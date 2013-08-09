@@ -1,0 +1,27 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+	<ui:style>
+		.text {
+			text-align: center;
+		}
+	</ui:style>
+	
+	<g:PopupPanel ui:field="popup" autoHideEnabled="true">
+		<g:FlexTable ui:field="flexTable"> </g:FlexTable>
+<!--		<g:VerticalPanel>-->
+<!--			<g:HorizontalPanel>-->
+<!--				<g:Label ui:field="c1" styleName='{style.c1}'></g:Label>-->
+<!--				<g:Label ui:field="c2" styleName='{style.c2}'></g:Label>-->
+<!--				<g:Label ui:field="c3" styleName='{style.c3}'></g:Label>-->
+<!--				<g:Label ui:field="c4" styleName='{style.c4}'></g:Label>-->
+<!--				<g:Label ui:field="c5" styleName='{style.c5}'></g:Label>-->
+<!--				<g:Label ui:field="c6" styleName='{style.c6}'></g:Label>-->
+<!--			</g:HorizontalPanel>-->
+<!--		</g:VerticalPanel>-->
+<!--		<g:Grid ui:field="colorGrid">-->
+			
+<!--		</g:Grid>-->
+	</g:PopupPanel>
+
+</ui:UiBinder>

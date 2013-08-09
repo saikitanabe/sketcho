@@ -1,0 +1,503 @@
+package net.sevenscales.editor.uicomponents.uml;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.utils.AreaUtils;
+import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.DiagramDragHandler;
+import net.sevenscales.editor.diagram.shape.Info;
+import net.sevenscales.editor.diagram.shape.RectShape;
+import net.sevenscales.editor.diagram.shape.SequenceShape;
+import net.sevenscales.editor.diagram.utils.GridUtils;
+import net.sevenscales.editor.diagram.utils.UiUtils;
+import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.ILine;
+import net.sevenscales.editor.gfx.domain.IRectangle;
+import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
+import net.sevenscales.editor.silver.SilverUtils;
+import net.sevenscales.editor.uicomponents.Anchor;
+import net.sevenscales.editor.uicomponents.AnchorElement;
+import net.sevenscales.editor.uicomponents.AnchorUtils;
+import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers.IExtraConnectionHandler;
+import net.sevenscales.editor.uicomponents.helpers.ILifeLineEditor;
+import net.sevenscales.editor.uicomponents.helpers.LifeLineEditorHelper;
+
+import com.google.gwt.core.client.JavaScriptObject;
+
+public class SequenceElement extends ClassElement2 implements DiagramDragHandler, SupportsRectangleShape, IExtraConnectionHandler {
+	private static SLogger logger = SLogger.createLogger(SequenceElement.class);
+	private static final int RADIUS_EXTRA = 12;
+	private static final int SELECTION_AREA_WIDTH = 12;
+	
+	public static final int RADIUS_START = 12;
+	public static final int RADIUS_SELECTION = 25;
+	
+  private ILine line;
+  private String color = "#000000";
+  private ILifeLineEditor lifeLineEditor;
+  private SurfaceHandler surface;
+  private Point currentDragStartPoint = new Point();
+//  private LineShape lineShape = new LineShape();
+//  private SequenceShape seqShape;
+  private IRectangle selectionArea;
+  private Integer[] fixedAnchorPoints = new Integer[]{};
+  
+  private static final int CONNECT_DISTANCE = 15;
+  
+  public interface LifelineCall {
+  	void makeCircle(int cx, int cy);
+  }
+
+	public SequenceElement(
+	      SurfaceHandler parent, SequenceShape shape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
+		super(parent, shape.rectShape, text, backgroundColor, borderColor, textColor, editable, true);
+		this.surface = parent;
+// 		this.seqShape = shape;
+//		lineShape.x1 = shape.rectShape.left + shape.rectShape.width/2;
+//		lineShape.y1 = shape.rectShape.top + shape.rectShape.height;
+//		lineShape.x2 = lineShape.x1;
+//		lineShape.y2 = lineShape.y1 + shape.lifeLineHeight;
+    int x1 = GridUtils.align(shape.rectShape.left + shape.rectShape.width/2);
+    int y1 = shape.rectShape.top + shape.rectShape.height;
+    int x2 = x1;
+    int y2 = y1 + shape.lifeLineHeight;
+
+		line = IShapeFactory.Util.factory(editable).createLine(getGroup());
+//		line.setShape(x1, y1, x2, y2);
+		line.setStroke(borderWebColor);
+		line.setStyle(ILine.DASHED);
+		
+		addEvents(line);
+		
+		selectionArea = IShapeFactory.Util.factory(editable).createRectangle(getGroup());
+//		selectionArea.setShape(x1-5, y1, 5*2, y2-y1, 0);
+	  selectionArea.setFill(200, 200, 200, 0);
+//	  selectionArea.setFill("transparent");
+	  selectionArea.addGraphicsMouseDownHandler(this);
+	  selectionArea.addGraphicsMouseUpHandler(this);
+	  
+	  selectionArea.addGraphicsMouseEnterHandler(this);
+	  selectionArea.addGraphicsMouseLeaveHandler(this);
+	  
+	  addTouchSupport();
+	  lifeLineEditor = LifeLineEditorHelper.createLifeLineEditorHelper(surface, this, getEditable());
+    
+    shapes.add(line);
+    shapes.add(selectionArea);
+
+    setReadOnly(!editable);
+    
+    setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height, shape.lifeLineHeight);
+    super.setText(text);
+    
+    super.constructorDone();
+	}
+	
+	private void addTouchSupport() {
+	  selectionArea.addGraphicsTouchStartHandler(this);
+	  selectionArea.addGraphicsTouchEndHandler(this);
+	}
+
+	private LifelineCall addExtraConnections = new LifelineCall() {
+		@Override
+		public void makeCircle(int cx, int cy) {
+			connectionHelpers.addExtraConnectionHandle(SequenceElement.this, cx, cy, RADIUS_EXTRA);
+		}
+	};
+	private void addRemoveVisibleConnectionHelpers() {
+		logger.debug2("addRemoveVisibleConnectionHelpers...");
+		removeExtraConnectionHandles();
+		
+		iterateLifelinePoints(addExtraConnections);
+		
+    selectionArea.moveToBack();
+    line.moveToBack();
+    
+    if (UiUtils.isIE()) {
+    	// IE hack, selectionArea and line are after canvas Rectangle
+    	surface.moveToBack();
+    }
+	}
+	
+  private void removeExtraConnectionHandles() {
+		connectionHelpers.removeExtraConnectionHandles();
+	}
+
+	
+	//	@Override
+	public void accept(SurfaceHandler surface) {
+	  super.accept(surface);
+	  
+	  // NOTE: there is a special handling on MouseDiagramDragHandler for CircleElement follow
+//	  surface.addDragHandler(this);
+	}
+
+//	@Override
+  protected JavaScriptObject createElement(JavaScriptObject canvas, RectShape shape) {
+    return SilverUtils.createRect(canvas, 0, 0, shape.height, shape.width);
+  }
+  
+  public Diagram duplicate(boolean partOfMultiple) {
+    return duplicate(surface, partOfMultiple);
+  }
+
+  public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple) {
+    RectShape rs = (RectShape) super.getInfo();
+    if (!partOfMultiple) {
+    	return duplicate(surface, rs.left + rs.width + 30, rs.top);
+    }
+    
+    return duplicate(surface, rs.left + 20, rs.top);
+  }
+
+  public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+    RectShape rs = (RectShape) super.getInfo();
+    SequenceShape ss = new SequenceShape(x, y, 
+        rs.width, rs.height, line.getY2() - line.getY1()); 
+    return new SequenceElement(surface, ss, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+  }
+
+	public void setShape(int left, int top, int width, int height, int lifelineheight) {
+    left = GridUtils.align(left);
+    top = GridUtils.align(top);
+    width = GridUtils.align(width);
+    height = GridUtils.align(height);
+
+	  int x1 = GridUtils.align(left + width/2);
+//	  int dy = top + height - line.getY1();
+	  int y1 = top + height;
+	  int x2 = x1;
+	  int y2 = y1 + lifelineheight;
+	  
+	  line.setShape(x1, y1, x2, y2);
+		selectionArea.setShape(x1 - SELECTION_AREA_WIDTH, y1, SELECTION_AREA_WIDTH * 2, y2-y1, 0);
+    
+    lifeLineEditor.setShape(this);
+    
+//    ++this.dispatchSequence;
+//    for (AnchorElement a : anchorMap.values()) {
+//      a.setAx(x1);
+////      a.setAy(((int)(height*a.getRelativeY()))+top);
+//      a.dispatch(dispatchSequence);
+//    }
+    
+//    addRemoveVisibleConnectionHelpers();
+    makeFixedAnchorPoints();
+	}
+	
+	private void iterateLifelinePoints(LifelineCall call) {
+		for (int y = getCenterY() + (CONNECT_DISTANCE * 2); y < line.getY2() + getTransformY() - CONNECT_DISTANCE; y += CONNECT_DISTANCE) {
+			call.makeCircle(line.getX1() + getTransformX(), y);
+		}
+	}
+
+  @Override
+  protected boolean fixedIncludesTransformation() {
+    return true;
+  }
+	
+	private class FixedPointsCalc implements LifelineCall {
+		public FixedPointsCalc() {
+		}
+		
+		@Override
+		public void makeCircle(int cx, int cy) {
+		}
+	};
+
+  private void makeFixedAnchorPoints() {
+//		List<Integer> fixed = new ArrayList<Integer>(connectionHelpers.getExtraConnectionHandles().size() * 2 + (2 * 4));
+  	final List<Integer> fixed = new ArrayList<Integer>();
+		
+  	iterateLifelinePoints(new LifelineCall() {
+			@Override
+			public void makeCircle(int cx, int cy) {
+				fixed.add(cx);
+				fixed.add(cy);
+			}
+		});
+//		DiagramHelpers.fill4FixedRectPoints(fixed, getLeft(), getTop(), getWidth(), getHeight());
+		
+//		for (ConnectionHandle c : connectionHelpers.getExtraConnectionHandles()) {
+//			fixed.add(c.visibleHandle.getX());
+//			fixed.add(c.visibleHandle.getY());
+//		}
+		
+//  	logger.debug("makeFixedAnchorPoints {} ...", fixed);
+
+  	// Bug fix.
+  	// it's either a bug somewhere or fixedAnchorPoints kept all
+  	// even thought the size got smaller => caused null entries in fixedAnchorPoints
+  	// and Integer.intValue started to fail
+  	fixedAnchorPoints = new Integer[fixed.size()];
+		fixedAnchorPoints = fixed.toArray(fixedAnchorPoints);
+//  	logger.debug("makeFixedAnchorPoints {} ... done", this);
+	}
+
+	public void setShape(int left, int top, int width, int height) {
+  	super.setShape(left, top, width, height);
+  	setShape(left, top, width, height, line.getY2() - line.getY1());
+  }
+	
+	@Override
+	protected boolean resize(int left, int top, int width, int height) {
+//	  int length = line.getY2() - line.getY1();
+	  boolean result = super.resize(left, top, width, height);
+//	  int dy = top + height - line.getY1();
+//	  setShape(left, top, width, height, length);
+    return result;
+	}
+	
+	@Override
+	public void applyTransform(int dx, int dy) {
+	  super.applyTransform(dx, dy);
+	  lifeLineEditor.applyTransform(dx, dy);
+	}
+	
+//	@Override
+//	public void saveLastTransform() {
+//		super.saveLastTransform();
+//	  int dx = SilverUtils.getTransformX(line.getRawNode());
+//    int dy = SilverUtils.getTransformY(line.getRawNode());
+//    line.applyTransform(dx, dy);
+//    selectionArea.applyTransform(dx, dy);
+//    SilverUtils.resetRenderTransform(line.getRawNode());
+//    SilverUtils.resetRenderTransform(selectionArea.getRawNode());
+////    
+//    startSelection.saveLastTransform();
+////	  startSelection.setShape(line.getX2()+dx, line.getY2()+dy, startSelection.getRadius());
+////    
+////    lineShape.x1 = line.getX1();
+////    lineShape.y1 = line.getY1();
+////    lineShape.x2 = line.getX2();
+////    lineShape.y2 = line.getY2();
+////    SilverUtils.resetRenderTransform(line);
+////    SilverUtils.setDashedLineShape(
+////        line, lineShape.x1, lineShape.y1, lineShape.x2, lineShape.y2, color);
+//	}
+
+//	@Override
+	public void select() {
+	  super.select();
+	  color = "#1D00FF";
+	  setHighlightColor(color);
+
+	  // HACK: when background is moved lineShape is no longer
+	  // in correct position. Probably it lineShape should be removed
+	  // and used only line. No duplicate information.
+//    lineShape.x1 = line.getX1();
+//    lineShape.y1 = line.getY1();
+//	  lineShape.x2 = line.getX2();
+//	  lineShape.y2 = line.getY2();
+	  lifeLineEditor.show(this);
+    // TODO: unselect startSelection
+    // callback if startSelection is selected unselect parent
+	}
+	
+	//	@Override
+	public void unselect() {
+	  super.unselect();
+    color = borderWebColor;
+    setHighlightColor(color);
+    lifeLineEditor.hide(this);
+	}
+	
+  public void dragStart(Diagram sender) {
+    if (sender == lifeLineEditor.getStartSelection()) {
+      RectShape rs = (RectShape) super.getInfo();
+      currentDragStartPoint.x = line.getX2();
+      currentDragStartPoint.y = line.getY2();
+      
+      removeExtraConnectionHandles();
+    }
+  }
+
+	public void onDrag(Diagram sender, int dx, int dy) {
+    if (sender == lifeLineEditor.getStartSelection()) {
+      // redraw while dragging
+//	    int x2 = startSelection.getLocationX()+startSelection.getTransformX();
+//	    int y2 = startSelection.getLocationY()+startSelection.getTransformY();
+      line.setShape(line.getX1(), line.getY1(), line.getX1(), line.getY2() + dy);
+      selectionArea.setShape(line.getX1() - SELECTION_AREA_WIDTH, line.getY1(), SELECTION_AREA_WIDTH * 2, line.getY2()-line.getY1(), 0);
+    }
+  }
+
+  public void dragEnd(Diagram sender) {
+  	if (sender == lifeLineEditor.getStartSelection()) {
+  		// better to modify visible connection helpers as well
+  		addRemoveVisibleConnectionHelpers();
+  		makeFixedAnchorPoints();
+  	}
+  }
+   
+  @Override
+  public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
+  	AnchorElement result = null;
+  	if (onDynamicAttachArea(anchor, x, y)) {
+      result = makeDynamicTempAnchorProperties(anchor, x, y);
+  	}
+    if (AnchorUtils.onAttachArea(x, y, selectionArea.getX() + getTransformX(), selectionArea.getY() + getTransformY(),
+      selectionArea.getWidth(), selectionArea.getHeight())) {
+    	// anchor to life line if on selection area
+    	result = makeFixedTempAnchorProperties(anchor, x, y);
+    }
+    return result;
+//  	AnchorElement result = super.onAttachArea(anchor, x, y);
+//  	if (result == null) {
+//  		result = super.onAttachArea(anchor, x, y, selectionArea.getX(), selectionArea.getY(), selectionArea.getWidth(), selectionArea.getHeight());
+//  	}
+//  	return result;
+  }
+  
+  @Override
+  protected void setRelativeAnchor(int x, int y) {
+  	if (AnchorUtils.onAttachArea(x, y, getLeft(), getTop(), getWidth(), getHeight())) {
+  		AnchorUtils.relativeValue(tempAnchorProperties, getLeft(), getTop(), getWidth(), getHeight());
+  	} else {
+  		// fix anchor points, just in case
+  		makeFixedAnchorPoints();
+  		AnchorUtils.anchorPoint(x, y, tempAnchorProperties, fixedAnchorPoints);
+  	}
+  }
+  
+  @Override
+	protected void dispatch(AnchorElement a, int left, int top, int width, int height, long dispatchSequence) {
+  	if (AnchorUtils.onAttachArea(a.getAx(), a.getAy(), left, top, width, height)) {
+  		// dispatch based on rect (object) area if anchor was attached to it; otherwise let do fixed anchoring
+			AnchorUtils.setRelativePosition(a, left, top, width, height);
+			a.dispatch(dispatchSequence);
+  	} else {
+  		super.dispatch(a, left, top, width, height, dispatchSequence);
+  	}
+  }
+  
+  @Override
+  public boolean onArea(int left, int top, int right, int bottom) {
+  	if (super.onArea(left, top, right, bottom)) {
+  		// check first rectangle area
+  		int x = line.getX1() + getTransformX();
+  		int y = line.getY1() + getTransformY();
+  		int bx = line.getX2() + getTransformX();
+  		int by = line.getY2() + getTransformY();
+  		return AreaUtils.onArea(x, y, bx, by, left, top, right, bottom);
+  	}
+  	return false;
+  }
+  
+  @Override
+	public Info getInfo() {
+	    RectShape rs = (RectShape) super.getInfo();
+	    SequenceShape result = new SequenceShape();
+	    result.rectShape = rs;
+	    result.lifeLineHeight = line.getY2() - line.getY1();
+	    
+	    super.fillInfo(result);
+	    return result;
+	}
+  
+  @Override
+  public void setReadOnly(boolean value) {
+    if (selectionArea != null) {
+      // due to inheritance base class calls setReadOnly before sub class construction
+    	// that's why check existance
+      selectionArea.setVisibility(!value);
+      lifeLineEditor.hide(this);
+//      if (startSelection.isVisible()) {
+//    	  // do not set visibility if not already visible
+//    	  // might change state in undesirable way...
+//    	  // check SvgConverter for details
+//    	  startSelection.setVisible(!value);
+//      }
+    }
+    super.setReadOnly(value);
+  }
+
+  @Override
+  public UMLDiagramType getDiagramType() {
+  	return UMLDiagramType.SEQUENCE;
+  }
+  
+  @Override
+  protected void doSetShape(int[] shape) {
+  	// note the order, lifeline height is the first value
+  	super.setShape(shape[1], shape[2], shape[3], shape[4]);
+  	setShape(shape[1], shape[2], shape[3], shape[4], shape[0]);
+  }
+  
+  @Override
+  public void setHighlightColor(String color) {
+  	super.setHighlightColor(color);
+  	
+  	// for now...
+	  line.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+  }
+
+  @Override
+  public boolean onArea(int x, int y) {
+  	if (onAttachAreaListener == null) {
+  		return false;
+  	}
+
+  	if (this instanceof SupportsRectangleShape) {
+  		if (AnchorUtils.onAttachArea(x, y, getLeft(), getTop(), getWidth(), getHeight() + line.getY2() - line.getY1())) {
+  			onAttachAreaListener.onAttachArea(this, x, y);
+  			return true;
+  		} else {
+  			onAttachAreaListener.notOnArea(this);
+  		}
+  	}
+  	return false;
+  }
+  
+  @Override
+  public void removeFromParent() {
+  	super.removeFromParent();
+  	lifeLineEditor.forceHide();
+  	connectionHelpers.removeExtraConnectionHandles();
+  }
+    
+  @Override
+  public void saveLastTransform(int dx, int dy) {
+  	super.saveLastTransform(dx, dy);
+  	lifeLineEditor.saveLastTransform(dx, dy);
+  	addRemoveVisibleConnectionHelpers();
+  	makeFixedAnchorPoints();
+  }
+
+  @Override
+  protected Integer[] getFixedAnchorPoints() {
+  	return fixedAnchorPoints;
+  }
+
+	@Override
+	public void showExtraConnectionHandles() {
+		addRemoveVisibleConnectionHelpers();
+	}
+	
+	@Override
+	public boolean disableBottom() {
+		return true;
+	}
+	
+	public ILine getLine() {
+    return line;
+  }
+	
+	public String getColor() {
+    return color;
+  }
+  
+//  @Override
+//  public int getHeight() {
+//  	return line.getY2() - line.getY1() + super.getHeight();
+//  }
+
+}

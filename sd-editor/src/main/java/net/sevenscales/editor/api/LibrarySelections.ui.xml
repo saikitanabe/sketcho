@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	</ui:style>
+	<g:HTMLPanel>
+		<div ui:field="btnGroup" class="btn-group library-selection" data-toggle="buttons-radio">
+		  <a ui:field="software" class="btn btn-mini active" style="color: #333333; text-decoration: none;">Software</a>
+      <a ui:field="mindmap" class="btn btn-mini" style="color: #333333; text-decoration: none;">Mind map</a>
+		
+<!-- 		  <a ui:field="software" class="btn btn-mini"><i class="icon-user icon"></i> Software</a> -->
+<!--       <a ui:field="mindmap" class="btn btn-mini"><i class="icon-user icon"></i> Mindmap</a> -->
+<!--       <a ui:field="roadmap" class="btn btn-mini"><i class="icon-user icon"></i> Roadmap</a> -->
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder> 

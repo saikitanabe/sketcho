@@ -1,0 +1,116 @@
+package net.sevenscales.editor.content.utils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.DiagramItemJS;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.domain.utils.JsonConversion;
+import net.sevenscales.domain.utils.JsonFormat;
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ot.BoardDocumentGraphicalViewHelpers;
+import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
+import net.sevenscales.editor.diagram.Diagram;
+
+public class JsonHelpers {
+	private static final SLogger logger = SLogger.createLogger(JsonHelpers.class);
+	private BoardDocumentGraphicalViewHelpers boardDocument;
+	
+	public static class MisMatchException extends Exception {
+    private String logicalName;
+		private int checksum;
+		private String json;
+
+		public MisMatchException(String logicalName, int checksum, String json) {
+		  this.logicalName = logicalName;
+			this.checksum = checksum;
+			this.json = json;
+		}
+		
+		public String getLogicalName() {
+      return logicalName;
+    }
+
+		public int checksum() {
+			return checksum;
+		}
+		
+		public String getJson() {
+			return json;
+		}
+	}
+	
+	public JsonHelpers(SurfaceHandler surface) {
+		boardDocument = new BoardDocumentGraphicalViewHelpers(surface);
+	}
+
+	public void verify(String logicalName, List<? extends IDiagramItemRO> list, int checksum, JsonFormat jsonFormat) throws MisMatchException {
+		String json = _json(list, jsonFormat);
+		int boardChecksum = ChecksumHelpers.crc32(json);
+		if (boardChecksum != checksum) {
+			logger.debug("Logical name {}, CLIENT JSON: {}", logicalName, json);
+			throw new MisMatchException(logicalName, boardChecksum, json);
+		}
+	}
+	
+	private String _json(List<? extends IDiagramItemRO> items, JsonFormat jsonFormat) {
+		String json = "";
+		
+		for (IDiagramItemRO di : items) {
+			// server has in saved format only one \n and also " without 
+			// e.g. \\n \"
+			json += DiagramItemJS.asJson2((DiagramItemDTO) di, jsonFormat).toString() + ",";
+		}
+		
+		json = removeLastComma(json);
+		return "[" + json + "]";
+	}
+
+	public JsonConversion json(List<Diagram> diagrams, boolean updateDiagramItem, JsonFormat jsonFormat) {
+		String json = "";
+		
+		List<IDiagramItem> items = BoardDocumentHelpers.getDiagramsAsDTO(diagrams, updateDiagramItem);
+		boolean first = true;
+		for (IDiagramItemRO di : items) {
+		  if (first) {
+		    first = false;
+		  } else {
+		    json += ",";
+		  }
+			json += DiagramItemJS.asJson2((DiagramItemDTO) di, jsonFormat).toString();
+		}
+		JsonConversion result = new JsonConversion("[" + json + "]", jsonFormat, items);
+		return result;
+	}
+
+	public JsonConversion json(Diagram[] diagrams, JsonFormat jsonFormat) {
+		List<Diagram> list = new ArrayList<Diagram>();
+		for (Diagram d : diagrams) {
+			list.add(d);
+		}
+		return json(list, false, jsonFormat);
+	}
+	
+	public static String json(List<IDiagramItemRO> items, JsonFormat jsonFormat) {
+		String result = "";
+		for (IDiagramItemRO di : items) {
+			if (di instanceof DiagramItemDTO) {
+				result += DiagramItemJS.asJson2((DiagramItemDTO) di, jsonFormat) + ",";
+			}
+		}
+		result = removeLastComma(result);
+		return "[" + result + "]";
+	}
+	
+	public static String removeLastComma(String json) {
+		if (json.length() > 0) {
+			// send doesn't allow last comma in the end => remove 
+			json = json.substring(0, json.length() - 1);
+		}
+		return json;
+	}
+
+}

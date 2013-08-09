@@ -1,0 +1,633 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+
+
+  
+
+
+  
+  
+  
+  
+  
+  <title>hibernate4gwt - Overview</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+
+
+
+  
+  
+  
+  <style type="text/css">
+<!--
+a:link { color: #FFFFFF; text-decoration: none}
+a:visited { text-decoration: none; color: #FFCC66}
+a:hover { color: #99CCFF; text-decoration: underline}
+body { font-family: "Arial", "Helvetica", "sans-serif"}
+-->
+  </style>
+</head>
+
+
+<body style="background-color: rgb(255, 255, 255);" link="#ffffff">
+
+
+
+
+<table align="center" background="image/top.gif" border="0" cellpadding="0" cellspacing="0" height="75" width="700">
+
+
+
+
+  <tbody>
+
+
+
+
+    <tr background="image/top.gif">
+
+
+
+
+      <td colspan="1">
+      
+      
+      
+      <table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
+
+
+
+
+        <tbody>
+
+
+
+
+          <tr>
+
+
+
+
+            <td><font face="Tahoma" size="6">hibernate4gwt</font>
+            
+            
+            
+            <pre><font face="Tahoma">http://hibernate4gwt.sourceforge.net</font></pre>
+
+
+
+
+            </td>
+
+
+
+
+            <td style="text-align: right;">hosted by<br>
+
+
+
+
+            <a href="http://sourceforge.net/"><img style="width: 125px; height: 37px;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=194811&amp;type=2" alt="SourceForge.net Logo" border="0"></a></td>
+
+
+
+
+          </tr>
+
+
+
+
+        
+        
+        
+        </tbody>
+      
+      
+      
+      </table>
+
+
+
+
+      </td>
+
+
+
+
+    </tr>
+
+
+
+
+  
+  
+  
+  </tbody>
+</table>
+
+
+
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" height="20" width="700">
+
+
+
+
+  <tbody>
+
+
+
+
+    <tr bgcolor="#000000">
+
+
+
+
+      <td bgcolor="#336666">
+      
+      
+      
+      <div align="center"> <font color="#ffffff" face="Tahoma">|<font face="Tahoma"> <a href="index.html">Home</a> | <a href="news.html">News</a>
+| <a href="getting_started.html">Getting started</a>
+| <a href="overview.html">Overview</a> |&nbsp;<a href="hibernate_gwt_problem.html">Hibernate-GWT issues</a>
+| <a href="faq.html">FAQ</a> | <a href="thanks.html">Thanks</a> | </font></font></div>
+
+
+
+
+      </td>
+
+
+
+
+    </tr>
+
+
+
+
+  
+  
+  
+  </tbody>
+</table>
+
+
+
+
+<table align="center" background="image/top1.gif" border="0" cellpadding="0" cellspacing="0" height="13" width="700">
+
+
+
+
+  <tbody>
+
+
+
+
+    <tr>
+
+
+
+
+      <td><font face="Tahoma"><img src="image/pixel.gif" height="1" width="1"></font></td>
+
+
+
+
+    </tr>
+
+
+
+
+  
+  
+  
+  </tbody>
+</table>
+
+
+
+
+<font face="Tahoma"><br>
+
+
+
+
+</font>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="700">
+
+
+
+
+  <tbody>
+
+
+
+
+    <tr>
+
+
+
+
+      <td valign="top" width="455">
+      
+      
+      
+      <table background="image/longmenu.gif" border="0" cellpadding="0" cellspacing="0" height="34" width="455">
+
+
+
+
+        <tbody>
+
+
+
+
+          <tr>
+
+
+
+
+            <td><b><font face="Tahoma">Overview</font></b></td>
+
+
+
+
+          </tr>
+
+
+
+
+        
+        
+        
+        </tbody>
+      
+      
+      
+      </table>
+
+
+
+
+      
+      
+      
+      <p class="MsoNormal"><b style=""><span style="" lang="EN-GB">Introduction</span></b><span style="" lang="EN-GB"></span></p>
+
+
+
+
+      
+      
+      
+      <p class="MsoNormal"><span style="" lang="EN-GB">This page
+describes the basic concepts used by hibernate4gwt to handle Hibernate
+beans and send them outside the JVM, to the GWT client side.&nbsp;</span></p>
+
+
+      
+      
+      <p class="MsoNormal"><span style="" lang="EN-GB">Note that you do not need to have a complete understanding of how hibernate4gwt works to use it and the "<a style="color: rgb(0, 0, 153);" href="getting_started.html">Getting started</a>"
+section is sufficient to use it.</span></p>
+
+      <span style="font-weight: bold;">Clone and merge operations</span><br>
+
+      <br>
+
+To work properly with Hibernate beans, GWT needs them to be<span style="font-weight: bold;"> &nbsp;real</span>
+POJO, ie without any instrumented class and basic collection
+implementations. Removing proxies and replacing persistent collections
+is the job of the&nbsp;<span style="font-weight: bold; color: rgb(255, 0, 0);">clone</span><span style="color: rgb(255, 0, 0);"> </span>operation.<br>
+
+Symetrically, Hibernate needs associations to be set with proxies when
+property was not loaded, and persistence information on collections
+(for dirty state checking and so on...). Rebuild such instrumented and
+persistent beans is the goal of the <span style="font-weight: bold;"><span style="color: rgb(255, 0, 0);">merge</span> </span>operation.<br>
+
+      <br>
+      <img style="width: 841px; height: 357px;" alt="" src="image/h4gwt_general.JPG">
+      
+      <p class="MsoNormal"><b style=""><span style="" lang="EN-GB">Lazy Properties<o:p></o:p></span></b></p>
+
+
+
+
+      
+      
+      
+      <p class="MsoNormal"><span style="" lang="EN-GB">hibernate4gwt
+needs to store persistent informations (such as proxies and
+collections) in order to rebuild the bean properly during the merge
+operation.</span></p>
+
+      
+      <p class="MsoNormal"><span style="" lang="EN-GB">Such informations can be stored in two ways :&nbsp;</span></p>
+
+      
+      <ul>
+
+        <li><span style="" lang="EN-GB"><span style="font-weight: bold;">in the entity bean</span>
+: that's the goal of the LazyPojo abstract class. It handles a list of
+properties that have not been set by Hibernate (the famous proxies).
+Because the persistence information is hold by the entity, the merge
+operation can be run on any server, that's why we call this mode&nbsp;<span style="font-weight: bold; color: rgb(255, 0, 0);">stateless</span></span></li>
+
+      
+      </ul>
+
+      
+      <ul>
+
+        <li><span style="" lang="EN-GB"><span style="font-weight: bold;">on the server</span>
+(HTTPSession, in-memory hashmap, ...) : in this case, the whole object
+graph is kept by the server and modifications made on the client side
+are just reported on it. In this case, only the server that stores such
+persistence information can perform the merge operation (<span style="font-weight: bold; color: rgb(255, 0, 0);">stateful</span><span style="color: rgb(255, 0, 0);"> </span>mode)</span></li>
+
+      
+      </ul>
+
+The "POJO store" concept is used to implement such storage strategy.<br>
+
+      <br>
+
+      <span style="font-weight: bold;">Proxy generation</span><br>
+
+      <br>
+
+In some case, none of the two solutions presented above are accpetable
+: no technical inh&eacute;ritance is allowed, and the server must
+remain purely stateless. <br>
+
+In order to solved such an issue, the library supports the <span style="font-weight: bold; color: rgb(255, 0, 0);">dynamic proxy </span><span style="color: rgb(0, 0, 0);">mode</span>, which is an <span style="text-decoration: underline;">extension to the stateless mode</span>.
+The only difference is that the LazyPojo inheritance is just needed. By
+using GWT generator for client-side and Javassist on the server one, a
+symetric proxy is created to handle persistence information by adding
+the ILazyPojo implementation. <br>
+
+      <br>
+
+In order to make GWT generator work, the model POJO must implement the
+java.io.Serializable interface. This one acts as a marker for the Proxy
+generator.
+      
+      <p class="MsoNormal"><b style=""><span style="" lang="EN-GB">Hibernate Bean Manager</span></b><span style="" lang="EN-GB"><o:p></o:p></span></p>
+
+
+
+
+      
+      
+      
+      <p class="MsoNormal"><span style="" lang="EN-GB">The HibernateBeanManager class is the heart of the library. It is based on a &ldquo;Lazy
+killer&rdquo; class and a &ldquo;POJO store&rdquo; (see above).<o:p></o:p></span></p>
+
+
+
+
+      
+      
+      
+      <p class="MsoNormal"><span style="" lang="EN-GB">The LazyKiller class removes
+Hibernate proxies, convert persistent collections to their regular
+counterparts and store lazy properties information for the merge
+operation.</span></p>
+
+      <span style="font-weight: bold;">HibernateRemoteService</span><br>
+
+      
+      <p class="MsoNormal"><span style="" lang="EN-GB">On the top
+of all this, the HibernateRemoteService handles the underlying
+mechanisms and provides
+the following methods:<o:p></o:p></span></p>
+
+
+
+
+      
+      
+      
+      <ul style="margin-top: 0cm;" type="disc">
+
+
+
+
+        <li class="MsoNormal" style=""><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; color: black;" lang="EN-GB">clone(Object hibernatePojo)</span><span style="" lang="EN-GB"><o:p></o:p></span></li>
+
+
+
+
+        <li class="MsoNormal" style=""><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; color: black;" lang="EN-GB">merge(Object gwtPojo)</span><span style="" lang="EN-GB"><o:p></o:p></span></li>
+
+
+
+
+        <li class="MsoNormal" style=""><span style="font-size: 10pt; font-family: &quot;Courier New&quot;; color: black;" lang="EN-GB">remove(Object gwtPojo)</span></li>
+
+
+
+
+      
+      
+      
+      </ul>
+
+
+
+
+It allows you to send the Hibernate query result to the GWT and sent
+modifications back to the persistance layer.<br>
+
+
+
+
+      <br>
+
+
+
+
+      <span style="font-weight: bold;">HibernateRemoteService</span>
+      
+      
+      
+      <p class="MsoNormal">The HibernateRemoteService
+overrides the GWT
+RemoteServiceServlet to seamlessly clone and merge Hibernate POJO
+before and after method invocation.</p>
+
+      
+      <p class="MsoNormal">Basically, HibernateRemoteService overrides the <span style="font-weight: bold;">processCall </span>method like this :</p>
+
+      
+      <p class="MsoNormal">Service class, for example as following :<br>
+
+
+      <span style="" lang="EN-GB"><o:p></o:p></span>
+      </p>
+      <table class="MsoTableGrid" style="border: medium none ; border-collapse: collapse;" border="1" cellpadding="0" cellspacing="0">
+
+
+        <tbody>
+
+
+          <tr style="">
+
+
+            <td style="border: 1pt solid windowtext; padding: 0cm 5.4pt; width: 460.6pt;" valign="top" width="614">
+            <pre>public String processCall(String payload) throws SerializationException<br>{&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <br>// Decode request<br>//<br>  RPCRequest rpcRequest = RPCCopy.getInstance().decodeRequest(payload, this.getClass(), this);<br><br>//  Merge input parameter<br>//<br> if ((rpcRequest != null) &amp;&amp;<br>     (rpcRequest.getParameters() != null))<br>  {<br>    Object[] parameters = rpcRequest.getParameters();<br>    for (int index = 0 ; index &lt; parameters.length; index ++)<br>    {<br>      if (parameters[index] != null)<br>      {<br>        parameters[index] = _beanManager.merge(parameters[index], true);<br>      }<br>    }<br>  }<br>//&nbsp;&nbsp;Invoke method<br>//<br>  Object returnValue = RPC.invoke(this, rpcRequest.getMethod(), <br>					rpcRequest.getParameters(),<br>					rpcRequest.getSerializationPolicy());<br>&nbsp; <br>//  Clone result<br>//<br>  if (returnValue != null)<br>  {<br>    returnValue = _beanManager.clone(returnValue, true);&nbsp;<br>  }</pre>
+            <pre>//&nbsp;&nbsp;&nbsp; Encode response<br>//&nbsp; <br> return RPC.encodeResponseForSuccess(rpcRequest.getMethod(), <br>				     returnValue,<br>				     rpcRequest.getSerializationPolicy());</pre>
+            <pre>}</pre>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+
+
+      <span style="font-weight: bold;"></span><span style="font-weight: bold;"></span><span style="font-weight: bold;"></span>
+
+
+
+      
+      
+      
+      <p class="MsoNormal"><span style="" lang="EN-GB"><o:p>O</o:p>f
+course,
+the inheritance on HibernateRemoteService is not mandatory: you can use
+the HibernateLazyManager
+by yourself&hellip; In this case, you would have to explictly clone
+and
+merge Hibernate beans by yourself (as it is the case in GWT1.4-Java5 support mode)</span></p>
+
+
+
+
+      
+      
+      
+      <p style="font-weight: bold;" class="MsoNormal"><span style="" lang="EN-GB">Class Mapper</span></p>
+
+
+
+
+      
+      
+      
+      <p class="MsoNormal">The class mapper is used to for cloning and merging from
+one Domain class to a different one (Java5 class to DTO, or proxy class to
+Domain)</p>
+
+
+
+
+      
+      
+      
+      <p class="MsoNormal">hibernate4gwt currently handles different "class mapping" strategies <span style="font-style: italic;">via</span>
+the DirectoryClassMapper or ExplicitClassMapper implementations : they generally translate the Domain class
+name to DTO class name by replacing package name and add a DTO suffix
+if declared.</p>
+
+
+
+
+      
+      
+      
+      <p class="MsoNormal">For particular needs, you can
+implement your own IClassMapper class, with custom class mapping
+strategy.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="700">
+  <tbody>
+    <tr>
+      <td>
+      <div align="center"><font face="Tahoma" size="2">Copyright 2007. All Rights Reserved</font></div>
+
+
+
+
+      
+      
+      
+      <table align="center" border="0" cellpadding="0" cellspacing="0" height="20" width="700">
+
+
+
+
+        <tbody>
+
+
+
+
+          <tr align="center" bgcolor="#000000">
+
+
+
+
+            <td bgcolor="#336666">&nbsp;<small><span style="color: rgb(255, 255, 255);">Last updated : 06 August
+2007</span></small></td>
+
+
+
+
+          </tr>
+
+
+
+
+        
+        
+        
+        </tbody>
+      
+      
+      
+      </table>
+
+
+
+
+      </td>
+
+
+
+
+    </tr>
+
+
+
+
+  
+  
+  
+  </tbody>
+</table>
+
+
+
+
+<center>&nbsp;</center>
+
+
+
+
+<br>
+
+
+
+
+<br>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <gwt.version>2.5.1</gwt.version>
+    </properties>
+    <groupId>net.sevenscales</groupId>
+    <artifactId>sketcho-aggregate</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Sketcho application</name>
+    <description>
+    </description>
+
+    <dependencies>
+        <!-- Common dependencies of the project goes here -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <modules>
+				<module>hibernate4gwt-1.1.2</module>
+        <module>plugin-manager</module>
+        <module>sd-app-frame</module>
+        <module>sd-domain</module>
+        <module>sd-editor</module>
+        <module>sd-plugin</module>
+        <module>sd-plugin-login</module>
+        <module>sd-plugin-share</module>
+        <module>sd-plugin-web-admin</module>
+        <module>sd-remote</module>
+        <!-- <module>sd-server</module>
+        <module>sketcho</module> -->
+    <module>sketcho-confluence</module>
+  </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+											<phase>verify</phase>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+<!--						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-dependency-plugin</artifactId>
+							<executions>
+									<execution>
+											<id>unpack</id>
+											<phase>process-resources</phase>
+											<goals>
+													<goal>unpack</goal>
+											</goals>
+											<configuration>
+													<artifactItems>
+															<artifactItem>
+																	<groupId>com.google.gwt</groupId>
+																	<artifactId>gwt-dev</artifactId>
+																	<version>${gwt.version}</version>
+																	<classifier>${platform}-libs</classifier>
+																	<type>zip</type>
+																	<overWrite>false</overWrite>
+																	<outputDirectory>${settings.localRepository}/com/google/gwt/gwt-dev/${gwt.version}</outputDirectory>
+															</artifactItem>
+													</artifactItems>
+											</configuration>
+									</execution>
+							</executions>
+					</plugin>
+-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<!-- best lock down version of the plugin too -->
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
+        </plugins>
+    </build>
+
+	 <profiles>
+      <!--  <profile>
+            <id>gwt-1.6.4-windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <platform>windows</platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>gwt-1.6.4-mac</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <platform>mac</platform>
+            </properties>
+        </profile>
+        <profile>
+            <id>gwt-1.6.4-linux</id>
+            <activation>
+                <os>
+                    <family>linux</family>
+                </os>
+            </activation>
+            <properties>
+                <platform>linux</platform>
+            </properties>
+        </profile>
+-->
+    </profiles>
+
+</project>

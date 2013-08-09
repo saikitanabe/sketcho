@@ -1,0 +1,145 @@
+package net.st.shareddesign.editor.diagram;
+
+import net.st.shareddesign.editor.diagram.utils.GridUtils;
+import net.st.shareddesign.editor.uicomponents.Point;
+
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.user.client.Event;
+
+public class MouseDiagramBendHandler implements MouseDiagramHandler, DragState, KeyEventListener {
+	private Diagram currentDiagram;
+//	private ArrayList dragHandlers;
+	private boolean bending = false;
+	private boolean mouseDown = false;
+	private MouseDiagramHandlerManager parent;
+	private Point mouseDownPoint = new Point();
+	private GridUtils gridUtils = new GridUtils();
+	private int prevX = 0;
+	private int prevY = 0;
+	private boolean bendEnabled;
+	
+	public MouseDiagramBendHandler(MouseDiagramHandlerManager parent) {
+		this.parent = parent;
+		currentDiagram = null;
+//		dragHandlers = new ArrayList();
+	}
+	
+	public void onMouseDown(Diagram sender, int x, int y) {
+		if (sender != null && sender.okToBend()) {
+		  System.out.println("bend mouse down:"+sender+" x:"+x+" y:"+y);
+			// drag handler is not interested in canvas events
+			currentDiagram = sender;
+			mouseDown = true;
+			bending = false;
+			mouseDownPoint.x = x;
+			mouseDownPoint.y = y;
+			prevX = x;
+			prevY = y;
+			
+			gridUtils.init(x, y);
+		}
+	}
+
+	public void onMouseEnter(Diagram sender, int x, int y) {
+		
+	}
+
+	public void onMouseLeave(Diagram sender, int x, int y) {
+	}
+
+	public void onMouseMove(Diagram sender, int x, int y) {
+	  
+//		if (sender != null) {
+//			// handle only canvas move events
+//			return;
+//		}
+		
+		// there will be always a move event on mouse down event
+		// skip until threshold is exceeded
+		if (currentDiagram != null && bendEnabled) {
+			
+     if (mouseDown && !bending) {
+		  System.out.println("bend start:"+sender+" x:"+x+" y:"+y);
+       currentDiagram.bendStart(gridUtils.align(mouseDownPoint.x), 
+           gridUtils.align(mouseDownPoint.y));
+     }
+     bending = true;
+
+			
+  		int dx = gridUtils.diffX(x, prevX);
+  		int dy = gridUtils.diffY(y, prevY);
+  		prevX = x;
+  		prevY = y;
+  
+//  		currentDiagram.bend(dx, dy);
+		}
+	}
+
+	public void onMouseUp(Diagram sender, int x, int y) {
+		  System.out.println("bend end:"+sender+" x:"+x+" y:"+y);
+		currentDiagram = null;
+		mouseDown = false;
+		bending = false;
+	}
+
+//	public void addDragHandler(DiagramDragHandler handler) {
+////		dragHandlers.add(handler);
+//	}
+	
+//	public List<DiagramDragHandler> getDragHandlers() {
+//	  return null;
+////	  return dragHandlers;
+//	}
+
+//	public void onDoubleClick(Diagram sender, int x, int y) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+
+	public boolean bending() {
+		return bending;
+	}
+
+	public void onKeyDown(Event event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean onKeyEventDown(int keyCode, boolean shift, boolean ctrl) {
+		this.bendEnabled = keyCode == 57;
+		return false;
+	}
+
+	public boolean onKeyEventUp(int keyCode, boolean shift, boolean ctrl) {
+		this.bendEnabled = false;
+		return false;
+	}
+
+	public void onKeyPress(Event event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onKeyUp(Event event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+  public void onKeyDown(KeyDownEvent event) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void onKeyPress(KeyPressEvent event) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void onKeyUp(KeyUpEvent event) {
+    // TODO Auto-generated method stub
+    
+  }
+
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='sketcho_confluence_app'>
+  <!-- Inherit the core Web Toolkit stuff.                        -->
+  <inherits name='com.google.gwt.user.User'/>
+
+  <inherits name="com.google.gwt.i18n.I18N"/>
+  <inherits name="com.google.gwt.http.HTTP" />
+  <inherits name="com.google.gwt.xml.XML" />
+  
+  <!-- Inherit the default GWT style sheet.  You can change       -->
+  <!-- the theme of your GWT application by uncommenting          -->
+  <!-- any one of the following lines.                            -->
+<!--   <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
+  <inherits name='com.google.gwt.user.theme.clean.Clean'/>
+  <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+  <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+
+  <!-- Other module inherits                                      -->
+<!--	<inherits name='net.sf.hibernate4gwt.Hibernate4Gwt15'/>-->
+	<inherits name="net.sevenscales.Domain"/>
+	<inherits name="net.sevenscales.appFrame.AppFrame"/>
+	<inherits name='net.sevenscales.editor.Editor'/>
+	
+	 <inherits name="com.google.gwt.logging.Logging" />
+  <set-property name="gwt.logging.logLevel" value="FINEST" />
+  <set-property name="gwt.logging.consoleHandler" value="ENABLED" />
+  <set-property name="gwt.logging.developmentModeHandler"
+    value="DISABLED" />
+  <set-property name="gwt.logging.popupHandler" value="DISABLED" />
+  <set-property name="gwt.logging.systemHandler" value="DISABLED" />
+	
+	
+	 <!-- PRODUCTION SETUP... -->
+  <!-- Production => UNCOMMENT -->
+<!--  <set-property name="gwt.logging.enabled" value="FALSE"/> -->
+
+  <!-- Production => COMMENT -->
+  
+  <add-linker name="xsiframe" />
+  <set-configuration-property name="devModeRedirectEnabled" value="true" />
+  
+<!--  <inherits name="com.googlecode.mgwt.MGWT"/> -->
+<!--  <set-configuration-property name="mgwt.superdevmode" value="on" /> -->
+
+  <!-- Production => COMMENT stack trace sources mapping -->
+  <set-property name="compiler.stackMode" value="emulated" />
+  <set-configuration-property name="compiler.emulatedStack.recordLineNumbers"
+    value="true" />
+  <set-configuration-property name="compiler.emulatedStack.recordFileNames"
+    value="true" />
+
+  <!-- PRODUCTION SETUP... DONE -->
+	
+
+  <!-- Specify the app entry point class.                         -->
+  <entry-point class='net.sevenscales.sketchoconfluenceapp.client.Sketcho_confluence_app'/>
+
+  <!-- Specify the paths for translatable code                    -->
+  <source path='client'/>
+
+</module>

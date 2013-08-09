@@ -1,0 +1,76 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:net.sevenscales.editor.api.impl">
+	<ui:style>
+		.simple {
+			display: inline;
+		}
+	</ui:style>
+		
+	<g:HTMLPanel>
+		<div class="btn-group">
+			<c:FastButton ui:field="newNote" addStyleNames="{style.simple}">
+				<c:child>
+					<g:HTML>
+						<a title="New Note" class="btn btn-custom download-btn tooltipper">
+							<i class="icon-note"></i>
+						</a>
+					</g:HTML>
+				</c:child>
+			</c:FastButton>
+			<c:FastButton ui:field="addElement" addStyleNames="{style.simple}">
+				<c:child>
+					<g:HTML>
+						<a title="Add Diagram Element" class="btn btn-custom download-btn tooltipper">
+							<i class="icon-add-diagram"></i>
+						</a>
+					</g:HTML>
+				</c:child>
+			</c:FastButton>
+<!-- 			<c:FastButton ui:field="freehand" addStyleNames="{style.simple}">
+				<c:child>
+					<g:HTML>
+						<a title="Freehand" class="btn btn-custom download-btn tooltipper">
+							<i class="icon-pen-white"></i>
+						</a>
+					</g:HTML>
+				</c:child>
+			</c:FastButton>
+ -->			<div class="btn-group">
+				<c:FastButton ui:field="freehand" addStyleNames="{style.simple}">
+					<c:child>
+						<g:HTML>
+							<a title="Freehand" class="btn btn-custom download-btn tooltipper">
+								<i class="icon-pen-white"></i>
+							</a>
+						</g:HTML>
+					</c:child>
+				</c:FastButton>
+				<button class="btn dropdown-toggle btn-custom" data-toggle="dropdown">
+					<span class="caret"></span>
+				</button>
+				<ul ui:field="freehandModeMenu" class="dropdown-menu">
+					<li ui:field="freehandMore" title="More accurate drawing, but board is coming bigger and loads slower.">
+						More Points
+					</li>
+					<li ui:field="freehandSmooth" title="Smoothing points and average board size.">
+						Smooth
+					</li>
+					<li ui:field="freehandLess" title="Taking less sample points and smoothing a lot. Faster board loading time.">
+						Less Points
+					</li>
+				</ul>
+			</div>
+			<c:FastButton ui:field="select" addStyleNames="{style.simple}">
+				<c:child>
+					<g:HTML>
+						<a title="Select" class="btn btn-custom download-btn tooltipper">
+							<i class="icon-select"></i>
+						</a>
+					</g:HTML>
+				</c:child>
+			</c:FastButton>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder>
+ 

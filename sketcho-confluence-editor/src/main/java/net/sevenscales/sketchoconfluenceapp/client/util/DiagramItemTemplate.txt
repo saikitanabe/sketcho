@@ -1,0 +1,5 @@
+		<net.sevenscales.domain.dto.DiagramItemDTO>
+			<text>%text</text>
+			<type>%type</type>
+			<shape>%shape</shape>
+		</net.sevenscales.domain.dto.DiagramItemDTO>

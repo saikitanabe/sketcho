@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<title>Sketcho</title>
+<!--		<script type="text/javascript" src="Silverlight.js"></script> -->
+<!--<script type="text/javascript" src="createSilverlight.js"></script>-->
+		<script language='javascript' src='net.st.shareddesign.SilverTest.nocache.js'></script>
+				
+    <script type="text/javascript" src="js/dojo-release-1.2.3/dojo/dojo.js" djConfig="isDebug: false"></script>
+    <script type="text/javascript" src="js/dojo-release-1.2.3/dojo/colors.js"></script>
+    
+    <script type="text/javascript">
+			dojo.require("dojox.gfx");
+	    dojo.require("dojox.cometd");
+			dojo.require("dojox.cometd.timestamp");
+			
+			
+<!--
+    if (dojo.isIE) {
+			  sl = new ActiveXObject("AgControl.AgControl");
+				if (sl && sl.IsVersionSupported("1.0")) {
+					dojo.require("dojox.gfx.silverlight");				
+				}
+			} else {
+		  	if (navigator.plugins["Silverlight Plug-In"]) {
+					dojo.require("dojox.gfx.silverlight");
+				}
+			}
+			-->
+
+		dojo.require("dojox.gfx.silverlight");
+
+			
+			dojo.require("dojox.color");
+    </script>
+    <script language="javascript" src="debug.js"></script>    
+		
+		<iframe src="javascript:''" id='__gwt_historyFrame' style='width:0;height:0;border:0'></iframe>		    
+  	</head>
+  	<body>
+  		<div id="content"></div>
+  		<div id="debug_holder"></div>
+	</body>
+
+</html>

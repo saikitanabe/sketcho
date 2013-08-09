@@ -1,0 +1,31 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:net.sevenscales.editor.api.impl">
+	<ui:style>
+	   .simple {
+      display: inline;
+    }
+	</ui:style>
+	<g:HTMLPanel>
+		<div id="sketchboardme-confluenceMenu" class="confluenceMenu btn-group">
+			<c:FastButton ui:field="btnSave" addStyleNames="{style.simple}">
+				<c:child>
+					<g:HTML>
+						<a ui:field="btnSaveAnchor" title="Save (Ctrl+S)" class="btn confluence-menu-save">
+							Save
+						</a>
+					</g:HTML>
+				</c:child>
+			</c:FastButton>
+			<c:FastButton ui:field="btnCancel" addStyleNames="{style.simple}">
+				<c:child>
+					<g:HTML>
+						<a title="Cancel" class="btn">
+							Cancel
+						</a>
+					</g:HTML>
+				</c:child>
+			</c:FastButton>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder> 

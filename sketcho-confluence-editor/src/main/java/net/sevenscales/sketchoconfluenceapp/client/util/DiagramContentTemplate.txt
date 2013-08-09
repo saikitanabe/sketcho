@@ -1,0 +1,7 @@
+<diagramContent class='net.sevenscales.domain.dto.DiagramContentDTO'>
+	<diagramItems>
+		%diagramItems
+	</diagramItems>
+	<width>%width</width>
+	<height>%height</height>
+</diagramContent>

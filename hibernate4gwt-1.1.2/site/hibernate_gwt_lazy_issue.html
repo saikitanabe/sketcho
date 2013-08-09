@@ -1,0 +1,277 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>hibernate4gwt - The Hibernate-GWT problem</title>
+
+
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+  <style type="text/css">
+<!--
+a:link { color: #FFFFFF; text-decoration: none}
+a:visited { text-decoration: none; color: #FFCC66}
+a:hover { color: #99CCFF; text-decoration: underline}
+body { font-family: "Arial", "Helvetica", "sans-serif"}
+-->
+  </style>
+</head>
+
+
+<body style="background-color: rgb(255, 255, 255);" link="#ffffff">
+
+<table align="center" background="image/top.gif" border="0" cellpadding="0" cellspacing="0" height="75" width="700">
+
+  <tbody>
+
+    <tr background="image/top.gif">
+
+      <td colspan="1">
+      <table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
+
+        <tbody>
+
+          <tr>
+
+            <td><font face="Tahoma" size="6">hibernate4gwt</font>
+            <pre><font face="Tahoma">http://hibernate4gwt.sourceforge.net</font></pre>
+
+            </td>
+
+            <td style="text-align: right;">hosted by<br>
+
+            <a href="http://sourceforge.net/"><img style="width: 125px; height: 37px;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=194811&amp;type=2" alt="SourceForge.net Logo" border="0"></a></td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      </td>
+
+    </tr>
+
+  </tbody>
+</table>
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" height="20" width="700">
+
+  <tbody>
+
+    <tr bgcolor="#000000">
+
+      <td bgcolor="#336666">
+      <div align="center"> <font color="#ffffff" face="Tahoma">|<font face="Tahoma"> <a href="index.html">Home</a> | <a href="news.html">News</a>
+| <a href="getting_started.html">Getting started</a>
+| <a href="overview.html">Overview</a> | <a href="hibernate_gwt_problem.html">Hibernate-GWT issues</a>
+| <a href="faq.html">FAQ</a> | <a href="thanks.html">Thanks</a> | </font></font></div>
+
+      </td>
+
+    </tr>
+
+  </tbody>
+</table>
+
+<table align="center" background="image/top1.gif" border="0" cellpadding="0" cellspacing="0" height="13" width="700">
+
+  <tbody>
+
+    <tr>
+
+      <td><font face="Tahoma"><img src="image/pixel.gif" height="1" width="1"></font></td>
+
+    </tr>
+
+  </tbody>
+</table>
+
+<font face="Tahoma"><br>
+
+</font>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="700">
+
+  <tbody>
+
+    <tr>
+
+      <td valign="top" width="455">
+      <table background="image/longmenu.gif" border="0" cellpadding="0" cellspacing="0" height="34" width="455">
+
+        <tbody>
+
+          <tr>
+
+            <td><b><font face="Tahoma">The
+Hibernate-GWT lazy issue</font></b></td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      <p class="MsoNormal"><span style="" lang="EN-GB"><span style="font-weight: bold;">The
+problem</span><o:p></o:p></span></p>
+
+      <p class="MsoNormal"><span style="" lang="EN-GB">Partial
+loading of POJO with Hibernate is a current usage to prevent loading of
+unnecessary data. The persistence library deals with these unloaded
+associations by handling proxies.<o:p></o:p></span></p>
+
+      <p class="MsoNormal"><span style="" lang="EN-GB">Trying to
+pass such a partially loaded POJO to GWT will raise an exception, since
+the
+Java-&gt;Javascript compiler is not able to serialize the nested
+proxies. <o:p></o:p></span></p>
+
+      <p class="MsoNormal"><span style="" lang="EN-GB">So you
+cannot send a partially loaded Hibernate POJO to the GWT client side.<o:p></o:p></span></p>
+
+      <br>
+
+      <p class="MsoNormal"><span style="" lang="EN-GB"><span style="font-weight: bold;">The
+general
+solution: Data Transfer Object and Dozer</span><o:p></o:p></span></p>
+
+      <p class="MsoNormal"><span style="" lang="EN-GB">The current
+common solution to this issue is to use <a style="color: rgb(0, 0, 0);" href="http://dozer.sourceforge.net/">Dozer</a> to
+clone the Hibenate
+POJO. It
+partially solves&nbsp; the <a style="color: rgb(0, 0, 153);" href="hibernate_gwt_type_issue.html">type issue</a><span style="color: rgb(0, 0, 153);"> </span>but
+raises a
+new one on partially loaded POJO.<o:p></o:p></span></p>
+
+      <p class="MsoNormal"><span style="" lang="EN-GB">Depending
+on the Hibernate session state (open or closed), Dozer will load the
+entire POJO
+association graph or raise a LazyIntialisationException. Indeed, by
+default
+Dozer tries to clone all properties: if the session is opened, they are
+lazy
+loaded, otherwise Hibernate throws an exception.<o:p></o:p></span></p>
+
+      <p class="MsoNormal"><span style="" lang="EN-GB"><span style=""></span>Well,
+the
+workaround mostly used is to define clone configuration with Dozer that
+only
+copy the loaded associations:<o:p></o:p></span></p>
+
+      <p style="text-align: center;" class="MsoNormal"><span style="" lang="EN-GB"><img style="width: 600px; height: 300px;" alt="dto" src="image/dto_clone.jpg"></span></p>
+
+      <p class="MsoNormal"><span style="" lang="EN-GB">This
+solution works, but it poses some issues: <o:p></o:p></span></p>
+
+      <ul style="margin-top: 0cm;" type="disc">
+
+        <li class="MsoNormal" style=""><span style="" lang="EN-GB">Your project will have to deal
+with 2 different object hierarchies: the Domain One and the DTO one.<o:p></o:p></span></li>
+
+        <li class="MsoNormal" style=""><span style="" lang="EN-GB">You will have to write as many
+clone configurations that you have of partial load request! This can
+really become a pain when your project deals with many data tables and
+as many partial loading request.<o:p></o:p></span></li>
+
+        <li class="MsoNormal" style=""><span style="" lang="EN-GB">You have to create as many
+service entry points as you have DTO concerned by it, even for the same
+purpose!<o:p></o:p></span></li>
+
+      </ul>
+
+      <table class="MsoTableGrid" style="border: medium none ; border-collapse: collapse; width: 631px; height: 58px;" border="1" cellpadding="0" cellspacing="0">
+
+        <tbody>
+
+          <tr style="">
+
+            <td style="border: 1pt solid windowtext; padding: 0cm 5.4pt; width: 460.6pt;" valign="top" width="614">
+            <pre><span style="" lang="EN-GB">public void updateUser(UserWithAddressDTO user) {&hellip;}<br>public void updateUser(CompleteUserDTO user) {&hellip;}<br>public void updateUser(SimpleUserDTO user) {&hellip;}<o:p></o:p></span></pre>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      <p class="MsoNormal"><span style="" lang="EN-GB"><br>
+
+      <span style="font-weight: bold;">Our
+solution: Domain Driven Design and hibernate4gwt</span><o:p></o:p></span></p>
+
+      <p class="MsoNormal"><span style="" lang="EN-GB"><o:p></o:p>The goal of
+the library is to allow you to send your Domain model to the GWT layer.
+This is
+achieved by dynamically cloning the Hibernate POJO. Proxy associations
+are
+first marked and then replaced by null to prevent
+LazyInitializationException
+or the Javascript compiler exception.<o:p></o:p></span></p>
+
+      <p style="text-align: center;" class="MsoNormal"><span style="" lang="EN-GB"><o:p></o:p></span><img style="width: 626px; height: 300px;" alt="h4gwt clone" src="image/h4gwt_clone.JPG"></p>
+
+      <p class="MsoNormal"><span style="" lang="EN-GB">The clone
+POJO can be manipulated by the GWT layer painlessly.<o:p></o:p></span></p>
+
+      <p class="MsoNormal"><span style="" lang="EN-GB">For update,
+the clone POJO must be merged with an existing Hibernate one to prevent
+lazy
+associations to be replaced by null (which would lead Hibernate to
+delete the
+association instead of leaving it unchanged). <o:p></o:p></span></p>
+
+      <p style="text-align: center;" class="MsoNormal"><span style="" lang="EN-GB"><o:p></o:p><o:p></o:p></span><img style="width: 650px; height: 275px;" alt="h4gwt merge" src="image/h4gwt_merge.JPG"></p>
+
+      <span style="" lang="EN-GB">The hibernate4gwt
+can store and restore
+seamlessly
+the Hibernate POJO in the HTTP session (stateful mode) or load a fresh
+new
+Hibernate Pojo before merge (stateless mode).</span></td>
+
+    </tr>
+
+  </tbody>
+</table>
+
+<font face="Tahoma"><br>
+
+</font>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="700">
+
+  <tbody>
+
+    <tr>
+
+      <td>
+      <div align="left"></div>
+
+      <div align="center"><font face="Tahoma" size="2">Copyright 2007. All Rights Reserved</font></div>
+
+      <table align="center" border="0" cellpadding="0" cellspacing="0" height="20" width="700">
+
+        <tbody>
+
+          <tr align="center" bgcolor="#000000">
+
+            <td bgcolor="#336666">&nbsp;<small><span style="color: rgb(255, 255, 255);">Last updated : 31 may,
+2007</span></small></td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+      </td>
+
+    </tr>
+
+  </tbody>
+</table>
+
+<center>&nbsp;</center>
+
+<br>
+
+<br>
+
+</body>
+</html>

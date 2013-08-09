@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry including="**/*.java" kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+	<classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-servlet/2.5.1/gwt-servlet-2.5.1.jar" sourcepath="M2_REPO/com/google/gwt/gwt-servlet/2.5.1/gwt-servlet-2.5.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/Users/saikitanabe/.m2/repository/com/google/gwt/gwt-servlet/2.5.1/gwt-servlet-2.5.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="M2_REPO/net/sevenscales/sketcho/hibernate4gwtdomain/hibernate4gwt-domain/1.0-SNAPSHOT/hibernate4gwt-domain-1.0-SNAPSHOT.jar" sourcepath="M2_REPO/net/sevenscales/sketcho/hibernate4gwtdomain/hibernate4gwt-domain/1.0-SNAPSHOT/hibernate4gwt-domain-1.0-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/net/sevenscales/sd-app-frame/1.0-SNAPSHOT/sd-app-frame-1.0-SNAPSHOT.jar" sourcepath="M2_REPO/net/sevenscales/sd-app-frame/1.0-SNAPSHOT/sd-app-frame-1.0-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/google/gwt/gwt-dev/2.5.1/gwt-dev-2.5.1.jar" sourcepath="M2_REPO/com/google/gwt/gwt-dev/2.5.1/gwt-dev-2.5.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/Users/saikitanabe/.m2/repository/com/google/gwt/gwt-dev/2.5.1/gwt-dev-2.5.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="M2_REPO/org/json/json/20090211/json-20090211.jar"/>
+	<classpathentry kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar" sourcepath="M2_REPO/junit/junit/3.8.1/junit-3.8.1-sources.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/sd-domain"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/sd-editor"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>

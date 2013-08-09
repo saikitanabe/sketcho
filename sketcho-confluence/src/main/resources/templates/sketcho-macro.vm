@@ -1,0 +1,43 @@
+<meta name="sketchboard-me-plugin-url" content="$resourcesPath">
+#requireResource("net.sevenscales.confluence.plugins.sketcho-confluence:script_resource")
+#requireResource("net.sevenscales.confluence.plugins.sketcho-confluence:sketcho_confluence_app")
+
+<script type="text/javascript">
+	var storeServicePath = {
+	    value:"$servletPath/sketcho_confluence_app/store"
+    };
+
+    var contentServicePath = {
+    	value:"$servletPath/resources/contentImage"
+    };
+    
+    var restServicePath = {
+    	value:"$restServicePath"
+    };
+    
+    
+  var resourcesPath = {value: "$resourcesPath"};  
+</script>
+
+<div id="toolbar-background" class="toolbar-background"></div>
+
+#if ($notValidLicense)
+  <div class="termsofuse">Sketchboard.Me: A license is currently stored, however, it is invalid (e.g. expired or user count mismatch). 
+  <a href="$servletPath/net.sevenscales.confluence.plugins.sketcho-confluence/license">Configure your license.</a> </div>
+#end
+
+#if ($noLicense)
+  <div class="termsofuse">Sketchboard.Me: You don't have a license, <a href="$servletPath/net.sevenscales.confluence.plugins.sketcho-confluence/license">get a trial license.</a></div>
+#end
+
+#if ($licenseResourceProblem)
+  <div class="termsofuse">Sketchboard.Me: Cannot find license resources. Please speak to a system administrator.
+  <a href="$servletPath/net.sevenscales.confluence.plugins.sketcho-confluence/license">Configure your license.</a></div>
+#end
+
+#if ($editable)
+  <img src="$imgUrl" onclick="openSketch('$modelingSpace', '$pageId', '$modelName', '.$classname', '$editable')" class="skme-img $classname" />
+  <div onclick="openSketch('$modelingSpace', '$pageId', '$modelName', '.$classname', '$editable')" class="sketchboardme-link">Edit Diagram</div>
+#else 
+  <img class="skme-img" src="$imgUrl" />
+#end

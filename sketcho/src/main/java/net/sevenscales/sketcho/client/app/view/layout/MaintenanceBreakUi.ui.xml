@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.panel {
+			border: 3px red solid;
+			margin-left: 190px;
+			margin-bottom: 15px;
+			padding: 5px;
+		}
+	</ui:style>
+	<g:HTMLPanel styleName='{style.panel}'>
+		<b>Maintenance break during Friday 19.03.2010 completed</b> Service will not be available from http://sketcho.7scales.net 
+		for couple of hours when it starts. If you need to access the service during that time contact info@7scales.net.
+	</g:HTMLPanel>
+</ui:UiBinder> 

@@ -1,0 +1,72 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style type="net.sevenscales.editor.content.ui.ColorSelections.Style">
+		.colortable {
+			border-collapse: collapse;
+		}
+		
+		.colortable td {
+			padding: 0;
+			margin: 0;
+			border: 1px solid #95918E;
+		}
+		
+		.colortable td:hover {
+			border: 1px solid #ffffff;
+			border: none;
+			outline: solid 2px #ffffff;
+		}
+		
+		.focuspanel:focus {
+			outline: none;
+		}
+		
+		.colorfield {
+			text-align: center;
+			font-size: 18px;
+			margin: 0;
+		}
+		
+		.transparent {
+			color: #444444;
+			width: 100%;
+			text-align: center;
+			background-color: #F9F9F9;
+			border: 1px solid #bbb;
+			outline: none;
+		}
+		
+		.tableStyle {
+			padding: 0;
+			margin: 0;
+			background-color: #95918E;
+		}
+	</ui:style>
+	<g:HTMLPanel styleName="color-tabs">
+		<ul class="nav nav-tabs">
+			<li class="active">
+				<a ui:field="background" data-toggle="tab">Background</a>
+			</li>
+      <li>
+        <a ui:field="border" data-toggle="tab">Border</a>
+      </li>
+		</ul>
+		<div id="myTabContent" class="tab-content">
+			<div>
+				<g:VerticalPanel styleName="{style.tableStyle}">
+					<!-- <g:HorizontalPanel styleName="{style.wrapper}"> -->
+					<!-- <g:SimplePanel ui:field="sampleColor" width="40px" height="20px"></g:SimplePanel> -->
+					<g:TextBox ui:field="colorValue" width="211px"
+						styleName="{style.colorfield}"></g:TextBox>
+					<!-- </g:HorizontalPanel> -->
+					<g:FocusPanel ui:field="transparent" styleName="{style.transparent}">
+						<g:HTML>transparent</g:HTML>
+					</g:FocusPanel>
+					<g:FlexTable ui:field="colortable" styleName="{style.colortable}"
+						cellPadding="0" cellSpacing="0"></g:FlexTable>
+				</g:VerticalPanel>
+			</div>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder> 

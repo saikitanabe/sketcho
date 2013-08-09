@@ -1,0 +1,309 @@
+package net.st.shareddesign.server.dao.hibernate;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.Map.Entry;
+
+import junit.framework.TestCase;
+import net.sevenscales.domain.api.IPage;
+import net.sevenscales.domain.api.IPageOrderedContent;
+import net.sevenscales.domain.api.IProject;
+import net.sevenscales.domain.constants.Constants;
+import net.sevenscales.domain.dto.SdServerEception;
+import net.sevenscales.domain.utils.PageIterator;
+import net.sevenscales.server.dao.IPageDAO;
+import net.sevenscales.server.dao.hibernate.ProjectDAO;
+import net.sevenscales.server.domain.ContentProperty;
+import net.sevenscales.server.domain.Page;
+import net.sevenscales.server.domain.PageOrderedContent;
+import net.sevenscales.server.domain.PageProperty;
+import net.sevenscales.server.domain.Project;
+import net.sf.beanlib.provider.collector.PublicSetterMethodCollector;
+import net.sf.beanlib.provider.finder.PublicReaderMethodFinder;
+import net.sf.beanlib.spi.BeanTransformerSpi;
+import net.sf.beanlib.spi.DetailedBeanPopulatable;
+import net.sf.beanlib.spi.replicator.CollectionReplicatorSpi;
+import net.sf.hibernate4gwt.core.HibernateBeanManager;
+
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.orm.hibernate3.SessionFactoryUtils;
+import org.springframework.orm.hibernate3.SessionHolder;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+public class CopyProjectTest extends TestCase {
+  private static CollectionReplicatorSpi.Factory factory = new CollectionReplicatorSpi.Factory() {
+    public CollectionReplicatorSpi newCollectionReplicatable(
+        BeanTransformerSpi beanTransformer) {
+      return new CollectionReplicatorSpi() {
+        public <T,V> V replicateCollection(Collection<T> fromCollection,
+            Class<V> toClass) {
+          return (V) BeanUtil2.clone(fromCollection);
+        }
+      };
+    }
+  };
+  
+  private static class MergeDetailedPopulatable implements DetailedBeanPopulatable {
+    public boolean shouldPopulate(String propertyName, Object fromBean,
+        Method readerMethod, Object toBean, Method setterMethod) {
+      
+      if (propertyName.equals("id")) {
+        return false;
+      }
+      return true;
+    }
+  }
+  
+  private static class IdResetor {
+    private Map<Long, Object> resetedMap = new HashMap<Long, Object>();
+    
+    public <T> T reset(T object) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, SecurityException {
+      if (object == null) {
+        return null;
+      }
+      
+      Object[] args = {null};
+      Class[] types = {Long.class}; 
+      Method setterMethod;
+      try {
+        Method idReaderMethod = PublicReaderMethodFinder.inst.find("id", object);
+        if (idReaderMethod != null) {
+          Long id = (Long) idReaderMethod.invoke(object, null);
+          if (resetedMap.get(id) == null) {
+            resetedMap.put(id, object);
+          
+            setterMethod = object.getClass().getMethod("setId", types);
+            setterMethod.invoke(object, args);
+            
+            for (Method m : PublicSetterMethodCollector.inst.collect(object)) {
+              final String propertyString = m.getName().substring(PublicSetterMethodCollector.inst.getMethodPrefix().length());
+              System.out.println(object+": propertyString: "+propertyString);
+              Method readerMethod = PublicReaderMethodFinder.inst.find(propertyString, object);
+              Object propertyValue = readerMethod.invoke(object, null);
+              reset(propertyValue);
+            }
+          }
+        }
+      } catch (NoSuchMethodException e) {
+      }
+      return object;
+    }
+  }
+  
+  private static IdResetor resetor; 
+  private static SessionFactory sessionFactory;
+  private static HibernateTemplate hibernateTemplate;
+  private static HibernateBeanManager beanManager;
+  
+//  public static class Resetor extends BeanTransformer {
+//
+//    protected Resetor(BeanPopulatorSpi.Factory beanPopulatorFactory) {
+//      super(beanPopulatorFactory);
+//    }
+//    
+//  }
+
+  static {
+//    AnnotationConfiguration config = new AnnotationConfiguration();
+//    config.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLInnoDBDialect").
+//    setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver").
+//    setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/sketcho").
+//    setProperty("hibernate.connection.username", "root").
+//    setProperty("hibernate.connection.password", "").
+//    setProperty("hibernate.connection.pool_size", "1").
+//    setProperty("hibernate.connection.autocommit", "false").
+//    setProperty("hibernate.cache.provider_class", "org.hibernate.cache.HashtableCacheProvider").
+//    setProperty("hibernate.hbm2ddl.auto", "update").
+//    setProperty("hibernate.show_sql", "true");
+////
+//    config.addAnnotatedClass(PageOrderedContent.class);
+//    config.addAnnotatedClass(Content.class);
+//    config.addAnnotatedClass(TextContent.class);
+//    config.addAnnotatedClass(TextLineContent.class);
+//    config.addAnnotatedClass(ListContent.class);
+//    config.addAnnotatedClass(LinkContent.class);
+//    config.addAnnotatedClass(Project.class);
+//    config.addAnnotatedClass(Page.class);
+//    config.addAnnotatedClass(Property.class);
+//    config.addAnnotatedClass(PageProperty.class);
+//    config.addAnnotatedClass(DiagramItem.class);
+//    config.addAnnotatedClass(DiagramContent.class);
+//    config.addAnnotatedClass(ContentProperty.class);
+//    
+//    config.addFile("/Users/saikitanabe/Documents/workspace/sd-server/target/classes/applicationContext-database.xml");
+    
+    GenericApplicationContext springContext = new GenericApplicationContext();
+    XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(springContext);
+    Resource[] resources = new Resource[]{
+        new ClassPathResource("applicationContext.xml"),
+        new ClassPathResource("applicationContext-GWT.xml"),
+        new ClassPathResource("applicationContext-acegi-security.xml"), 
+        new ClassPathResource("applicationContext-common-authorization.xml") 
+        };
+    xmlReader.loadBeanDefinitions(resources);
+    springContext.refresh();
+
+    sessionFactory = (SessionFactory) springContext.getBean("sessionFactory");
+//    sessionFactory = config.buildSessionFactory();
+    hibernateTemplate = new HibernateTemplate(sessionFactory);
+    beanManager = (HibernateBeanManager) springContext.getBean("hibernateBeanManager");
+    
+    //    Resetor bt = new Resetor(factory);
+//    bt.initDetailedBeanPopulatable(new MergeDetailedPopulatable());
+
+//    bt.initCollectionReplicatable(factory);
+    resetor = new IdResetor();
+    pageDAO = (IPageDAO) springContext.getBean("pageDAO");
+  }
+
+  private static IPageDAO pageDAO;
+  private ProjectDAO projectDAO;
+  private IProject project;
+  private Session session;
+
+  @Override
+  protected void setUp() throws Exception {
+    HibernateTemplate hibernateTemplate =
+        new HibernateTemplate(sessionFactory);
+    this.session = SessionFactoryUtils.
+      getSession(sessionFactory, true);
+    TransactionSynchronizationManager.
+      bindResource(sessionFactory, 
+          new SessionHolder(session));
+    
+//    UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken
+//      ("testitollo", "pass");
+
+//    SecurityContextHolder.getContext().setAuthentication(authRequest);
+  }
+  
+  @Override
+  protected void tearDown() throws Exception {
+//    SecurityContextHolder.getContext().setAuthentication(null);
+
+    TransactionSynchronizationManager.unbindResource(sessionFactory);
+    SessionFactoryUtils.releaseSession(session, sessionFactory);
+  }
+  
+  public void testDummy() {
+    
+  }
+
+  public void distestDuplicateProject() throws SdServerEception, IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    Project persistedProject = openProjectWithSubpages(new Long(1));
+//    Page persistedDash = persistedProject.getDashboard();
+    final Project clonedProject = (Project) BeanUtil2.cloneHibernate(persistedProject);
+    Page dash = clonedProject.getDashboard();
+    clonedProject.setDashboard(null);
+    hibernateTemplate.save(clonedProject);
+    
+//    // now clone dashboard with hierarchy
+//    PageIterator pi = new PageIterator(dash, new PageIterator.IteratorCallback() {
+//      public void iteration(IPage page, int level) {
+//        System.out.println(page.getName());
+//        savePage((Page)page, clonedProject);
+//      }
+//    });
+//    pi.iterate();
+
+//    persistedDash.setSubpages(null);
+//    Page dash = cloneAndSave(persistedDash, clonedProject);
+    clonedProject.setDashboard(dash);
+    hibernateTemplate.update(clonedProject);
+    
+//    for (Project p : projects) {
+//      System.out.println(p.getName());
+////      ProjectDTO pdto = (ProjectDTO) beanManager.clone(p);
+//      
+////      Project to = replicator.replicateBean(pdto,    Project.class);
+//      Project cloned = (Project) BeanUtil.cloneHibernate(p);
+//      cloned.setDashboard(null);
+//      hibernateTemplate.save(cloned);
+//
+////    Page cloned = (Page) BeanUtil.cloneHibernate(pageDAO.open(s.getId()));
+//
+////      System.out.println("Replicated: " + cloned.getName());
+////      
+////      PageIterator pi = new PageIterator(cloned.getDashboard(), new PageIterator.IteratorCallback() {
+////        public void iteration(IPage page, int level) {
+////          System.out.println(page.getName());
+////          for (PageOrderedContent c : (Set<PageOrderedContent>) page.getContentItems()) {
+////            System.out.println(c.getOrderValue()+": "+c.getContent().getName());
+////          }
+////        }
+////      });
+////      pi.iterate();
+//    }
+    
+    List<IPage> skeches = pageDAO.findAll(new Long(1), Constants.PAGE_TYPE_SKETCH);
+    for (IPage s : skeches) {
+//      IPage cloned = (IPage) beanManager.clone(pageDAO.open(s.getId()));
+      cloneAndSave(s, clonedProject);
+      
+////      Page reset = resetor.reset(cloned);
+//      System.out.println(cloned.getName()+" id:"+cloned.getId()+":contentitems:"+cloned.getContentItems().size());
+////      for (IPageOrderedContent poc : (Set<IPageOrderedContent>)cloned.getContentItems()) {
+//      for (IPageOrderedContent poc : cloned.getContentItems()) {
+//        System.out.println(poc.getContent());
+//      }
+    }
+    
+    hibernateTemplate.flush();
+    hibernateTemplate.clear();
+  }
+
+  private Project openProjectWithSubpages(Long long1) {
+    List<Project> projects = hibernateTemplate.find("from "+Project.class.getName()+" p where p.id=1");
+    final Project result = projects.get(0);
+    PageIterator pi = new PageIterator(result.getDashboard(), new PageIterator.IteratorCallback() {
+      public void iteration(IPage page, int level) {
+        System.out.println(page.getName());
+        page.setProject(result);
+        Hibernate.initialize(page.getContentItems());
+      }
+    });
+    pi.iterate();
+    return result;
+  }
+
+  private Page cloneAndSave(IPage s, IProject clonedProject) {
+    Page cloned = (Page) BeanUtil2.cloneHibernate(pageDAO.open(s.getId()));
+    cloned = savePage(cloned, clonedProject);
+    return cloned;
+  }
+
+  private Page savePage(Page cloned, IProject clonedProject) {
+    cloned.setProject(clonedProject);
+    SortedSet<PageOrderedContent> contents = cloned.getContentItems();
+    cloned.setContentItems(null);
+    hibernateTemplate.save(cloned);
+    cloned.setContentItems(contents);
+    
+    for (IPageOrderedContent poc : cloned.getContentItems()) {
+      poc.setPage(cloned);
+      Map<String,ContentProperty> map = (Map<String, ContentProperty>) poc.getContent().getProperties();
+      for (Entry<String,ContentProperty> e : map.entrySet()) {
+        hibernateTemplate.save(e.getValue());
+      }
+      hibernateTemplate.save(poc);
+    }
+    
+    for (Entry<String, PageProperty> e : cloned.getProperties().entrySet()) {
+      hibernateTemplate.save(e.getValue());
+    }
+    hibernateTemplate.update(cloned);
+    return cloned;
+  }
+}

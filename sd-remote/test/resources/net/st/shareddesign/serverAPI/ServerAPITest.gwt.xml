@@ -1,0 +1,18 @@
+<module>
+	<inherits name='com.google.gwt.user.User'/>
+    <inherits name='net.sf.hibernate4gwt.Hibernate4Gwt15'/>
+	
+		<source path='remote'/>
+		
+		<inherits name='net.sf.hibernate4gwt.Hibernate4Gwt15'/>
+		<inherits name="net.st.shareddesign.domain.Domain"/>
+	 	<inherits name="net.st.shareddesign.serverAPI.ServerAPI"/> 
+
+<!--  	<servlet path="/LoginRemote" class="net.st.shareddesign.server.gwt.LoginRemoteImpl"/>-->
+<!--  	<servlet path="/AdminRemote" class="net.st.shareddesign.server.gwt.AdminRemoteImpl"/>-->
+<!--  	<servlet path="/PageRemote" class="net.st.shareddesign.server.gwt.PageRemoteImpl"/>-->
+<!--  	<servlet path="/project.rpc" class="net.st.shareddesign.server.gwt.ProjectRemoteImpl"/>-->
+<!--  	<servlet path="/ShareRemote" class="net.st.shareddesign.server.gwt.ShareRemoteImpl"/>-->
+<!-- 		<servlet path="/TicketRemote" class="net.st.shareddesign.server.gwt.TicketRemoteImpl"/>-->
+
+</module>

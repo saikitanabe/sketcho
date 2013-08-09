@@ -1,0 +1,885 @@
+/** Add css rules here for your application. */
+/* sketchboardme-grey.gif, grid.gif, brownbg.gif */
+.bodystyle {
+    background: url("images/paper-try-out3.gif") repeat center center;
+
+/* 	right: 0; The part that puts the Panel in bottom right of the page/client area */
+/* 	bottom: 0; */
+}
+
+body {
+	/* override gwt clean theme margin */
+	margin: 0 !important;
+}
+
+.splash {
+    position: fixed;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   background: url("images/sketchboard.png") no-repeat center center;
+}
+
+.scaleSlider {
+    position: fixed;
+    z-index: 1001 !important;
+    left: 10px;
+    top: 10px;
+}
+
+@-webkit-keyframes glow {
+	0% {
+		-webkit-box-shadow: 0 0 16px rgba(66, 140, 240, 0.5);
+		border-color: rgba(0,0,255,0.5);
+	}
+	100% {
+		-webkit-box-shadow: 0 0 16px rgba(66, 140, 240, 1.0), 0 0 36px rgba(0, 140, 255, 1.0);
+		border-color: rgba(0,0,255,1.0);
+	}
+}
+@-moz-keyframes glow {
+	0% {
+		-moz-box-shadow: 0 0 16px rgba(66, 140, 240, 0.5);
+		border-color: rgba(0,0,255,0.5);
+	}
+	100% {
+		-moz-box-shadow: 0 0 16px rgba(66, 140, 240, 1.0), 0 0 36px rgba(0, 140, 255, 1.0);
+		border-color: rgba(0,0,255,1.0);
+	}
+}
+@-ms-keyframes glow {
+	0% {
+		box-shadow: 0 0 16px rgba(66, 140, 240, 0.5);
+		border-color: rgba(0,0,255,0.5);
+	}
+	100% {
+		box-shadow: 0 0 16px rgba(66, 140, 240, 1.0), 0 0 36px rgba(0, 140, 255, 1.0);
+		border-color: rgba(0,0,255,1.0);
+	}
+}
+@-o-keyframes glow {
+	0% {
+		box-shadow: 0 0 16px rgba(66, 140, 240, 0.5);
+		border-color: rgba(0,0,255,0.5);
+	}
+	100% {
+		box-shadow: 0 0 16px rgba(66, 140, 240, 1.0), 0 0 36px rgba(0, 140, 255, 1.0);
+		border-color: rgba(0,0,255,1.0);
+	}
+}
+@keyframes glow {
+	0% {
+		box-shadow: 0 0 16px rgba(66, 140, 240, 0.5);
+		border-color: rgba(0,0,255,0.5);
+	}
+	100% {
+		box-shadow: 0 0 16px rgba(66, 140, 240, 1.0), 0 0 36px rgba(0, 140, 255, 1.0);
+		border-color: rgba(0,0,255,1.0);
+	}
+}
+
+/*.anim-effect {
+    background-color:#cce;
+	-webkit-animation-name: glow;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-direction: alternate;
+	-webkit-animation-timing-function: ease-in-out;
+
+	-moz-animation-name: glow;
+	-moz-animation-duration: 1s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-direction: alternate;
+	-moz-animation-timing-function: ease-in-out;
+
+	-ms-animation-name: glow;
+	-ms-animation-duration: 1s;
+	-ms-animation-iteration-count: infinite;
+	-ms-animation-direction: alternate;
+	-ms-animation-timing-function: ease-in-out;
+
+	-o-animation-name: glow;
+	-o-animation-duration: 1s;
+	-o-animation-iteration-count: infinite;
+	-o-animation-direction: alternate;
+	-o-animation-timing-function: ease-in-out;
+
+	animation-name: glow;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	animation-timing-function: ease-in-out;
+}
+*/
+.topButtons {
+    position: fixed;
+    z-index: 1001 !important;
+    left: 40px;
+    top: 10px;
+}
+
+.toolbar {
+    width: 100%;
+	  background: url("images/paper-try-out3.gif") repeat center center;
+    border-left: 1px solid #bbb;
+    border-right: 1px solid #bbb;
+    border-top: 1px solid #bbb;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.ToolFrame-panel {
+    position: relative;
+    margin-left: -215px;
+}
+
+.library {
+    overflow-y: scroll;
+    z-index: 1010;
+}
+
+.library-selection {
+    position: fixed;
+    top: 90px;
+    right: -59px;
+    width: 150px;
+    -webkit-transform:rotate(90deg);
+    -moz-transform:rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    z-index: 1010 !important;
+}
+
+@-moz-document url-prefix() {
+    .library-selection {
+        right: -60px;
+    }
+    
+	.ToolFrame-panel {
+        margin-left: -221px;
+    }
+}
+
+
+.toolbar-background {
+position: fixed;
+bottom: 0;
+left: 0;
+right: 0;
+height: 40px;
+z-index: 1001 !important;
+/*background: url("images/library-bg.gif") repeat center center;*/
+filter:alpha(opacity=50);opacity:0.5;background-color:#333;
+visibility: hidden;
+}
+
+.library-showhide-area {
+  width: 21px;
+  position: fixed; /* Or fixed - depends on what you want */
+  right: 0;
+  top: 0;
+  bottom: 40px;
+  background: url("images/left-arrow.png") no-repeat center center;
+  user-select: none;
+  z-index: 1002 !important;
+/*background-color: #ECE6E0;*/
+/*opacity:0.1;
+filter:Alpha(opacity=10)*/
+}
+
+.confluenceMenu {
+  position: fixed;
+  bottom: 7px;
+  left: 20px;  
+  z-index: 1002 !important;
+}
+
+.buttonbar {
+  position: fixed; /* Or fixed - depends on what you want */
+  bottom: 3px;
+  left: 50%;
+  margin-left: -115px;
+  z-index: 1001 !important;
+}
+
+.buttonbar td {
+  padding-right: 5px;
+}
+
+.ToolFrame {
+
+/*	border-top: solid grey 1px;
+	border-right: solid grey 1px;
+	border-bottom: solid grey 1px;
+	*/
+/*  position: absolute;
+  right: 20px;
+  top: 0;
+  bottom: 40px;*/
+  /*background: url("images/library-bg.gif") repeat center center;*/
+}
+
+.libraryButton-on {
+  position: fixed; /* Or fixed - depends on what you want */
+  top: 0;
+  right: 0;
+  bottom: 40px;
+  background: url("images/right-arrow.png") no-repeat center center;
+  cursor: default;
+  z-index: 1001;
+}
+
+.libraryButton-on:hover {
+  background: #eee url("images/right-arrow.png") no-repeat center center;
+}
+
+.libraryButton-off {
+  position: fixed; /* Or fixed - depends on what you want */
+  right: 0;
+  top: 0;
+  bottom: 40px;
+  background: url("images/left-arrow.png") no-repeat center center;
+}
+
+.libraryButton-off:hover {
+  background: #eee url("images/left-arrow.png") no-repeat center center;
+}
+
+.SketchoBoard {
+	position: fixed; /* Or fixed - depends on what you want */
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+  background: url("images/paper-try-out3.gif") repeat center center;
+  z-index: 1000 !important;
+
+/* 	right: 0; The part that puts the Panel in bottom right of the page/client area */
+/* 	bottom: 0; */
+}
+
+div.UiContent {
+position: relative;
+/*z-index: 1;*/
+}
+
+.modebar {
+	height: 100%;
+}
+
+.modebar td {
+	padding-top: 70px;
+	padding-right: 3px;
+	padding-left: 3px;
+}
+
+.gwt-Button {
+	padding: 2px 3px;
+	font-size: small;
+	cursor: pointer;
+	cursor: hand;
+	border: 1px outset #ccc;
+	white-space: nowrap;
+}
+
+.menuArea {
+}
+
+.UiEditContent {
+}
+
+.UiContent {
+/*  background-color: #FCFCFC;
+	padding: 15px;
+  border: #bbb solid 1px;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-border-radius: 4px;
+  border-radius: 4px;*/
+}
+
+.sd-editor-surface-modeling-area {
+	/* 	border: solid grey 1px; #6694e3 */
+	
+}
+
+textarea {
+	background-color: #fff;
+	border: 1px solid #bbb;
+}
+
+.content-edit-buttons {
+	height: 28px;
+	padding-left: 0px;
+}
+
+.content-edit-buttons td {
+}
+
+.debug {
+	border: 1px solid black;
+	text-align: left;
+}
+
+.ModelingPanel {
+	-moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+	
+	height: 100%;
+	z-index: 1001 !important;
+}
+
+.sd-editor-surface-modeling-area {
+/*	border: solid 1px #bbb; */
+}
+
+.properties-TextArea {
+	height: 100%;
+}
+
+.termsofuse {
+  padding: 8px 0 10px 0;
+  border: #bbb solid 1px;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  background-color: #F7F7F7;
+  text-align: center;
+}
+
+/** GWT LAYOUT FIXES **/
+.properties-TextArea {
+	border: none;
+}
+
+.gwt-TextArea {
+	border: none;
+}
+
+.gwt-DecoratorPanel2 {
+	
+}
+
+.gwt-DecoratorPanel2 .topCenter,.gwt-DecoratorPanel2 .bottomCenter {
+	background: url(images/standard/images/hborder.png) repeat-x;
+}
+
+.gwt-DecoratorPanel2 .middleLeft,.gwt-DecoratorPanel2 .middleRight {
+	background: url(images/standard/images/vborder.png) repeat-y;
+}
+
+.gwt-DecoratorPanel2 .topLeftInner,.gwt-DecoratorPanel2 .topRightInner,.gwt-DecoratorPanel2 .bottomLeftInner,.gwt-DecoratorPanel2 .bottomRightInner
+	{
+	width: 5px;
+	height: 5px;
+	zoom: 1;
+}
+
+.gwt-DecoratorPanel2 .topLeft {
+	background: url(images/standard/images/corner.png) no-repeat 0px 0px;
+	-background: url(images/standard/images/corner_ie6.png) no-repeat 0px
+		0px;
+}
+
+.gwt-DecoratorPanel2 .topRight {
+	background: url(images/standard/images/corner.png) no-repeat -5px 0px;
+	-background: url(images/standard/images/corner_ie6.png) no-repeat -5px
+		0px;
+}
+
+.gwt-DecoratorPanel2 .bottomLeft {
+	background: url(images/standard/images/corner.png) no-repeat 0px -5px;
+	-background: url(images/standard/images/corner_ie6.png) no-repeat 0px
+		-5px;
+}
+
+.gwt-DecoratorPanel2 .bottomRight {
+	background: url(images/standard/images/corner.png) no-repeat -5px -5px;
+	-background: url(images/standard/images/corner_ie6.png) no-repeat -5px
+		-5px;
+}
+
+* html .gwt-DecoratorPanel2 .topLeftInner,* html .gwt-DecoratorPanel2 .topRightInner,* html .gwt-DecoratorPanel2 .bottomLeftInner,* html .gwt-DecoratorPanel2 .bottomRightInner
+	{
+	width: 5px;
+	height: 5px;
+	overflow: hidden;
+}
+
+.editInDialog {
+	color: #ccc;
+}
+
+.editInDialog:hover {
+  color: #4166CC;
+}
+
+.gwt-DialogBox {
+  z-index: 1002 !important; /* Needed because some parts in confluence uses z-index */
+} 
+
+.gwt-PopupPanel {
+  z-index: 1003 !important; /* Needs to be higher than gwt-DialogBox */
+}
+
+.warning-dialog {
+  z-index: 1004 !important; /* Needs to be higher than anything else */
+}
+
+
+.propertyPopup {
+	z-index: 1004 !important;
+}
+
+.RelationshipDragEndHandler {
+  border: #bbb solid 1px;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  background-color: #F9F9F9;
+  z-index: 1003 !important; /* Needs to be higher than gwt-DialogBox */
+}
+
+.ColorButtonBox {
+  border: #fff solid 1px;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  background-color: #F9F9F9;
+  z-index: 1004 !important;
+}
+
+.SelectButtonBoxPopup {
+  border: #bbb solid 1px;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  background-color: #959395;
+  z-index: 1004 !important;
+}
+
+textarea.properties-TextArea2 {
+    background: transparent;
+	outline: none;
+	border: none;
+    font-family: sans-serif;
+    font-size: 12px;
+    resize: none;
+    line-height: 17px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    border: 1px dashed #bbb;
+}
+
+.properties-TextArea2 textarea {
+	z-index: 1002 !important;
+}
+
+.properties-MeasurementPanel {
+border: 1px solid blue;
+visibility: hidden;
+line-height: 17px;
+font-size: 12px;
+}
+
+.properties-MeasurementPanel-Horizontal {
+  position: absolute;
+	line-height: 17px;
+	font-size: 12px;
+	height: auto;
+  width: auto;
+  z-index: 1004;
+  border: 1px solid red;
+}
+
+.no-show-focus input:focus {
+	outline: 0;
+	border: none;
+}
+
+.no-show-focus:FOCUS {
+	outline: none;
+	outline-style: none;
+	border: none;
+}
+
+.SelectButtonBoxPopup {
+}
+
+.btn-delete {
+    margin-top: 2px;
+    display: inline-block;
+    min-width: 26px;
+    min-height: 26px;
+    text-decoration: none;
+}
+
+.btn-delete-enabled {
+    background: url("images/btn-delete.png") no-repeat center center;
+}
+
+.btn-delete-enabled:hover {
+    background: url("images/btn-delete-hover.png") no-repeat center center;
+}
+
+.btn-delete-disabled {
+    background: url("images/btn-delete-disabled.png") no-repeat center center;
+}
+
+
+.btn-freehand {
+    margin-top: 2px;
+    display: inline-block;
+    min-width: 26px;
+    min-height: 26px;
+    text-decoration: none;
+}
+
+.btn-freehand-enabled {
+    background: url("images/btn-freehand.png") no-repeat center center;
+}
+
+.btn-freehand-enabled:hover {
+    background: url("images/btn-delete-hover.png") no-repeat center center;
+}
+
+.btn-freehand-disabled {
+    background: url("images/btn-freehand-disabled.png") no-repeat center center;
+}
+
+
+
+.UiContextMenu {
+  border: #bbb solid 1px;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  background-color: #959395;
+  z-index: 1004 !important;
+}
+
+.icon-reverse-connection {
+background-image: url("images/icon-reverse-connection.png");
+display: inline-block;
+width: 17px;
+height: 15px;
+line-height: 14px;
+vertical-align: middle;
+background-position: 0px 0px;
+background-repeat: no-repeat;
+*margin-right: .3em;
+}
+
+.icon-colorize {
+background-image: url("images/icon-colorize.png");
+display: inline-block;
+width: 16px;
+height: 16px;
+line-height: 16px;
+vertical-align: middle;
+background-position: 0px 0px;
+background-repeat: no-repeat;
+*margin-right: .3em;
+}
+
+.icon-note {
+background-image: url("images/icon-note.png");
+display: inline-block;
+width: 17px;
+height: 15px;
+line-height: 15px;
+vertical-align: middle;
+background-position: 0px 0px;
+background-repeat: no-repeat;
+*margin-right: .3em;
+margin-bottom: 2px;
+}
+
+.icon-add-diagram {
+background-image: url("images/icon-add-diagram.png");
+display: inline-block;
+width: 17px;
+height: 15px;
+line-height: 15px;
+vertical-align: middle;
+background-position: 0px 0px;
+background-repeat: no-repeat;
+*margin-right: .3em;
+margin-bottom: 2px;
+}
+
+.icon-select {
+background-image: url("images/icon-select.png");
+display: inline-block;
+width: 17px;
+height: 15px;
+line-height: 15px;
+vertical-align: middle;
+background-position: 0px 0px;
+background-repeat: no-repeat;
+*margin-right: .3em;
+margin-bottom: 2px;
+}
+
+.icon-duplicate {
+background-image: url("images/duplicate.png");
+display: inline-block;
+width: 17px;
+height: 14px;
+line-height: 14px;
+vertical-align: middle;
+background-position: 0px 0px;
+background-repeat: no-repeat;
+*margin-right: .3em;
+}
+
+.icon-trash {
+background-image: url("images/trash.png");
+display: inline-block;
+width: 17px;
+height: 14px;
+line-height: 14px;
+vertical-align: middle;
+background-position: 0px 0px;
+background-repeat: no-repeat;
+*margin-right: .3em;
+margin-bottom: 3px;
+}
+
+
+table.selectConnection {
+	border-color: #eee;
+}
+
+td.selectConnection {
+	border-right: 1px solid #eee;
+	height: 30px;
+	padding-left: 4px;
+	min-width: 50px;
+  vertical-align: middle;
+}
+
+td.dropButton {
+  vertical-align: middle;
+}
+
+table.colorSelection {
+	border-color: #eee;
+}
+
+td.colorSelection {
+	height: 30px;
+	border-right: 1px solid #eee;
+  vertical-align: middle;
+}
+
+[class ^="icon-conn-"],[class *=" icon-conn"] {
+	display: inline-block;
+	width: 45px;
+	height: 18px; *
+	margin-right: 0;
+	line-height: 18px;
+	vertical-align: text-top;
+	background-image: url("images/connections-sprite-white.png");
+	background-position: 45px 18px;
+	background-repeat: no-repeat;
+}
+
+.icon-conn-directed {
+	background-position: 0 -36px;
+}
+
+.icon-conn-inheritance {
+	background-position: 0 -108px;
+}
+
+.icon-conn-line {
+	background-position: 0 0;
+}
+
+.icon-conn-dependency {
+	background-position: 0 -72px;
+}
+
+.icon-conn-dashedline {
+	background-position: 0 -126px;
+}
+
+.icon-conn-aggregation {
+	background-position: 0 -90px;
+}
+
+.icon-conn-aggregationboth {
+	background-position: 0 -18px;
+}
+
+.icon-conn-reverse {
+	background-position: 0 -54px;
+}
+
+[class ^="icon-cust-"],[class *=" icon-cust"] {
+	display: inline-block;
+	width: 18px;
+	height: 18px; *
+	margin-right: 0;
+	line-height: 18px;
+	vertical-align: text-top;
+	background-image: url("images/drop-sprite-white.png");
+	background-position: 18px 18px;
+	background-repeat: no-repeat;
+}
+
+.icon-cust-drop-down {
+	background-position: 0 0;
+}
+
+.icon-pen {
+background-image: url("images/icon-pen.png");
+display: inline-block;
+min-width: 15px;
+background-position: 0px 0px;
+background-repeat: no-repeat;
+width: 17px;
+height: 15px;
+line-height: 15px;
+vertical-align: middle;
+}
+
+.icon-pen-white {
+background-image: url("images/icon-pen-white.png");
+display: inline-block;
+min-width: 15px;
+background-position: 0px 0px;
+background-repeat: no-repeat;
+width: 17px;
+height: 15px;
+line-height: 15px;
+vertical-align: middle;
+margin-bottom: 3px;
+}
+
+.icon-undo {
+background-image: url("images/icon-undo.png");
+display: inline-block;
+width: 20px;
+height: 14px;
+line-height: 14px;
+vertical-align: middle;
+background-position: 0px 0px;
+background-repeat: no-repeat;
+*margin-right: .3em;
+margin-bottom: 3px;
+}
+
+.icon-redo {
+background-image: url("images/icon-redo.png");
+display: inline-block;
+width: 20px;
+height: 14px;
+line-height: 14px;
+vertical-align: middle;
+background-position: 0px 0px;
+background-repeat: no-repeat;
+*margin-right: .3em;
+margin-bottom: 3px;
+}
+
+.btn-custom,.btn-custom:hover {
+  background-color: #8E8E8E;
+  background-image: none;
+  filter: none;
+  color: #fff;
+  border-color: none;
+  text-shadow: none;
+  border: none;
+}
+
+.btn-custom:hover,.btn-custom a:hover {
+  background-color: #666666;
+}
+
+.library::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+.library::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+/* Handle */
+.library::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.15);
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+.library::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(0,0,0,0.4);
+}
+
+.color-tabs ul {
+margin: 0;
+}
+.nav > li > a:hover {
+    background-color: #cccccc;
+    text-decoration: none;
+    color: #fff;
+    cursor: default;
+}
+
+.sketchboardme-link {
+  color: #4166CC;
+}
+
+.sketchboardme-link:HOVER {
+  cursor: pointer;
+}
+
+.sketchboardme-spinner {
+  width: 100px;
+  height: 80px;
+	background-color: #444;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  z-index: 1004 !important;
+}
+
+.sketchboardme-spinner-bg {
+  width: 100px;
+  height: 75px;
+	background: url("images/ajax-loader.gif") no-repeat center center;
+}
+
+
+img.skme-img {
+    max-width: 100%;
+    max-height: 100%;
+}

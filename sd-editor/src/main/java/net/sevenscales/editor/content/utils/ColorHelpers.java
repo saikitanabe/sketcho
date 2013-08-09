@@ -1,0 +1,211 @@
+package net.sevenscales.editor.content.utils;
+
+import net.sevenscales.editor.gfx.domain.Color;
+
+import com.google.gwt.core.client.JavaScriptObject;
+
+public class ColorHelpers {
+
+	public static class Rgb {
+		public Rgb(int r, int g, int b) {
+			red = r;
+			green = g;
+			blue = b;
+		}
+
+		public int red;
+		public int green;
+		public int blue;
+		
+		@Override
+		public String toString() {
+			return "rgb(" + red + "," + green + "," + blue + ")";
+		}
+	}
+	
+	public static String asHexColor(int red, int green, int blue) {
+		String r = Integer.toHexString(0x100 | red).substring(1).toUpperCase();
+		String g = Integer.toHexString(0x100 | green).substring(1).toUpperCase();
+		String b = Integer.toHexString(0x100 | blue).substring(1).toUpperCase();
+		return r + g + b;
+	}
+
+	public static String createBorderColor(Color color) {
+		return borderColorByBackground(color.red, color.green, color.blue);
+	}
+	
+	public static String createBorderColor(String color) {
+		if (color.equals("transparent")) {
+			return "#555555";
+		}
+		Rgb rgb = toRgb(color);
+		return borderColorByBackground(rgb.red, rgb.green, rgb.blue);
+	}
+	
+	public static String createOppositeColor(String color) {
+		Rgb rgb = toRgb(color);
+		String result = "#444444";
+		if (!"transparent".equals(color) && isRgbBlack(rgb.toString())) {
+			result = "#dddddd";
+		}
+		return result;
+	}
+	
+	public static native boolean isRgbBlack(String rgb)/*-{
+		rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+		return (((parseInt(rgb[1]) + parseInt(rgb[2]) + parseInt(rgb[3])) / 3) > 128) ? true : false;
+	}-*/;
+
+
+	public static Rgb toRgb(String hexColor) {
+		if (hexColor.equals("transparent")) {
+			return new Rgb(0xff, 0xff, 0xff);
+		}
+		hexColor = parserHexColor(hexColor);
+		int r = Integer.valueOf(hexColor.substring(0, 2), 16);
+		int g = Integer.valueOf(hexColor.substring(2, 4), 16);
+		int b = Integer.valueOf(hexColor.substring(4, 6), 16);
+		return new Rgb(r, g, b);
+	}
+
+	public static String borderColorByBackground(int red, int green, int blue) {
+		JavaScriptObject hsv = rgbToHsv(red, green, blue);
+		JavaScriptObject rgb = hsv2rgb(getIntValue(hsv, 0), getIntValue(hsv, 1),
+				getIntValue(hsv, 2) - 10);
+
+		String result = "#"
+				+ asHexColor(getIntValue(rgb, 0), getIntValue(rgb, 1),
+						getIntValue(rgb, 2));
+
+		return result;
+	}
+
+	private static native JavaScriptObject rgbToHsv(int r, int g, int b)/*-{
+		function rgbToHsl(r, g, b) {
+			r /= 255, g /= 255, b /= 255;
+			var max = Math.max(r, g, b), min = Math.min(r, g, b);
+			var h, s, l = (max + min) / 2;
+
+			if (max == min) {
+				h = s = 0; // achromatic
+			} else {
+				var d = max - min;
+				s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+				switch (max) {
+				case r:
+					h = (g - b) / d + (g < b ? 6 : 0);
+					break;
+				case g:
+					h = (b - r) / d + 2;
+					break;
+				case b:
+					h = (r - g) / d + 4;
+					break;
+				}
+				h /= 6;
+			}
+
+			return [ Math.floor(h * 360), Math.floor(s * 100), Math.floor(l * 100) ];
+		}
+
+		function rgbToHsv(r, g, b) {
+			var min = Math.min(r, g, b), max = Math.max(r, g, b), delta = max - min, h, s, v = max;
+
+			v = Math.floor(max / 255 * 100);
+			if (max != 0)
+				s = Math.floor(delta / max * 100);
+			else {
+				// black
+				return [ 0, 0, 0 ];
+			}
+
+			if (r == max)
+				h = (g - b) / delta; // between yellow & magenta
+			else if (g == max)
+				h = 2 + (b - r) / delta; // between cyan & yellow
+			else
+				h = 4 + (r - g) / delta; // between magenta & cyan
+
+			h = Math.floor(h * 60); // degrees
+			if (h < 0)
+				h += 360;
+
+			return [ h, s, v ];
+		}
+
+		return rgbToHsv(r, g, b);
+	}-*/;
+
+	public native static JavaScriptObject hsv2rgb(int h, int s, int v)/*-{
+		function HSV2RGB(HSV, RGB) {
+			var h = HSV.h / 360;
+			var s = HSV.s / 100;
+			var v = HSV.v / 100;
+			if (s == 0) {
+				RGB.r = v * 255;
+				RGB.g = v * 255;
+				RGB.b = v * 255;
+			} else {
+				var_h = h * 6;
+				var_i = Math.floor(var_h);
+				var_1 = v * (1 - s);
+				var_2 = v * (1 - s * (var_h - var_i));
+				var_3 = v * (1 - s * (1 - (var_h - var_i)));
+
+				if (var_i == 0) {
+					var_r = v;
+					var_g = var_3;
+					var_b = var_1
+				} else if (var_i == 1) {
+					var_r = var_2;
+					var_g = v;
+					var_b = var_1
+				} else if (var_i == 2) {
+					var_r = var_1;
+					var_g = v;
+					var_b = var_3
+				} else if (var_i == 3) {
+					var_r = var_1;
+					var_g = var_2;
+					var_b = v
+				} else if (var_i == 4) {
+					var_r = var_3;
+					var_g = var_1;
+					var_b = v
+				} else {
+					var_r = v;
+					var_g = var_1;
+					var_b = var_2
+				}
+				;
+
+				RGB.r = var_r * 255;
+				RGB.g = var_g * 255;
+				RGB.b = var_b * 255;
+			}
+		}
+		var hsv = {
+			h : h,
+			s : s,
+			v : v
+		};
+		var rgb = {};
+		HSV2RGB(hsv, rgb);
+		return [ rgb.r, rgb.g, rgb.b ];
+	}-*/;
+
+	private static native int getIntValue(JavaScriptObject values, int index) /*-{
+		if (values.length > index && !isNaN(values[index])) {
+			return parseInt(values[index]);
+		}
+		return 0;
+	}-*/;
+
+	public static String parserHexColor(String color) {
+		if (color.startsWith("#")) {
+			color = color.substring(1);
+		}
+		return color;
+	}
+
+}

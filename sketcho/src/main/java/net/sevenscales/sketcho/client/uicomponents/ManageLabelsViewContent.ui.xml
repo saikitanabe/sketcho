@@ -1,0 +1,57 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    xmlns:s='urn:import:net.sevenscales.appFrame.impl.uicomponents'>
+
+	<ui:style type='net.sevenscales.sketcho.client.uicomponents.ManageLabelsViewContent.MyStyle'>
+		.title {
+			font-size: 150%;
+			font-weight: bold;
+		}
+		
+		.notactive {
+			text-decoration: underline;
+			color: #E18400;
+			cursor: pointer; cursor: hand;
+		}
+		.active {
+			font-weight: bold;
+		}
+		.readstate:hover {
+			background-color: #e0ecff;
+		}
+		.editinglabel{
+			padding: 0 0 0 0;
+			margin: 0 0 0 0;
+			margin-right: 5px;
+		}
+		.editTextBox {
+			width: 100%;
+			margin: 0 0 0 0;
+			padding: 0 0 0 0;
+			border: 1px solid #959485;
+			color: #222222;
+			font-weight: normal;
+		}
+		
+	</ui:style>
+	<g:VerticalPanel width="100%" spacing="20">
+		<g:Label styleName="{style.title}">Manage Labels</g:Label>
+		<g:FlexTable ui:field="list" width="100%"></g:FlexTable>
+	</g:VerticalPanel>
+	
+	
+<!--		<g:VerticalPanel>-->
+<!--			<g:HorizontalPanel>-->
+<!--				<g:Label ui:field="c1" styleName='{style.c1}'></g:Label>-->
+<!--				<g:Label ui:field="c2" styleName='{style.c2}'></g:Label>-->
+<!--				<g:Label ui:field="c3" styleName='{style.c3}'></g:Label>-->
+<!--				<g:Label ui:field="c4" styleName='{style.c4}'></g:Label>-->
+<!--				<g:Label ui:field="c5" styleName='{style.c5}'></g:Label>-->
+<!--				<g:Label ui:field="c6" styleName='{style.c6}'></g:Label>-->
+<!--			</g:HorizontalPanel>-->
+<!--		</g:VerticalPanel>-->
+<!--		<g:Grid ui:field="colorGrid">-->
+			
+<!--		</g:Grid>-->
+
+</ui:UiBinder>

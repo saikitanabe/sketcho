@@ -1,0 +1,527 @@
+package net.sevenscales.editor.diagram;
+
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
+import net.sevenscales.editor.api.event.DeleteSelectedEvent;
+import net.sevenscales.editor.api.event.DeleteSelectedEventHandler;
+import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
+import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler;
+import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
+import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
+import net.sevenscales.editor.api.event.SelectionEvent;
+import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
+import net.sevenscales.editor.api.event.UnselectAllEvent;
+import net.sevenscales.editor.gfx.domain.IGraphics;
+import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.silver.KeyCodeMap;
+import net.sevenscales.editor.uicomponents.AnchorElement;
+import net.sevenscales.editor.uicomponents.uml.Relationship2;
+import net.sevenscales.editor.api.EditorProperty;
+
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.KeyboardListener;
+
+
+public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
+	private static final SLogger logger = SLogger.createLogger(SelectionHandler.class);
+	
+//	private Diagram mouseDownSender = null;
+	private List<Diagram> diagrams;
+	private SelectionHandlerCollection selectionHandlers;
+	private SurfaceHandler surface;
+	private java.util.Set<Diagram> tmpSelectedItems;
+	private Set<DiagramDragHandler> dragHandlers;
+	private boolean shiftOn;
+	private Diagram currentHandler;
+  private long dispachSequence;
+	private Diagram lastMultimodeSelectedDiagram;
+  private boolean freehandModeOn;
+	
+	public SelectionHandler(SurfaceHandler surface, List<Diagram> diagrams, Set<DiagramDragHandler> dragHandlers) {
+		this.surface = surface;
+		this.diagrams = diagrams;
+		this.dragHandlers = dragHandlers;
+		this.selectionHandlers = new SelectionHandlerCollection();
+		tmpSelectedItems = new HashSet();
+		
+		if (surface.isDeleteSupported()) {
+			surface.getEditorContext().getEventBus().addHandler(DeleteSelectedEvent.TYPE, new DeleteSelectedEventHandler() {
+				@Override
+				public void onSelection(DeleteSelectedEvent event) {
+					removeSelected();
+				}
+			});
+		}
+		
+		surface.getEditorContext().getEventBus().addHandler(EditDiagramPropertiesStartedEvent.TYPE, new EditDiagramPropertiesStartedEventHandler() {
+			@Override
+			public void on(EditDiagramPropertiesStartedEvent event) {
+				// long press will hide mouse up and current handler is not nulled.
+				// Need to listen property editor open and use that to set currentHandler to null.
+				currentHandler = null;
+			}
+		});
+
+    surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
+      public void on(FreehandModeChangedEvent event) {
+        freehandModeOn = event.isEnabled();
+        if (freehandModeOn) {
+          unselectAll();
+        }
+      }
+    });
+
+	}
+		
+////////////////////////////////////
+	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+		// logger.debug("onMouseDown sender={}, currentHandler={}...", sender, currentHandler);
+		if (sender == null && currentHandler == null) {
+			// if null it is canvas mouse down event
+			// but prevent handling bubbled event which is already sent by 
+			// real target object
+			handleCanvasMouseDown();
+			return true;
+//			System.out.println("canvas selected:" + sender+" x:"+x+" y:"+y);
+		} else if (sender != null) {
+		  // pass shift parameter
+		  shiftOn = keys == IGraphics.SHIFT ? true : false;
+		  select(sender);
+		  shiftOn = false;
+		}
+		return false;
+	}
+
+  public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onMouseLeave(Diagram sender, MatrixPointJS point) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onMouseMove(Diagram sender, MatrixPointJS point) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onMouseUp(Diagram sender, MatrixPointJS point) {
+		// logger.debug("onMouseUp sender={}...", sender);
+		if (sender != null && 
+				getSelectedItems().size() > 0 && 
+				!surface.getMouseDiagramManager().getDragHandler().isDragging()) {
+			// allow only to show if really clicked an element => then other rules
+			// should not show context menu if this was a drag and select
+			Set<Diagram> selected = getSelectedItems();
+			Diagram[] diagrams = new Diagram[1];
+			surface.getEditorContext().getEventBus().fireEvent(new SelectionMouseUpEvent(selected.toArray(diagrams), sender));
+		}
+		currentHandler = null;
+	}
+	
+	@Override
+	public void onTouchStart(Diagram sender, MatrixPointJS point) {
+	}
+	
+  @Override
+  public void onTouchMove(Diagram sender, MatrixPointJS point) {
+  }
+  @Override
+  public void onTouchEnd(Diagram sender, MatrixPointJS point) {
+  }
+	
+////////////////////////////////////////////////////////////
+
+	private void handleCanvasMouseDown() {
+	  unselectAll();
+	}
+
+	public void addDiagramSelectionHandler(DiagramSelectionHandler handler) {
+		selectionHandlers.add(handler);
+	}
+
+	public void removeSelected() {
+	  Diagram[] items = new Diagram[]{};
+	  items = diagrams.toArray(items);
+	  Set<Diagram> removed = new HashSet<Diagram>();
+		for (Diagram d : items) {
+		  if (d.isSelected()) {
+  		  Diagram removeItem = d.getOwnerComponent();
+  		  removed.add(removeItem);
+  		  removeItem.removeFromParent();
+  			dragHandlers.remove(removeItem);
+		  }
+		}
+		surface.getEditorContext().getEventBus().fireEvent(new BoardRemoveDiagramsEvent(removed));
+//		selectedItems.clear();
+	}
+
+//  @Override
+  public boolean onKeyEventDown(int keyCode, boolean shift, boolean ctrl) {
+    int multiplier = !ctrl ? 5 : 1; // if ctrl is pressed goes to finest granularity
+    multiplier = shift ? multiplier * 3 : multiplier; // if shift is pressed speed will be increased
+    // TODO: components should do boundary checking so that those cannot be moved outside surface
+    
+    this.shiftOn = keyCode == 4 ? true : false;
+    
+    switch (keyCode) {
+      case KeyCodeMap.DELETE: { // delete key 
+        removeSelected();
+        return true;
+      }
+      case KeyCodeMap.LEFT: { // TODO: test constant from gwt, down arrow
+        moveSelected(-1 * multiplier, 0);
+        return true;
+      }
+      case KeyCodeMap.UP: { // TODO: test constant from gwt, down arrow
+        moveSelected(0, -1  * multiplier);
+        return true;
+      }
+      case KeyCodeMap.RIGHT: { // TODO: test constant from gwt, down arrow
+        moveSelected(1 * multiplier, 0);
+        return true;
+      }
+      case KeyCodeMap.DOWN: { // TODO: test constant from gwt, down arrow
+        moveSelected(0, 1 * multiplier);
+        return true;
+      }
+//      case KeyCodeMap.A: { // TODO: a
+//        if (ctrl) {
+//          selectAll();
+//        }
+//        return true;
+//      }
+        
+    }
+    return false;
+  }
+
+//@Override
+  public boolean onKeyEventUp(int keyCode, boolean shift, boolean ctrl) {
+    this.shiftOn = false;
+//    System.out.println("up shiftOn: " + shiftOn);    
+    return false;
+  }
+  
+//  public void onKeyDown(Event event) {
+//  }
+  
+//  public void onKeyUp(Event event) {
+//	// TODO Auto-generated method stub
+//	
+//  }
+  
+//  public void onKeyPress(Event event) {
+//  }
+  
+  public void onKeyDown(KeyDownEvent event) {
+    // TODO Auto-generated method stub
+  	boolean ctrl = DOM.eventGetCtrlKey(Event.as(event.getNativeEvent()));
+  	boolean shift = DOM.eventGetShiftKey(Event.as(event.getNativeEvent()));
+      int multiplier = !ctrl ? 5 : 1; // if ctrl is pressed goes to finest granularity
+      multiplier = shift ? multiplier * 3 : multiplier; // if shift is pressed speed will be increased
+      // TODO: components should do boundary checking so that those cannot be moved outside surface
+      
+      int keyCode = DOM.eventGetKeyCode(Event.as(event.getNativeEvent()));
+      this.shiftOn = keyCode == KeyboardListener.KEY_SHIFT ? true : false;
+//  			    System.out.println("down shiftOn: " + shiftOn);
+      
+      // safari key codes has been added, because
+      // on left arrow key down event is not received :(
+      switch (keyCode) {
+//        case 63272: // safari delete on key press
+        case KeyboardListener.KEY_DELETE: { // delete key 
+          removeSelected();
+          break;
+        }
+//  	  case 63234: // left key on safari
+        case KeyboardListener.KEY_LEFT: { // TODO: test constant from gwt, down arrow
+          moveSelected(-1 * multiplier, 0);
+          break;
+        }
+//        case 63232: // safari up on key press
+        case KeyboardListener.KEY_UP: { // TODO: test constant from gwt, down arrow
+          moveSelected(0, -1  * multiplier);
+          break;
+        }
+//        case 63235: // safari right on key press
+        case KeyboardListener.KEY_RIGHT: { // TODO: test constant from gwt, down arrow
+          moveSelected(1 * multiplier, 0);
+          break;
+        }
+//        case 63233: // safari down on key press
+        case KeyboardListener.KEY_DOWN: { // TODO: test constant from gwt, down arrow
+          moveSelected(0, 1 * multiplier);
+          break;
+        }
+//        case 'a': { // TODO: selecting all is not supported
+//          if (ctrl) {
+//            selectAll();
+//          }
+//          break;
+//        }
+      }
+  }
+  public void onKeyPress(KeyPressEvent event) {
+    // TODO Auto-generated method stub
+  }
+  public void onKeyUp(KeyUpEvent event) {
+    // TODO Auto-generated method stub
+  }
+
+  public void moveSelected(int dx, int dy) {
+  	MatrixPointJS dp = MatrixPointJS.createScaledPoint(dx, dy, surface.getScaleFactor());
+    for (Diagram d : diagrams) {
+      if (d.isSelected()) {
+        d.applyTransform(dp.getDX(), dp.getDY());
+        moveDiagram(d, dx, dy);
+      }
+    }
+  }
+  
+  public void select(Diagram sender) {
+    if (freehandModeOn) {
+      // if freehand mode is on, selection is not supported!
+      return;
+    }
+
+    // logger.start("SelectionHandler.select SUM");
+    // logger.start("SelectionHandler.select 1");
+
+  	this.currentHandler = sender;
+    if (sender.isSelected()) {
+      return;
+    }
+
+    // logger.debugTime();
+    // logger.start("SelectionHandler.select 2");
+
+//  System.out.println("selected:"+sender);
+  // store that diagram has handled event
+//  mouseDownSender = sender;
+  
+  // select sender
+  boolean selected = sender.isSelected();
+
+  // logger.debugTime();
+  // logger.start("SelectionHandler.select 3");
+
+  // logger.debugTime();
+  // logger.start("SelectionHandler.select 6");
+  
+  if (!shiftOn && !selected) {
+    // remove other selected items, because shift is not pressed and current element is not selected        
+    for (int i = 0; i < diagrams.size(); ++i) {
+      Diagram d = (Diagram) diagrams.get(i);
+      // if d equals to sender it has been just selected 
+      // if sender differs, need to check that owner component
+      // is not d
+      if (d != sender && d.isSelected()) {
+        d.unselect();
+//        selectedItems.remove(d);
+      }
+    }
+  }
+
+  sender.select();
+
+  // logger.debugTime();
+  // logger.start("SelectionHandler.select 4");
+
+//  selectedItems.add(sender);
+  
+  List<Diagram> notifyDiagrams = new ArrayList<Diagram>();
+  Diagram notifyDiagram = sender.getOwnerComponent();
+  notifyDiagrams.add(notifyDiagram);
+  selectionHandlers.fireSelection(notifyDiagrams);
+
+  // logger.debugTime();
+  // logger.start("SelectionHandler.select 5");
+
+  surface.getEditorContext().getEventBus().fireEvent(new SelectionEvent());
+
+
+  // logger.debugTime();
+  // logger.debugTime();
+  
+  // select again, to have correct colors in relationship circle elements :)
+//  sender.select();
+	}
+  
+	public void select(List<Diagram> toSelectDiagrams) {
+		unselectAll();
+	  List<Diagram> notifyDiagrams = new ArrayList<Diagram>();
+		for (Diagram d : toSelectDiagrams) {
+			d.select();
+			hideRelationshipHandles(d);
+			notifyDiagrams.add(d.getOwnerComponent());
+		}
+		
+	  selectionHandlers.fireSelection(notifyDiagrams);
+	  surface.getEditorContext().getEventBus().fireEvent(new SelectionEvent());
+  }
+
+	/**
+	 * HACK: Used when selecting multiple items. Relationship should not show
+	 * handles at that time.
+	 * @param d
+	 */
+  private void hideRelationshipHandles(Diagram d) {
+		if (d instanceof Relationship2) {
+			((Relationship2) d).hideAllHandles();
+		}
+	}
+
+	/**
+   * Used when lassoing selected items.
+   */
+  public void selectInMultimode(Diagram diagram) {
+    lastMultimodeSelectedDiagram = diagram;
+  	diagram.select();
+  	hideRelationshipHandles(diagram);
+  	List<Diagram> diagrams = new ArrayList<Diagram>();
+  	diagrams.add(diagram);
+    selectionHandlers.fireSelection(diagrams);
+    surface.getEditorContext().getEventBus().fireEvent(new SelectionEvent());
+  }
+  
+  public Diagram getLastMultimodeSelectedDiagram() {
+		return lastMultimodeSelectedDiagram;
+	}
+  public void setLastMultimodeSelectedDiagram(Diagram lastMultimodeSelectedDiagram) {
+		this.lastMultimodeSelectedDiagram = lastMultimodeSelectedDiagram;
+	}
+  
+  public boolean isMultiMode() {
+    return lastMultimodeSelectedDiagram != null;
+  }
+  
+  public void unselect(Diagram diagram) {
+  	diagram.unselect();
+  	
+  	if (getSelectedItems().size() <= 0) {
+  	  logger.start("fireUnselectAll");
+  		selectionHandlers.fireUnselectAll();
+  		logger.debugTime();
+  	}
+  }
+
+//  private boolean isSelected(Diagram sender) {
+//    // TODO: Diagram should support at some point selected property
+//    // and have call back to selection handler interface to unselect/select
+//    // directly through a diagram
+//    for (Diagram d : selectedItems) {
+//      if (d == sender) {
+//        return true;
+//      }
+//    }
+//    return false;
+//  }
+
+  public void selectAll() {
+    for (Diagram d : surface.getDiagrams()) {      
+      // select diagram
+      d.select();
+//      selectedItems.add(d);
+    }
+    
+    selectionHandlers.fireSelection(surface.getDiagrams());
+    surface.getEditorContext().getEventBus().fireEvent(new SelectionEvent());
+  }
+  
+  public Set<Diagram> getSelectedItems() {
+    tmpSelectedItems.clear();
+    for (Diagram d : diagrams) {
+      if (d.isSelected()) {
+        tmpSelectedItems.add(d);
+      }
+    }
+    return tmpSelectedItems;
+  }
+
+  public void unselectAll() {
+  	logger.debug("unselectAll...");
+    logger.start("unselectAll");
+    for (int i = 0; i < diagrams.size(); ++i) {
+      // nobody handled, so unselect all
+      Diagram d = (Diagram) diagrams.get(i);
+      if (d.isSelected()) {
+        d.unselect();
+      }
+//      selectedItems.remove(d);
+    }
+    logger.debugTime();
+    
+    logger.start("unselectAll B");
+    selectionHandlers.fireUnselectAll();
+    surface.getEditorContext().getEventBus().fireEvent(new UnselectAllEvent());
+    logger.debugTime();
+  }
+
+//  public void diagramRemoved(Diagram diagram) {
+//    selectedItems.remove(diagram);
+//  }
+  
+  public void selectionOn(boolean selectionOn) {
+    shiftOn = selectionOn;
+  }
+
+	public void moveItems(Set<Diagram> diagrams, int dx, int dy) {
+		for (Diagram d : diagrams) {
+			moveDiagram(d, dx, dy);
+		}
+	}
+
+	private void moveDiagram(Diagram d, int dx, int dy) {
+//		MatrixPointJS point = MatrixPointJS.createScaledTransform(dx, dy, surface.getScaleFactor());
+    // handle anchor move events from current diagram
+    ++this.dispachSequence;
+    Collection<AnchorElement> anchors = d.getAnchors();
+    for (AnchorElement ae : anchors) {
+      ae.dispatch(dx, dy, dispachSequence);
+    }
+    
+    for (DiagramDragHandler h : dragHandlers) {
+      h.dragStart(d);
+    }
+    
+    for (DiagramDragHandler h : dragHandlers) {
+      h.onDrag(d, dx, dy);
+    }
+    
+    d.saveLastTransform(dx, dy);
+    for (DiagramDragHandler h : dragHandlers) {
+      h.dragEnd(d);
+    }
+	}
+
+  public int size() {
+    int result = 0;
+    for (Diagram d : diagrams) {
+      if (d.isSelected()) {
+        ++result;
+      }
+    }
+    return result;
+  }
+
+  public void reset() {
+    tmpSelectedItems.clear();
+    dragHandlers.clear();
+  }
+
+}

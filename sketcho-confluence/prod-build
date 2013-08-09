@@ -1,0 +1,4 @@
+cd ../sketcho-confluence-editor
+ant prod
+cd ../sketcho-confluence
+atlas-mvn clean package

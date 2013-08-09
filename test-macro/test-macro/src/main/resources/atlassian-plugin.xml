@@ -1,0 +1,21 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.artifactId}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+    </plugin-info>
+
+    <macro name="test-macro" class="net.sevenscales.confluence.plugins.ExampleMacro" key="my-macro">
+    <!-- TODO: Add macro description -->
+    <!-- <description></description> -->
+   	    <resource name="js/" type="download" location="js/"/>
+    </macro>
+
+    <servlet name="Store Servlet" 
+    		key="greetServlet" 
+    		class="net.sevenscales.confluence.plugins.testmacrogwt.server.GreetingServiceImpl">
+        <description>Store Servlet</description>
+        <url-pattern>/testmacrogwt/greet</url-pattern>
+    </servlet>
+    
+</atlassian-plugin>

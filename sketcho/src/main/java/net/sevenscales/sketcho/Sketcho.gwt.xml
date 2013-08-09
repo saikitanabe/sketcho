@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="sketcho">
+
+	<!-- Inherit the core Web Toolkit stuff.                  -->
+	<inherits name='com.google.gwt.user.User'/>
+  
+  <inherits name='com.google.gwt.user.theme.standard.Standard'/>
+<!--  <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+  
+	<inherits name="com.google.gwt.json.JSON" />
+	<inherits name='net.sf.hibernate4gwt.Hibernate4Gwt15'/>
+	<inherits name="net.sevenscales.domain.Domain"/>
+ 	<inherits name="net.sevenscales.serverAPI.ServerAPI"/> 
+	<inherits name="net.sevenscales.plugin.Plugin"/>
+	<inherits name="net.sevenscales.appFrame.AppFrame"/>
+	<inherits name='net.sevenscales.editor.Editor'/>
+  <inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
+  <inherits name="com.google.gwt.http.HTTP" />
+	
+	<!-- Needed for support Plugin implementation -->
+	<inherits name='net.sevenscales.pluginManager.PluginManager'/>
+	
+	<!--
+		- inherits needs to be added for a plugin 
+		- also runtime src path needs to be added for running project
+	-->
+	
+  	<inherits name='net.sevenscales.webAdmin.WebAdmin'/>  
+ 	<inherits name='net.sevenscales.login.Login'/> 
+ 	<inherits name='net.sevenscales.share.Share'/>
+	
+	<stylesheet src='../sketcho.css'/>
+
+	<!-- Specify the app entry point class.                   -->
+	<entry-point class='net.sevenscales.sketcho.client.Sketcho'/>
+	<source path='client'/>
+	
+</module>

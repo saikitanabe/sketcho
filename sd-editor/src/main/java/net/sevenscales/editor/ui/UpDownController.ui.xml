@@ -1,0 +1,38 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.up-img {
+			height: 9px;
+			width: 15px;
+			padding: 0;
+			margin: 0;
+			border: solid 1px #6694e3;
+			background-repeat: no-repeat;
+			background-color: white;
+			background-position: center;
+		}
+		.down-img {
+			height: 9px;
+			width: 15px;
+			padding: 0;
+			margin: 0;
+			border: solid 1px #6694e3;
+			background-repeat: no-repeat;
+			background-color: white;
+			background-position: center;
+		}
+	</ui:style>
+	
+<!--	  <ui:with field='res' type='net.sevenscales.editor.ui.Resources'/>-->
+	
+	<g:HTMLPanel>
+		<g:VerticalPanel>
+			<g:HTML ui:field="up" styleName="{style.up-img}"></g:HTML>
+			<g:HTML ui:field="down" styleName="{style.down-img}"></g:HTML>
+<!--      <g:PushButton ui:field='upb' enabled='true'>-->
+<!--        <g:upFace image='{res.up}'></g:upFace>-->
+<!--      </g:PushButton>-->
+		</g:VerticalPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

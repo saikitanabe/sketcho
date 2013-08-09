@@ -1,0 +1,14 @@
+<module>
+	<define-property name="plugins" values="none" />
+	<!-- Something needs to be defined, otherwise nothing is seen while 
+	running on javascript -->
+	<set-property name="plugins" value="none" />
+
+	<source path='api'/>
+	<source path='impl'/>
+	
+  	<generate-with class="net.sevenscales.pluginManager.rebind.FactoryGenerator">
+		<when-type-is class="net.sevenscales.pluginManager.api.IPluginFactory"/>
+	</generate-with>
+	
+</module>

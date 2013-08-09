@@ -1,0 +1,29 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:net.sevenscales.editor.api.impl">
+	<ui:style>
+		.wrapper {
+			display: inline;
+		}
+	</ui:style>
+	
+	<g:HTMLPanel>
+		<div class="btn-group">
+			<a ui:field="freehandOff" title="Freehand ON/Off" class="btn btn-custom tooltipper">
+				<i class="icon-pen-white"></i>
+			</a>
+			<a ui:field="duplicate" title="Duplicate" class="btn btn-custom tooltipper">
+				<i class="icon-duplicate"></i>
+			</a>
+			<a ui:field="reverseConnection" title="Reverse Connection" class="btn btn-custom tooltipper">
+				<i class="icon-reverse-connection"></i>
+			</a>
+			<a ui:field="colorize" title="Change Color" class="btn btn-custom tooltipper">
+				<i class="icon-colorize"></i>
+			</a>
+			<a ui:field="delete" title="Delete" class="btn btn-custom tooltipper">
+				<i class="icon-trash"></i>
+			</a>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder>

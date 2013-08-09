@@ -1,0 +1,3 @@
+curl -i -H "Accept: application/json" http://localhost:1990/confluence/rest/storerestservice/1.0/sketch.json
+curl -i -H "Content-Type: application/json" -X POST --data @message1.json  http://localhost:1990/confluence/rest/storerestservice/1.0/sketch.json
+curl --user admin:admin -i -H "Content-Type: application/json" -X POST --data @message2.json  http://localhost:1990/confluence/rest/storerestservice/1.0/sketch.json

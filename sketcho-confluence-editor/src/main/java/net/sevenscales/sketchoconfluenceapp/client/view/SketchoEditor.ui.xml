@@ -1,0 +1,45 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:net.sevenscales.editor.api.impl">
+	<ui:style
+		type="net.sevenscales.sketchoconfluenceapp.client.view.SketchoEditor.MyStyle">
+			.image {
+				
+			}
+			
+			.image:hover {
+				
+			}
+			
+			.link {
+				color: #4166CC;
+			}
+			
+			.link:HOVER {
+				cursor: pointer;
+			}
+			
+			.link2 {
+				
+			}
+			
+			.link2:HOVER {
+				cursor: pointer;
+			}
+			
+			.nolink {
+				text-decoration: none;
+			}
+			
+			.nolink:hover {
+				text-decoration: none;
+			}
+		</ui:style>
+	<g:VerticalPanel ui:field="mainPanel">
+		<g:DeckPanel ui:field="deck">
+			<g:SimplePanel ui:field="readPanel" addStyleNames="editLinks">
+			</g:SimplePanel>
+			<g:SimplePanel ui:field="editPanel"></g:SimplePanel>
+		</g:DeckPanel>
+	</g:VerticalPanel>
+</ui:UiBinder>

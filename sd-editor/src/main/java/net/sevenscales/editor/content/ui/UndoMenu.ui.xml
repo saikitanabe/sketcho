@@ -1,0 +1,29 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:net.sevenscales.editor.api.impl">
+	<ui:style>
+		.simple {
+			display: inline;
+		}
+	</ui:style>
+	<g:HTMLPanel>
+		<c:FastButton ui:field="undo" addStyleNames="{style.simple}">
+			<c:child>
+				<g:HTML>
+					<a title="Undo (Ctrl+Z)" class="btn btn-custom download-btn tooltipper">
+						<i class="icon-undo"></i>
+					</a>
+				</g:HTML>
+			</c:child>
+		</c:FastButton>
+		<c:FastButton ui:field="redo" addStyleNames="{style.simple}">
+			<c:child>
+				<g:HTML>
+					<a title="Redo (Cntrl+Shift+Z)" class="btn btn-custom download-btn tooltipper">
+						<i class="icon-redo"></i>
+					</a>
+				</g:HTML>
+			</c:child>
+		</c:FastButton>
+	</g:HTMLPanel>
+</ui:UiBinder> 

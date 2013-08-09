@@ -1,0 +1,1189 @@
+/*
+
+Admin page color = #d2b48c
+
+Projects page color = white
+
+*/
+/*
+body {
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 0;
+	padding-left: 0px;
+	padding-right: 0px;
+	background: transparent;
+	color: #2C2C28;
+	font-size: small;
+	font-weight: normal;
+	line-height: 160%;
+}
+*/
+
+BODY {
+	MARGIN: 0px; WIDTH: 100%; HEIGHT: 100%
+}
+BODY {
+	FONT-FAMILY: "Trebuchet MS", Verdana, Arial, sans-serif;
+}
+TD {
+	FONT-FAMILY: "Trebuchet MS", Verdana, Arial, sans-serif;
+}
+INPUT {
+	FONT-FAMILY: "Trebuchet MS", Verdana, Arial, sans-serif;
+}
+TEXTAREA {
+	FONT-FAMILY: "Trebuchet MS", Verdana, Arial, sans-serif;
+}
+SELECT {
+	FONT-FAMILY: "Trebuchet MS", Verdana, Arial, sans-serif;
+}
+INPUT {
+	FONT-SIZE: 100%
+}
+TEXTAREA {
+	FONT-SIZE: 100%
+}
+SELECT {
+	FONT-SIZE: 100%
+}
+
+
+h1 {
+/*  margin-left: 25px;*/
+	padding: 0;
+	background: transparent;
+	font-weight: bold;
+	color: #FFFFFF;
+	font-size: 130%;
+	display: inline;
+/*	width: 300px; */
+	height: 40px;
+	float: left;
+}
+
+h2 {
+/*	margin-top: 20px;
+	margin-bottom: 5px;
+  margin-left: 25px;*/
+	background: transparent;
+	font-weight: bold;
+	color: #E39D24;
+	font-size: 120%;
+/*	border-bottom: 3px solid #D2D1BB; */
+}
+
+h3 {
+/*	margin: 10px 0 7px 0;*/
+	margin-top: 15px;
+	padding: 0;
+	background: transparent;
+	font-weight: bold;
+	color: #4B7AA5;
+	font-size: 110%;
+/*	border-bottom: 1px solid #E2E2DD; */
+}
+/*
+div.sideBar h3 {
+
+	margin: 0 0 0 2px;
+
+	padding: 5px 0 0 2px;
+
+	font-weight: bold;
+
+	font-size: 130%;
+
+	color: #4A78A4;
+
+	background: #F1F0E5 url(/tasktool/images/headings/h3-sb-bg.gif) no-repeat top right;
+
+}
+*/
+
+h4 {
+	width: 100%;
+/*	height: 21px; */
+/*    margin-top: 0px;
+    margin-bottom: 5px;
+    margin-left: 25px;*/
+	padding: 0;
+	color: #C98000;
+	font-weight: bold;
+	font-size: 110%;
+/*	border-bottom: 1px solid #E2E2DD; */
+}
+
+h5 {
+/*	margin: 0 0 1px 0;
+	padding: 0;*/	
+	color: #2c2c28;
+	background: transparent;
+	font-weight: bold;
+	font-size: 95%;
+}
+
+h6 {
+/*	margin: 0 0 1px 0;
+	padding: 0;*/	
+	color: #60605A;
+	background: transparent;
+	font-weight: normal;
+	font-size: 95%;
+	text-transform: uppercase;
+}
+
+/************************************************************************
+* Body Link Elements
+************************************************************************/
+a:link, a:active, a:visited {
+	color: #E18400;
+	text-decoration: none;
+	background: transparent;
+}
+
+a:hover {
+	color: #E18400;
+	text-decoration: underline;
+	background: transparent;
+}
+
+.linkStyle {
+	padding-left: 20px;
+    margin-right: 15px;
+	color: #E18400;
+	text-decoration: none;
+	background: transparent;
+}
+
+.linkStyle:hover {
+	color: #E18400;
+	text-decoration: underline;
+	background: transparent;
+/*	cursor: pointer; cursor: hand; */
+}
+
+.editLink {
+	float: right;
+}
+
+.topPanel-Item-Left {
+	font-size: 80%;
+	margin-right:10px;
+}
+
+.topPanel-Item-Right {
+	font-size: 80%;
+	margin-left:10px;
+}
+
+.sd-app-PrimaryNavigationView-NavigationPanelVertical {
+	padding-bottom: 10px;
+	padding-left: 20px;
+}
+
+.sd-app-PrimaryNavigationView-NavigationPanelHorizontal {
+/*  background-color: #6694e3; */
+	color: white;
+}
+
+/*a:link, a:active, a:visited {*/
+
+.sd-app-PrimaryNavigationView-NavigationPanelHorizontal a {
+/*  background-color: #6694e3; */
+	color: white;
+}
+
+.sd-app-PrimaryNavigationView-NavigationPanelVertical a {
+	color: #2a5db6;
+	text-decoration: underline;
+	padding-left: 10px;
+}
+
+.sd-app-PrimaryNavigationView-focus {
+}
+
+.sd-app-PrimaryNavigationView-focus a {
+	padding-top: 5px;
+	font-weight: bold;
+	color: white;
+/*	padding-left: 10px; */
+	text-decoration: none;
+}
+
+.primary-navigation {
+	height: 25px;
+	margin: 0 0 0 0;  
+	padding: 0 0 0 0;
+	text-align: left;
+	color: #FFFFFF;
+}
+
+/*
+* some location padding for navigation panel
+*/
+.primary-nav {
+	margin: 2px 0 0 15px;  
+	padding: 0 0 0 0;
+}
+
+.primary-navigation a {
+	color: #FFFFFF;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+
+/* belly-Area */
+.belly-Area {
+	width: 100%;
+}
+
+*/*
+.contentLeft {
+	float: left;
+}
+*/
+
+/* menu-Area */
+/*
+.menu-Area {
+	border-spacing: 0 30px;
+	width: 170px;
+}
+*/
+
+/*
+.menuArea-Navigation {
+	color: white; 
+}
+*/
+
+/*
+.menuArea-ContextMenu {
+	color: white; 
+}
+*/
+
+/* content-Area */
+
+/*
+.content-Area {
+
+}
+.subcontent {
+	border: 3px solid #6694e3;
+}
+*/
+
+/*
+.content-Area-Td {
+	margin-right: 50px;
+}
+*/
+
+/*
+.content-Area-ListItem {
+	padding-right: 20px;	
+}
+*/
+
+/* footer-Area */
+/*
+.footer-Area {
+	font-size: 90%;
+}*/
+
+.diagram-panel {
+/*    border: 1px solid #4b7297; */
+}
+
+.readContent {
+/*    border: 1px; */
+}
+
+/* Menu Navigation View */
+/*
+.menuNavigationView-Style {
+	width: 100%;
+}
+*/
+
+/*
+.menuNavigationView-Active-Projects {
+	background: white;
+}
+*/
+
+/*
+.menuNavigationView-Active-Admin {
+	background: #d2b48c;
+}*/
+
+/*
+.page-Menu {
+	font-size: 90%;
+}
+*/
+/*
+.gwt-DisclosurePanel .header .page-Menu-Header {
+	font-weight: bold;
+	color: white;
+	text-decoration:none;
+	padding-right: 10px;
+}
+*/
+
+/*
+.page-Menu-Content {
+	width: 100%;
+	margin: 5px;
+}
+*/
+/*
+.page-Menu-Content a {
+	color: white;
+}
+
+.page-Content-Area {
+	background: grey;
+	width: 500px;	
+}
+*/
+/*
+.page-Table {
+	width: 100%;
+}
+*/
+
+.page-ListHeader {
+	font-size: 80%;
+	font-weight: bold;
+	background-color: #eeeeee;
+}
+
+.properties-TextArea {
+/*    border: 1px solid blue; */
+}
+
+/* Dialogs */
+.gwt-DialogBox {
+  border: 2px outset;
+  background-color: white;
+}
+
+.gwt-DialogBox .Caption {
+  background-color: #C3D9FF;
+  padding: 3px;
+  margin: 2px;
+  font-weight: bold;
+  cursor: default;
+}
+
+.command-Area {
+	background-color: #e0ecff;
+}
+
+.command-area-buttons {
+    height: 27px;
+}
+
+.command-Area td {
+	padding-left: 5px;
+	margin: 5px;
+}
+
+.pageContent {
+/*
+	padding-left: 20px;
+	padding-right: 20px;*/
+}
+
+.pageContent td {
+/*	text-align: justify; */
+	font-size: small;
+}
+
+.page-Hierarchy {
+    color: #797c80;
+    font-weight: normal;
+}
+
+
+.page-Hierarchy a {
+    color: #797c80; /*#303f60*/
+/*    font-weight: bold; */
+}
+
+.page-link-hierarchy {
+	font-size: 10px;
+	margin-left: 5px;
+  height: 20px;
+}
+
+.gwt-Button {
+		font-size: 90%;*/
+		font-size:  90%;
+		padding-top: 3px; 
+		padding-bottom: 3px;
+		white-space: nowrap;
+}
+
+/*
+.gwt-HTML {
+	color: #222222;
+	font-weight: normal;
+}*/
+
+.gwt-TextBox {
+/*	width: 100%; */
+	margin: 0 0 3px 0;
+	padding: 0 0 0 2px;
+	height: 16px;
+	border: 1px solid #959485;
+	color: #222222;
+	font-weight: normal;
+}
+
+.gwt-PasswordTextBox {
+	width: 600px;
+	margin: 0 0 3px 0;
+	padding: 0 0 0 2px;
+	height: 16px;
+	border: 1px solid #959485;
+	color: #222222;
+	font-weight: normal;
+}
+
+/* INDIVIDUAL COMPONENT LAYOUTS */
+.text-Area {
+	height: 250px;
+	width: 100%
+}
+
+.UiEditContent {
+/*	border: solid #6694e3 3px; */
+	margin-bottom: 5px;
+	width: 100%;
+}
+
+
+.sd-plugin-share-ShareView {
+	width: 175px;
+	overflow: hidden;
+}
+
+
+.gwt-DisclosurePanel {
+}
+
+.gwt-DisclosurePanel .header {
+	background-color: #e0ecff;
+}
+
+.gwt-DisclosurePanel-open .header {
+	background-color: #e0ecff;
+  border: none;
+}
+
+.gwt-DisclosurePanel .content {
+	border: none;
+}
+
+.gwt-DisclosurePanel-close .content {
+	background-color: yellow;
+	height: 0px;
+}
+
+/*
+.gwt-DisclosurePanel-open .content {
+	border: none;
+	width: 100px;
+}*/
+
+.sd-plugin-share-ShareView-DecoratorPanel {
+/*   height: 100%;*/
+   width: 100px;
+}
+ 
+.gwt-DecoratorPanel .middleCenter {
+/*   height: 100%;
+   width: 100%;*/
+}
+
+/*
+.sd-plugin-share-ShareView-RowFormatter {
+	background-color: white;
+}
+.sd-plugin-share-ShareView-RowFormatter td {
+	background-color: white;
+	border: none;
+}
+*/
+
+.debug {
+	border: 1px solid black;
+	text-align: left;
+}
+
+.debug td {
+	border: 1px solid black;
+}
+
+.login-textarea {
+  margin-left: 5px;
+}
+
+.generic-title {
+	margin-top: 20px;
+	margin-bottom: 5px;
+  margin-left: 25px;
+	background: #FFFFFF;
+	font-weight: bold;
+	color: black; /*#E39D24;*/
+	font-size: 135%;
+}
+
+.generic-title-edit {
+	margin-top: 20px;
+  padding-right: 15px;
+}
+
+.generic-line-title {
+  padding-left: 25px;
+	color: black; /*#C98000;*/
+	font-weight: bold;
+	font-size: 110%;
+}
+
+.login-commands-background {
+	background: #e0ecff;
+	height: 30px;
+	margin-bottom: 10px;
+}
+
+.login-commands {
+  padding-left: 25px;
+}
+
+.content-edit-buttons {
+	height: 28px;
+	margin-bottom: 5px;
+  padding-left: 0px;
+}
+
+.content-edit-buttons td {
+	background: #e0ecff;
+}
+
+.architecture-content {
+    padding-right: 15px;
+}
+
+.sd-app-PageOrganizeFormatter {
+	margin-top: 20px;
+	margin-left: 25px;
+	margin-bottom: 20px;
+}
+
+.sd-app-PageOrganizeFormatter-Root {
+	margin-bottom: 5px;
+/*  margin-left: 25px;*/
+	background: #FFFFFF;
+	font-weight: bold;
+	color: black; /*#E39D24;*/
+	font-size: 135%;
+}
+
+.dragdrop-handle {
+/*  background: url("images/row-dragger-8.gif") no-repeat;
+  padding-left: 10px;*/
+}
+
+.sd-app-PageOrganizeHandle-Root {
+	border-left: black solid 2px;
+/*  background: url("images/row-dragger-8.gif") no-repeat; */
+}
+
+.sd-app-PageOrganizeHandle {
+  background: url("images/row-dragger-8.gif") no-repeat;
+/*  padding-left: 10px;*/
+/*	border: solid 1px black;*/
+	margin-left: 25px;
+	margin-top: 20px;
+	margin-bottom: 10px;
+/*	width: 50px;
+	height: 20px;*/
+}
+
+.sd-app-PageOrganizeHandle-Child {
+	margin-left: 25px;
+}
+
+.sd-app-PageOrganizeHandle-empty {
+  border: solid 1px black;
+	width: 100px;
+	height: 20px;
+}
+
+.sd-app-NoInsertAtEndIndexedDropController-onEnter {
+	/*background-color: #6694e3;*/
+	border: dashed #6694e3 1px; 
+}
+
+.sd-app-NoInsertAtEndIndexedDropController-Positioner {
+	margin-left: 25px;
+	background-color: #6694e3;
+}
+
+/*
+.left-page-hierarchy {
+  margin-top: 10px;
+ 	background: #e0ecff;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 10px;	
+}*/
+
+.admin-users-header {
+	font-weight: bold;
+	color: #E39D24;
+	font-size: 110%;
+}
+
+.admin-users-user-column {
+	width: 200px;
+}
+
+.admin-users-user-column td {
+	margin-right: 200px;
+}
+
+.sd-editor-surface-modeling-area {
+	border: solid #6694e3 1px;
+}
+
+.UiReadContent {
+	margin-left: 25px;
+	margin-rigth: 25px;
+	padding-left: 25px;
+	padding-rigth: 25px;
+	border: solid 1px black;
+}
+
+.UiReadContent-EditPanel {
+}
+	
+.sd-editor-UiHtmlReadContent {
+/*	padding-left: 25px;*/
+	padding-top: 10px;
+	font-size: 100%;
+	color: black; /*#515151;*/
+}
+
+.sd-editor-UiHtmlReadContent .gwt-HTML {
+	font-size: 100%;
+	color: black; /*#515151;*/
+}
+
+.sd-editor-UiCustomReadContent {
+/*	padding-left: 25px; */
+/*	padding-top: 10px;*/
+}
+
+.sd-editor-UiCustomReadContent .gwt-HTML {
+	font-size: 100%;
+}
+
+.sd-editor-UiCustomReadContent-title {
+/*	width: 750px; */
+  /*margin-left: 25px;
+	margin: 10px 0 7px 0;
+	padding: 0;
+	*/
+	margin-top: 10px;
+	margin-bottom: 5px;
+	background: transparent;
+	font-weight: bold;
+	color: #4B7AA5;
+	font-size: 110%;
+}
+
+.sd-editor-UiDiagramReadContent {
+/*	padding-left: 25px; */
+/*	padding-top: 25px;*/
+}
+
+.sd-editor-UiDiagramReadContent-title {
+	margin-top: 15px;
+	/*margin-bottom: 15px;*/
+	background: transparent;
+	font-weight: bold;
+	color: #4B7AA5;
+	font-size: 110%;
+}
+
+.sd-editor-UiReadTextLineContent {
+	margin-top: 20px;
+	/*	padding-left: 25px;*/
+	/*	padding-top: 25px;*/
+}
+
+.sd-editor-UiReadTextLineContent-title {
+	margin-bottom: 15px;
+/*  margin-left: 25px;*/
+	background: transparent;
+	font-weight: bold;
+	color: black; /*#4B7AA5;*/
+	font-size: 145%;
+}
+
+.UiEditTextLineContent {
+	font-weight: bold;
+	color: black; /*#4B7AA5;*/
+	font-size: 145%;
+	height: 120%;
+	margin-right: 10px;
+	
+}
+
+.UiEditTextLineContent-Panel {
+	padding-right: 5px;
+	padding-bottom: 5px;
+}
+
+.sd-editor-UiReadLinkContent {
+/*	margin-left: 25px; */
+	margin-bottom: 5px; 
+}
+
+.UiReadLinkContent-Link {
+	margin-left: 7px;
+}
+
+.sd-editor-UiReadLinkContent-title {
+	background: transparent;
+	font-weight: bold;
+	color: #4B7AA5;
+	font-size: 100%;
+}
+
+.UiEditLinkContent-Panel {
+	padding-right: 5px;
+}
+
+.UiEditLinkContent-Title {
+	font-weight: bold;
+	color: #4B7AA5;
+	font-size: 100%;
+}
+
+.sd-editor-UiEditLinkContent-TextBox {
+}
+
+.sd-editor-UiReadListContent {
+/*	margin-left: 25px; */
+}
+
+.UiReadListContent-Value {
+	margin-left: 7px;
+}
+
+.sd-editor-UiReadListContent .gwt-HTML {
+/*	padding-left: 25px;*/
+	font-size: 100%;
+}
+
+.sd-editor-UiReadListContent-title {
+	background: transparent;
+	font-weight: bold;
+	color: #4B7AA5;
+	font-size: 100%;
+}
+
+.UiEditListContent-Title {
+	font-weight: bold;
+	color: #4B7AA5;
+	font-size: 100%;
+}
+
+.sd-app-frame-ListUiHelper {
+  cursor: pointer;
+  cursor: hand;
+	border-left: 1px solid #666;
+	border-right: 1px solid #666;
+	border-top: 1px solid #666;
+	border-bottom: 1px solid #666;
+}
+
+.sd-app-frame-ListUiHelper td {
+/*  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;*/
+	margin-right: 10px;
+  padding: 2px 10px 2px 10px;
+  font-size: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sd-app-frame-ListUiHelper-Header {
+/*	font-weight: bold; */
+	  font-size: 100%;
+}
+
+.sd-app-frame-ListUiHelper-Header td {
+  padding: 2px 0 2px 10px;
+/*  border-top: 1px solid #666; */
+/*  border-bottom: 1px solid #d6d6d6; */
+  border-bottom: 1px solid #666;
+  
+  background-color: transparent;
+/*  color: #E18400; */
+}
+
+.sd-app-frame-ListUiHelper-Header .gwt-HTML {
+  font-weight: bold;
+  font-size: 100%; 
+}
+
+.sd-app-frame-ListUiHelper-RowFormatter td {
+  border-bottom: 1px solid #d6d6d6;
+  /*  font: 100% 'trebuchet ms',helvetica,sans-serif;*/
+  white-space: nowrap;
+  overflow: hidden; 
+ /* border-top: 1px solid #666;*/
+}
+
+.sd-app-frame-ListUiHelper-RowFormatter:hover {
+  /*font: 100% 'trebuchet ms',helvetica,sans-serif;*/
+/*	background: transparent;*/ /*#efefef;*/
+	color: #6694e3;
+}
+/*
+.sd-add-frame-ListSelectionComponent-even-row {
+	background-color: #e0ecff;
+}*/
+
+/* Top Navigation */
+.sd-app-ViewTemplate3-top-Navigation {
+	font-size: small;		
+	width: 100%;
+/*	border-bottom: solid #cccccc 1px;*/
+	margin-bottom: 2px;
+}
+
+.sd-app-ViewTemplate3-ContentLeft {
+	padding-bottom: 10px;
+}
+
+.sd-app-ViewTemplate3-PrimaryNavigation {
+/*	padding-top: 15px;
+	padding-bottom: 10px;*/
+  background-color: #6694e3;
+  margin-left: 15px;
+}
+
+.sd-app-ViewTemplate3-Title-Area {
+	padding-top: 4px;
+	padding-bottom: 5px;
+	margin-bottom: 10px;
+  background-color: #6694e3;
+}
+
+.sd-app-ViewTemplate3-Icon {
+/*	padding-top: 5px;
+	padding-bottom: 20px;
+	padding-left: 15px;*/
+	margin-left: 10px;
+}
+
+.sd-app-ViewTemplate3-Title {
+  /*height: 30px;*/
+ /* margin-bottom: 10px;*/
+	font-size: 150%;
+}
+
+
+.title {
+	font-size: 150%;
+}
+
+.title-text {
+  margin-left: 15px;
+  padding-bottom: 2px;
+	font-weight: bold;
+	color: black;
+	font-size: 150%;
+/*	text-decoration: underline;*/
+}
+
+.sd-app-ViewTemplate3-MainContent {
+/*	margin-top: 10px;*/
+/*	border: 3px solid #6694e3; */
+	width: 100%;
+	height: 100%;
+}
+
+.gwt-DecoratorPanel .middleCenter {
+	height: 100%;
+  width: 100%;
+}
+
+.sd-app-ViewTemplate3-Root {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.sd-app-HierarchyView {
+	overflow: hidden;
+}
+
+.sd-app-HierarchyView-Tree {
+	overflow: hidden;
+}
+
+.gwt-Tree .gwt-TreeItem-selected {
+	background: none;
+	overflow: hidden;
+}
+
+.HierarchyView-Button {
+  margin: 0;
+  padding: 3px 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-decoration: none;
+  font-size: 90%;
+  background: url("images/hborder.png") repeat-x 0px -27px;
+ 	white-space: nowrap;
+ 	cursor: pointer;
+  	cursor: hand;
+  background: url("images/hborder.png") repeat-x 0px -27px;
+  border: 1px outset #ccc;
+}
+
+.HierarchyView-Button:active {
+  border: 1px inset #ccc;
+}
+.HierarchyView-Button:hover {
+  border-color: #9cf #69e #69e #7af;
+}
+
+
+/*
+.gwt-Tree {
+	width: 100px;
+}*/
+
+/*
+.kala {
+	padding: 0;
+	margin: 0;
+	border: solid black 1px;
+}
+
+
+.gwt-Tree .gwt-TreeItem {
+	border: solid black 1px;
+	color: yellow;
+	vertical-align: top;
+}
+*/
+
+.sd-app-SketchesView-Description {
+	width: 300px;
+	white-space: nowrap;
+	overflow: hidden;	
+}
+
+.sd-app-SketchesView-SketchNew {
+	font-weight: bold;
+	font-size: 90%;
+/*	color: #1d4194; *//*#2e3b58;*/
+}
+
+.sd-app-SketchesView-SketchAccepted {
+/*	font-weight: bold;
+	font-size: 85%;*/
+	/*color: green;*/
+/*	color: #1d4194; */
+}
+
+.sd-app-SketchesView-SketchStarted {
+/*	font-weight: bold;
+	font-size: 85%;*/
+/*	color: #1d4194; */
+}
+
+.sd-app-SketchesView-SketchDesigned {
+	background-color: /*#d0e4f6;*/ #f1efff; /* #efefff; */ /*#efefef;*/
+	color: #6f7373;
+	/*	color: #444444; */
+}
+
+.sd-app-SketchesView-SketchFuture {
+	background-color: /*#d0e4f6;*/ /* #e7f0f0; */ #f1efff; /*#e8eff8*/; /*#efefff;*/ /*#d9efef;*/ /*#c2defb; */
+/*	background-color: #efefef; */
+/*	color: #444444; */
+	color: #6f7373; 
+}
+
+.sd-app-SketchesView-SketchDiscarded {
+/*	background-color: #efefef; */
+	background-color: /*#d0e4f6;*/ #f1efff; /*#efefff;*/
+	color: #8c9191; /*#9f9182; */
+}
+
+.plugin-api-UiNotifier {
+	color: red;
+	font-weight: bold;
+	text-align: center;
+	padding-bottom: 10px;
+}
+
+.EditWidget div {
+}
+
+.PageView-PageContent {
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+.IssueView-Grid td {
+/*	border: solid 1px black; */
+/*  padding-right: 5px;
+  padding-bottom: 3px;*/
+}
+
+.ArchitectureView {
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+.ArchitectureView-Title {
+	margin-top: 20px;
+	margin-bottom: 5px;
+	background: transparent;
+	font-weight: bold;
+	color: black; /*#E39D24;*/
+	font-size: 145%;
+}
+
+.ArchitectureView-EditLink {
+	margin-top: 20px;
+}
+
+.PageView-EditModeSelector {
+	color: #E18400;
+	text-decoration: underline;
+	font-weight: bold;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.SilverlightInstallView {
+	border: solid black 1px;
+}
+
+.SilverlightInstallView-header {
+	border-right: solid black 1px;
+}
+
+.SilverlightInstallView-column {
+	border: green;
+}
+
+.SilverlightInstallView-RowFormatter td {
+  border-bottom: 1px solid #d6d6d6;
+  /*  font: 100% 'trebuchet ms',helvetica,sans-serif;*/
+  white-space: nowrap;
+  overflow: hidden; 
+ /* border-top: 1px solid #666;*/
+}
+
+.sd-SurfaceHandler {
+  cursor: pointer;
+  cursor: hand;
+}
+
+/*.gwt-DisclosurePanel .content {*/
+.sd-app-LabelView .content {
+	width: 100%;
+}
+
+.LabelView-LabelList {
+	border: none;
+/*	border-left: 1px solid #666;
+	border-right: 1px solid #666;
+	border-top: 1px solid #666;
+	border-bottom: 1px solid #666;*/
+}
+
+.LabelView-LabelListRow td {
+	border-bottom: none;
+	color: #E18400
+}
+
+.LabelView-LabelListRow:HOVER {
+	text-decoration: underline;
+	color: #E18400
+}
+
+.LabelView-HighlightRow {
+	background-color: #6694e3;
+}
+
+.LabelWidget {
+	padding: 0 0 0 0;
+	margin: 0 0 0 0;
+	font-size: 60%;
+}
+.LabelWidget td {
+	padding: 0 0 0 0;
+	padding-left: 5px;
+	margin: 0 0 0 0;
+	margin-left: 5px;
+	border-bottom: none;
+}
+
+.empty-borders {
+}
+.empty-borders td {
+	border: none;
+}
+
+.LabelColorSelector {
+}
+.LabelColorSelector td {
+	background-color: blue;
+}
+.LabelColorSelector:hover {
+	border: black;
+}
+
+.up-img {
+	height: 9px;
+	width: 15px;
+	padding: 0;
+	margin: 0;
+	border: solid 1px #6694e3;
+	background-image: url("images/up.png");
+	background-repeat: no-repeat;
+	background-color: white;
+	background-position: center;
+}
+
+.down-img {
+	height: 9px;
+	width: 15px;
+	padding: 0;
+	margin: 0;
+	border: solid 1px #6694e3;
+	background-image: url("images/down.png");
+	background-repeat: no-repeat;
+	background-color: white;
+	background-position: center;
+}
+
+.ToolFrame {
+/*	border-top: 1px solid #6694e3; */
+}

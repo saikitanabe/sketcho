@@ -1,0 +1,37 @@
+<projectDescription>
+  <name>sketcho</name>
+  <comment>NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
+  <projects>
+    <project>hibernate4gwt</project>
+    <project>plugin-manager</project>
+    <project>sd-app-frame</project>
+    <project>sd-domain</project>
+    <project>sd-editor</project>
+    <project>sd-plugin</project>
+    <project>sd-plugin-login</project>
+    <project>sd-plugin-share</project>
+    <project>sd-plugin-web-admin</project>
+    <project>sd-remote</project>
+    <project>sd-server</project>
+  </projects>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.jdt.core.javabuilder</name>
+    </buildCommand>
+    <buildCommand>
+      <name>com.google.gdt.eclipse.core.webAppProjectValidator</name>
+    </buildCommand>
+    <buildCommand>
+      <name>com.google.gwt.eclipse.core.gwtProjectValidator</name>
+    </buildCommand>
+    <buildCommand>
+      <name>org.maven.ide.eclipse.maven2Builder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.maven.ide.eclipse.maven2Nature</nature>
+    <nature>org.eclipse.jdt.core.javanature</nature>
+    <nature>com.google.gwt.eclipse.core.gwtNature</nature>
+    <nature>com.google.gdt.eclipse.core.webAppNature</nature>
+  </natures>
+</projectDescription>

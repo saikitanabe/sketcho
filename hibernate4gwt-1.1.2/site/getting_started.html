@@ -1,0 +1,364 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+  
+
+
+  
+  <title>hibernate4gwt - Getting Started</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+
+  
+  <style type="text/css">
+<!--
+a:link { color: #FFFFFF; text-decoration: none}
+a:visited { text-decoration: none; color: #FFCC66}
+a:hover { color: #99CCFF; text-decoration: underline}
+body { font-family: "Arial", "Helvetica", "sans-serif"}
+-->
+  </style>
+</head>
+
+
+<body style="background-color: rgb(255, 255, 255);" link="#ffffff">
+
+
+<table align="center" background="image/top.gif" border="0" cellpadding="0" cellspacing="0" height="75" width="700">
+
+
+  <tbody>
+
+
+    <tr background="image/top.gif">
+
+
+      <td colspan="1">
+      
+      <table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
+
+
+        <tbody>
+
+
+          <tr>
+
+
+            <td><font face="Tahoma" size="6">hibernate4gwt</font>
+            
+            <pre><font face="Tahoma">http://hibernate4gwt.sourceforge.net</font></pre>
+
+
+            </td>
+
+
+            <td style="text-align: right;">hosted by<br>
+
+
+            <a href="http://sourceforge.net/"><img style="width: 125px; height: 37px;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=194811&amp;type=2" alt="SourceForge.net Logo" border="0"></a></td>
+
+
+          </tr>
+
+
+        
+        </tbody>
+      
+      </table>
+
+
+      </td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" height="20" width="700">
+
+
+  <tbody>
+
+
+    <tr bgcolor="#000000">
+
+
+      <td bgcolor="#336666">
+      
+      <div align="center"> <font color="#ffffff" face="Tahoma">|<font face="Tahoma"> <a href="index.html">Home</a> | <a href="news.html">News</a>
+| <a href="getting_started.html">Getting started</a>
+| <a href="overview.html">Overview</a> |&nbsp;<a href="hibernate_gwt_problem.html">Hibernate-GWT issues</a>
+| <a href="faq.html">FAQ</a> | <a href="thanks.html">Thanks</a> | </font></font></div>
+
+
+      </td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<table align="center" background="image/top1.gif" border="0" cellpadding="0" cellspacing="0" height="13" width="700">
+
+
+  <tbody>
+
+
+    <tr>
+
+
+      <td><font face="Tahoma"><img src="image/pixel.gif" height="1" width="1"></font></td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<font face="Tahoma"><br>
+
+
+</font>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="700">
+
+
+  <tbody>
+
+
+    <tr>
+
+
+      <td valign="top" width="455">
+      
+      <table background="image/longmenu.gif" border="0" cellpadding="0" cellspacing="0" height="34" width="455">
+
+
+        <tbody>
+
+
+          <tr>
+
+
+            <td><b><font face="Tahoma">Getting
+started</font></b></td>
+
+
+          </tr>
+
+
+        
+        </tbody>
+      
+      </table>
+
+
+      
+      <p class="MsoNormal"><span style="" lang="EN-GB">hibernate4gwt allows different configurations, depending on your needs and constraints :</span></p>
+
+
+      
+      <ul>
+
+
+        <li><span style="" lang="EN-GB"><span style="font-weight: bold;">stateless </span>(the
+default) : your server remains stateless and do not store any extra
+information. Your domain classes will have to inherit from <span style="font-weight: bold; color: rgb(255, 0, 0);">LazyPojo</span>
+to store lazy attributes.</span></li>
+
+
+        <li><span style="font-weight: bold;">dynamic
+proxy</span> : a proxy is generated to handle lazy
+properties information both on server and client side. You just have to
+implement the <span style="font-weight: bold; color: rgb(255, 0, 0);">Serializable</span> interface and force GWT deferred binding on
+client side (see the associated guide for details)<span style="" lang="EN-GB"><span style="font-weight: bold;"></span></span></li>
+        <li><span style="" lang="EN-GB"><span style="font-weight: bold;">stateful</span>
+: lazy informations are not stored in the POJO but in HTTP session. So,
+your Domain classes <span style="text-decoration: underline;">do not need to have any technical inheritance</span>, but
+your web server become stateful (sticky session).&nbsp;<span style="font-style: italic; color: rgb(255, 0, 0);"></span>&nbsp;</span></li>
+        <li><span style="" lang="EN-GB"><span style="font-weight: bold;">Java5&nbsp;support </span>(<span style="font-style: italic;">will probably disappear in future releases</span>):
+because GWT 1.4 did not support Java5 syntax, hibernate4gwt allow you to
+dynamically clone yourJava 5 Domain classes to GWT compatible DTO (Java 1.4 syntax). Theses
+clone classes must have the same name than the Domain class (in a
+different package) and inherits from <span style="font-weight: bold; color: rgb(255, 0, 0);">LazyPojo</span>. On the other hand,
+hibernate4gwt will manager lazy properties for you and do not require
+any clone mapping file.</span></li>
+
+
+      
+      </ul>
+
+
+      
+      <p class="MsoNormal"><span style="" lang="EN-GB">First of all, you have to decide in which
+configuration your application will run :</span></p>
+
+
+      
+      <ul>
+
+
+        <li><span style="" lang="EN-GB">For a
+          <span style="text-decoration: underline;">fresh
+new project</span>, or if
+your can easily add a technical inheritance to your Domain classes, we
+recommend your to run in <span style="font-weight: bold;">dynamic
+proxy</span> or <span style="font-weight: bold;">stateless</span>
+mode</span></li>
+
+
+        <li><span style="" lang="EN-GB">If
+you <span style="text-decoration: underline;">cannot (or do not wish to) add technical
+inheritance</span> on
+them, you can run in <span style="font-weight: bold;">dynamic
+proxy</span> mode if they implements the
+Serializable interface (a common best practice), or in <span style="font-weight: bold;">stateful</span>
+mode otherwise.</span></li>
+
+
+        <li><span style="" lang="EN-GB">At
+last, if you are using <span style="text-decoration: underline;">Java5</span>
+domain classes and GWT 1.4, you will have to use hibernate4gwt with explicit clone
+(called <span style="font-weight: bold;">Java5 support</span>)
+configuration.<br>
+
+
+          </span></li>
+
+
+      
+      </ul>
+
+
+      
+      <p class="MsoNormal"><span style="" lang="EN-GB"></span>Then&nbsp;follow the dedicated
+"Getting started" guide :</p>
+
+
+      
+      <ul>
+
+
+        <li style="color: rgb(0, 0, 153);"><a href="getting_started_stateless.html"><span style="color: rgb(0, 0, 153);">Getting started for stateless
+applications</span>&nbsp;</a></li>
+
+
+        <li><a style="color: rgb(0, 0, 153);" href="getting_started_proxy.html">Getting started for
+dynamic proxy mode</a></li>
+
+
+        <li><a style="color: rgb(0, 0, 153);" href="getting_started_java5.html">Getting started for Java5
+support applications</a></li>
+
+
+        <li><a style="color: rgb(0, 0, 153);" href="getting_started_stateful.html">Getting started for
+stateful applications</a>&nbsp;</li>
+
+
+      
+      </ul>
+
+
+      <br>
+
+
+      <span style="" lang="EN-GB">Finally, the <a style="color: rgb(0, 0, 153);" href="overview.html">Overview</a>
+section explain the different possibilities and configuration allowed
+by the
+library.<br>
+
+
+      </span><span style="" lang="EN-GB">Additionally,
+a simple sample application of each configuration is now available for
+download !</span><br>
+
+
+      </td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<font face="Tahoma"><br>
+
+
+</font>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="700">
+
+
+  <tbody>
+
+
+    <tr>
+
+
+      <td>
+      
+      <div align="left"></div>
+
+
+      
+      <div align="center"><font face="Tahoma" size="2">Copyright 2007. All Rights Reserved</font></div>
+
+
+      
+      <table align="center" border="0" cellpadding="0" cellspacing="0" height="20" width="700">
+
+
+        <tbody>
+
+
+          <tr align="center" bgcolor="#000000">
+
+
+            <td bgcolor="#336666">&nbsp;<small><span style="color: rgb(255, 255, 255);">Last updated : 12 June,
+2008</span></small></td>
+
+
+          </tr>
+
+
+        
+        </tbody>
+      
+      </table>
+
+
+      </td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<center>&nbsp;</center>
+
+
+<br>
+
+
+<br>
+
+
+</body>
+</html>

@@ -1,0 +1,367 @@
+package net.sevenscales.editor.content.ui;
+
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.EditorContext;
+import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
+import net.sevenscales.editor.api.impl.FastButton;
+import net.sevenscales.editor.api.impl.FastElementButton;
+import net.sevenscales.editor.api.impl.TouchHelpers;
+import net.sevenscales.editor.content.utils.ColorHelpers;
+import net.sevenscales.editor.content.utils.ColorHelpers.Rgb;
+import net.sevenscales.editor.diagram.utils.Color;
+import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
+
+public class ColorSelections extends Composite {
+	private static final SLogger logger = SLogger.createLogger(ColorSelections.class);
+
+	private static ColorSelectionsUiBinder uiBinder = GWT
+			.create(ColorSelectionsUiBinder.class);
+
+	interface ColorSelectionsUiBinder extends UiBinder<Widget, ColorSelections> {
+	}
+
+	public interface Style extends CssResource {
+		String focuspanel();
+	}
+	
+	public interface SelectionHandler {
+		void itemSelected(Color currentColor, ColorTarget colorTarget);
+	}
+
+	@UiField
+	Style style;
+	@UiField
+	FlexTable colortable;
+	// @UiField
+	// SimplePanel sampleColor;
+	@UiField
+	TextBox colorValue;
+	
+	public static native String rgb2hex(int r, int g, int b)/*-{
+		function hex(x) {
+			return ("0" + parseInt(x).toString(16)).slice(-2);
+		}
+		return hex(r) + hex(g) + hex(b);
+	}-*/;
+
+	private native String rgb2hex(String rgb)/*-{
+		rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+		function hex(x) {
+			return ("0" + parseInt(x).toString(16)).slice(-2);
+		}
+		return hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+	}-*/;
+
+	private native int rgb2hexval(String rgb)/*-{
+		rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+		function hex(x) {
+			return 0x100 | parseInt(x);
+		}
+		return hex(rgb[1]) | hex(rgb[2]) | hex(rgb[3]);
+	}-*/;
+	
+	private native int red(String rgb)/*-{
+		rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+		return parseInt(rgb[1]);
+	}-*/;
+	private native int green(String rgb)/*-{
+		rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+		return parseInt(rgb[2]);
+	}-*/;
+	private native int blue(String rgb)/*-{
+		rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+		return parseInt(rgb[3]);
+	}-*/;
+	
+
+	private MouseOverHandler mouseOverHandler = new MouseOverHandler() {
+		@Override
+		public void onMouseOver(MouseOverEvent event) {
+			selectCurrentColor(event);
+		}
+	};
+	
+	private <H extends EventHandler> void selectCurrentColor(GwtEvent<H> event) {
+		Widget widget = (Widget) event.getSource();
+		
+		String backgroundRgb = widget.getElement().getStyle().getBackgroundColor();
+		if (backgroundRgb.startsWith("#")) {
+			// in hex format IE8 at least
+			String hexnumber = backgroundRgb.substring(1, backgroundRgb.length());
+			assert(hexnumber.length() == 6);
+			int rc = Integer.valueOf(hexnumber.substring(0, 2), 16);
+			int gc = Integer.valueOf(hexnumber.substring(2, 4), 16);
+			int bc = Integer.valueOf(hexnumber.substring(4, 6), 16);
+			backgroundRgb = "rgb(" + rc + "," + gc + "," + bc + ")";
+		}
+		String color = rgb2hex(backgroundRgb).toUpperCase();
+		
+		currentColor.setBackgroundColor(color);
+		currentColor.setRr(red(backgroundRgb));
+		currentColor.setGg(green(backgroundRgb));
+		currentColor.setBb(blue(backgroundRgb));
+		currentColor.setOpacity(0.85);
+
+		colorValue.setText(color);
+		// colorValue.selectAll();
+		// colorValue.setFocus(true);
+
+		colorValue.getElement().getStyle().setBackgroundColor("#" + color);
+		String textcolor = "ffffff";
+		if (ColorHelpers.isRgbBlack(widget.getElement().getStyle().getBackgroundColor())) {
+			textcolor = "444444";
+		}
+		
+		int tr = Integer.valueOf(textcolor.substring(0, 2), 16);
+		int tg = Integer.valueOf(textcolor.substring(2, 4), 16);
+		int tb = Integer.valueOf(textcolor.substring(4, 6), 16);
+
+		currentColor.setTextColor(textcolor);
+		currentColor.setR(tr);
+		currentColor.setG(tg);
+		currentColor.setB(tb);
+		
+		colorValue.getElement().getStyle().setColor(currentColor.getTextColor4Web());
+	}
+
+	
+	private ClickHandler clickHandler = new ClickHandler() {
+		@Override
+		public void onClick(ClickEvent event) {
+			selectCurrentColor(event);
+			logger.debug2("onClick currentColor: {}", currentColor);
+			Color color = (Color) editorContext.get(EditorProperty.CURRENT_COLOR);
+			switch (colorTarget) {
+			case BORDER:
+				color.setBorderColor(currentColor.getBackgroundColor());
+				color.setBorR(currentColor.getRr());
+				color.setBorG(currentColor.getGg());
+				color.setBorB(currentColor.getBb());
+				break;
+			case BACKGROUND:
+				applyCommonBackgroundColor(color);
+				
+				// set border color based on background
+				String borderHex = ColorHelpers.createBorderColor(currentColor.getBackgroundColor());
+				color.setBorderColor(borderHex);
+				Rgb borderRgb = ColorHelpers.toRgb(borderHex);
+				color.setBorR(borderRgb.red);
+				color.setBorG(borderRgb.green);
+				color.setBorB(borderRgb.blue);
+				color.setBorderColor(borderHex);
+				break;
+			}
+			selectionHandler.itemSelected(color, colorTarget);
+		}
+	};
+	
+	private Color currentColor = new Color("444444", 0x44, 0x44, 0x44, "ffffff", 0xff, 0xff, 0xff, "333333", 0x33, 0x33, 0x33, AbstractDiagramItem.DEFAULT_FILL_OPACITY); 
+
+//	private String currentBackgroundColor = "#3366FF";
+//	private String currentTextColor = "#FFFFFF";
+	private SelectionHandler selectionHandler; 
+	private ColorTarget colorTarget = ColorTarget.BACKGROUND;
+	
+	@UiField AnchorElement border;
+	@UiField AnchorElement background;
+	private EditorContext editorContext;
+	
+
+	public ColorSelections(EditorContext editorContext) {
+		this.editorContext = editorContext;
+		initWidget(uiBinder.createAndBindUi(this));
+		
+		colorValue.getElement().getStyle().setBackgroundColor(currentColor.getBackgroundColor4Web());
+		colorValue.getElement().getStyle().setColor(currentColor.getTextColor4Web());
+
+		colortable.setWidget(0, 0, createColorButton("#000000"));
+		colortable.setWidget(1, 0, createColorButton("#333333"));
+		colortable.setWidget(2, 0, createColorButton("#666666"));
+		colortable.setWidget(3, 0, createColorButton("#999999"));
+		colortable.setWidget(4, 0, createColorButton("#CCCCCC"));
+		colortable.setWidget(5, 0, createColorButton("#FFFFFF"));
+		colortable.setWidget(6, 0, createColorButton("#FF0000"));
+		colortable.setWidget(7, 0, createColorButton("#00FF00"));
+		colortable.setWidget(8, 0, createColorButton("#0000FF"));
+		colortable.setWidget(9, 0, createColorButton("#FFFF00"));
+		colortable.setWidget(10, 0, createColorButton("#00FFFF"));
+		colortable.setWidget(11, 0, createColorButton("#FF00FF"));
+		
+		colortable.setWidget(0, 1, createColorButton("#000000"));
+		colortable.setWidget(1, 1, createColorButton("#000000"));
+		colortable.setWidget(2, 1, createColorButton("#000000"));
+		colortable.setWidget(3, 1, createColorButton("#000000"));
+		colortable.setWidget(4, 1, createColorButton("#000000"));
+		colortable.setWidget(5, 1, createColorButton("#000000"));
+		colortable.setWidget(6, 1, createColorButton("#000000"));
+		colortable.setWidget(7, 1, createColorButton("#000000"));
+		colortable.setWidget(8, 1, createColorButton("#000000"));
+		colortable.setWidget(9, 1, createColorButton("#000000"));
+		colortable.setWidget(10, 1, createColorButton("#000000"));
+		colortable.setWidget(11, 1, createColorButton("#000000"));
+		
+		colorBox(0, 0, 0x000000);
+		colorBox(0, 6, 0x330000);
+		colorBox(0, 12, 0x660000);
+		colorBox(6, 0, 0x990000);
+		colorBox(6, 6, 0xCC0000);
+		colorBox(6, 12, 0xFF0000);
+		
+		new FastElementButton(border).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				colorTarget = ColorTarget.BORDER;
+			}
+		});
+		
+//		DOM.sinkEvents((com.google.gwt.user.client.Element) border.cast(),
+//				Event.ONCLICK);
+//		DOM.setEventListener(
+//				(com.google.gwt.user.client.Element) border.cast(),
+//				new EventListener() {
+//					@Override
+//					public void onBrowserEvent(Event event) {
+//						switch (DOM.eventGetType(event)) {
+//						case Event.ONCLICK:
+//							colorTarget = ColorTarget.BORDER;
+////							showTab(border);
+//							break;
+//						}
+//					}
+//				});
+		
+		new FastElementButton(background).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				colorTarget = ColorTarget.BACKGROUND;
+			}
+		});
+		
+//		DOM.sinkEvents((com.google.gwt.user.client.Element) background.cast(),
+//				Event.ONCLICK);
+//		DOM.setEventListener(
+//				(com.google.gwt.user.client.Element) background.cast(),
+//				new EventListener() {
+//					@Override
+//					public void onBrowserEvent(Event event) {
+//						switch (DOM.eventGetType(event)) {
+//						case Event.ONCLICK:
+//							colorTarget = ColorTarget.BACKGROUND;
+//							break;
+//						}
+//					}
+//				});
+	}
+	
+	private native void showTab(Element element)/*-{
+		if (typeof $wnd.jq172 == "function") $wnd.jq172(element).tab('show')
+	}-*/;
+	
+	private void colorBox(int baserow, int basecol, int basecolor) {
+		for (int row = baserow; row < baserow + 6; ++row) {
+			for (int col = basecol; col < basecol + 6; ++col) {
+				colortable.setWidget(row, col + 2, createColorButton(colorHex(row, col, basecolor))); // + 2 two extra cols in the beginning
+			}
+		}
+	}
+
+	private Widget createColorButton(String hexcolor) {
+		FocusPanel focus = new FocusPanel();
+		FastButton color = new FastButton(focus);
+//		color.addMouseOverHandler(mouseOverHandler);
+		color.addClickHandler(clickHandler);
+		color.setStyleName(style.focuspanel());
+		
+		
+		int width = 10;
+		int height = 10;
+		if (TouchHelpers.isSupportsTouch()) {
+			width = 20;
+			height = 20;
+		}
+		color.setPixelSize(width, height);
+//		String hex = colorHex(row, col, basecolor);
+//		System.out.println(hex);
+		color.getElement().getStyle().setBackgroundColor(hexcolor);
+		return color;
+	}
+
+	private String colorHex(int row, int col, int basecolor) {
+		int add = basecolor | add(row, col);
+		String result = Integer.toHexString(0x1000000 | add).substring(1)
+				.toUpperCase();
+		return "#" + result;
+	}
+
+	private int add(int row, int col) {
+		int rowadd = 0x000033;
+		int coladd = 0x003300;
+		return (rowadd * (row % 6)) | (coladd * (col % 6));
+	}
+	
+	public void setSelectionHandler(SelectionHandler selectionHandler) {
+		this.selectionHandler = selectionHandler;
+	}
+
+	public static int lighter(int value) {
+		if (255 - value < 255) {
+			return 255 - value + 51;
+		}
+		return 255;
+	}
+	
+	@UiHandler("transparent")
+	public void onTransparent(ClickEvent event) {
+		currentColor.setBackgroundColor("transparent");
+		currentColor.setOpacity(0);
+		
+		currentColor.setTextColor("444444");
+		currentColor.setR(0x44);
+		currentColor.setG(0x44);
+		currentColor.setB(0x44);
+		
+		Color color = (Color) editorContext.get(EditorProperty.CURRENT_COLOR);
+		applyCommonBackgroundColor(color);
+		selectionHandler.itemSelected(currentColor, colorTarget);
+	}
+	
+	private void applyCommonBackgroundColor(Color color) {
+		color.setBackgroundColor(currentColor.getBackgroundColor());
+		color.setRr(currentColor.getRr());
+		color.setGg(currentColor.getGg());
+		color.setBb(currentColor.getBb());
+		color.setOpacity(currentColor.getOpacity());
+		
+		color.setTextColor(currentColor.getTextColor());
+		color.setR(currentColor.getR());
+		color.setG(currentColor.getG());
+		color.setB(currentColor.getB());
+	}
+
+	public void setCurrentDiagramColor(String textColor, String backgroundColor) {
+		System.out.println("setCurrentDiagramColor: " + textColor + " " + backgroundColor);
+		colorValue.setText(backgroundColor.toUpperCase());
+		colorValue.getElement().getStyle().setColor("#" + textColor);
+		colorValue.getElement().getStyle().setBackgroundColor("#" + backgroundColor);
+	}
+}

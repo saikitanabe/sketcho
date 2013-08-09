@@ -1,0 +1,6 @@
+mvn -o clean package -Dmaven.test.skip
+cd target
+unzip -d h sketcho-1.0-SNAPSHOT.war
+cd h
+zip -r sketcho-cs.zip sketcho sketcho.css svg.js svg.htc svg.swf WEB-INF/classes
+scp sketcho-cs.zip root@7scales.net:

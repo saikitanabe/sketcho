@@ -1,0 +1,15 @@
+<net.sevenscales.domain.dto.DiagramContentDTO>
+  <diagramItems>
+    <net.sevenscales.domain.dto.DiagramItemDTO>
+      <text>SimpleClass</text>
+      <type>classitem</type>
+      <shape>241,81,230,30</shape>
+      <version>1</version>
+      <__lazyProperties/>
+    </net.sevenscales.domain.dto.DiagramItemDTO>
+  </diagramItems>
+  <width>800</width>
+  <height>600</height>
+  <properties/>
+  <__lazyProperties/>
+</net.sevenscales.domain.dto.DiagramContentDTO>

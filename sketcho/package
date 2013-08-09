@@ -1,0 +1,8 @@
+cd ..
+mvn -o clean package -Dmaven.test.skip
+cd sketcho
+cd target
+unzip -d h sketcho-1.0-SNAPSHOT.war
+cd h
+zip -r ui.zip sketcho sketcho.css index.html SilverTest.html svg.js svg.htc svg.swf images 
+scp ui.zip saiki@sketcho.7scales.net:

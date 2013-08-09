@@ -1,0 +1,17 @@
+{
+"pageId":"983070",
+"createdAt":"1349900128867",
+"updatedAt":"1349900153149",
+"name":"mock",
+"svg":"<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='background-color:transparent;' viewBox='-15 -10 486 155' width='486' height='155'><image x='280' y='92' width='50' height='50' xlink:href='https://sketchboard.me/resources-56/../images/shadow-left.png' /><image x='412' y='93' width='50' height='50' xlink:href='https://sketchboard.me/resources-56/../images/shadow-right2.png' /><rect x='286' y='90' width='170' height='40' rx='0'  style='fill: rgb(102,153,255);fill-opacity: 0.85;stroke-width: 1;stroke: rgb(102,153,255);'/><rect x='339' y='81' width='30' height='15' rx='0' transform='translate(18,1) rotate(-2,356,86)'  style='fill: rgb(255,255,255);fill-opacity: 0.9;stroke-width: 0;%stroke%'/><text x='291' y='114' style='font-weight:Normal; font-size: 12px; text-anchor: start; font-family: Arial2Change, sans-serif, Arial; fill: #444444;'><tspan > Omage testi</tspan></text></svg>",
+"items":[{
+   "text":"Juupa Jokinen",
+   "elementType":"noteitem",
+   "shape":"286,90,170,36",
+   "backgroundColor":"102,153,255,0.85",
+   "textColor":"68,68,68,1",
+   "version":1,
+   "id":968069638,
+   "clientId":"F134990078269920"
+ }]
+}

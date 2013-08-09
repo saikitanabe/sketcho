@@ -1,0 +1,64 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui'
+    xmlns:c='urn:import:net.sevenscales.sketcho.client.uicomponents'>
+
+	<ui:style type='net.sevenscales.sketcho.client.app.view.MenuViewCompo.MyStyle'>
+		.text {
+			text-align: center;
+		}
+
+		.link {
+			cursor: pointer;
+			margin-left: 15px;
+		}
+		.link:HOVER {
+			cursor: pointer;
+		}
+		
+		.MenuView-Link {
+			margin-left: 3px;
+			margin-bottom: 15px;
+			font-weight: bold;
+			white-space: nowrap;
+			cursor: pointer hand;
+			text-decoration: underline;
+		}
+		
+		.vertical {
+			width: 100%;
+			margin-top: 25px;
+			margin-bottom: 15px;
+		}
+		
+		.launch {
+			text-decoration: underline;
+			cursor: pointer;
+			padding-left: 33px;
+		}
+		
+		.focused {
+			background-color: #d0e4f6;
+		}
+		
+		.enabled {
+			color: black;
+		}
+		.disabled {
+			color: grey;
+		}
+	</ui:style>
+	
+	<ui:with field='res' type='net.sevenscales.sketcho.client.app.view.Resources'/>
+
+	<g:VerticalPanel styleName='{style.vertical}'>
+		<c:HorizontalEventPanel ui:field="newsketch" styleName='{style.link}'>
+			<g:Image resource='{res.addSketch}'/>
+			<g:Label styleName='{style.MenuView-Link}'>New Sketch</g:Label>
+		</c:HorizontalEventPanel>
+		<g:Label ui:field="dashboard" styleName='{style.launch}'>Dashboard</g:Label>
+		<g:Label ui:field="sketches" styleName='{style.launch}'>Sketches</g:Label>
+		<g:Label ui:field="design" styleName='{style.launch}'>Design</g:Label>
+		<g:Label ui:field="myprojects" styleName='{style.launch}'>My Projects</g:Label>
+	</g:VerticalPanel>	
+
+</ui:UiBinder>

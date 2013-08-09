@@ -1,0 +1,858 @@
+/*
+
+Admin page color = #d2b48c
+
+Projects page color = white
+
+*/
+/*
+body {
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 0;
+	padding-left: 0px;
+	padding-right: 0px;
+	background: transparent;
+	color: #2C2C28;
+	font-size: small;
+	font-family: Verdana, "Lucida Grande", Arial, Sans-Serif;
+	font-weight: normal;
+	line-height: 160%;
+}
+*/
+
+h1 {
+/*  margin-left: 25px;*/
+	padding: 0;
+	background: transparent;
+	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+	font-weight: bold;
+	color: #FFFFFF;
+	font-size: 130%;
+	display: inline;
+/*	width: 300px; */
+	height: 40px;
+	float: left;
+}
+
+h2 {
+/*	margin-top: 20px;
+	margin-bottom: 5px;
+  margin-left: 25px;*/
+	background: #FFFFFF;
+	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+	font-weight: bold;
+	color: #E39D24;
+	font-size: 120%;
+/*	border-bottom: 3px solid #D2D1BB; */
+}
+
+h3 {
+	width: 750px;
+/*	margin: 10px 0 7px 0;*/
+	padding: 0;
+	background: #FFFFFF;
+	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+	font-weight: bold;
+	color: #4B7AA5;
+	font-size: 110%;
+/*	border-bottom: 1px solid #E2E2DD; */
+}
+/*
+div.sideBar h3 {
+
+	margin: 0 0 0 2px;
+
+	padding: 5px 0 0 2px;
+
+	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+
+	font-weight: bold;
+
+	font-size: 130%;
+
+	color: #4A78A4;
+
+	background: #F1F0E5 url(/tasktool/images/headings/h3-sb-bg.gif) no-repeat top right;
+
+}
+*/
+
+h4 {
+	width: 100%;
+/*	height: 21px; */
+/*    margin-top: 0px;
+    margin-bottom: 5px;
+    margin-left: 25px;*/
+	padding: 0;
+	color: #C98000;
+	font-family: "Trebuchet MS", "Lucida Grande", Verdana, Arial, sans-serif;
+	font-weight: bold;
+	font-size: 110%;
+/*	border-bottom: 1px solid #E2E2DD; */
+}
+
+h5 {
+/*	margin: 0 0 1px 0;
+	padding: 0;*/	
+	color: #2c2c28;
+	background: #FFFFFF;
+	font-family: Verdana, "Lucida Grande", Arial, sans-serif;
+	font-weight: bold;
+	font-size: 95%;
+}
+
+h6 {
+/*	margin: 0 0 1px 0;
+	padding: 0;*/	
+	color: #60605A;
+	background: #FFFFFF;
+	font-family: Verdana, "Lucida Grande", Arial, sans-serif;
+	font-weight: normal;
+	font-size: 95%;
+	text-transform: uppercase;
+}
+
+/************************************************************************
+* Body Link Elements
+************************************************************************/
+a:link, a:active, a:visited {
+	color: #E18400;
+	text-decoration: none;
+	background: transparent;
+}
+
+a:hover {
+	color: #E18400;
+	text-decoration: underline;
+	background: transparent;
+}
+
+.linkStyle {
+	padding-left: 20px;
+    margin-right: 15px;
+	color: #E18400;
+	text-decoration: none;
+	background: transparent;
+}
+
+.linkStyle:hover {
+	color: #E18400;
+	text-decoration: underline;
+	background: transparent;
+/*	cursor: pointer; cursor: hand; */
+}
+
+.editLink {
+	float: right;
+}
+
+/* Top Navigation */
+.top-Navigation {
+	font-size: small;		
+	font-family: Verdana, "Lucida Grande", Arial, sans-serif;
+	width: 100%;
+}
+
+.topPanel-Item-Left {
+	font-size: 80%;
+	margin-right:10px;
+}
+
+.topPanel-Item-Right {
+	font-size: 80%;
+	margin-left:10px;
+}
+
+.sd-app-PrimaryNavigationView-NavigationPanelVertical {
+	padding-bottom: 10px;
+	padding-left: 20px;
+}
+
+.sd-app-PrimaryNavigationView-NavigationPanelVertical a {
+	font-family: Verdana, "Lucida Grande", Arial, sans-serif;
+	color: #2a5db6;
+	text-decoration: underline;
+	padding-left: 10px;
+}
+
+.sd-app-PrimaryNavigationView-focus {
+	background-color: #6694e3;
+	font-weight: bold;
+	color: white;	
+}
+
+.sd-app-PrimaryNavigationView-focus a {
+	font-family: Verdana, "Lucida Grande", Arial, sans-serif;
+	font-weight: bold;
+	color: white;
+	padding-left: 10px;
+	text-decoration: none;
+}
+
+
+.title {
+	margin: 0 0 0 0px;
+	padding: 0 0 0 0;
+  background-color: #6694e3;
+  height: 75px;
+}
+
+
+
+
+
+
+
+.title-text {
+
+
+
+    margin-left: 15px;
+
+
+
+    margin-top: 10px;
+
+
+
+	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+
+
+
+	font-weight: bold;
+
+
+
+	color: #303f60;
+
+
+
+	font-size: 160%;
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+/* title-Area */
+.title-Area {
+	height: 23px;
+	margin: 0 0 0 0;  
+	padding: 0;
+	text-align: left;
+	color: #222222;
+}
+
+.primary-navigation {
+	height: 24px;
+	margin: 0 0 0 0;  
+	padding: 0 0 0 0;
+	text-align: left;
+	color: #FFFFFF;
+}
+
+/*
+* some location padding for navigation panel
+*/
+.primary-nav {
+	margin: 2px 0 0 15px;  
+	padding: 0 0 0 0;
+}
+
+.primary-navigation a {
+	color: #FFFFFF;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+
+/* belly-Area */
+.belly-Area {
+	width: 100%;
+}
+
+*/*
+.contentLeft {
+	float: left;
+}
+*/
+
+/* menu-Area */
+/*
+.menu-Area {
+	border-spacing: 0 30px;
+	width: 170px;
+}
+*/
+
+/*
+.menuArea-Navigation {
+	color: white; 
+}
+*/
+
+/*
+.menuArea-ContextMenu {
+	color: white; 
+}
+*/
+
+/* content-Area */
+
+/*
+.content-Area {
+
+}
+.subcontent {
+	border: 3px solid #6694e3;
+}
+*/
+
+/*
+.content-Area-Td {
+	margin-right: 50px;
+}
+*/
+
+/*
+.content-Area-ListItem {
+	padding-right: 20px;	
+}
+*/
+
+/* footer-Area */
+/*
+.footer-Area {
+	font-size: 90%;
+}*/
+
+.diagram-panel {
+/*    border: 1px solid #4b7297; */
+}
+
+.readContent {
+/*    border: 1px; */
+}
+
+/* Menu Navigation View */
+/*
+.menuNavigationView-Style {
+	width: 100%;
+}
+*/
+
+/*
+.menuNavigationView-Active-Projects {
+	background: white;
+}
+*/
+
+/*
+.menuNavigationView-Active-Admin {
+	background: #d2b48c;
+}*/
+
+/*
+.page-Menu {
+	font-size: 90%;
+}
+*/
+/*
+.gwt-DisclosurePanel .header .page-Menu-Header {
+	font-weight: bold;
+	color: white;
+	text-decoration:none;
+	padding-right: 10px;
+}
+*/
+
+/*
+.page-Menu-Content {
+	width: 100%;
+	margin: 5px;
+}
+*/
+/*
+.page-Menu-Content a {
+	color: white;
+}
+
+.page-Content-Area {
+	background: grey;
+	width: 500px;	
+}
+*/
+/*
+.page-Table {
+	width: 100%;
+}
+*/
+
+.page-ListHeader {
+	font-family: "Lucida Grande", Arial, sans-serif;
+	font-size: 80%;
+	font-weight: bold;
+	background-color: #eeeeee;
+}
+
+.properties-TextArea {
+/*    border: 1px solid blue; */
+}
+
+/* Dialogs */
+.gwt-DialogBox {
+  border: 2px outset;
+  background-color: white;
+}
+
+.gwt-DialogBox .Caption {
+  background-color: #C3D9FF;
+  padding: 3px;
+  margin: 2px;
+  font-weight: bold;
+  cursor: default;
+}
+
+.command-Area {
+	background-color: #e0ecff;
+}
+
+.command-area-buttons {
+    height: 27px;
+}
+
+.command-Area td {
+	padding-left: 5px;
+	margin: 5px;
+}
+
+.pageContent {
+/*
+	padding-left: 20px;
+	padding-right: 20px;*/
+}
+
+.pageContent td {
+/*	text-align: justify; */
+	font-size: small;
+	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+}
+
+.page-Hierarchy {
+    color: #797c80;
+    font-weight: normal;
+}
+
+
+.page-Hierarchy a {
+    color: #797c80; /*#303f60*/
+    font-weight: bold;
+}
+
+.page-link-hierarchy {
+	font-size: 10px;
+	margin-left: 5px;
+  height: 20px;
+}
+
+.gwt-Button {
+/*  	font-family: "Courier New", "Comic Sans MS", "Microsoft Sans Serif";
+		font-size: 90%;*/
+		font: 90% 'trebuchet ms',helvetica,sans-serif;
+		padding-top: 3px; 
+		padding-bottom: 3px; 
+}
+
+.gwt-HTML {
+	color: #222222;
+	font-family: Verdana, "Lucida Grande", Arial, Sans-Serif;
+	font-weight: normal;
+}
+
+.gwt-TextBox {
+/*	width: 100%; */
+	margin: 0 0 3px 0;
+	padding: 0 0 0 2px;
+	height: 16px;
+	border: 1px solid #959485;
+	color: #222222;
+	font-family: Verdana, "Lucida Grande", Arial, Sans-Serif;
+	font-weight: normal;
+}
+
+.gwt-PasswordTextBox {
+	width: 600px;
+	margin: 0 0 3px 0;
+	padding: 0 0 0 2px;
+	height: 16px;
+	border: 1px solid #959485;
+	color: #222222;
+	font-family: Verdana, "Lucida Grande", Arial, Sans-Serif;
+	font-weight: normal;
+}
+
+/* INDIVIDUAL COMPONENT LAYOUTS */
+.text-Area {
+	height: 250px;
+	width: 100%
+}
+
+.content-Layout {
+	border: solid #E39D24 2px;
+	width: 100%;
+	padding: 2px;
+}
+
+
+/* New */
+.sd-plugin-share-ShareView {
+/*	background-color: #e0ecff;*/
+/*	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 10px;*/	
+  width:100%;
+/*  border: solid 2px #e0ecff;*/
+}
+
+/*
+.gwt-DisclosurePanel-open .header {
+	background-color: #e0ecff;
+  border: none;
+}
+*/
+.gwt-DisclosurePanel-open .content {
+  border: black solid 1px;
+  padding-bottom: 0;
+  margin: 0;
+}
+
+.sd-plugin-share-ShareView-DecoratorPanel {
+   height: 100%;
+   width: 100%;
+}
+ 
+.gwt-DecoratorPanel .middleCenter {
+   height: 100%;
+   width: 100%;
+}
+
+/*
+.sd-plugin-share-ShareView-RowFormatter {
+	background-color: white;
+}
+.sd-plugin-share-ShareView-RowFormatter td {
+	background-color: white;
+	border: none;
+}
+*/
+
+.debug {
+	border: 1px solid black;
+}
+
+.debug td {
+	border: 1px solid black;
+}
+
+.sketchGroup1 {
+	padding-bottom: 15px;
+/*	border-bottom: solid #709ac2 2px;*/
+}
+
+.sketchGroup1 td {
+/*	background-color: #e0ecff;*/
+	/*	padding-left: -5px;
+	padding-right: -5px; */
+}
+
+/*
+.margin-bottom {
+    margin-bottom: 10px;
+}
+*/
+
+/*
+.sketchBody {
+	font-family: Verdana, "Lucida Grande", Arial, Sans-Serif;
+}
+
+.sketchHeadingButtons {
+	height: 28px;
+	margin-bottom: 5px;
+  padding-left: 25px;
+}*/
+
+/*
+.sketchHeadingButtons td {
+	background: #e0ecff;
+}
+
+.sketch-edit-area {
+    margin-left: 25px;
+}*/
+
+/*
+.sketch-margin {
+    margin-left: 25px;
+}
+*/
+
+.bodyText {
+	font-size: small;
+	color: #515151;
+/*    padding-left: 25px; */
+}
+
+/*
+.separator {
+	margin: 15px;
+}
+*/
+
+.login-textarea {
+  margin-left: 5px;
+}
+
+.generic-title {
+	margin-top: 20px;
+	margin-bottom: 5px;
+  margin-left: 25px;
+	background: #FFFFFF;
+	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+	font-weight: bold;
+	color: #E39D24;
+	font-size: 120%;
+}
+
+.generic-title-edit {
+	margin-top: 20px;
+  padding-right: 15px;
+}
+
+.generic-line-title {
+  padding-left: 25px;
+	color: #C98000;
+	font-family: "Trebuchet MS", "Lucida Grande", Verdana, Arial, sans-serif;
+	font-weight: bold;
+	font-size: 110%;
+}
+
+.login-commands-background {
+	background: #e0ecff;
+	height: 30px;
+	margin-bottom: 10px;
+}
+
+.login-commands {
+  padding-left: 25px;
+}
+
+.content-edit-buttons {
+	height: 28px;
+	margin-bottom: 5px;
+  padding-left: 0px;
+}
+
+.content-edit-buttons td {
+	background: #e0ecff;
+}
+
+.architecture-content {
+    padding-right: 15px;
+}
+
+.organize-container {
+	/*border: solid 1px black;*/
+	margin-top: 20px;
+/*	width: 50px;
+	height: 20px;*/
+}
+
+.organize-container-empty {
+	border: solid 1px black;
+	width: 100px;
+	height: 20px;
+}
+/*
+.left-page-hierarchy {
+  margin-top: 10px;
+ 	background: #e0ecff;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 10px;	
+}*/
+
+.admin-users-header {
+	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+	font-weight: bold;
+	color: #E39D24;
+	font-size: 110%;
+}
+
+.admin-users-user-column {
+	width: 200px;
+}
+
+.admin-users-user-column td {
+	margin-right: 200px;
+}
+
+.sd-editor-diagram-edit-content {
+	border: solid #E39D24 2px;
+}
+
+.sd-editor-surface-modeling-area {
+	border: solid #E39D24 1px;
+}
+
+
+.sd-editor-UiHtmlReadContent {
+	padding-left: 25px;
+}
+
+
+.sd-editor-UiCustomReadContent {
+	padding-left: 25px;
+	padding-top: 10px;
+}
+
+.sd-editor-UiCustomReadContent-title {
+/*	width: 750px; */
+  /*margin-left: 25px;
+	margin: 10px 0 7px 0;
+	padding: 0;
+	*/
+	background: #FFFFFF;
+	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+	font-weight: bold;
+	color: #4B7AA5;
+	font-size: 110%;
+}
+
+.sd-editor-UiDiagramReadContent {
+	padding-left: 25px;
+	padding-top: 25px;
+}
+
+.sd-editor-UiDiagramReadContent-title {
+	background: #FFFFFF;
+	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+	font-weight: bold;
+	color: #4B7AA5;
+	font-size: 110%;
+}
+
+.sd-editor-UiReadTextLineContent {
+/*	padding-left: 25px;*/
+	padding-top: 25px;
+}
+
+.sd-editor-UiReadTextLineContent-title {
+/*  margin-top: 20px; */
+	margin-bottom: 5px;
+  margin-left: 25px;
+	background: #FFFFFF;
+	font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+	font-weight: bold;
+	color: #E39D24;
+	font-size: 120%;
+}
+
+.sd-editor-UiReadTextLineContent-TextBox {
+	width: 650px;
+}
+
+.sd-editor-UiReadLinkContent {
+	padding-left: 25px;
+}
+
+.sd-editor-UiReadLinkContent-title {
+}
+
+.sd-editor-UiEditLinkContent-TextBox {
+	width: 650px;
+}
+
+.sd-editor-UiReadListContent {
+	padding-left: 25px;
+}
+
+.sd-editor-UiReadListContent-title {
+}
+
+.sd-app-frame-ListUiHelper {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.sd-app-frame-ListUiHelper td {
+/*  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;*/
+  margin-right: 10px;
+  padding: 2px 0 2px 10px;
+  font-size: 90%;
+  overflow: hidden;
+}
+
+.sd-app-frame-ListUiHelper-Header {
+	font-weight: bold;
+}
+
+.sd-app-frame-ListUiHelper-Header td {
+  padding: 2px 0 2px 10px;
+  border-top: 1px solid #666;
+  border-bottom: 1px solid #666;
+  background-color: white;
+}
+
+.sd-app-frame-ListUiHelper-Header .gwt-HTML {
+  font-weight: bold;
+  font-size: 90%;
+}
+
+.sd-app-frame-ListUiHelper-RowFormatter td {
+  border-bottom: 1px solid #d6d6d6;
+ /* border-top: 1px solid #666;*/
+}
+
+.sd-app-frame-ListUiHelper-RowFormatter {
+	background: white; /*#efefef;*/
+}
+/*
+.sd-add-frame-ListSelectionComponent-even-row {
+	background-color: #e0ecff;
+}*/
+
+/*
+.sd-app-ViewTemplate3-ContentLeft {
+	padding-bottom: 10px;
+}*/
+
+/*
+.kala {
+	padding: 0;
+	margin: 0;
+	border: solid black 1px;
+}
+
+.gwt-Tree {
+	margin: 0;
+	background-color: blue;
+}
+
+.gwt-Tree .gwt-TreeItem {
+	border: solid black 1px;
+	color: yellow;
+	vertical-align: top;
+}
+*/
+

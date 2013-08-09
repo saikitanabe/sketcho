@@ -1,0 +1,58 @@
+<module>
+	<inherits name='com.google.gwt.user.User'/>
+	<inherits name='net.sevenscales.Domain'/>
+	<inherits name="com.google.gwt.user.UserAgent"/>
+	
+	<source path='api'/>
+	<source path='diagram'/>
+	<source path='gfx'/>
+	<source path='silver'/>
+	<source path='uicomponents'/>
+	<source path='content'/>
+	<source path='ui'/>
+	
+    <replace-with class="net.sevenscales.editor.uicomponents.impl.BrowserStyleImplIE6">
+         <when-type-is class="net.sevenscales.editor.uicomponents.impl.BrowserStyleImpl"/>
+         <when-property-is name="user.agent" value="ie6"/>
+    </replace-with>
+
+    <replace-with class="net.sevenscales.editor.uicomponents.impl.BrowserStyleImplMozilla">
+         <when-type-is class="net.sevenscales.editor.uicomponents.impl.BrowserStyleImpl"/>
+         <when-property-is name="user.agent" value="gecko1_8"/>
+    </replace-with>
+
+<!--     <replace-with class="net.sevenscales.editor.api.impl.SurfaceHandlerImplFirefox"> -->
+<!--          <when-type-is class="net.sevenscales.editor.api.SurfaceHandler"/> -->
+<!--          <when-property-is name="user.agent" value="gecko1_8"/> -->
+<!--     </replace-with> -->
+    
+<!--     <replace-with class="net.sevenscales.editor.api.impl.SurfaceHandlerImplFirefox"> -->
+<!--          <when-type-is class="net.sevenscales.editor.api.SurfaceHandler"/> -->
+<!--          <when-property-is name="user.agent" value="safari"/> -->
+<!--     </replace-with> -->
+    
+    
+<!-- 
+    <replace-with class="net.sevenscales.editor.gfx.dojo.impl.SurfaceSafari">
+         <when-type-is class="net.sevenscales.editor.gfx.dojo.Surface"/>
+         <when-property-is name="user.agent" value="ie6"/>
+    </replace-with>
+    <replace-with class="net.sevenscales.editor.gfx.dojo.impl.SurfaceSafari">
+         <when-type-is class="net.sevenscales.editor.gfx.dojo.Surface"/>
+         <when-property-is name="user.agent" value="ie8"/>
+    </replace-with>
+    <replace-with class="net.sevenscales.editor.gfx.dojo.impl.SurfaceFirefox">
+         <when-type-is class="net.sevenscales.editor.gfx.dojo.Surface"/>
+         <when-property-is name="user.agent" value="gecko1_8"/>
+    </replace-with>
+    <replace-with class="net.sevenscales.editor.gfx.dojo.impl.SurfaceFirefox">
+         <when-type-is class="net.sevenscales.editor.gfx.dojo.Surface"/>
+         <when-property-is name="user.agent" value="gecko"/>
+    </replace-with>
+    <replace-with class="net.sevenscales.editor.gfx.dojo.impl.SurfaceSafari">
+         <when-type-is class="net.sevenscales.editor.gfx.dojo.Surface"/>
+         <when-property-is name="user.agent" value="safari"/>
+    </replace-with>
+     -->
+
+</module>

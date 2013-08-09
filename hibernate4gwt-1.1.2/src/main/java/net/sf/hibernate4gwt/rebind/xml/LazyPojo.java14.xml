@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<additionalCode suffix="_h4gwt14" implementedInterface="net.sf.hibernate4gwt.pojo.base.ILazyPojo">
+	<!--
+		ATTRIBUTES 
+	 -->
+    <attributes>
+    	<attribute name="_lazyProperties" visibility= "protected" 
+    			   type="java.util.List" defaultValue="new java.util.ArrayList()">
+    		<javadoc>
+    			<![CDATA[
+    				@gwt.typeArgs <java.lang.String>
+    			]]>
+    		</javadoc>
+    	</attribute>
+    </attributes>
+    
+    <!--
+    	METHODS 
+     -->
+    <methods>
+    	<!-- addLazyProperty -->
+    	<method visibility="public" returnType="void" name="addLazyProperty" javadoc="">
+    		<parameters>
+    			<parameter type="String" name="property" />
+    		</parameters>
+    		<code>
+    			{ _lazyProperties.add(property); }
+    		</code>
+    	</method>
+    	
+    	<!--  removeLazyProperty -->
+    	<method visibility="public" returnType="void" name="removeLazyProperty" javadoc="">
+    		<parameters>
+    			<parameter type="String" name="property" />
+    		</parameters>
+    		<code>
+    			{ _lazyProperties.remove(property); }
+    		</code>
+    	</method>
+    	
+    	<!-- isLazyProperty -->
+    	<method visibility="public" returnType="boolean" name="isLazyProperty" javadoc="">
+    		<parameters>
+    			<parameter type="String" name="property" />
+    		</parameters>
+    		<code>
+    			{ return _lazyProperties.contains(property); }
+    		</code>
+    	</method>
+    	
+    	<!-- getLazyString -->
+    	<method visibility="public" returnType="String" name="getLazyString" javadoc="">
+    		<code>
+    		<![CDATA[
+    		{
+				StringBuffer result = new StringBuffer();
+				for (int index = 0 ; index < _lazyProperties.size() ; index ++)
+				{
+					result.append(_lazyProperties.get(index));
+					result.append(',');
+				}
+				return result.toString();
+			}
+			]]>
+    		</code>
+    	</method>
+    	
+    	<!-- getLazyProperties -->
+    	<method visibility="public" returnType="java.util.List" name="getLazyProperties">
+    		<javadoc>
+    			<![CDATA[
+    				javadoc="![CDATA[@gwt.typeArgs <java.lang.String>
+    			]]>
+    		</javadoc>
+    		<code>
+    			{ return _lazyProperties; }
+    		</code>
+    	</method>
+    	
+    	<!-- setLazyProperties -->
+    	<method visibility="public" returnType="void" name="setLazyProperties" >
+    		<javadoc>
+    			<![CDATA[
+    				@gwt.typeArgs properties <java.lang.String>
+    			]]>
+    		</javadoc>
+    		<parameters>
+    			<parameter type="java.util.List" name="properties" />
+    		</parameters>
+    		<code>
+    			{ _lazyProperties = properties; }
+    		</code>
+    	</method>
+    </methods>
+</additionalCode>

@@ -1,0 +1,292 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+  
+
+
+  
+  <title>hibernate4gwt - The Hibernate-GWT problem</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+
+  
+  <style type="text/css">
+<!--
+a:link { color: #FFFFFF; text-decoration: none}
+a:visited { text-decoration: none; color: #FFCC66}
+a:hover { color: #99CCFF; text-decoration: underline}
+body { font-family: "Arial", "Helvetica", "sans-serif"}
+-->
+  </style>
+</head>
+
+
+<body style="background-color: rgb(255, 255, 255);" link="#ffffff">
+
+
+<table align="center" background="image/top.gif" border="0" cellpadding="0" cellspacing="0" height="75" width="700">
+
+
+  <tbody>
+
+
+    <tr background="image/top.gif">
+
+
+      <td colspan="1">
+      
+      <table style="text-align: left; width: 100%;" border="0" cellpadding="0" cellspacing="0">
+
+
+        <tbody>
+
+
+          <tr>
+
+
+            <td><font face="Tahoma" size="6">hibernate4gwt</font>
+            
+            <pre><font face="Tahoma">http://hibernate4gwt.sourceforge.net</font></pre>
+
+
+            </td>
+
+
+            <td style="text-align: right;">hosted by<br>
+
+
+            <a href="http://sourceforge.net/"><img style="width: 125px; height: 37px;" src="http://sflogo.sourceforge.net/sflogo.php?group_id=194811&amp;type=2" alt="SourceForge.net Logo" border="0"></a></td>
+
+
+          </tr>
+
+
+        
+        </tbody>
+      
+      </table>
+
+
+      </td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<table align="center" border="0" cellpadding="0" cellspacing="0" height="20" width="700">
+
+
+  <tbody>
+
+
+    <tr bgcolor="#000000">
+
+
+      <td bgcolor="#336666">
+      
+      <div align="center"> <font color="#ffffff" face="Tahoma">|<font face="Tahoma"> <a href="index.html">Home</a> | <a href="news.html">News</a>
+| <a href="getting_started.html">Getting started</a>
+| <a href="overview.html">Overview</a> | <a href="hibernate_gwt_problem.html">Hibernate-GWT issues</a>
+| <a href="faq.html">FAQ</a> | <a href="thanks.html">Thanks</a> | </font></font></div>
+
+
+      </td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<table align="center" background="image/top1.gif" border="0" cellpadding="0" cellspacing="0" height="13" width="700">
+
+
+  <tbody>
+
+
+    <tr>
+
+
+      <td><font face="Tahoma"><img src="image/pixel.gif" height="1" width="1"></font></td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<font face="Tahoma"><br>
+
+
+</font>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="700">
+
+
+  <tbody>
+
+
+    <tr>
+
+
+      <td valign="top" width="455">
+      
+      <table background="image/longmenu.gif" border="0" cellpadding="0" cellspacing="0" height="34" width="455">
+
+
+        <tbody>
+
+
+          <tr>
+
+
+            <td><b><font face="Tahoma">Hibernate-GWT
+issues</font></b></td>
+
+
+          </tr>
+
+
+        
+        </tbody>
+      
+      </table>
+
+
+      
+      <p class="MsoNormal"><span style="" lang="EN-GB">Using Hibernate POJO with GWT generally leads
+to two issues :</span></p>
+
+
+      
+      <ul>
+
+
+        <li><span style="" lang="EN-GB"><a style="color: rgb(0, 0, 153);" href="hibernate_gwt_lazy_issue.html">Lazy properties issue</a>
+: when trying to send a partially loaded Hibernate POJO to the
+client-side of GWT (Javascript), the GWT compiler throws a
+Serialization exception because it the CGLIB generated proxy does not
+belong to the JRE emulation.</span></li>
+
+
+      
+      </ul>
+
+
+      <span style="" lang="EN-GB"><br>
+
+
+      </span>
+      
+      <ul>
+
+
+        <li><span style="" lang="EN-GB"><a style="color: rgb(0, 0, 153);" href="hibernate_gwt_type_issue.html">Type issue</a>
+: Hibernate replaces some basic Java types with various subclassed
+implementation (such as java.sql.Timestamp instead of java.util.Date or
+PersistentList for List collections). Javascript serialization of these
+classes will fail, since they do not belong to the JRE emulation
+supported by GWT 1.4 <span style="font-style: italic; font-weight: bold;">(note : the Java SQL dates are now supported by GWT 1.5)</span></span></li>
+
+
+      
+      </ul>
+
+
+      <span style="" lang="EN-GB"></span><br>
+
+
+      <span style="" lang="EN-GB"></span><span style="" lang="EN-GB">The goal of hibernate4gwt is to
+solve them and allow seamless use of Hibernate POJO with GWT client
+code.<span style="font-weight: bold;"></span></span><br>
+
+
+      <span style="" lang="EN-GB"></span></td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<font face="Tahoma"><br>
+
+
+</font>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="700">
+
+
+  <tbody>
+
+
+    <tr>
+
+
+      <td>
+      
+      <div align="left"></div>
+
+
+      
+      <div align="center"><font face="Tahoma" size="2">Copyright 2007. All Rights Reserved</font></div>
+
+
+      
+      <table align="center" border="0" cellpadding="0" cellspacing="0" height="20" width="700">
+
+
+        <tbody>
+
+
+          <tr align="center" bgcolor="#000000">
+
+
+            <td bgcolor="#336666">&nbsp;<small><span style="color: rgb(255, 255, 255);">Last updated :&nbsp;1 June,
+2008</span></small></td>
+
+
+          </tr>
+
+
+        
+        </tbody>
+      
+      </table>
+
+
+      </td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<center>&nbsp;</center>
+
+
+<br>
+
+
+<br>
+
+
+</body>
+</html>

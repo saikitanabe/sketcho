@@ -1,0 +1,6 @@
+mvn -o clean package
+cd target
+unzip -d h sd-server-1.0-SNAPSHOT.war
+cd h
+zip -r ui.zip sketcho sketcho.css index.html SilverTest.html src/main/webapp/images
+scp ui.zip root@7scales.net:

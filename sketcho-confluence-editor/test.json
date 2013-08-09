@@ -1,0 +1,11 @@
+{
+  "name":"kakku",
+  "items":[{
+    "text":"Blog\n--\nid: Long\nname: String",
+    "elementType":"classitem",
+    "shape":"125,229,104,68",
+    "backgroundColor":"255,255,204,1",
+    "textColor":"12,12,12,1",
+    "version":2
+  }]
+}
