@@ -11,7 +11,7 @@ import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.SurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ThemeName;
-import net.sevenscales.editor.api.ot.BoardDocumentHelpers.ApplyOperation;
+import net.sevenscales.editor.api.ot.BoardDocumentHelpers.DiagramApplyOperation;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
@@ -31,8 +31,8 @@ public class BoardOTHelpers {
 		this.clientIdentifier = clientIdentifier;
 	}
 	
-	public void applyOperationsToGraphicalView(String originator, List<ApplyOperation> operations) throws MappingNotFoundException {
-		for (ApplyOperation ap : operations) {
+	public void applyOperationsToGraphicalView(String originator, List<DiagramApplyOperation> operations) throws MappingNotFoundException {
+		for (DiagramApplyOperation ap : operations) {
 			applyOperationToGraphicalView(originator, ap.getOperation(), ap.getItems());
 		}
 	}

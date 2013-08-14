@@ -1,6 +1,7 @@
 package net.sevenscales.editor.content;
 
 import net.sevenscales.domain.DiagramItemJS;
+import net.sevenscales.sketchoconfluenceapp.client.util.BoardUser;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
@@ -14,5 +15,9 @@ public class OperationJS extends JavaScriptObject {
 	}-*/;
 	public final native JsArray<DiagramItemJS> getItems()/*-{
 		return this.items;
+	}-*/;
+
+	public final native BoardUser.BoardUserJson getUser() /*-{
+		return this.user;
 	}-*/;
 }
