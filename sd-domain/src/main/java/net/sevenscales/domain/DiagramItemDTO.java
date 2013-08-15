@@ -20,7 +20,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
   private Integer version = 3;
 	private String clientId;
 	private String customData;
-	private int crc32;
+	private double crc32;
 	
 	public DiagramItemDTO() {
   }
@@ -34,7 +34,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 
 	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
-			Integer version, Long id, String clientId, String customData, int crc32) {
+			Integer version, Long id, String clientId, String customData, double crc32) {
 		super();
 		this.text = text;
 		this.type = type;
@@ -139,12 +139,12 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 
 	@Override
-	public int getCrc32() {
+	public double getCrc32() {
 		return crc32;
 	}
 
 	@Override
-	public void setCrc32(int crc32) {
+	public void setCrc32(double crc32) {
 		this.crc32 = crc32;
 	}
 	

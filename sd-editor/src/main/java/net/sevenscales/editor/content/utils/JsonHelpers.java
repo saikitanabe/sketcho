@@ -21,10 +21,10 @@ public class JsonHelpers {
 	
 	public static class MisMatchException extends Exception {
     private String logicalName;
-		private int checksum;
+		private double checksum;
 		private String json;
 
-		public MisMatchException(String logicalName, int checksum, String json) {
+		public MisMatchException(String logicalName, double checksum, String json) {
 		  this.logicalName = logicalName;
 			this.checksum = checksum;
 			this.json = json;
@@ -34,7 +34,7 @@ public class JsonHelpers {
       return logicalName;
     }
 
-		public int checksum() {
+		public double checksum() {
 			return checksum;
 		}
 		
@@ -47,16 +47,16 @@ public class JsonHelpers {
 		boardDocument = new BoardDocumentGraphicalViewHelpers(surface);
 	}
 
-	public void verify(String logicalName, List<? extends IDiagramItemRO> list, int checksum, JsonFormat jsonFormat) throws MisMatchException {
-		String json = _json(list, jsonFormat);
-		int boardChecksum = ChecksumHelpers.crc32(json);
+	public void verify(String logicalName, List<? extends IDiagramItemRO> list, double checksum, JsonFormat jsonFormat) throws MisMatchException {
+		String json = toJson(list, jsonFormat);
+		double boardChecksum = ChecksumHelpers.crc32(json);
 		if (boardChecksum != checksum) {
-			logger.debug("Logical name {}, CLIENT JSON: {}", logicalName, json);
+			logger.error("Logical name {}, CLIENT JSON: {}", logicalName, json);
 			throw new MisMatchException(logicalName, boardChecksum, json);
 		}
 	}
 	
-	private String _json(List<? extends IDiagramItemRO> items, JsonFormat jsonFormat) {
+	public static String toJson(List<? extends IDiagramItemRO> items, JsonFormat jsonFormat) {
 		String json = "";
 		
 		for (IDiagramItemRO di : items) {

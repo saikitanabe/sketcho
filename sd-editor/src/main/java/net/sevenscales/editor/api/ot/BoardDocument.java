@@ -10,6 +10,8 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers.ApplyOperation;
 import net.sevenscales.editor.content.ClientIdHelpers.UniqueChecker;
+import net.sevenscales.editor.content.utils.JsonHelpers;
+import net.sevenscales.domain.utils.JsonFormat;
 
 
 public class BoardDocument implements UniqueChecker {
@@ -31,6 +33,7 @@ public class BoardDocument implements UniqueChecker {
 
 	public BoardDocument(List<? extends IDiagramItemRO> doc, String logicalName) {
 		this(logicalName);
+		reset(doc);
 	}
 	
 	public void apply(List<ApplyOperation> operations) {
@@ -45,8 +48,8 @@ public class BoardDocument implements UniqueChecker {
 	* Possible maybe to calculate by modify operations, perhaps
 	* minus if element is removed.
 	*/
-	public int crc32() {
-		int result = 0;
+	public double calculateChecksum() {
+		double result = 0;
 		for (IDiagramItemRO diro : document) {
 			result += diro.getCrc32();
 		}
@@ -163,6 +166,10 @@ public class BoardDocument implements UniqueChecker {
 	
 	public String getLogicalName() {
 		return logicalName;
+	}
+
+	public String toJson(JsonFormat format) {
+		return JsonHelpers.toJson(getDocument(), format);
 	}
 
 }
