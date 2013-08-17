@@ -1,16 +1,22 @@
 package net.sevenscales.editor.api.ot;
 
 import java.util.List;
+import java.util.ArrayList;
 
+import net.sevenscales.domain.DiagramItemJS;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers.ApplyOperation;
 import net.sevenscales.editor.content.ClientIdHelpers.UniqueChecker;
+import net.sevenscales.editor.content.utils.JsonHelpers;
+import net.sevenscales.domain.utils.JsonFormat;
+
 
 public class BoardDocument implements UniqueChecker {
 	private static final SLogger logger = SLogger.createLogger(BoardDocument.class);
+
 	private List<IDiagramItemRO> document;
 	private IDiagramItem searchHelper;
 	private String logicalName;
@@ -24,10 +30,10 @@ public class BoardDocument implements UniqueChecker {
 		this(logicalName);
 		document = BoardDocumentHelpers.fromJson(boardJson);
 	}
-	
-	public BoardDocument(List<? extends IDiagramItemRO> clientDoc, String logicalName) {
+
+	public BoardDocument(List<? extends IDiagramItemRO> doc, String logicalName) {
 		this(logicalName);
-		reset(clientDoc);
+		reset(doc);
 	}
 	
 	public void apply(List<ApplyOperation> operations) {
@@ -36,6 +42,18 @@ public class BoardDocument implements UniqueChecker {
 			apply(op.getOperation(), op.getItems());
 		}
 		logger.debug("BoardDocument.apply... done");
+	}
+
+	/**
+	* Possible maybe to calculate by modify operations, perhaps
+	* minus if element is removed.
+	*/
+	public double calculateChecksum() {
+		double result = 0;
+		for (IDiagramItemRO diro : document) {
+			result += diro.getCrc32();
+		}
+		return result;
 	}
 
 	/**
@@ -59,7 +77,7 @@ public class BoardDocument implements UniqueChecker {
 	 * But client need to know it and use it before client doc is changed!
 	 * @return
 	 */
-	public List<? extends IDiagramItemRO> getDocument() {
+	public List<IDiagramItemRO> getDocument() {
 		return document;
 	}
 	
@@ -148,6 +166,10 @@ public class BoardDocument implements UniqueChecker {
 	
 	public String getLogicalName() {
 		return logicalName;
+	}
+
+	public String toJson(JsonFormat format) {
+		return JsonHelpers.toJson(getDocument(), format);
 	}
 
 }

@@ -29,6 +29,7 @@ public class DiagramItemJS extends JavaScriptObject implements IDiagramItemRO { 
 	  public final native int _getId() /*-{ return this.id; }-*/;
 	  public final native String getClientId() /*-{ return this.clientId; }-*/;
 	  public final native String getCustomData() /*-{ return this.cd; }-*/;
+	  public final native double getCrc32() /*-{ return this.crc; }-*/;
 	  
 	  public final DiagramItemDTO asDTO() {
 	  	return new DiagramItemDTO(getText(), 
@@ -39,7 +40,8 @@ public class DiagramItemJS extends JavaScriptObject implements IDiagramItemRO { 
 	  														getVersion(), 
 	  														new Long(getId()), 
 	  														getClientId(),
-	  														getCustomData());
+	  														getCustomData(),
+	  														getCrc32());
 	  }
 
 	  private static class JSONObjectFormatter extends JSONObject {
@@ -123,6 +125,7 @@ public class DiagramItemJS extends JavaScriptObject implements IDiagramItemRO { 
       result.put("id", new JSONNumber(item.getId()));
       result.put("clientId", new JSONString(safeJsonString(item.getClientId())));
       result.put("cd", new JSONString(safeJsonString(item.getCustomData())));
+      result.put("crc", new JSONNumber(item.getCrc32()));
       return result;
     }
 
