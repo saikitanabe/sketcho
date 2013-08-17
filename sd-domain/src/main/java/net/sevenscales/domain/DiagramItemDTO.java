@@ -20,6 +20,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
   private Integer version = 3;
 	private String clientId;
 	private String customData;
+	private double crc32;
 	
 	public DiagramItemDTO() {
   }
@@ -29,11 +30,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		return "DiagramItemDTO [id=" + id + ", text=" + text + ", type=" + type
 				+ ", shape=" + shape + ", diagramContent=" + diagramContent
 				+ ", backgroundColor=" + backgroundColor + ", textColor=" + textColor
-				+ ", version=" + version + ", clientId=" + clientId + "]";
+				+ ", version=" + version + ", clientId=" + clientId + ", crc32=" + crc32 + "]";
 	}
 
 	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
-			Integer version, Long id, String clientId, String customData) {
+			Integer version, Long id, String clientId, String customData, double crc32) {
 		super();
 		this.text = text;
 		this.type = type;
@@ -44,10 +45,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		this.id = id;
 		this.clientId = clientId;
 		this.customData = customData;
+		this.crc32 = crc32;
 	}
 	
 	public DiagramItemDTO(String clientId) {
-		this("", "", "", "", "", 0, 0L, clientId, "");
+		this("", "", "", "", "", 0, 0L, clientId, "", 0);
 	}
 
 	public DiagramItemDTO(IDiagramItemRO di) {
@@ -135,6 +137,16 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	public void setCustomData(String customData) {
 		this.customData = customData;
 	}
+
+	@Override
+	public double getCrc32() {
+		return crc32;
+	}
+
+	@Override
+	public void setCrc32(double crc32) {
+		this.crc32 = crc32;
+	}
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -164,8 +176,10 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		if (checkIfNotSame(clientId, item.getClientId())) {
 			return false;
 		}
-
 		if (checkIfNotSame(customData, item.getCustomData())) {
+			return false;
+		}
+		if (crc32 != item.getCrc32()) {
 			return false;
 		}
 
@@ -196,5 +210,6 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		version = dit.version;
 		clientId = dit.clientId;
 		customData = dit.customData;
+		crc32 = dit.crc32;
 	}
 }

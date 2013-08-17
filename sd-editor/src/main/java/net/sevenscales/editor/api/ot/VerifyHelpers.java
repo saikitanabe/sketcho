@@ -23,7 +23,7 @@ public class VerifyHelpers {
 	private JsonHelpers jsonHelpers;
 	private SurfaceHandler surface;
 	private Integer version;
-	private int checksum;
+	private double checksum;
 	private VerifyTimer timer;
 	private String boardName;
 	private VerifyCallback callback;
@@ -74,7 +74,7 @@ public class VerifyHelpers {
 	}
 
 	public interface VerifyCallback {
-		void debugServer(String boardName, String msg, int checksum, String json, int serverChecksum, Integer serverVersion);
+		void debugServer(String boardName, String msg, double checksum, String json, double serverChecksum, Integer serverVersion);
 		void forceReload();
 	}
 	public VerifyHelpers(String boardName, VerifyCallback callback, JsonHelpers jsonHelpers, SurfaceHandler surface, 
@@ -95,7 +95,7 @@ public class VerifyHelpers {
 
 	}
 
-	public void verify(Integer version, int checksum, OperationQueue operationQueue) {
+	public void verify(Integer version, double checksum, OperationQueue operationQueue) {
 		this.version = version;
 		this.checksum = checksum;
 		this.operationQueue = operationQueue;
@@ -147,7 +147,14 @@ public class VerifyHelpers {
 
 	private void verifyDocument(BoardDocument document, JsonFormat jsonFormat)  throws MisMatchException {
 		long time = System.currentTimeMillis();
-		jsonHelpers.verify(document.getLogicalName(), document.getDocument(), checksum, jsonFormat);
+		double boardChecksum = document.calculateChecksum();
+		if (boardChecksum != checksum) {
+			String json = document.toJson(JsonFormat.SERVER_FORMAT);
+			logger.debug("Logical name {}, CLIENT JSON: {}", document.getLogicalName(), json);
+			throw new MisMatchException(document.getLogicalName(), boardChecksum, json);
+		}
+
+		// jsonHelpers.verify(document.getLogicalName(), document.getDocument(), checksum, jsonFormat);
 		versionVerified = version;
 		logger.debug("VERIFIED({}): version {} time {}", document.getLogicalName(), versionVerified, System.currentTimeMillis() - time);
 	}
