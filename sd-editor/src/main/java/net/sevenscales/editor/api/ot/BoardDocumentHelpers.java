@@ -181,8 +181,10 @@ public class BoardDocumentHelpers {
 			OperationJS opjs = ops.get(i);
 			OTOperation operation = OTOperation.getEnum(opjs.getOperation());
 			if (opjs.getOperation().startsWith("user.")) {
-				BoardUserApplyOperation applyOperation = createBoardUserApplyOperation(operation, opjs.getUser());
-				result.userOperations.add(applyOperation);
+				BoardUserApplyOperation applyOperation = createBoardUserApplyOperation(operation, opjs.getUsers());
+				if (applyOperation != null) {
+					result.userOperations.add(applyOperation);
+				}
 			} else {
 				DiagramApplyOperation applyOperation = createDiagramApplyOperation(operation, opjs.getItems());
 				result.diagramOperations.add(applyOperation);
@@ -191,8 +193,14 @@ public class BoardDocumentHelpers {
 		return result;
 	}
 
-	private static BoardUserApplyOperation createBoardUserApplyOperation(OTOperation operation, BoardUserJson boardUserJson) {
-		return new BoardUserApplyOperation(operation, boardUserJson.getUsername(), boardUserJson.getAvatarUrl(), boardUserJson.getX(), boardUserJson.getY());
+	private static BoardUserApplyOperation createBoardUserApplyOperation(OTOperation operation, JsArray<BoardUserJson> usersJs) {
+		int length = usersJs.length();
+		if (length > 0) {
+			// read only last
+			BoardUserJson json = usersJs.get(length - 1);
+			return new BoardUserApplyOperation(operation, json.getUsername(), json.getAvatarUrl(), json.getX(), json.getY());
+		}
+		return null;
 	}
 
 	private static DiagramApplyOperation createDiagramApplyOperation(OTOperation operation, JsArray<DiagramItemJS> itemsJs) {

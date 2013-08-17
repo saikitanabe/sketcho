@@ -49,11 +49,14 @@ public class OperationQueue {
 			this.operationJson = operationJson;
 		}
 
-		public JSONValue toJson() {
-			JSONObject result = new JSONObject();
-			result.put("operation", new JSONString(operation.toString()));
-			result.put("json", new JSONString(operationJson));
-			return result;
+		public String toJson() {
+			return SLogger.format("{\"operation\":\"{}\",\"items\":{}}", operation.toString(),
+					operationJson);
+			// cannot use gwt utilities since already converted from JSONValue
+			// JSONObject result = new JSONObject();
+			// result.put("operation", new JSONString(operation.toString()));
+			// result.put("items", new JSONString(operationJson));
+			// return result;
 		}
 		
 		public OTOperation getOperation() {

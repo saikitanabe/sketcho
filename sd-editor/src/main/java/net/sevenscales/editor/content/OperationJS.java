@@ -17,7 +17,7 @@ public class OperationJS extends JavaScriptObject {
 		return this.items;
 	}-*/;
 
-	public final native BoardUser.BoardUserJson getUser() /*-{
-		return this.user;
+	public final native JsArray<BoardUser.BoardUserJson> getUsers() /*-{
+		return this.users;
 	}-*/;
 }
