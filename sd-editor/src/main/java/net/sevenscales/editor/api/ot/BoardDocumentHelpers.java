@@ -127,13 +127,15 @@ public class BoardDocumentHelpers {
 		private String avatarUrl;
 		private int x;
 		private int y;
+		private String clientIdentifier;
 
-		public BoardUserApplyOperation(OTOperation operation, String username, String avatarUrl, int x, int y) {
+		public BoardUserApplyOperation(OTOperation operation, String username, String avatarUrl, int x, int y, String clientIdentifier) {
 			super(operation);
 			this.username = username;
 			this.avatarUrl = avatarUrl;
 			this.x = x;
 			this.y = y;
+			this.clientIdentifier = clientIdentifier;
 		}
 
 		public String getUsername() {
@@ -150,6 +152,10 @@ public class BoardDocumentHelpers {
 
 		public int getY() {
 			return y;
+		}
+
+		public String getClientIdentifier() {
+			return clientIdentifier;
 		}
 	}
 
@@ -198,7 +204,7 @@ public class BoardDocumentHelpers {
 		if (length > 0) {
 			// read only last
 			BoardUserJson json = usersJs.get(length - 1);
-			return new BoardUserApplyOperation(operation, json.getUsername(), json.getAvatarUrl(), json.getX(), json.getY());
+			return new BoardUserApplyOperation(operation, json.getUsername(), json.getAvatarUrl(), json.getX(), json.getY(), json.getClientIdentifier());
 		}
 		return null;
 	}
