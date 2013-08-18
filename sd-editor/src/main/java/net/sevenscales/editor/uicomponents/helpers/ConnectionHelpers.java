@@ -251,7 +251,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		if (propertyEditorShown || resizeOn || freehandModeOn || someElementIsDragged) {
 			// do not show connection helpers if property editor is shown
 			// do not show if resize is on going
-			logger.debug("show propertyEditorShown {} resizeOn {} freehandModeOn {} someElementIsDragged {}", propertyEditorShown, resizeOn, freehandModeOn, someElementIsDragged);
+			// logger.debug("show propertyEditorShown {} resizeOn {} freehandModeOn {} someElementIsDragged {}", propertyEditorShown, resizeOn, freehandModeOn, someElementIsDragged);
 			return;
 		}
 		
