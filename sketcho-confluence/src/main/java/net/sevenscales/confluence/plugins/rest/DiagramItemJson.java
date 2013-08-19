@@ -30,6 +30,8 @@ public class DiagramItemJson {
 	private String clientId;
   @XmlElement(name = "cd")
 	private String cd;
+  @XmlElement(required = false, name = "crc")
+	private String crc;
 	
 	public String getText() {
 		return text;

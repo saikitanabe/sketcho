@@ -10,6 +10,7 @@
 	<source path='uicomponents'/>
 	<source path='content'/>
 	<source path='ui'/>
+    <source path='utils'/>
 	
     <replace-with class="net.sevenscales.editor.uicomponents.impl.BrowserStyleImplIE6">
          <when-type-is class="net.sevenscales.editor.uicomponents.impl.BrowserStyleImpl"/>
