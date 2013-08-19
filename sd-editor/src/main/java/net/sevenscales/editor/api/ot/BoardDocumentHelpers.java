@@ -14,7 +14,7 @@ import net.sevenscales.editor.content.OperationJS;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.CircleElement;
-import net.sevenscales.sketchoconfluenceapp.client.util.BoardUser.BoardUserJson;
+import net.sevenscales.editor.api.ot.BoardUser.BoardUserJson;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsonUtils;
@@ -108,114 +108,6 @@ public class BoardDocumentHelpers {
 		int index = binarySearch(list, di);
     if (index < 0) index = ~index;
     list.add(index, di);
-	}
-
-	public static class ApplyOperation {
-		private OTOperation operation;
-
-		public ApplyOperation(OTOperation operation) {
-			this.operation = operation;
-		}
-
-		public OTOperation getOperation() {
-			return operation;
-		}
-	}
-
-	public static class BoardUserApplyOperation extends ApplyOperation {
-		private String username;
-		private String avatarUrl;
-		private int x;
-		private int y;
-		private String clientIdentifier;
-
-		public BoardUserApplyOperation(OTOperation operation, String username, String avatarUrl, int x, int y, String clientIdentifier) {
-			super(operation);
-			this.username = username;
-			this.avatarUrl = avatarUrl;
-			this.x = x;
-			this.y = y;
-			this.clientIdentifier = clientIdentifier;
-		}
-
-		public String getUsername() {
-			return username;
-		}
-
-		public String getAvatarUrl() {
-			return avatarUrl;
-		}
-
-		public int getX() {
-			return x;
-		}
-
-		public int getY() {
-			return y;
-		}
-
-		public String getClientIdentifier() {
-			return clientIdentifier;
-		}
-	}
-
-	public static class DiagramApplyOperation extends ApplyOperation {
-		private List<IDiagramItemRO> items;
-		
-		public DiagramApplyOperation(OTOperation operation, List<IDiagramItemRO> items) {
-			super(operation);
-			this.items = items;
-		}
-				
-		public List<IDiagramItemRO> getItems() {
-			return items;
-		}
-	}
-
-	public static class ApplyOperations {
-		public List<DiagramApplyOperation> diagramOperations;
-		public List<BoardUserApplyOperation> userOperations;
-	}
-	
-	public static ApplyOperations toApplyOperations(String operations) {
-		ApplyOperations result = new ApplyOperations();
-		result.diagramOperations = new ArrayList<DiagramApplyOperation>();
-		result.userOperations = new ArrayList<BoardUserApplyOperation>();
-
-		JsArray<OperationJS> ops = JsonUtils.safeEval(operations);
-		for (int i = 0; i < ops.length(); ++i) {
-			OperationJS opjs = ops.get(i);
-			OTOperation operation = OTOperation.getEnum(opjs.getOperation());
-			if (opjs.getOperation().startsWith("user.")) {
-				BoardUserApplyOperation applyOperation = createBoardUserApplyOperation(operation, opjs.getUsers());
-				if (applyOperation != null) {
-					result.userOperations.add(applyOperation);
-				}
-			} else {
-				DiagramApplyOperation applyOperation = createDiagramApplyOperation(operation, opjs.getItems());
-				result.diagramOperations.add(applyOperation);
-			}
-		}
-		return result;
-	}
-
-	private static BoardUserApplyOperation createBoardUserApplyOperation(OTOperation operation, JsArray<BoardUserJson> usersJs) {
-		int length = usersJs.length();
-		if (length > 0) {
-			// read only last
-			BoardUserJson json = usersJs.get(length - 1);
-			return new BoardUserApplyOperation(operation, json.getUsername(), json.getAvatarUrl(), json.getX(), json.getY(), json.getClientIdentifier());
-		}
-		return null;
-	}
-
-	private static DiagramApplyOperation createDiagramApplyOperation(OTOperation operation, JsArray<DiagramItemJS> itemsJs) {
-		List<IDiagramItemRO> items = new ArrayList<IDiagramItemRO>();
-		for (int x = 0; x < itemsJs.length(); ++x) {
-			items.add(itemsJs.get(x).asDTO());
-		}
-
-		return new DiagramApplyOperation(operation, items);
 	}
 
 	public static List<IDiagramItemRO> fromApplyOperations(JsArray<DiagramItemJS> items) {

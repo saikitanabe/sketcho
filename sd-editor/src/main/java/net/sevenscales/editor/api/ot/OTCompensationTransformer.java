@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.ot.BoardDocumentHelpers.DiagramApplyOperation;
+import net.sevenscales.editor.api.ot.ApplyHelpers.DiagramApplyOperation;
 
 import com.google.gwt.logging.client.LogConfiguration;
 
@@ -36,7 +36,7 @@ public class OTCompensationTransformer {
 		return compensateOperation(operation, newItems);
 	}
 	
-	public List<CompensationModel> compensateApplyOperations(List<DiagramApplyOperation> applyOperations, List<? extends IDiagramItemRO> currentState) throws MappingNotFoundException {
+	public List<CompensationModel> compensateApplyOperations(List<ApplyHelpers.DiagramApplyOperation> applyOperations, List<? extends IDiagramItemRO> currentState) throws MappingNotFoundException {
 		this.applyOperations = applyOperations;
 		this.currentApplyOperationIndex = -1;
 		this.currentState = currentState;

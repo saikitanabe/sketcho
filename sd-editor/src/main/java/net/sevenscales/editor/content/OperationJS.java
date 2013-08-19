@@ -1,7 +1,7 @@
 package net.sevenscales.editor.content;
 
 import net.sevenscales.domain.DiagramItemJS;
-import net.sevenscales.sketchoconfluenceapp.client.util.BoardUser;
+import net.sevenscales.editor.api.ot.BoardUser;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
