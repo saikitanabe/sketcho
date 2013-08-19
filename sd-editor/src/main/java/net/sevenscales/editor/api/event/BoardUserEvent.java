@@ -12,23 +12,23 @@ public class BoardUserEvent extends GwtEvent<BoardUserEventHandler> {
   private int y;
   private int targetx;
   private int targety;
+  private String selectedCids;
 
   public BoardUserEvent(OTOperation operation) {
-  	this.operation = operation;
+    this(operation, 0, 0, 0, 0, "");
   }
 
   public BoardUserEvent(OTOperation operation, int x, int y) {
-  	this.operation = operation;
-  	this.x = x;
-  	this.y = y;
+    this(operation, x, y, 0, 0, "");
   }
 
-  public BoardUserEvent(OTOperation operation, int x, int y, int targetx, int targety) {
+  public BoardUserEvent(OTOperation operation, int x, int y, int targetx, int targety, String selectedCids) {
     this.operation = operation;
     this.x = x;
     this.y = y;
     this.targetx = targetx;
     this.targety = targety;
+    this.selectedCids = selectedCids;
   }
 
   @Override
@@ -59,5 +59,9 @@ public class BoardUserEvent extends GwtEvent<BoardUserEventHandler> {
 
   public int getTargetY() {
     return targety;
+  }
+
+  public String getSelectedCids() {
+    return selectedCids;
   }
 }
