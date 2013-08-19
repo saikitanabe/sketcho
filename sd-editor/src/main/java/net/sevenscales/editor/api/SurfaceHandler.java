@@ -83,10 +83,6 @@ public class SurfaceHandler extends SimplePanel implements
 	private ClickDiagramHandlerCollection clickListenerCollection;
 	private boolean editable;
 	private boolean deleteSupported;
-	private int mouseDownX;
-	private int mouseDownY;
-	private int currentMouseX;
-	private int currentMouseY;
 //  private SimplePanel panel;
 //	private DoubleClickHandler handler;
 	private DoubleClickState state = new DoubleClickState();
@@ -473,20 +469,12 @@ public class SurfaceHandler extends SimplePanel implements
     return surface.canvas.children.count;
   }-*/;
   
-  public int getMouseDownX() {
-		return mouseDownX;
-	}
-  
-  public int getMouseDownY() {
-		return mouseDownY;
+	public int scaleClientX(int clientX) {
+		 return ScaleHelpers.scaleValue(clientX, getScaleFactor()) - getRootLayer().getTransformX();
 	}
 
-  public int getCurrentMouseX() {
-		return currentMouseX;
-	}
-  
-  public int getCurrentMouseY() {
-		return currentMouseY;
+	public int scaleClientY(int clientY) {
+		 return ScaleHelpers.scaleValue(clientY, getScaleFactor()) - getRootLayer().getTransformY();
 	}
 
 	public void onDoubleClick(IGraphics graphics, Event event) {

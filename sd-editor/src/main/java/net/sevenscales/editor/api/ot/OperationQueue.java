@@ -11,6 +11,10 @@ import net.sevenscales.editor.content.utils.JsonHelpers;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsonUtils;
+import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
+
 
 public class OperationQueue {
   private static SLogger logger = SLogger.createLogger(OperationQueue.class);
@@ -48,6 +52,11 @@ public class OperationQueue {
 		public String toJson() {
 			return SLogger.format("{\"operation\":\"{}\",\"items\":{}}", operation.toString(),
 					operationJson);
+			// cannot use gwt utilities since already converted from JSONValue
+			// JSONObject result = new JSONObject();
+			// result.put("operation", new JSONString(operation.toString()));
+			// result.put("items", new JSONString(operationJson));
+			// return result;
 		}
 		
 		public OTOperation getOperation() {

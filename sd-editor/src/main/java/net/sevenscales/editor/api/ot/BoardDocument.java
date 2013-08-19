@@ -8,7 +8,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.ot.BoardDocumentHelpers.ApplyOperation;
+import net.sevenscales.editor.api.ot.BoardDocumentHelpers.DiagramApplyOperation;
 import net.sevenscales.editor.content.ClientIdHelpers.UniqueChecker;
 import net.sevenscales.editor.content.utils.JsonHelpers;
 import net.sevenscales.domain.utils.JsonFormat;
@@ -36,9 +36,9 @@ public class BoardDocument implements UniqueChecker {
 		reset(doc);
 	}
 	
-	public void apply(List<ApplyOperation> operations) {
+	public void apply(List<DiagramApplyOperation> operations) {
 		logger.debug("BoardDocument.apply...");
-		for (ApplyOperation op : operations) {
+		for (DiagramApplyOperation op : operations) {
 			apply(op.getOperation(), op.getItems());
 		}
 		logger.debug("BoardDocument.apply... done");
