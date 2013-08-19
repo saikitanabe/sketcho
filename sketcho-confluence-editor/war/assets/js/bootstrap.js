@@ -1,483 +1,5 @@
-/* ===================================================
- * bootstrap-transition.js v2.3.2
- * http://twitter.github.com/bootstrap/javascript.html#transitions
- * ===================================================
- * Copyright 2012 Twitter, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ========================================================== */
-
-
-!function (jq172) {
-
-  "use strict"; // jshint ;_;
-
-
-  /* CSS TRANSITION SUPPORT (http://www.modernizr.com/)
-   * ======================================================= */
-
-  jq172(function () {
-
-    jq172.support.transition = (function () {
-
-      var transitionEnd = (function () {
-
-        var el = document.createElement('bootstrap')
-          , transEndEventNames = {
-               'WebkitTransition' : 'webkitTransitionEnd'
-            ,  'MozTransition'    : 'transitionend'
-            ,  'OTransition'      : 'oTransitionEnd otransitionend'
-            ,  'transition'       : 'transitionend'
-            }
-          , name
-
-        for (name in transEndEventNames){
-          if (el.style[name] !== undefined) {
-            return transEndEventNames[name]
-          }
-        }
-
-      }())
-
-      return transitionEnd && {
-        end: transitionEnd
-      }
-
-    })()
-
-  })
-
-}(window.jq172);
-/* =========================================================
- * bootstrap-modal.js v2.3.2
- * http://twitter.github.com/bootstrap/javascript.html#modals
- * =========================================================
- * Copyright 2012 Twitter, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ========================================================= */
-
-
-!function (jq172) {
-
-  "use strict"; // jshint ;_;
-
-
- /* MODAL CLASS DEFINITION
-  * ====================== */
-
-  var Modal = function (element, options) {
-    this.options = options
-    this.jq172element = jq172(element)
-      .delegate('[data-dismiss="modal"]', 'click.dismiss.modal', jq172.proxy(this.hide, this))
-    this.options.remote && this.jq172element.find('.modal-body').load(this.options.remote)
-  }
-
-  Modal.prototype = {
-
-      constructor: Modal
-
-    , toggle: function () {
-        return this[!this.isShown ? 'show' : 'hide']()
-      }
-
-    , show: function () {
-        var that = this
-          , e = jq172.Event('show')
-
-        this.jq172element.trigger(e)
-
-        if (this.isShown || e.isDefaultPrevented()) return
-
-        this.isShown = true
-
-        this.escape()
-
-        this.backdrop(function () {
-          var transition = jq172.support.transition && that.jq172element.hasClass('fade')
-
-          if (!that.jq172element.parent().length) {
-            that.jq172element.appendTo(document.body) //don't move modals dom position
-          }
-
-          that.jq172element.show()
-
-          if (transition) {
-            that.jq172element[0].offsetWidth // force reflow
-          }
-
-          that.jq172element
-            .addClass('in')
-            .attr('aria-hidden', false)
-
-          that.enforceFocus()
-
-          transition ?
-            that.jq172element.one(jq172.support.transition.end, function () { that.jq172element.focus().trigger('shown') }) :
-            that.jq172element.focus().trigger('shown')
-
-        })
-      }
-
-    , hide: function (e) {
-        e && e.preventDefault()
-
-        var that = this
-
-        e = jq172.Event('hide')
-
-        this.jq172element.trigger(e)
-
-        if (!this.isShown || e.isDefaultPrevented()) return
-
-        this.isShown = false
-
-        this.escape()
-
-        jq172(document).off('focusin.modal')
-
-        this.jq172element
-          .removeClass('in')
-          .attr('aria-hidden', true)
-
-        jq172.support.transition && this.jq172element.hasClass('fade') ?
-          this.hideWithTransition() :
-          this.hideModal()
-      }
-
-    , enforceFocus: function () {
-        var that = this
-        jq172(document).bind('focusin.modal', function (e) {
-          if (that.jq172element[0] !== e.target && !that.jq172element.has(e.target).length) {
-            that.jq172element.focus()
-          }
-        })
-      }
-
-    , escape: function () {
-        var that = this
-        if (this.isShown && this.options.keyboard) {
-          this.jq172element.bind('keyup.dismiss.modal', function ( e ) {
-            e.which == 27 && that.hide()
-          })
-        } else if (!this.isShown) {
-          this.jq172element.off('keyup.dismiss.modal')
-        }
-      }
-
-    , hideWithTransition: function () {
-        var that = this
-          , timeout = setTimeout(function () {
-              that.jq172element.off(jq172.support.transition.end)
-              that.hideModal()
-            }, 500)
-
-        this.jq172element.one(jq172.support.transition.end, function () {
-          clearTimeout(timeout)
-          that.hideModal()
-        })
-      }
-
-    , hideModal: function () {
-        var that = this
-        this.jq172element.hide()
-        this.backdrop(function () {
-          that.removeBackdrop()
-          that.jq172element.trigger('hidden')
-        })
-      }
-
-    , removeBackdrop: function () {
-        this.jq172backdrop && this.jq172backdrop.remove()
-        this.jq172backdrop = null
-      }
-
-    , backdrop: function (callback) {
-        var that = this
-          , animate = this.jq172element.hasClass('fade') ? 'fade' : ''
-
-        if (this.isShown && this.options.backdrop) {
-          var doAnimate = jq172.support.transition && animate
-
-          this.jq172backdrop = jq172('<div class="modal-backdrop ' + animate + '" />')
-            .appendTo(document.body)
-
-          this.jq172backdrop.click(
-            this.options.backdrop == 'static' ?
-              jq172.proxy(this.jq172element[0].focus, this.jq172element[0])
-            : jq172.proxy(this.hide, this)
-          )
-
-          if (doAnimate) this.jq172backdrop[0].offsetWidth // force reflow
-
-          this.jq172backdrop.addClass('in')
-
-          if (!callback) return
-
-          doAnimate ?
-            this.jq172backdrop.one(jq172.support.transition.end, callback) :
-            callback()
-
-        } else if (!this.isShown && this.jq172backdrop) {
-          this.jq172backdrop.removeClass('in')
-
-          jq172.support.transition && this.jq172element.hasClass('fade')?
-            this.jq172backdrop.one(jq172.support.transition.end, callback) :
-            callback()
-
-        } else if (callback) {
-          callback()
-        }
-      }
-  }
-
-
- /* MODAL PLUGIN DEFINITION
-  * ======================= */
-
-  var old = jq172.fn.modal
-
-  jq172.fn.modal = function (option) {
-    return this.each(function () {
-      var jq172this = jq172(this)
-        , data = jq172this.data('modal')
-        , options = jq172.extend({}, jq172.fn.modal.defaults, jq172this.data(), typeof option == 'object' && option)
-      if (!data) jq172this.data('modal', (data = new Modal(this, options)))
-      if (typeof option == 'string') data[option]()
-      else if (options.show) data.show()
-    })
-  }
-
-  jq172.fn.modal.defaults = {
-      backdrop: true
-    , keyboard: true
-    , show: true
-  }
-
-  jq172.fn.modal.Constructor = Modal
-
-
- /* MODAL NO CONFLICT
-  * ================= */
-
-  jq172.fn.modal.noConflict = function () {
-    jq172.fn.modal = old
-    return this
-  }
-
-
- /* MODAL DATA-API
-  * ============== */
-
-  jq172(document).bind('click.modal.data-api', '[data-toggle="modal"]', function (e) {
-    var jq172this = jq172(this)
-      , href = jq172this.attr('href')
-      , jq172target = jq172(jq172this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))) //strip for ie7
-      , option = jq172target.data('modal') ? 'toggle' : jq172.extend({ remote:!/#/.test(href) && href }, jq172target.data(), jq172this.data())
-
-    e.preventDefault()
-
-    jq172target
-      .modal(option)
-      .one('hide', function () {
-        jq172this.focus()
-      })
-  })
-
-}(window.jq172);
-
-/* ============================================================
- * bootstrap-dropdown.js v2.3.2
- * http://twitter.github.com/bootstrap/javascript.html#dropdowns
- * ============================================================
- * Copyright 2012 Twitter, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ============================================================ */
-
-
-!function (jq172) {
-
-  "use strict"; // jshint ;_;
-
-
- /* DROPDOWN CLASS DEFINITION
-  * ========================= */
-
-  var toggle = '[data-toggle=dropdown]'
-    , Dropdown = function (element) {
-        var jq172el = jq172(element).bind('click.dropdown.data-api', this.toggle)
-        jq172('html').bind('click.dropdown.data-api', function () {
-          jq172el.parent().removeClass('open')
-        })
-      }
-
-  Dropdown.prototype = {
-
-    constructor: Dropdown
-
-  , toggle: function (e) {
-      var jq172this = jq172(this)
-        , jq172parent
-        , isActive
-
-      if (jq172this.is('.disabled, :disabled')) return
-
-      jq172parent = getParent(jq172this)
-
-      isActive = jq172parent.hasClass('open')
-
-      clearMenus()
-
-      if (!isActive) {
-        if ('ontouchstart' in document.documentElement) {
-          // if mobile we we use a backdrop because click events don't delegate
-          jq172('<div class="dropdown-backdrop"/>').insertBefore(jq172(this)).bind('click', clearMenus)
-        }
-        jq172parent.toggleClass('open')
-      }
-
-      jq172this.focus()
-
-      return false
-    }
-
-  , keydown: function (e) {
-      var jq172this
-        , jq172items
-        , jq172active
-        , jq172parent
-        , isActive
-        , index
-
-      if (!/(38|40|27)/.test(e.keyCode)) return
-
-      jq172this = jq172(this)
-
-      e.preventDefault()
-      e.stopPropagation()
-
-      if (jq172this.is('.disabled, :disabled')) return
-
-      jq172parent = getParent(jq172this)
-
-      isActive = jq172parent.hasClass('open')
-
-      if (!isActive || (isActive && e.keyCode == 27)) {
-        if (e.which == 27) jq172parent.find(toggle).focus()
-        return jq172this.click()
-      }
-
-      jq172items = jq172('[role=menu] li:not(.divider):visible a', jq172parent)
-
-      if (!jq172items.length) return
-
-      index = jq172items.index(jq172items.filter(':focus'))
-
-      if (e.keyCode == 38 && index > 0) index--                                        // up
-      if (e.keyCode == 40 && index < jq172items.length - 1) index++                        // down
-      if (!~index) index = 0
-
-      jq172items
-        .eq(index)
-        .focus()
-    }
-
-  }
-
-  function clearMenus() {
-    jq172('.dropdown-backdrop').remove()
-    jq172(toggle).each(function () {
-      getParent(jq172(this)).removeClass('open')
-    })
-  }
-
-  function getParent(jq172this) {
-    var selector = jq172this.attr('data-target')
-      , jq172parent
-
-    if (!selector) {
-      selector = jq172this.attr('href')
-      selector = selector && /#/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
-    }
-
-    jq172parent = selector && jq172(selector)
-
-    if (!jq172parent || !jq172parent.length) jq172parent = jq172this.parent()
-
-    return jq172parent
-  }
-
-
-  /* DROPDOWN PLUGIN DEFINITION
-   * ========================== */
-
-  var old = jq172.fn.dropdown
-
-  jq172.fn.dropdown = function (option) {
-    return this.each(function () {
-      var jq172this = jq172(this)
-        , data = jq172this.data('dropdown')
-      if (!data) jq172this.data('dropdown', (data = new Dropdown(this)))
-      if (typeof option == 'string') data[option].call(jq172this)
-    })
-  }
-
-  jq172.fn.dropdown.Constructor = Dropdown
-
-
- /* DROPDOWN NO CONFLICT
-  * ==================== */
-
-  jq172.fn.dropdown.noConflict = function () {
-    jq172.fn.dropdown = old
-    return this
-  }
-
-
-  /* APPLY TO STANDARD DROPDOWN ELEMENTS
-   * =================================== */
-
-  jq172(document)
-    .bind('click.dropdown.data-api', clearMenus)
-    .bind('click.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
-    .bind('click.dropdown.data-api'  , toggle, Dropdown.prototype.toggle)
-    .bind('keydown.dropdown.data-api', toggle + ', [role=menu]' , Dropdown.prototype.keydown)
-
-}(window.jq172);
-
 /* ========================================================
- * bootstrap-tab.js v2.3.2
+ * bootstrap-tab.js v2.3.1
  * http://twitter.github.com/bootstrap/javascript.html#tabs
  * ========================================================
  * Copyright 2012 Twitter, Inc.
@@ -522,7 +44,7 @@
 
       if (!selector) {
         selector = jq172this.attr('href')
-        selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
+        selector = selector && selector.replace(/.*(?=#[^\s]*jq172)/, '') //strip for ie7
       }
 
       if ( jq172this.parent('li').hasClass('active') ) return
@@ -614,15 +136,14 @@
  /* TAB DATA-API
   * ============ */
 
-  jq172(document).bind('click.tab.data-api', '[data-toggle="tab"], [data-toggle="pill"]', function (e) {
+  jq172(document).on('click.tab.data-api', '[data-toggle="tab"], [data-toggle="pill"]', function (e) {
     e.preventDefault()
     jq172(this).tab('show')
   })
 
 }(window.jq172);
-
 /* ===========================================================
- * bootstrap-tooltip.js v2.3.2
+ * bootstrap-tooltip.js v2.3.1
  * http://twitter.github.com/bootstrap/javascript.html#tooltips
  * Inspired by the original jQuery.tipsy by Jason Frame
  * ===========================================================
@@ -650,22 +171,21 @@
  /* TOOLTIP PUBLIC CLASS DEFINITION
   * =============================== */
 
-  var Tooltip = function (name, element, options) {
-    this.init(name, 'tooltip', element, options)
+  var Tooltip = function (element, options) {
+    this.init('tooltip', element, options)
   }
 
   Tooltip.prototype = {
 
     constructor: Tooltip
 
-  , init: function (name, type, element, options) {
+  , init: function (type, element, options) {
       var eventIn
         , eventOut
         , triggers
         , trigger
         , i
 
-      this.name = name
       this.type = type
       this.jq172element = jq172(element)
       this.options = this.getOptions(options)
@@ -676,12 +196,12 @@
       for (i = triggers.length; i--;) {
         trigger = triggers[i]
         if (trigger == 'click') {
-          this.jq172element.bind('click.' + this.type, this.options.selector, jq172.proxy(this.toggle, this))
+          this.jq172element.on('click.' + this.type, this.options.selector, jq172.proxy(this.toggle, this))
         } else if (trigger != 'manual') {
           eventIn = trigger == 'hover' ? 'mouseenter' : 'focus'
           eventOut = trigger == 'hover' ? 'mouseleave' : 'blur'
-          this.jq172element.bind(eventIn + '.' + this.type, this.options.selector, jq172.proxy(this.enter, this))
-          this.jq172element.bind(eventOut + '.' + this.type, this.options.selector, jq172.proxy(this.leave, this))
+          this.jq172element.on(eventIn + '.' + this.type, this.options.selector, jq172.proxy(this.enter, this))
+          this.jq172element.on(eventOut + '.' + this.type, this.options.selector, jq172.proxy(this.leave, this))
         }
       }
 
@@ -712,7 +232,7 @@
         if (defaults[key] != value) options[key] = value
       }, this)
 
-      self = jq172(e.currentTarget)[this.type](options, this.name).data(this.name)
+      self = jq172(e.currentTarget)[this.type](options).data(this.type)
 
       if (!self.options.delay || !self.options.delay.show) return self.show()
 
@@ -724,7 +244,7 @@
     }
 
   , leave: function (e) {
-      var self = jq172(e.currentTarget)[this.type](this._options, this.name).data(this.name)
+      var self = jq172(e.currentTarget)[this.type](this._options).data(this.type)
 
       if (this.timeout) clearTimeout(this.timeout)
       if (!self.options.delay || !self.options.delay.hide) return self.hide()
@@ -933,7 +453,7 @@
     }
 
   , toggle: function (e) {
-      var self = e ? jq172(e.currentTarget)[this.type](this._options).data(this.name) : this
+      var self = e ? jq172(e.currentTarget)[this.type](this._options).data(this.type) : this
       self.tip().hasClass('in') ? self.hide() : self.show()
     }
 
@@ -949,13 +469,12 @@
 
   var old = jq172.fn.tooltip
 
-  jq172.fn.tooltip = function ( option, name ) {
+  jq172.fn.tooltip = function ( option ) {
     return this.each(function () {
       var jq172this = jq172(this)
-        , tooltipName = (name) ? name : 'defaultTooltip'
-        , data = jq172this.data(tooltipName)
+        , data = jq172this.data('tooltip')
         , options = typeof option == 'object' && option
-      if (!data) jq172this.data(tooltipName, (data = new Tooltip(tooltipName, this, options)))
+      if (!data) jq172this.data('tooltip', (data = new Tooltip(this, options)))
       if (typeof option == 'string') data[option]()
     })
   }
@@ -986,7 +505,7 @@
 }(window.jq172);
 
 /* ===========================================================
- * bootstrap-popover.js v2.3.2
+ * bootstrap-popover.js v2.3.1
  * http://twitter.github.com/bootstrap/javascript.html#popovers
  * ===========================================================
  * Copyright 2012 Twitter, Inc.
@@ -1013,8 +532,8 @@
  /* POPOVER PUBLIC CLASS DEFINITION
   * =============================== */
 
-  var Popover = function (name, element, options) {
-    this.init(name, 'popover', element, options)
+  var Popover = function (element, options) {
+    this.init('popover', element, options)
   }
 
 
@@ -1070,13 +589,12 @@
 
   var old = jq172.fn.popover
 
-  jq172.fn.popover = function (option, name) {
+  jq172.fn.popover = function (option) {
     return this.each(function () {
       var jq172this = jq172(this)
-        , popoverName = (name) ? name : 'defaultPopover'
-        , data = jq172this.data(popoverName)
+        , data = jq172this.data('popover')
         , options = typeof option == 'object' && option
-      if (!data) jq172this.data(popoverName, (data = new Popover(popoverName, this, options)))
+      if (!data) jq172this.data('popover', (data = new Popover(this, options)))
       if (typeof option == 'string') data[option]()
     })
   }
@@ -1102,7 +620,7 @@
 }(window.jq172);
 
 /* ============================================================
- * bootstrap-button.js v2.3.2
+ * bootstrap-button.js v2.3.1
  * http://twitter.github.com/bootstrap/javascript.html#buttons
  * ============================================================
  * Copyright 2012 Twitter, Inc.
@@ -1199,7 +717,7 @@
  /* BUTTON DATA-API
   * =============== */
 
-  jq172(document).bind('click.button.data-api', '[data-toggle^=button]', function (e) {
+  jq172(document).on('click.button.data-api', '[data-toggle^=button]', function (e) {
     var jq172btn = jq172(e.target)
     if (!jq172btn.hasClass('btn')) jq172btn = jq172btn.closest('.btn')
     jq172btn.button('toggle')
