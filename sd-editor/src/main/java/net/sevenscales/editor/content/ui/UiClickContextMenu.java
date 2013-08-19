@@ -52,9 +52,9 @@ public class UiClickContextMenu extends Composite {
 	private PopupPanel popup;
 	private SurfaceHandler surface;
 
-	@UiField LIElement freehandMore;
-	@UiField LIElement freehandSmooth;
-	@UiField LIElement freehandLess;
+	// @UiField LIElement freehandMore;
+	// @UiField LIElement freehandSmooth;
+	// @UiField LIElement freehandLess;
 	
 //	@UiField AnchorElement newNote;
 //	private int cancelTimer;
@@ -143,36 +143,36 @@ public class UiClickContextMenu extends Composite {
 			}
 		});
 
-		ElementHelpers.addEventListener(freehandMore, new EventListener() {
-					@Override
-					public void onBrowserEvent(Event event) {
-						switch (DOM.eventGetType(event)) {
-						case Event.ONCLICK:
-							freehandMore();
-							break;
-						}
-					}
-				});
-		ElementHelpers.addEventListener(freehandSmooth, new EventListener() {
-					@Override
-					public void onBrowserEvent(Event event) {
-						switch (DOM.eventGetType(event)) {
-						case Event.ONCLICK:
-							freehandSmooth();
-							break;
-						}
-					}
-				});
-		ElementHelpers.addEventListener(freehandLess, new EventListener() {
-					@Override
-					public void onBrowserEvent(Event event) {
-						switch (DOM.eventGetType(event)) {
-						case Event.ONCLICK:
-							freehandLess();
-							break;
-						}
-					}
-				});
+		// ElementHelpers.addEventListener(freehandMore, new EventListener() {
+		// 			@Override
+		// 			public void onBrowserEvent(Event event) {
+		// 				switch (DOM.eventGetType(event)) {
+		// 				case Event.ONCLICK:
+		// 					freehandMore();
+		// 					break;
+		// 				}
+		// 			}
+		// 		});
+		// ElementHelpers.addEventListener(freehandSmooth, new EventListener() {
+		// 			@Override
+		// 			public void onBrowserEvent(Event event) {
+		// 				switch (DOM.eventGetType(event)) {
+		// 				case Event.ONCLICK:
+		// 					freehandSmooth();
+		// 					break;
+		// 				}
+		// 			}
+		// 		});
+		// ElementHelpers.addEventListener(freehandLess, new EventListener() {
+		// 			@Override
+		// 			public void onBrowserEvent(Event event) {
+		// 				switch (DOM.eventGetType(event)) {
+		// 				case Event.ONCLICK:
+		// 					freehandLess();
+		// 					break;
+		// 				}
+		// 			}
+		// 		});
 
 		closeOnSave();
 	}

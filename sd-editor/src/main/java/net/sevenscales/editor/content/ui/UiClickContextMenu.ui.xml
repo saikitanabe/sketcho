@@ -46,7 +46,7 @@
 						</g:HTML>
 					</c:child>
 				</c:FastButton>
-				<button class="btn dropdown-toggle btn-custom" data-toggle="dropdown">
+<!-- 				<button class="btn dropdown-toggle btn-custom" data-toggle="dropdown" href="#">
 					<span class="caret"></span>
 				</button>
 				<ul ui:field="freehandModeMenu" class="dropdown-menu">
@@ -60,7 +60,7 @@
 						Less Points
 					</li>
 				</ul>
-			</div>
+ -->			</div>
 			<c:FastButton ui:field="select" addStyleNames="{style.simple}">
 				<c:child>
 					<g:HTML>

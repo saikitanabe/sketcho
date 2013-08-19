@@ -71,11 +71,12 @@ public class TopButtons extends Composite {
 			// this is due to initial load
 			super.setVisible(event.isEnabled());
 			freehandOn.getStyle().setDisplay(Display.INLINE);
-			String text = editorContext.<FreehandModeType>getAs(EditorProperty.FREEHAND_MODE_TYPE).toString();
-			if (event.isModeTypeChanged()) {
-				text = event.getModeType().toString();
-			}
-			freehandOn.setInnerText("Freehand " + text);
+			// String text = editorContext.<FreehandModeType>getAs(EditorProperty.FREEHAND_MODE_TYPE).toString();
+			// if (event.isModeTypeChanged()) {
+			// 	text = event.getModeType().toString();
+			// }
+			// // freehandOn.setInnerText("Freehand " + text);
+			// freehandOn.setInnerText("Freehand ON");
 		} 
 	}
 	
