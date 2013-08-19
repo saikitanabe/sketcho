@@ -11,7 +11,7 @@ import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.SurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ThemeName;
-import net.sevenscales.editor.api.ot.BoardDocumentHelpers.DiagramApplyOperation;
+import net.sevenscales.editor.api.ot.ApplyHelpers.DiagramApplyOperation;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
