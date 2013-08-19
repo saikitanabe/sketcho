@@ -52,14 +52,18 @@ public class ApplyHelpers {
 		private String avatarUrl;
 		private int x;
 		private int y;
+		private int targetx;
+		private int targety;
 		private String clientIdentifier;
 
-		public BoardUserApplyOperation(OTOperation operation, String username, String avatarUrl, int x, int y, String clientIdentifier) {
+		public BoardUserApplyOperation(OTOperation operation, String username, String avatarUrl, int x, int y, int targetx, int targety, String clientIdentifier) {
 			super(operation);
 			this.username = username;
 			this.avatarUrl = avatarUrl;
 			this.x = x;
 			this.y = y;
+			this.targetx = targetx;
+			this.targety = targety;
 			this.clientIdentifier = clientIdentifier;
 		}
 
@@ -77,6 +81,14 @@ public class ApplyHelpers {
 
 		public int getY() {
 			return y;
+		}
+
+		public int getTargetX() {
+			return targetx;
+		}
+
+		public int getTargetY() {
+			return targety;
 		}
 
 		public String getClientIdentifier() {
@@ -107,7 +119,7 @@ public class ApplyHelpers {
 		if (length > 0) {
 			// read only last
 			BoardUser.BoardUserJson json = usersJs.get(length - 1);
-			return new BoardUserApplyOperation(operation, json.getUsername(), json.getAvatarUrl(), json.getX(), json.getY(), json.getClientIdentifier());
+			return new BoardUserApplyOperation(operation, json.getUsername(), json.getAvatarUrl(), json.getX(), json.getY(), json.getTargetX(), json.getTargetY(), json.getClientIdentifier());
 		}
 		return null;
 	}

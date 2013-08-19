@@ -11,18 +11,25 @@ public class BoardUser {
 	private String avatarUrl = "";
 	private int x;
 	private int y;
+	private int targetx;
+	private int targety;
 	private String clientIdentifier = "";
 
 	public BoardUser(int x, int y) {
-		this.x = x;
-		this.y = y;
+		this("", "", x, y, 0, 0, "");
 	}
 
-	public BoardUser(String username, String avatarUrl, int x, int y, String clientIdentifier) {
+	public BoardUser(int x, int y, int targetx, int targety) {
+		this("", "", x, y, targetx, targety, "");
+	}
+
+	public BoardUser(String username, String avatarUrl, int x, int y, int targetx, int targety, String clientIdentifier) {
 		this.username = username;
 		this.avatarUrl = avatarUrl;
 		this.x = x;
 		this.y = y;
+		this.targetx = targetx;
+		this.targety = targety;
 		this.clientIdentifier = clientIdentifier;
 	}
 
@@ -35,6 +42,8 @@ public class BoardUser {
     result.put("avatarUrl", new JSONString(username));
     result.put("x", new JSONNumber(x));
     result.put("y", new JSONNumber(y));
+    result.put("tx", new JSONNumber(targetx));
+    result.put("ty", new JSONNumber(targety));
     result.put("cid", new JSONString(clientIdentifier));
 		return result;
 	}
@@ -49,6 +58,8 @@ public class BoardUser {
 		public final native String getAvatarUrl() /*-{return this.avatarUrl;}-*/;
 		public final native int getX() /*-{return this.x;}-*/;
 		public final native int getY() /*-{return this.y;}-*/;
+		public final native int getTargetX() /*-{return this.tx;}-*/;
+		public final native int getTargetY() /*-{return this.ty;}-*/;
 		public final native String getClientIdentifier() /*-{return this.cid;}-*/;
 	}
 
