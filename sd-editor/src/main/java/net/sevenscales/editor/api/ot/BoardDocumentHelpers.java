@@ -14,7 +14,7 @@ import net.sevenscales.editor.content.OperationJS;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.CircleElement;
-import net.sevenscales.sketchoconfluenceapp.client.util.BoardUser.BoardUserJson;
+import net.sevenscales.editor.api.ot.BoardUser.BoardUserJson;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsonUtils;

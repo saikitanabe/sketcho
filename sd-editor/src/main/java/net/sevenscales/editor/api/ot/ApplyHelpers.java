@@ -10,7 +10,6 @@ import net.sevenscales.editor.content.OperationJS;
 import net.sevenscales.domain.DiagramItemJS;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.api.ot.OTOperation;
-import net.sevenscales.sketchoconfluenceapp.client.util.BoardUser.BoardUserJson;
 
 public class ApplyHelpers {
 
@@ -103,11 +102,11 @@ public class ApplyHelpers {
 		public List<BoardUserApplyOperation> userOperations;
 	}
 	
-	private static BoardUserApplyOperation createBoardUserApplyOperation(OTOperation operation, JsArray<BoardUserJson> usersJs) {
+	private static BoardUserApplyOperation createBoardUserApplyOperation(OTOperation operation, JsArray<BoardUser.BoardUserJson> usersJs) {
 		int length = usersJs.length();
 		if (length > 0) {
 			// read only last
-			BoardUserJson json = usersJs.get(length - 1);
+			BoardUser.BoardUserJson json = usersJs.get(length - 1);
 			return new BoardUserApplyOperation(operation, json.getUsername(), json.getAvatarUrl(), json.getX(), json.getY(), json.getClientIdentifier());
 		}
 		return null;
