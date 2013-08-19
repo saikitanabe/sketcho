@@ -49,3 +49,5 @@ sketcho-confluence-editor/war/tmp/kalapulla.model.xml
 hibernate4gwt-domain/.classpath
 
 hibernate4gwt-domain/.project
+
+*.sublime-workspace
