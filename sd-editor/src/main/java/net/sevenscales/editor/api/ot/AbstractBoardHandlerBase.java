@@ -38,7 +38,7 @@ import net.sevenscales.editor.uicomponents.helpers.IGlobalElement;
 import net.sevenscales.editor.uicomponents.helpers.LifeLineEditorHelper;
 import net.sevenscales.editor.uicomponents.helpers.RelationshipHandleHelpers;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
-import net.sevenscales.sketchoconfluenceapp.client.util.GoogleAnalyticsHelper;
+import net.sevenscales.editor.utils.GoogleAnalyticsHelper;
 
 import com.google.gwt.logging.client.LogConfiguration;
 import com.google.gwt.user.client.Window;
