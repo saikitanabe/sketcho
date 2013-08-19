@@ -175,7 +175,7 @@ Test targets suppressed because -junit argument was not specified when running w
 
   <target name="hosted" depends="devmode" description="Run development mode (NOTE: the 'hosted' target is deprecated)" />
 
-  <target name="build" depends="gwtc" description="Build this project" />
+  <target name="build" depends="javac" description="Build this project" />
 
   <target name="war" depends="build" description="Create a war file">
     <zip destfile="Sketcho_confluence_app.war" basedir="war"/>
