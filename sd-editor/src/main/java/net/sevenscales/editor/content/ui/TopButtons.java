@@ -6,6 +6,7 @@ import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
 import net.sevenscales.editor.api.event.RelationshipTypeSelectedEvent;
+import com.google.gwt.dom.client.Style.Display;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ButtonElement;
@@ -61,13 +62,15 @@ public class TopButtons extends Composite {
 					}
 				});
 	}
-	
+
 	public void setVisible(FreehandModeChangedEvent event) {
 		super.setVisible(false);
+		freehandOn.getStyle().setDisplay(Display.NONE);
 		if (event.isEnabled()) {
 			// do not set visible if freehand mode is not on
 			// this is due to initial load
 			super.setVisible(event.isEnabled());
+			freehandOn.getStyle().setDisplay(Display.INLINE);
 			String text = editorContext.<FreehandModeType>getAs(EditorProperty.FREEHAND_MODE_TYPE).toString();
 			if (event.isModeTypeChanged()) {
 				text = event.getModeType().toString();
