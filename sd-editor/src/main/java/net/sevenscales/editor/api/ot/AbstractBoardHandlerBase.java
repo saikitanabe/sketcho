@@ -22,7 +22,8 @@ import net.sevenscales.editor.api.event.RedoEvent;
 import net.sevenscales.editor.api.event.RedoEventHandler;
 import net.sevenscales.editor.api.event.UndoEvent;
 import net.sevenscales.editor.api.event.UndoEventHandler;
-import net.sevenscales.editor.api.ot.BoardDocumentHelpers.ApplyOperation;
+import net.sevenscales.editor.api.ot.ApplyHelpers.ApplyOperation;
+import net.sevenscales.editor.api.ot.ApplyHelpers.DiagramApplyOperation;
 import net.sevenscales.editor.api.ot.OperationQueue.Acknowledged;
 import net.sevenscales.editor.content.ClientIdHelpers;
 import net.sevenscales.editor.content.Context;
@@ -37,7 +38,7 @@ import net.sevenscales.editor.uicomponents.helpers.IGlobalElement;
 import net.sevenscales.editor.uicomponents.helpers.LifeLineEditorHelper;
 import net.sevenscales.editor.uicomponents.helpers.RelationshipHandleHelpers;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
-import net.sevenscales.sketchoconfluenceapp.client.util.GoogleAnalyticsHelper;
+import net.sevenscales.editor.utils.GoogleAnalyticsHelper;
 
 import com.google.gwt.logging.client.LogConfiguration;
 import com.google.gwt.user.client.Window;
@@ -345,9 +346,9 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
 	protected abstract void extendApplyLocalRedo(OTOperation redoop, OTOperation redoOperation, List<IDiagramItemRO> redoJson);
 
 	protected void applyUndoOrRedoToGraphicalView(OTOperation ope, List<IDiagramItemRO> diagramItems) {
-		ApplyOperation o = new ApplyOperation(ope, BoardDocumentHelpers.copyDiagramItems(diagramItems));
+		DiagramApplyOperation o = new DiagramApplyOperation(ope, BoardDocumentHelpers.copyDiagramItems(diagramItems));
 		logger.debug("applyUndoOrRedoToGraphicalView op {}, items.length() {}", o.getOperation(), o.getItems().size());
-		List<ApplyOperation> ops = new ArrayList<ApplyOperation>();
+		List<DiagramApplyOperation> ops = new ArrayList<DiagramApplyOperation>();
 		ops.add(o);
 		try {
       getBoardHelpers().applyOperationsToGraphicalView(getClientIdentifier(), ops);

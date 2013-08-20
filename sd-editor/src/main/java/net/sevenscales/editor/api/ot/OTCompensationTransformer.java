@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.ot.BoardDocumentHelpers.ApplyOperation;
+import net.sevenscales.editor.api.ot.ApplyHelpers.DiagramApplyOperation;
 
 import com.google.gwt.logging.client.LogConfiguration;
 
@@ -15,7 +15,7 @@ public class OTCompensationTransformer {
 	private static SLogger logger = SLogger.createLogger(OTCompensationTransformer.class);
 	private List<? extends IDiagramItemRO> currentState;
 	private boolean testMode;
-	private List<ApplyOperation> applyOperations;
+	private List<DiagramApplyOperation> applyOperations;
 	private int currentApplyOperationIndex;
 	
 	public OTCompensationTransformer() {
@@ -36,13 +36,13 @@ public class OTCompensationTransformer {
 		return compensateOperation(operation, newItems);
 	}
 	
-	public List<CompensationModel> compensateApplyOperations(List<ApplyOperation> applyOperations, List<? extends IDiagramItemRO> currentState) throws MappingNotFoundException {
+	public List<CompensationModel> compensateApplyOperations(List<ApplyHelpers.DiagramApplyOperation> applyOperations, List<? extends IDiagramItemRO> currentState) throws MappingNotFoundException {
 		this.applyOperations = applyOperations;
 		this.currentApplyOperationIndex = -1;
 		this.currentState = currentState;
 		List<CompensationModel> result = new ArrayList<CompensationModel>();
 		for (int i = 0; i < applyOperations.size(); ++i) {
-			ApplyOperation ap = applyOperations.get(i);
+			DiagramApplyOperation ap = applyOperations.get(i);
 			this.currentApplyOperationIndex = i;
 			result.add(compensateOperation(ap.getOperation(), ap.getItems()));
 		}
@@ -93,10 +93,10 @@ public class OTCompensationTransformer {
 		return new CompensationModel(OTOperation.MODIFY, mapped, operation, BoardDocumentHelpers.copyDiagramItems(items));
 	}
 	
-	private IDiagramItemRO findPreviousItemStateFromAppliedOperations(IDiagramItemRO tofind, List<ApplyOperation> applyOperations, int currentApplyIndex) {
+	private IDiagramItemRO findPreviousItemStateFromAppliedOperations(IDiagramItemRO tofind, List<DiagramApplyOperation> applyOperations, int currentApplyIndex) {
 		// look from the current position to earlier applied operations
 		for (int i = currentApplyIndex - 1; i >= 0; --i) {
-			ApplyOperation ap = applyOperations.get(i);
+			DiagramApplyOperation ap = applyOperations.get(i);
 			for (IDiagramItemRO previousStateCandidate : ap.getItems()) {
 				if (tofind.getClientId().equals(previousStateCandidate.getClientId())) {
 					return previousStateCandidate;

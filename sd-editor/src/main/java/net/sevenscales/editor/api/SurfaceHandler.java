@@ -57,8 +57,12 @@ import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
+
 
 public class SurfaceHandler extends SimplePanel implements 
 							SourcesClickDiagramEvents, ILoadObserver, IKeyEventHandler,
@@ -83,10 +87,6 @@ public class SurfaceHandler extends SimplePanel implements
 	private ClickDiagramHandlerCollection clickListenerCollection;
 	private boolean editable;
 	private boolean deleteSupported;
-	private int mouseDownX;
-	private int mouseDownY;
-	private int currentMouseX;
-	private int currentMouseY;
 //  private SimplePanel panel;
 //	private DoubleClickHandler handler;
 	private DoubleClickState state = new DoubleClickState();
@@ -105,6 +105,8 @@ public class SurfaceHandler extends SimplePanel implements
 	private IGroup rootLayer0;
 	private Integer width;
 	private Integer height;
+	private int currentClientX;
+	private int currentClientY;
 	
 	// configuration parameter that e.g. library enables for background movement
 	private boolean verticalDragOnly;
@@ -147,6 +149,27 @@ public class SurfaceHandler extends SimplePanel implements
 
 //		  addStyleName("diagram-panel");
 		}
+
+		Event.addNativePreviewHandler(new NativePreviewHandler() {
+		  @Override
+		  public void onPreviewNativeEvent(NativePreviewEvent event) {
+				NativeEvent ne = event.getNativeEvent();
+				switch (event.getTypeInt()) {
+					case Event.ONMOUSEDOWN:
+					case Event.ONMOUSEUP: {
+						// store mouse up event location before it happens
+						// on surface, then possible to pass this location
+						// together with OTs.
+						// mouse up location through surface is the location of mouse down
+						// at least when dragging an element, most probably element prevents
+						// getting mouse up location
+						currentClientX = ne.getClientX();
+						currentClientY = ne.getClientY();
+					}
+		  	}
+			}
+		});
+
 		
 		// FocusPanel support (key events handled through browser)
 //		getElement().setTabIndex(0);
@@ -284,6 +307,14 @@ public class SurfaceHandler extends SimplePanel implements
 		add(diagrams, ownerComponent, duplicate);
 //		}
 	  mouseDiagramManager.select(diagrams);
+	}
+
+	public int getCurrentClientX() {
+		return currentClientX;
+	}
+
+	public int getCurrentClientY() {
+		return currentClientY;
 	}
 	
 	public void removeAll() {
@@ -473,20 +504,12 @@ public class SurfaceHandler extends SimplePanel implements
     return surface.canvas.children.count;
   }-*/;
   
-  public int getMouseDownX() {
-		return mouseDownX;
-	}
-  
-  public int getMouseDownY() {
-		return mouseDownY;
+	public int scaleClientX(int clientX) {
+		 return ScaleHelpers.scaleValue(clientX, getScaleFactor()) - getRootLayer().getTransformX();
 	}
 
-  public int getCurrentMouseX() {
-		return currentMouseX;
-	}
-  
-  public int getCurrentMouseY() {
-		return currentMouseY;
+	public int scaleClientY(int clientY) {
+		 return ScaleHelpers.scaleValue(clientY, getScaleFactor()) - getRootLayer().getTransformY();
 	}
 
 	public void onDoubleClick(IGraphics graphics, Event event) {

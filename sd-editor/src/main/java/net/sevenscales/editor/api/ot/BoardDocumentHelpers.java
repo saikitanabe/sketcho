@@ -14,6 +14,7 @@ import net.sevenscales.editor.content.OperationJS;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.CircleElement;
+import net.sevenscales.editor.api.ot.BoardUser.BoardUserJson;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsonUtils;
@@ -107,40 +108,6 @@ public class BoardDocumentHelpers {
 		int index = binarySearch(list, di);
     if (index < 0) index = ~index;
     list.add(index, di);
-	}
-
-	public static class ApplyOperation {
-		private OTOperation operation;
-		private List<IDiagramItemRO> items;
-		
-		public ApplyOperation(OTOperation operation, List<IDiagramItemRO> items) {
-			super();
-			this.operation = operation;
-			this.items = items;
-		}
-		
-		public OTOperation getOperation() {
-			return operation;
-		}
-		
-		public List<IDiagramItemRO> getItems() {
-			return items;
-		}
-	}
-	
-	public static List<ApplyOperation> toApplyOperations(String operations) {
-		List<ApplyOperation> result = new ArrayList<ApplyOperation>();
-		JsArray<OperationJS> ops = JsonUtils.safeEval(operations);
-		for (int i = 0; i < ops.length(); ++i) {
-			OperationJS opjs = ops.get(i);
-			JsArray<DiagramItemJS> itemsJs = opjs.getItems();
-			List<IDiagramItemRO> items = new ArrayList<IDiagramItemRO>();
-			for (int x = 0; x < itemsJs.length(); ++x) {
-				items.add(itemsJs.get(x).asDTO());
-			}
-			result.add(new ApplyOperation(OTOperation.getEnum(opjs.getOperation()), items));
-		}
-		return result;
 	}
 
 	public static List<IDiagramItemRO> fromApplyOperations(JsArray<DiagramItemJS> items) {

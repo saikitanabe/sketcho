@@ -29,6 +29,7 @@ import net.sevenscales.sketchoconfluenceapp.client.Sketcho_confluence_app;
 import net.sevenscales.sketchoconfluenceapp.client.util.DiagramContentFactory;
 import net.sevenscales.sketchoconfluenceapp.client.util.ot.BoardOTConfluenceHandler;
 import net.sevenscales.sketchoconfluenceapp.client.util.ot.Spinner;
+import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
@@ -473,6 +474,7 @@ public class SketchoEditor extends Composite implements Spinner {
   private void configureContext(EditorContext editorContext) {
   	editorContext.setEditable(true);
   	editorContext.set(EditorProperty.CONFLUENCE_MODE, true);
+    editorContext.set(EditorProperty.FREEHAND_MODE_TYPE, FreehandModeType.FREEHAND_SMOOTH);
   	editorContext.set(EditorProperty.RESOURCES_PATH, Sketcho_confluence_app.resourcesPath);
 	}
 

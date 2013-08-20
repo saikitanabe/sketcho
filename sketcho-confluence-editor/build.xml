@@ -41,7 +41,8 @@
     <javac srcdir="src:${sketcho.src}/sd-domain/src/main/java:${sketcho.src}/hibernate4gwt-domain/src/main/java:${sketcho.src}/sd-app-frame/src/main/java:${sketcho.src}/sd-editor/src/main/java" includes="**" encoding="utf-8"
         destdir="war/WEB-INF/classes"
         source="1.5" target="1.5" nowarn="true"
-        debug="true" debuglevel="lines,vars,source">
+        debug="true" debuglevel="lines,vars,source"
+        includeantruntime="false">
       <classpath refid="project.class.path"/>
     </javac>
     <copy todir="war/WEB-INF/classes">
@@ -72,7 +73,7 @@
     </java>
   </target>
 
-  <target name="draft">
+  <target name="dev">
     <echo message="NOTE: DRAFT COMPILE!!!"/>
     <antcall target="gwtc">
       <param name="draft" value="-draftCompile"/>

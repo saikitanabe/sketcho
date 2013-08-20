@@ -448,7 +448,9 @@ textarea {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   -moz-border-radius: 4px;
   border-radius: 4px;
-  background-color: #F9F9F9;
+  filter:alpha(opacity=60);
+  opacity:0.6;
+  background-color:#222;
   z-index: 1003 !important; /* Needs to be higher than gwt-DialogBox */
 }
 
@@ -882,4 +884,8 @@ margin: 0;
 img.skme-img {
     max-width: 100%;
     max-height: 100%;
+}
+
+.dropdown-menu {
+	display: inline;
 }
