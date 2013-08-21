@@ -24,6 +24,7 @@ import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.silver.KeyCodeMap;
 import net.sevenscales.editor.uicomponents.AnchorElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
+import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.api.EditorProperty;
 
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -390,7 +391,13 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
    * Used when lassoing selected items.
    */
   public void selectInMultimode(Diagram diagram) {
+    if (diagram instanceof CircleElement) {
+      // handles cannot be selected in multi selection mode
+      return;
+    }
+
     lastMultimodeSelectedDiagram = diagram;
+
   	diagram.select();
   	hideRelationshipHandles(diagram);
   	List<Diagram> diagrams = new ArrayList<Diagram>();
