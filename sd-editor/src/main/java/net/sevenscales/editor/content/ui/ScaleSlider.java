@@ -125,7 +125,7 @@ public class ScaleSlider {
 			Event.addNativePreviewHandler(new NativePreviewHandler() {
 			  @Override
 			  public void onPreviewNativeEvent(NativePreviewEvent event) {
-			    if (!birdsEyeDown && (event.getTypeInt() == Event.ONKEYPRESS) && !ScaleSlider.this.editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
+			    if (!birdsEyeDown && (event.getTypeInt() == Event.ONKEYPRESS) && !ScaleSlider.this.editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) && UIKeyHelpers.allMenusAreClosed()) {
 			      NativeEvent ne = event.getNativeEvent();
 			      if (ne.getCharCode() == '+') { // compare using char code since key code is different on Firefox
 			      	int val = getSliderValue() + 1;
@@ -136,7 +136,7 @@ public class ScaleSlider {
 						}	
 					}
 
-					if (!birdsEyeDown && event.getTypeInt() == Event.ONKEYPRESS && !ScaleSlider.this.editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
+					if (!birdsEyeDown && event.getTypeInt() == Event.ONKEYPRESS && !ScaleSlider.this.editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) && UIKeyHelpers.allMenusAreClosed()) {
 			      NativeEvent ne = event.getNativeEvent();
 			      if (ne.getCharCode() == '-') { // compare using char code since key code is different on Firefox
 			      	logger.debug("zoom --");
