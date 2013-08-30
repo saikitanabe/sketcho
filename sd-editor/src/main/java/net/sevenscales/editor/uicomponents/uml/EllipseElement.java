@@ -174,6 +174,7 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
 
     public void resize(int x, int y, int width, int height) {
     	EllipseElement.this.setShape(x, y, width, height);
+      dispatch();
       fireSizeChanged();
     }
 
@@ -394,16 +395,20 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
 
     _setShape(cx, cy, rx, ry);
     super.applyHelpersShape();
-		
+    
+    dispatch();
+    return true;
+	}
+
+  private void dispatch() {
     ++this.dispatchSequence;
     for (AnchorElement ae : getAnchors()) {
-    	calcAnchorPointWithAngle(ae.getAx(), ae.getAy(), ae.getRelativeFactorX(), tempAnchorPoint);
+      calcAnchorPointWithAngle(ae.getAx(), ae.getAy(), ae.getRelativeFactorX(), tempAnchorPoint);
       ae.setAx(tempAnchorPoint.x + getTransformX());
       ae.setAy(tempAnchorPoint.y + getTransformY());
       ae.dispatch(dispatchSequence);
     }
-    return true;
-	}
+  }
 
 //  private boolean outside(int ax, int ay) {
 //    int x0 = ax - ellipse.getCx();
