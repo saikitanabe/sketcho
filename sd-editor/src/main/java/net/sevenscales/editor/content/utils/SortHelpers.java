@@ -3,16 +3,26 @@ package net.sevenscales.editor.content.utils;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import net.sevenscales.editor.diagram.ContainerType;
 import net.sevenscales.editor.diagram.Diagram;
 
 public class SortHelpers {
-	public static Diagram[] sortDiagramItems(List<Diagram> diagrams) {
+	public static Diagram[] toArray(List<Diagram> diagrams) {
     Diagram[] items = new Diagram[diagrams.size()];
     diagrams.toArray(items);
+    return items;
+	}
 
-		Arrays.sort(items, new Comparator<Diagram>() {
+	public static Diagram[] toArray(Set<Diagram> diagrams) {
+    Diagram[] items = new Diagram[diagrams.size()];
+    diagrams.toArray(items);
+    return items;
+	}
+
+	public static Diagram[] sortDiagramItems(Diagram[] diagrams) {
+		Arrays.sort(diagrams, new Comparator<Diagram>() {
 			@Override
 			public int compare(Diagram arg0, Diagram arg1) {
 				if (arg0 instanceof ContainerType) {
@@ -31,7 +41,7 @@ public class SortHelpers {
 				return 0;
 			}
 		});
-		return items;
+		return diagrams;
 	}
 
 }

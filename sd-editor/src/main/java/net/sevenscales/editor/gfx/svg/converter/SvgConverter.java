@@ -2,6 +2,7 @@ package net.sevenscales.editor.gfx.svg.converter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.utils.SLogger;
@@ -75,9 +76,21 @@ public class SvgConverter {
   	this.scaleSize = scaleSize;
   }
 
+  /**
+  * If any elements are selected, export only those to svg.
+  */
+  private Diagram[] getDiagrams(SurfaceHandler surfaceHandler) {
+    Set<Diagram> selected = surfaceHandler.getSelectionHandler().getSelectedItems();
+    if (selected.size() > 0) {
+      return SortHelpers.sortDiagramItems(SortHelpers.toArray(selected));
+    }
+
+    return SortHelpers.sortDiagramItems(SortHelpers.toArray(surfaceHandler.getDiagrams()));
+  }
+
   public SvgData convertToSvg(IDiagramContent content, SurfaceHandler surfaceHandler) {
   	EditorContext editorContext = surfaceHandler.getEditorContext();
-    Diagram[] diagrams = SortHelpers.sortDiagramItems(surfaceHandler.getDiagrams());
+    Diagram[] diagrams = getDiagrams(surfaceHandler);
     String items = "";
     
     ResizeHelpers.createResizeHelpers(surfaceHandler).hideGlobalElement();
