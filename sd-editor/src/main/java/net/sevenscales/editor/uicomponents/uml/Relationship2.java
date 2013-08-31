@@ -11,6 +11,7 @@ import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.utils.AreaUtils;
+import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramDragHandler;
 import net.sevenscales.editor.diagram.DiagramResizeHandler;
@@ -1071,6 +1072,16 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   		result = Math.min(result, points.get(i));
   	}
   	return result;
+  }
+
+  @Override
+  public int getWidth() {
+    return DiagramHelpers.getWidth(points);
+  }
+
+  @Override
+  public int getHeight() {
+    return DiagramHelpers.getHeight(points);
   }
   
 	@Override
