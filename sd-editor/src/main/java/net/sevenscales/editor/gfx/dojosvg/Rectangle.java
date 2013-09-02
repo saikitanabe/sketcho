@@ -10,7 +10,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 public class Rectangle extends Shape implements IRectangle {
 	protected Rectangle(IContainer container) {
 		rawNode = createRect(container.getContainer());
-		assert(rawNode != null);
+		// assert(rawNode != null);
 	}
 	
 	/* (non-Javadoc)

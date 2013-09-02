@@ -13,7 +13,7 @@ public class RectShape extends Info {
 	}
 
 	public RectShape(String[] rectShape) {
-		assert(rectShape.length == 4);
+		// assert(rectShape.length == 4);
 		left = Integer.valueOf(rectShape[0]);
 		top = Integer.valueOf(rectShape[1]);
 		width = Integer.valueOf(rectShape[2]);

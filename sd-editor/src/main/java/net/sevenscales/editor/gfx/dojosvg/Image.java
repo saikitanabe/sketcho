@@ -9,7 +9,7 @@ public class Image extends Shape implements IImage {
 
 	public Image(IContainer container, int x, int y, int width, int height, String src) {
 		rawNode = createImage(container.getContainer(), x, y, width, height, src);
-		assert(rawNode != null);
+		// assert(rawNode != null);
 	}
 	
 	private native JavaScriptObject createImage(JavaScriptObject surface, int x, int y, int width, int height, String src)/*-{
