@@ -17,7 +17,7 @@ public class SelectionMouseUpEvent extends GwtEvent<SelectionMouseUpEventHandler
   
   public SelectionMouseUpEvent(Diagram[] diagrams, Diagram lastSelected) {
   	this.diagrams = diagrams;
-  	assert(lastSelected != null);
+  	// assert(lastSelected != null);
   	this.lastSelected = lastSelected.getOwnerComponent();
   }
 

@@ -187,10 +187,8 @@ public class BoardOTHelpers {
 		for (IDiagramItemRO diro : items) {
 			logger.debug2("modifyOT {}", diro);
 			Diagram diagram = findDiagramById(diro);
-			
-			reattachHelpers.processDiagram(diagram);
-			
 			if (diagram != null) {
+				reattachHelpers.processDiagram(diagram);
 				diagram.copyFrom(diro);
 				
 				applyThemeColors(diagram);

@@ -38,7 +38,7 @@ public class AreaUtils {
 	 */
 	public static boolean onArea(List<Integer> points, int left, int top,
 			int right, int bottom) {
-		assert(points.size() % 2 == 0); // parillinen maara
+		// assert(points.size() % 2 == 0); // parillinen maara
 		
 		for (int i = 0; i < points.size(); i += 2) {
 			int x = points.get(i);

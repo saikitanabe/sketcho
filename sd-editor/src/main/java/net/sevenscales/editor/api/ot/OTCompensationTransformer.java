@@ -138,7 +138,7 @@ public class OTCompensationTransformer {
     	
     	if (!mappingFound) {
 	  		for (IDiagramItemRO c : currentState) {
-	  			if ("".equals(n.getClientId()) || "".equals(c.getClientId())) {
+	  			if (LogConfiguration.loggingIsEnabled(Level.FINEST) && "".equals(n.getClientId()) || "".equals(c.getClientId())) {
 	  				throw new RuntimeException("Client ID cannot be empty!");
 	  			}
 	    		if (n.getClientId().equals(c.getClientId())) {
@@ -150,6 +150,7 @@ public class OTCompensationTransformer {
     	}
     	
   		if (!mappingFound) {
+  			// cannot fail whole apply; so better to fail 
   			String msg = SLogger.format("Operation {} failed, mapping not found. NEW ITEM STATE: {} \n CURR STATE: {}", operation.getValue(), n.toString(), currentState.toString());
   			logger.error(msg);
   			throw new MappingNotFoundException("mapNewToCurrent failed");
