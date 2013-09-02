@@ -8,6 +8,11 @@ public class JQuery {
 	  else if (typeof $wnd.jQuery == "function") $wnd.jQuery(element).click();
 	}-*/;
 
+	public static native void tab(Element element, String value)/*-{
+		if (typeof $wnd.jq172 == "function") $wnd.jq172(element).tab(value);
+	  else if (typeof $wnd.jQuery == "function") $wnd.jQuery(element).tab(value);
+	}-*/;
+
 	public static native void flashStyleClass(String search, String clazz)/*-{
 		if (typeof $wnd.jq172 == "function") $wnd.jq172(search).addClass(clazz).delay(1000).removeClass(clazz);
 	  else if (typeof $wnd.jQuery == "function") {
