@@ -8,6 +8,7 @@ import net.sevenscales.editor.api.impl.FastButton;
 import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.content.utils.ColorHelpers;
+import net.sevenscales.editor.content.utils.JQuery;
 import net.sevenscales.editor.content.utils.ColorHelpers.Rgb;
 import net.sevenscales.editor.diagram.utils.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
@@ -231,6 +232,7 @@ public class ColorSelections extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				colorTarget = ColorTarget.BORDER;
+				JQuery.tab(border, "show");
 			}
 		});
 		
@@ -254,6 +256,7 @@ public class ColorSelections extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				colorTarget = ColorTarget.BACKGROUND;
+				JQuery.tab(background, "show");
 			}
 		});
 		
@@ -272,11 +275,7 @@ public class ColorSelections extends Composite {
 //					}
 //				});
 	}
-	
-	private native void showTab(Element element)/*-{
-		if (typeof $wnd.jq172 == "function") $wnd.jq172(element).tab('show')
-	}-*/;
-	
+		
 	private void colorBox(int baserow, int basecol, int basecolor) {
 		for (int row = baserow; row < baserow + 6; ++row) {
 			for (int col = basecol; col < basecol + 6; ++col) {
