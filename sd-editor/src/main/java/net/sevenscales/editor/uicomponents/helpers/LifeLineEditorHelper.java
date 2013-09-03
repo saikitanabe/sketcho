@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramProxy;
 import net.sevenscales.editor.diagram.shape.CircleShape;
@@ -17,9 +17,9 @@ public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
   
   private CircleElement startSelection;
   private CircleShape circleShape = new CircleShape();
-  private SurfaceHandler surface;
+  private ISurfaceHandler surface;
   private SequenceElement parent;
-  private static Map<SurfaceHandler, ILifeLineEditor> instances;
+  private static Map<ISurfaceHandler, ILifeLineEditor> instances;
 
   private static ILifeLineEditor EMPTY_EDITOR = new ILifeLineEditor() {
     @Override
@@ -61,10 +61,10 @@ public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
   };
   
   static {
-    instances = new HashMap<SurfaceHandler, ILifeLineEditor>();
+    instances = new HashMap<ISurfaceHandler, ILifeLineEditor>();
   }
 
-  public LifeLineEditorHelper(SurfaceHandler surface, SequenceElement parent, boolean editable) {
+  public LifeLineEditorHelper(ISurfaceHandler surface, SequenceElement parent, boolean editable) {
     this.surface = surface;
     this.parent = parent;
     
@@ -87,10 +87,10 @@ public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
 //    });
   }
 
-  public static ILifeLineEditor createLifeLineEditorHelper(SurfaceHandler surface, SequenceElement parent, boolean editable) {
+  public static ILifeLineEditor createLifeLineEditorHelper(ISurfaceHandler surface, SequenceElement parent, boolean editable) {
     ILifeLineEditor result = instances.get(surface);
     if (result == null) {
-      if (SurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
+      if (ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
         result = new LifeLineEditorHelper(surface, parent, editable);
         instances.put(surface, result);
       } else {
@@ -101,7 +101,7 @@ public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
     return result;
   }
   
-  public static ILifeLineEditor getIfAny(SurfaceHandler surface) {
+  public static ILifeLineEditor getIfAny(ISurfaceHandler surface) {
     return instances.get(surface);
   }
 

@@ -1,16 +1,16 @@
 package net.sevenscales.editor.api.impl;
 
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ToolFrame;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 
 public class ModelingPanelEventHandler implements MouseDiagramHandler {
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	private ToolFrame toolFrame;
 
-	public ModelingPanelEventHandler(SurfaceHandler surface, ToolFrame toolFrame) {
+	public ModelingPanelEventHandler(ISurfaceHandler surface, ToolFrame toolFrame) {
 		this.surface = surface;
 		this.toolFrame = toolFrame;
 		

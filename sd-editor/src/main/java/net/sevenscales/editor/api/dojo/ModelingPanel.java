@@ -1,8 +1,14 @@
-package net.sevenscales.editor.api;
+package net.sevenscales.editor.api.dojo;
 
 import java.util.List;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.IModelingPanel;
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.ToolFrame;
+import net.sevenscales.editor.api.EditorContext;
+import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.LongPressHandler;
 import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
 import net.sevenscales.editor.api.event.DiagramElementAddedEventHandler;
 import net.sevenscales.editor.api.event.RelationshipNotAttachedEvent;
@@ -11,7 +17,6 @@ import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
 import net.sevenscales.editor.api.impl.DragAndDropHandler;
 import net.sevenscales.editor.api.impl.ModelingPanelEventHandler;
 import net.sevenscales.editor.api.impl.SurfaceEventWrapper;
-import net.sevenscales.editor.api.impl.SurfaceHandlerImplFirefox;
 import net.sevenscales.editor.api.impl.TouchDragAndDrop;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.ui.ScaleSlider;
@@ -41,8 +46,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.user.client.ui.Widget;
 
-public class ModelingPanel extends HorizontalPanel {
+class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 	private static final SLogger logger = SLogger.createLogger(ModelingPanel.class);
 	
 	private SurfaceHandler surface;
@@ -170,7 +176,7 @@ public class ModelingPanel extends HorizontalPanel {
 		}
 		
 		dragAndDropHandler = new DragAndDropHandler(surface, toolFrame.getToolbar());
-		touchManager = new TouchDragAndDrop(dragAndDropHandler, toolFrame.getToolbar());
+		touchManager = new TouchDragAndDrop(dragAndDropHandler, toolFrame.getToolbar().getHasTouchStartHandlers());
 		new SurfaceEventWrapper(surface, dragAndDropHandler);
 		
 		this.scaleSlider = new ScaleSlider(surface);
@@ -263,7 +269,7 @@ public class ModelingPanel extends HorizontalPanel {
 		new UiClickContextMenu(surface);
 	}
 	
-	public SurfaceHandler getSurface() {
+	public ISurfaceHandler getSurface() {
 		return this.surface;
 	}
 
@@ -312,6 +318,10 @@ public class ModelingPanel extends HorizontalPanel {
     surface.reset();
     surface.getRootLayer().setTransform(0, 0);
     scaleSlider.reset();
+  }
+
+  public Widget getWidget() {
+  	return this;
   }
 
 }

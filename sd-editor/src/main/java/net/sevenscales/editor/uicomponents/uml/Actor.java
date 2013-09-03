@@ -1,7 +1,7 @@
 package net.sevenscales.editor.uicomponents.uml;
 
 
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
@@ -55,7 +55,7 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 	protected int textareaWidth;
 	protected int textareaHeight;
   
-	public Actor(SurfaceHandler surface, ActorShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
+	public Actor(ISurfaceHandler surface, ActorShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
 		super(editable, surface, backgroundColor, borderColor, textColor); 
 		// actor doesn't use saved text color, it is always based on theme
 		this.shape = newShape;
@@ -235,7 +235,7 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 		return new Point(diffFromMouseDownX, diffFromMouseDownY);
 	}
 	
-	public void accept(SurfaceHandler surface) {
+	public void accept(ISurfaceHandler surface) {
 	  super.accept(surface);
 		surface.makeDraggable(this);
 	}
@@ -348,19 +348,19 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 	}
 	
   @Override
-	public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple) {
+	public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
 		Point p = getCoords();
 		return duplicate(surface, p.x + 20, p.y + 20);
 	}
 	
   @Override
-  public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     ActorShape newShape = new ActorShape(x, y, background.getWidth(), background.getHeight());
     Diagram result = createDiagram(surface, newShape, getText(), getEditable());
     return result;
   }
 	
-  protected Diagram createDiagram(SurfaceHandler surface, ActorShape newShape,
+  protected Diagram createDiagram(ISurfaceHandler surface, ActorShape newShape,
       String text, boolean editable) {
     return new Actor(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
   }

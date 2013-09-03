@@ -1,4 +1,4 @@
-package net.sevenscales.editor.api;
+package net.sevenscales.editor.api.dojo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,12 @@ import java.util.List;
 import net.sevenscales.appFrame.impl.EventRegistry;
 import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.LoadEventListenerCollection;
+import net.sevenscales.editor.api.Properties;
+import net.sevenscales.editor.api.EditorContext;
+import net.sevenscales.editor.api.SurfaceLoadedEventListener;
+import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
 import net.sevenscales.editor.api.impl.SurfaceDiagramSearch;
 import net.sevenscales.editor.content.ui.IModeManager;
@@ -62,9 +68,10 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
+import com.google.gwt.user.client.ui.Widget;
 
 
-public class SurfaceHandler extends SimplePanel implements 
+class SurfaceHandler extends SimplePanel implements 
 							SourcesClickDiagramEvents, ILoadObserver, IKeyEventHandler,
               GraphicsMouseDownHandler,
               GraphicsMouseUpHandler,
@@ -73,12 +80,10 @@ public class SurfaceHandler extends SimplePanel implements
               GraphicsMouseEnterHandler, 
               HasTouchStartHandlers,
               HasTouchMoveHandlers,
-              HasTouchEndHandlers {
+              HasTouchEndHandlers,
+              ISurfaceHandler {
 	private static final SLogger logger = SLogger.createLogger(SurfaceHandler.class);
-	
-	public static final String DRAWING_AREA = "drawingarea";
-	public static final String LIBRARY_AREA = "libraryarea";
-	
+		
 	private ISurface surface;
 	private List<Diagram> diagrams;
 	protected MouseDiagramHandlerManager mouseDiagramManager;
@@ -925,6 +930,14 @@ public class SurfaceHandler extends SimplePanel implements
 	@Override
 	public HandlerRegistration addTouchMoveHandler(TouchMoveHandler handler) {
 		return addDomHandler(handler, TouchMoveEvent.getType());
+	}
+
+	public Widget getWidget() {
+		return this;
+	}
+
+	public HasTouchStartHandlers getHasTouchStartHandlers() {
+		return this;
 	}
 
 }

@@ -21,7 +21,7 @@ public class ToolFrame extends SimplePanel {
 	private SimplePanel justBacgkround;
 	private ShowHideHelpers showHideHelpers;
 
-  public ToolFrame(SurfaceHandler surface, int height, IModeManager modeManager, EditorContext editorContext, boolean autohide) {
+  public ToolFrame(ISurfaceHandler surface, int height, IModeManager modeManager, EditorContext editorContext, boolean autohide) {
   	this.editorContext = editorContext;
   	
 		panel = new VerticalPanel();
@@ -85,7 +85,7 @@ public class ToolFrame extends SimplePanel {
 		return properties;
 	}
   
-  public SurfaceHandler getToolbar() {
+  public ISurfaceHandler getToolbar() {
 		return toolbar.getToolPool();
 	}
 

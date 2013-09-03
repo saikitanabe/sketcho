@@ -7,7 +7,7 @@ import java.util.Set;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.utils.SortHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.IShape;
@@ -79,7 +79,7 @@ public class SvgConverter {
   /**
   * If any elements are selected, export only those to svg.
   */
-  private Diagram[] getDiagrams(SurfaceHandler surfaceHandler) {
+  private Diagram[] getDiagrams(ISurfaceHandler surfaceHandler) {
     Set<Diagram> selected = surfaceHandler.getSelectionHandler().getSelectedItems();
     if (selected.size() > 0) {
       return SortHelpers.sortDiagramItems(SortHelpers.toArray(selected));
@@ -88,7 +88,7 @@ public class SvgConverter {
     return SortHelpers.sortDiagramItems(SortHelpers.toArray(surfaceHandler.getDiagrams()));
   }
 
-  public SvgData convertToSvg(IDiagramContent content, SurfaceHandler surfaceHandler) {
+  public SvgData convertToSvg(IDiagramContent content, ISurfaceHandler surfaceHandler) {
   	EditorContext editorContext = surfaceHandler.getEditorContext();
     Diagram[] diagrams = getDiagrams(surfaceHandler);
     String items = "";

@@ -1,8 +1,8 @@
-package net.sevenscales.editor.api.impl;
+package net.sevenscales.editor.api.dojo;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.dojo.SurfaceHandler;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 
@@ -12,7 +12,7 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Element;
 
-public class SurfaceHandlerImplFirefox extends SurfaceHandler {
+class SurfaceHandlerImplFirefox extends SurfaceHandler {
 	private static final SLogger logger = SLogger.createLogger(SurfaceHandlerImplFirefox.class);
 
   private HandlerRegistration overreg;

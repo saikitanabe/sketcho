@@ -21,7 +21,7 @@ import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler
 public class SketchDiagramAreaHandler implements MouseDiagramHandler {
 	private static final SLogger logger = SLogger.createLogger(SketchDiagramAreaHandler.class);
 	
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
   private int downX;
   private int downY;
   private boolean noSelectedItems;
@@ -32,7 +32,7 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
   private IModeManager modeManager;
   private boolean modeManual;
 
-	public SketchDiagramAreaHandler(SurfaceHandler surface, IModeManager modeManager) {
+	public SketchDiagramAreaHandler(ISurfaceHandler surface, IModeManager modeManager) {
 		this.surface = surface;
 		this.modeManager = modeManager;
 		// kept just to remind of surface event registry usage :)

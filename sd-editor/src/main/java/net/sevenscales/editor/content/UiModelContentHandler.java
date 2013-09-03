@@ -6,8 +6,8 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.ModelingPanel;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.IModelingPanel;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.SurfaceLoadedEventListener;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
@@ -25,7 +25,7 @@ import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 public class UiModelContentHandler implements SurfaceLoadedEventListener {
 	private static final SLogger logger = SLogger.createLogger(UiModelContentHandler.class);
   public interface IUiDiagramContent {
-    public ModelingPanel getModelingPanel();
+    public IModelingPanel getModelingPanel();
     public IContent getContent();
   }
 
@@ -57,8 +57,8 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 	}
 
 	public void externalize() {
-		ModelingPanel mPanel = (ModelingPanel) uiContent.getModelingPanel();
-		SurfaceHandler surface = mPanel.getSurface();
+		IModelingPanel mPanel = (IModelingPanel) uiContent.getModelingPanel();
+		ISurfaceHandler surface = mPanel.getSurface();
 
 		IDiagramContent dContent = (IDiagramContent) uiContent.getContent();
 		dContent.reset();
@@ -75,17 +75,17 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 	public void internalize() {
 		// panel and surface needs to be fully constructed
 		// before new items can be added
-		ModelingPanel mPanel = (ModelingPanel) uiContent.getModelingPanel();
-		SurfaceHandler surface = mPanel.getSurface();
+		IModelingPanel mPanel = (IModelingPanel) uiContent.getModelingPanel();
+		ISurfaceHandler surface = mPanel.getSurface();
 		surface.addLoadEventListener(this);
 	}
 	
 	public void onLoaded() {
 		try {
 			logger.debug("onLoaded...");
-			ModelingPanel mPanel = (ModelingPanel) uiContent.getModelingPanel();
+			IModelingPanel mPanel = (IModelingPanel) uiContent.getModelingPanel();
 			mPanel.reset();
-			SurfaceHandler surface = mPanel.getSurface();
+			ISurfaceHandler surface = mPanel.getSurface();
 			
 			// this is just to guarantee that order is correct...
 			resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
@@ -103,7 +103,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 		}
 	}
 
-  public void addContentItems(final IDiagramContent dContent, final SurfaceHandler surface) {
+  public void addContentItems(final IDiagramContent dContent, final ISurfaceHandler surface) {
 //  	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 //			@Override
 //			public void execute() {
@@ -119,7 +119,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 //			}
 //		});
   }
-  public void addContentItems(IDiagramContent dContent, SurfaceHandler surface, boolean asSelected) {
+  public void addContentItems(IDiagramContent dContent, ISurfaceHandler surface, boolean asSelected) {
     // to loop relationships later; to enable anchors
 //    final List<Diagram> containerElements = new ArrayList<Diagram>();
   	

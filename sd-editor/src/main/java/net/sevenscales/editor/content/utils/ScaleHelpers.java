@@ -1,6 +1,6 @@
 package net.sevenscales.editor.content.utils;
 
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UiContextMenu;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.uicomponents.Point;
@@ -43,7 +43,7 @@ public class ScaleHelpers {
 		public Point scaledAndTranslated;
 		public MatrixPointJS scaledPoint;
 	}
-	public static ScaledAndTranslatedPoint scaleAndTranslateScreenpoint(int screenX, int screenY, SurfaceHandler surface) {
+	public static ScaledAndTranslatedPoint scaleAndTranslateScreenpoint(int screenX, int screenY, ISurfaceHandler surface) {
 		ScaledAndTranslatedPoint result = new ScaledAndTranslatedPoint();
 		// scale point
 		result.scaledAndTranslated = new Point();
@@ -55,11 +55,11 @@ public class ScaleHelpers {
 		return result;
 	}
 	
-	public static int scaleAndTranslateY(int scaledY, SurfaceHandler surface) {
+	public static int scaleAndTranslateY(int scaledY, ISurfaceHandler surface) {
 		return unscaleValue(scaledY, surface.getScaleFactor()) + surface.getRootLayer().getTransformY();
 	}
 
-	public static int scaleAndTranslateX(int scaledX, SurfaceHandler surface) {
+	public static int scaleAndTranslateX(int scaledX, ISurfaceHandler surface) {
 		return unscaleValue(scaledX, surface.getScaleFactor()) + surface.getRootLayer().getTransformX();
 	}
 

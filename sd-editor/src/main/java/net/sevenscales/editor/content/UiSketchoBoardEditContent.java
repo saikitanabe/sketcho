@@ -7,8 +7,11 @@ import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.ModelingPanel;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.IModelingPanel;
+import net.sevenscales.editor.api.ISurfaceHandler;
+
+import net.sevenscales.editor.api.dojo.FactoryDoJo;
+
 import net.sevenscales.editor.content.UiModelContentHandler.IUiDiagramContent;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.diagram.Diagram;
@@ -29,7 +32,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class UiSketchoBoardEditContent extends UiEditBoardContent implements KeyEventListener, IUiDiagramContent {
   private UiModelContentHandler modelHandler;
-  private ModelingPanel modelingPanel;
+  private IModelingPanel modelingPanel;
 //  private HorizontalPanel main = new HorizontalPanel();
   protected VerticalPanel vpanel = new VerticalPanel();
 //  private DiagramContentQuickHelp help;
@@ -69,7 +72,7 @@ public class UiSketchoBoardEditContent extends UiEditBoardContent implements Key
     getEditorContext().set(EditorProperty.SKETCHO_BOARD_MODE, true);
     getEditorContext().setEditable(editable);
 
-    modelingPanel = new ModelingPanel(this, getContent().getWidth(), getContent().getHeight(), editable, getModeManager(), getEditorContext(), false, true);
+    modelingPanel = FactoryDoJo.createModelingPanel(this, getContent().getWidth(), getContent().getHeight(), editable, getModeManager(), getEditorContext());
     modelingPanel.addKeyEventHandler(this);
     modelHandler = new UiModelContentHandler(this, editable, getEditorContext(), getModeManager());
     
@@ -111,7 +114,7 @@ public class UiSketchoBoardEditContent extends UiEditBoardContent implements Key
 //    help = new DiagramContentQuickHelp(modelingPanel.getSurface(), modelingPanel.getToolFrame());
 //    vpanel.setBorderWidth(1);
 //    vpanel.add(help);
-    vpanel.add(modelingPanel);
+    vpanel.add(modelingPanel.getWidget());
     
 //    decorator.getElement().getStyle().setBackgroundColor("#d0e4f6");
 
@@ -222,7 +225,7 @@ public class UiSketchoBoardEditContent extends UiEditBoardContent implements Key
 //    modelingPanel.setVisible(visible);
   }
 
-  public ModelingPanel getModelingPanel() {
+  public IModelingPanel getModelingPanel() {
     return modelingPanel;
   }
   
@@ -282,7 +285,7 @@ public class UiSketchoBoardEditContent extends UiEditBoardContent implements Key
     return DiagramContentDTO.class;
   }
 
-	public SurfaceHandler getSurface() {
+	public ISurfaceHandler getSurface() {
 		return modelingPanel.getSurface();
 	}
 

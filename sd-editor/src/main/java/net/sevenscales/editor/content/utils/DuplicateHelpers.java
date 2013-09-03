@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sevenscales.domain.DiagramItemDTO;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.BoardDocument;
 import net.sevenscales.editor.content.ClientIdHelpers;
 import net.sevenscales.editor.diagram.Diagram;
@@ -17,10 +17,10 @@ import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
 public class DuplicateHelpers {
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	private SelectionHandler selectionHandler;
 
-	public DuplicateHelpers(SurfaceHandler surface, SelectionHandler selectionHandler) {
+	public DuplicateHelpers(ISurfaceHandler surface, SelectionHandler selectionHandler) {
 		this.surface = surface;
 		this.selectionHandler = selectionHandler;
 	}

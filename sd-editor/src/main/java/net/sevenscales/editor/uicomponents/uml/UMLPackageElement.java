@@ -1,7 +1,7 @@
 package net.sevenscales.editor.uicomponents.uml;
 
 
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.ContainerType;
@@ -43,11 +43,11 @@ public class UMLPackageElement extends AbstractDiagramItem implements SupportsRe
 	private static final int CORNER_HEIGHT = 13;
 	private static final int CORNER_WIDTH = (int) (CORNER_HEIGHT * 1.5);
 
-  public UMLPackageElement(SurfaceHandler surface, UMLPackageShape  newShape, String text, 
+  public UMLPackageElement(ISurfaceHandler surface, UMLPackageShape  newShape, String text, 
   		Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
     this(surface, newShape, text, backgroundColor, borderColor, textColor, editable, false);
   }
-  public UMLPackageElement(SurfaceHandler surface, UMLPackageShape newShape, String text, 
+  public UMLPackageElement(ISurfaceHandler surface, UMLPackageShape newShape, String text, 
   		Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText) {
     super(editable, surface, backgroundColor, borderColor, textColor);
     this.shape = newShape;
@@ -177,7 +177,7 @@ public class UMLPackageElement extends AbstractDiagramItem implements SupportsRe
     return new Point(diffFromMouseDownX, diffFromMouseDownY);
   }
   
-  public void accept(SurfaceHandler surface) {
+  public void accept(ISurfaceHandler surface) {
     super.accept(surface);
     surface.makeDraggable(this);
   }
@@ -230,19 +230,19 @@ public class UMLPackageElement extends AbstractDiagramItem implements SupportsRe
   }
   
   @Override
-  public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple) {
+  public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
     Point p = getCoords();
     return duplicate(surface, p.x + 20, p.y + 20);
   }
   
   @Override
-  public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     UMLPackageShape newShape = new UMLPackageShape(x, y, rectSurface.getWidth(), rectSurface.getHeight());
     Diagram result = createDiagram(surface, newShape, getText(), getEditable());
     return result;
   }
   
-  protected Diagram createDiagram(SurfaceHandler surface, UMLPackageShape newShape,
+  protected Diagram createDiagram(ISurfaceHandler surface, UMLPackageShape newShape,
       String text, boolean editable) {
     return new UMLPackageElement(surface, newShape, text, 
     		new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);

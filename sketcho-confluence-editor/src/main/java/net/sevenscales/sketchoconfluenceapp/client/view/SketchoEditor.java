@@ -9,7 +9,7 @@ import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.SurfaceLoadedEventListener;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesEndedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesEndedEventHandler;
@@ -263,7 +263,7 @@ public class SketchoEditor extends Composite implements Spinner {
                 }
 
                 public void generateImage(IDiagramContent content,
-                    SurfaceHandler surfaceHandler) {
+                    ISurfaceHandler surfaceHandler) {
                 }
 
                 public void delete(IContent content) {

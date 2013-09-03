@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.RelationshipNotAttachedEvent;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.diagram.Diagram;
@@ -25,7 +25,7 @@ import net.sevenscales.editor.uicomponents.uml.Relationship2;
 public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramProxy, DiagramDragHandler, IGlobalElement {
   private static final SLogger logger = SLogger.createLogger(RelationshipHandleHelpers.class);
   
-  private static Map<SurfaceHandler, RelationshipHandleHelpers> instances;
+  private static Map<ISurfaceHandler, RelationshipHandleHelpers> instances;
   
   private static final int HANDLE_RADIUS = 6;
   private static final int SELECTION_RADIUS;
@@ -33,12 +33,12 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   private List<CircleElement> handles = new ArrayList<CircleElement>();
   private List<CircleElement> bendHandles = new ArrayList<CircleElement>();
   private List<Integer> points = new ArrayList<Integer>();
-  private SurfaceHandler surface;
+  private ISurfaceHandler surface;
 
   private Relationship2 parentRelationship;
 
   static {
-    instances = new HashMap<SurfaceHandler, RelationshipHandleHelpers>();
+    instances = new HashMap<ISurfaceHandler, RelationshipHandleHelpers>();
     
     if (TouchHelpers.isSupportsTouch()) {
       SELECTION_RADIUS = 25;
@@ -48,7 +48,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     }
   }
 
-  private RelationshipHandleHelpers(SurfaceHandler surface, Relationship2 parentRelationship) {
+  private RelationshipHandleHelpers(ISurfaceHandler surface, Relationship2 parentRelationship) {
     this.surface = surface;
     // set initial relationship; since parentRelationship should not be null
     // changed on runtime
@@ -60,10 +60,10 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     initDefaults();
   }
 
-  public static RelationshipHandleHelpers createConnectionHelpers(SurfaceHandler surface, Relationship2 parentRelationship) {
+  public static RelationshipHandleHelpers createConnectionHelpers(ISurfaceHandler surface, Relationship2 parentRelationship) {
     RelationshipHandleHelpers result = instances.get(surface);
     if (result == null) {
-      if (SurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
+      if (ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
         result = new RelationshipHandleHelpers(surface, parentRelationship);
         instances.put(surface, result);
       } else {
@@ -74,7 +74,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     return result;
   }
   
-  public static RelationshipHandleHelpers getIfAny(SurfaceHandler surface) {
+  public static RelationshipHandleHelpers getIfAny(ISurfaceHandler surface) {
     return instances.get(surface);
   }
   

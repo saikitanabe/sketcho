@@ -11,7 +11,7 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.SurfaceUtil;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
@@ -99,7 +99,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   private boolean ctrlDown;
   private boolean verticalMovement;
   private boolean visible;
-  protected SurfaceHandler surface;
+  protected ISurfaceHandler surface;
   private Map<Anchor,AnchorElement> anchorMap = new HashMap<Anchor,AnchorElement>();
   // to save memory
   protected AnchorProperties tempAnchorProperties = new AnchorProperties();
@@ -132,12 +132,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	
   public static final String EVENT_DOUBLE_CLICK = "ondblclick";
 
-  public AbstractDiagramItem(boolean editable, SurfaceHandler surface) {
+  public AbstractDiagramItem(boolean editable, ISurfaceHandler surface) {
   	this(editable, surface, Theme.createDefaultBackgroundColor(), 
   													Theme.createDefaultBorderColor(), 
   													Theme.createDefaultTextColor());
   }
-  public AbstractDiagramItem(boolean editable, SurfaceHandler surface, Color backgroundColor, Color borderColor, Color textColor) {
+  public AbstractDiagramItem(boolean editable, ISurfaceHandler surface, Color backgroundColor, Color borderColor, Color textColor) {
   	this.data = new DiagramItemDTO(); // set default item
     this.editable = editable;
     this.surface = surface;
@@ -154,7 +154,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     
     connectionHelpers = createConnectionHelpers();
     
-    if (anchorPoint == null && SurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
+    if (anchorPoint == null && ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
       // "singleton" common for all diagram elements, there can be visible only one at a time
       // surface.getSurface()
       anchorPoint = IShapeFactory.Util.factory(editable).createCircle(surface.getInteractionLayer());
@@ -339,7 +339,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     clickListeners.removeClickHandler(listener);
   }
   
-  public void accept(SurfaceHandler surface) {
+  public void accept(ISurfaceHandler surface) {
     surface.addKeyEventHandler(this);
   }
   
@@ -534,7 +534,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     return anchorMap.values();
   }
   
-  public SurfaceHandler getSurfaceHandler() {
+  public ISurfaceHandler getSurfaceHandler() {
     return surface;
   }
   
@@ -618,12 +618,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   @Override
-  public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple) {
+  public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
     return null;
   }
 
   @Override
-  public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     return null;
   }
 

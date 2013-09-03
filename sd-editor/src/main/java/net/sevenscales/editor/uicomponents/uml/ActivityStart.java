@@ -1,7 +1,7 @@
 package net.sevenscales.editor.uicomponents.uml;
 
 
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
@@ -35,11 +35,11 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
 //	private boolean onResizeArea;
   private IGroup group;
   
-  public ActivityStart(SurfaceHandler surface, ActivityStartShape newShape, boolean editable) {
+  public ActivityStart(ISurfaceHandler surface, ActivityStartShape newShape, boolean editable) {
     this(surface, newShape, Theme.createDefaultBorderColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), editable);
   }
   
-	public ActivityStart(SurfaceHandler surface, ActivityStartShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
+	public ActivityStart(ISurfaceHandler surface, ActivityStartShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
 		super(editable, surface, backgroundColor, borderColor, textColor);
 		this.shape = newShape;
 		
@@ -136,7 +136,7 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
 		return new Point(diffFromMouseDownX, diffFromMouseDownY);
 	}
 	
-	public void accept(SurfaceHandler surface) {
+	public void accept(ISurfaceHandler surface) {
 	  super.accept(surface);
 		surface.makeDraggable(this);
 	}
@@ -155,19 +155,19 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
 	}
 	
   @Override
-	public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple) {
+	public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
 		Point p = getCoords();
 		return duplicate(surface, p.x + 20, p.y + 20);
 	}
 	
   @Override
-  public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     ActivityStartShape newShape = new ActivityStartShape(x, y, visible.getRadius());
     Diagram result = createDiagram(surface, newShape, getEditable());
     return result;
   }
 	
-  protected Diagram createDiagram(SurfaceHandler surface, ActivityStartShape newShape,
+  protected Diagram createDiagram(ISurfaceHandler surface, ActivityStartShape newShape,
       boolean editable) {
     return new ActivityStart(surface, newShape, editable);
   }

@@ -4,7 +4,7 @@ package net.sevenscales.editor.uicomponents.uml;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
@@ -42,11 +42,11 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
   private TextElementFormatUtil textUtil;
   private static final int DEFAULT_CLASS_RADIUS = 2;
 
-  public ClassElement2(SurfaceHandler surface, RectShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
+  public ClassElement2(ISurfaceHandler surface, RectShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
     this(surface, newShape, text, backgroundColor, borderColor, textColor, editable, false);
   }
   
-  public ClassElement2(SurfaceHandler surface, RectShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText) {
+  public ClassElement2(ISurfaceHandler surface, RectShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText) {
     super(editable, surface, backgroundColor, borderColor, textColor);
     this.shape = newShape;
     
@@ -146,7 +146,7 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
     return new Point(diffFromMouseDownX, diffFromMouseDownY);
   }
   
-  public void accept(SurfaceHandler surface) {
+  public void accept(ISurfaceHandler surface) {
     super.accept(surface);
     surface.makeDraggable(this);
   }
@@ -169,19 +169,19 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
   }
   
   @Override
-  public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple) {
+  public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
     Point p = getCoords();
     return duplicate(surface, p.x + 20, p.y + 20);
   }
   
   @Override
-  public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     RectShape newShape = new RectShape(x, y, rectSurface.getWidth(), rectSurface.getHeight());
     Diagram result = createDiagram(surface, newShape, getText(), getEditable());
     return result;
   }
   
-  protected Diagram createDiagram(SurfaceHandler surface, RectShape newShape,
+  protected Diagram createDiagram(ISurfaceHandler surface, RectShape newShape,
       String text, boolean editable) {
     return new ClassElement2(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
   }

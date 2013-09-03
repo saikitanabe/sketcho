@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
@@ -43,7 +43,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
   private ILine line;
   private String color = "#000000";
   private ILifeLineEditor lifeLineEditor;
-  private SurfaceHandler surface;
+  private ISurfaceHandler surface;
   private Point currentDragStartPoint = new Point();
 //  private LineShape lineShape = new LineShape();
 //  private SequenceShape seqShape;
@@ -57,7 +57,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
   }
 
 	public SequenceElement(
-	      SurfaceHandler parent, SequenceShape shape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
+	      ISurfaceHandler parent, SequenceShape shape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
 		super(parent, shape.rectShape, text, backgroundColor, borderColor, textColor, editable, true);
 		this.surface = parent;
 // 		this.seqShape = shape;
@@ -133,7 +133,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 
 	
 	//	@Override
-	public void accept(SurfaceHandler surface) {
+	public void accept(ISurfaceHandler surface) {
 	  super.accept(surface);
 	  
 	  // NOTE: there is a special handling on MouseDiagramDragHandler for CircleElement follow
@@ -149,7 +149,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
     return duplicate(surface, partOfMultiple);
   }
 
-  public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple) {
+  public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
     RectShape rs = (RectShape) super.getInfo();
     if (!partOfMultiple) {
     	return duplicate(surface, rs.left + rs.width + 30, rs.top);
@@ -158,7 +158,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
     return duplicate(surface, rs.left + 20, rs.top);
   }
 
-  public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     RectShape rs = (RectShape) super.getInfo();
     SequenceShape ss = new SequenceShape(x, y, 
         rs.width, rs.height, line.getY2() - line.getY1()); 

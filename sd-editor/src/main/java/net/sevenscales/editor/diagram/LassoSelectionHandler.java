@@ -5,7 +5,7 @@ import java.util.Set;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.StartSelectToolEvent;
 import net.sevenscales.editor.api.event.StartSelectToolEventHandler;
@@ -29,7 +29,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
   private boolean backgroundMouseDown = true;
   private Diagram currentSender;
   private boolean mouseDown = false;
-  private SurfaceHandler surface;
+  private ISurfaceHandler surface;
   private IRectangle lassoRectangle;
 	private IGroup group;
 	private boolean isLassoing;
@@ -85,7 +85,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 		}
 	}
 
-  public LassoSelectionHandler(List<Diagram> diagrams, SurfaceHandler surface) {
+  public LassoSelectionHandler(List<Diagram> diagrams, ISurfaceHandler surface) {
     this.diagrams = diagrams;
     this.surface = surface;
     

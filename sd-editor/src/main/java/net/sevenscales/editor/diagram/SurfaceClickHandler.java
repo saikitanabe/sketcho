@@ -1,14 +1,14 @@
 package net.sevenscales.editor.diagram;
 
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 
 public class SurfaceClickHandler implements MouseDiagramHandler, ClickDiagramHandler {
 	private Diagram currentDiagram;
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	
-	public SurfaceClickHandler(SurfaceHandler surface) {
+	public SurfaceClickHandler(ISurfaceHandler surface) {
 		this.surface = surface;
 	}
 

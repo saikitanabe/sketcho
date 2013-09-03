@@ -4,7 +4,7 @@ package net.sevenscales.editor.uicomponents.uml;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
@@ -42,7 +42,7 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
   protected TextElementFormatUtil textUtil;
   private long dispachSequence;
   
-	public ActivityElement(SurfaceHandler surface, HasRectShape newShape, String text, 
+	public ActivityElement(ISurfaceHandler surface, HasRectShape newShape, String text, 
 												 Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
 		super(editable, surface, backgroundColor, borderColor, textColor);
 		this.shape = newShape;
@@ -155,7 +155,7 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
 		return new Point(diffFromMouseDownX, diffFromMouseDownY);
 	}
 	
-	public void accept(SurfaceHandler surface) {
+	public void accept(ISurfaceHandler surface) {
 	  super.accept(surface);
 		surface.makeDraggable(this);
 	}
@@ -174,20 +174,20 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
 	}
 	
   @Override
-	public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple) {
+	public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
 		Point p = getCoords();
 		return duplicate(surface, p.x + 20, p.y + 20);
 	}
 	
   @Override
-  public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     ActivityShape newShape = new ActivityShape(x, y, 
     		boundary.getWidth(), boundary.getHeight());
     Diagram result = createDiagram(surface, newShape, getText(), getEditable());
     return result;
   }
 	
-  protected Diagram createDiagram(SurfaceHandler surface, ActivityShape newShape,
+  protected Diagram createDiagram(ISurfaceHandler surface, ActivityShape newShape,
       String text, boolean editable) {
     return new ActivityElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
   }

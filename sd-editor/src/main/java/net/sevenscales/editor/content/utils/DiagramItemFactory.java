@@ -8,7 +8,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 import net.sevenscales.editor.api.impl.Theme.ThemeName;
@@ -68,7 +68,7 @@ public class DiagramItemFactory {
    */
   public static final int ITEM_VERSION = 3;
   
-  public static Diagram create(IDiagramItemRO item, SurfaceHandler surface, boolean editable) {
+  public static Diagram create(IDiagramItemRO item, ISurfaceHandler surface, boolean editable) {
     Diagram result = null;
     if (item.getType().equals("ellipseitem")) {
       String[] s = item.getShape().split(",");

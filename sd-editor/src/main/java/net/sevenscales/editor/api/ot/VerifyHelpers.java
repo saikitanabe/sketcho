@@ -5,7 +5,7 @@ import java.util.logging.Level;
 
 import net.sevenscales.domain.utils.JsonFormat;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.utils.JsonHelpers;
 import net.sevenscales.editor.content.utils.JsonHelpers.MisMatchException;
 import net.sevenscales.editor.api.EditorProperty;
@@ -21,7 +21,7 @@ public class VerifyHelpers {
 	private static final int TIME_OUT = 3000;
 
 	private JsonHelpers jsonHelpers;
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	private Integer version;
 	private double checksum;
 	// private VerifyTimer timer;
@@ -77,7 +77,7 @@ public class VerifyHelpers {
 		void debugServer(String boardName, String msg, double checksum, String json, double serverChecksum, Integer serverVersion);
 		void forceReload();
 	}
-	public VerifyHelpers(String boardName, VerifyCallback callback, JsonHelpers jsonHelpers, SurfaceHandler surface, 
+	public VerifyHelpers(String boardName, VerifyCallback callback, JsonHelpers jsonHelpers, ISurfaceHandler surface, 
 											 BoardDocument serverDocument, BoardDocument graphicalViewCache) {
 		this.boardName = boardName;
 		this.callback = callback;

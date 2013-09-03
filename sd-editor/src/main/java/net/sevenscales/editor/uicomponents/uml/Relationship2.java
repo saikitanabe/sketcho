@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.utils.StringUtil;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
@@ -190,7 +190,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   }
   
-  public Relationship2(SurfaceHandler surface, List<Integer> points, String text,
+  public Relationship2(ISurfaceHandler surface, List<Integer> points, String text,
       boolean editable) {
     super(editable, surface, Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor());
     this.points = points;
@@ -297,7 +297,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //  }
 
   // @Override
-  public void accept(SurfaceHandler surface) {
+  public void accept(ISurfaceHandler surface) {
     // NOTE: there is a special handling on MouseDiagramDragHandler for CircleElement follow
 //    surface.addDragHandler(this);
     surface.makeDraggable(this);
@@ -550,7 +550,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   @Override
-  public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
 //    RelationshipShape newshape = new RelationshipShape(
 //        shape.startPoint.x + 20, shape.startPoint.y + 20, shape.endPoint.x + 20, shape.endPoint.y + 20, shape.caps);
 

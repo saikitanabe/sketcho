@@ -1,7 +1,7 @@
 package net.sevenscales.editor.content.ui;
 
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickEventHandler;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
 import net.sevenscales.editor.api.event.CreateElementEvent;
@@ -50,7 +50,7 @@ public class UiClickContextMenu extends Composite {
 	}
 	
 	private PopupPanel popup;
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 
 	// @UiField LIElement freehandMore;
 	// @UiField LIElement freehandSmooth;
@@ -59,7 +59,7 @@ public class UiClickContextMenu extends Composite {
 //	@UiField AnchorElement newNote;
 //	private int cancelTimer;
 
-	public UiClickContextMenu(SurfaceHandler surface) {
+	public UiClickContextMenu(ISurfaceHandler surface) {
 		this.surface = surface;
 		
 		initWidget(uiBinder.createAndBindUi(this));

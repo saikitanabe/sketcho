@@ -3,7 +3,7 @@ package net.sevenscales.editor.content.ui;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.ColorSelectedEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
@@ -55,7 +55,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	private PopupPanel popup;
 	private EditorContext editorContext;
 	private SelectionHandler selectionHandler;
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	
 	@UiField AnchorElement freehandOff;
 	@UiField AnchorElement duplicate;
@@ -66,7 +66,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	private Color color = new Color("444444", 0x44, 0x44, 0x44, "6699ff", 0x66, 0x99, 0xff, "FFFFFF", 255, 255, 255, AbstractDiagramItem.DEFAULT_FILL_OPACITY);
 	private ColorSelections colorSelections;
 
-	public UiContextMenu(SurfaceHandler surface, EditorContext editorContext, SelectionHandler selectionHandler) {
+	public UiContextMenu(ISurfaceHandler surface, EditorContext editorContext, SelectionHandler selectionHandler) {
 		this.surface = surface;
 		this.editorContext = editorContext;
 		this.selectionHandler = selectionHandler;

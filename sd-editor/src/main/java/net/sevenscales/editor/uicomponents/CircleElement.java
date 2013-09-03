@@ -4,7 +4,7 @@ package net.sevenscales.editor.uicomponents;
 import java.util.List;
 
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.diagram.Diagram;
@@ -28,12 +28,12 @@ public class CircleElement extends AbstractDiagramItem {
 	private IGroup group;
 	private ICircle selectionArea;
 
-	public CircleElement(IGroup layer, SurfaceHandler surface, DiagramProxy parent, int circleX, int circleY, int radius, boolean editable) {
+	public CircleElement(IGroup layer, ISurfaceHandler surface, DiagramProxy parent, int circleX, int circleY, int radius, boolean editable) {
 		this(layer, surface, parent, circleX, circleY, radius, 0, editable);
 	}
 	
 	public CircleElement(IGroup layer, 
-											SurfaceHandler surface, 
+											ISurfaceHandler surface, 
 											DiagramProxy parent, 
 											int circleX, 
 											int circleY, 
@@ -92,7 +92,7 @@ public class CircleElement extends AbstractDiagramItem {
 		return new Point(diffFromMouseDownX, diffFromMouseDownY);
 	}
 	
-	public void accept(SurfaceHandler surface) {
+	public void accept(ISurfaceHandler surface) {
 		surface.makeDraggable(this);
 	}
 	public void select() {
@@ -160,7 +160,7 @@ public class CircleElement extends AbstractDiagramItem {
 	}
 
   @Override
-  public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple) {
+  public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
   	// not possible to duplicate helper diagram element; 
   	// can be duplicated only through parent element
   	return null;

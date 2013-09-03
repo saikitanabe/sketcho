@@ -1,7 +1,7 @@
 package net.sevenscales.editor.uicomponents.uml;
 
 
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
@@ -47,7 +47,7 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
       Math.toRadians(-45), Math.toRadians(-90) };
 	
 	public EllipseElement(
-			SurfaceHandler surface, EllipseShape info, 
+			ISurfaceHandler surface, EllipseShape info, 
 			String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
 		super(editable, surface, backgroundColor, borderColor, textColor);
 		
@@ -205,7 +205,7 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
 		return new Point(diffFromMouseDownX, diffFromMouseDownY);
 	}
 	
-	public void accept(SurfaceHandler surface) {
+	public void accept(ISurfaceHandler surface) {
 	  super.accept(surface);
 		surface.makeDraggable(this);
 	}
@@ -351,13 +351,13 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
   @Override
-	public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple) {
+	public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
     Point p = getCoords();
     return duplicate(surface, getCenterX() + 20, getCenterY() + 20);
 	}
 
   @Override
-	public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+	public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
 		EllipseShape info = new EllipseShape(x, y, ellipse.getRx(), ellipse.getRy());
     super.fillInfo(info);
 		Diagram result = 

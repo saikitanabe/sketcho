@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.diagram.shape.Info;
@@ -25,7 +25,7 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
   public void saveLastTransform(int dx, int dy);
   int getTransformX();
   int getTransformY();
-  public void accept(SurfaceHandler surface);
+  public void accept(ISurfaceHandler surface);
   public void select();
   public boolean isSelected();
   public void unselect();
@@ -90,8 +90,8 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
    * @param y coordinate y
    * @return
    */
-  public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple);
-  public Diagram duplicate(SurfaceHandler surface, int x, int y);
+  public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple);
+  public Diagram duplicate(ISurfaceHandler surface, int x, int y);
   
   public void setDragState(DragState dragState);
   
@@ -120,7 +120,7 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 //  public void bend(int dx, int dy);
   public void removeAnchor(Anchor anchor);
   public Collection<AnchorElement> getAnchors();
-  public SurfaceHandler getSurfaceHandler();
+  public ISurfaceHandler getSurfaceHandler();
   public String getDefaultRelationship();
   
   public UMLDiagramType getDiagramType();

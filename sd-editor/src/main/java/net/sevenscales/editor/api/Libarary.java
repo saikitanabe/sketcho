@@ -3,12 +3,14 @@ package net.sevenscales.editor.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sevenscales.editor.api.dojo.FactoryDoJo;
+
 import net.sevenscales.editor.api.LibrarySelections.Library;
 import net.sevenscales.editor.api.LibrarySelections.LibrarySelectedHandler;
 import net.sevenscales.editor.api.event.LibrarySelectionEvent;
 import net.sevenscales.editor.api.event.ThemeChangedEvent;
 import net.sevenscales.editor.api.event.ThemeChangedEventHandler;
-import net.sevenscales.editor.api.impl.SurfaceHandlerImplFirefox;
+
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.content.ui.IModeManager;
@@ -60,8 +62,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 public class Libarary extends SimplePanel implements SurfaceLoadedEventListener, ClickDiagramHandler, IToolSelection {
-	private SurfaceHandler surface;
-	private SurfaceHandler toolpool;
+	private ISurfaceHandler surface;
+	private ISurfaceHandler toolpool;
 	private List<Diagram> items;
   private ProxyDragHandler proxyDragHandler;
 	private EditorContext editorContext;
@@ -101,11 +103,11 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		}
 	};
 
-	public Libarary(SurfaceHandler asurface, int height, IModeManager modeManager, EditorContext editorContext) {
+	public Libarary(ISurfaceHandler asurface, int height, IModeManager modeManager, EditorContext editorContext) {
 		this.surface = asurface;
 		this.editorContext = editorContext;
-		this.toolpool = GWT.create(SurfaceHandlerImplFirefox.class);
-		toolpool.setName(SurfaceHandler.LIBRARY_AREA);
+		this.toolpool = FactoryDoJo.createSurfaceHandler();
+		toolpool.setName(ISurfaceHandler.LIBRARY_AREA);
 		toolpool.setDisableOnArea(true);
 		toolpool.init(200, 1100, true, modeManager, false, editorContext);
 		
@@ -135,7 +137,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     final FlowPanel panel = new FlowPanel();
     panel.setHeight(Window.getClientHeight() + "px");
     panel.setStyleName("library");
-		panel.add(toolpool);
+		panel.add(toolpool.getWidget());
 		panel.add(new LibrarySelections(librarySelectedHandler, editorContext));
 		
 		Window.addResizeHandler(new ResizeHandler() {
@@ -418,11 +420,11 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     return null;
   }
   
-  public SurfaceHandler getSurfaceHandler() {
+  public ISurfaceHandler getSurfaceHandler() {
     return toolpool;
   }
 
-	public SurfaceHandler getToolPool() {
+	public ISurfaceHandler getToolPool() {
 		return toolpool;
 	}
 

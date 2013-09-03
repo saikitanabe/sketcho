@@ -6,7 +6,7 @@ import java.util.Set;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.SketchDiagramAreaHandler;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.content.ui.IModeManager;
@@ -30,12 +30,12 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	private LassoSelectionHandler lassoSelectionHandler;
 	private FreehandDrawerHandler freehandDrawHandler;
 	private SurfaceClickHandler surfaceClickHandler;
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	// current handler gets events after mouse down if registered
 	private MouseDiagramHandler currentMouseHandler;
 //	private MouseDiagramHandler connectionModeMouseHandler;
 
-	public MouseDiagramHandlerManager(SurfaceHandler surface, List<Diagram> diagrams, boolean editable, 
+	public MouseDiagramHandlerManager(ISurfaceHandler surface, List<Diagram> diagrams, boolean editable, 
 	    IModeManager modeManager) {
 		this.surface = surface;
 	  this.editable = editable;
@@ -57,7 +57,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		resizeHandler = new MouseDiagramResizeHandler(this, surface, modeManager);
 		backgroundMoveHandler = new BackgroundMoveHandler(diagrams, surface);
 		lassoSelectionHandler = new LassoSelectionHandler(diagrams, surface);
-		if (SurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
+		if (ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
 			// free hand drawing is not possible on library area
 			freehandDrawHandler = new FreehandDrawerHandler(surface);
 		}

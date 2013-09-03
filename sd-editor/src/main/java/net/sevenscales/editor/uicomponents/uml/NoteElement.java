@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
@@ -64,7 +64,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
   };
 
   
-	public NoteElement(SurfaceHandler surface, NoteShape newShape, String text, 
+	public NoteElement(ISurfaceHandler surface, NoteShape newShape, String text, 
 										 Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
 		super(editable, surface, backgroundColor, borderColor, textColor);
 		this.shape = newShape;
@@ -272,7 +272,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 		return new Point(diffFromMouseDownX, diffFromMouseDownY);
 	}
 	
-	public void accept(SurfaceHandler surface) {
+	public void accept(ISurfaceHandler surface) {
 	  super.accept(surface);
 		surface.makeDraggable(this);
 	}
@@ -332,13 +332,13 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	}
 	
   @Override
-	public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple) {
+	public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
 		Point p = getCoords();
 		return duplicate(surface, p.x + 20, p.y + 20);
 	}
 	
   @Override
-  public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     NoteShape newShape = new NoteShape(x, y, getWidth(), getHeight());
     NoteElement result = createDiagram(surface, newShape, getText(), getEditable());
     // refresh text, it is not visible...
@@ -346,7 +346,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
     return result;
   }
 	
-  protected NoteElement createDiagram(SurfaceHandler surface, NoteShape newShape,
+  protected NoteElement createDiagram(ISurfaceHandler surface, NoteShape newShape,
       String text, boolean editable) {
     return new NoteElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
   }

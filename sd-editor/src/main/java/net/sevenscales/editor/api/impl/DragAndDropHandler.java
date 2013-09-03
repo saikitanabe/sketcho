@@ -1,7 +1,7 @@
 package net.sevenscales.editor.api.impl;
 
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.TouchDragAndDrop.ITouchToMouseHandler;
 
 import com.google.gwt.dom.client.Element;
@@ -14,14 +14,14 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 public class DragAndDropHandler implements MouseMoveHandler, ITouchToMouseHandler {
 	private static final SLogger logger = SLogger.createLogger(DragAndDropHandler.class);
 	
-	private SurfaceHandler surface;
-	private SurfaceHandler toolFrame;
+	private ISurfaceHandler surface;
+	private ISurfaceHandler toolFrame;
 	
 	private Boolean onentersurface = false;
 
 	private boolean libraryHandling;
 
-	public DragAndDropHandler(SurfaceHandler surface, SurfaceHandler toolFrame) {
+	public DragAndDropHandler(ISurfaceHandler surface, ISurfaceHandler toolFrame) {
 		this.surface = surface;
 		this.toolFrame = toolFrame;
 	}
@@ -36,7 +36,7 @@ public class DragAndDropHandler implements MouseMoveHandler, ITouchToMouseHandle
 		handleSurfaceMouseMove(event, surface);
 	}
 
-	private void handleSurfaceMouseMove(MouseMoveEvent event, SurfaceHandler sh) {
+	private void handleSurfaceMouseMove(MouseMoveEvent event, ISurfaceHandler sh) {
 		boolean onsurface = !isOverToolbar(event);
 		
 		if (!onentersurface && onsurface) {
@@ -53,7 +53,7 @@ public class DragAndDropHandler implements MouseMoveHandler, ITouchToMouseHandle
 		}
 	}
 
-	private void handleToolbarMouseMove(MouseMoveEvent event, SurfaceHandler sh) {
+	private void handleToolbarMouseMove(MouseMoveEvent event, ISurfaceHandler sh) {
 		if (isOverToolbar(event)) {
 			boolean toolbar = true;
 			sh.fireMouseMove(event, toolbar);

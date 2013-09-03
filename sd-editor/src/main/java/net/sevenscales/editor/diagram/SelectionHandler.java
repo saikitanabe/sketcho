@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
 import net.sevenscales.editor.api.event.DeleteSelectedEvent;
 import net.sevenscales.editor.api.event.DeleteSelectedEventHandler;
@@ -41,7 +41,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 //	private Diagram mouseDownSender = null;
 	private List<Diagram> diagrams;
 	private SelectionHandlerCollection selectionHandlers;
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	private java.util.Set<Diagram> tmpSelectedItems;
 	private Set<DiagramDragHandler> dragHandlers;
 	private boolean shiftOn;
@@ -50,7 +50,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 	private Diagram lastMultimodeSelectedDiagram;
   private boolean freehandModeOn;
 	
-	public SelectionHandler(SurfaceHandler surface, List<Diagram> diagrams, Set<DiagramDragHandler> dragHandlers) {
+	public SelectionHandler(ISurfaceHandler surface, List<Diagram> diagrams, Set<DiagramDragHandler> dragHandlers) {
 		this.surface = surface;
 		this.diagrams = diagrams;
 		this.dragHandlers = dragHandlers;

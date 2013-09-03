@@ -2,7 +2,7 @@ package net.sevenscales.editor.diagram;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.CreateElementEvent;
 import net.sevenscales.editor.api.event.CreateElementEventHandler;
 import net.sevenscales.editor.api.event.LibrarySelectionEvent;
@@ -63,7 +63,7 @@ public class RelationshipDragEndHandler implements
   private static SLogger logger = SLogger.createLogger(RelationshipDragEndHandler.class);
   
 	private PopupPanel popup;
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	private int currentX;
 	private int currentY;
 	private Anchor currentAnchor;
@@ -71,7 +71,7 @@ public class RelationshipDragEndHandler implements
 	private boolean startNode;
 	private UMLDiagramSelections diagramSelections;
 
-	public RelationshipDragEndHandler(SurfaceHandler surface) {
+	public RelationshipDragEndHandler(ISurfaceHandler surface) {
 		this.surface = surface;
 		popup = new PopupPanel();
 		popup.setStyleName("RelationshipDragEndHandler");

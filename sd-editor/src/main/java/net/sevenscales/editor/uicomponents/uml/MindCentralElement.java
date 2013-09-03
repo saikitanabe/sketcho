@@ -1,7 +1,7 @@
 package net.sevenscales.editor.uicomponents.uml;
 
 
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.MindCentralShape;
@@ -10,7 +10,7 @@ import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 
 public class MindCentralElement extends ActivityElement implements SupportsRectangleShape {
-	public MindCentralElement(SurfaceHandler surface, MindCentralShape newShape, String text, 
+	public MindCentralElement(ISurfaceHandler surface, MindCentralShape newShape, String text, 
 			Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
 		super(surface, newShape, text, backgroundColor, borderColor, textColor, editable);
 		
@@ -38,13 +38,13 @@ public class MindCentralElement extends ActivityElement implements SupportsRecta
 		return 3.0;
 	}
 
-  public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
   	MindCentralShape newShape = new MindCentralShape(x, y, getWidth(), getHeight());
     Diagram result = createDiagram(surface, newShape, getText(), getEditable());
     return result;
   }
 
-  protected Diagram createDiagram(SurfaceHandler surface, MindCentralShape newShape,
+  protected Diagram createDiagram(ISurfaceHandler surface, MindCentralShape newShape,
       String text, boolean editable) {
     return new MindCentralElement(surface, newShape, text, 
     		new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);

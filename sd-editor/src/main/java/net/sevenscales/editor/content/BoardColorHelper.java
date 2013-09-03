@@ -6,7 +6,7 @@ import com.google.gwt.event.shared.HandlerManager;
 
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.ThemeChangedEvent;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
@@ -19,9 +19,9 @@ import net.sevenscales.editor.uicomponents.CircleElement;
 public class BoardColorHelper {
   private static final SLogger logger = SLogger.createLogger(BoardColorHelper.class);
   
-  private SurfaceHandler surface;
+  private ISurfaceHandler surface;
   private BoardDocument boardDocument;
-  private SurfaceHandler toolbar;
+  private ISurfaceHandler toolbar;
   private BoardDocument toolbarDocument;
   private HandlerManager evenBus;
 
@@ -38,7 +38,7 @@ public class BoardColorHelper {
     }
   }
 
-  public void setSurface(SurfaceHandler surface, SurfaceHandler toolbar, BoardDocument boardDocument) {
+  public void setSurface(ISurfaceHandler surface, ISurfaceHandler toolbar, BoardDocument boardDocument) {
     this.surface = surface;
     this.toolbar = toolbar;
     this.boardDocument = boardDocument;
@@ -62,7 +62,7 @@ public class BoardColorHelper {
     }
   }
 
-  private void applyBackgroundColor(SurfaceHandler surface, BoardDocument document, String newThemeName) {
+  private void applyBackgroundColor(ISurfaceHandler surface, BoardDocument document, String newThemeName) {
     ElementColorScheme currentColorScheme = Theme.getCurrentColorScheme();
     ElementColorScheme newColorScheme = Theme.getColorScheme(ThemeName.getEnum(newThemeName));
     for (Diagram d : surface.getDiagrams()) {

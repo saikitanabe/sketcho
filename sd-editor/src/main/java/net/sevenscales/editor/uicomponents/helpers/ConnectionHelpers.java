@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesEndedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesEndedEventHandler;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
@@ -50,7 +50,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
   private List<ConnectionHandle> connectionHandles = new ArrayList<ConnectionHandle>();
   private List<ConnectionHandle> extraConnectionHandles = new ArrayList<ConnectionHandle>();
   private ICircle currentMouseOverHandle;
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	private boolean pointInHandle = false;
 	private boolean shown;
 	private IGroup group;
@@ -61,10 +61,10 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	private static final String ON_COLOR = "#777777";
 	private boolean resizeOn;
 	
-	private static Map<SurfaceHandler, IConnectionHelpers> instances;
+	private static Map<ISurfaceHandler, IConnectionHelpers> instances;
 	
 	static {
-		instances = new HashMap<SurfaceHandler, IConnectionHelpers>();
+		instances = new HashMap<ISurfaceHandler, IConnectionHelpers>();
 		if (TouchHelpers.isSupportsTouch()) {
 			RADIUS = 25;
 		} else {
@@ -73,7 +73,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		}
 	}
 	
-	private ConnectionHelpers(SurfaceHandler surface, IModeManager modeManager) {
+	private ConnectionHelpers(ISurfaceHandler surface, IModeManager modeManager) {
 		this.surface = surface;
 		this.modeManager = modeManager;
 		group = IShapeFactory.Util.factory(true).createGroup(surface.getInteractionLayer());
@@ -214,10 +214,10 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	};
 
 	
-	public static IConnectionHelpers createConnectionHelpers(SurfaceHandler surface, IModeManager modeManager) {
+	public static IConnectionHelpers createConnectionHelpers(ISurfaceHandler surface, IModeManager modeManager) {
 		IConnectionHelpers result = instances.get(surface);
 		if (result == null) {
-			if (SurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
+			if (ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
 				// logger.debug("createConnectionHelpers created...");
 				result = new ConnectionHelpers(surface, modeManager);
 			} else {
@@ -229,7 +229,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		return result;
 	}
 	
-  public static IConnectionHelpers getIfAny(SurfaceHandler surface) {
+  public static IConnectionHelpers getIfAny(ISurfaceHandler surface) {
     return instances.get(surface);
   }
 		

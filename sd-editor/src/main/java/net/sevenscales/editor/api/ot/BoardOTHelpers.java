@@ -8,7 +8,7 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ThemeName;
 import net.sevenscales.editor.api.ot.ApplyHelpers.DiagramApplyOperation;
@@ -22,11 +22,11 @@ import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 
 public class BoardOTHelpers {
 	public static final String HIGHLIGHT_COLOR = "00E000";
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	private String clientIdentifier;
 	private static final SLogger logger = SLogger.createLogger(BoardOTHelpers.class);
 
-	public BoardOTHelpers(SurfaceHandler surface, String clientIdentifier) {
+	public BoardOTHelpers(ISurfaceHandler surface, String clientIdentifier) {
 		this.surface = surface;
 		this.clientIdentifier = clientIdentifier;
 	}

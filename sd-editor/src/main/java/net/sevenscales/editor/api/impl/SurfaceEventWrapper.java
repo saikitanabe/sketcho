@@ -3,7 +3,7 @@ package net.sevenscales.editor.api.impl;
 import java.util.Date;
 
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 
 import com.google.gwt.dom.client.Touch;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -20,11 +20,11 @@ import com.google.gwt.event.dom.client.TouchStartHandler;
 
 public class SurfaceEventWrapper implements TouchStartHandler, TouchMoveHandler, TouchEndHandler, TouchCancelHandler {
 	private static final SLogger logger = SLogger.createLogger(SurfaceEventWrapper.class);
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	private DragAndDropHandler dragAndDropHandler;
 	private TouchContext context;
 	
-	public SurfaceEventWrapper(SurfaceHandler surface, DragAndDropHandler dragAndDropHandler) {
+	public SurfaceEventWrapper(ISurfaceHandler surface, DragAndDropHandler dragAndDropHandler) {
 		this.surface = surface;
 		this.dragAndDropHandler = dragAndDropHandler;
 		context = new TouchContext();

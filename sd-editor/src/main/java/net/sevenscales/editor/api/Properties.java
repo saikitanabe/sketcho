@@ -59,13 +59,13 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class Properties extends SimplePanel implements DiagramSelectionHandler, ClickDiagramHandler, SizeChangedHandler, IEditor {
 	private static final SLogger logger = SLogger.createLogger(Properties.class);
 	
-  private Map<SurfaceHandler,Boolean> surfaces = new HashMap<SurfaceHandler, Boolean>();
+  private Map<ISurfaceHandler,Boolean> surfaces = new HashMap<ISurfaceHandler, Boolean>();
 	private TextArea textArea;
 	private Diagram selectedDiagram;
 	private EditorContext editorContext;
 	private SelectionHandler selectionHandler;
 	private CustomPopupPanel popup;
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	private Diagram lastDiagramAdded;
 	private boolean sending;
 	private int textEditX;
@@ -95,7 +95,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		}
 	};
 
-	public Properties(int height, SurfaceHandler surface, SelectionHandler selectionHandler, EditorContext editorContext) {
+	public Properties(int height, ISurfaceHandler surface, SelectionHandler selectionHandler, EditorContext editorContext) {
 		this.surface = surface;
 		this.selectionHandler = selectionHandler;
 		this.editorContext = editorContext;
@@ -271,7 +271,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		selectedDiagram.setHeight(MeasurementPanel.getMeasurementPanel().getOffsetHeight() + TextElementFormatUtil.DEFAULT_MARGIN_TOP + TextElementFormatUtil.DEFAULT_MARGIN_BOTTOM);
 	}
 	
-	public void addSurface(SurfaceHandler surfaceHandler, boolean modifiable) {
+	public void addSurface(ISurfaceHandler surfaceHandler, boolean modifiable) {
 	  surfaces.put(surfaceHandler, modifiable);
 	  surfaceHandler.addSelectionListener(this);
 //	  if (modifiable) {
@@ -309,7 +309,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	
 	public void unselectAll() {
 	  boolean reset = true;
-	  for (SurfaceHandler s : surfaces.keySet()) {
+	  for (ISurfaceHandler s : surfaces.keySet()) {
 	    if (s.getSelectionHandler().getSelectedItems().size() > 0) {
 	      reset = false;
 	      break;

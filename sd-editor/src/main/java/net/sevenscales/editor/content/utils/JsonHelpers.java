@@ -10,7 +10,7 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.JsonConversion;
 import net.sevenscales.domain.utils.JsonFormat;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.BoardDocumentGraphicalViewHelpers;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.editor.diagram.Diagram;
@@ -43,7 +43,7 @@ public class JsonHelpers {
 		}
 	}
 	
-	public JsonHelpers(SurfaceHandler surface) {
+	public JsonHelpers(ISurfaceHandler surface) {
 		boardDocument = new BoardDocumentGraphicalViewHelpers(surface);
 	}
 

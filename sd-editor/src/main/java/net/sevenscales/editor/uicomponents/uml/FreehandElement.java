@@ -1,7 +1,7 @@
 package net.sevenscales.editor.uicomponents.uml;
 
 
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
@@ -47,7 +47,7 @@ public class FreehandElement extends AbstractDiagramItem implements SupportsRect
   	}
   };
   
-	public FreehandElement(SurfaceHandler surface, FreehandShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
+	public FreehandElement(ISurfaceHandler surface, FreehandShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
 		super(editable, surface, backgroundColor, borderColor, textColor);
 		this.shape = newShape;
 		
@@ -119,7 +119,7 @@ public class FreehandElement extends AbstractDiagramItem implements SupportsRect
 		return new Point(diffFromMouseDownX, diffFromMouseDownY);
 	}
 	
-	public void accept(SurfaceHandler surface) {
+	public void accept(ISurfaceHandler surface) {
 	  super.accept(surface);
 		surface.makeDraggable(this);
 	}
@@ -140,20 +140,20 @@ public class FreehandElement extends AbstractDiagramItem implements SupportsRect
 	}
 	
   @Override
-	public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple) {
+	public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
 		Point p = getCoords();
 		return duplicate(surface, p.x + 20, p.y + 20);
 	}
 	
   @Override
-  public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     FreehandShape newShape = new FreehandShape(DiagramHelpers.map(shape.points, 10, 10));
     Diagram result = new FreehandElement(surface, newShape, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
 //    Diagram result = createDiagram(surface, newShape, getEditable());
     return result;
   }
 	
-//  protected Diagram createDiagram(SurfaceHandler surface, ActivityStartShape newShape,
+//  protected Diagram createDiagram(ISurfaceHandler surface, ActivityStartShape newShape,
 //      boolean editable) {
 ////    return new FreehandElement(surface, newShape, editable);
 //  	return null;

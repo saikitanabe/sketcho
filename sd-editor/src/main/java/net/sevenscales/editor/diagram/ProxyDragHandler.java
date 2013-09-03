@@ -5,7 +5,7 @@ import com.google.gwt.event.dom.client.MouseMoveEvent;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.impl.TouchDragAndDrop;
 import net.sevenscales.editor.api.impl.TouchDragAndDrop.ITouchToMouseHandler;
@@ -24,8 +24,8 @@ public class ProxyDragHandler implements MouseDiagramHandler {
 	private static final SLogger logger = SLogger.createLogger(ProxyDragHandler.class);
 
   private GridUtils gridUtils = new GridUtils();
-  private SurfaceHandler source;
-  private SurfaceHandler target;
+  private ISurfaceHandler source;
+  private ISurfaceHandler target;
   private Diagram sourceproxy;
   private Diagram targetproxy;
 	private int prevDX;
@@ -35,7 +35,7 @@ public class ProxyDragHandler implements MouseDiagramHandler {
 //  private int prevX = 0;
 //  private int prevY = 0;
 
-  public ProxyDragHandler(SurfaceHandler source, SurfaceHandler target) {
+  public ProxyDragHandler(ISurfaceHandler source, ISurfaceHandler target) {
     this.source = source;
     this.target = target;
     

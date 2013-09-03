@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
 import net.sevenscales.editor.api.event.OperationQueueRequestEvent;
@@ -41,7 +41,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   private boolean backgroundMouseDown = true;
   private Diagram currentSender;
   private boolean mouseDown = false;
-  private SurfaceHandler surface;
+  private ISurfaceHandler surface;
 	private boolean freehandKeyDown;
   private List<FreehandPath> freehandPahts = new ArrayList<FreehandPath>();
   private FreehandPath currentFreehandPath;
@@ -51,9 +51,9 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     IGroup group;
     IPolyline polyline;
     List<Integer> points = new ArrayList<Integer>();
-    SurfaceHandler surface;
+    ISurfaceHandler surface;
 
-    FreehandPath(SurfaceHandler surface) {
+    FreehandPath(ISurfaceHandler surface) {
       this.surface = surface;
       group = IShapeFactory.Util.factory(true).createGroup(surface.getSurface());
       //  path = IShapeFactory.Util.factory(true).createPath(group);
@@ -112,7 +112,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 
 //  private Map<String,String> params = new HashMap<String, String>();
 
-  public FreehandDrawerHandler(SurfaceHandler surface) {
+  public FreehandDrawerHandler(ISurfaceHandler surface) {
     this.surface = surface;
     
     gridUtils = new GridUtils(1);
@@ -151,7 +151,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   }
     
   public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
-  	if (!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE) || !surface.getName().equals(SurfaceHandler.DRAWING_AREA)) {
+  	if (!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE) || !surface.getName().equals(ISurfaceHandler.DRAWING_AREA)) {
       return false;
     }
   	
@@ -185,7 +185,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   }
 
   public void onMouseMove(Diagram sender, MatrixPointJS point) {
-    if (!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE) || !surface.getName().equals(SurfaceHandler.DRAWING_AREA)) {
+    if (!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE) || !surface.getName().equals(ISurfaceHandler.DRAWING_AREA)) {
       return;
     }
     
@@ -303,7 +303,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   }
 
 	public boolean handling() {
-		return surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE) && surface.getName().equals(SurfaceHandler.DRAWING_AREA);
+		return surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE) && surface.getName().equals(ISurfaceHandler.DRAWING_AREA);
 	}
   
 }

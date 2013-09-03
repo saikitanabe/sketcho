@@ -64,11 +64,11 @@ public class LongPressHandler implements MouseDownHandler,
     }
   };
   
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	private int startX;
 	private int startY;
 	
-	public LongPressHandler(SurfaceHandler surface) {
+	public LongPressHandler(ISurfaceHandler surface) {
 		this.surface = surface;
 		surface.addDomHandler(this, MouseDownEvent.getType());
 		surface.addDomHandler(this, MouseUpEvent.getType());

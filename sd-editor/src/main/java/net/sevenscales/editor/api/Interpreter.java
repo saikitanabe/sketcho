@@ -5,10 +5,10 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class Interpreter extends SimplePanel {
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	private TextArea textArea;
 
-	public Interpreter(SurfaceHandler surface) {
+	public Interpreter(ISurfaceHandler surface) {
 		this.surface = surface;
 		VerticalPanel panel = new VerticalPanel();
 		this.textArea = new TextArea();

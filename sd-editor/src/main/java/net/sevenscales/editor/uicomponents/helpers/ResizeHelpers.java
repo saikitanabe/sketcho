@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramDragHandler;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
@@ -33,12 +33,12 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 	private ILine line6;
 	private AbstractDiagramItem parent;
 
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	
-	private static Map<SurfaceHandler, ResizeHelpers> instances;
+	private static Map<ISurfaceHandler, ResizeHelpers> instances;
 	
 	static {
-		instances = new HashMap<SurfaceHandler, ResizeHelpers>();
+		instances = new HashMap<ISurfaceHandler, ResizeHelpers>();
 	}
 	
 	private static final int cornerwidth = 10;
@@ -46,10 +46,10 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 	private static final String DARK_LINE = "222222";
 	private static final String WHITE_LINE = "dddddd";
 	
-	public static ResizeHelpers createResizeHelpers(SurfaceHandler surface) {
+	public static ResizeHelpers createResizeHelpers(ISurfaceHandler surface) {
 		ResizeHelpers result = instances.get(surface);
 		if (result == null) {
-//			if (SurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
+//			if (ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
 				result = new ResizeHelpers(surface);
 //			} else {
 //				// dummy implementation is the default for library
@@ -60,7 +60,7 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 		return result;
 	}
 	
-  public static ResizeHelpers getIfAny(SurfaceHandler surface) {
+  public static ResizeHelpers getIfAny(ISurfaceHandler surface) {
     return instances.get(surface);
   }
 
@@ -71,7 +71,7 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 //	private ResizeHelpers(AbstractDiagramItem parent, List<IShape> shapes, int indent) {
 //		this(parent, shapes, indent, indent);
 //	}
-	private ResizeHelpers(SurfaceHandler surface) {
+	private ResizeHelpers(ISurfaceHandler surface) {
 		this.surface = surface;
 		line4 = createLine(WHITE_LINE, 2);
 		line5 = createLine(WHITE_LINE, 2);

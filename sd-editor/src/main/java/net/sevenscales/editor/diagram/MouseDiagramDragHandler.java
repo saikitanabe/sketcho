@@ -10,7 +10,7 @@ import java.util.Set;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
@@ -62,7 +62,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	private boolean forceOn;
 	private ISelectionHandler selectionHandler;
 	private Set<Diagram> forcedItems = new HashSet<Diagram>();
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	private Map<Relationship2, ConnectionMoveHandler> moveHandlers = new HashMap<Relationship2, ConnectionMoveHandler>();
 	private int prevDX;
 	private int prevDY;
@@ -82,7 +82,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	private List<Diagram> prevYHighlights;
 	private static final String LINE_HELPER_COLOR = "#dddddd"; 
 	
-	public MouseDiagramDragHandler(SurfaceHandler surface, MouseDiagramHandlerManager parent,
+	public MouseDiagramDragHandler(ISurfaceHandler surface, MouseDiagramHandlerManager parent,
 			ISelectionHandler selectionHandler) {
 		this.surface = surface;
 		this.parent = parent;

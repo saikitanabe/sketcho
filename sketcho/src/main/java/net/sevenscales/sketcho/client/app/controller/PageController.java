@@ -25,7 +25,7 @@ import net.sevenscales.domain.dto.DiagramContentDTO;
 import net.sevenscales.domain.dto.PageOrderedContentDTO;
 import net.sevenscales.domain.dto.TextContentDTO;
 import net.sevenscales.domain.dto.TextLineContentDTO;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ContentEditListener;
 import net.sevenscales.editor.content.ContentEditorFactory;
 import net.sevenscales.editor.content.ContentSaveListener;
@@ -149,7 +149,7 @@ public class PageController extends ControllerBase<Context> implements
       public void share(IContent content) {
       }
       
-      public void generateImage(IDiagramContent content, SurfaceHandler surfaceHandler) {
+      public void generateImage(IDiagramContent content, ISurfaceHandler surfaceHandler) {
         // TODO Auto-generated method stub
         
       }
@@ -455,7 +455,7 @@ public class PageController extends ControllerBase<Context> implements
     shareContributor.share(content);
   }
   
-  public void generateImage(IDiagramContent content, SurfaceHandler surfaceHandler) {
+  public void generateImage(IDiagramContent content, ISurfaceHandler surfaceHandler) {
     SvgConverter sc = new SvgConverter();
     String svg = sc.convertToSvg(content, surfaceHandler);
     

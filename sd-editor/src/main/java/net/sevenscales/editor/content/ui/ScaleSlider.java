@@ -4,7 +4,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.BoardDimensions;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.PinchZoomStartedEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEvent;
 import net.sevenscales.editor.api.impl.TouchHelpers;
@@ -37,7 +37,7 @@ public class ScaleSlider {
 	private static final double TRESHOLD = 40;
 
 	private EditorContext editorContext;
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	private int currentIndex = DEFAULT_INDEX;
 	private double currentDistance;
 
@@ -173,7 +173,7 @@ public class ScaleSlider {
 		
 	}
 
-	public ScaleSlider(SurfaceHandler surface) {
+	public ScaleSlider(ISurfaceHandler surface) {
 		this.surface = surface;
 		this.editorContext = surface.getEditorContext();
 		

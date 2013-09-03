@@ -2,7 +2,7 @@ package net.sevenscales.editor.uicomponents.uml;
 
 
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.content.utils.Strings;
@@ -54,7 +54,7 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
   private TextElementFormatUtil textUtil;
   private HalfEllipseTransformer halfEllipseTransformer = new HalfEllipseTransformer();
   
-	public StorageElement(SurfaceHandler surface, DbShape newShape, String text, 
+	public StorageElement(ISurfaceHandler surface, DbShape newShape, String text, 
 			Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
 		super(editable, surface, backgroundColor, borderColor, textColor);
 		this.shape = newShape;
@@ -221,7 +221,7 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
 		return new Point(diffFromMouseDownX, diffFromMouseDownY);
 	}
 	
-	public void accept(SurfaceHandler surface) {
+	public void accept(ISurfaceHandler surface) {
 	  super.accept(surface);
 		surface.makeDraggable(this);
 	}
@@ -240,19 +240,19 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
 	}
 	
   @Override
-	public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple) {
+	public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
 		Point p = getCoords();
 		return duplicate(surface, p.x + 20, p.y + 20);
 	}
 	
   @Override
-  public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     DbShape newShape = new DbShape(x, y, background.getWidth(), background.getHeight());
     Diagram result = createDiagram(surface, newShape, getText(), getEditable());
     return result;
   }
 	
-  protected Diagram createDiagram(SurfaceHandler surface, DbShape newShape,
+  protected Diagram createDiagram(ISurfaceHandler surface, DbShape newShape,
       String text, boolean editable) {
     return new StorageElement(surface, newShape, text, 
     		new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);

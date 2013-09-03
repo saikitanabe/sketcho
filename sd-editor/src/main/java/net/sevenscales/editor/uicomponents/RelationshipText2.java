@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
@@ -27,14 +27,14 @@ public class RelationshipText2 {
   private List<IShape> elements;
   int posx = 0;
   int posy = 0;
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
   private final static double angle = 30;
 
   public enum ClickTextPosition {
   	START, MIDDLE, END, ALL
   }
 
-  public RelationshipText2(IGroup group, SurfaceHandler surface, boolean editable) {
+  public RelationshipText2(IGroup group, ISurfaceHandler surface, boolean editable) {
   	this.surface = surface;
     labelElement = IShapeFactory.Util.factory(editable).createText(group);
     startElement = IShapeFactory.Util.factory(editable).createText(group);

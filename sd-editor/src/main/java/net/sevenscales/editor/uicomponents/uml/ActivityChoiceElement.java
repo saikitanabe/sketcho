@@ -2,7 +2,7 @@ package net.sevenscales.editor.uicomponents.uml;
 
 
 import net.sevenscales.domain.utils.Debug;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
@@ -43,7 +43,7 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
   	}
   };
   
-	public ActivityChoiceElement(SurfaceHandler surface, ActivityChoiceShape newShape, String text, 
+	public ActivityChoiceElement(ISurfaceHandler surface, ActivityChoiceShape newShape, String text, 
 			Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
 		super(editable, surface, backgroundColor, borderColor, textColor); 
 		this.shape = newShape;
@@ -191,7 +191,7 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 		return new Point(diffFromMouseDownX, diffFromMouseDownY);
 	}
 	
-	public void accept(SurfaceHandler surface) {
+	public void accept(ISurfaceHandler surface) {
 	  super.accept(surface);
 		surface.makeDraggable(this);
 	}
@@ -241,19 +241,19 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 	}
 	
   @Override
-	public Diagram duplicate(SurfaceHandler surface, boolean partOfMultiple) {
+	public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
 		Point p = getCoords();
 		return duplicate(surface, p.x + 20, p.y + 20);
 	}
 	
   @Override
-  public Diagram duplicate(SurfaceHandler surface, int x, int y) {
+  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     ActivityChoiceShape newShape = new ActivityChoiceShape(x, y, getWidth(), getHeight());
     Diagram result = createDiagram(surface, newShape, getText(), getEditable());
     return result;
   }
 	
-  protected Diagram createDiagram(SurfaceHandler surface, ActivityChoiceShape newShape,
+  protected Diagram createDiagram(ISurfaceHandler surface, ActivityChoiceShape newShape,
       String text, boolean editable) {
     return new ActivityChoiceElement(surface, newShape, text, 
     		new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);

@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.diagram.utils.GridUtils;
@@ -27,12 +27,12 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler {
 //	private int prevX;
 //	private int prevY;
 	private boolean onResizeArea;
-  private SurfaceHandler surface;
+  private ISurfaceHandler surface;
   private IModeManager modeManager;
 	private int prevDX;
 	private int prevDY;
 	
-	public MouseDiagramResizeHandler(MouseDiagramHandlerManager parent, SurfaceHandler surface, 
+	public MouseDiagramResizeHandler(MouseDiagramHandlerManager parent, ISurfaceHandler surface, 
 	    IModeManager modeManager) {
 		this.parent = parent;
 		this.surface = surface;

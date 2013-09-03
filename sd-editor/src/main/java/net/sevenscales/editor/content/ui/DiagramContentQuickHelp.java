@@ -2,7 +2,7 @@ package net.sevenscales.editor.content.ui;
 
 import java.util.List;
 
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ToolFrame;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSelectionHandler;
@@ -36,7 +36,7 @@ public class DiagramContentQuickHelp extends Composite {
   private boolean overtoolbar = true;
   private int selectionCounter = 0;
   
-  public DiagramContentQuickHelp(SurfaceHandler surfaceHandler, ToolFrame toolFrame) {
+  public DiagramContentQuickHelp(ISurfaceHandler surfaceHandler, ToolFrame toolFrame) {
     initWidget(uiBinder.createAndBindUi(this));
     
     // for some reason IE doesn't accept background-color in ui.xml

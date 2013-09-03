@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.PinchZoomStartedEvent;
 import net.sevenscales.editor.api.event.PinchZoomStartedEventHandler;
 import net.sevenscales.editor.diagram.utils.GridUtils;
@@ -22,14 +22,14 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
   private boolean backgroundMouseDown = true;
   private Diagram currentSender;
   private boolean mouseDown = false;
-  private SurfaceHandler surface;
+  private ISurfaceHandler surface;
 	private int prevTransformDX;
 	private int prevTransformDY;
   private boolean backgroundMoving;
 	
 //	private DiagramHelpers.ComplexElementHandler complexElementHandler = new DiagramHelpers.ComplexElementHandler();
 
-  public BackgroundMoveHandler(List<Diagram> diagrams, SurfaceHandler surface) {
+  public BackgroundMoveHandler(List<Diagram> diagrams, ISurfaceHandler surface) {
     this.diagrams = diagrams;
     this.surface = surface;
     

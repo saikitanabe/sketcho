@@ -2,7 +2,7 @@ package net.sevenscales.editor.content;
 
 import net.sevenscales.domain.api.IContent;
 import net.sevenscales.domain.api.IDiagramContent;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 
 public interface ContentSaveListener {
 
@@ -11,6 +11,6 @@ public interface ContentSaveListener {
 	void cancel(IContent content);
 	void delete(IContent content);
   void share(IContent content);
-  void generateImage(IDiagramContent content, SurfaceHandler surfaceHandler);
+  void generateImage(IDiagramContent content, ISurfaceHandler surfaceHandler);
 
 }

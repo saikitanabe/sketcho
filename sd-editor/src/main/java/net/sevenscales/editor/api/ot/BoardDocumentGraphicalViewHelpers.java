@@ -5,15 +5,15 @@ import java.util.List;
 
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SurfaceHandler;
+import net.sevenscales.editor.api.ISurfaceHandler;
 
 public class BoardDocumentGraphicalViewHelpers {
 	private static final SLogger logger = SLogger.createLogger(BoardDocumentGraphicalViewHelpers.class);
 	
-	private SurfaceHandler surface;
+	private ISurfaceHandler surface;
 	private List<IDiagramItem> documentSnapshot;
 
-	public BoardDocumentGraphicalViewHelpers(SurfaceHandler surface) {
+	public BoardDocumentGraphicalViewHelpers(ISurfaceHandler surface) {
 		this.surface = surface;
 		documentSnapshot = new ArrayList<IDiagramItem>();
 	}
