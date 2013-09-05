@@ -75,7 +75,7 @@ public class VerifyHelpers {
 
 	public interface VerifyCallback {
 		void debugServer(String boardName, String msg, double checksum, String json, double serverChecksum, Integer serverVersion);
-		void forceReload();
+		void forceReload(String reason);
 	}
 	public VerifyHelpers(String boardName, VerifyCallback callback, JsonHelpers jsonHelpers, ISurfaceHandler surface, 
 											 BoardDocument serverDocument, BoardDocument graphicalViewCache) {
@@ -105,11 +105,11 @@ public class VerifyHelpers {
 			callback.debugServer(boardName, SLogger.format("Logical Board Name {}, board ID {}", e.getLogicalName(), boardName), e.checksum(), e.getJson(), checksum, version);
 			
 			if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
-//				Window.alert(msg);
-        callback.forceReload();
+				// Window.alert(msg);
+        callback.forceReload("cli chsum: " + String.valueOf(e.checksum()) + " server chsum: " + String.valueOf(checksum));
 			} else {
 				// production build
-				callback.forceReload();
+        callback.forceReload("cli chsum: " + String.valueOf(e.checksum()) + " server chsum: " + String.valueOf(checksum));
 			}
 		}
 	}
