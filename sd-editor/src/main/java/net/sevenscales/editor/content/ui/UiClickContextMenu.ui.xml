@@ -64,7 +64,7 @@
 			<c:FastButton ui:field="select" addStyleNames="{style.simple}">
 				<c:child>
 					<g:HTML>
-						<a title="Select" class="btn btn-custom download-btn tooltipper">
+						<a title="Lasso Select (by dragging)" class="btn btn-custom download-btn tooltipper">
 							<i class="icon-select"></i>
 						</a>
 					</g:HTML>
