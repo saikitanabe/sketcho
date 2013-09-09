@@ -3,6 +3,8 @@ package net.sevenscales.editor.uicomponents;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.MeasurementPanel;
@@ -33,7 +35,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   
   @Override
   public void show() {
-  	calculateLines(hasTextElement.getX());
+  	calculateLines2(hasTextElement.getX());
   	setTextShape();
   	super.show();
   }
@@ -59,6 +61,31 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
 	  	firstInsert = false;
   	}
   }
+
+  private void calculateLines2(int left) {
+    JavaScriptObject tokens = TokenParser.parse2(getText());
+    
+   clearLines();
+   List<IShape> currentline = new ArrayList<IShape>();
+   lines.add(currentline);
+    
+    IText text = createText(true);
+    currentline.add(text);
+
+    // boolean firstInsert = true;
+  //  for (StringToken token : tokens) {
+   //   boolean newline = false;
+   //   if (token.text.matches("\\s*")) { // "\\s*" == line break...
+   //     newline = true;
+   //   }
+
+    text.addText(tokens, hasTextElement.getX() + 9, parent.getMeasurementAreaWidth());
+
+   //   text.addText(token.text.trim(), token.fontWeight, firstInsert, newline, hasTextElement.getX() + 9, parent.getMeasurementAreaWidth());
+   //   firstInsert = false;
+  //  }
+  }
+
   
 	private void calculateAndNotifyHeight(int width) {
 		MeasurementPanel.setText(getText(), width);
@@ -75,7 +102,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
     setText(newText);
     
     if (force || editorContext.isTrue(EditorProperty.ON_SURFACE_LOAD) || editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
-    	calculateLines(hasTextElement.getX());
+    	calculateLines2(hasTextElement.getX());
       if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
         // during OT operation element is NOT resized and everything is 
         // copied as is, element size and text

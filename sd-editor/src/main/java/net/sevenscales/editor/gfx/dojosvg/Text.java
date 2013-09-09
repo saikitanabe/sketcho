@@ -244,7 +244,17 @@ class Text extends Shape implements IText {
   	prevTspanElement = addMultilineText(text, fontWeight, firstInsert, newline, x, width);
   	prevTspanWeight = fontWeight;
   }
+
+  public void addText(JavaScriptObject tokens, int x, int width) {
+	  Element r = getRawNode(rawNode);
+	  addText(r, tokens, x, width);
+  }
   
+  private native void addText(JavaScriptObject parent,JavaScriptObject tokens, int x, int width)/*-{
+		var svgText = $wnd.svgTextArea(parent, x, width);
+    var elements = svgText.addTokens(tokens);
+  }-*/;
+
   private Element addMultilineText(String text, boolean fontWeight, boolean firstInsert, boolean newline, int x, int width) {
   	Element tspan_element = prevTspanElement;
   	Element r = getRawNode(rawNode);
