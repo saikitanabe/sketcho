@@ -6,6 +6,11 @@ import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.core.client.JavaScriptObject;
+
+import net.sevenscales.editor.content.utils.TokenParser;
+import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 
 public class MeasurementPanel {
 	private static SimplePanel measurementPanel;
@@ -23,9 +28,9 @@ public class MeasurementPanel {
 	private static SimplePanel createMeasurementPanel() {
 		SimplePanel result = new SimplePanel();
   	result.setStyleName("properties-MeasurementPanel");
-//  	measurementPanel.setWidth(hasTextElement.getWidth() + "px");
-  	result.getElement().getStyle().setVisibility(Visibility.HIDDEN);
-//  	result.getElement().getStyle().setPosition(Position.RELATIVE);
+  	// result.getElement().getStyle().setVisibility(Visibility.HIDDEN);
+//	 	measurementPanel.setWidth(hasTextElement.getWidth() + "px");
+	 	result.getElement().getStyle().setPosition(Position.RELATIVE);
 
   	RootPanel.get().add(result);
   	return result;
@@ -39,6 +44,15 @@ public class MeasurementPanel {
 	}
 	
 	public static void setText(String text, int width) {
+    JavaScriptObject tokens = TokenParser.parse2(text);
+    setTokens(tokens, width);
+	}
+
+	public static void setTokens(JavaScriptObject tokens, int width) {
+		_setText(TokenParser.formatHtml(tokens), width);
+	}
+
+	private static void _setText(String html, int width) {
 		if (width > 0) {
 			MeasurementPanel.getMeasurementPanel().setWidth(width + "px");
 		}
@@ -46,14 +60,16 @@ public class MeasurementPanel {
 		// add also html space entity to increase measurement panel height
 		// it will lead for one extra space in measuremnt div but it doesn't
 		// make too much failure.
-		String tmphtml = SafeHtmlUtils.htmlEscape(text).replaceAll("\\n", "<br>&nbsp;");
-		MeasurementPanel.getMeasurementPanel().getElement().setInnerHTML(tmphtml);
+		// String tmphtml = SafeHtmlUtils.htmlEscape(text).replaceAll("\\n", "<br>&nbsp;");
+		// String tmphtml = text.replaceAll("\\n", "<br>&nbsp;");
+		MeasurementPanel.getMeasurementPanel().getElement().setInnerHTML(html);
 
 	  // this is just for debugging, to show measurement panel right next to the element
 //			  System.out.println("offsetHeight: " + measurementPanel.getOffsetHeight());
-//			  selectedDiagram.setHeight(measurementPanel.getOffsetHeight() + TextElementFormatUtil.DEFAULT_MARGIN_TOP + TextElementFormatUtil.MARGIN_BOTTOM);
+		// selectedDiagram.setHeight(measurementPanel.getOffsetHeight() + TextElementFormatUtil.DEFAULT_MARGIN_TOP + TextElementFormatUtil.DEFAULT_MARGIN_BOTTOM);
+		// selectedDiagram.setHeight(measurementPanel.getOffsetHeight() + TextElementFormatUtil.DEFAULT_MARGIN_TOP + TextElementFormatUtil.DEFAULT_MARGIN_BOTTOM);
 	}
-	
+
 	public static int getOffsetHeight() {
 		return measurementPanel.getOffsetHeight();
 	}

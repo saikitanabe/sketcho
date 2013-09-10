@@ -26,7 +26,7 @@ public class TextElementFormatUtil {
 	private static final SLogger logger = SLogger.createLogger(TextElementFormatUtil.class);
 	
   public final static int DEFAULT_MARGIN_TOP = 7;
-  public final static int DEFAULT_MARGIN_BOTTOM = 14;
+  public final static int DEFAULT_MARGIN_BOTTOM = 25;
   public final static int ROW_HEIGHT = 17;
 
   public interface HasTextElement {

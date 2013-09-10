@@ -25,6 +25,8 @@ import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
 
 public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
+  private JavaScriptObject tokens;
+
 	public TextElementVerticalFormatUtil(Diagram parent, HasTextElement hasTextElement, IGroup group, EditorContext editorContext) {
   	super(parent, hasTextElement, group, editorContext);
   }
@@ -63,34 +65,23 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   }
 
   private void calculateLines2(int left) {
-    JavaScriptObject tokens = TokenParser.parse2(getText());
+    this.tokens = TokenParser.parse2(getText());
+    // token to be reused in html formatting
     
-   clearLines();
-   List<IShape> currentline = new ArrayList<IShape>();
-   lines.add(currentline);
+    clearLines();
+    List<IShape> currentline = new ArrayList<IShape>();
+    lines.add(currentline);
     
     IText text = createText(true);
     currentline.add(text);
-
-    // boolean firstInsert = true;
-  //  for (StringToken token : tokens) {
-   //   boolean newline = false;
-   //   if (token.text.matches("\\s*")) { // "\\s*" == line break...
-   //     newline = true;
-   //   }
-
     text.addText(tokens, hasTextElement.getX() + 9, parent.getMeasurementAreaWidth());
-
-   //   text.addText(token.text.trim(), token.fontWeight, firstInsert, newline, hasTextElement.getX() + 9, parent.getMeasurementAreaWidth());
-   //   firstInsert = false;
-  //  }
   }
 
   
 	private void calculateAndNotifyHeight(int width) {
-		MeasurementPanel.setText(getText(), width);
+		MeasurementPanel.setTokens(tokens, width);
 		MeasurementPanel.setPosition(hasTextElement.getX() + parent.getWidth() + 20, hasTextElement.getY());
-    hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + ROW_HEIGHT);
+    hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + DEFAULT_MARGIN_BOTTOM);
   }
   
   public void setText(String newText, boolean editable, boolean force) {
@@ -109,6 +100,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
         // though in vertical case text needs to be recalculated based on element size
         calculateAndNotifyHeight(parent.getMeasurementAreaWidth());
       }
+      this.tokens = null; // cleanup some memory
     	setTextShape();
     }
 

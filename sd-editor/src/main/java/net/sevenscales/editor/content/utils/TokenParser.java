@@ -20,6 +20,10 @@ public class TokenParser {
 	public native static JavaScriptObject parse2(String text)/*-{
 		return $wnd.markedToken.parse(text);
 	}-*/;
+
+	public native static String formatHtml(JavaScriptObject tokens)/*-{
+		return $wnd.markedToken.parseHtml(tokens);
+	}-*/;
 	
 	public static List<StringToken> parseEntities(String line) {
     // split by entities *<text>*, _<text>_
