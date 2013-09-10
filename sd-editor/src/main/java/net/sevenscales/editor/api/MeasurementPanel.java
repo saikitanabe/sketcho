@@ -28,7 +28,7 @@ public class MeasurementPanel {
 	private static SimplePanel createMeasurementPanel() {
 		SimplePanel result = new SimplePanel();
   	result.setStyleName("properties-MeasurementPanel");
-  	// result.getElement().getStyle().setVisibility(Visibility.HIDDEN);
+  	result.getElement().getStyle().setVisibility(Visibility.HIDDEN);
 //	 	measurementPanel.setWidth(hasTextElement.getWidth() + "px");
 	 	result.getElement().getStyle().setPosition(Position.RELATIVE);
 

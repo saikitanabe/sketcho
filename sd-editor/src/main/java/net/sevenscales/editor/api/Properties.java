@@ -37,6 +37,7 @@ import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.uicomponents.AnchorElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
+import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
 import com.google.gwt.core.client.Scheduler;
@@ -268,7 +269,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 	
 	private void setSelectedDiagramHeight() {
-		selectedDiagram.setHeight(MeasurementPanel.getMeasurementPanel().getOffsetHeight() + TextElementFormatUtil.DEFAULT_MARGIN_TOP + TextElementFormatUtil.DEFAULT_MARGIN_BOTTOM);
+		selectedDiagram.setHeight(MeasurementPanel.getMeasurementPanel().getOffsetHeight() + TextElementVerticalFormatUtil.DEFAULT_VERTICAL_TEXT_MARGIN);
 	}
 	
 	public void addSurface(ISurfaceHandler surfaceHandler, boolean modifiable) {

@@ -26,6 +26,7 @@ import net.sevenscales.editor.gfx.domain.IText;
 
 public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   private JavaScriptObject tokens;
+  public static int DEFAULT_VERTICAL_TEXT_MARGIN = DEFAULT_MARGIN_TOP + DEFAULT_MARGIN_BOTTOM + 7;
 
 	public TextElementVerticalFormatUtil(Diagram parent, HasTextElement hasTextElement, IGroup group, EditorContext editorContext) {
   	super(parent, hasTextElement, group, editorContext);
@@ -81,7 +82,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
 	private void calculateAndNotifyHeight(int width) {
 		MeasurementPanel.setTokens(tokens, width);
 		MeasurementPanel.setPosition(hasTextElement.getX() + parent.getWidth() + 20, hasTextElement.getY());
-    hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + DEFAULT_MARGIN_BOTTOM);
+    hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + DEFAULT_VERTICAL_TEXT_MARGIN);
   }
   
   public void setText(String newText, boolean editable, boolean force) {
