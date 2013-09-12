@@ -9,7 +9,7 @@ public interface IText extends IShape {
   
   public static final String WEIGHT_BOLD = "bold";
   public static final String WEIGHT_NORMAL = "normal";
-	public static final String SANS = "sans-serif";
+	public static final String SANS = "arial,helvetica,sans-serif";
   
 	public int getX();
 	public int getY();
