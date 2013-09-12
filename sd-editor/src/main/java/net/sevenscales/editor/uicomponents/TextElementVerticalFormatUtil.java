@@ -3,6 +3,8 @@ package net.sevenscales.editor.uicomponents;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.MeasurementPanel;
@@ -23,6 +25,9 @@ import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
 
 public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
+  private JavaScriptObject tokens;
+  public static int DEFAULT_VERTICAL_TEXT_MARGIN = DEFAULT_MARGIN_TOP + DEFAULT_MARGIN_BOTTOM + 7;
+
 	public TextElementVerticalFormatUtil(Diagram parent, HasTextElement hasTextElement, IGroup group, EditorContext editorContext) {
   	super(parent, hasTextElement, group, editorContext);
   }
@@ -33,7 +38,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   
   @Override
   public void show() {
-  	calculateLines(hasTextElement.getX());
+  	calculateLines2(hasTextElement.getX());
   	setTextShape();
   	super.show();
   }
@@ -59,11 +64,25 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
 	  	firstInsert = false;
   	}
   }
+
+  private void calculateLines2(int left) {
+    this.tokens = TokenParser.parse2(getText());
+    // token to be reused in html formatting
+    
+    clearLines();
+    List<IShape> currentline = new ArrayList<IShape>();
+    lines.add(currentline);
+    
+    IText text = createText(true);
+    currentline.add(text);
+    text.addText(tokens, hasTextElement.getX() + 9, parent.getMeasurementAreaWidth());
+  }
+
   
 	private void calculateAndNotifyHeight(int width) {
-		MeasurementPanel.setText(getText(), width);
+		MeasurementPanel.setTokens(tokens, width);
 		MeasurementPanel.setPosition(hasTextElement.getX() + parent.getWidth() + 20, hasTextElement.getY());
-    hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + ROW_HEIGHT);
+    hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + DEFAULT_VERTICAL_TEXT_MARGIN);
   }
   
   public void setText(String newText, boolean editable, boolean force) {
@@ -75,13 +94,14 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
     setText(newText);
     
     if (force || editorContext.isTrue(EditorProperty.ON_SURFACE_LOAD) || editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
-    	calculateLines(hasTextElement.getX());
+    	calculateLines2(hasTextElement.getX());
       if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
         // during OT operation element is NOT resized and everything is 
         // copied as is, element size and text
         // though in vertical case text needs to be recalculated based on element size
         calculateAndNotifyHeight(parent.getMeasurementAreaWidth());
       }
+      this.tokens = null; // cleanup some memory
     	setTextShape();
     }
 

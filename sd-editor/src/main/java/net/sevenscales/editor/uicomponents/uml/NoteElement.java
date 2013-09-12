@@ -486,7 +486,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
   
   @Override
 	public int getMeasurementAreaWidth() {
-  	return getWidth() - hasTextElement.getTextMargin() - 9;
+  	return getWidth() - hasTextElement.getTextMargin() - 3;
 	}
   
 	@Override

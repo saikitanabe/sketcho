@@ -1,5 +1,7 @@
 package net.sevenscales.editor.gfx.domain;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 public interface IText extends IShape {
   public static final String ALIGN_LEFT = "start";
   public static final String ALIGN_CENTER = "middle";
@@ -7,7 +9,7 @@ public interface IText extends IShape {
   
   public static final String WEIGHT_BOLD = "bold";
   public static final String WEIGHT_NORMAL = "normal";
-	public static final String SANS = "sans-serif";
+	public static final String SANS = "arial,helvetica,sans-serif";
   
 	public int getX();
 	public int getY();
@@ -35,6 +37,7 @@ public interface IText extends IShape {
 	 * @param width
 	 */
 	void addText(String text, boolean fontWeight, boolean firstInsert, boolean newline, int x, int width);
+	void addText(JavaScriptObject tokens, int x, int width);
 	String getChildElements(int dx);
 	void removeLastSpan();
 }

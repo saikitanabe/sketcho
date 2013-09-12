@@ -3,6 +3,8 @@ package net.sevenscales.editor.content.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 public class TokenParser {
 	public static class StringToken {
 		public String text;
@@ -14,6 +16,14 @@ public class TokenParser {
 			this.fontWeight = fontWeight;
 		}
 	}
+
+	public native static JavaScriptObject parse2(String text)/*-{
+		return $wnd.markedToken.parse(text);
+	}-*/;
+
+	public native static String formatHtml(JavaScriptObject tokens)/*-{
+		return $wnd.markedToken.parseHtml(tokens);
+	}-*/;
 	
 	public static List<StringToken> parseEntities(String line) {
     // split by entities *<text>*, _<text>_
