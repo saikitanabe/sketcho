@@ -499,9 +499,61 @@ textarea.properties-TextArea2 {
 
 .properties-MeasurementPanel {
 border: 1px solid blue;
-visibility: hidden;
 line-height: 17px;
 font-size: 12px;
+padding: 0 0 0 0;
+margin: 0;
+}
+.properties-MeasurementPanel h1 {
+	font-size: 36px;
+	padding: 0;
+	margin: 0 0 7px 0;
+	line-height: 38px;
+}
+.properties-MeasurementPanel h2 {
+	font-size: 24px;
+	padding: 0;
+	margin: 3px 0 3px 0;
+	line-height: 26px;
+}
+.properties-MeasurementPanel h3 {
+	font-size: 18px;
+	padding: 0;
+	margin: 3px 0 0 0;
+	line-height: 20px;
+}
+.properties-MeasurementPanel h4 {
+	font-size: 14px;
+	padding: 0;
+	margin: 8px 0 0 0;
+	line-height: 16px;
+}
+.properties-MeasurementPanel h5 {
+	font-size: 12px;
+	padding: 0;
+	margin: 7px 0 0 0;
+	line-height: 14px;
+}
+.properties-MeasurementPanel h6 {
+	font-size: 11px;
+	padding: 0;
+	margin: 5px 0 0 0;
+	line-height: 13px;
+}
+.properties-MeasurementPanel p {
+	padding: 0 10px 0 0;
+	margin: 0;
+}
+
+.properties-MeasurementPanel ul {
+	padding: 0; 
+	margin: 0 0 0 22px;
+}
+
+.properties-MeasurementPanel li {
+	padding: 0;
+	margin: 0;
+	line-height: 19px;
 }
 
 .properties-MeasurementPanel-Horizontal {
