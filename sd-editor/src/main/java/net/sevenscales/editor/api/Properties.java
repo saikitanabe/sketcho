@@ -572,7 +572,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 		MeasurementPanel.setText(text, selectedDiagram.getMeasurementAreaWidth());
 		MeasurementPanel.setPosition(selectedDiagram.getLeft() + selectedDiagram.getWidth() + 20, selectedDiagram.getTop());
-		textArea.getElement().getStyle().setHeight(MeasurementPanel.getOffsetHeight(), Unit.PX);
+		// textArea.getElement().getStyle().setHeight(MeasurementPanel.getOffsetHeight(), Unit.PX);
+		setTextAreaHeight(MeasurementPanel.getOffsetHeight());
 		setSelectedDiagramHeight();
 	}
 
@@ -589,7 +590,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		textArea.getElement().getStyle().setBackgroundColor(diagram.getTextAreaBackgroundColor());
 		textArea.getElement().getStyle().setColor("#" + diagram.getTextColor());
 		textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
-		textArea.getElement().getStyle().setHeight(diagram.getTextAreaHeight(), Unit.PX);
+		setTextAreaHeight(diagram.getTextAreaHeight());
 		textArea.getElement().getStyle().setProperty("textAlign", diagram.getTextAreaAlign());
 		
 		textArea.getElement().getStyle().setBorderColor("#bbb");
@@ -600,6 +601,13 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 //			diagram.setVisible(false);
 			textArea.getElement().getStyle().setBackgroundColor("#" + diagram.getBackgroundColor());
 		}
+	}
+
+	private void setTextAreaHeight(int height) {
+		String[] rows = textArea.getText().split("\n");
+		int rowsHeight = rows.length * 17;
+		height = rowsHeight > height ? rowsHeight : height;
+		textArea.getElement().getStyle().setHeight(height, Unit.PX);
 	}
 
 	public void showEditor(final KeyDownEvent event) {
