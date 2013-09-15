@@ -37,4 +37,15 @@ public class JQuery {
 		if (typeof $wnd.jq172 == "function") $wnd.jq172(selector).attr(name, value);
 	  else if (typeof $wnd.jQuery == "function") $wnd.jQuery(selector).attr(name, value);
 	}-*/;
+
+	public static native void css(Element element, String propertyName)/*-{
+    var jq = null;
+    if (typeof $wnd.jq172 == "function") {
+      jq = $wnd.jq172;
+    } else if (typeof $wnd.jQuery == "function") {
+      jq = $wnd.jQuery;
+    }
+  	return jq(element).css(propertyName);
+	}-*/;
+
 }

@@ -39,6 +39,7 @@ import net.sevenscales.editor.uicomponents.AnchorElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
+import net.sevenscales.editor.api.impl.Theme;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
@@ -58,11 +59,13 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import net.sevenscales.editor.content.utils.JQuery;
 
 public class Properties extends SimplePanel implements DiagramSelectionHandler, ClickDiagramHandler, SizeChangedHandler, IEditor {
 	private static final SLogger logger = SLogger.createLogger(Properties.class);
 
 	private static final String TAB_AS_SPACES = "    ";
+	private static final String PROPERTIES_EDITOR_STYLE = "properties-TextArea2";
 	
   private Map<ISurfaceHandler,Boolean> surfaces = new HashMap<ISurfaceHandler, Boolean>();
 	private TextArea textArea;
@@ -144,7 +147,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		});
 //		this.textArea.setWidth("170px");
 //		this.textArea.setHeight(height + "px");
-		textArea.setStyleName("properties-TextArea2");
+		textArea.setStyleName(PROPERTIES_EDITOR_STYLE);
 //		textArea.setVisibleLines(20); 
 //		textArea.setCharacterWidth(30);
 		textArea.addKeyUpHandler(new KeyUpHandler() {
@@ -589,7 +592,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		popup.setPopupPosition(x, y);
 
 		textArea.setVisible(true);
-		textArea.getElement().getStyle().setBackgroundColor(diagram.getTextAreaBackgroundColor());
+		textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor());
 		textArea.getElement().getStyle().setColor("#" + diagram.getTextColor());
 		textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
 		setTextAreaHeight(diagram.getTextAreaHeight());
@@ -599,10 +602,11 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		textArea.getElement().getStyle().setBorderWidth(1, Unit.PX);
 		textArea.getElement().getStyle().setBorderStyle(BorderStyle.DASHED);
 
-		if (surface.getScaleFactor() != 1.0f && !"transparent".equals(diagram.getTextAreaBackgroundColor())) {
-//			diagram.setVisible(false);
-			textArea.getElement().getStyle().setBackgroundColor("#" + diagram.getBackgroundColor());
-		}
+
+// 		if (surface.getScaleFactor() != 1.0f && !"transparent".equals(diagram.getTextAreaBackgroundColor())) {
+// //			diagram.setVisible(false);
+// 			textArea.getElement().getStyle().setBackgroundColor("#" + diagram.getBackgroundColor());
+// 		}
 	}
 
 	private void setTextAreaHeight(int height) {

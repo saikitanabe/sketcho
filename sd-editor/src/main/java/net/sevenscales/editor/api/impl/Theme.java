@@ -13,15 +13,21 @@ public class Theme {
 	private ElementColorScheme currentColorScheme;
 
   public enum ThemeName {
-    WHITE("white"), BLACK("black"), SEPIA("sepia"), PAPER("paper");
+    WHITE("white", "#fff"), BLACK("black", "#272822"), SEPIA("sepia", "#FBF0D9"), PAPER("paper", "#FAFAFA");
     
     private String name;
-    private ThemeName(String name) {
+    private String boardBackgroundColor;
+    private ThemeName(String name, String boardBackgroundColor) {
       this.name = name;
+      this.boardBackgroundColor = boardBackgroundColor;
     }
     
     public String getName() {
       return name;
+    }
+
+    public String getBoardBackgroundColor() {
+      return boardBackgroundColor;
     }
     
     public static ThemeName getEnum(String operation) {
@@ -171,4 +177,5 @@ public class Theme {
   public static String themeCssClass() {
     return THEME_PREFIX + getCurrentThemeName().name;
   }
+
 }
