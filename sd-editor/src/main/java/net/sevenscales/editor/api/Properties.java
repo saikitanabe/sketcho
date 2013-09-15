@@ -61,6 +61,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class Properties extends SimplePanel implements DiagramSelectionHandler, ClickDiagramHandler, SizeChangedHandler, IEditor {
 	private static final SLogger logger = SLogger.createLogger(Properties.class);
+
+	private static final String TAB_AS_SPACES = "    ";
 	
   private Map<ISurfaceHandler,Boolean> surfaces = new HashMap<ISurfaceHandler, Boolean>();
 	private TextArea textArea;
@@ -134,8 +136,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		        int index = ta.getCursorPos();
 		        String text = ta.getText();
 		        ta.setText(text.substring(0, index) 
-		                   + "\t" + text.substring(index));
-		        ta.setCursorPos(index + 1);
+		                   + TAB_AS_SPACES + text.substring(index));
+		        ta.setCursorPos(index + TAB_AS_SPACES.length());
 		      }		      
 		    }
 		  }
@@ -605,7 +607,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 	private void setTextAreaHeight(int height) {
 		String[] rows = textArea.getText().split("\n");
-		int rowsHeight = rows.length * TextElementFormatUtil.ROW_HEIGHT;
+		int rowsHeight = (rows.length + 1) * TextElementFormatUtil.ROW_HEIGHT;
 		height = rowsHeight > height ? rowsHeight : height;
 		textArea.getElement().getStyle().setHeight(height, Unit.PX);
 	}
