@@ -83,7 +83,6 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
     }
 
     setReadOnly(!editable);
-    moveToBack();
     
     setBorderColor(borderWebColor);
     
