@@ -605,7 +605,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 	private void setTextAreaHeight(int height) {
 		String[] rows = textArea.getText().split("\n");
-		int rowsHeight = rows.length * 17;
+		int rowsHeight = rows.length * TextElementFormatUtil.ROW_HEIGHT;
 		height = rowsHeight > height ? rowsHeight : height;
 		textArea.getElement().getStyle().setHeight(height, Unit.PX);
 	}
