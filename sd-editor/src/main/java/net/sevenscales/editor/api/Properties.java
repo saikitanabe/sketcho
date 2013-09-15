@@ -45,11 +45,13 @@ import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -104,7 +106,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		setHeight("100%");
 		VerticalPanel panel = new VerticalPanel();
 		panel.setHeight("100%");
-		
+
 		surface.getEditorContext().getEventBus().addHandler(SelectionEvent.TYPE, new SelectionEventHandler() {
 			@Override
 			public void onSelection(SelectionEvent event) {
@@ -120,6 +122,24 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		});
 		
 		this.textArea = new TextArea();
+
+		textArea.addKeyDownHandler(new KeyDownHandler() {
+		  @Override
+		  public void onKeyDown(KeyDownEvent event) {
+		    if (event.getNativeKeyCode() == KeyCodes.KEY_TAB) {
+		      event.preventDefault();
+		      event.stopPropagation();
+					if(event.getSource() instanceof TextArea) {
+		        TextArea ta = (TextArea) event.getSource();
+		        int index = ta.getCursorPos();
+		        String text = ta.getText();
+		        ta.setText(text.substring(0, index) 
+		                   + "\t" + text.substring(index));
+		        ta.setCursorPos(index + 1);
+		      }		      
+		    }
+		  }
+		});
 //		this.textArea.setWidth("170px");
 //		this.textArea.setHeight(height + "px");
 		textArea.setStyleName("properties-TextArea2");
