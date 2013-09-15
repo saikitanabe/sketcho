@@ -584,7 +584,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 	private void _setTextAreaSize(Diagram diagram) {
 		// no need to hide text any longer since markdown editor hides the text with background color.
-		// diagram.hideText();
+		diagram.hideText();
 		
 		MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
 		int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
@@ -610,11 +610,27 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 // 		}
 	}
 
+	private int rows(String text) {
+		int result = 0;
+		char[] array = text.toCharArray();
+		for (int i = 0; i < array.length; ++i) {
+			if (text.charAt(i) == '\n') {
+				++result;
+			}
+		}
+		return result;
+	}
+
 	private void setTextAreaHeight(int height) {
-		String[] rows = textArea.getText().split("\n");
-		int rowsHeight = (rows.length + 1) * TextElementFormatUtil.ROW_HEIGHT;
-		height = rowsHeight > height ? rowsHeight : height;
-		textArea.getElement().getStyle().setHeight(height, Unit.PX);
+		// String[] rows = textArea.getText().split("\n");
+		int rows = rows(textArea.getText());
+		logger.debug("rows.length: {}", rows);
+		// this is some magical approximation of the textarea height
+		// it is at least the size of measurement panel, but extra
+		// line breaks in editor might not increase measurment panel height
+		// therefore need to add something based on line breaks...
+		int textAreaHeight = height + rows / 4 * TextElementFormatUtil.ROW_HEIGHT;
+		textArea.getElement().getStyle().setHeight(textAreaHeight, Unit.PX);
 	}
 
 	public void showEditor(final KeyDownEvent event) {
