@@ -148,6 +148,12 @@
 		<resource type="download" name="initsketcho.js" location="js/initsketcho.js">
 			<param name="batch" value="false" />
 		</resource>
+		<resource type="download" name="underscore-min.js" location="js/underscore-min.js">
+			<param name="batch" value="true" />
+		</resource>
+		<resource type="download" name="marked-svg.min.js" location="js/marked-svg.min.js">
+			<param name="batch" value="true" />
+		</resource>
 <!-- 		<resource type="download" name="bootstrap.min.js" location="assets/js/bootstrap.min.js"> -->
 <!-- 			<param name="batch" value="false" /> -->
 <!-- 		</resource> -->

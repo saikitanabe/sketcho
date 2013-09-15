@@ -1,0 +1,11 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "/Users/saikitanabe/Documents/sources/sketcho/sketcho-confluence",
+		    "file_exclude_patterns":["*.jar","*.cache.js"],
+		    "folder_exclude_patterns":["target",".idea",".idea_modules","comp"]
+		}
+	]
+}
