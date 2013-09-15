@@ -583,7 +583,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 
 	private void _setTextAreaSize(Diagram diagram) {
-		diagram.hideText();
+		// no need to hide text any longer since markdown editor hides the text with background color.
+		// diagram.hideText();
 		
 		MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
 		int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
