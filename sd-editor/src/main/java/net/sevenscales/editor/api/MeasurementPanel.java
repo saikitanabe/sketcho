@@ -30,7 +30,7 @@ public class MeasurementPanel {
   	result.setStyleName("properties-MeasurementPanel");
   	result.getElement().getStyle().setVisibility(Visibility.HIDDEN);
 //	 	measurementPanel.setWidth(hasTextElement.getWidth() + "px");
-	 	result.getElement().getStyle().setPosition(Position.RELATIVE);
+	 	result.getElement().getStyle().setPosition(Position.FIXED);
 
   	RootPanel.get().add(result);
   	return result;
