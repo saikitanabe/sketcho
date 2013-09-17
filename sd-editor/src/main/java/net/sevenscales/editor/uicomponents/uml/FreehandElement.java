@@ -30,6 +30,8 @@ public class FreehandElement extends AbstractDiagramItem {
 	private static SLogger logger = SLogger.createLogger(FreehandElement.class);
 	public static int FREEHAND_STROKE_WIDTH = 2;
 	public static int ACTIVITY_START_RADIUS = 10;
+	public static int FREEHAND_TOUCH_WIDTH = 20;
+
 	private FreehandShape shape;
 	private Point coords = new Point();
   private IPath path;
@@ -62,7 +64,7 @@ public class FreehandElement extends AbstractDiagramItem {
     
     backgroundPath = IShapeFactory.Util.factory(editable).createPath(group, pathTransformer);
     backgroundPath.setStroke(0, 0, 0, 0);
-    backgroundPath.setStrokeWidth(15);
+    backgroundPath.setStrokeWidth(FREEHAND_TOUCH_WIDTH);
 
     enableDisableBackgroundEvents();
 		
