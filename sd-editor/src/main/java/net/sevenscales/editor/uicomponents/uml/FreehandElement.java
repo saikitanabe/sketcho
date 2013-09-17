@@ -62,7 +62,7 @@ public class FreehandElement extends AbstractDiagramItem {
     
     backgroundPath = IShapeFactory.Util.factory(editable).createPath(group, pathTransformer);
     backgroundPath.setStroke(0, 0, 0, 0);
-    backgroundPath.setStrokeWidth(10);
+    backgroundPath.setStrokeWidth(15);
 
     enableDisableBackgroundEvents();
 		
@@ -81,23 +81,19 @@ public class FreehandElement extends AbstractDiagramItem {
 	@Override
 	protected int doGetLeft() {
 		return left;
-		// return boundary.getX();
 	}
 	@Override
 
 	protected int doGetTop() {
 		return top;
-		// return boundary.getY();
 	}
 	@Override
 	public int getWidth() {
 		return width;
-		// return boundary.getWidth();
 	}
 	@Override
 	public int getHeight() {
 		return height;
-		// return boundary.getHeight();
 	}
 	
 	public Point getDiffFromMouseDownLocation() {
@@ -132,7 +128,7 @@ public class FreehandElement extends AbstractDiagramItem {
 	
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-    FreehandShape newShape = new FreehandShape(DiagramHelpers.map(shape.points, 10, 10));
+    FreehandShape newShape = new FreehandShape(DiagramHelpers.map(shape.points, 20 + getTransformX(), 20 + getTransformY()));
     Diagram result = new FreehandElement(surface, newShape, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
     return result;
   }
