@@ -268,7 +268,7 @@ public class FreehandElement extends AbstractDiagramItem {
 			int mid2x = mid(currx, prev1x);
 			int mid2y = mid(curry, prev1y);
 
-			if (first) {
+			if (first || backgroundColor.opacity == 0) { // no background, so no need to hide anything below
 				result += moveBezier(mid1x, mid1y, prev1x, prev1y, mid2x, mid2y);
 				first = false;
 			} else {
@@ -288,6 +288,9 @@ public class FreehandElement extends AbstractDiagramItem {
   public void setBackgroundColor(int red, int green, int blue, double opacity) {
   	super.setBackgroundColor(red, green, blue, opacity);
     path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+
+    // need to draw differently with or without background, so redraw
+    doSetShape(this.shape.points);
     enableDisableBackgroundEvents();
   }
 
