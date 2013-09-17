@@ -67,8 +67,14 @@ public class SvgConverter {
   private int outerright = Integer.MIN_VALUE;
   private int outertop = Integer.MAX_VALUE;
   private int outerbottom = Integer.MIN_VALUE;
+
+  /**
+  * If true converts only selected elements; if false converts always all.
+  */
+  private boolean onlySelected;
   
-  public SvgConverter() {
+  public SvgConverter(boolean onlySelected) {
+    this.onlySelected = onlySelected;
   	scaleSize = ScaleSize.ORICINAL_SIZE;
 	}
   
@@ -81,7 +87,7 @@ public class SvgConverter {
   */
   private Diagram[] getDiagrams(ISurfaceHandler surfaceHandler) {
     Set<Diagram> selected = surfaceHandler.getSelectionHandler().getSelectedItems();
-    if (selected.size() > 0) {
+    if (onlySelected && selected.size() > 0) {
       return SortHelpers.sortDiagramItems(SortHelpers.toArray(selected));
     }
 
@@ -97,6 +103,7 @@ public class SvgConverter {
     
     List<List<IShape>> shapes = new ArrayList<List<IShape>>();
     for (Diagram d : diagrams) {
+      d.toSvgStart();
     	d.unselect();
     	shapes.clear();
     	shapes.add(d.getElements());
@@ -106,6 +113,7 @@ public class SvgConverter {
       if (textElements != null) {
       	items += toSvg(d, textElements, editorContext);
       }
+      d.toSvgEnd();
     }
 
 		if (diagrams.length > 0) {

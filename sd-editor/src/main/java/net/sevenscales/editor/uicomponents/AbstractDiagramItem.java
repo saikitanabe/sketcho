@@ -579,6 +579,14 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   	setText(text);
   }
   
+  public void toSvgStart() {
+
+  }
+
+  public void toSvgEnd() {
+
+  }
+
   public List<IShape> getElements() {
     return shapes;
   }
@@ -1361,5 +1369,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public int getSnaphsotTransformY() {
     return transformY;
   }
+
 
 }

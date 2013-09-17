@@ -110,6 +110,15 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
   
   public void setLink(String link);
   
+  /**
+  * These are needed if element needs to do something differently
+  * when export to svg is starged.
+  */
+  void toSvgStart();
+  /**
+  * This can be used to change state back to as it was.
+  */
+  void toSvgEnd();
   public Info getInfo();
   
   public void setReadOnly(boolean value);

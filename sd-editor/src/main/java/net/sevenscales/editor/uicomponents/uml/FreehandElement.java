@@ -41,6 +41,8 @@ public class FreehandElement extends AbstractDiagramItem {
   private int top;
   private int width;
   private int height;
+
+  private boolean tosvg;
   
   private static final String BOUNDARY_COLOR = "#aaaaaa";
 
@@ -65,8 +67,6 @@ public class FreehandElement extends AbstractDiagramItem {
     backgroundPath = IShapeFactory.Util.factory(editable).createPath(group, pathTransformer);
     backgroundPath.setStroke(0, 0, 0, 0);
     backgroundPath.setStrokeWidth(FREEHAND_TOUCH_WIDTH);
-
-    enableDisableBackgroundEvents();
 		
 		addEvents(backgroundPath);
 		
@@ -76,6 +76,8 @@ public class FreehandElement extends AbstractDiagramItem {
     
     setReadOnly(!editable);
     setShape(shape.points);
+
+    enableDisableBackgroundEvents();
     
     super.constructorDone();
 	}
@@ -148,6 +150,23 @@ public class FreehandElement extends AbstractDiagramItem {
 
 	public void resizeEnd() {
 	}
+
+	/**
+	* Convert shape to normal shape to hide elements below it. Otherwise
+	* after transform path will be broken.
+	*/
+  public void toSvgStart() {
+  	this.tosvg = true;
+  	doSetShape(this.shape.points);
+  }
+
+  /**
+  * Restore shape back to as it is suppose to be. Not to hide elements.
+  */
+  public void toSvgEnd() {
+  	this.tosvg = false;
+  	doSetShape(this.shape.points);
+  }
 
 	/**
 	* Copy points since shape.points is the model of this runtime instance.
@@ -268,7 +287,7 @@ public class FreehandElement extends AbstractDiagramItem {
 			int mid2x = mid(currx, prev1x);
 			int mid2y = mid(curry, prev1y);
 
-			if (first || backgroundColor.opacity == 0) { // no background, so no need to hide anything below
+			if (first || (backgroundColor.opacity == 0 && !this.tosvg)) { // no background, so no need to hide anything below
 				result += moveBezier(mid1x, mid1y, prev1x, prev1y, mid2x, mid2y);
 				first = false;
 			} else {

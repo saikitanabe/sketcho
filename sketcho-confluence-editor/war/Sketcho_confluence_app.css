@@ -513,13 +513,13 @@ margin: 0;
 .properties-MeasurementPanel h2 {
 	font-size: 24px;
 	padding: 0;
-	margin: 3px 0 3px 0;
+	margin: 11px 0 4px 0;
 	line-height: 26px;
 }
 .properties-MeasurementPanel h3 {
 	font-size: 18px;
 	padding: 0;
-	margin: 3px 0 0 0;
+	margin: 7px 0 0 0;
 	line-height: 20px;
 }
 .properties-MeasurementPanel h4 {
@@ -541,13 +541,18 @@ margin: 0;
 	line-height: 13px;
 }
 .properties-MeasurementPanel p {
-	padding: 0 10px 0 0;
+	padding: 0 8px 8px 0;
 	margin: 0;
 }
 
-.properties-MeasurementPanel ul {
+.properties-MeasurementPanel ul.list {
 	padding: 0; 
-	margin: 0 0 0 22px;
+	margin: 3px 0 10px 22px;
+}
+
+.properties-MeasurementPanel ul.list-nested {
+	padding: 0; 
+	margin: 1px 0 2px 22px;
 }
 
 .properties-MeasurementPanel li {

@@ -242,7 +242,7 @@ public class SketchoEditor extends Composite implements Spinner {
                 	if (!originalContent.equals(content)) {
                 		assert(content != null);
                 		// do not save if content has not changed
-          	        SvgConverter sc = new SvgConverter();
+          	        SvgConverter sc = new SvgConverter(false);
           	        SvgData svg = sc.convertToSvg((IDiagramContent) content,
           	        		currentEditContent.getModelingPanel().getSurface());
           	        DiagramContentFactory.store(pageId, name, (IDiagramContent) content, svg, new AsyncCallback<String>() {
