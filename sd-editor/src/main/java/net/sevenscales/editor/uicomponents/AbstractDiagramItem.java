@@ -284,9 +284,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
     mouseListeners.fireMouseEnter(this, point);
     
-    if (!connectionHelpers.isShownFor(this)) {
-    	connectionHelpers.show(this);
-    }
+    // if (!connectionHelpers.isShownFor(this)) {
+    // 	connectionHelpers.show(this);
+    // }
   }
   
   public void onTouchMove(GraphicsEvent event) {
@@ -363,12 +363,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     // selectionHandlers.fireSelection(diagrams);
     setHighlightColor("#1D00FF");
  
-    if (TouchHelpers.isSupportsTouch()) {
+    // if (TouchHelpers.isSupportsTouch()) {
     	// usability for touch devices, hide in case connection helpers are on a way
-    	connectionHelpers.toggle(this);
-		} else {
-			connectionHelpers.show(this);
-		}
+  	connectionHelpers.toggle(this);
+		// } else {
+		// 	connectionHelpers.show(this);
+		// }
     
     if (resizeHelpers != null) {
     	resizeHelpers.show(this);

@@ -251,12 +251,13 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		if (propertyEditorShown || resizeOn || freehandModeOn || someElementIsDragged) {
 			// do not show connection helpers if property editor is shown
 			// do not show if resize is on going
-			// logger.debug("show propertyEditorShown {} resizeOn {} freehandModeOn {} someElementIsDragged {}", propertyEditorShown, resizeOn, freehandModeOn, someElementIsDragged);
+			logger.debug("show propertyEditorShown {} resizeOn {} freehandModeOn {} someElementIsDragged {}", propertyEditorShown, resizeOn, freehandModeOn, someElementIsDragged);
 			return;
 		}
 		
 		this.parent = parent;
 		setShape(left, top, width, height);
+		logger.debug("ConnectionHelpers.show...");
 		
 		this.shown = true;
 		for (ConnectionHandle c : connectionHandles) {
@@ -290,7 +291,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	}
 	
 	private void hide() {
-		// logger.debug("hide {}...", parent);
+		logger.debug("ConnectionHelpers.hide {}...", parent);
 		this.shown = false;
 		currentMouseOverHandle = null;
 		
@@ -559,7 +560,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	}
 	
 	public void toggle(AbstractDiagramItem parent, int left, int top, int width, int height) {
-    if (shown && parent == this.parent) {
+    if (shown) {
     	hideForce();
     } else {
       show(parent, left, top, width, height);

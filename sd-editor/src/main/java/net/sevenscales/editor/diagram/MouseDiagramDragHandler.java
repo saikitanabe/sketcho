@@ -184,7 +184,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	}
 	
 	private void initLineHelpers() {
-		logger.debug("initLineHelpers...");
+		// logger.debug("initLineHelpers...");
 		oneSelected = null;
 		
 		if (verticalLine == null && horizontalLine == null) {

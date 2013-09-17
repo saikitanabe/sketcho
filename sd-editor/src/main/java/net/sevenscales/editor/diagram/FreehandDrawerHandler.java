@@ -66,7 +66,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 
     FreehandElement plot() {
       if (polyline != null && points.size() > 2) {
-        logger.debug("PLOTTING...");
+        // logger.debug("PLOTTING...");
         List<Integer> filteredPoints = filterPoints();
         
         FreehandElement diagram = new FreehandElement(surface, new FreehandShape(IntegerHelpers.toIntArray(filteredPoints)),
@@ -78,7 +78,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
         polyline.setShape(points);
         polyline.moveToBack();
 
-        logger.debug("PLOTTING... done");
+        // logger.debug("PLOTTING... done");
         return diagram;
         // disturbs usabilility if context menu is shown right after drawing is ended
   //      surface.getEditorContext().getEventBus().fireEvent(new SelectionMouseUpEvent(diagram));
@@ -265,7 +265,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   }
 
   private void plot() {
-    logger.debug("PLOTTING size {}...", freehandPahts.size());
+    // logger.debug("PLOTTING size {}...", freehandPahts.size());
     List<Diagram> drawing = new ArrayList<Diagram>();
     for (FreehandPath fp : freehandPahts) {
       FreehandElement fe = fp.plot();
@@ -280,7 +280,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       freeLater();
     }
     freehandPahts.clear();
-    logger.debug("PLOTTING... done");
+    // logger.debug("PLOTTING... done");
   }
 
 	public void onMouseUp(Diagram sender, MatrixPointJS point) {

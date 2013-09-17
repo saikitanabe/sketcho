@@ -135,7 +135,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				if (selected.length >= 1) {
 					// diagram position is scaled value, so need to translate to screen pixels...
 					Diagram d = event.getLastSelected();
-					logger.debug("Last Selected type {} x({}) y({})", d.toString(), d.getLeft(), d.getTop());
+					// logger.debug("Last Selected type {} x({}) y({})", d.toString(), d.getLeft(), d.getTop());
 					
 					int left = ScaleHelpers.unscaleValue(UiContextMenu.this.surface.getAbsoluteLeft() + d.getLeft(), UiContextMenu.this.surface.getScaleFactor()) + 
 							UiContextMenu.this.surface.getRootLayer().getTransformX(); 

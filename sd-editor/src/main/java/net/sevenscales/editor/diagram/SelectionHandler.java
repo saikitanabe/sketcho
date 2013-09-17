@@ -304,9 +304,9 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     // logger.start("SelectionHandler.select 1");
 
   	this.currentHandler = sender;
-    if (sender.isSelected()) {
-      return;
-    }
+    // if (sender.isSelected()) {
+    //   return;
+    // }
 
     // logger.debugTime();
     // logger.start("SelectionHandler.select 2");

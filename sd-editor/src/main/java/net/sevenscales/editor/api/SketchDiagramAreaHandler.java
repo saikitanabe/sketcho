@@ -86,7 +86,7 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
     // doesn't support Relationship2 yet
     // removed shift key down
     boolean connectionMode = modeManager.isConnectMode();
-  	logger.debug("onMouseDown connectionMode({}), sender({}) ... 1", connectionMode, sender);
+  	// logger.debug("onMouseDown connectionMode({}), sender({}) ... 1", connectionMode, sender);
     if ( sender != null && !(sender instanceof Relationship2) && connectionMode && notFreehandMode()) {
     	logger.debug2("Starting to create quick connection sender({})... 2", sender);
       // set connection mode on automatically as long as shift key is down
