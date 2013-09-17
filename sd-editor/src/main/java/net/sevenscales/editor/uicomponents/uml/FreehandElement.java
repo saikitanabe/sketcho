@@ -26,18 +26,23 @@ import net.sevenscales.editor.uicomponents.AnchorElement;
 import net.sevenscales.editor.uicomponents.Point;
 import net.sevenscales.domain.utils.SLogger;
 
-public class FreehandElement extends AbstractDiagramItem implements SupportsRectangleShape {
+public class FreehandElement extends AbstractDiagramItem {
 	private static SLogger logger = SLogger.createLogger(FreehandElement.class);
 	public static int FREEHAND_STROKE_WIDTH = 2;
 	public static int ACTIVITY_START_RADIUS = 10;
 //	private Rectangle rectSurface;
 	private FreehandShape shape;
 	private Point coords = new Point();
-	private IRectangle boundary;
+	// private IRectangle boundary;
 //	private boolean onResizeArea;
   private IPath path;
+  private IPath backgroundPath;
 //  private IPolyline path;
   private IGroup group;
+  private int left;
+  private int top;
+  private int width;
+  private int height;
   
   private static final String BOUNDARY_COLOR = "#aaaaaa";
 
@@ -59,16 +64,23 @@ public class FreehandElement extends AbstractDiagramItem implements SupportsRect
     path.setStrokeWidth(FREEHAND_STROKE_WIDTH);
     path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     
-    boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
-    boundary.setStroke("transparent");
-    boundary.setFill(0, 0, 0, 0); // transparent
-    boundary.setStyle(ILine.DASH);
+    // boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
+    // boundary.setStroke("transparent");
+    // boundary.setFill(0, 0, 0, 0); // transparent
+    // boundary.setStyle(ILine.DASH);
+
+    backgroundPath = IShapeFactory.Util.factory(editable).createPath(group, pathTransformer);
+    // backgroundPath.setStroke(borderWebColor);
+    backgroundPath.setStroke(0, 0, 0, 0);
+    backgroundPath.setStrokeWidth(10);
+
+    enableDisableBackgroundEvents();
 		
-		addEvents(boundary);
+		addEvents(backgroundPath);
 		
 		addMouseDiagramHandler(this);
 		
-    shapes.add(boundary);
+    // shapes.add(boundary);
     shapes.add(path);
     
     setReadOnly(!editable);
@@ -79,27 +91,31 @@ public class FreehandElement extends AbstractDiagramItem implements SupportsRect
 	
 	@Override
 	protected int doGetLeft() {
-		return boundary.getX();
+		return left;
+		// return boundary.getX();
 	}
 	@Override
 
 	protected int doGetTop() {
-		return boundary.getY();
+		return top;
+		// return boundary.getY();
 	}
 	@Override
 	public int getWidth() {
-		return boundary.getWidth();
+		return width;
+		// return boundary.getWidth();
 	}
 	@Override
 	public int getHeight() {
-		return boundary.getHeight();
+		return height;
+		// return boundary.getHeight();
 	}
 	
-	@Override
-	public void setShape(int left, int top, int width, int height) {
-//    boundary.setShape(left + width / 2, top + height / 2, width / 2);
-//    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
-	}
+// 	@Override
+// 	public void setShape(int left, int top, int width, int height) {
+// //    boundary.setShape(left + width / 2, top + height / 2, width / 2);
+// //    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
+// 	}
 	
 //	public void saveLastTransform() {
 //	  // get transformation
@@ -217,7 +233,7 @@ public class FreehandElement extends AbstractDiagramItem implements SupportsRect
 
 	public void setReadOnly(boolean value) {
 	  super.setReadOnly(value);
-	  boundary.setVisibility(!value);
+	  // boundary.setVisibility(!value);
 	}
 	
   public String getDefaultRelationship() {
@@ -234,16 +250,18 @@ public class FreehandElement extends AbstractDiagramItem implements SupportsRect
 //    setShape(shape[0], shape[1], shape[2]);
   	this.shape.points = shape;
   	path.setShape(calcShape(shape, 0, 0));
-  	int left = DiagramHelpers.getLeftCoordinate(shape);
-  	int top = DiagramHelpers.getTopCoordinate(shape);
-  	int width = DiagramHelpers.getWidth(shape);
-  	int height = DiagramHelpers.getHeight(shape);
-  	boundary.setShape(
-  			left, 
-  			top, 
-  			width, 
-  			height, 4);
-  	
+  	backgroundPath.setShape(calcShape(shape, 0, 0));
+
+  	this.left = DiagramHelpers.getLeftCoordinate(shape);
+  	this.top = DiagramHelpers.getTopCoordinate(shape);
+  	this.width = DiagramHelpers.getWidth(shape);
+  	this.height = DiagramHelpers.getHeight(shape);
+  	// boundary.setShape(
+  	// 		left, 
+  	// 		top, 
+  	// 		width, 
+  	// 		height, 4);
+
     connectionHelpers.setShape(left, top, width, height);
 
 //  	boundary.setShape(getLeft(), getTop(), getWidth(), getHeight(), 4);
@@ -345,28 +363,39 @@ public class FreehandElement extends AbstractDiagramItem implements SupportsRect
 	// }
   
   public void setHighlightColor(String color) {
-  	if (!isHighlightOn()) {
+  	// if (!isHighlightOn()) {
   		// do not change path color if this is highlight border color change 
   		path.setStroke(color);
-  	}
+  	// }
   }
   
-  @Override
-  public void setHighlight(boolean highlight) {
-  	String color = HIGHLIGHT_COLOR;
-		if (!highlight) {
-			color = "transparent";
-		}
-  	super.setHighlight(highlight);
-  	boundary.setStroke(color);
-  }
+  // @Override
+  // public void setHighlight(boolean highlight) {
+  // 	String color = HIGHLIGHT_COLOR;
+		// if (!highlight) {
+		// 	color = "transparent";
+		// }
+  // 	super.setHighlight(highlight);
+  // 	// boundary.setStroke(color);
+  // }
   
   @Override
   public void setBackgroundColor(int red, int green, int blue, double opacity) {
   	super.setBackgroundColor(red, green, blue, opacity);
 //  	path.setStroke(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 1);
     path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+    enableDisableBackgroundEvents();
 //  	path.setStrokeWidth(2);
+  }
+
+  private void enableDisableBackgroundEvents() {
+    if (backgroundColor.opacity == 0) {
+    	// clear events from background
+	    backgroundPath.setFill(null);
+    } else {
+	    // enable mouse events from background
+	    backgroundPath.setFill(0, 0, 0, 0);
+    }
   }
   	
 	@Override
