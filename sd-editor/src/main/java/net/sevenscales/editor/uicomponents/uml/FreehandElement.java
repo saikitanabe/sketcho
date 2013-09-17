@@ -30,14 +30,10 @@ public class FreehandElement extends AbstractDiagramItem {
 	private static SLogger logger = SLogger.createLogger(FreehandElement.class);
 	public static int FREEHAND_STROKE_WIDTH = 2;
 	public static int ACTIVITY_START_RADIUS = 10;
-//	private Rectangle rectSurface;
 	private FreehandShape shape;
 	private Point coords = new Point();
-	// private IRectangle boundary;
-//	private boolean onResizeArea;
   private IPath path;
   private IPath backgroundPath;
-//  private IPolyline path;
   private IGroup group;
   private int left;
   private int top;
@@ -64,13 +60,7 @@ public class FreehandElement extends AbstractDiagramItem {
     path.setStrokeWidth(FREEHAND_STROKE_WIDTH);
     path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     
-    // boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
-    // boundary.setStroke("transparent");
-    // boundary.setFill(0, 0, 0, 0); // transparent
-    // boundary.setStyle(ILine.DASH);
-
     backgroundPath = IShapeFactory.Util.factory(editable).createPath(group, pathTransformer);
-    // backgroundPath.setStroke(borderWebColor);
     backgroundPath.setStroke(0, 0, 0, 0);
     backgroundPath.setStrokeWidth(10);
 
@@ -80,7 +70,6 @@ public class FreehandElement extends AbstractDiagramItem {
 		
 		addMouseDiagramHandler(this);
 		
-    // shapes.add(boundary);
     shapes.add(path);
     
     setReadOnly(!editable);
@@ -111,26 +100,6 @@ public class FreehandElement extends AbstractDiagramItem {
 		// return boundary.getHeight();
 	}
 	
-// 	@Override
-// 	public void setShape(int left, int top, int width, int height) {
-// //    boundary.setShape(left + width / 2, top + height / 2, width / 2);
-// //    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
-// 	}
-	
-//	public void saveLastTransform() {
-//	  // get transformation
-//    int dx = SilverUtils.getTransformX(group.getContainer());
-//    int dy = SilverUtils.getTransformY(group.getContainer());
-//	    
-//	  // reset transformations
-//    SilverUtils.resetRenderTransform(group.getContainer());
-//	    
-//    // apply transformations to shapes
-//    for (IShape s : shapes) {
-//      s.applyTransform(dx, dy);
-//    }
-//	}
-
 	public Point getDiffFromMouseDownLocation() {
 		return new Point(diffFromMouseDownX, diffFromMouseDownY);
 	}
@@ -165,44 +134,17 @@ public class FreehandElement extends AbstractDiagramItem {
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     FreehandShape newShape = new FreehandShape(DiagramHelpers.map(shape.points, 10, 10));
     Diagram result = new FreehandElement(surface, newShape, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
-//    Diagram result = createDiagram(surface, newShape, getEditable());
     return result;
   }
-	
-//  protected Diagram createDiagram(ISurfaceHandler surface, ActivityStartShape newShape,
-//      boolean editable) {
-////    return new FreehandElement(surface, newShape, editable);
-//  	return null;
-//  }
-	
-//////////////////////////////////////////////////////////////////////
-	
-//	public boolean onResizeArea(int x, int y) {
-//		return onResizeArea;
-//	}
-
-//	public JavaScriptObject getResizeElement() {
-//		return rectSurface.getRawNode();
-//	}
 	
 	public void resizeStart() {
 	}
 
 	public boolean resize(Point diff) {
-//		return resize(boundary.getX(), boundary.getY(), boundary.getRadius() + diff.x, boundary.getRadius() + diff.y);
 		return false;
 	}
 
 	protected boolean resize(int left, int top, int width, int height) {
-//	   if (width >= minimumWidth && height >= minimumHeight) {
-//  	   left = GridUtils.align(left);
-//       top = GridUtils.align(top);
-//       width = GridUtils.align(width);
-//       height = GridUtils.align(height);
-//       
-//       setShape(left, top, width);
-//  		return true;
-//	   }
 	   return false;
 	}
 
@@ -233,7 +175,6 @@ public class FreehandElement extends AbstractDiagramItem {
 
 	public void setReadOnly(boolean value) {
 	  super.setReadOnly(value);
-	  // boundary.setVisibility(!value);
 	}
 	
   public String getDefaultRelationship() {
@@ -247,7 +188,6 @@ public class FreehandElement extends AbstractDiagramItem {
   
   @Override
 	protected void doSetShape(int[] shape) {
-//    setShape(shape[0], shape[1], shape[2]);
   	this.shape.points = shape;
   	path.setShape(calcShape(shape, 0, 0));
   	backgroundPath.setShape(calcShape(shape, 0, 0));
@@ -256,15 +196,7 @@ public class FreehandElement extends AbstractDiagramItem {
   	this.top = DiagramHelpers.getTopCoordinate(shape);
   	this.width = DiagramHelpers.getWidth(shape);
   	this.height = DiagramHelpers.getHeight(shape);
-  	// boundary.setShape(
-  	// 		left, 
-  	// 		top, 
-  	// 		width, 
-  	// 		height, 4);
-
     connectionHelpers.setShape(left, top, width, height);
-
-//  	boundary.setShape(getLeft(), getTop(), getWidth(), getHeight(), 4);
 	}
 
 	private int mid(int val1, int val2) {
@@ -350,42 +282,15 @@ public class FreehandElement extends AbstractDiagramItem {
 		return result;
 	}
 	
-	// @Override
-	// public void select() {
-	// 	super.select();
-	// 	boundary.setStroke(BOUNDARY_COLOR);
-	// }
-	
-	// @Override
-	// public void unselect() {
-	// 	super.unselect();
-	// 	boundary.setStroke("transparent");
-	// }
-  
   public void setHighlightColor(String color) {
-  	// if (!isHighlightOn()) {
-  		// do not change path color if this is highlight border color change 
-  		path.setStroke(color);
-  	// }
+		path.setStroke(color);
   }
-  
-  // @Override
-  // public void setHighlight(boolean highlight) {
-  // 	String color = HIGHLIGHT_COLOR;
-		// if (!highlight) {
-		// 	color = "transparent";
-		// }
-  // 	super.setHighlight(highlight);
-  // 	// boundary.setStroke(color);
-  // }
   
   @Override
   public void setBackgroundColor(int red, int green, int blue, double opacity) {
   	super.setBackgroundColor(red, green, blue, opacity);
-//  	path.setStroke(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 1);
     path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     enableDisableBackgroundEvents();
-//  	path.setStrokeWidth(2);
   }
 
   private void enableDisableBackgroundEvents() {
@@ -412,6 +317,5 @@ public class FreehandElement extends AbstractDiagramItem {
   public int supportedMenuItems() {
   	return ContextMenuItem.FREEHAND_MENU.getValue() | ContextMenuItem.COLOR_MENU.getValue();
   }
-
 
 }
