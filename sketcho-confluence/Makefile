@@ -20,4 +20,5 @@ tag:
 
 build:
 	make -C ../sketcho-confluence-editor prod
+	make -C ../../marked-token prod
 	atlas-mvn clean package
