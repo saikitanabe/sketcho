@@ -89,12 +89,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
     this.diagrams = diagrams;
     this.surface = surface;
     
-    if (IShapeFactory.Util.isCurrentGfxSvg()) {
-      gridUtils = new GridUtils();
-    } else {
-    	// let silverlight have more changes to draw
-      gridUtils = new GridUtils(10);
-    }
+	  gridUtils = new GridUtils();
     
 		surface.getEditorContext().getEventBus().addHandler(StartSelectToolEvent.TYPE, new StartSelectToolEventHandler() {
 			@Override

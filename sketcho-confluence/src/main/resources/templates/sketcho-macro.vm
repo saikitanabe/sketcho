@@ -1,4 +1,5 @@
 <meta name="sketchboard-me-plugin-url" content="$resourcesPath">
+#requireResource("com.atlassian.auiplugin:ajs-underscorejs")
 #requireResource("net.sevenscales.confluence.plugins.sketcho-confluence:script_resource")
 #requireResource("net.sevenscales.confluence.plugins.sketcho-confluence:sketcho_confluence_app")
 
