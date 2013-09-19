@@ -94,6 +94,11 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 			
 			@Override
 			public void dragStart(Diagram sender) {
+				if (freehandModeOn) {
+					// do not check dragging if freehand mode is on
+					// connection helpers will not show then later.
+					return;
+				}
 				someElementIsDragged = true;
 				setVisibility(false);
 			}
