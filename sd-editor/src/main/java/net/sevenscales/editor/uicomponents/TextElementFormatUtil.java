@@ -330,7 +330,7 @@ public class TextElementFormatUtil {
 	public void hide() {
 		textGroup.setVisible(false);
 	}
-	
+
 	public void show() {
 		textGroup.setVisible(true);
 	}

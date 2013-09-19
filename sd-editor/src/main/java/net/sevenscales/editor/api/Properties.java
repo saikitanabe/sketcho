@@ -242,12 +242,12 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			@Override
 			public void onClose(CloseEvent<PopupPanel> event) {
 				logger.info("close properties editor...");
+				applyTextToDiagram();
 				fireEditorClosed();
 				if (selectedDiagram == null) {
 					return;
 				}
 				
-				applyTextToDiagram();
 				if (!TouchHelpers.isSupportsTouch()) {
 					// selection stays if not unselected separately on non touch device
 					selectedDiagram.unselect();

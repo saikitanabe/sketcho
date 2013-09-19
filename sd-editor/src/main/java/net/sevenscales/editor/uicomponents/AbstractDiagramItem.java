@@ -414,11 +414,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     if (resizeHelpers != null) {
     	resizeHelpers.hide(this);
     }
-
-    // need to show text just in case, since editor might be open
-    // but unselect all loses selected diagram and cannot restore
-    // show text state, this will fix that.
-    showText();
     
     // logger.debugTime();
   }
@@ -1113,7 +1108,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 			textFormatter.show();
 		}
 	}
-	
+
 	public String getTextAreaBackgroundColor() {
 		if (backgroundColor.opacity == 0) {
 			// transparent
