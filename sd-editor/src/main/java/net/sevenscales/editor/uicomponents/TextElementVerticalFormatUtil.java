@@ -26,7 +26,7 @@ import net.sevenscales.editor.gfx.domain.IText;
 
 public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   private JavaScriptObject tokens;
-  public static int DEFAULT_VERTICAL_TEXT_MARGIN = DEFAULT_MARGIN_TOP + DEFAULT_MARGIN_BOTTOM;
+  public static int DEFAULT_VERTICAL_TEXT_MARGIN = 0;
 
 	public TextElementVerticalFormatUtil(Diagram parent, HasTextElement hasTextElement, IGroup group, EditorContext editorContext) {
   	super(parent, hasTextElement, group, editorContext);
