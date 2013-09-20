@@ -61,6 +61,15 @@
 					</li>
 				</ul>
  -->			</div>
+			<c:FastButton ui:field="commentMode" addStyleNames="{style.simple}">
+				<c:child>
+					<g:HTML>
+						<a title="Comment Mode" class="btn btn-custom download-btn tooltipper">
+							<i class="">C</i>
+						</a>
+					</g:HTML>
+				</c:child>
+			</c:FastButton>
 			<c:FastButton ui:field="select" addStyleNames="{style.simple}">
 				<c:child>
 					<g:HTML>

@@ -40,6 +40,7 @@
 	<ui:image field="umlsequence" src="sequence-white.png"></ui:image>
 	<ui:image field="umlactor" src="actor-white.png"></ui:image>
 	<ui:image field="umlnote" src="note-white.png"></ui:image>
+	<ui:image field="elcomments" src="comments-white.png"></ui:image>
 	<ui:image field="umlchoice" src="choice-white.png"></ui:image>
 	<ui:image field="umlstart" src="start-white.png"></ui:image>
 	<ui:image field="umlend" src="end-white.png"></ui:image>
@@ -61,10 +62,16 @@
 <!-- 		</g:HTML> -->
 		<g:HorizontalPanel ui:field="diagramGroups">
 			<g:VerticalPanel styleName="{style.selectionTable} class-diagram">
+				<c:FastButton ui:field="comments" styleName="{style.focuspanel}">
+					<c:child>
+						<g:SimplePanel styleName="{style.asbutton}">
+							<g:Image resource="{elcomments}" styleName="{style.relationship}"></g:Image>
+						</g:SimplePanel>
+					</c:child>
+				</c:FastButton>
 				<c:FastButton ui:field="note" styleName="{style.focuspanel}">
 					<c:child>
 						<g:SimplePanel styleName="{style.asbutton}">
-
 							<g:Image resource="{umlnote}" styleName="{style.relationship}"></g:Image>
 						</g:SimplePanel>
 					</c:child>

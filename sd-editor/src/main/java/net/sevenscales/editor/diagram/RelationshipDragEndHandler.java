@@ -28,6 +28,7 @@ import net.sevenscales.editor.diagram.shape.DbShape;
 import net.sevenscales.editor.diagram.shape.EllipseShape;
 import net.sevenscales.editor.diagram.shape.MindCentralShape;
 import net.sevenscales.editor.diagram.shape.NoteShape;
+import net.sevenscales.editor.diagram.shape.CommentsShape;
 import net.sevenscales.editor.diagram.shape.RectShape;
 import net.sevenscales.editor.diagram.shape.SequenceShape;
 import net.sevenscales.editor.diagram.shape.TextShape;
@@ -48,6 +49,7 @@ import net.sevenscales.editor.uicomponents.uml.ClassElement2;
 import net.sevenscales.editor.uicomponents.uml.EllipseElement;
 import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
+import net.sevenscales.editor.uicomponents.uml.CommentsElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement;
 import net.sevenscales.editor.uicomponents.uml.StorageElement;
@@ -176,6 +178,7 @@ public class RelationshipDragEndHandler implements
 	}
 
 	public void itemSelected(UMLDiagramType type, int x, int y) {
+		logger.debug("itemSelected {}", type);
 		hide();
 		Diagram diagram = null;
 		if (currentRel != null) {
@@ -265,6 +268,16 @@ public class RelationshipDragEndHandler implements
 			NoteElement ne = new NoteElement(surface,
 	        new NoteShape(x, y, 150, 1),
 	        type.getValue(),
+	        background, borderColor, color, true);
+			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
+			result = ne;
+			break;
+		}
+		case COMMENTS: {
+			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
+			CommentsElement ne = new CommentsElement(surface,
+	        new CommentsShape(x, y, 150, 1),
+	        "Comments",
 	        background, borderColor, color, true);
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 			result = ne;

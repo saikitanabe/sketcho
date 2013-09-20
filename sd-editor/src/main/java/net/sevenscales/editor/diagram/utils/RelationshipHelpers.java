@@ -6,6 +6,7 @@ import net.sevenscales.editor.api.LibrarySelections.Library;
 import net.sevenscales.editor.content.ui.LineSelections.RelationShipType;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
+import net.sevenscales.editor.uicomponents.uml.CommentsElement;
 
 public class RelationshipHelpers {
 	public static String relationship(Diagram sender, EditorContext editorContext) {
@@ -24,10 +25,16 @@ public class RelationshipHelpers {
   		return RelationShipType.LINE.getValue();
   	}
   	
+    // TODO should be diagram property, it would know wheather or not always have certain type of connection
   	if (sender instanceof NoteElement || (theOtherEnd != null && theOtherEnd instanceof NoteElement)) {
   		// note element has always default type
   		return RelationShipType.DEPENDANCY.getValue();
   	}
+
+    if (sender instanceof CommentsElement || (theOtherEnd != null && theOtherEnd instanceof CommentsElement)) {
+      // comments element has always default type
+      return RelationShipType.DEPENDANCY.getValue();
+    }
     
 		Object type = editorContext.get(EditorProperty.CURRENT_RELATIONSHIP_TYPE);
 		if (type != null && type instanceof RelationShipType) {
