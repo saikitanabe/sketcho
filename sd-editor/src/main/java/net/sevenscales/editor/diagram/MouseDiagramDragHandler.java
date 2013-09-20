@@ -145,7 +145,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	}
 
 	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
-		if (sender != null && !parent.getResize()) {
+		if (sender != null && !parent.getResize() && !surface.getEditorContext().isFreehandMode()) {
 			// Debug.print("onMouseDown:"+x+"y:"+y);
 			// System.out.println("drag mouse down"+sender);
 			// drag handler is not interested in canvas events
@@ -163,7 +163,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 			
 			initLineHelpers();
 //	    complexElementHandler.reset();
-		}
+		} 
 		return false;
 	}
 
@@ -179,7 +179,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 			// handle only canvas move events
 			return;
 		}
-		
+
 		drag(point);
 	}
 	

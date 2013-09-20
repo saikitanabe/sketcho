@@ -121,4 +121,8 @@ public class EditorContext {
 //    Document.get().getElementById("sketchboardme-toolframe").getStyle().setVisibility(Visibility.VISIBLE);
 //    Document.get().getElementById("sketchboardme-scaleSlider").getStyle().setVisibility(Visibility.VISIBLE);
 	}
+
+	public boolean isFreehandMode() {
+		return isTrue(EditorProperty.FREEHAND_MODE);
+	}
 }
