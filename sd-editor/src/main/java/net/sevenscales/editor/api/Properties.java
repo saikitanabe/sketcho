@@ -39,6 +39,7 @@ import net.sevenscales.editor.uicomponents.AnchorElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
+import net.sevenscales.editor.uicomponents.uml.CommentsElement;
 import net.sevenscales.editor.api.impl.Theme;
 
 import com.google.gwt.core.client.Scheduler;
@@ -496,6 +497,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			// if diagram text editing is not supported => return
 			return;
 		}
+
+		if (selectedDiagram instanceof CommentsElement) {
+			return;
+		}
 		
 		selectedDiagram.hideConnectionHelpers();
 		
@@ -593,7 +598,13 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		popup.setPopupPosition(x, y);
 
 		textArea.setVisible(true);
-		textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor());
+		
+		if ("transparent".equals(diagram.getTextAreaBackgroundColor())) {
+			textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor());
+		} else {
+			textArea.getElement().getStyle().setBackgroundColor("#" + diagram.getBackgroundColor());
+		}
+
 		textArea.getElement().getStyle().setColor("#" + diagram.getTextColor());
 		textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
 		setTextAreaHeight(diagram.getTextAreaHeight());
