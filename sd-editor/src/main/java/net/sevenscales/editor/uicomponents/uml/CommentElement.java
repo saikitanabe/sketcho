@@ -4,6 +4,10 @@ package net.sevenscales.editor.uicomponents.uml;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
+import com.google.gwt.core.client.JsonUtils;
+
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
@@ -30,9 +34,14 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.JsComment;
+
 import com.google.gwt.core.client.GWT;
 
 public class CommentElement extends AbstractDiagramItem implements SupportsRectangleShape {
+	private static final SLogger logger = SLogger.createLogger(CommentElement.class);
+
 //	private Rectangle rectSurface;
 //  private IPolyline boundary;
 	private IRectangle boundary;
@@ -51,7 +60,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //  private IImage rightShadow;
 //  private IImage topBlur;
   private TextElementVerticalFormatUtil textUtil;
-  private Diagram commentThread;
+  private String parentThread;
   
   private static final int LEFT_SHADOW_LEFT = 6; 
   private static final int LEFT_SHADOW_HEIGHT = 41; 
@@ -67,10 +76,10 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   
 	public CommentElement(ISurfaceHandler surface, CommentShape newShape, String text, 
 										 Color backgroundColor, Color borderColor, Color textColor, boolean editable,
-										 Diagram commentThread) {
+										 String parentThread) {
 		super(editable, surface, backgroundColor, borderColor, textColor);
 		this.shape = newShape;
-		this.commentThread = commentThread;
+		this.parentThread = parentThread;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     group.setAttribute("cursor", "default");
@@ -351,7 +360,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	
   protected CommentElement createDiagram(ISurfaceHandler surface, CommentShape newShape,
       String text, boolean editable) {
-    return new CommentElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, commentThread);
+    return new CommentElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, parentThread);
   }
 	
 //////////////////////////////////////////////////////////////////////
@@ -495,6 +504,24 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	@Override
 	public int getTextAreaLeft() {
 		return getLeft() + 7;
+	}
+
+	@Override
+	public String getCustomData() {
+   	JSONObject json = new JSONObject();
+    json.put("pthread", new JSONString(parentThread));
+
+    String result = json.toString().replaceAll("\"", "\\\\\"");
+    logger.debug("pthread: {}", result);
+    return result;
+	}
+
+	@Override
+  public void parseCustomData(String customData) {
+  	logger.debug("customData: {}", customData);
+  	JsComment jsComment = JsonUtils.safeEval(customData);
+    parentThread = jsComment.getParentThread();
+    logger.debug("PARENTTHREAD {}", parentThread);
 	}
 
 }

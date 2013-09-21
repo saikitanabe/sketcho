@@ -11,6 +11,8 @@ import com.google.gwt.dom.client.Style.*;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.EditorCommon;
@@ -72,9 +74,14 @@ class CommentEditor  extends Composite {
 			public void onClick(ClickEvent event) {
 				logger.debug("Comment {}...", textArea.getText());
 				createComment();
-				hide();
+				clearAndHide();
 			}
 		});
+	}
+
+	private void clearAndHide() {
+		textArea.setText("");
+		hide();
 	}
 
 	private void createComment() {
@@ -87,8 +94,15 @@ class CommentEditor  extends Composite {
 		CommentElement commentElement = new CommentElement(surface,
         new CommentShape(commentThread.getLeft(), commentThread.getTop(), commentThread.getWidth(), 1),
         textArea.getText(),
-        background, borderColor, color, true, commentThread);
+        background, borderColor, color, true, commentThread.getDiagramItem().getClientId());
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
+
+   	// JSONObject json = new JSONObject();
+    // json.put("pthread", new JSONString(commentThread.getDiagramItem().getClientId()));
+
+    // logger.debug("pthread: {}", json.toString());
+		// commentElement.getDiagramItem().setCustomData(json.toString());
+		// commentElement.setCustomData(json.toString());
 
 		surface.addAsSelected(commentElement, true);
 
