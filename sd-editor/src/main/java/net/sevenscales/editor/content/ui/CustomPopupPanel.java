@@ -13,9 +13,11 @@ public class CustomPopupPanel extends PopupPanel {
 	private static final SLogger logger = SLogger
 			.createLogger(CustomPopupPanel.class);
 	private boolean selectAll;
+	private TextArea textArea;
 	
-	public CustomPopupPanel() {
+	public CustomPopupPanel(TextArea textArea) {
 		super(false);
+		this.textArea = textArea;
 	}
 
 	@Override
@@ -44,17 +46,15 @@ public class CustomPopupPanel extends PopupPanel {
 	}
 
 	private void focusEditor() {
-		if (getWidget() instanceof TextArea) {
-			TextArea ta = (TextArea) getWidget();
-			ta.setFocus(true);
-			
-			if (selectAll) {
-				ta.setSelectionRange(0, ta.getText().length());
-				logger.info("focus set and text selected");
-			} else {
-				ta.setCursorPos(ta.getText().length());
-			}
+		textArea.setFocus(true);
+		
+		if (selectAll) {
+			textArea.setSelectionRange(0, textArea.getText().length());
+			logger.info("focus set and text selected");
+		} else {
+			textArea.setCursorPos(textArea.getText().length());
 		}
+		
 	}
 
 	public void selectAll(boolean selectAll) {

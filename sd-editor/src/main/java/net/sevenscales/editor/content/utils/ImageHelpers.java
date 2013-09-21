@@ -69,13 +69,12 @@ public class ImageHelpers extends Composite {
 		popup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
 			@Override
 			public void setPosition(int offsetWidth, int offsetHeight) {
-		    SvgConverter sc = new SvgConverter();
+		    SvgConverter sc = new SvgConverter(true);
 		    
 		    editorContent.externalize();
 		    SvgData svg = sc.convertToSvg((IDiagramContent) editorContent.getContent(),
 		    		editorContent.getModelingPanel().getSurface());
 		    
-		    System.out.println(svg.svg);
 		    _updateCanvas2(Element.as(imageCanvas), svg.svg, svg.width, svg.height);
 //		    DiagramContentFactory.jsonUploadService(content, content.getName(), data);
 //		    _setHref(data);

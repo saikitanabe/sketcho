@@ -11,19 +11,11 @@ import net.sevenscales.editor.api.event.ColorSelectedEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEventHandler;
 import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
 import net.sevenscales.editor.api.event.DiagramElementAddedEventHandler;
-import net.sevenscales.editor.api.event.EditDiagramPropertiesEndedEvent;
-import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
-import net.sevenscales.editor.api.event.EditorClosedEvent;
-import net.sevenscales.editor.api.event.EditorClosedEventHandler;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.event.RelationshipTypeSelectedEvent;
 import net.sevenscales.editor.api.event.RelationshipTypeSelectedEventHandler;
-import net.sevenscales.editor.api.event.SelectionEvent;
-import net.sevenscales.editor.api.event.SelectionEventHandler;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEventHandler;
-import net.sevenscales.editor.api.event.UnselectAllEvent;
-import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
 import net.sevenscales.editor.content.ui.LineSelections.RelationShipType;
@@ -41,6 +33,7 @@ import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.CommentsElement;
 import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.api.impl.EditorCommon;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
@@ -79,6 +72,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private boolean sending;
 	private int textEditX;
 	private int textEditY;
+	private CommentEditor commentEditor;
+	private EditorCommon editorCommon;
 	
 	private static class Buffer {
 		String text;
@@ -113,17 +108,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		VerticalPanel panel = new VerticalPanel();
 		panel.setHeight("100%");
 
-		surface.getEditorContext().getEventBus().addHandler(SelectionEvent.TYPE, new SelectionEventHandler() {
-			@Override
-			public void onSelection(SelectionEvent event) {
-				hide();
-			}
-		});
-		
-		surface.getEditorContext().getEventBus().addHandler(EditorClosedEvent.TYPE, new EditorClosedEventHandler() {
-			@Override
-			public void onSelection(EditorClosedEvent event) {
-				hide();
+		editorCommon = new EditorCommon(surface, new EditorCommon.HideEditor() {
+			public void hide() {
+				Properties.this.hide();
 			}
 		});
 		
@@ -231,7 +218,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			}
 		});
 
-		popup = new CustomPopupPanel();
+		commentEditor = new CommentEditor(surface);
+
+		popup = new CustomPopupPanel(textArea);
 		popup.setStyleName("propertyPopup");
 		popup.setWidget(textArea);
 		// autohide is not enabled since property editor is closed manually and autohide causes problems
@@ -244,7 +233,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			public void onClose(CloseEvent<PopupPanel> event) {
 				logger.info("close properties editor...");
 				applyTextToDiagram();
-				fireEditorClosed();
+				Properties.this.editorCommon.fireEditorClosed();
 				if (selectedDiagram == null) {
 					return;
 				}
@@ -275,16 +264,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 				}
 			}
 		});
-		
-		editorContext.getEventBus().addHandler(UnselectAllEvent.TYPE, new UnselecteAllEventHandler() {
-			@Override
-			public void onUnselectAll(UnselectAllEvent event) {
-				logger.info("onUnselectAll...");
-				// if surface background is selected => hide popup
-				hide();
-			}
-		});
-		
+				
 		editorContext.getEventBus().addHandler(ShowDiagramPropertyTextEditorEvent.TYPE, showDiagramText);
 
 		setWidget(panel);
@@ -435,7 +415,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			public boolean execute() {
 				lastSentText = buffer.diagram.getText(textEditX, textEditY);
 				
-				fireChanged(buffer.diagram);
+				Properties.this.editorCommon.fireChanged(buffer.diagram);
 		    sending = false;
 		    
 //		    System.out.println("buffer != lastSentText: " + buffer + " " + lastSentText + " " + buffer != lastSentText);
@@ -447,21 +427,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	
 	private boolean bufferTextIsSent() {
 	  return buffer.text.equals(lastSentText);
-	}
-
-	private void fireChanged(Diagram diagram) {
-		Set<Diagram> diagrams = new HashSet<Diagram>();
-		for (AnchorElement ae : diagram.getAnchors()) {
-			// this starts to fail, null pointer
-			// but where is the actual problem!!
-			// should be cleaned up!!, difficult to track down.
-			if (ae.getHandler() != null) {
-				diagrams.add(ae.getHandler().connection());
-			}
-		}
-		
-		diagrams.add(diagram);
-    editorContext.getEventBus().fireEvent(new PotentialOnChangedEvent(diagrams));
 	}
 
 	@Override
@@ -499,6 +464,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		}
 
 		if (selectedDiagram instanceof CommentsElement) {
+			commentEditor.show(selectedDiagram);
 			return;
 		}
 		
@@ -525,7 +491,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 //
 //		surface.invertScaleDiagram(diagram, diagram.getTextAreaLeft(), diagram.getTextAreaTop());
 
-		fireEditorOpen();
+		this.editorCommon.fireEditorOpen();
 		popup.selectAll(justCreated);
 		popup.show();
 		
@@ -598,7 +564,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		popup.setPopupPosition(x, y);
 
 		textArea.setVisible(true);
-		
+
 		if ("transparent".equals(diagram.getTextAreaBackgroundColor())) {
 			textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor());
 		} else {
@@ -683,16 +649,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		if (popup.isShowing() && selectedDiagram == diagram) {
 			_setTextAreaSize(diagram);
 		}
-	}
-
-	private void fireEditorOpen() {
-		editorContext.set(EditorProperty.PROPERTY_EDITOR_IS_OPEN, true);
-		editorContext.getEventBus().fireEvent(new EditDiagramPropertiesStartedEvent());
-	}
-
-	private void fireEditorClosed() {
-		editorContext.set(EditorProperty.PROPERTY_EDITOR_IS_OPEN, false);
-		editorContext.getEventBus().fireEvent(new EditDiagramPropertiesEndedEvent());
 	}
 
 	@Override
