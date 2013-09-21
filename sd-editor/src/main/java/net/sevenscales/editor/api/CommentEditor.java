@@ -12,13 +12,19 @@ import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 
-import net.sevenscales.editor.content.ui.CustomPopupPanel;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.EditorCommon;
-import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.FastElementButton;
+
+import net.sevenscales.editor.content.ui.CustomPopupPanel;
+
+import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.shape.CommentShape;
+
+import net.sevenscales.editor.uicomponents.uml.CommentElement;
+import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.domain.utils.SLogger;
 
 
@@ -36,7 +42,7 @@ class CommentEditor  extends Composite {
 	@UiField AnchorElement comment;
 	private CustomPopupPanel popup;
 	private EditorCommon editorCommon;
-	private Diagram editedDiagram;
+	private Diagram commentThread;
 
 	CommentEditor(ISurfaceHandler surface) {
 		this.surface = surface;
@@ -65,15 +71,36 @@ class CommentEditor  extends Composite {
 			@Override
 			public void onClick(ClickEvent event) {
 				logger.debug("Comment {}...", textArea.getText());
-				editedDiagram.setText(textArea.getText());
-				CommentEditor.this.editorCommon.fireChanged(editedDiagram);
+				createComment();
 				hide();
 			}
 		});
 	}
 
+	private void createComment() {
+		net.sevenscales.editor.diagram.utils.Color current = Theme.defaultColor();
+		Color background = new Color(current.getRr(), current.getGg(), current.getBb(), current.getOpacity());
+		Color borderColor = new Color(current.getBorR(), current.getBorG(), current.getBorB(), 1);
+		Color color = new Color(current.getR(), current.getG(), current.getB(), 1);
+
+		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
+		CommentElement commentElement = new CommentElement(surface,
+        new CommentShape(commentThread.getLeft(), commentThread.getTop(), commentThread.getWidth(), 1),
+        textArea.getText(),
+        background, borderColor, color, true, commentThread);
+		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
+
+		surface.addAsSelected(commentElement, true);
+
+
+		// commentThread.setText(textArea.getText());
+		// editorCommon.fireChanged(ne);
+	}
+
 	void show(Diagram diagram) {
-		this.editedDiagram = diagram;
+		// TODO get parent from CommentElement; store also comment element
+		// if need to update comment
+		this.commentThread = diagram;
 		logger.debug("show CommentEditor...");
 		surface.getMouseDiagramManager().getDragHandler().releaseDrag();
 

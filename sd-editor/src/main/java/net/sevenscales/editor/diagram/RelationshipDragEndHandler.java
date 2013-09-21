@@ -273,7 +273,7 @@ public class RelationshipDragEndHandler implements
 			result = ne;
 			break;
 		}
-		case COMMENTS: {
+		case COMMENT_THREAD: {
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 			CommentThreadElement ne = new CommentThreadElement(surface,
 	        new CommentThreadShape(x, y, 150, 1),

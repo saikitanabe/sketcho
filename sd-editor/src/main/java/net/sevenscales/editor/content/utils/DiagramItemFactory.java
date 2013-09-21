@@ -26,6 +26,7 @@ import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.MindCentralShape;
 import net.sevenscales.editor.diagram.shape.NoteShape;
 import net.sevenscales.editor.diagram.shape.CommentThreadShape;
+import net.sevenscales.editor.diagram.shape.CommentShape;
 import net.sevenscales.editor.diagram.shape.RectContainerShape;
 import net.sevenscales.editor.diagram.shape.RectShape;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
@@ -47,6 +48,7 @@ import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
+import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.uicomponents.uml.RectBoundaryElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement;
@@ -165,6 +167,24 @@ public class DiagramItemFactory {
               parseBorderColor(item),
               parseTextColor(item),
           editable);
+      result = ne;
+    } else if (item.getType().equals("comment")) {
+      String[] s = item.getShape().split(",");
+      int x = parseInt(s[0]);
+      int y = parseInt(s[1]);
+      int width = parseInt(s[2]);
+      int height = parseInt(s[3]);
+      CommentElement ne = new CommentElement(surface,
+          new CommentShape(x, 
+              y,
+              width,
+              height),
+              item.getText(),
+              parseBackgroundColor(item),
+              parseBorderColor(item),
+              parseTextColor(item),
+          editable,
+          null); // TODO find parent
       result = ne;
     } else if (item.getType().equals("choice")) {
       String[] s = item.getShape().split(",");
@@ -461,6 +481,11 @@ public class DiagramItemFactory {
       result = getItem(diagram, forceCreate);
       shapetext += rect2ShapeText(note.rectShape, moveX, moveY);
       type = "comments";
+    } else if (shape instanceof CommentShape) {
+      CommentShape note = (CommentShape) shape;
+      result = getItem(diagram, forceCreate);
+      shapetext += rect2ShapeText(note.rectShape, moveX, moveY);
+      type = "comment";
     } else if (shape instanceof TextShape) {
       TextShape text = (TextShape) shape;
       result = getItem(diagram, forceCreate);

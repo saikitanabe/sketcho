@@ -51,7 +51,8 @@ public class UMLDiagramSelections extends Composite {
 		MIND_MAIN_TOPIC("Main Topic", UMLDiagramGroup.MINDMAP),
 		MIND_SUB_TOPIC("Sub Topic", UMLDiagramGroup.MINDMAP),
 		FREE_HAND("", UMLDiagramGroup.MINDMAP),
-		COMMENTS("", UMLDiagramGroup.CLASS_DIAGRAM),
+		COMMENT_THREAD("", UMLDiagramGroup.CLASS_DIAGRAM),
+		COMMENT("", UMLDiagramGroup.CLASS_DIAGRAM),
 		NONE("", UMLDiagramGroup.NONE);
 		
 		private String value;
@@ -133,7 +134,7 @@ public class UMLDiagramSelections extends Composite {
 	}
 	@UiHandler("comments")
 	public void oncomments(ClickEvent event) {
-		fire(UMLDiagramType.COMMENTS);
+		fire(UMLDiagramType.COMMENT_THREAD);
 	}
 	
 	@UiHandler("choice")
