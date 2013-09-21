@@ -25,7 +25,7 @@ import net.sevenscales.editor.diagram.shape.FreehandShape;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.MindCentralShape;
 import net.sevenscales.editor.diagram.shape.NoteShape;
-import net.sevenscales.editor.diagram.shape.CommentsShape;
+import net.sevenscales.editor.diagram.shape.CommentThreadShape;
 import net.sevenscales.editor.diagram.shape.RectContainerShape;
 import net.sevenscales.editor.diagram.shape.RectShape;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
@@ -46,7 +46,7 @@ import net.sevenscales.editor.uicomponents.uml.EllipseElement;
 import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
-import net.sevenscales.editor.uicomponents.uml.CommentsElement;
+import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.RectBoundaryElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement;
@@ -155,8 +155,8 @@ public class DiagramItemFactory {
       int y = parseInt(s[1]);
       int width = parseInt(s[2]);
       int height = parseInt(s[3]);
-      CommentsElement ne = new CommentsElement(surface,
-          new CommentsShape(x, 
+      CommentThreadElement ne = new CommentThreadElement(surface,
+          new CommentThreadShape(x, 
               y,
               width,
               height),
@@ -456,8 +456,8 @@ public class DiagramItemFactory {
       result = getItem(diagram, forceCreate);
       shapetext += rect2ShapeText(note.rectShape, moveX, moveY);
       type = "noteitem";
-    } else if (shape instanceof CommentsShape) {
-      CommentsShape note = (CommentsShape) shape;
+    } else if (shape instanceof CommentThreadShape) {
+      CommentThreadShape note = (CommentThreadShape) shape;
       result = getItem(diagram, forceCreate);
       shapetext += rect2ShapeText(note.rectShape, moveX, moveY);
       type = "comments";

@@ -31,7 +31,7 @@ import net.sevenscales.editor.uicomponents.AnchorElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
-import net.sevenscales.editor.uicomponents.uml.CommentsElement;
+import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.EditorCommon;
 
@@ -463,7 +463,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			return;
 		}
 
-		if (selectedDiagram instanceof CommentsElement) {
+		if (selectedDiagram instanceof CommentThreadElement) {
 			commentEditor.show(selectedDiagram);
 			return;
 		}

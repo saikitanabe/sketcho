@@ -10,7 +10,7 @@ import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
-import net.sevenscales.editor.diagram.shape.CommentsShape;
+import net.sevenscales.editor.diagram.shape.CommentThreadShape;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 import net.sevenscales.editor.gfx.domain.Color;
@@ -32,13 +32,13 @@ import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 
 import com.google.gwt.core.client.GWT;
 
-public class CommentsElement extends AbstractDiagramItem implements SupportsRectangleShape {
+public class CommentThreadElement extends AbstractDiagramItem implements SupportsRectangleShape {
 //	private Rectangle rectSurface;
 //  private IPolyline boundary;
 	private IRectangle boundary;
 	private int minimumWidth = 25;
 	private int minimumHeight = 25;
-	private CommentsShape shape;
+	private CommentThreadShape shape;
 	private Point coords = new Point();
   // utility shape container to align text and make separators
   private List<IShape> innerShapes = new ArrayList<IShape>();
@@ -64,7 +64,7 @@ public class CommentsElement extends AbstractDiagramItem implements SupportsRect
   };
 
   
-	public CommentsElement(ISurfaceHandler surface, CommentsShape newShape, String text, 
+	public CommentThreadElement(ISurfaceHandler surface, CommentThreadShape newShape, String text, 
 										 Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
 		super(editable, surface, backgroundColor, borderColor, textColor);
 		this.shape = newShape;
@@ -229,20 +229,20 @@ public class CommentsElement extends AbstractDiagramItem implements SupportsRect
     }
 
     public String getLink() {
-      return CommentsElement.this.getLink();
+      return CommentThreadElement.this.getLink();
     }
 
     public boolean isAutoResize() {
-      return CommentsElement.this.isAutoResize();
+      return CommentThreadElement.this.isAutoResize();
     }
 
     public void resize(int x, int y, int width, int height) {
-      CommentsElement.this.resize(x, y, width, height);
+      CommentThreadElement.this.resize(x, y, width, height);
       fireSizeChanged();
     }
 
     public void setLink(String link) {
-      CommentsElement.this.setLink(link);      
+      CommentThreadElement.this.setLink(link);      
     }
     public boolean supportsTitleCenter() {
       return false;
@@ -255,7 +255,7 @@ public class CommentsElement extends AbstractDiagramItem implements SupportsRect
     }
     
     public GraphicsEventHandler getGraphicsMouseHandler() {
-      return CommentsElement.this;
+      return CommentThreadElement.this;
     }
 		@Override
 		public String getTextColorAsString() {
@@ -339,16 +339,16 @@ public class CommentsElement extends AbstractDiagramItem implements SupportsRect
 	
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-    CommentsShape newShape = new CommentsShape(x, y, getWidth(), getHeight());
-    CommentsElement result = createDiagram(surface, newShape, getText(), getEditable());
+    CommentThreadShape newShape = new CommentThreadShape(x, y, getWidth(), getHeight());
+    CommentThreadElement result = createDiagram(surface, newShape, getText(), getEditable());
     // refresh text, it is not visible...
 		result.textUtil.show();
     return result;
   }
 	
-  protected CommentsElement createDiagram(ISurfaceHandler surface, CommentsShape newShape,
+  protected CommentThreadElement createDiagram(ISurfaceHandler surface, CommentThreadShape newShape,
       String text, boolean editable) {
-    return new CommentsElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+    return new CommentThreadElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
   }
 	
 //////////////////////////////////////////////////////////////////////
