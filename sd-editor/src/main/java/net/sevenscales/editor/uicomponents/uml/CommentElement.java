@@ -133,7 +133,8 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		// addEvents(tape);
 		addEvents(boundary);
     
-    resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
+    // disable resizing
+    // resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
 
 		addMouseDiagramHandler(this);
 		
@@ -341,7 +342,6 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	
 	public void accept(ISurfaceHandler surface) {
 	  super.accept(surface);
-		surface.makeDraggable(this);
 	}
 
 	public void removeFromParent() {
@@ -420,13 +420,6 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	
 //////////////////////////////////////////////////////////////////////
 	
-	public boolean onResizeArea(int x, int y) {
-		return resizeHelpers.isOnResizeArea();
-	}
-
-	public void resizeStart() {
-	}
-
 	public boolean resize(Point diff) {
 		return resize(doGetLeft(), doGetTop(), getWidth() + diff.x, getHeight() + diff.y);
 	}
@@ -439,10 +432,6 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
        return true;
 	   }
 	   return false;
-	}
-
-	public void resizeEnd() {
-		textUtil.setText(getText(), editable, true);
 	}
 
 	public Info getInfo() {
