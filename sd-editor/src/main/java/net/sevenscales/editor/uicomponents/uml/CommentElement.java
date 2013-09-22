@@ -349,6 +349,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	public void removeFromParent() {
+		parentThread.removeChild(this);
 		surface.remove(this);
     surface.remove(group.getContainer());
 	}
@@ -558,7 +559,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 
 	@Override
 	public String getCustomData() {
-		return createCommentJsonStr(parentThread);
+		return createCommentJsonStr(parentThread, true);
 	}
 
 	public void setUser(String user) {
@@ -577,14 +578,19 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	public static JsComment createJsComment(CommentThreadElement thread) {
-		return parseCommentJson(createCommentJsonStr(thread).toString());
+		return parseCommentJson(createCommentJsonStr(thread, false).toString());
 	}
 
-	private static String createCommentJsonStr(CommentThreadElement thread) {
+	private static String createCommentJsonStr(CommentThreadElement thread, boolean toserver) {
    	JSONObject json = new JSONObject();
     json.put("pthread", new JSONString(thread.getDiagramItem().getClientId()));
 
-    String result = json.toString().replaceAll("\"", "\\\\\"");
+    String result = json.toString();
+
+    if (toserver) {
+    	result = result.replaceAll("\"", "\\\\\"");
+    }
+
     logger.debug("pthread: {}", result);
     return result;
 	}

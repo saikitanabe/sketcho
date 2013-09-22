@@ -68,7 +68,7 @@ public class CommentFactory {
     int width = DiagramItemFactory.parseInt(s[2]);
     int height = DiagramItemFactory.parseInt(s[3]);
 
-    return new CommentElement(surface,
+    CommentElement result = new CommentElement(surface,
         new CommentShape(x, 
             y,
             width,
@@ -80,5 +80,6 @@ public class CommentFactory {
         editable,
         thread, 
         jsComment);
+    return (CommentElement) DiagramItemFactory.applyDiagramItem(result, item);
 	}
 }

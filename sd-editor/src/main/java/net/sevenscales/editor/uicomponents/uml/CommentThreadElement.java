@@ -286,6 +286,11 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		surface.remove(this);
     surface.remove(group.getContainer());
 	}
+
+	protected void removeChild(Diagram child) {
+		setShape(getLeft(), getTop(), getWidth(), getHeight() - child.getHeight());
+    surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
+	}
 	
 	@Override
 	protected int doGetLeft() {

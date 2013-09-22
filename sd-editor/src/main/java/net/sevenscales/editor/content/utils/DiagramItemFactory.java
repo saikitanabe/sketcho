@@ -354,11 +354,15 @@ public class DiagramItemFactory {
       result = packagee;
     }
 
+    return applyDiagramItem(result, item);
+  }
+
+  public static Diagram applyDiagramItem(Diagram result, IDiagramItemRO item) {
     if (result != null) {
       result.setDiagramItem(item.copy());
       result.parseCustomData(item.getCustomData());
     }
-    return result;
+    return result;    
   }
 
 	public static Color parseBackgroundColor(IDiagramItemRO item) {
