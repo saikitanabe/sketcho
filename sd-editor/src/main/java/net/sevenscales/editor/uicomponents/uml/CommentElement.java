@@ -576,7 +576,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     logger.debug("parseCustomData.customData {}", customData);
   	JsComment jsComment = JsonUtils.safeEval(customData);
     this.parentThread = jsComment.getParentThread();
-    setUser(jsComment.getUser());
+    setUser(jsComment.getDisplayName());
 	}
 
 	public void setUser(String user) {

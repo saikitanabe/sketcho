@@ -15,6 +15,10 @@ public class JsComment extends JavaScriptObject {
 		return this.user;
 	}-*/;
 
+	public final native String getDisplayName()/*-{
+		return this.dname;
+	}-*/;
+
 	public final native double getCreatedAt()/*-{
 		return this.cat;
 	}-*/;
