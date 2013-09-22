@@ -59,6 +59,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //  private IImage leftShadow;
 //  private IImage rightShadow;
 //  private IImage topBlur;
+  private TextElementVerticalFormatUtil title;
   private TextElementVerticalFormatUtil textUtil;
   private String parentThread;
   
@@ -143,6 +144,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     shapes.add(tape);
 //    shapes.add(fold);
     
+    title = new TextElementVerticalFormatUtil(this, hasTitleTextElement, group, surface.getEditorContext());
     textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
 
     setReadOnly(!editable);
@@ -217,6 +219,59 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		return result;
 	}
 
+  private HasTextElement hasTitleTextElement = new AbstractHasTextElement() {
+    public void addShape(IShape shape) {
+      shapes.add(shape);
+    }
+    public int getWidth() {
+    	return boundary.getWidth();
+    }
+    public int getX() {
+    	return boundary.getX();
+    }
+    public int getY() {
+    	return boundary.getY() - 30;
+    }
+    public int getHeight() {
+    	return boundary.getHeight();
+    }
+    public void removeShape(IShape shape) {
+      group.remove(shape);
+      shapes.remove(shape);
+    }
+
+    public String getLink() {
+      return CommentElement.this.getLink();
+    }
+
+    public boolean isAutoResize() {
+      return false;
+    }
+
+    public void resize(int x, int y, int width, int height) {
+    }
+
+    public void setLink(String link) {
+    }
+    public boolean supportsTitleCenter() {
+      return false;
+    }
+    public int getTextMargin() {
+      return 21;
+    }
+    public boolean forceAutoResize() {
+      return false;
+    }
+    
+    public GraphicsEventHandler getGraphicsMouseHandler() {
+      return CommentElement.this;
+    }
+		@Override
+		public String getTextColorAsString() {
+			return "#" + textColor.toHexString();
+		};
+
+  };
 	
   // nice way to clearly separate interface methods :)
   private HasTextElement hasTextElement = new AbstractHasTextElement() {
@@ -518,10 +573,14 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 
 	@Override
   public void parseCustomData(String customData) {
-  	logger.debug("customData: {}", customData);
+    logger.debug("parseCustomData.customData {}", customData);
   	JsComment jsComment = JsonUtils.safeEval(customData);
-    parentThread = jsComment.getParentThread();
-    logger.debug("PARENTTHREAD {}", parentThread);
+    this.parentThread = jsComment.getParentThread();
+    setUser(jsComment.getUser());
+	}
+
+	public void setUser(String user) {
+    title.setText("*" + user + "*", false);
 	}
 
 }

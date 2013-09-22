@@ -125,4 +125,8 @@ public class EditorContext {
 	public boolean isFreehandMode() {
 		return isTrue(EditorProperty.FREEHAND_MODE);
 	}
+
+	public native String getCurrentUser()/*-{
+		return $wnd.currentUser().displayName;
+	}-*/;
 }

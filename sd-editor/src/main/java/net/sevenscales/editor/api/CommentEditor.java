@@ -95,6 +95,9 @@ class CommentEditor  extends Composite {
         new CommentShape(commentThread.getLeft(), commentThread.getTop(), commentThread.getWidth(), 1),
         textArea.getText(),
         background, borderColor, color, true, commentThread.getDiagramItem().getClientId());
+
+		// get current user to show quickly
+    commentElement.setUser(surface.getEditorContext().getCurrentUser());
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 
    	// JSONObject json = new JSONObject();
