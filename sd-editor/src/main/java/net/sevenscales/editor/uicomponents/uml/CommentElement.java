@@ -41,6 +41,7 @@ import com.google.gwt.core.client.GWT;
 
 public class CommentElement extends AbstractDiagramItem implements SupportsRectangleShape {
 	private static final SLogger logger = SLogger.createLogger(CommentElement.class);
+	public static String TYPE = ElementType.COMMENT.getValue();
 
 //	private Rectangle rectSurface;
 //  private IPolyline boundary;
@@ -61,7 +62,8 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //  private IImage topBlur;
   private TextElementVerticalFormatUtil title;
   private TextElementVerticalFormatUtil textUtil;
-  private String parentThread;
+  private CommentThreadElement parentThread;
+  private JsComment jsComment;
   
   private static final int LEFT_SHADOW_LEFT = 6; 
   private static final int LEFT_SHADOW_HEIGHT = 41; 
@@ -77,13 +79,14 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   
 	public CommentElement(ISurfaceHandler surface, CommentShape newShape, String text, 
 										 Color backgroundColor, Color borderColor, Color textColor, boolean editable,
-										 String parentThread) {
+										 CommentThreadElement parentThread, JsComment jsComment) {
 		super(editable, surface, backgroundColor, borderColor, textColor);
 		this.shape = newShape;
 		this.parentThread = parentThread;
+		this.jsComment = jsComment;
 		
-		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
-    group.setAttribute("cursor", "default");
+		group = IShapeFactory.Util.factory(editable).createGroup(parentThread.getGroup());
+    // group.setAttribute("cursor", "default");
     
     // TODO, implement shadows using svg
 //    leftShadow = IShapeFactory.Util.factory(editable)
@@ -152,6 +155,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     setShape(shape.rectShape.left, shape.rectShape.top, 
              shape.rectShape.width, shape.rectShape.height);
     
+    setUser(jsComment.getDisplayName());
     setText(text);
     
     setBorderColor(borderWebColor);
@@ -415,7 +419,9 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	
   protected CommentElement createDiagram(ISurfaceHandler surface, CommentShape newShape,
       String text, boolean editable) {
-    return new CommentElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, parentThread);
+  	// not supported for now
+  	return null;
+    // return new CommentElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, parentThread);
   }
 	
 //////////////////////////////////////////////////////////////////////
@@ -552,24 +558,35 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 
 	@Override
 	public String getCustomData() {
-   	JSONObject json = new JSONObject();
-    json.put("pthread", new JSONString(parentThread));
-
-    String result = json.toString().replaceAll("\"", "\\\\\"");
-    logger.debug("pthread: {}", result);
-    return result;
-	}
-
-	@Override
-  public void parseCustomData(String customData) {
-    logger.debug("parseCustomData.customData {}", customData);
-  	JsComment jsComment = JsonUtils.safeEval(customData);
-    this.parentThread = jsComment.getParentThread();
-    setUser(jsComment.getDisplayName());
+		return createCommentJsonStr(parentThread);
 	}
 
 	public void setUser(String user) {
     title.setText("*" + user + "*", false);
+	}
+
+	public CommentThreadElement getParentThread() {
+		return parentThread;
+	}
+
+	public static JsComment parseCommentJson(String commentJsonStr) {
+    logger.debug("parseCommentJson.commentJsonStr {}", commentJsonStr);
+  	JsComment jsComment = JsonUtils.safeEval(commentJsonStr);
+    // this.parentThreadId = jsComment.getParentThread();
+    return jsComment;
+	}
+
+	public static JsComment createJsComment(CommentThreadElement thread) {
+		return parseCommentJson(createCommentJsonStr(thread).toString());
+	}
+
+	private static String createCommentJsonStr(CommentThreadElement thread) {
+   	JSONObject json = new JSONObject();
+    json.put("pthread", new JSONString(thread.getDiagramItem().getClientId()));
+
+    String result = json.toString().replaceAll("\"", "\\\\\"");
+    logger.debug("pthread: {}", result);
+    return result;
 	}
 
 }

@@ -21,6 +21,8 @@ import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.editor.diagram.utils.CommentFactory;
+import net.sevenscales.editor.uicomponents.uml.CommentElement;
 
 public class UiModelContentHandler implements SurfaceLoadedEventListener {
 	private static final SLogger logger = SLogger.createLogger(UiModelContentHandler.class);
@@ -119,11 +121,12 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 //			}
 //		});
   }
-  public void addContentItems(IDiagramContent dContent, ISurfaceHandler surface, boolean asSelected) {
+  public void addContentItems(IDiagramContent dContent, final ISurfaceHandler surface, final boolean asSelected) {
     // to loop relationships later; to enable anchors
 //    final List<Diagram> containerElements = new ArrayList<Diagram>();
   	
-  	ReattachHelpers reattachHelpers = new ReattachHelpers();
+  	final ReattachHelpers reattachHelpers = new ReattachHelpers();
+  	final CommentFactory commentReattachHelper = new CommentFactory(surface, editable);
 
     surface.getMouseDiagramManager().getSelectionHandler().unselectAll();
     surface.getMouseDiagramManager().getSelectionHandler().selectionOn(asSelected);
@@ -157,25 +160,28 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     	// client id cannot clash because single user environment and done only for 
     	// legacy Confluence boards that didn't use client id for diagram items.
     	ClientIdHelpers.generateClientIdIfNotSet(item, ++i, null);
-    	Diagram diagram = DiagramItemFactory.create(item, surface, editable);
-    	
-//    	// diagram is saved always using PAPER theme colors, so compare to that
-    	BoardColorHelper.applyThemeToDiagram(diagram, Theme.getColorScheme(ThemeName.PAPER), Theme.getCurrentColorScheme());
-    	reattachHelpers.processDiagram(diagram);
-     
-//     if (diagram instanceof UMLPackageElement) {
-//    	 containerElements.add(diagram);
-//     }
-  
-		 	if (asSelected) {
-		 		surface.addAsSelected(diagram, true);
-		 	} else {
-		 		surface.add(diagram, true);
-		 	}
+    	if (CommentElement.TYPE.equals(item.getType())) {
+    		// create comments lazily or any parent child relation elements
+    		commentReattachHelper.add(item);
+    	} else {
+		  	Diagram diagram = DiagramItemFactory.create(item, surface, editable);
+		  	commentReattachHelper.process(diagram);
+    		_addDiagram(diagram, surface, reattachHelpers, commentReattachHelper, asSelected);
+    	}
     }
+
+    // could be more common; interface ChildElement e.g. with Relationship
+    // Text for reusing "Just Text" elements
+    // need to create comments later to use comment thread
+    // group
+    commentReattachHelper.lazyInit(new CommentFactory.Factory() {
+    	public void addDiagram(Diagram diagram) {
+				_addDiagram(diagram, surface, reattachHelpers, commentReattachHelper, asSelected);
+    	}
+    });
     
     reattachHelpers.reattachRelationships();
-   
+
    // small hack to send package elements to background on load
    // could be replaced with static layering values for container elements
    // e.g. package element should be on background always
@@ -192,5 +198,22 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
    surface.getMouseDiagramManager().getSelectionHandler().selectionOn(false);
    surface.unsuspendRedrawAll();
   }
+
+  private void _addDiagram(Diagram diagram, ISurfaceHandler surface, ReattachHelpers reattachHelpers, CommentFactory commentReattachHelper, boolean asSelected) {
+ 		// diagram is saved always using PAPER theme colors, so compare to that
+  	BoardColorHelper.applyThemeToDiagram(diagram, Theme.getColorScheme(ThemeName.PAPER), Theme.getCurrentColorScheme());
+  	// need to process also comments if any connections on those
+  	reattachHelpers.processDiagram(diagram);
+   
+//     if (diagram instanceof UMLPackageElement) {
+//    	 containerElements.add(diagram);
+//     }
+
+	 	if (asSelected) {
+	 		surface.addAsSelected(diagram, true);
+	 	} else {
+	 		surface.add(diagram, true);
+	 	}
+	 }
 	
 }

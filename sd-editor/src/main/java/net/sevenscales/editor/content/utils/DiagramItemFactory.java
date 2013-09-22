@@ -2,6 +2,8 @@ package net.sevenscales.editor.content.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 import net.sevenscales.domain.DiagramItemDTO;
@@ -157,7 +159,7 @@ public class DiagramItemFactory {
       int y = parseInt(s[1]);
       int width = parseInt(s[2]);
       int height = parseInt(s[3]);
-      CommentThreadElement ne = new CommentThreadElement(surface,
+      CommentThreadElement thread = new CommentThreadElement(surface,
           new CommentThreadShape(x, 
               y,
               width,
@@ -167,25 +169,7 @@ public class DiagramItemFactory {
               parseBorderColor(item),
               parseTextColor(item),
           editable);
-      result = ne;
-    } else if (item.getType().equals("comment")) {
-      String[] s = item.getShape().split(",");
-      int x = parseInt(s[0]);
-      int y = parseInt(s[1]);
-      int width = parseInt(s[2]);
-      int height = parseInt(s[3]);
-      CommentElement ne = new CommentElement(surface,
-          new CommentShape(x, 
-              y,
-              width,
-              height),
-              item.getText(),
-              parseBackgroundColor(item),
-              parseBorderColor(item),
-              parseTextColor(item),
-          editable,
-          null); // TODO find parent
-      result = ne;
+      result = thread;
     } else if (item.getType().equals("choice")) {
       String[] s = item.getShape().split(",");
       int x = parseInt(s[0]);
@@ -369,8 +353,11 @@ public class DiagramItemFactory {
           editable);
       result = packagee;
     }
-    result.setDiagramItem(item.copy());
-    result.parseCustomData(item.getCustomData());
+
+    if (result != null) {
+      result.setDiagramItem(item.copy());
+      result.parseCustomData(item.getCustomData());
+    }
     return result;
   }
 
@@ -485,7 +472,7 @@ public class DiagramItemFactory {
       CommentShape note = (CommentShape) shape;
       result = getItem(diagram, forceCreate);
       shapetext += rect2ShapeText(note.rectShape, moveX, moveY);
-      type = "comment";
+      type = CommentElement.TYPE;
     } else if (shape instanceof TextShape) {
       TextShape text = (TextShape) shape;
       result = getItem(diagram, forceCreate);
@@ -592,7 +579,7 @@ public class DiagramItemFactory {
   private native static int parseInt(int p)/*-{
     return parseInt(p);
   }-*/;
-  private native static int parseInt(String p)/*-{
+  public native static int parseInt(String p)/*-{
     return parseInt(p);
   }-*/;
 

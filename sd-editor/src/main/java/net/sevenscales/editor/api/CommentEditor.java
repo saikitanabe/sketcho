@@ -28,6 +28,8 @@ import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Color;
+
+import net.sevenscales.domain.JsComment;
 import net.sevenscales.domain.utils.SLogger;
 
 
@@ -45,7 +47,7 @@ class CommentEditor  extends Composite {
 	@UiField AnchorElement comment;
 	private CustomPopupPanel popup;
 	private EditorCommon editorCommon;
-	private Diagram commentThread;
+	private CommentThreadElement commentThread;
 
 	CommentEditor(ISurfaceHandler surface) {
 		this.surface = surface;
@@ -92,21 +94,19 @@ class CommentEditor  extends Composite {
 		Color color = new Color(current.getR(), current.getG(), current.getB(), 1);
 
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
+		JsComment jsComment = CommentElement.createJsComment(commentThread);
 		CommentElement commentElement = new CommentElement(surface,
         new CommentShape(commentThread.getLeft(), commentThread.getTop() + commentThread.getHeight(), commentThread.getWidth(), 1),
         textArea.getText(),
-        background, borderColor, color, true, commentThread.getDiagramItem().getClientId());
+        background, borderColor, color, true, commentThread, jsComment);
 
 		// get current user to show quickly
     commentElement.setUser(surface.getEditorContext().getCurrentUser());
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 
-		if (commentThread instanceof CommentThreadElement) {
-			CommentThreadElement thread = (CommentThreadElement) commentThread;
-	    thread.addComment(commentElement);
+    commentThread.addComment(commentElement);
 
 	    // editorCommon.fireChanged(thread);
-		}
 
    	// JSONObject json = new JSONObject();
     // json.put("pthread", new JSONString(commentThread.getDiagramItem().getClientId()));
@@ -125,25 +125,27 @@ class CommentEditor  extends Composite {
 	void show(Diagram diagram) {
 		// TODO get parent from CommentElement; store also comment element
 		// if need to update comment
-		this.commentThread = diagram;
-		logger.debug("show CommentEditor...");
-		surface.getMouseDiagramManager().getDragHandler().releaseDrag();
+		if (diagram instanceof CommentThreadElement) {
+			this.commentThread = (CommentThreadElement) diagram;
+			logger.debug("show CommentEditor...");
+			surface.getMouseDiagramManager().getDragHandler().releaseDrag();
 
-		MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
-		int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
-		int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop() + diagram.getHeight();
+			MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
+			int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
+			int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop() + diagram.getHeight();
 
-		popup.setPopupPosition(x, y);
+			popup.setPopupPosition(x, y);
 
-		textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor());
-		textArea.getElement().getStyle().setColor("#" + diagram.getTextColor());
-		textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
-		textArea.getElement().getStyle().setHeight(50, Unit.PX);
-		textArea.setVisible(true);
+			textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor());
+			textArea.getElement().getStyle().setColor("#" + diagram.getTextColor());
+			textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
+			textArea.getElement().getStyle().setHeight(50, Unit.PX);
+			textArea.setVisible(true);
 
-		popup.show();
+			popup.show();
 
-		editorCommon.fireEditorOpen();
+			editorCommon.fireEditorOpen();
+		}
 	}
 
 	private void hide() {
