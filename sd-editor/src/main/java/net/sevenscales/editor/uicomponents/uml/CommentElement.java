@@ -102,7 +102,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //                       shape.rectShape.left, shape.rectShape.top+shape.rectShape.height,
 //                       shape.rectShape.left, shape.rectShape.top};
 		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
-		boundary.setStrokeWidth(STROKE_WIDTH);
+		boundary.setStroke(0, 0, 0, 0);
 		boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 		
 //    topBlur = IShapeFactory.Util.factory(editable)
@@ -230,7 +230,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     	return boundary.getX();
     }
     public int getY() {
-    	return boundary.getY() - 30;
+    	return boundary.getY() - TextElementFormatUtil.ROW_HEIGHT;
     }
     public int getHeight() {
     	return boundary.getHeight();
@@ -488,10 +488,10 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   	setShape(shape[0], shape[1], shape[2], shape[3]);
   }
   
-  @Override
-	public void setHighlightColor(String color) {
-		boundary.setStroke(color);
-	}
+ //  @Override
+	// public void setHighlightColor(String color) {
+	// 	boundary.setStroke(color);
+	// }
   
 	// @Override
 	// public void resetTransform() {

@@ -4,8 +4,12 @@ package net.sevenscales.editor.uicomponents.uml;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
@@ -233,12 +237,13 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
     }
 
     public boolean isAutoResize() {
-      return CommentThreadElement.this.isAutoResize();
+    	return false;
+      // return CommentThreadElement.this.isAutoResize();
     }
 
     public void resize(int x, int y, int width, int height) {
-      CommentThreadElement.this.resize(x, y, width, height);
-      fireSizeChanged();
+      // CommentThreadElement.this.resize(x, y, width, height);
+      // fireSizeChanged();
     }
 
     public void setLink(String link) {
@@ -493,5 +498,35 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	public int getTextAreaLeft() {
 		return getLeft() + 7;
 	}
+
+	public void addComment(final CommentElement comment) {
+		// schedule to get height right
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+			@Override
+			public void execute() {
+				_addComment(comment);
+			}
+		});
+	}
+
+	private void _addComment(CommentElement comment) {
+		setShape(getLeft(), getTop(), getWidth(), getHeight() + comment.getHeight());
+    surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
+	}
+
+	// 	net.sevenscales.editor.diagram.utils.Color current = Theme.defaultColor();
+	// 	Color background = new Color(current.getRr(), current.getGg(), current.getBb(), current.getOpacity());
+	// 	Color borderColor = new Color(current.getBorR(), current.getBorG(), current.getBorB(), 1);
+	// 	Color color = new Color(current.getR(), current.getG(), current.getB(), 1);
+
+	// 	CommentElement commentElement = new CommentElement(surface,
+ //        new CommentShape(commentThread.getLeft(), commentThread.getTop() + , commentThread.getWidth(), 1),
+ //        text,
+ //        background, borderColor, color, true, commentThread.getDiagramItem().getClientId());
+
+	// 	// get current user to show quickly
+ //    commentElement.setUser(surface.getEditorContext().getCurrentUser());
+
+	// }
 
 }

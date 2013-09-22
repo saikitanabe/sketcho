@@ -25,6 +25,7 @@ import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.CommentShape;
 
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
+import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.domain.utils.SLogger;
@@ -92,13 +93,20 @@ class CommentEditor  extends Composite {
 
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 		CommentElement commentElement = new CommentElement(surface,
-        new CommentShape(commentThread.getLeft(), commentThread.getTop(), commentThread.getWidth(), 1),
+        new CommentShape(commentThread.getLeft(), commentThread.getTop() + commentThread.getHeight(), commentThread.getWidth(), 1),
         textArea.getText(),
         background, borderColor, color, true, commentThread.getDiagramItem().getClientId());
 
 		// get current user to show quickly
     commentElement.setUser(surface.getEditorContext().getCurrentUser());
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
+
+		if (commentThread instanceof CommentThreadElement) {
+			CommentThreadElement thread = (CommentThreadElement) commentThread;
+	    thread.addComment(commentElement);
+
+	    // editorCommon.fireChanged(thread);
+		}
 
    	// JSONObject json = new JSONObject();
     // json.put("pthread", new JSONString(commentThread.getDiagramItem().getClientId()));
