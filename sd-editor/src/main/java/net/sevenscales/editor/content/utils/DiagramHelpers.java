@@ -69,8 +69,9 @@ public class DiagramHelpers {
 			// will not add duplicate items, checks if index already exists with a client id
 			result.add(d);
 
-			if (d.getChildElements() != null) {
-				for (Diagram child : d.getChildElements()) {
+			List<? extends Diagram> childElements = d.getChildElements();
+			if (childElements != null) {
+				for (Diagram child : childElements) {
 					result.add(child);
 				}
 			}

@@ -163,6 +163,12 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 		  if (d.isSelected()) {
   		  Diagram removeItem = d.getOwnerComponent();
   		  removed.add(removeItem);
+
+        List<? extends Diagram> childElements = removeItem.getChildElements();
+        if (childElements != null) {
+          removed.addAll(childElements);
+        }
+
   		  removeItem.removeFromParent();
   			dragHandlers.remove(removeItem);
 		  }
