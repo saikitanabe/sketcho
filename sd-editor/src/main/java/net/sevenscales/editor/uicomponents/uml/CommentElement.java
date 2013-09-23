@@ -86,6 +86,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		this.jsComment = jsComment;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(parentThread.getGroup());
+		// group = parentThread.getGroup();
     // group.setAttribute("cursor", "default");
     
     // TODO, implement shadows using svg
@@ -105,7 +106,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //                       shape.rectShape.left, shape.rectShape.top+shape.rectShape.height,
 //                       shape.rectShape.left, shape.rectShape.top};
 		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
-		boundary.setStroke(0, 0, 0, 0);
+		boundary.setStroke(0, 0, 0, 1);
 		boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 		
 //    topBlur = IShapeFactory.Util.factory(editable)
@@ -148,8 +149,8 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     shapes.add(tape);
 //    shapes.add(fold);
     
-    title = new TextElementVerticalFormatUtil(this, hasTitleTextElement, group, surface.getEditorContext());
-    textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+    title = new TextElementVerticalFormatUtil(this, hasTitleTextElement, parentThread.getGroup(), surface.getEditorContext());
+    textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, parentThread.getGroup(), surface.getEditorContext());
 
     setReadOnly(!editable);
     setShape(shape.rectShape.left, shape.rectShape.top, 
@@ -176,7 +177,6 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //        left+width, top+height,
 //        left, top+height,
 //        left, top};
-
 		boundary.setShape(left, top, width, height, 0);
 		
 //		leftShadow.setShape(left - LEFT_SHADOW_LEFT, top + height - LEFT_SHADOW_HEIGHT, 50, 50);
@@ -189,6 +189,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     tape.setShape(calcShape(left, top, width, height));
     // tape.rotate(-3, getCenterX(), getLeft() + (getWidth() / 2));
     
+    title.setTextShape();
     textUtil.setTextShape();
     super.applyHelpersShape();
 	}
@@ -512,6 +513,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	
 	@Override
 	public IGroup getGroup() {
+		// return parentThread.getGroup();
 		return group;
 	}
 	
@@ -599,5 +601,16 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	public JsComment getJsComment() {
 		return jsComment;
 	}
+
+	@Override
+	public int getTransformX() {
+		return parentThread.getGroup().getTransformX();
+	}
+
+	@Override
+	public int getTransformY() {
+		return parentThread.getGroup().getTransformY();
+	}
+
 
 }

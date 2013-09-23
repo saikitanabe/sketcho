@@ -18,6 +18,7 @@ import net.sevenscales.editor.diagram.shape.CommentThreadShape;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.diagram.utils.CommentList2;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
+import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IContainer;
 import net.sevenscales.editor.gfx.domain.IGroup;
@@ -34,6 +35,8 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasText
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.editor.diagram.shape.CommentShape;
+import net.sevenscales.domain.JsComment;
 import net.sevenscales.domain.utils.SLogger;
 
 
@@ -292,6 +295,10 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 
 	public void removeFromParent() {
+		for (CommentElement ce : comments) {
+			ce.removeFromParent();
+		}
+
 		surface.remove(this);
     surface.remove(group.getContainer());
 	}
@@ -528,6 +535,26 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		return getLeft() + 7;
 	}
 
+	public void createComment(String text) {
+		net.sevenscales.editor.diagram.utils.Color current = Theme.defaultColor();
+		Color background = new Color(current.getRr(), current.getGg(), current.getBb(), current.getOpacity());
+		Color borderColor = new Color(current.getBorR(), current.getBorG(), current.getBorB(), 1);
+		Color color = new Color(current.getR(), current.getG(), current.getB(), 1);
+
+		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
+		JsComment jsComment = CommentElement.createJsComment(this);
+		CommentElement commentElement = new CommentElement(surface,
+        new CommentShape(doGetLeft(), doGetTop() + getHeight(), getWidth(), 1),
+        text,
+        background, borderColor, color, true, this, jsComment);
+
+		// get current user to show quickly
+    commentElement.setUser(surface.getEditorContext().getCurrentUser());
+		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
+
+		surface.addAsSelected(commentElement, true);
+	}
+
 	// public void addComment(final CommentElement comment) {
 	// 	// schedule to get height right
 	// 	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
@@ -560,23 +587,27 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 
 	private void sort() {
-		int height = 50;
+		int left = doGetLeft();
+		int top = doGetTop();
+		int currentHeight = 50; // getHeight();
+		int width = getWidth();
+
+		int height = currentHeight;
 		int size = comments.size();
 		for (int i = 0; i < size; ++i) {
 			CommentElement ce = comments.get(i);
 
 			int commentHeight = ce.getHeight();
-			int top = getTop();
-			if ( ce.getTop() != (top + height) ) {
-				ce.setShape(getLeft(), top + height, getWidth(), commentHeight);
-			}
+			// if ( ce.doGetTop() != (top + height) ) {
+				ce.setShape(left, top + height, width, commentHeight);
+			// }
 			height += commentHeight;
 		}
 
-		if (height != getHeight()) {
+		if (height != currentHeight) {
 			// TODO most probably needs load time check, not to fire thread changed events
-			logger.debug("CommentThreadElement height changed current {} new {}...", getHeight(), height);
-			setShape(getLeft(), getTop(), getWidth(), height);
+			logger.debug("CommentThreadElement height changed current {} new {}...", currentHeight, height);
+			setShape(left, top, width, height);
 	    surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
 		}
 	}

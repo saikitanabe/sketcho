@@ -22,14 +22,10 @@ import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
 
 import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.editor.diagram.shape.CommentShape;
 
-import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
-import net.sevenscales.editor.gfx.domain.Color;
 
-import net.sevenscales.domain.JsComment;
 import net.sevenscales.domain.utils.SLogger;
 
 
@@ -88,21 +84,7 @@ class CommentEditor  extends Composite {
 	}
 
 	private void createComment() {
-		net.sevenscales.editor.diagram.utils.Color current = Theme.defaultColor();
-		Color background = new Color(current.getRr(), current.getGg(), current.getBb(), current.getOpacity());
-		Color borderColor = new Color(current.getBorR(), current.getBorG(), current.getBorB(), 1);
-		Color color = new Color(current.getR(), current.getG(), current.getB(), 1);
-
-		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
-		JsComment jsComment = CommentElement.createJsComment(commentThread);
-		CommentElement commentElement = new CommentElement(surface,
-        new CommentShape(commentThread.getLeft(), commentThread.getTop() + commentThread.getHeight(), commentThread.getWidth(), 1),
-        textArea.getText(),
-        background, borderColor, color, true, commentThread, jsComment);
-
-		// get current user to show quickly
-    commentElement.setUser(surface.getEditorContext().getCurrentUser());
-		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
+		commentThread.createComment(textArea.getText());
 
     // commentThread.addComment(commentElement);
 
@@ -114,8 +96,6 @@ class CommentEditor  extends Composite {
     // logger.debug("pthread: {}", json.toString());
 		// commentElement.getDiagramItem().setCustomData(json.toString());
 		// commentElement.setCustomData(json.toString());
-
-		surface.addAsSelected(commentElement, true);
 
 
 		// commentThread.setText(textArea.getText());
