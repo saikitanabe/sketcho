@@ -48,8 +48,9 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 //	private Rectangle rectSurface;
 //  private IPolyline boundary;
 	private IRectangle boundary;
-	private int minimumWidth = 25;
-	private int minimumHeight = 25;
+	private int minimumWidth = 150;
+	private int minimumHeight = 50;
+
 	private CommentThreadShape shape;
 	private Point coords = new Point();
   // utility shape container to align text and make separators
@@ -397,11 +398,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	protected boolean resize(int left, int top, int width, int height) {
 	  if (width >= minimumWidth && height >= minimumHeight) {
-	  	int minheight = minHeight();
-	  	logger.debug("minHeight: {}" + minheight);
-	  	minheight = height > minheight + 50 ? height : minheight + 50;
-      setShape(left, top, width, minheight);
-      connectionHelpers.setShape(getLeft(), getTop(), getWidth(), minheight);
+      setShape(left, top, width, height);
+      connectionHelpers.setShape(getLeft(), getTop(), getWidth(), height);
 
       dispatchAndRecalculateAnchorPositions();
       return true;
