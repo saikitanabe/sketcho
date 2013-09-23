@@ -306,6 +306,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	protected void removeComment(CommentElement child) {
 		comments.remove(child);
 		setShape(getLeft(), getTop(), getWidth(), getHeight() - child.getHeight());
+    sort(false);
     surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
 
     // TODO change comments position after this and minus removed heidht from top
@@ -409,7 +410,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 
 	private void resizeChildren() {
-		sort();
+		sort(true);
 	}
 
 	private int minHeight() {
@@ -585,14 +586,14 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 				@Override
 				public void execute() {
-					sort();
+					sort(false);
 					sorting = false;
 				}
 			});
 		}
 	}
 
-	private void sort() {
+	private void sort(boolean resize) {
 		int left = doGetLeft();
 		int top = doGetTop();
 		int currentHeight = 50; // getHeight();
@@ -606,6 +607,9 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			int commentHeight = ce.getHeight();
 			// if ( ce.doGetTop() != (top + height) ) {
 				ce.setShape(left, top + height, width, commentHeight);
+				if (resize) {
+					ce.resizeText();
+				}
 			// }
 			height += commentHeight;
 		}

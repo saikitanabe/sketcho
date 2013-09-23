@@ -149,8 +149,8 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     shapes.add(tape);
 //    shapes.add(fold);
     
-    title = new TextElementVerticalFormatUtil(this, hasTitleTextElement, parentThread.getGroup(), surface.getEditorContext());
-    textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, parentThread.getGroup(), surface.getEditorContext());
+    title = new TextElementVerticalFormatUtil(this, hasTitleTextElement, group, surface.getEditorContext());
+    textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
 
     setReadOnly(!editable);
     setShape(shape.rectShape.left, shape.rectShape.top, 
@@ -192,6 +192,10 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     title.setTextShape();
     textUtil.setTextShape();
     super.applyHelpersShape();
+	}
+
+	public void resizeText() {
+		textUtil.setText(getText(), editable, true);
 	}
 
 	private String calcShape(int left, int top, int width, int height) {
