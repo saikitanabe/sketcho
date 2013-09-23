@@ -13,9 +13,12 @@ import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ThemeName;
 import net.sevenscales.editor.api.ot.ApplyHelpers.DiagramApplyOperation;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
+import net.sevenscales.editor.diagram.utils.CommentFactory;
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.DiagramSearch;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.uicomponents.CircleElement;
+import net.sevenscales.editor.uicomponents.uml.CommentElement;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
@@ -23,12 +26,16 @@ import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 public class BoardOTHelpers {
 	public static final String HIGHLIGHT_COLOR = "00E000";
 	private ISurfaceHandler surface;
+	private DiagramSearch diagramSearch;
+	private CommentFactory commentFactory;
 	private String clientIdentifier;
 	private static final SLogger logger = SLogger.createLogger(BoardOTHelpers.class);
 
 	public BoardOTHelpers(ISurfaceHandler surface, String clientIdentifier) {
 		this.surface = surface;
 		this.clientIdentifier = clientIdentifier;
+		this.diagramSearch = surface.createDiagramSearch();
+		this.commentFactory = new CommentFactory(surface, true);
 	}
 	
 	public void applyOperationsToGraphicalView(String originator, List<DiagramApplyOperation> operations) throws MappingNotFoundException {
@@ -151,11 +158,10 @@ public class BoardOTHelpers {
     ReattachHelpers reattachHelpers = new ReattachHelpers(surface.createDiagramSearch());
 
 		for (IDiagramItemRO diro: items) {
+			// TODO diagram should never be found!?!?
 			Diagram diagram = findDiagramByClientId(diro.getClientId());
 			if (diagram == null) {
-			    // not from this client or undo/redo => add as new
-		      diagram = DiagramItemFactory.create(diro, surface, true);
-		      surface.add(diagram, true, false);
+				diagram = createAndAddElement(diro);
 			}
 			applyThemeColors(diagram);
       diagrams.add(diagram);
@@ -173,6 +179,20 @@ public class BoardOTHelpers {
 		highlightChanges(originator, diagrams, new OTHighlight(diagrams));
 	}
 
+	private Diagram createAndAddElement(IDiagramItemRO diro) {
+		Diagram result = null;
+  	if (CommentElement.TYPE.equals(diro.getType())) {
+  		// comments are created through comment factory
+  		// doesn't need to create lazily since comment thread is already
+  		// on board or it is not possible to create comment
+    	result = commentFactory.createComment(diro, diagramSearch);
+	  } else {
+	    result = DiagramItemFactory.create(diro, surface, true);
+	  }
+    surface.add(result, true, false);
+    return result;
+	}
+
 	private void safeModifyOT(String originator, List<IDiagramItemRO> items) throws MappingNotFoundException {
 		if (originator.equals(clientIdentifier)) {
 			return;
@@ -182,7 +202,7 @@ public class BoardOTHelpers {
 	private void modifyOT(String originator, List<IDiagramItemRO> items) throws MappingNotFoundException {
 		logger.debug2("modifyOT items.length() {}", items.size());
 		Set<Diagram> diagrams = new HashSet<Diagram>();
-    ReattachHelpers reattachHelpers = new ReattachHelpers(surface.createDiagramSearch());
+    ReattachHelpers reattachHelpers = new ReattachHelpers(diagramSearch);
 
 		for (IDiagramItemRO diro : items) {
 			logger.debug2("modifyOT {}", diro);
@@ -257,7 +277,7 @@ public class BoardOTHelpers {
 		}
 		return null;
 	}
-	
+
 	public void checkItem(IDiagramItemRO di) {
 		if (di.getClientId() == null) {
 			Debug.log("ERROR: client id has not been set!");

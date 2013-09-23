@@ -10,6 +10,7 @@ import net.sevenscales.domain.IDiagramItemRO;
 import  net.sevenscales.domain.JsComment;
 
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.DiagramSearch;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
@@ -49,6 +50,17 @@ public class CommentFactory {
 				factory.addDiagram(comment);
 			}
 		}
+	}
+
+	public Diagram createComment(IDiagramItemRO diro, DiagramSearch diagramSearch) {
+		CommentElement result = null;
+		JsComment jsComment = CommentElement.parseCommentJson(diro.getCustomData());
+		Diagram parent = diagramSearch.findByClientId(jsComment.getParentThread());
+		if (parent != null) {
+			CommentThreadElement thread = (CommentThreadElement) parent;
+			result = _createComment(diro, jsComment, thread);
+		}
+		return result;
 	}
 
 	private CommentElement createComment(IDiagramItemRO item) {

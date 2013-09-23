@@ -126,7 +126,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 //    final List<Diagram> containerElements = new ArrayList<Diagram>();
   	
   	final ReattachHelpers reattachHelpers = new ReattachHelpers();
-  	final CommentFactory commentReattachHelper = new CommentFactory(surface, editable);
+  	final CommentFactory commentFactory = new CommentFactory(surface, editable);
 
     surface.getMouseDiagramManager().getSelectionHandler().unselectAll();
     surface.getMouseDiagramManager().getSelectionHandler().selectionOn(asSelected);
@@ -162,11 +162,11 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     	ClientIdHelpers.generateClientIdIfNotSet(item, ++i, null);
     	if (CommentElement.TYPE.equals(item.getType())) {
     		// create comments lazily or any parent child relation elements
-    		commentReattachHelper.add(item);
+    		commentFactory.add(item);
     	} else {
 		  	Diagram diagram = DiagramItemFactory.create(item, surface, editable);
-		  	commentReattachHelper.process(diagram);
-    		_addDiagram(diagram, surface, reattachHelpers, commentReattachHelper, asSelected);
+		  	commentFactory.process(diagram);
+    		_addDiagram(diagram, surface, reattachHelpers, commentFactory, asSelected);
     	}
     }
 
@@ -174,9 +174,9 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     // Text for reusing "Just Text" elements
     // need to create comments later to use comment thread
     // group
-    commentReattachHelper.lazyInit(new CommentFactory.Factory() {
+    commentFactory.lazyInit(new CommentFactory.Factory() {
     	public void addDiagram(Diagram diagram) {
-				_addDiagram(diagram, surface, reattachHelpers, commentReattachHelper, asSelected);
+				_addDiagram(diagram, surface, reattachHelpers, commentFactory, asSelected);
     	}
     });
     
@@ -199,7 +199,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
    surface.unsuspendRedrawAll();
   }
 
-  private void _addDiagram(Diagram diagram, ISurfaceHandler surface, ReattachHelpers reattachHelpers, CommentFactory commentReattachHelper, boolean asSelected) {
+  private void _addDiagram(Diagram diagram, ISurfaceHandler surface, ReattachHelpers reattachHelpers, CommentFactory commentFactory, boolean asSelected) {
  		// diagram is saved always using PAPER theme colors, so compare to that
   	BoardColorHelper.applyThemeToDiagram(diagram, Theme.getColorScheme(ThemeName.PAPER), Theme.getCurrentColorScheme());
   	// need to process also comments if any connections on those
