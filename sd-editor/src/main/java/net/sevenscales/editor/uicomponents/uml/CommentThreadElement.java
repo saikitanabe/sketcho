@@ -167,6 +167,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 
 	public void setShape(int left, int top, int width, int height) {
+		height = minimumHeight > height ? minimumHeight : height;
+
 //    points = new int[]{left, top, 
 //        left+width-FOLD_SIZE, top,
 //        left+width, top+FOLD_SIZE,
@@ -409,14 +411,6 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	private void resizeChildren() {
 		sort(true);
-	}
-
-	private int minHeight() {
-		int result = 0;
-		for (CommentElement c : comments) {
-			result += c.getHeight();
-		}
-		return result;
 	}
 
 	public void resizeEnd() {
