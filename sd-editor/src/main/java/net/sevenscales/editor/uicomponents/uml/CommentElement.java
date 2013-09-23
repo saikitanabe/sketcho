@@ -160,6 +160,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     
     setBorderColor(borderWebColor);
     
+    parentThread.accept(this);
     super.constructorDone();
 	}
 	
@@ -349,7 +350,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	public void removeFromParent() {
-		parentThread.removeChild(this);
+		parentThread.removeComment(this);
 		surface.remove(this);
     surface.remove(group.getContainer());
 	}
@@ -593,6 +594,10 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 
     logger.debug("pthread: {}", result);
     return result;
+	}
+
+	public JsComment getJsComment() {
+		return jsComment;
 	}
 
 }

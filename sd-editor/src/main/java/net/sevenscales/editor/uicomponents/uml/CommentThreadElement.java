@@ -16,6 +16,7 @@ import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.CommentThreadShape;
 import net.sevenscales.editor.diagram.utils.GridUtils;
+import net.sevenscales.editor.diagram.utils.CommentList2;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IContainer;
@@ -33,10 +34,14 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasText
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.domain.utils.SLogger;
+
 
 import com.google.gwt.core.client.GWT;
 
 public class CommentThreadElement extends AbstractDiagramItem implements SupportsRectangleShape {
+	private static final SLogger logger = SLogger.createLogger(CommentThreadElement.class);
+
 //	private Rectangle rectSurface;
 //  private IPolyline boundary;
 	private IRectangle boundary;
@@ -55,6 +60,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 //  private IImage rightShadow;
 //  private IImage topBlur;
   private TextElementVerticalFormatUtil textUtil;
+  private CommentList2 comments;
+  private boolean sorting;
   
   private static final int LEFT_SHADOW_LEFT = 6; 
   private static final int LEFT_SHADOW_HEIGHT = 41; 
@@ -72,6 +79,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 										 Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
 		super(editable, surface, backgroundColor, borderColor, textColor);
 		this.shape = newShape;
+
+		comments = new CommentList2();
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     group.setAttribute("cursor", "default");
@@ -287,9 +296,13 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
     surface.remove(group.getContainer());
 	}
 
-	protected void removeChild(Diagram child) {
+	protected void removeComment(CommentElement child) {
+		comments.remove(child);
 		setShape(getLeft(), getTop(), getWidth(), getHeight() - child.getHeight());
     surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
+
+    // TODO change comments position after this and minus removed heidht from top
+    // - find, eachFromIndex(index, c.setTop(-height))
 	}
 	
 	@Override
@@ -375,13 +388,24 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 
 	protected boolean resize(int left, int top, int width, int height) {
-	   if (width >= minimumWidth && height >= minimumHeight) {
-       setShape(left, top, width, height);
-       connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
-       dispatchAndRecalculateAnchorPositions();
-       return true;
-	   }
-	   return false;
+	  if (width >= minimumWidth && height >= minimumHeight) {
+	  	int minheight = minHeight();
+	  	logger.debug("minHeight: {}" + minheight);
+	  	minheight = height > minheight + 50 ? height : minheight + 50;
+      setShape(left, top, width, minheight);
+      connectionHelpers.setShape(getLeft(), getTop(), getWidth(), minheight);
+      dispatchAndRecalculateAnchorPositions();
+      return true;
+	  }
+	  return false;
+	}
+
+	private int minHeight() {
+		int result = 0;
+		for (CommentElement c : comments) {
+			result += c.getHeight();
+		}
+		return result;
 	}
 
 	public void resizeEnd() {
@@ -504,19 +528,57 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		return getLeft() + 7;
 	}
 
-	public void addComment(final CommentElement comment) {
-		// schedule to get height right
-		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-			@Override
-			public void execute() {
-				_addComment(comment);
-			}
-		});
-	}
+	// public void addComment(final CommentElement comment) {
+	// 	// schedule to get height right
+	// 	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+	// 		@Override
+	// 		public void execute() {
+	// 			_addComment(comment);
+	// 		}
+	// 	});
+	// }
 
 	private void _addComment(CommentElement comment) {
 		setShape(getLeft(), getTop(), getWidth(), getHeight() + comment.getHeight());
     surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
+	}
+
+	public void accept(CommentElement comment) {
+		comments.add(comment);
+
+		if (!sorting) {
+			// queue sorting outside this loop
+			sorting = true;
+			Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+				@Override
+				public void execute() {
+					sort();
+					sorting = false;
+				}
+			});
+		}
+	}
+
+	private void sort() {
+		int height = 50;
+		int size = comments.size();
+		for (int i = 0; i < size; ++i) {
+			CommentElement ce = comments.get(i);
+
+			int commentHeight = ce.getHeight();
+			int top = getTop();
+			if ( ce.getTop() != (top + height) ) {
+				ce.setShape(getLeft(), top + height, getWidth(), commentHeight);
+			}
+			height += commentHeight;
+		}
+
+		if (height != getHeight()) {
+			// TODO most probably needs load time check, not to fire thread changed events
+			logger.debug("CommentThreadElement height changed current {} new {}...", getHeight(), height);
+			setShape(getLeft(), getTop(), getWidth(), height);
+	    surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
+		}
 	}
 
 	// 	net.sevenscales.editor.diagram.utils.Color current = Theme.defaultColor();

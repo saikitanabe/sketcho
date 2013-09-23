@@ -104,7 +104,7 @@ class CommentEditor  extends Composite {
     commentElement.setUser(surface.getEditorContext().getCurrentUser());
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 
-    commentThread.addComment(commentElement);
+    // commentThread.addComment(commentElement);
 
 	    // editorCommon.fireChanged(thread);
 
