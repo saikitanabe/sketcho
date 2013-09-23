@@ -401,10 +401,15 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	  	minheight = height > minheight + 50 ? height : minheight + 50;
       setShape(left, top, width, minheight);
       connectionHelpers.setShape(getLeft(), getTop(), getWidth(), minheight);
+
       dispatchAndRecalculateAnchorPositions();
       return true;
 	  }
 	  return false;
+	}
+
+	private void resizeChildren() {
+		sort();
 	}
 
 	private int minHeight() {
@@ -417,6 +422,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	public void resizeEnd() {
 		textUtil.setText(getText(), editable, true);
+    resizeChildren();
 	}
 
 	public Info getInfo() {
