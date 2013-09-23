@@ -68,6 +68,12 @@ public class DiagramHelpers {
 			d = d.getOwnerComponent();
 			// will not add duplicate items, checks if index already exists with a client id
 			result.add(d);
+
+			if (d.getChildElements() != null) {
+				for (Diagram child : d.getChildElements()) {
+					result.add(child);
+				}
+			}
 		}
 		return result;
 	}

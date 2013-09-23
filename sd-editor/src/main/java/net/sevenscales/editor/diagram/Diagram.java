@@ -208,4 +208,10 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
   int getSnaphsotTransformX();
   int getSnaphsotTransformY();
 
+  /**
+  * Meant for composite elements like comment thread with comment elements.
+  * @return null if not a composite element
+  */
+  List<? extends Diagram> getChildElements();
+
 }

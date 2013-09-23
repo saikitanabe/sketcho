@@ -1365,5 +1365,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     return transformY;
   }
 
+  public List<? extends Diagram> getChildElements() {
+    return null;
+  }
 
 }

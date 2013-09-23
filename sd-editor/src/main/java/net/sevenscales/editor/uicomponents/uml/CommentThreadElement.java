@@ -612,6 +612,11 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		}
 	}
 
+ 	public List<? extends Diagram> getChildElements() {
+    return comments;
+  }
+
+
 	// 	net.sevenscales.editor.diagram.utils.Color current = Theme.defaultColor();
 	// 	Color background = new Color(current.getRr(), current.getGg(), current.getBb(), current.getOpacity());
 	// 	Color borderColor = new Color(current.getBorR(), current.getBorG(), current.getBorB(), 1);
