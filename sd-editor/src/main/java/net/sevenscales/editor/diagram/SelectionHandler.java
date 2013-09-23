@@ -164,6 +164,11 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   		  Diagram removeItem = d.getOwnerComponent();
   		  removed.add(removeItem);
 
+        // this is not absolutely must in here, but
+        // would require Comment Thread Element to keep state
+        // that it is under deletion, so that child element reference
+        // is not lost. In this way child elements will be deleted even though
+        // parent loses reference to children.
         List<? extends Diagram> childElements = removeItem.getChildElements();
         if (childElements != null) {
           removed.addAll(childElements);
