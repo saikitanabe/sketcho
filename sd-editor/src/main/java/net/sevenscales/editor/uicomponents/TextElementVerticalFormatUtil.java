@@ -43,28 +43,6 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   	super.show();
   }
   
-  private void calculateLines(int left) {
-  	List<StringToken> tokens = TokenParser.parse(getText());
-  	
-  	clearLines();
-  	List<IShape> currentline = new ArrayList<IShape>();
-  	lines.add(currentline);
-  	
-		IText text = createText(true);
-		currentline.add(text);
-
-		boolean firstInsert = true;
-  	for (StringToken token : tokens) {
-	  	boolean newline = false;
-	  	if (token.text.matches("\\s*")) { // "\\s*" == line break...
-	  		newline = true;
-	  	}
-
-	  	text.addText(token.text.trim(), token.fontWeight, firstInsert, newline, hasTextElement.getX() + 9, parent.getMeasurementAreaWidth());
-	  	firstInsert = false;
-  	}
-  }
-
   private void calculateLines2(int left) {
     this.tokens = TokenParser.parse2(getText());
     // token to be reused in html formatting
@@ -78,7 +56,6 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
     text.addText(tokens, hasTextElement.getX() + 9, parent.getMeasurementAreaWidth());
   }
 
-  
 	private void calculateAndNotifyHeight(int width) {
 		MeasurementPanel.setTokens(tokens, width);
 		MeasurementPanel.setPosition(hasTextElement.getX() + parent.getWidth() + 20, hasTextElement.getY());

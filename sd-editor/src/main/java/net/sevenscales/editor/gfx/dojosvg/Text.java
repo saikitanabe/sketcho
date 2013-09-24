@@ -177,36 +177,7 @@ class Text extends Shape implements IText {
 		return 0;
 //	  return getTextHeight(rawNode);
 	}
-	
-	private native double getTextHeight(JavaScriptObject thisNode)/*-{
-		function textHeight(node) {
-			// summary: get the text width in pixels
-			var rawNode = node,
-				oldParent = rawNode.parentNode,
-				_measurementNode = rawNode.cloneNode(true);
-			_measurementNode.style.visibility = "hidden";
-
-			// solution to the "orphan issue" in FF
-			var _height = 0, _text = _measurementNode.firstChild.nodeValue;
-			oldParent.appendChild(_measurementNode);
-
-			// solution to the "orphan issue" in Opera
-			// (nodeValue == "" hangs firefox)
-			if(_text!=""){
-				while(!_height){
-				//Yang: work around svgweb bug 417 -- http://code.google.com/p/svgweb/issues/detail?id=417
-				if (_measurementNode.getBBox)
-									_height = parseInt(_measurementNode.getBBox().height);
-				else
-					_height = 13;
-								}
-							}
-							oldParent.removeChild(_measurementNode);
-							return _height;
-						}
-	  return textHeight(thisNode.rawNode);
-	}-*/;
-  
+	  
   @Override
   public void applyTransformToShape(int dx, int dy) {
 		setShape(getX() + dx, getY() + dy);
@@ -234,17 +205,6 @@ class Text extends Shape implements IText {
   	return rawNode.getFont().family;
   }-*/;
   
-  public void addText(String text, boolean fontWeight, boolean firstInsert, boolean newline, int x, int width) {
-  	// all text elements are wrapped to tspan to calculate width easily
-  	boolean previousSpanIsNotUsed = prevTspanElement != null && !prevTspanElement.getFirstChild().getNodeValue().trim().equals("");
-  	if ( (fontWeight != prevTspanWeight && previousSpanIsNotUsed) || newline) {
-  		prevTspanElement = null;
-  	}
-  	
-  	prevTspanElement = addMultilineText(text, fontWeight, firstInsert, newline, x, width);
-  	prevTspanWeight = fontWeight;
-  }
-
   public void addText(JavaScriptObject tokens, int x, int width) {
 	  Element r = getRawNode(rawNode);
 	  addText(r, tokens, x, width);
@@ -254,73 +214,6 @@ class Text extends Shape implements IText {
 		var svgText = $wnd.svgTextArea(parent, x, width);
     var elements = svgText.addTokens(tokens);
   }-*/;
-
-  private Element addMultilineText(String text, boolean fontWeight, boolean firstInsert, boolean newline, int x, int width) {
-  	Element tspan_element = prevTspanElement;
-  	Element r = getRawNode(rawNode);
-  	
-  	if (tspan_element == null) {
-  		tspan_element = createElementNSAndAddTspanWithText(r, "");
-  	}
-  	
-   	String dy = "17";
-   	if (firstInsert || newline) {
-   		setAttributeNS(tspan_element, "x", String.valueOf(x));
-   	}
-   	
-		if (newline) {
-	    setAttributeNS(tspan_element, "dy", dy);
-  		currentLineLength = 0;
-  		if (text.equals("")) {
-  			text = " ";
-  		}
-		}
-		
-		Node firstTextChild = tspan_element.getFirstChild();
-  	int len = firstTextChild.getNodeValue().length();
-  	double oldLineLength = currentLineLength;
-  	double tspan_element_length = 0;
-		tspan_element_length = getComputedTextLength(tspan_element);
-		String thetext = firstTextChild.getNodeValue() + " " + text;
- 		if (startsNewline) {
-			// this node starts a new line so trim any beginning spaces or there will be some indentation sometimes.
-			thetext = thetext.trim();
-		}
-		firstTextChild.setNodeValue(thetext);
-  	double candidateLength = 0;
-		candidateLength = getComputedTextLength(tspan_element);
-  	
-  	currentLineLength = oldLineLength - tspan_element_length + candidateLength;
-  	
-  	if (currentLineLength > width) {
-  		// create new row, remove added word it didn't fit
-  		firstTextChild.setNodeValue(firstTextChild.getNodeValue().substring(0, len));
-			
-  		tspan_element = createElementNSAndAddTspanWithText(r, text);
-	    setAttributeNS(tspan_element, "x", String.valueOf(x));
-  		setAttributeNS(tspan_element, "dy", "17");
-  		
-  		currentLineLength = 0;
-			currentLineLength = getComputedTextLength(tspan_element);
-  	}
-  	
-  	
-  	if (fontWeight) {
-    	setAttributeNS(tspan_element, "font-weight", "bold");
-		}
-  	
-  	startsNewline = newline;
-		
-		return tspan_element;
-  }
-  
-  private Element createElementNSAndAddTspanWithText(Element element, String text) {
-		Element result = createElementNS(svgNS, "tspan");
-		com.google.gwt.dom.client.Text text_node = Document.get().createTextNode(text);
-		result.appendChild(text_node);
-		element.appendChild(result);
-		return result;
-  }
   
   private double getComputedTextLength(Element tspanElement) {
   	if (!tspanElement.getFirstChild().getNodeValue().equals("")) {
@@ -336,15 +229,7 @@ class Text extends Shape implements IText {
   private native Element getRawNode(JavaScriptObject rawNode)/*-{
   	return rawNode.rawNode;
   }-*/;
-  
-  private native Element createElementNS(String svgNS, String tagname)/*-{
-  	return $wnd.document.createElementNS(svgNS, tagname);
-  }-*/;
-  
-  private native void setAttributeNS(Element element, String attrName, String value)/*-{
-  	element.setAttributeNS(null, attrName, value);
-  }-*/;
-  
+    
   public String getChildElements(int dx) {
   	String children = getChildElementsEscaped(dx);
   	return children;
@@ -385,18 +270,4 @@ class Text extends Shape implements IText {
 	  return elem.attributes;
 	}-*/;
 
-	@Override
-	public void removeLastSpan() {
-		_removeLastSpan(rawNode);
-	}
-	private native void _removeLastSpan(JavaScriptObject text)/*-{
-		var len = $wnd.jQuery.trim(text.rawNode.lastChild.textContent).lastIndexOf(' ');             // Find number of letters in string
-//		$wnd.console.log("len: " + len);
-		$wnd.console.log("pre text.rawNode.lastChild.textContent: '" + text.rawNode.lastChild.textContent + "'");
-		text.rawNode.lastChild.textContent = text.rawNode.lastChild.textContent.slice(0, len+1);
-//		text.rawNode.lastChild.textContent = $wnd.jQuery.trim(text.rawNode.lastChild.textContent).replace(/\w*$/, "pallo");
-//		text.rawNode.lastChild.textContent.replace(/\w*$/, "");
-		$wnd.console.log("post text.rawNode.lastChild.textContent: " + text.rawNode.lastChild.textContent);
-//		text.rawNode.removeChild(text.rawNode.lastChild);
-	}-*/;
 }

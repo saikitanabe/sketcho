@@ -27,17 +27,6 @@ public interface IText extends IShape {
 	public double getTextHeight();
 	public void setFontFamily(String family);
 	public String getFontFamily();
-	/**
-	 * 
-	 * @param text
-	 * @param fontWeight
-	 * @param firstInsert needed to position first word with same indent as when using new line
-	 * @param newline
-	 * @param x
-	 * @param width
-	 */
-	void addText(String text, boolean fontWeight, boolean firstInsert, boolean newline, int x, int width);
 	void addText(JavaScriptObject tokens, int x, int width);
 	String getChildElements(int dx);
-	void removeLastSpan();
 }
