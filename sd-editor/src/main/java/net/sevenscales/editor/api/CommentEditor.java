@@ -38,6 +38,8 @@ import net.sevenscales.domain.utils.SLogger;
 class CommentEditor  extends Composite {
 	private static final SLogger logger = SLogger.createLogger(CommentEditor.class);
 	private static final String PROPERTIES_EDITOR_STYLE = "properties-TextArea2";
+	private static final int EDITOR_INCREMENT = 90;
+	private static final int HINT_INCREMENT = 40;
 
   private static CommentEditorUiBinder uiBinder = GWT.create(CommentEditorUiBinder.class);
 	interface CommentEditorUiBinder extends UiBinder<Widget, CommentEditor> {
@@ -52,6 +54,8 @@ class CommentEditor  extends Composite {
 	private CustomPopupPanel popup;
 	private EditorCommon editorCommon;
 	private CommentThreadElement commentThread;
+
+	private int incrementSize;
 	private int currentThreadHeight;
 
 	CommentEditor(ISurfaceHandler surface) {
@@ -68,17 +72,18 @@ class CommentEditor  extends Composite {
 		this.popup.setAutoHideEnabled(false);
 		this.popup.setAutoHideOnHistoryEventsEnabled(false);
 
+		this.popup.setWidget(this);
+
 		editorCommon = new EditorCommon(surface, new EditorCommon.HideEditor() {
 			public void hide() {
 				CommentEditor.this.hide();
 			}
 		});
 
-		this.popup.setWidget(this);
-
 		writeComment.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				incrementSize = EDITOR_INCREMENT;
 				show(commentThread);
 			}
 		});
@@ -143,7 +148,7 @@ class CommentEditor  extends Composite {
 			int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
 			int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop() + diagram.getHeight();
 
-			popup.setPopupPosition(x, y);
+			popup.setPopupPosition(x, y + 18);
 
 			textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor());
 			textArea.getElement().getStyle().setColor("#" + diagram.getTextColor());
@@ -155,7 +160,7 @@ class CommentEditor  extends Composite {
 			writeComment.setVisible(false);
 
 			currentThreadHeight = commentThread.getHeight();
-			commentThread.setIncrementHeight(20);
+			commentThread.setIncrementHeight(incrementSize);
 
 			popup.show();
 
@@ -167,6 +172,7 @@ class CommentEditor  extends Composite {
 		if (diagram instanceof CommentThreadElement) {
 			this.commentThread = (CommentThreadElement) diagram;
 			writeComment.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
+			incrementSize = HINT_INCREMENT;
 			show(commentThread);
 			writeComment.setVisible(true);
 			commentArea.getStyle().setVisibility(Visibility.HIDDEN);

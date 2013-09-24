@@ -637,7 +637,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 		int height = currentHeight;
 		int size = comments.size();
-		CommentElement last = null;
+		// CommentElement last = null;
 		for (int i = 0; i < size; ++i) {
 			CommentElement ce = comments.get(i);
 
@@ -651,12 +651,12 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			}
 			// }
 			height += commentHeight;
-			last = ce;
+			// last = ce;
 		}
 
-		if (last != null) {
-			last.hideBottomLine();
-		}
+		// if (last != null) {
+		// 	last.hideBottomLine();
+		// }
 
 		if (height != currentHeight) {
 			logger.debug("CommentThreadElement height changed current {} new {}...", currentHeight, height);

@@ -324,7 +324,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     }
 
     public void resize(int x, int y, int width, int height) {
-      CommentElement.this.resize(x, y, width, height + 10);
+      CommentElement.this.resize(x, y, width, height);
       fireSizeChanged();
     }
 
