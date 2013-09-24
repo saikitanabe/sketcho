@@ -634,7 +634,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	private void _sort(boolean resizeChild) {
 		int left = doGetLeft();
 		int top = doGetTop();
-		int currentHeight = MINIMUM_HEIGHT;
+		int currentHeight = 0;
 		int width = getWidth();
 
 		int height = currentHeight;

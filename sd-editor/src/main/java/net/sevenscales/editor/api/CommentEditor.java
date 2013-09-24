@@ -157,7 +157,7 @@ class CommentEditor  extends Composite {
 
 			popup.setPopupPosition(x, y + 18);
 
-			textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor());
+			textArea.getElement().getStyle().setBackgroundColor("#" + commentThread.getBackgroundColor());
 			textArea.getElement().getStyle().setColor("#" + diagram.getTextColor());
 			textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
 			textArea.getElement().getStyle().setHeight(50, Unit.PX);
