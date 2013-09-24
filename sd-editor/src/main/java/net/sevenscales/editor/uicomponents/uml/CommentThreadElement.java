@@ -318,6 +318,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			surface.getSelectionHandler().addToBeRemovedCycle(this);
 			removeFromParent();
 		} else {
+			// resizeWithKnownChildren();
 			setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() - child.getHeight());
 	    _sort(false);
 		}
@@ -423,6 +424,10 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	public void resizeEnd() {
 		textUtil.setText(getText(), editable, true);
 
+		resizeWithKnownChildren();
+	}
+
+	public void resizeWithKnownChildren() {
 		// all children are known so children resize can be synchronous
     resizeChildren();
     // start async from SORT state

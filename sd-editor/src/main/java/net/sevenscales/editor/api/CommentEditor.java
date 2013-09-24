@@ -59,7 +59,6 @@ class CommentEditor  extends Composite {
 	private CommentThreadElement commentThread;
 
 	private int incrementSize;
-	private int currentThreadHeight;
 
 	CommentEditor(ISurfaceHandler surface) {
 		this.surface = surface;
@@ -121,21 +120,6 @@ class CommentEditor  extends Composite {
 
 	private void createComment() {
 		commentThread.createComment(textArea.getText());
-
-    // commentThread.addComment(commentElement);
-
-	    // editorCommon.fireChanged(thread);
-
-   	// JSONObject json = new JSONObject();
-    // json.put("pthread", new JSONString(commentThread.getDiagramItem().getClientId()));
-
-    // logger.debug("pthread: {}", json.toString());
-		// commentElement.getDiagramItem().setCustomData(json.toString());
-		// commentElement.setCustomData(json.toString());
-
-
-		// commentThread.setText(textArea.getText());
-		// editorCommon.fireChanged(ne);
 	}
 
 	void show(Diagram diagram) {
@@ -161,12 +145,10 @@ class CommentEditor  extends Composite {
 			textArea.getElement().getStyle().setColor("#" + diagram.getTextColor());
 			textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
 			textArea.getElement().getStyle().setHeight(50, Unit.PX);
-			// textArea.setVisible(true);
 			commentArea.getStyle().setVisibility(Visibility.VISIBLE);
 
 			writeComment.setVisible(false);
 
-			currentThreadHeight = commentThread.getHeight();
 			commentThread.setIncrementHeight(incrementSize);
 
 			popup.show();
@@ -189,7 +171,7 @@ class CommentEditor  extends Composite {
 
 	private void hide() {
 		if (popup.isShowing() && commentThread != null) {
-			commentThread.restoreHeight(currentThreadHeight);
+			commentThread.resizeWithKnownChildren();
 			popup.hide();
 			commentThread = null;
 			CommentEditor.this.editorCommon.fireEditorClosed();
