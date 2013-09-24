@@ -86,6 +86,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		this.jsComment = jsComment;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(parentThread.getGroup());
+		setVisible(false);
 		// group = parentThread.getGroup();
     // group.setAttribute("cursor", "default");
     

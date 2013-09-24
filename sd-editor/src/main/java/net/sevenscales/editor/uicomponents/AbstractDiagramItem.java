@@ -732,9 +732,14 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   public void setVisible(boolean visible) {
     this.visible = visible; 
-    for (IShape e : getElements()) {
-      e.setVisibility(visible);
+    IGroup group = getGroup();
+    if (group != null) {
+      group.setVisible(visible);
     }
+
+    // for (IShape e : getElements()) {
+    //   e.setVisibility(visible);
+    // }
   }
   
   public boolean isVisible() {

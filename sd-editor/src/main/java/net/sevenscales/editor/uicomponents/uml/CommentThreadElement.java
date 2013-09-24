@@ -640,6 +640,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 				ce.setShape(left, top + height, width, commentHeight);
 			if (resizeChild) {
 				ce.resizeText();
+			} else {
+				ce.setVisible(true);
 			}
 			// }
 			height += commentHeight;
@@ -658,7 +660,10 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
   public void childResized(CommentElement comment, int diff) {
   	if (!surface.getEditorContext().isTrue(EditorProperty.ON_SURFACE_LOAD)) {
   		repositionCommentsAfter(comment, diff);
-			setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() + diff);
+  		if (diff != 0) {
+				setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() + diff);
+				surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
+  		}
   	}
   }
 
