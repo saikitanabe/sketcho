@@ -1,6 +1,6 @@
 package net.sevenscales.editor.uicomponents.uml;
 
-
+import java.util.Collection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +23,7 @@ import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
+import net.sevenscales.editor.uicomponents.AnchorElement;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.Point;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
@@ -30,6 +31,7 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasText
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.editor.api.event.CommentSelectedEvent;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.JsComment;
@@ -361,6 +363,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	
 	public void accept(ISurfaceHandler surface) {
 	  super.accept(surface);
+		surface.makeDraggable(this);
 	}
 
 	public void removeFromParent() {
@@ -393,7 +396,6 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	
 	public void setHeight(int height) {
 		int prevHeight = getHeight();
-		height += 10;
 		setShape(doGetLeft(), doGetTop(), getWidth(), height);
 		dispatchAndRecalculateAnchorPositions();
     parentThread.childResized(this, height - prevHeight);
@@ -607,13 +609,23 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		return parentThread.getGroup().getTransformY();
 	}
 
-	@Override
-  public void select() {
-  	// parentThread.showReply();
-	}
+	// @Override
+ //  public void select() {
+ //    // surface.getEditorContext().getEventBus().fireEvent(new CommentSelectedEvent(this));
+ //  	super.select();
+	// }
 
 	public void hideBottomLine() {
 		separator.setVisibility(false);
 	}
+
+	@Override
+  public void setTransform(int dx, int dy) {
+  	parentThread.setTransform(dx, dy);
+  }
+
+  public Collection<AnchorElement> getAnchors() {
+  	return parentThread.getAnchors();
+  }
 
 }

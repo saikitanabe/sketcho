@@ -15,8 +15,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
-// import com.google.gwt.core.client.Scheduler;
-// import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.EditorCommon;
@@ -24,12 +24,15 @@ import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.SelectionMouseUpEventHandler;
+import net.sevenscales.editor.api.event.CommentSelectedEvent;
+import net.sevenscales.editor.api.event.CommentSelectedEventHandler;
 
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
 
 import net.sevenscales.editor.diagram.Diagram;
 
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
+import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 
 import net.sevenscales.domain.utils.SLogger;
@@ -100,11 +103,30 @@ class CommentEditor  extends Composite {
 		surface.getEditorContext().getEventBus().addHandler(SelectionMouseUpEvent.TYPE, new SelectionMouseUpEventHandler() {
 			public void onSelection(SelectionMouseUpEvent event) {
 				if (event.isOnlyOne()) {
-					showWriteComment(event.getFirst());
-					// show(event.getFirst());
+					Diagram selected = event.getFirst();
+					if (selected instanceof CommentElement) {
+						selected = ((CommentElement) selected).getParentThread();
+					}
+					showWriteComment(selected);
 				}
 			}
 		});
+
+		surface.getEditorContext().getEventBus().addHandler(CommentSelectedEvent.TYPE, new CommentSelectedEventHandler() {
+			public void on(CommentSelectedEvent event) {
+				Diagram commentElement = event.getCommentElement();
+				if (commentElement instanceof CommentElement) {
+					final CommentElement ce = (CommentElement) commentElement;
+					// get out of the loop; not to hide popup due to selection
+					Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+						public void execute() {
+							showWriteComment(ce.getParentThread());
+						}
+					});
+				}
+			}
+		});
+
 	}
 
 	private void clearAndHide() {
