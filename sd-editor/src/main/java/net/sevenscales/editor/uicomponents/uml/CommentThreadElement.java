@@ -308,9 +308,9 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	protected void removeComment(CommentElement child) {
 		comments.remove(child);
-		setShape(getLeft(), getTop(), getWidth(), getHeight() - child.getHeight());
+		setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() - child.getHeight());
     sort(false);
-    surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
+    // surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
 
     // TODO change comments position after this and minus removed heidht from top
     // - find, eachFromIndex(index, c.setTop(-height))
@@ -585,7 +585,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		}
 	}
 
-	private void sort(boolean resize) {
+	private void sort(boolean resizeChild) {
 		int left = doGetLeft();
 		int top = doGetTop();
 		int currentHeight = 50; // getHeight();
@@ -599,9 +599,9 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			int commentHeight = ce.getHeight();
 			// if ( ce.doGetTop() != (top + height) ) {
 				ce.setShape(left, top + height, width, commentHeight);
-				if (resize) {
-					ce.resizeText();
-				}
+			if (resizeChild) {
+				ce.resizeText();
+			}
 			// }
 			height += commentHeight;
 		}
@@ -610,12 +610,19 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			// TODO most probably needs load time check, not to fire thread changed events
 			logger.debug("CommentThreadElement height changed current {} new {}...", currentHeight, height);
 			setShape(left, top, width, height);
-	    surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
+	    // surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
 		}
 	}
 
  	public List<? extends Diagram> getChildElements() {
     return comments;
+  }
+
+  public void childResized(int diff) {
+  	if (!surface.getEditorContext().isTrue(EditorProperty.ON_SURFACE_LOAD)) {
+	  	sort(false);
+			setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() + diff);
+  	}
   }
 
 

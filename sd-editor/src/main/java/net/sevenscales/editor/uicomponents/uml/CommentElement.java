@@ -383,8 +383,10 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 	
 	public void setHeight(int height) {
+		int prevHeight = getHeight();
 		setShape(doGetLeft(), doGetTop(), getWidth(), height);
 		dispatchAndRecalculateAnchorPositions();
+    parentThread.childResized(height - prevHeight);
 	}
 	
   @Override
