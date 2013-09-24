@@ -111,7 +111,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 
 		separator = IShapeFactory.Util.factory(editable).createLine(group);
 		// #bbbbbb
-		separator.setStroke(textColor.red, textColor.green, textColor.blue, textColor.opacity);
+		separator.setStroke(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);
 		separator.setStrokeWidth(1);
 		
 //    topBlur = IShapeFactory.Util.factory(editable)

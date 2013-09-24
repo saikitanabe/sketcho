@@ -112,7 +112,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 //                       shape.rectShape.left, shape.rectShape.top+shape.rectShape.height,
 //                       shape.rectShape.left, shape.rectShape.top};
 		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
-		boundary.setStrokeWidth(STROKE_WIDTH);
+		boundary.setStrokeWidth(1);
 		boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 		
 //    topBlur = IShapeFactory.Util.factory(editable)
@@ -542,17 +542,19 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 
 	public void createComment(String text) {
-		net.sevenscales.editor.diagram.utils.Color current = Theme.defaultColor();
-		Color background = new Color(current.getRr(), current.getGg(), current.getBb(), current.getOpacity());
-		Color borderColor = new Color(current.getBorR(), current.getBorG(), current.getBorB(), 1);
-		Color color = new Color(current.getR(), current.getG(), current.getB(), 1);
+		Theme.ElementColorScheme commentColor = Theme.getCommentColorScheme();
 
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 		JsComment jsComment = JsComment.createJsComment(this.getDiagramItem().getClientId(), surface.getEditorContext().getCurrentUser());
 		CommentElement commentElement = new CommentElement(surface,
         new CommentShape(doGetLeft(), doGetTop() + getHeight(), getWidth(), 1),
         text,
-        background, borderColor, color, true, this, jsComment);
+        commentColor.getBackgroundColor().create(), 
+        commentColor.getBorderColor().create(), 
+        commentColor.getTextColor().create(), 
+        true, 
+        this, 
+        jsComment);
 
 		// get current user to show quickly
     // commentElement.setUser(surface.getEditorContext().getCurrentUser());
@@ -643,7 +645,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 			int commentHeight = ce.getHeight();
 			// if ( ce.doGetTop() != (top + height) ) {
-				ce.setShape(left, top + height, width, commentHeight);
+				ce.setShape(left + 1, top + height, width - 2, commentHeight);
 			if (resizeChild) {
 				ce.resizeText();
 			} else {

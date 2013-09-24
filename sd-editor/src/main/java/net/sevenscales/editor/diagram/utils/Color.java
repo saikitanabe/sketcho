@@ -156,4 +156,5 @@ public class Color {
 	public double getOpacity() {
 		return opacity;
 	}
+	
 }

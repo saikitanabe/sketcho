@@ -11,6 +11,7 @@ public class Theme {
 	
   private ThemeName currentThemeName;
 	private ElementColorScheme currentColorScheme;
+  private ElementColorScheme commentColorScheme;
 
   public enum ThemeName {
     WHITE("white", "#fff"), BLACK("black", "#272822"), SEPIA("sepia", "#FBF0D9"), PAPER("paper", "#FAFAFA");
@@ -108,6 +109,10 @@ public class Theme {
                                                                      createDefaultBorderColorOnSepia(), 
                                                                      createDefaultBackgroundColor()));
 
+    commentColorScheme = new ElementColorScheme(createDefaultCommentTextColor(),
+                                                createDefaultCommentBorderColor(),
+                                                createDefaultCommentBackgroundColor());
+
     currentThemeName = ThemeName.PAPER;
     currentColorScheme = defaultColorMap.get(currentThemeName.name);
 	}
@@ -143,6 +148,16 @@ public class Theme {
 	public static Color createDefaultTextColor() {
 		return new Color(instance().currentColorScheme.getTextColor());
 	}
+
+  private static Color createDefaultCommentTextColor() {
+    return new Color(0x66, 0x66, 0x66, 1);
+  }
+  private static Color createDefaultCommentBorderColor() {
+    return new Color(0xFB, 0xE2, 0x80, 1);
+  }
+  private static Color createDefaultCommentBackgroundColor() {
+    return new Color(0xFC, 0xF7, 0xCA, 1);
+  }
 	
 	public static net.sevenscales.editor.diagram.utils.Color defaultColor() {
 		Color background = createDefaultBackgroundColor();
@@ -152,6 +167,15 @@ public class Theme {
 				background.toHexString(), background.red, background.green, background.blue,
 				border.toHexString(), border.red, border.green, border.blue, 0);
 	}
+
+  public static net.sevenscales.editor.diagram.utils.Color defaultCommentColor() {
+    Color background = createDefaultCommentBackgroundColor();
+    Color border = createDefaultCommentBorderColor();
+    Color text = createDefaultCommentTextColor();
+    return new net.sevenscales.editor.diagram.utils.Color(text.toHexString(), text.red, text.green, text.blue,
+        background.toHexString(), background.red, background.green, background.blue,
+        border.toHexString(), border.red, border.green, border.blue, 0);
+  }
 
 	public static void setColorScheme(String colorName) {
 		instance()._setColorScheme(colorName);
@@ -169,6 +193,10 @@ public class Theme {
 	public static ElementColorScheme getCurrentColorScheme() {
 		return instance().currentColorScheme;
 	}
+
+  public static ElementColorScheme getCommentColorScheme() {
+    return instance().commentColorScheme;
+  }
 
   public static ElementColorScheme getColorScheme(ThemeName themeName) {
     return instance().defaultColorMap.get(themeName.name);

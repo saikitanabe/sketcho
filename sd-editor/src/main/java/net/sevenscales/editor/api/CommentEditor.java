@@ -112,21 +112,6 @@ class CommentEditor  extends Composite {
 			}
 		});
 
-		surface.getEditorContext().getEventBus().addHandler(CommentSelectedEvent.TYPE, new CommentSelectedEventHandler() {
-			public void on(CommentSelectedEvent event) {
-				Diagram commentElement = event.getCommentElement();
-				if (commentElement instanceof CommentElement) {
-					final CommentElement ce = (CommentElement) commentElement;
-					// get out of the loop; not to hide popup due to selection
-					Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-						public void execute() {
-							showWriteComment(ce.getParentThread());
-						}
-					});
-				}
-			}
-		});
-
 	}
 
 	private void clearAndHide() {
@@ -193,6 +178,7 @@ class CommentEditor  extends Composite {
 	private void showWriteComment(Diagram diagram) {
 		if (diagram instanceof CommentThreadElement) {
 			this.commentThread = (CommentThreadElement) diagram;
+			commentThread.showResizeHandles();
 			writeComment.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
 			incrementSize = HINT_INCREMENT;
 			show(commentThread);
