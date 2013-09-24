@@ -59,7 +59,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
 	private void calculateAndNotifyHeight(int width) {
 		MeasurementPanel.setTokens(tokens, width);
 		MeasurementPanel.setPosition(hasTextElement.getX() + parent.getWidth() + 20, hasTextElement.getY());
-    hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + DEFAULT_VERTICAL_TEXT_MARGIN);
+    hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + DEFAULT_VERTICAL_TEXT_MARGIN + getMarginTop());
   }
   
   public void setText(String newText, boolean editable, boolean force) {

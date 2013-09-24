@@ -4,10 +4,6 @@ package net.sevenscales.editor.uicomponents.uml;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.core.client.JsonUtils;
-
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
@@ -22,6 +18,7 @@ import net.sevenscales.editor.gfx.domain.IContainer;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IImage;
 import net.sevenscales.editor.gfx.domain.IRectangle;
+import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
@@ -46,6 +43,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //	private Rectangle rectSurface;
 //  private IPolyline boundary;
 	private IRectangle boundary;
+	private ILine separator;
 	private int minimumWidth = 25;
 	private int minimumHeight = 25;
 	private CommentShape shape;
@@ -56,7 +54,6 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //  private int[] points;
 //  private static final int FOLD_SIZE = 10;
 //  private IPolyline fold;
-  private IPath tape;
 //  private IImage leftShadow;
 //  private IImage rightShadow;
 //  private IImage topBlur;
@@ -107,8 +104,12 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //                       shape.rectShape.left, shape.rectShape.top+shape.rectShape.height,
 //                       shape.rectShape.left, shape.rectShape.top};
 		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
-		boundary.setStroke(0, 0, 0, 1);
 		boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+
+		separator = IShapeFactory.Util.factory(editable).createLine(group);
+		// #bbbbbb
+		separator.setStroke(textColor.red, textColor.green, textColor.blue, textColor.opacity);
+		separator.setStrokeWidth(1);
 		
 //    topBlur = IShapeFactory.Util.factory(editable)
 //    		.createImage(group, shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height, "images/notetopblur.png");
@@ -120,17 +121,6 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //		fold.setStrokeWidth(3.0);
 //    fold.setFill(255, 255, 255, 0.1);
     
-		tape = IShapeFactory.Util.factory(editable).createPath(group, pathTransformer);
-		if (surface.getEditorContext().isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {
-			tape.setFill(0xe2, 0x56, 0x56, 0.7);
-			tape.setStroke(0xe2, 0x56, 0x56, 0.7);
-		} else {
-			tape.setFill(0xee, 0xee, 0xee, 0.8);
-			tape.setStroke(0xee, 0xee, 0xee, 0.8);
-		}
-
-		tape.setStrokeWidth(1);
-
 		// tape.setSvgFixX(-17);
 		// tape.setSvgFixY(-5);
 
@@ -147,11 +137,12 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //    shapes.add(leftShadow);
 //    shapes.add(rightShadow);
     shapes.add(boundary);
-    shapes.add(tape);
 //    shapes.add(fold);
     
     title = new TextElementVerticalFormatUtil(this, hasTitleTextElement, group, surface.getEditorContext());
     textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+
+    textUtil.setMarginTop(25);
 
     setReadOnly(!editable);
     setShape(shape.rectShape.left, shape.rectShape.top, 
@@ -198,17 +189,12 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //        left, top+height,
 //        left, top};
 		boundary.setShape(left, top, width, height, 0);
-		
+		separator.setShape(left, top + height, left + width, top + height);
 //		leftShadow.setShape(left - LEFT_SHADOW_LEFT, top + height - LEFT_SHADOW_HEIGHT, 50, 50);
 //		rightShadow.setShape(left + width - RIGHT_SHADOW_LEFT, top + height - RIGHT_SHADOW_HEIGHT, 50, 50);
 
 //    boundary.setShape(points);
-    
-		// tape.resetAllTransforms();
-		// tape.setShape(left + width / 2 - 15, top - 4, 30, 15, 0);
-    tape.setShape(calcShape(left, top, width, height));
-    // tape.rotate(-3, getCenterX(), getLeft() + (getWidth() / 2));
-    
+        
     title.setTextShape();
     textUtil.setTextShape();
     super.applyHelpersShape();
@@ -262,7 +248,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     	return boundary.getX();
     }
     public int getY() {
-    	return boundary.getY() - TextElementFormatUtil.ROW_HEIGHT;
+    	return boundary.getY();
     }
     public int getHeight() {
     	return boundary.getHeight();
@@ -405,6 +391,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	
 	public void setHeight(int height) {
 		int prevHeight = getHeight();
+		height += textUtil.getMarginTop();
 		setShape(doGetLeft(), doGetTop(), getWidth(), height);
 		dispatchAndRecalculateAnchorPositions();
     parentThread.childResized(this, height - prevHeight);
@@ -593,7 +580,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 
 	@Override
 	public String getCustomData() {
-		return createCommentJsonStr(parentThread, true);
+		return JsComment.createCommentJsonStr(parentThread.getDiagramItem().getClientId(), "", true);
 	}
 
 	public void setUser(String user) {
@@ -602,31 +589,6 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 
 	public CommentThreadElement getParentThread() {
 		return parentThread;
-	}
-
-	public static JsComment parseCommentJson(String commentJsonStr) {
-    logger.debug("parseCommentJson.commentJsonStr {}", commentJsonStr);
-  	JsComment jsComment = JsonUtils.safeEval(commentJsonStr);
-    // this.parentThreadId = jsComment.getParentThread();
-    return jsComment;
-	}
-
-	public static JsComment createJsComment(CommentThreadElement thread) {
-		return parseCommentJson(createCommentJsonStr(thread, false).toString());
-	}
-
-	private static String createCommentJsonStr(CommentThreadElement thread, boolean toserver) {
-   	JSONObject json = new JSONObject();
-    json.put("pthread", new JSONString(thread.getDiagramItem().getClientId()));
-
-    String result = json.toString();
-
-    if (toserver) {
-    	result = result.replaceAll("\"", "\\\\\"");
-    }
-
-    logger.debug("pthread: {}", result);
-    return result;
 	}
 
 	public JsComment getJsComment() {

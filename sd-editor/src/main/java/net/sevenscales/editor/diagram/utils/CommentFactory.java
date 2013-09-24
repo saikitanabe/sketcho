@@ -54,7 +54,7 @@ public class CommentFactory {
 
 	public Diagram createComment(IDiagramItemRO diro, DiagramSearch diagramSearch) {
 		CommentElement result = null;
-		JsComment jsComment = CommentElement.parseCommentJson(diro.getCustomData());
+		JsComment jsComment = JsComment.parseCommentJson(diro.getCustomData());
 		Diagram parent = diagramSearch.findByClientId(jsComment.getParentThread());
 		if (parent != null) {
 			CommentThreadElement thread = (CommentThreadElement) parent;
@@ -65,7 +65,7 @@ public class CommentFactory {
 
 	private CommentElement createComment(IDiagramItemRO item) {
 		CommentElement result = null;
-		JsComment jsComment = CommentElement.parseCommentJson(item.getCustomData());
+		JsComment jsComment = JsComment.parseCommentJson(item.getCustomData());
 		if (commentThreadMapping.containsKey(jsComment.getParentThread())) {
 			CommentThreadElement thread = commentThreadMapping.get(jsComment.getParentThread());
 			result = _createComment(item, jsComment, thread);

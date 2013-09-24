@@ -417,7 +417,12 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	public void resizeEnd() {
 		textUtil.setText(getText(), editable, true);
+
+		// all children are known so children resize can be synchronous
     resizeChildren();
+    // start async from SORT state
+    sortState = SortState.SORT;
+		queueSorting();
 	}
 
 	public Info getInfo() {
@@ -543,14 +548,14 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		Color color = new Color(current.getR(), current.getG(), current.getB(), 1);
 
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
-		JsComment jsComment = CommentElement.createJsComment(this);
+		JsComment jsComment = JsComment.createJsComment(this.getDiagramItem().getClientId(), surface.getEditorContext().getCurrentUser());
 		CommentElement commentElement = new CommentElement(surface,
         new CommentShape(doGetLeft(), doGetTop() + getHeight(), getWidth(), 1),
         text,
         background, borderColor, color, true, this, jsComment);
 
 		// get current user to show quickly
-    commentElement.setUser(surface.getEditorContext().getCurrentUser());
+    // commentElement.setUser(surface.getEditorContext().getCurrentUser());
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 
 		surface.addAsSelected(commentElement, true);

@@ -29,7 +29,17 @@ public class CommentList2 extends ArrayList<CommentElement> {
         return 0;
       }
 
-      double result = c1.getJsComment().getCreatedAt() - c2.getJsComment().getCreatedAt();
+      double cat1 = c1.getJsComment().getCreatedAt();
+      double cat2 = c2.getJsComment().getCreatedAt();
+      if (cat1 == 0) {
+        return -1;
+      }
+
+      if (cat2 == 0) {
+        return -1;
+      }
+
+      double result = cat1 - cat2;
       if (result == 0) {
         return 0;
       } else if (result > 0) {
