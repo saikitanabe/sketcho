@@ -66,6 +66,12 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
   private TextElementVerticalFormatUtil textUtil;
   private CommentList2 comments;
   private boolean sorting;
+
+  private enum SortState {
+  	RESIZE_CHILDREN, SORT;
+  }
+
+  private SortState sortState = SortState.RESIZE_CHILDREN;
   
   private static final int LEFT_SHADOW_LEFT = 6; 
   private static final int LEFT_SHADOW_HEIGHT = 41; 
@@ -309,7 +315,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	protected void removeComment(CommentElement child) {
 		comments.remove(child);
 		setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() - child.getHeight());
-    sort(false);
+    _sort(false);
     // surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
 
     // TODO change comments position after this and minus removed heidht from top
@@ -407,10 +413,6 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
       return true;
 	  }
 	  return false;
-	}
-
-	private void resizeChildren() {
-		sort(true);
 	}
 
 	public void resizeEnd() {
@@ -571,21 +573,58 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	public void accept(CommentElement comment) {
 		comments.add(comment);
+		queueSorting();
+	}
 
+	private void queueSorting() {
 		if (!sorting) {
 			// queue sorting outside this loop
 			sorting = true;
 			Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 				@Override
 				public void execute() {
-					sort(false);
+					// free lock
 					sorting = false;
+					_sort(false);
+
+					switch (sortState) {
+						case RESIZE_CHILDREN: {
+							resizeChildren();
+							sortState = SortState.SORT;
+							// now children has correct position and size 
+							// recursively sort again to position comments and thread correctly
+							// according to comments real size (need to redraw => async)
+							queueSorting();
+							break;
+						}
+						case SORT: {
+							_sort(false);
+							// next time start from resize children
+							sortState = SortState.RESIZE_CHILDREN;
+							break;
+						}
+					}
 				}
 			});
 		}
 	}
 
-	private void sort(boolean resizeChild) {
+	// private void sort(boolean resizeChild) {
+	// 	if (resizeChild) {
+	// 		resizeChildren();
+	// 		// children need to reshape/draw itself to get correct height
+	// 		// for sorting
+	// 		queueSorting();
+	// 	} else {
+	// 		sort();
+	// 	}
+	// }
+
+	private void resizeChildren() {
+		_sort(true);
+	}
+
+	private void _sort(boolean resizeChild) {
 		int left = doGetLeft();
 		int top = doGetTop();
 		int currentHeight = 50; // getHeight();
@@ -607,10 +646,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		}
 
 		if (height != currentHeight) {
-			// TODO most probably needs load time check, not to fire thread changed events
 			logger.debug("CommentThreadElement height changed current {} new {}...", currentHeight, height);
 			setShape(left, top, width, height);
-	    // surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
 		}
 	}
 
@@ -618,27 +655,26 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
     return comments;
   }
 
-  public void childResized(int diff) {
+  public void childResized(CommentElement comment, int diff) {
   	if (!surface.getEditorContext().isTrue(EditorProperty.ON_SURFACE_LOAD)) {
-	  	sort(false);
+  		repositionCommentsAfter(comment, diff);
 			setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() + diff);
   	}
   }
 
+  private void repositionCommentsAfter(CommentElement comment, int diff) {
+  	boolean reposition = false;
+  	for (int i = 0; i < comments.size(); ++i) {
+  		CommentElement ce = comments.get(i);
+  		if (reposition) {
+  			ce.setTopDiff(diff);
+  		}
 
-	// 	net.sevenscales.editor.diagram.utils.Color current = Theme.defaultColor();
-	// 	Color background = new Color(current.getRr(), current.getGg(), current.getBb(), current.getOpacity());
-	// 	Color borderColor = new Color(current.getBorR(), current.getBorG(), current.getBorB(), 1);
-	// 	Color color = new Color(current.getR(), current.getG(), current.getB(), 1);
+  		if (ce == comment) {
+  			reposition = true;
+  		}
 
-	// 	CommentElement commentElement = new CommentElement(surface,
- //        new CommentShape(commentThread.getLeft(), commentThread.getTop() + , commentThread.getWidth(), 1),
- //        text,
- //        background, borderColor, color, true, commentThread.getDiagramItem().getClientId());
-
-	// 	// get current user to show quickly
- //    commentElement.setUser(surface.getEditorContext().getCurrentUser());
-
-	// }
+  	}
+  }
 
 }

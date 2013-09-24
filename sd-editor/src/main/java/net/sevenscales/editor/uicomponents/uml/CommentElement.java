@@ -170,7 +170,26 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //		rightShadow.setVisibility(!(backgroundColor.opacity == 0));
 	}
 
+	private boolean checkIfChanged(int left, int top, int width, int height) {
+		if (doGetLeft() != left) {
+			return true;
+		}
+		if (doGetTop() != top) {
+			return true;
+		}
+		if (getWidth() != width) {
+			return true;
+		}
+		if (getHeight() != height) {
+			return true;
+		}
+		return false;
+	}
+
 	public void setShape(int left, int top, int width, int height) {
+		// if (!checkIfChanged(left, top, width, height)) {
+		// 	return;
+		// }
 //    points = new int[]{left, top, 
 //        left+width-FOLD_SIZE, top,
 //        left+width, top+FOLD_SIZE,
@@ -195,6 +214,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	public void resizeText() {
+		setUser(jsComment.getDisplayName());
 		textUtil.setText(getText(), editable, true);
 	}
 
@@ -386,7 +406,11 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		int prevHeight = getHeight();
 		setShape(doGetLeft(), doGetTop(), getWidth(), height);
 		dispatchAndRecalculateAnchorPositions();
-    parentThread.childResized(height - prevHeight);
+    parentThread.childResized(this, height - prevHeight);
+	}
+
+	public void setTopDiff(int diff) {
+		setShape(doGetLeft(), doGetTop() + diff, getWidth(), getHeight());
 	}
 	
   @Override
@@ -572,7 +596,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	public void setUser(String user) {
-    title.setText("*" + user + "*", false);
+    title.setText("*" + user + "*", editable, true);
 	}
 
 	public CommentThreadElement getParentThread() {
