@@ -62,7 +62,6 @@ class CommentEditor  extends Composite {
 		editorCommon = new EditorCommon(surface, new EditorCommon.HideEditor() {
 			public void hide() {
 				CommentEditor.this.hide();
-				CommentEditor.this.editorCommon.fireEditorClosed();
 			}
 		});
 
@@ -129,7 +128,13 @@ class CommentEditor  extends Composite {
 	}
 
 	private void hide() {
-		popup.hide();
+		// Diagram selected = surface.getSelectionHandler().getOnlyOneSelected();
+		// if (selected != null && selected instanceof CommentThreadElement) {
+		// 	show(selected);
+		// } else {
+			popup.hide();
+			CommentEditor.this.editorCommon.fireEditorClosed();
+		// }
 	}
 
 }

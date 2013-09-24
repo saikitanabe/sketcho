@@ -471,6 +471,25 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     return tmpSelectedItems;
   }
 
+  /**
+  * Returns null if none or more than one is selected.
+  * Otherwise selected diagram.
+  */
+  public Diagram getOnlyOneSelected() {
+    Diagram result = null;
+    for (Diagram d : diagrams) {
+      if (d.isSelected()) {
+        if (result != null) {
+          // more than one is selected
+          return null;
+        } else {
+          result = d;
+        }
+      }
+    }
+    return result;
+  }
+
   public void unselectAll() {
   	logger.debug("unselectAll...");
     logger.start("unselectAll");

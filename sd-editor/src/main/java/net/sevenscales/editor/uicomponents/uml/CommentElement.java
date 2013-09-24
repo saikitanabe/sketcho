@@ -605,5 +605,9 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		return parentThread.getGroup().getTransformY();
 	}
 
+	@Override
+  public void select() {
+  	// parentThread.showReply();
+	}
 
 }
