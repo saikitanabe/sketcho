@@ -314,8 +314,13 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	protected void removeComment(CommentElement child) {
 		comments.remove(child);
-		setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() - child.getHeight());
-    _sort(false);
+		if (comments.size() == 0) {
+			surface.getSelectionHandler().addToBeRemovedCycle(this);
+			removeFromParent();
+		} else {
+			setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() - child.getHeight());
+	    _sort(false);
+		}
     // surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
 
     // TODO change comments position after this and minus removed heidht from top

@@ -42,20 +42,22 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 	private List<Diagram> diagrams;
 	private SelectionHandlerCollection selectionHandlers;
 	private ISurfaceHandler surface;
-	private java.util.Set<Diagram> tmpSelectedItems;
+	private Set<Diagram> tmpSelectedItems;
 	private Set<DiagramDragHandler> dragHandlers;
 	private boolean shiftOn;
 	private Diagram currentHandler;
   private long dispachSequence;
 	private Diagram lastMultimodeSelectedDiagram;
   private boolean freehandModeOn;
+  private Set<Diagram> tobeRemovedInCycle;
 	
 	public SelectionHandler(ISurfaceHandler surface, List<Diagram> diagrams, Set<DiagramDragHandler> dragHandlers) {
 		this.surface = surface;
 		this.diagrams = diagrams;
 		this.dragHandlers = dragHandlers;
 		this.selectionHandlers = new SelectionHandlerCollection();
-		tmpSelectedItems = new HashSet();
+		tmpSelectedItems = new HashSet<Diagram>();
+    tobeRemovedInCycle = new HashSet<Diagram>();
 		
 		if (surface.isDeleteSupported()) {
 			surface.getEditorContext().getEventBus().addHandler(DeleteSelectedEvent.TYPE, new DeleteSelectedEventHandler() {
@@ -155,32 +157,74 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 		selectionHandlers.add(handler);
 	}
 
+  public void remove(Diagram diagram) {
+    Set<Diagram> removed = new HashSet<Diagram>();
+    _remove(diagram, removed);
+    surface.getEditorContext().getEventBus().fireEvent(new BoardRemoveDiagramsEvent(removed));
+  }
+
+  /**
+  * Removes selected and allows parent child removal hooks
+  * in the middle of the loop. Parents can be added
+  * to be deleted after a child element. Possibility to make undo/redo
+  * work in correct order.
+  */
 	public void removeSelected() {
-	  Diagram[] items = new Diagram[]{};
-	  items = diagrams.toArray(items);
+    // clear to be removed so hooks are valid in this cycle
+    clearToBeRemovedCycle();
 	  Set<Diagram> removed = new HashSet<Diagram>();
-		for (Diagram d : items) {
+		for (Diagram d : diagrams) {
 		  if (d.isSelected()) {
-  		  Diagram removeItem = d.getOwnerComponent();
-  		  removed.add(removeItem);
-
-        // this is not absolutely must in here, but
-        // would require Comment Thread Element to keep state
-        // that it is under deletion, so that child element reference
-        // is not lost. In this way child elements will be deleted even though
-        // parent loses reference to children.
-        List<? extends Diagram> childElements = removeItem.getChildElements();
-        if (childElements != null) {
-          removed.addAll(childElements);
-        }
-
-  		  removeItem.removeFromParent();
-  			dragHandlers.remove(removeItem);
+        _remove(d, removed);
 		  }
 		}
+    handleAdditionalRemovals(removed);
 		surface.getEditorContext().getEventBus().fireEvent(new BoardRemoveDiagramsEvent(removed));
-//		selectedItems.clear();
 	}
+
+  /**
+  * This can be used to hook parent deletion after
+  * a child element removal.
+  */
+  public void addToBeRemovedCycle(Diagram diagram) {
+    tobeRemovedInCycle.add(diagram);
+  }
+
+  private void handleAdditionalRemovals(Set<Diagram> removed) {
+    for (Diagram remove : tobeRemovedInCycle) {
+      removed.add(remove);
+    }
+    clearToBeRemovedCycle();
+  }
+  private void clearToBeRemovedCycle() {
+    tobeRemovedInCycle.clear();    
+  }
+
+  public void remove(Diagram[] forRemoval) {
+    Set<Diagram> removed = new HashSet<Diagram>();
+    for (Diagram remove : forRemoval) {
+      _remove(remove, removed);
+    }
+    surface.getEditorContext().getEventBus().fireEvent(new BoardRemoveDiagramsEvent(removed));
+  }
+
+  private void _remove(Diagram diagram, Set<Diagram> removed) {
+    Diagram removeItem = diagram.getOwnerComponent();
+    removed.add(removeItem);
+
+    // this is not absolutely must in here, but
+    // would require Comment Thread Element to keep state
+    // that it is under deletion, so that child element reference
+    // is not lost. In this way child elements will be deleted even though
+    // parent loses reference to children.
+    List<? extends Diagram> childElements = removeItem.getChildElements();
+    if (childElements != null) {
+      removed.addAll(childElements);
+    }
+
+    removeItem.removeFromParent();
+    dragHandlers.remove(removeItem);
+  }
 
 //  @Override
   public boolean onKeyEventDown(int keyCode, boolean shift, boolean ctrl) {

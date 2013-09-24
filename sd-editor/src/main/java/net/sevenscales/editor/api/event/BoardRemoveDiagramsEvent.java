@@ -1,6 +1,7 @@
 package net.sevenscales.editor.api.event;
 
 import java.util.Set;
+import java.util.HashSet;
 
 import net.sevenscales.editor.diagram.Diagram;
 
@@ -9,6 +10,11 @@ import com.google.gwt.event.shared.GwtEvent;
 public class BoardRemoveDiagramsEvent extends GwtEvent<BoardRemoveDiagramsEventHandler> {
   public static Type<BoardRemoveDiagramsEventHandler> TYPE = new Type<BoardRemoveDiagramsEventHandler>();
 	private Set<Diagram> removed;
+
+	public BoardRemoveDiagramsEvent(Diagram removed) {
+		this.removed = new HashSet<Diagram>();
+		this.removed.add(removed);
+	}
 
   public BoardRemoveDiagramsEvent(Set<Diagram> removed) {
   	this.removed = removed;
