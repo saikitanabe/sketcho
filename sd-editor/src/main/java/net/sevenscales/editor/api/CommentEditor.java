@@ -7,17 +7,23 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.dom.client.Style.*;
 import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+// import com.google.gwt.core.client.Scheduler;
+// import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.EditorCommon;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.FastElementButton;
+import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
+import net.sevenscales.editor.api.event.SelectionMouseUpEventHandler;
 
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
 
@@ -39,11 +45,14 @@ class CommentEditor  extends Composite {
 
 
 	private ISurfaceHandler surface;
+	@UiField Label writeComment;
+	@UiField DivElement commentArea;
 	@UiField TextArea textArea;
 	@UiField AnchorElement comment;
 	private CustomPopupPanel popup;
 	private EditorCommon editorCommon;
 	private CommentThreadElement commentThread;
+	private int currentThreadHeight;
 
 	CommentEditor(ISurfaceHandler surface) {
 		this.surface = surface;
@@ -67,12 +76,28 @@ class CommentEditor  extends Composite {
 
 		this.popup.setWidget(this);
 
+		writeComment.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				show(commentThread);
+			}
+		});
+
 		new FastElementButton(comment).addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				logger.debug("Comment {}...", textArea.getText());
 				createComment();
 				clearAndHide();
+			}
+		});
+
+		surface.getEditorContext().getEventBus().addHandler(SelectionMouseUpEvent.TYPE, new SelectionMouseUpEventHandler() {
+			public void onSelection(SelectionMouseUpEvent event) {
+				if (event.isOnlyOne()) {
+					showWriteComment(event.getFirst());
+					// show(event.getFirst());
+				}
 			}
 		});
 	}
@@ -104,6 +129,11 @@ class CommentEditor  extends Composite {
 	void show(Diagram diagram) {
 		// TODO get parent from CommentElement; store also comment element
 		// if need to update comment
+
+		if (popup.isShowing()) {
+			hide();
+		}
+
 		if (diagram instanceof CommentThreadElement) {
 			this.commentThread = (CommentThreadElement) diagram;
 			logger.debug("show CommentEditor...");
@@ -119,7 +149,13 @@ class CommentEditor  extends Composite {
 			textArea.getElement().getStyle().setColor("#" + diagram.getTextColor());
 			textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
 			textArea.getElement().getStyle().setHeight(50, Unit.PX);
-			textArea.setVisible(true);
+			// textArea.setVisible(true);
+			commentArea.getStyle().setVisibility(Visibility.VISIBLE);
+
+			writeComment.setVisible(false);
+
+			currentThreadHeight = commentThread.getHeight();
+			commentThread.setIncrementHeight(20);
 
 			popup.show();
 
@@ -127,14 +163,23 @@ class CommentEditor  extends Composite {
 		}
 	}
 
+	private void showWriteComment(Diagram diagram) {
+		if (diagram instanceof CommentThreadElement) {
+			this.commentThread = (CommentThreadElement) diagram;
+			writeComment.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
+			show(commentThread);
+			writeComment.setVisible(true);
+			commentArea.getStyle().setVisibility(Visibility.HIDDEN);
+		}		
+	}
+
 	private void hide() {
-		// Diagram selected = surface.getSelectionHandler().getOnlyOneSelected();
-		// if (selected != null && selected instanceof CommentThreadElement) {
-		// 	show(selected);
-		// } else {
+		if (popup.isShowing() && commentThread != null) {
+			commentThread.restoreHeight(currentThreadHeight);
 			popup.hide();
+			commentThread = null;
 			CommentEditor.this.editorCommon.fireEditorClosed();
-		// }
+		}
 	}
 
 }

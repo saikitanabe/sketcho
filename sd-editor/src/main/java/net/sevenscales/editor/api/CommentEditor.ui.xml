@@ -4,10 +4,15 @@
 	</ui:style>
 	<g:HTMLPanel>
 		<div>
-			<g:TextArea ui:field="textArea"></g:TextArea>
+			<g:Label ui:field="writeComment" styleName="write-comment">Write Comment</g:Label>
 		</div>
-		<div>
-	  	<a ui:field="comment" class="btn btn-mini">Comment</a>
-	  </div>
+		<div ui:field="commentArea">
+			<div>
+				<g:TextArea ui:field="textArea"></g:TextArea>
+			</div>
+			<div>
+		  	<a ui:field="comment" class="btn btn-mini">Comment</a>
+		  </div>
+		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

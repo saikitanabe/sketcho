@@ -276,7 +276,7 @@ public class RelationshipDragEndHandler implements
 		case COMMENT_THREAD: {
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 			CommentThreadElement ne = new CommentThreadElement(surface,
-	        new CommentThreadShape(x, y, 150, 50),
+	        new CommentThreadShape(x, y, CommentThreadElement.MINIMUM_WIDTH, CommentThreadElement.MINIMUM_HEIGHT),
 	        "Comments",
 	        background, borderColor, color, true);
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);

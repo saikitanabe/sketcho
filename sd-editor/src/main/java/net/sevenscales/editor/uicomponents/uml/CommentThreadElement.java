@@ -48,8 +48,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 //	private Rectangle rectSurface;
 //  private IPolyline boundary;
 	private IRectangle boundary;
-	private int minimumWidth = 150;
-	private int minimumHeight = 50;
+	public static int MINIMUM_WIDTH = 200;
+	public static int MINIMUM_HEIGHT = 40;
 
 	private CommentThreadShape shape;
 	private Point coords = new Point();
@@ -173,7 +173,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 
 	public void setShape(int left, int top, int width, int height) {
-		height = minimumHeight > height ? minimumHeight : height;
+		height = MINIMUM_HEIGHT > height ? MINIMUM_HEIGHT : height;
 
 //    points = new int[]{left, top, 
 //        left+width-FOLD_SIZE, top,
@@ -405,7 +405,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 
 	protected boolean resize(int left, int top, int width, int height) {
-	  if (width >= minimumWidth && height >= minimumHeight) {
+	  if (width >= MINIMUM_WIDTH && height >= MINIMUM_HEIGHT) {
       setShape(left, top, width, height);
       connectionHelpers.setShape(getLeft(), getTop(), getWidth(), height);
 
@@ -632,11 +632,12 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	private void _sort(boolean resizeChild) {
 		int left = doGetLeft();
 		int top = doGetTop();
-		int currentHeight = 50; // getHeight();
+		int currentHeight = MINIMUM_HEIGHT;
 		int width = getWidth();
 
 		int height = currentHeight;
 		int size = comments.size();
+		CommentElement last = null;
 		for (int i = 0; i < size; ++i) {
 			CommentElement ce = comments.get(i);
 
@@ -650,6 +651,11 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			}
 			// }
 			height += commentHeight;
+			last = ce;
+		}
+
+		if (last != null) {
+			last.hideBottomLine();
 		}
 
 		if (height != currentHeight) {
@@ -686,5 +692,20 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
   	}
   }
+
+	@Override
+	public int getTextAreaTop() {
+		return getTop() - 10;
+	}
+
+	public void setIncrementHeight(int value) {
+		setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() + value);
+	}
+
+	public void restoreHeight(int height) {
+		setShape(doGetLeft(), doGetTop(), getWidth(), height);
+	}
+
+
 
 }

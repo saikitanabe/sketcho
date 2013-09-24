@@ -104,6 +104,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //                       shape.rectShape.left, shape.rectShape.top+shape.rectShape.height,
 //                       shape.rectShape.left, shape.rectShape.top};
 		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
+		// boundary.setStroke(textColor.red, textColor.green, textColor.blue, textColor.opacity);
 		boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 
 		separator = IShapeFactory.Util.factory(editable).createLine(group);
@@ -142,7 +143,8 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     title = new TextElementVerticalFormatUtil(this, hasTitleTextElement, group, surface.getEditorContext());
     textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
 
-    textUtil.setMarginTop(25);
+		title.setMarginTop(0);
+    textUtil.setMarginTop(20);
 
     setReadOnly(!editable);
     setShape(shape.rectShape.left, shape.rectShape.top, 
@@ -322,7 +324,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     }
 
     public void resize(int x, int y, int width, int height) {
-      CommentElement.this.resize(x, y, width, height);
+      CommentElement.this.resize(x, y, width, height + 10);
       fireSizeChanged();
     }
 
@@ -391,7 +393,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	
 	public void setHeight(int height) {
 		int prevHeight = getHeight();
-		height += textUtil.getMarginTop();
+		height += 10;
 		setShape(doGetLeft(), doGetTop(), getWidth(), height);
 		dispatchAndRecalculateAnchorPositions();
     parentThread.childResized(this, height - prevHeight);
@@ -608,6 +610,10 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	@Override
   public void select() {
   	// parentThread.showReply();
+	}
+
+	public void hideBottomLine() {
+		separator.setVisibility(false);
 	}
 
 }
