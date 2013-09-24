@@ -573,21 +573,6 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		surface.addAsSelected(commentElement, true);
 	}
 
-	// public void addComment(final CommentElement comment) {
-	// 	// schedule to get height right
-	// 	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-	// 		@Override
-	// 		public void execute() {
-	// 			_addComment(comment);
-	// 		}
-	// 	});
-	// }
-
-	private void _addComment(CommentElement comment) {
-		setShape(getLeft(), getTop(), getWidth(), getHeight() + comment.getHeight());
-    surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
-	}
-
 	public void accept(CommentElement comment) {
 		comments.add(comment);
 		queueSorting();
@@ -625,17 +610,6 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			});
 		}
 	}
-
-	// private void sort(boolean resizeChild) {
-	// 	if (resizeChild) {
-	// 		resizeChildren();
-	// 		// children need to reshape/draw itself to get correct height
-	// 		// for sorting
-	// 		queueSorting();
-	// 	} else {
-	// 		sort();
-	// 	}
-	// }
 
 	private void resizeChildren() {
 		_sort(true);
@@ -713,11 +687,5 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	public void setIncrementHeight(int value) {
 		setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() + value);
 	}
-
-	public void restoreHeight(int height) {
-		setShape(doGetLeft(), doGetTop(), getWidth(), height);
-	}
-
-
 
 }

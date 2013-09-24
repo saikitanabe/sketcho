@@ -31,7 +31,7 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasText
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
-import net.sevenscales.editor.api.event.CommentSelectedEvent;
+import net.sevenscales.editor.api.event.CommentDeletedEvent;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.JsComment;
@@ -370,6 +370,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		parentThread.removeComment(this);
 		surface.remove(this);
     surface.remove(group.getContainer());
+    surface.getEditorContext().getEventBus().fireEvent(new CommentDeletedEvent(this));
 	}
 	
 	@Override

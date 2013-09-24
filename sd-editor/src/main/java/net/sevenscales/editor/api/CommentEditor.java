@@ -24,8 +24,8 @@ import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.SelectionMouseUpEventHandler;
-import net.sevenscales.editor.api.event.CommentSelectedEvent;
-import net.sevenscales.editor.api.event.CommentSelectedEventHandler;
+import net.sevenscales.editor.api.event.CommentDeletedEvent;
+import net.sevenscales.editor.api.event.CommentDeletedEventHandler;
 
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
 
@@ -111,6 +111,11 @@ class CommentEditor  extends Composite {
 			}
 		});
 
+		surface.getEditorContext().getEventBus().addHandler(CommentDeletedEvent.TYPE, new CommentDeletedEventHandler() {
+			public void on(CommentDeletedEvent event) {
+				hide();
+			}
+		});
 	}
 
 	private void clearAndHide() {
@@ -171,11 +176,12 @@ class CommentEditor  extends Composite {
 
 	private void hide() {
 		if (popup.isShowing() && commentThread != null) {
+			commentThread.hideResizeHandles();
 			commentThread.resizeWithKnownChildren();
-			popup.hide();
-			commentThread = null;
-			CommentEditor.this.editorCommon.fireEditorClosed();
 		}
+		commentThread = null;
+		popup.hide();
+		CommentEditor.this.editorCommon.fireEditorClosed();
 	}
 
 }
