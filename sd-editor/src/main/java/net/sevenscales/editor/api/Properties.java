@@ -464,7 +464,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		}
 
 		if (selectedDiagram instanceof CommentThreadElement) {
-			commentEditor.show(selectedDiagram);
+			commentEditor.showEditor(selectedDiagram);
 			return;
 		}
 		

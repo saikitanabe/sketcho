@@ -42,6 +42,7 @@ class CommentEditor  extends Composite {
 	private static final SLogger logger = SLogger.createLogger(CommentEditor.class);
 	private static final String PROPERTIES_EDITOR_STYLE = "properties-TextArea2";
 	private static final int EDITOR_INCREMENT = 90;
+	private static final int EDITOR_INCREMENT_FIRST = 30;
 	private static final int HINT_INCREMENT = 40;
 
   private static CommentEditorUiBinder uiBinder = GWT.create(CommentEditorUiBinder.class);
@@ -57,8 +58,6 @@ class CommentEditor  extends Composite {
 	private CustomPopupPanel popup;
 	private EditorCommon editorCommon;
 	private CommentThreadElement commentThread;
-
-	private int incrementSize;
 
 	CommentEditor(ISurfaceHandler surface) {
 		this.surface = surface;
@@ -85,8 +84,7 @@ class CommentEditor  extends Composite {
 		writeComment.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				incrementSize = EDITOR_INCREMENT;
-				show(commentThread);
+				show(commentThread, EDITOR_INCREMENT);
 			}
 		});
 
@@ -127,11 +125,26 @@ class CommentEditor  extends Composite {
 		commentThread.createComment(textArea.getText());
 	}
 
-	void show(Diagram diagram) {
+	void showEditor(Diagram diagram) {
+		show(diagram, calcEditorIncrement(diagram));
+	}
+
+	private void calcEditorIncrement(Diagram diagram) {
+ 		int result = EDITOR_INCREMENT_FIRST;
+		if (diagram instanceof CommentThreadElement) {
+			if (((CommentThreadElement) diagram).getChildElements().size() > 0) {
+				result = EDITOR_INCREMENT;
+			}
+		}
+		return result;
+	}
+
+	private void show(Diagram diagram, int incrementSize) {
 		// TODO get parent from CommentElement; store also comment element
 		// if need to update comment
 
 		if (popup.isShowing()) {
+			// reset height state
 			hide();
 		}
 
@@ -142,9 +155,13 @@ class CommentEditor  extends Composite {
 
 			MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
 			int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
-			int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop() + diagram.getHeight();
+			int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop() + 5;
 
-			popup.setPopupPosition(x, y + 18);
+			if (commentThread.getChildElements().size() > 0) {
+				// not first
+				y += diagram.getHeight();
+			}
+			popup.setPopupPosition(x, y);
 
 			textArea.getElement().getStyle().setBackgroundColor("#" + commentThread.getBackgroundColor());
 			textArea.getElement().getStyle().setColor("#" + diagram.getTextColor());
@@ -167,8 +184,7 @@ class CommentEditor  extends Composite {
 			this.commentThread = (CommentThreadElement) diagram;
 			commentThread.showResizeHandles();
 			writeComment.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
-			incrementSize = HINT_INCREMENT;
-			show(commentThread);
+			show(commentThread, HINT_INCREMENT);
 			writeComment.setVisible(true);
 			commentArea.getStyle().setVisibility(Visibility.HIDDEN);
 		}		
@@ -177,7 +193,7 @@ class CommentEditor  extends Composite {
 	private void hide() {
 		if (popup.isShowing() && commentThread != null) {
 			commentThread.hideResizeHandles();
-			commentThread.resizeWithKnownChildren();
+			commentThread.restoreSize();
 		}
 		commentThread = null;
 		popup.hide();

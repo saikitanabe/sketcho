@@ -435,6 +435,10 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		queueSorting();
 	}
 
+	public void restoreSize() {
+		_sort(false);
+	}
+
 	public Info getInfo() {
     super.fillInfo(shape);
 		return this.shape;
@@ -644,10 +648,10 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		// 	last.hideBottomLine();
 		// }
 
-		if (height != currentHeight) {
-			logger.debug("CommentThreadElement height changed current {} new {}...", currentHeight, height);
-			setShape(left, top, width, height);
-		}
+		// if (height != currentHeight) {
+		// 	logger.debug("CommentThreadElement height changed current {} new {}...", currentHeight, height);
+		setShape(left, top, width, height);
+		// }
 	}
 
  	public List<? extends Diagram> getChildElements() {
@@ -681,7 +685,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	@Override
 	public int getTextAreaTop() {
-		return getTop() - 10;
+		return getTop();
 	}
 
 	public void setIncrementHeight(int value) {
