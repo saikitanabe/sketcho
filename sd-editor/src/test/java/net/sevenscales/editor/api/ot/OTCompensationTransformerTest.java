@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.ot.BoardDocumentHelpers.ApplyOperation;
+import net.sevenscales.editor.api.ot.ApplyHelpers.DiagramApplyOperation;
 
 public class OTCompensationTransformerTest extends TestCase {
 	private List<? extends IDiagramItemRO> currentState;
@@ -22,8 +22,8 @@ public class OTCompensationTransformerTest extends TestCase {
 		mappedCompensatedOperations.put(OTOperation.MODIFY, OTOperation.MODIFY);
 	}
 	
-	private List<ApplyOperation> generateApplyOperations(OTOperation[] operations, int maxItemsPerApplyOperation) {
-		List<ApplyOperation> result = new ArrayList<ApplyOperation>();
+	private List<DiagramApplyOperation> generateApplyOperations(OTOperation[] operations, int maxItemsPerApplyOperation) {
+		List<DiagramApplyOperation> result = new ArrayList<DiagramApplyOperation>();
 		
 		for (int i = 0; i < operations.length; ++i) {
 			int itemCount = (int) (Math.random() * maxItemsPerApplyOperation);
@@ -31,7 +31,7 @@ public class OTCompensationTransformerTest extends TestCase {
 			itemCount = itemCount == 0 ? 1 : itemCount;
 			
 			List<IDiagramItemRO> items = TestUtils.generateDiagramItems(itemCount);
-			ApplyOperation ap = new ApplyOperation(operations[i], items);
+			DiagramApplyOperation ap = new DiagramApplyOperation(operations[i], items);
 			result.add(ap);
 		}
 		
@@ -42,7 +42,7 @@ public class OTCompensationTransformerTest extends TestCase {
 		OTCompensationTransformer t = new OTCompensationTransformer();
 		t.setTestMode(true);
 		currentState = TestUtils.generateDiagramItems(0);
-		List<ApplyOperation> applyOperations = generateApplyOperations(new OTOperation[]{OTOperation.INSERT}, 1);
+		List<DiagramApplyOperation> applyOperations = generateApplyOperations(new OTOperation[]{OTOperation.INSERT}, 1);
 		
 		List<CompensationModel> models = t.compensateApplyOperations(applyOperations, currentState);
 		assertNotNull("compensation models should not be null", models);
@@ -57,7 +57,7 @@ public class OTCompensationTransformerTest extends TestCase {
 		OTCompensationTransformer t = new OTCompensationTransformer();
 		t.setTestMode(true);
 		currentState = TestUtils.generateDiagramItems(7);
-		List<ApplyOperation> applyOperations = generateApplyOperations(new OTOperation[]{OTOperation.DELETE}, 7);
+		List<DiagramApplyOperation> applyOperations = generateApplyOperations(new OTOperation[]{OTOperation.DELETE}, 7);
 		
 		List<CompensationModel> models = t.compensateApplyOperations(applyOperations, currentState);
 		assertEquals("there should be same amount of compensations as there are apply operations", applyOperations.size(), models.size());
@@ -74,9 +74,9 @@ public class OTCompensationTransformerTest extends TestCase {
 		assertFalse("new and prev state should not be the same", currentState.get(0).equals(applyOperations.get(0).getItems().get(0)));
 	}
 
-	private void compareApplyOperationsToCompensatedModels(List<ApplyOperation> applyOperations, List<CompensationModel> models) {
+	private void compareApplyOperationsToCompensatedModels(List<DiagramApplyOperation> applyOperations, List<CompensationModel> models) {
 		for (int i = 0; i < applyOperations.size(); ++i) {
-			ApplyOperation ao = applyOperations.get(i);
+			DiagramApplyOperation ao = applyOperations.get(i);
 			CompensationModel cm = models.get(i);
 			for (int x = 0; x < ao.getItems().size(); ++x) {
 				IDiagramItemRO expectedItem = ao.getItems().get(x);
@@ -96,7 +96,7 @@ public class OTCompensationTransformerTest extends TestCase {
 		}
 	}
 
-	private void assertUndo(IDiagramItemRO expectedUndo, IDiagramItemRO actualUndo, ApplyOperation ao, CompensationModel cm) {
+	private void assertUndo(IDiagramItemRO expectedUndo, IDiagramItemRO actualUndo, DiagramApplyOperation ao, CompensationModel cm) {
 		assertTrue("udo operation should be the opposite", mappedCompensatedOperations.get(ao.getOperation()) == cm.undoOperation);
 		assertNotSame("undo item should not be a same instance", expectedUndo, actualUndo);
 		if (cm.undoOperation == OTOperation.DELETE) {
@@ -109,14 +109,14 @@ public class OTCompensationTransformerTest extends TestCase {
 		}
 	}
 
-	private void assertRedo(IDiagramItemRO expectedItem, IDiagramItemRO actualRedo, ApplyOperation ao, CompensationModel cm) {
+	private void assertRedo(IDiagramItemRO expectedItem, IDiagramItemRO actualRedo, DiagramApplyOperation ao, CompensationModel cm) {
 		assertTrue("redo operation should be the same", ao.getOperation() == cm.redoOperation);
 		assertNotSame("redo item should not be a same as applied item", expectedItem, actualRedo);
 		assertEquals("redo item should be copy of the applied item", expectedItem, actualRedo);
 		System.out.println("REDO state matches with apply state: " + expectedItem);
 	}
 
-	private IDiagramItemRO findPreviousItemState(IDiagramItemRO tofind, List<ApplyOperation> applyOperations, int currentApplyIndex, List<? extends IDiagramItemRO> currentState) {
+	private IDiagramItemRO findPreviousItemState(IDiagramItemRO tofind, List<DiagramApplyOperation> applyOperations, int currentApplyIndex, List<? extends IDiagramItemRO> currentState) {
 		IDiagramItemRO result = findPreviousItemStateFromAppliedOperations(tofind, applyOperations, currentApplyIndex);
 		// search from current state if item is not found from applied operations
 		if (result == null) {
@@ -135,9 +135,9 @@ public class OTCompensationTransformerTest extends TestCase {
 		return null;
 	}
 
-	private IDiagramItemRO findPreviousItemStateFromAppliedOperations(IDiagramItemRO tofind, List<ApplyOperation> applyOperations, int currentApplyIndex) {
+	private IDiagramItemRO findPreviousItemStateFromAppliedOperations(IDiagramItemRO tofind, List<DiagramApplyOperation> applyOperations, int currentApplyIndex) {
 		for (int i = currentApplyIndex - 1; i >= 0; --i) {
-			ApplyOperation ap = applyOperations.get(i);
+			DiagramApplyOperation ap = applyOperations.get(i);
 			for (IDiagramItemRO previousStateCandidate : ap.getItems()) {
 				if (tofind.getClientId().equals(previousStateCandidate.getClientId())) {
 					return previousStateCandidate;
@@ -151,11 +151,11 @@ public class OTCompensationTransformerTest extends TestCase {
 		OTCompensationTransformer t = new OTCompensationTransformer();
 		t.setTestMode(true);
 		currentState = TestUtils.generateDiagramItems(7);
-		List<ApplyOperation> applyOperations = generateApplyOperations(new OTOperation[]{OTOperation.MODIFY}, 5);
+		List<DiagramApplyOperation> applyOperations = generateApplyOperations(new OTOperation[]{OTOperation.MODIFY}, 5);
 		
 		// add extra apply operation manually and check that it works as planned; item is found from apply operations not from the server document
 		List<IDiagramItemRO> shouldBeFound = TestUtils.generateDiagramItems(1); // client id 0000
-		ApplyOperation previousApplyOperationState = new ApplyOperation(OTOperation.INSERT, shouldBeFound);
+		DiagramApplyOperation previousApplyOperationState = new DiagramApplyOperation(OTOperation.INSERT, shouldBeFound);
 		// add it as earlier operation => first on the list so that it is applied earlier, so it is the previous state
 		IDiagramItemRO expectedUndoState = shouldBeFound.get(0);
 		applyOperations.add(0, previousApplyOperationState);

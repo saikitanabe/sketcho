@@ -24,8 +24,8 @@ public class StringUtilTest extends TestCase {
 	}
 	
 	public void testTrimSpaces2() {
-		String v = "[{\"text\":\"Server pallo ja \\\"meri on täällä\\\" \",\"elementType\":\"server\",\"shape\":\"416, 61,60,80\", \"backgroundColor\":\"204,255, 102,0.85:183,229,91,1\",\"textColor\":\"68,68,68,1\",\"version\":2, \"id\":1021157283, \"clientId\":\"F135894057551812\",\"cd\":\"\"}]";
-		String expected = "[{\"text\":\"Server pallo ja \\\"meri on täällä\\\" \",\"elementType\":\"server\",\"shape\":\"416, 61,60,80\",\"backgroundColor\":\"204,255, 102,0.85:183,229,91,1\",\"textColor\":\"68,68,68,1\",\"version\":2,\"id\":1021157283,\"clientId\":\"F135894057551812\",\"cd\":\"\"}]";
+		String v = "[{\"text\":\"Server pallo ja \\\"meri on taalla\\\" \",\"elementType\":\"server\",\"shape\":\"416, 61,60,80\", \"backgroundColor\":\"204,255, 102,0.85:183,229,91,1\",\"textColor\":\"68,68,68,1\",\"version\":2, \"id\":1021157283, \"clientId\":\"F135894057551812\",\"cd\":\"\"}]";
+		String expected = "[{\"text\":\"Server pallo ja \\\"meri on taalla\\\" \",\"elementType\":\"server\",\"shape\":\"416, 61,60,80\",\"backgroundColor\":\"204,255, 102,0.85:183,229,91,1\",\"textColor\":\"68,68,68,1\",\"version\":2,\"id\":1021157283,\"clientId\":\"F135894057551812\",\"cd\":\"\"}]";
 
 		String actual = StringUtil.trimSpaces(v);
 		assertEquals(expected, actual);

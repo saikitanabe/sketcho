@@ -9,6 +9,7 @@ import net.sf.hibernate4gwt.pojo.java5.LazyPojo;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializable, IsSerializable {
+	public static final int DATA_VERSION = 3;
 	private static final long serialVersionUID = 5754682876312853660L;
 	private Long id;
 	private String text;
@@ -17,7 +18,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
   private IDiagramContent diagramContent;
 	private String backgroundColor;
 	private String textColor;
-  private Integer version = 3;
+  private Integer version = DATA_VERSION;
 	private String clientId;
 	private String customData;
 	private double crc32;

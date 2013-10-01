@@ -207,6 +207,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //    anchorPoint.setStrokeWidth(1);
 //    anchorPoint.setVisibility(false);
 
+    textUtil = new RelationshipTextUtil2();
     relationshipText = new RelationshipText2(group, surface, editable);
 
     inheritancePoints = new int[8];
@@ -748,9 +749,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   	text = text.replaceAll("\\\\r", ""); // windows line breaks removed
   	this.text = text;
   	
-    if (textUtil == null) {
-      textUtil = new RelationshipTextUtil2();
-    }
     textUtil.setText(this.text);
     RelationshipShape2 rs = (RelationshipShape2) textUtil.parseShape();	
     
@@ -774,9 +772,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   public RelationshipShape2 getRelationshipShape() {
-    if (textUtil == null) {
-      textUtil = new RelationshipTextUtil2();
-    }
     textUtil.setText(text);
     return (RelationshipShape2) textUtil.parseShape();
   }
