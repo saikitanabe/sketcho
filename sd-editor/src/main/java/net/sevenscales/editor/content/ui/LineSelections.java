@@ -14,12 +14,16 @@ public class LineSelections extends Composite {
 	
 	public enum RelationShipType {
 		DIRECTED("->"),
-		LINE("-"), 
+		DIRECTED_BOTH("<->"),
+		LINE("-"),
 		DEPENDANCY("--"),
-		DEPENDANCY_DIRECTED("-->"), 
-		INHERITANCE("-|>"), 
-		AGGREGATION_DIRECTED("<>->"), 
+		DEPENDANCY_DIRECTED("-->"),
+		DEPENDANCY_DIRECTED_BOTH("<-->"),
+		INHERITANCE("-|>"),
+		AGGREGATION_DIRECTED("<>->"),
+		AGGREGATION_DIRECTED_FILLED("<*>->"),
 		AGGREGATION("<>-"), 
+		AGGREGATION_FILLED("<*>-"), 
 		REVERSE("");
 		
 		private String value;

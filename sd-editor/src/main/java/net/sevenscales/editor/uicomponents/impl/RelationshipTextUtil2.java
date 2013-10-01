@@ -60,34 +60,6 @@ public class RelationshipTextUtil2 implements RelationshipParser {
 			return null;			
 		}
 		public Info parseShape() {
-			// int result = 0;
-			// if (RelationshipShape.INHERITANCE.equals(text)) {
-			// 	result |= RelationshipShape.INHERITANCE;
-			// 	relationshipShape.type = RelationShipType.INHERITANCE;
-			// } else if (RelationshipShape.DEPENDANCY_DIRECTED.getValue().equals(text)) {
-			// 	result |= RelationshipShape.DEPENDANCY | RelationshipShape.DIRECTED;
-			// 	relationshipShape.type = RelationShipType.DEPENDANCY_DIRECTED;
-			// } else if (RelationshipShape.DEPENDANCY.getValue().equals(text)) {
-			// 	result |= RelationshipShape.DEPENDANCY;
-			// 	relationshipShape.type = RelationShipType.DEPENDANCY;
-			// } else if (RelationshipShape.AGGREGATION_DIRECTED.getValue().equals(text)) {
-			// 	result |= RelationshipShape.AGGREGATE | RelationshipShape.DIRECTED;
-			// 	relationshipShape.type = RelationShipType.AGGREGATION_DIRECTED;
-			// } else if (RelationshipShape.AGGREGATION.getValue().equals(text)) {
-			// 	result |= RelationshipShape.AGGREGATE;
-			// 	relationshipShape.type = RelationShipType.AGGREGATION;
-			// } else if (RelationshipShape.DIRECTED.getValue().equals(text)) {
-			// 	result |= RelationshipShape.DIRECTED;
-			// 	relationshipShape.type = RelationShipType.DIRECTED;
-			// } else if (RelationshipShape.LINE.getValue().equals(text)) {
-			// 	relationshipShape.type = RelationShipType.LINE;
-			// } else {
-			// 	// fall back to plain line
-			// 	relationshipShape.type = RelationShipType.LINE;
-			// }
-
-			// relationshipShape.caps = result;
-			// return relationshipShape;
 			return null;
 		}
 		public String parseLeftText() {
@@ -129,34 +101,56 @@ public class RelationshipTextUtil2 implements RelationshipParser {
 			// NOTE: order matters! Put most complex as first
 			// sub elements needs be after more complex ones!
 			if (arrowLine.matches(".*-\\|>.*")) {
-				result |= RelationshipShape.INHERITANCE;
+				result |= RelationshipShape2.INHERITANCE;
 				leftEnd = arrowLine.indexOf(RelationShipType.INHERITANCE.getValue());
 				rightStart = leftEnd + RelationShipType.INHERITANCE.getValue().length();
 				relationshipShape.type = RelationShipType.INHERITANCE;
+			} else if (arrowLine.matches(".*<-->.*")) {
+				result |= RelationshipShape2.DEPENDANCY | RelationshipShape2.DIRECTED | RelationshipShape2.DIRECTED_START;
+				leftEnd = arrowLine.indexOf(RelationShipType.DEPENDANCY_DIRECTED_BOTH.getValue());
+				rightStart = leftEnd
+						+ RelationShipType.DEPENDANCY_DIRECTED.getValue().length();
+				relationshipShape.type = RelationShipType.DEPENDANCY_DIRECTED_BOTH;
 			} else if (arrowLine.matches(".*-->.*")) {
-				result |= RelationshipShape.DEPENDANCY | RelationshipShape.DIRECTED;
+				result |= RelationshipShape2.DEPENDANCY | RelationshipShape2.DIRECTED;
 				leftEnd = arrowLine.indexOf(RelationShipType.DEPENDANCY_DIRECTED.getValue());
 				rightStart = leftEnd
 						+ RelationShipType.DEPENDANCY_DIRECTED.getValue().length();
 				relationshipShape.type = RelationShipType.DEPENDANCY_DIRECTED;
 			} else if (arrowLine.matches(".*--.*")) {
-				result |= RelationshipShape.DEPENDANCY;
+				result |= RelationshipShape2.DEPENDANCY;
 				leftEnd = arrowLine.indexOf(RelationShipType.DEPENDANCY.getValue());
 				rightStart = leftEnd + RelationShipType.DEPENDANCY.getValue().length();
 				relationshipShape.type = RelationShipType.DEPENDANCY;
+			} else if (arrowLine.matches(".*<\\*>->.*")) {
+				result |= RelationshipShape2.AGGREGATE | RelationshipShape2.DIRECTED | RelationshipShape2.FILLED;
+				leftEnd = arrowLine.indexOf(RelationShipType.AGGREGATION_DIRECTED_FILLED.getValue());
+				rightStart = leftEnd
+						+ RelationShipType.AGGREGATION_DIRECTED.getValue().length();
+				relationshipShape.type = RelationShipType.AGGREGATION_DIRECTED;
 			} else if (arrowLine.matches(".*<>->.*")) {
-				result |= RelationshipShape.AGGREGATE | RelationshipShape.DIRECTED;
+				result |= RelationshipShape2.AGGREGATE | RelationshipShape2.DIRECTED;
 				leftEnd = arrowLine.indexOf(RelationShipType.AGGREGATION_DIRECTED.getValue());
 				rightStart = leftEnd
 						+ RelationShipType.AGGREGATION_DIRECTED.getValue().length();
 				relationshipShape.type = RelationShipType.AGGREGATION_DIRECTED;
+			} else if (arrowLine.matches(".*<\\*>-.*")) {
+				result |= RelationshipShape2.AGGREGATE | RelationshipShape2.FILLED;
+				leftEnd = arrowLine.indexOf(RelationShipType.AGGREGATION_FILLED.getValue());
+				rightStart = leftEnd + RelationShipType.AGGREGATION_FILLED.getValue().length();
+				relationshipShape.type = RelationShipType.AGGREGATION_FILLED;
 			} else if (arrowLine.matches(".*<>-.*")) {
-				result |= RelationshipShape.AGGREGATE;
+				result |= RelationshipShape2.AGGREGATE;
 				leftEnd = arrowLine.indexOf(RelationShipType.AGGREGATION.getValue());
 				rightStart = leftEnd + RelationShipType.AGGREGATION.getValue().length();
 				relationshipShape.type = RelationShipType.AGGREGATION;
+			} else if (arrowLine.matches(".*<->.*")) {
+				result |= RelationshipShape2.DIRECTED | RelationshipShape2.DIRECTED_START;
+				leftEnd = arrowLine.indexOf(RelationShipType.DIRECTED_BOTH.getValue());
+				rightStart = leftEnd + RelationShipType.DIRECTED_BOTH.getValue().length();
+				relationshipShape.type = RelationShipType.DIRECTED_BOTH;
 			} else if (arrowLine.matches(".*->.*")) {
-				result |= RelationshipShape.DIRECTED;
+				result |= RelationshipShape2.DIRECTED;
 				leftEnd = arrowLine.indexOf(RelationShipType.DIRECTED.getValue());
 				rightStart = leftEnd + RelationShipType.DIRECTED.getValue().length();
 				relationshipShape.type = RelationShipType.DIRECTED;
