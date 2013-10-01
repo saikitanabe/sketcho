@@ -369,6 +369,4 @@ public class RelationshipTextUtil2Test extends TestCase {
     assertTrue(rs.isFilled());
   }
 
-
-
 }

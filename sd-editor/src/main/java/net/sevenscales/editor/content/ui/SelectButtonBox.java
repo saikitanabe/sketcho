@@ -80,7 +80,7 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 							int left = SelectButtonBox.this.getAbsoluteLeft() + 0;
 							int top = SelectButtonBox.this.getAbsoluteTop() + 30;
 							if (SelectButtonBox.this.editorContext.isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {
-								top = SelectButtonBox.this.getAbsoluteTop() - 207;
+								top = SelectButtonBox.this.getAbsoluteTop() - 333;
 							}
 							popup.setPopupPosition(left, top);
 							popup.show();
