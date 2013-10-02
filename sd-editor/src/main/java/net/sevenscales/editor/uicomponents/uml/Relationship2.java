@@ -46,6 +46,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	private IPolyline inheritance;
   private IPolyline arrow;
   private IPolyline aggregate;
+  private ArrowStartPolyline arrowStartPolyline;
   private RelationshipText2 relationshipText;
 //  private List<IShape> elements = new ArrayList<IShape>();
 
@@ -81,6 +82,42 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	private ClickTextPosition currentTextEditLocation;
 	private boolean legacyAnchor;
   private RelationshipHandleHelpers relationshipHandleHelpers;
+
+  private static class ArrowStartPolyline {
+    private IPolyline arrowStart;
+    private Relationship2 parent;
+
+    ArrowStartPolyline(Relationship2 parent) {
+      this.parent = parent;
+    }
+
+    void setShape(int startx, int starty) {
+      if (parent.info != null && parent.info.isDirectedStart()) {
+        createIfNull();
+        // borrow arrowPoints array; it is always calculated
+        // before applying as a shape to arrow
+        parent.arrowPoints[0] = parent.dleft.x; parent.arrowPoints[1] = parent.dleft.y;
+        parent.arrowPoints[2] = startx; parent.arrowPoints[3] = starty;
+        parent.arrowPoints[4] = parent.dright.x; parent.arrowPoints[5] = parent.dright.y;
+        arrowStart.setShape(parent.arrowPoints);
+      }
+      if (arrowStart != null) {
+        arrowStart.setVisibility(parent.info.isDirectedStart());
+      }
+    }
+
+    /**
+    * To minimize DOM manipulation unnecessarily.
+    */
+    private void createIfNull() {
+      if (arrowStart == null) {
+        arrowStart = IShapeFactory.Util.factory(parent.editable).createPolyline(parent.group, parent.arrowPoints);
+        arrowStart.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+        arrowStart.setFill(255, 255, 255, 0);
+      }
+    }
+
+  }
 	
 //	private TextPosition textUnderEdit = TextPosition.TEXT_ALL;
 //	private enum TextPosition {
@@ -225,6 +262,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     arrow = IShapeFactory.Util.factory(editable).createPolyline(group, arrowPoints);
     arrow.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
     arrow.setFill(255, 255, 255, 0);
+
+    arrowStartPolyline = new ArrowStartPolyline(this);
     
     aggregatePoints = new int[10];
     aggregate = IShapeFactory.Util.factory(editable).createPolyline(group, aggregatePoints);
@@ -887,6 +926,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     aggregate.setVisibility(info.isAggregate());
 //    aggregate.setStroke("black");
     aggregate.moveToFront();
+
+    arrowStartPolyline.setShape(startx, starty);
 
     relationshipHandleHelpers.doSetShape(currentDragged);
   }
