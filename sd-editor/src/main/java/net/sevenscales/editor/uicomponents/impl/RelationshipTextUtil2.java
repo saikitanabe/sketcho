@@ -1,6 +1,6 @@
 package net.sevenscales.editor.uicomponents.impl;
 
-import net.sevenscales.editor.content.ui.LineSelections.RelationShipType;
+import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
 import net.sevenscales.editor.silver.RelationshipShape;
@@ -109,7 +109,7 @@ public class RelationshipTextUtil2 implements RelationshipParser {
 				result |= RelationshipShape2.DEPENDANCY | RelationshipShape2.DIRECTED | RelationshipShape2.DIRECTED_START;
 				leftEnd = arrowLine.indexOf(RelationShipType.DEPENDANCY_DIRECTED_BOTH.getValue());
 				rightStart = leftEnd
-						+ RelationShipType.DEPENDANCY_DIRECTED.getValue().length();
+						+ RelationShipType.DEPENDANCY_DIRECTED_BOTH.getValue().length();
 				relationshipShape.type = RelationShipType.DEPENDANCY_DIRECTED_BOTH;
 			} else if (arrowLine.matches(".*-->.*")) {
 				result |= RelationshipShape2.DEPENDANCY | RelationshipShape2.DIRECTED;
@@ -126,8 +126,8 @@ public class RelationshipTextUtil2 implements RelationshipParser {
 				result |= RelationshipShape2.AGGREGATE | RelationshipShape2.DIRECTED | RelationshipShape2.FILLED;
 				leftEnd = arrowLine.indexOf(RelationShipType.AGGREGATION_DIRECTED_FILLED.getValue());
 				rightStart = leftEnd
-						+ RelationShipType.AGGREGATION_DIRECTED.getValue().length();
-				relationshipShape.type = RelationShipType.AGGREGATION_DIRECTED;
+						+ RelationShipType.AGGREGATION_DIRECTED_FILLED.getValue().length();
+				relationshipShape.type = RelationShipType.AGGREGATION_DIRECTED_FILLED;
 			} else if (arrowLine.matches(".*<>->.*")) {
 				result |= RelationshipShape2.AGGREGATE | RelationshipShape2.DIRECTED;
 				leftEnd = arrowLine.indexOf(RelationShipType.AGGREGATION_DIRECTED.getValue());

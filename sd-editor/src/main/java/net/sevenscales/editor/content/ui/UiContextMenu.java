@@ -15,7 +15,7 @@ import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.SelectionMouseUpEventHandler;
 import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.api.impl.TouchHelpers;
-import net.sevenscales.editor.content.ui.LineSelections.RelationShipType;
+import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.utils.DuplicateHelpers;
 import net.sevenscales.editor.content.utils.EffectHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;

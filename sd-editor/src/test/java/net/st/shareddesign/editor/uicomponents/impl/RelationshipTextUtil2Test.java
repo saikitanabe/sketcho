@@ -13,6 +13,7 @@ import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
 import net.sevenscales.editor.uicomponents.impl.RelationshipTextUtil2;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.editor.content.RelationShipType;
 
 
 public class RelationshipTextUtil2Test extends TestCase {
@@ -356,10 +357,12 @@ public class RelationshipTextUtil2Test extends TestCase {
 
   public void testLegacyOwnsDirectedFilled() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
-    su.setText("<*>->");
+    su.setText("motivus\nstart<*>->end");
     Info s = su.parseShape();
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
+
+    assertEquals(RelationShipType.AGGREGATION_DIRECTED_FILLED, rs.type);
 
     assertTrue(!rs.isDependancy());    
     assertTrue(rs.isDirected());
@@ -367,6 +370,10 @@ public class RelationshipTextUtil2Test extends TestCase {
     assertTrue(rs.isAggregate());
     assertTrue(!rs.isInheritance());    
     assertTrue(rs.isFilled());
+
+    assertEquals("start", su.parseLeftText());
+    assertEquals("motivus", su.parseLabel());
+    assertEquals("end", su.parseRightText());
   }
 
 }

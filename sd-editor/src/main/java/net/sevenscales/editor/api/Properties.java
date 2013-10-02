@@ -26,7 +26,7 @@ import net.sevenscales.editor.api.event.UnselectAllEvent;
 import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
-import net.sevenscales.editor.content.ui.LineSelections.RelationShipType;
+import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.utils.ColorHelpers;
 import net.sevenscales.editor.diagram.ClickDiagramHandler;
 import net.sevenscales.editor.diagram.Diagram;
@@ -174,9 +174,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 					} else {
 						String what = ((Relationship2) diagram).getRelationshipShape().type.getValue();
 						String to = event.getRelationshipType().getValue();
-						System.out.println("what => to : " + what + " => " + to);
+						logger.debug("what => to : {} => {}", what, to);
 						if (!"".equals(text)) {
 							text = text.replace(what, to);
+							logger.debug("replaced text {}", text);
 						} else {
 							// fallback to just set the value
 							text = new String(to);

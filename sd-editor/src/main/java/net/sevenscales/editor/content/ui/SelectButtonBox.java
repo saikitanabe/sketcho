@@ -3,7 +3,7 @@ package net.sevenscales.editor.content.ui;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.event.RelationshipTypeSelectedEvent;
-import net.sevenscales.editor.content.ui.LineSelections.RelationShipType;
+import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.ui.LineSelections.SelectionHandler;
 
 import com.google.gwt.core.client.GWT;
@@ -92,12 +92,16 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 
 	private void removeLineClassNames() {
 		relationarrow.removeClassName("icon-conn-directed");
+		relationarrow.removeClassName("icon-conn-directed-both");
 		relationarrow.removeClassName("icon-conn-inheritance");
 		relationarrow.removeClassName("icon-conn-line");
 		relationarrow.removeClassName("icon-conn-dependency");
+		relationarrow.removeClassName("icon-conn-dependency-both");
 		relationarrow.removeClassName("icon-conn-dashedline");
 		relationarrow.removeClassName("icon-conn-aggregation");
+		relationarrow.removeClassName("icon-conn-aggregation-filled");
 		relationarrow.removeClassName("icon-conn-aggregationboth");
+		relationarrow.removeClassName("icon-conn-aggregationboth-filled");
 		relationarrow.removeClassName("icon-conn-reverse");
 	}
 
@@ -108,6 +112,9 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 		case DIRECTED:
 			relationarrow.addClassName("icon-conn-directed");
 			break;
+		case DIRECTED_BOTH:
+			relationarrow.addClassName("icon-conn-directed-both");
+			break;
 		case INHERITANCE:
 			relationarrow.addClassName("icon-conn-inheritance");
 			break;
@@ -117,14 +124,23 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 		case DEPENDANCY_DIRECTED:
 			relationarrow.addClassName("icon-conn-dependency");
 			break;
+		case DEPENDANCY_DIRECTED_BOTH:
+			relationarrow.addClassName("icon-conn-dependency-both");
+			break;
 		case DEPENDANCY:
 			relationarrow.addClassName("icon-conn-dashedline");
 			break;
 		case AGGREGATION_DIRECTED:
 			relationarrow.addClassName("icon-conn-aggregation");
 			break;
+		case AGGREGATION_DIRECTED_FILLED:
+			relationarrow.addClassName("icon-conn-aggregation-filled");
+			break;
 		case AGGREGATION:
 			relationarrow.addClassName("icon-conn-aggregationboth");
+			break;
+		case AGGREGATION_FILLED:
+			relationarrow.addClassName("icon-conn-aggregationboth-filled");
 			break;
 		case REVERSE:
 			relationarrow.addClassName("icon-conn-reverse");
@@ -138,7 +154,6 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 		popup.hide();
 		
 		editorContext.set(EditorProperty.CURRENT_RELATIONSHIP_TYPE, currentRelationshipType);
-		System.out.println("type: " + type);
 		editorContext.getEventBus().fireEvent(new RelationshipTypeSelectedEvent(type));
 	}
 

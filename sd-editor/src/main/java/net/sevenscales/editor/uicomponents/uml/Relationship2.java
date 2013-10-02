@@ -881,6 +881,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       aggregatePoints[4] = dline.x; aggregatePoints[5] = dline.y;
       aggregatePoints[6] = dright.x; aggregatePoints[7] = dright.y;
       aggregatePoints[8] = startx; aggregatePoints[9] = starty;
+      fillAggregate();
       aggregate.setShape(aggregatePoints);
     }
     aggregate.setVisibility(info.isAggregate());
@@ -888,6 +889,18 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     aggregate.moveToFront();
 
     relationshipHandleHelpers.doSetShape(currentDragged);
+  }
+
+  private void fillAggregate() {
+    if (info != null && info.isAggregate() && info.isFilled()) {
+      aggregate.setFill(Theme.getCurrentColorScheme().getBorderColor().red,
+                        Theme.getCurrentColorScheme().getBorderColor().green,
+                        Theme.getCurrentColorScheme().getBorderColor().blue,
+                        Theme.getCurrentColorScheme().getBorderColor().opacity);
+    } else {
+      // TODO set background color and on print set white bg color
+      aggregate.setFill(255, 255, 255, 1);
+    }
   }
 
   // ///////////////////////////////////////

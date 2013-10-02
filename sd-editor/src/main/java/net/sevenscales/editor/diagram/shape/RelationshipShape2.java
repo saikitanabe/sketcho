@@ -2,7 +2,7 @@ package net.sevenscales.editor.diagram.shape;
 
 import java.util.List;
 
-import net.sevenscales.editor.content.ui.LineSelections.RelationShipType;
+import net.sevenscales.editor.content.RelationShipType;
 
 public class RelationshipShape2 extends Info {
 	public static final int INHERITANCE 		= 0x00000001;
