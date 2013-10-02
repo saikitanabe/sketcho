@@ -15,6 +15,8 @@
 			<a ui:field="duplicate" title="Duplicate" class="btn btn-custom tooltipper">
 				<i class="icon-duplicate"></i>
 			</a>
+			<g:SimplePanel ui:field="changeConnection" styleName="inline-change-connection">
+			</g:SimplePanel>
 			<a ui:field="reverseConnection" title="Reverse Connection" class="btn btn-custom tooltipper">
 				<i class="icon-reverse-connection"></i>
 			</a>

@@ -28,20 +28,23 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 	interface SelectButtonBoxUiBinder extends UiBinder<Widget, SelectButtonBox> {
 	}
 
-	@UiField
-	TableCellElement relationbutton;
+	@UiField TableCellElement relationbutton;
 	@UiField DivElement relationarrow;
-	@UiField
-	TableCellElement drop;
-	@UiField
-	HTMLPanel panel;
+	@UiField TableCellElement drop;
+	@UiField HTMLPanel panel;
 	
 	PopupPanel popup;
 	private RelationShipType currentRelationshipType = RelationShipType.DIRECTED;
 	private EditorContext editorContext;
+	private boolean popupUp;
 
 	public SelectButtonBox(EditorContext editorContext) {
+		this(editorContext, true);
+	}
+
+	public SelectButtonBox(EditorContext editorContext, boolean popupUp) {
 		this.editorContext = editorContext;
+		this.popupUp = popupUp;
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		editorContext.set(EditorProperty.CURRENT_RELATIONSHIP_TYPE, currentRelationshipType);
@@ -76,18 +79,24 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 					public void onBrowserEvent(Event event) {
 						switch (DOM.eventGetType(event)) {
 						case Event.ONCLICK:
-							// popup.setWidth(panel.getElement().getStyle().getWidth());
-							int left = SelectButtonBox.this.getAbsoluteLeft() - 60;
-							int top = SelectButtonBox.this.getAbsoluteTop() + 30;
-							if (SelectButtonBox.this.editorContext.isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {
-								top = SelectButtonBox.this.getAbsoluteTop() - 115;
-							}
-							popup.setPopupPosition(left, top);
-							popup.show();
+							showPopup();
 							break;
 						}
 					}
 				});
+	}
+
+	private void showPopup() {
+		int left = SelectButtonBox.this.getAbsoluteLeft() - 60;;
+		int top = SelectButtonBox.this.getAbsoluteTop() + 30;
+		// popup.setWidth(panel.getElement().getStyle().getWidth());
+		if (popupUp) {
+			if (SelectButtonBox.this.editorContext.isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {
+				top = SelectButtonBox.this.getAbsoluteTop() - 115;
+			}
+		}
+		popup.setPopupPosition(left, top);
+		popup.show();
 	}
 
 	private void removeLineClassNames() {

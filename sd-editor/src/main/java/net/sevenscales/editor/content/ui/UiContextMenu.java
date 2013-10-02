@@ -20,12 +20,14 @@ import net.sevenscales.editor.content.utils.DuplicateHelpers;
 import net.sevenscales.editor.content.utils.EffectHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.utils.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -42,6 +44,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 public class UiContextMenu extends Composite implements net.sevenscales.editor.content.ui.ColorSelections.SelectionHandler {
 	private static final SLogger logger = SLogger.createLogger(UiContextMenu.class);
@@ -59,6 +62,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	
 	@UiField AnchorElement freehandOff;
 	@UiField AnchorElement duplicate;
+	@UiField SimplePanel changeConnection;
 	@UiField AnchorElement reverseConnection;
 	@UiField AnchorElement colorize;
 	@UiField AnchorElement delete;
@@ -95,12 +99,15 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				}
 			}
 		}, TouchStartEvent.getType());
+
+		changeConnection.setWidget(new SelectButtonBox(editorContext, false));
 		
 		editorContext.getEventBus().addHandler(SelectionMouseUpEvent.TYPE, new SelectionMouseUpEventHandler() {
 			private void setMenuItemVisibility(Diagram diagram, Diagram[] selected) {
 				Display freehandMenu = Display.NONE;
 				Display reverseMenu = Display.NONE;
 				Display colorMenu = Display.NONE;
+				boolean changeConnectionMenu = false;
 				
 				if ((diagram.supportedMenuItems() & ContextMenuItem.FREEHAND_MENU.getValue()) == ContextMenuItem.FREEHAND_MENU.getValue()) {
 					freehandMenu = Display.INLINE;
@@ -113,7 +120,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				if (anySupportsColorMenu(selected)) {
 					colorMenu = Display.INLINE;
 				}
-				
+
+				changeConnection.setVisible(allConnections(selected));
 				freehandOff.getStyle().setDisplay(freehandMenu);
 				reverseConnection.getStyle().setDisplay(reverseMenu);
 				colorize.getStyle().setDisplay(colorMenu);
@@ -126,6 +134,17 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					}
 				}
 				return false;
+			}
+
+			private boolean allConnections(Diagram[] selected) {
+				boolean result = false;
+				for (Diagram d : selected) {
+					result = true;
+					if ( !(d instanceof Relationship2) ) {
+						return false;
+					}
+				}
+				return result;
 			}
 
 			@Override
