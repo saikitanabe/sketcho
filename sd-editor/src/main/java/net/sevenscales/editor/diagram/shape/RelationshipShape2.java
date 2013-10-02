@@ -2,13 +2,15 @@ package net.sevenscales.editor.diagram.shape;
 
 import java.util.List;
 
-import net.sevenscales.editor.content.ui.LineSelections.RelationShipType;
+import net.sevenscales.editor.content.RelationShipType;
 
 public class RelationshipShape2 extends Info {
-	public static final int INHERITANCE = 0x00000001;
-	public static final int DIRECTED = 0x00000002;
-	public static final int DEPENDANCY = 0x00000004;
-  public static final int AGGREGATE = 0x00000008;
+	public static final int INHERITANCE 		= 0x00000001;
+	public static final int DIRECTED 				= 0x00000002;
+	public static final int DEPENDANCY 			= 0x00000004;
+  public static final int AGGREGATE 			= 0x00000008;
+  public static final int FILLED 					= 0x00000010;
+  public static final int DIRECTED_START 	= 0x00000020;
 
   public List<Integer> points;
 	public int caps;
@@ -39,6 +41,10 @@ public class RelationshipShape2 extends Info {
 		return (caps & RelationshipShape2.DIRECTED) == RelationshipShape2.DIRECTED;
 	}
 
+	public boolean isDirectedStart() {
+		return (caps & RelationshipShape2.DIRECTED_START) == RelationshipShape2.DIRECTED_START;
+	}
+
 	public boolean isDependancy() {
 		return (caps & RelationshipShape2.DEPENDANCY) == RelationshipShape2.DEPENDANCY;
 	}
@@ -46,6 +52,11 @@ public class RelationshipShape2 extends Info {
   public boolean isAggregate() {
     return (caps & RelationshipShape2.AGGREGATE) == RelationshipShape2.AGGREGATE;
   }
+
+  public boolean isFilled() {
+    return (caps & RelationshipShape2.FILLED) == RelationshipShape2.FILLED;
+  }
+
   
   @Override
   public int getLeft() {

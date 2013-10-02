@@ -7,30 +7,13 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
+import net.sevenscales.editor.content.RelationShipType;
+
 public class LineSelections extends Composite {
 
 	private static LineSelectionsUiBinder uiBinder = GWT
 			.create(LineSelectionsUiBinder.class);
-	
-	public enum RelationShipType {
-		DIRECTED("->"),
-		LINE("-"), 
-		DEPENDANCY("--"),
-		DEPENDANCY_DIRECTED("-->"), 
-		INHERITANCE("-|>"), 
-		AGGREGATION_DIRECTED("<>->"), 
-		AGGREGATION("<>-"), 
-		REVERSE("");
 		
-		private String value;
-
-		RelationShipType(String value) {
-			this.value = value;
-		}
-		
-		public String getValue() {return value;}
-	}
-	
 	public interface SelectionHandler {
 		void itemSelected(RelationShipType type);
 	}
@@ -56,9 +39,17 @@ public class LineSelections extends Composite {
 	public void onDLine(ClickEvent event) {
 		selectionHandler.itemSelected(RelationShipType.DIRECTED);
 	}
+	@UiHandler("dlineboth")
+	public void onDLineBoth(ClickEvent event) {
+		selectionHandler.itemSelected(RelationShipType.DIRECTED_BOTH);
+	}
 	@UiHandler("depline")
 	public void onDepLine(ClickEvent event) {
 		selectionHandler.itemSelected(RelationShipType.DEPENDANCY_DIRECTED);
+	}
+	@UiHandler("deplineboth")
+	public void onDepLineBoth(ClickEvent event) {
+		selectionHandler.itemSelected(RelationShipType.DEPENDANCY_DIRECTED_BOTH);
 	}
 	@UiHandler("dashed")
 	public void onDashedLine(ClickEvent event) {
@@ -72,11 +63,18 @@ public class LineSelections extends Composite {
 	public void onALine(ClickEvent event) {
 		selectionHandler.itemSelected(RelationShipType.AGGREGATION_DIRECTED);
 	}
+	@UiHandler("alinefilled")
+	public void onALineFilled(ClickEvent event) {
+		selectionHandler.itemSelected(RelationShipType.AGGREGATION_DIRECTED_FILLED);
+	}
 	@UiHandler("aggrboth")
 	public void onAggregationBoth(ClickEvent event) {
 		selectionHandler.itemSelected(RelationShipType.AGGREGATION);
 	}
-
+	@UiHandler("aggrbothfilled")
+	public void onAggregationBothFilled(ClickEvent event) {
+		selectionHandler.itemSelected(RelationShipType.AGGREGATION_FILLED);
+	}
 	@UiHandler("reverseline")
 	public void onReverse(ClickEvent event) {
 		selectionHandler.itemSelected(RelationShipType.REVERSE);

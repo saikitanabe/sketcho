@@ -6,52 +6,43 @@
 			min-height: 18px;
 			min-width: 50px;
 		}
-		
-		.selectionTable {
-			border: #fff 1px solid;
-		}
-		
-		.selectionTable tr:HOVER {
-			background-color: #666666;
-			cursor: pointer;
-		}
-		
-		.selectionTable td {
-			padding: 3px;
-			text-align: center;
-		}
-		
+				
 		.focuspanel:focus {
 			outline: none;
 		}
 	</ui:style>
 
-	<ui:image field="directed" src="directed.png"></ui:image>
-	<ui:image field="line" src="line.png"></ui:image>
-	<ui:image field="dependency" src="dependency.png"></ui:image>
-	<ui:image field="dashedline" src="dashed-line.png"></ui:image>
-	<ui:image field="inheritance" src="inheritance.png"></ui:image>
-	<ui:image field="aggregation" src="aggregation.png"></ui:image>
-	<ui:image field="aggregationboth" src="aggregation-both.png"></ui:image>
-	<ui:image field="reverse" src="reverse.png"></ui:image>
-
-	<g:VerticalPanel styleName="{style.selectionTable}">
-		<g:FocusPanel ui:field="dline" styleName="{style.focuspanel} {style.relationship} icon-conn-directed">
-		</g:FocusPanel>
-		<g:FocusPanel ui:field="iline" styleName="{style.focuspanel} {style.relationship} icon-conn-inheritance">
-		</g:FocusPanel>
-		<g:FocusPanel ui:field="rline" styleName="{style.focuspanel} {style.relationship} icon-conn-line">
-		</g:FocusPanel>
-		<g:FocusPanel ui:field="depline" styleName="{style.focuspanel} {style.relationship} icon-conn-dependency">
-		</g:FocusPanel>
-		<g:FocusPanel ui:field="dashed" styleName="{style.focuspanel} {style.relationship} icon-conn-dashedline">
-		</g:FocusPanel>
-		<g:FocusPanel ui:field="aline" styleName="{style.focuspanel} {style.relationship} icon-conn-aggregation">
-		</g:FocusPanel>
-		<g:FocusPanel ui:field="aggrboth" styleName="{style.focuspanel} {style.relationship} icon-conn-aggregationboth">
-		</g:FocusPanel>
-		<g:FocusPanel ui:field="reverseline" styleName="{style.focuspanel} {style.relationship} icon-conn-reverse">
-		</g:FocusPanel>
-	</g:VerticalPanel>
+	<g:HorizontalPanel>
+		<g:VerticalPanel styleName="uml-selection-table">
+			<g:FocusPanel ui:field="dline" styleName="{style.focuspanel} {style.relationship} icon-conn-directed">
+			</g:FocusPanel>
+			<g:FocusPanel ui:field="dlineboth" styleName="{style.focuspanel} {style.relationship} icon-conn-directed-both">
+			</g:FocusPanel>
+			<g:FocusPanel ui:field="iline" styleName="{style.focuspanel} {style.relationship} icon-conn-inheritance">
+			</g:FocusPanel>
+			<g:FocusPanel ui:field="rline" styleName="{style.focuspanel} {style.relationship} icon-conn-line">
+			</g:FocusPanel>
+		</g:VerticalPanel>
+		<g:VerticalPanel styleName="uml-selection-table">
+			<g:FocusPanel ui:field="depline" styleName="{style.focuspanel} {style.relationship} icon-conn-dependency">
+			</g:FocusPanel>
+			<g:FocusPanel ui:field="deplineboth" styleName="{style.focuspanel} {style.relationship} icon-conn-dependency-both">
+			</g:FocusPanel>
+			<g:FocusPanel ui:field="dashed" styleName="{style.focuspanel} {style.relationship} icon-conn-dashedline">
+			</g:FocusPanel>
+			<g:FocusPanel ui:field="reverseline" styleName="{style.focuspanel} {style.relationship} icon-conn-reverse">
+			</g:FocusPanel>
+		</g:VerticalPanel>
+		<g:VerticalPanel styleName="uml-selection-table">
+			<g:FocusPanel ui:field="aline" styleName="{style.focuspanel} {style.relationship} icon-conn-aggregation">
+			</g:FocusPanel>
+			<g:FocusPanel ui:field="alinefilled" styleName="{style.focuspanel} {style.relationship} icon-conn-aggregation-filled">
+			</g:FocusPanel>
+			<g:FocusPanel ui:field="aggrboth" styleName="{style.focuspanel} {style.relationship} icon-conn-aggregationboth">
+			</g:FocusPanel>
+			<g:FocusPanel ui:field="aggrbothfilled" styleName="{style.focuspanel} {style.relationship} icon-conn-aggregationboth-filled">
+			</g:FocusPanel>
+		</g:VerticalPanel>
+	</g:HorizontalPanel>
 
 </ui:UiBinder> 

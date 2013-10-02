@@ -29,7 +29,8 @@ public class TestUtils {
 					 1, 
 					 1L, 
 					 id,
-					 "");
+					 "",
+					 0f);
 			result.add(di);
 			System.out.println(di);
 		}

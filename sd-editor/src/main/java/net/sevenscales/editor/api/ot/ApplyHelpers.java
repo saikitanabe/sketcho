@@ -35,7 +35,7 @@ public class ApplyHelpers {
 		return result;
 	}
 
-	public static class ApplyOperation {
+	public static abstract class ApplyOperation {
 		private OTOperation operation;
 
 		public ApplyOperation(OTOperation operation) {

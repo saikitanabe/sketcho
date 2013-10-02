@@ -32,9 +32,6 @@
 			background-color: #666666;
 		}
 		
-		.dropbutton {
-			padding: 0 0 2px 4px;
-		}
 	</ui:style>
 	
 	<g:HTMLPanel ui:field="panel">
@@ -46,7 +43,7 @@
 					<div ui:field="relationarrow" class="icon-conn-directed"></div>
 				</td>
 				<td ui:field="drop"
-					class="{style.button} {style.dropbutton} dropButton">
+					class="{style.button} dropButton">
 					<div class="icon-cust-drop-down"></div>
 				</td>
 			</tr>

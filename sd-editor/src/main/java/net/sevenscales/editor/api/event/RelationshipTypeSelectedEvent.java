@@ -1,6 +1,6 @@
 package net.sevenscales.editor.api.event;
 
-import net.sevenscales.editor.content.ui.LineSelections.RelationShipType;
+import net.sevenscales.editor.content.RelationShipType;
 
 import com.google.gwt.event.shared.GwtEvent;
 

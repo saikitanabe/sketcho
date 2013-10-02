@@ -78,7 +78,7 @@ public class TokenParser {
     String[] lineTokens = content.split("\\n");
     // split by lines
     // split by entities *<text>*, _<text>_ => \*[^\s].*\*\s
-    // set state according to entities, (mitä jos molemmat), *_<text line>_* _*<text line>*_
+    // set state according to entities, (mita jos molemmat), *_<text line>_* _*<text line>*_
     // split by words
     
     List<StringToken> result = new ArrayList<StringToken>();
