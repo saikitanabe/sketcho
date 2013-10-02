@@ -114,6 +114,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
         arrowStart = IShapeFactory.Util.factory(parent.editable).createPolyline(parent.group, parent.arrowPoints);
         arrowStart.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
         arrowStart.setFill(255, 255, 255, 0);
+        parent.shapes.add(arrowStart);
       }
     }
 
