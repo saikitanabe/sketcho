@@ -35,6 +35,7 @@ import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.api.event.CommentDeletedEvent;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.JsComment;
 
 import com.google.gwt.core.client.GWT;
@@ -423,26 +424,6 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	public void setText(String newText) {
     textUtil.setText(newText, editable);
 	}
-
-  @Override
-	public Diagram duplicate(boolean partOfMultiple) {
-		return duplicate(surface, partOfMultiple);
-	}
-	
-  @Override
-	public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
-		Point p = getCoords();
-		return duplicate(surface, p.x + 20, p.y + 20);
-	}
-	
-  @Override
-  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-    CommentShape newShape = new CommentShape(x, y, getWidth(), getHeight());
-    CommentElement result = createDiagram(surface, newShape, getText(), getEditable());
-    // refresh text, it is not visible...
-		result.textUtil.show();
-    return result;
-  }
 	
   protected CommentElement createDiagram(ISurfaceHandler surface, CommentShape newShape,
       String text, boolean editable) {
@@ -640,6 +621,12 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   		return parentThread;
   	}
   	return super.getOwnerComponent(actionType);
-	}  
+	}
+
+	@Override
+	public void copyFrom(IDiagramItemRO diagramItem) {
+		super.copyFrom(diagramItem);
+		parentThread.resizeWithKnownChildren();
+	}	
 
 }

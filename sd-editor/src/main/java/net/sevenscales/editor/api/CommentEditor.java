@@ -84,7 +84,7 @@ class CommentEditor  extends Composite {
 		writeComment.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				show(commentThread, calcEditorIncrement(commentThread, false));
+				showEditor(commentThread);
 			}
 		});
 
@@ -127,6 +127,7 @@ class CommentEditor  extends Composite {
 
 	void showEditor(Diagram diagram) {
 		show(diagram, calcEditorIncrement(diagram, false));
+		editorCommon.fireEditorOpen();
 	}
 
 	private int calcEditorIncrement(Diagram diagram, boolean calcHintSize) {
@@ -174,8 +175,6 @@ class CommentEditor  extends Composite {
 			commentThread.setIncrementHeight(incrementSize);
 
 			popup.show();
-
-			editorCommon.fireEditorOpen();
 		}
 	}
 

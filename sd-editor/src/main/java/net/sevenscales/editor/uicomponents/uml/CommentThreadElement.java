@@ -36,6 +36,7 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.diagram.shape.CommentShape;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.JsComment;
 import net.sevenscales.domain.utils.SLogger;
 
@@ -371,26 +372,6 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	public void setText(String newText) {
     textUtil.setText(newText, editable);
 	}
-
-  @Override
-	public Diagram duplicate(boolean partOfMultiple) {
-		return duplicate(surface, partOfMultiple);
-	}
-	
-  @Override
-	public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
-		Point p = getCoords();
-		return duplicate(surface, p.x + 20, p.y + 20);
-	}
-	
-  @Override
-  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-    CommentThreadShape newShape = new CommentThreadShape(x, y, getWidth(), getHeight());
-    CommentThreadElement result = createDiagram(surface, newShape, getText(), getEditable());
-    // refresh text, it is not visible...
-		result.textUtil.show();
-    return result;
-  }
 	
   protected CommentThreadElement createDiagram(ISurfaceHandler surface, CommentThreadShape newShape,
       String text, boolean editable) {
@@ -619,6 +600,10 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		_sort(true);
 	}
 
+	private void repositionChildren() {
+		_sort(false);
+	}
+
 	private void _sort(boolean resizeChild) {
 		int left = doGetLeft();
 		int top = doGetTop();
@@ -690,6 +675,12 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	public void setIncrementHeight(int value) {
 		setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() + value);
+	}
+
+	@Override
+	public void copyFrom(IDiagramItemRO diagramItem) {
+		super.copyFrom(diagramItem);
+		queueSorting();
 	}
 
 }
