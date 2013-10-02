@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.content.ui.IModeManager;
@@ -154,7 +155,7 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler {
 			// to common code with mouse drag manager
 			Set<Diagram> resizedElements = new HashSet<Diagram>();
 			resizedElements.add(this.sender);
-			MouseDiagramEventHelpers.fireDiagramsChangedEvenet(resizedElements, surface);
+			MouseDiagramEventHelpers.fireDiagramsChangedEvenet(resizedElements, surface, ActionType.NONE);
 			// surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this.sender));
 
 //			SilverUtils.setCursor(SilverUtils.DEFAULT);

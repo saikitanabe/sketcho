@@ -6,6 +6,7 @@ import java.util.logging.Level;
 
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.utils.JsonConversion;
 import net.sevenscales.domain.utils.JsonFormat;
@@ -250,7 +251,7 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
 //		List<IDiagramItem> prevState = BoardDocumentHelpers.getDiagramsAsDTO(diagrams, false);
 		// update diagram items and generate json from those
 		// make sure that circle elements are not sent to server
-		List<Diagram> filteredDiagrams = DiagramHelpers.filterOwnerDiagramsAsList(diagrams);
+		List<Diagram> filteredDiagrams = DiagramHelpers.filterOwnerDiagramsAsList(diagrams, ActionType.NONE);
 		JsonConversion jsonConversion = getJsonHelpers().json(filteredDiagrams, true, JsonFormat.SEND_FORMAT);
 		logger.debug("sendOperation operation {} json {} filteredDiagrams {}", operation, jsonConversion.getJson(), filteredDiagrams);
 		if (jsonConversion.getJson().length() > 2) {

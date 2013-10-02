@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 
@@ -23,7 +24,7 @@ public class PotentialOnChangedEvent extends GwtEvent<PotentialOnChangedEventHan
 	}
   
   public PotentialOnChangedEvent(Set<Diagram> diagrams) {
-  	this.diagrams = DiagramHelpers.filterOwnerDiagramsAsList(diagrams);
+  	this.diagrams = DiagramHelpers.filterOwnerDiagramsAsList(diagrams, ActionType.NONE);
 	}
 
 	@Override

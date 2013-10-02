@@ -11,6 +11,8 @@ import net.sevenscales.editor.diagram.utils.DiagramList;
 import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.gfx.domain.IPath.PathTransformer;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
+import net.sevenscales.editor.api.ActionType;
+
 
 public class DiagramHelpers {
 	private static final SLogger logger = SLogger.createLogger(DiagramHelpers.class);
@@ -62,10 +64,10 @@ public class DiagramHelpers {
 		return filtered.toArray(result);
 	}
 	
-	public static List<Diagram> filterOwnerDiagramsAsList(Iterable<Diagram> diagrams) {
+	public static List<Diagram> filterOwnerDiagramsAsList(Iterable<Diagram> diagrams, ActionType actionType) {
 		List<Diagram> result = new DiagramList();
 		for (Diagram d : diagrams) {
-			d = d.getOwnerComponent();
+			d = d.getOwnerComponent(actionType);
 			// will not add duplicate items, checks if index already exists with a client id
 			result.add(d);
 		}

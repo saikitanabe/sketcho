@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
@@ -628,5 +629,17 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   public Collection<AnchorElement> getAnchors() {
   	return parentThread.getAnchors();
   }
+
+  /**
+  * Specialize on dragging action to return parent thread.
+  * Will be sent to server as modified instead of comment element.
+  */
+  @Override
+  public Diagram getOwnerComponent(ActionType actionType) {
+  	if (actionType == ActionType.DRAGGING) {
+  		return parentThread;
+  	}
+  	return super.getOwnerComponent(actionType);
+	}  
 
 }

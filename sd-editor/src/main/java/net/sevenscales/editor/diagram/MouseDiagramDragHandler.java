@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
@@ -623,7 +624,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		// logger.debugTime();
 		// logger.start("MouseDiagramDragHandler.dragEnd 2");
 
-		MouseDiagramEventHelpers.fireDiagramsChangedEvenet(selectedItems, surface);
+		MouseDiagramEventHelpers.fireDiagramsChangedEvenet(selectedItems, surface, ActionType.DRAGGING);
 
 		// logger.debugTime();
 		// logger.debugTime();

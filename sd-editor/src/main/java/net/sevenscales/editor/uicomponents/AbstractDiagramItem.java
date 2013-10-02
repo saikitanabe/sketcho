@@ -10,6 +10,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.SurfaceUtil;
@@ -545,8 +546,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public ISurfaceHandler getSurfaceHandler() {
     return surface;
   }
-  
+
   public Diagram getOwnerComponent() {
+    return getOwnerComponent(ActionType.NONE);
+  }
+  
+  public Diagram getOwnerComponent(ActionType actionType) {
   	if (ownerComponent == null) {
   		return this;
   	}

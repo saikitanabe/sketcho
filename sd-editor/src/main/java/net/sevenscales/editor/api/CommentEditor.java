@@ -42,7 +42,7 @@ class CommentEditor  extends Composite {
 	private static final SLogger logger = SLogger.createLogger(CommentEditor.class);
 	private static final String PROPERTIES_EDITOR_STYLE = "properties-TextArea2";
 	private static final int EDITOR_INCREMENT = 90;
-	private static final int EDITOR_INCREMENT_FIRST = 30;
+	private static final int EDITOR_INCREMENT_FIRST = 45;
 	private static final int HINT_INCREMENT = 40;
 
   private static CommentEditorUiBinder uiBinder = GWT.create(CommentEditorUiBinder.class);
@@ -84,7 +84,7 @@ class CommentEditor  extends Composite {
 		writeComment.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				show(commentThread, EDITOR_INCREMENT);
+				show(commentThread, calcEditorIncrement(commentThread, false));
 			}
 		});
 
@@ -126,14 +126,14 @@ class CommentEditor  extends Composite {
 	}
 
 	void showEditor(Diagram diagram) {
-		show(diagram, calcEditorIncrement(diagram));
+		show(diagram, calcEditorIncrement(diagram, false));
 	}
 
-	private void calcEditorIncrement(Diagram diagram) {
- 		int result = EDITOR_INCREMENT_FIRST;
+	private int calcEditorIncrement(Diagram diagram, boolean calcHintSize) {
+ 		int result = calcHintSize ? 0 : EDITOR_INCREMENT_FIRST;
 		if (diagram instanceof CommentThreadElement) {
 			if (((CommentThreadElement) diagram).getChildElements().size() > 0) {
-				result = EDITOR_INCREMENT;
+				result = calcHintSize ? HINT_INCREMENT : EDITOR_INCREMENT;
 			}
 		}
 		return result;
@@ -184,7 +184,7 @@ class CommentEditor  extends Composite {
 			this.commentThread = (CommentThreadElement) diagram;
 			commentThread.showResizeHandles();
 			writeComment.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
-			show(commentThread, HINT_INCREMENT);
+			show(commentThread, calcEditorIncrement(commentThread, true));
 			writeComment.setVisible(true);
 			commentArea.getStyle().setVisibility(Visibility.HIDDEN);
 		}		

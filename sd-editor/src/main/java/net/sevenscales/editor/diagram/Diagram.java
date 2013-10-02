@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
@@ -46,6 +47,14 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
    */
   public Point getDiffFromMouseDownLocation();
   Diagram getOwnerComponent();
+  /**
+  * Makes possible for subclasses to specialize returned owner component
+  * related to certain action. E.g. comment element is dragged
+  * and moved element that is fired to server is comment thread.
+  * actionType would contain DRAGGING and comment element can 
+  * specialize owner component to be parent comment thread.
+  */
+  Diagram getOwnerComponent(ActionType actionType);
   public void setOwnerComponent(DiagramProxy ownerComponent);
   /**
    * Provided to enable auto resize of diagram element. Element
