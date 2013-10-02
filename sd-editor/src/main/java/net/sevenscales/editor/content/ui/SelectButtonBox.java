@@ -47,7 +47,7 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 		editorContext.set(EditorProperty.CURRENT_RELATIONSHIP_TYPE, currentRelationshipType);
 		
 		popup = new PopupPanel();
-		popup.setStyleName("SelectButtonBoxPopup");
+		popup.setStyleName("RelationshipDragEndHandler");
 		LineSelections ls = new LineSelections();
 		ls.setSelectionHandler(SelectButtonBox.this);
 		popup.setWidget(ls);
@@ -77,10 +77,10 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 						switch (DOM.eventGetType(event)) {
 						case Event.ONCLICK:
 							// popup.setWidth(panel.getElement().getStyle().getWidth());
-							int left = SelectButtonBox.this.getAbsoluteLeft() + 0;
+							int left = SelectButtonBox.this.getAbsoluteLeft() - 60;
 							int top = SelectButtonBox.this.getAbsoluteTop() + 30;
 							if (SelectButtonBox.this.editorContext.isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {
-								top = SelectButtonBox.this.getAbsoluteTop() - 333;
+								top = SelectButtonBox.this.getAbsoluteTop() - 115;
 							}
 							popup.setPopupPosition(left, top);
 							popup.show();
