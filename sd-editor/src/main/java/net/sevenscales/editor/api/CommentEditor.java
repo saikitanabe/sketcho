@@ -7,6 +7,8 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.dom.client.Style.*;
 import com.google.gwt.dom.client.AnchorElement;
@@ -45,7 +47,7 @@ class CommentEditor  extends Composite {
 	private static final String PROPERTIES_EDITOR_STYLE = "properties-TextArea2";
 	private static final int EDITOR_INCREMENT = 90;
 	private static final int EDITOR_INCREMENT_FIRST = 45;
-	private static final int HINT_INCREMENT = 40;
+	private static final int HINT_INCREMENT = 50;
 
   private static CommentEditorUiBinder uiBinder = GWT.create(CommentEditorUiBinder.class);
 	interface CommentEditorUiBinder extends UiBinder<Widget, CommentEditor> {
@@ -53,6 +55,8 @@ class CommentEditor  extends Composite {
 
 
 	private ISurfaceHandler surface;
+	@UiField Widget commentEditorContainer;
+	@UiField DivElement commentHintBox;
 	@UiField Label writeComment;
 	@UiField DivElement commentArea;
 	@UiField TextArea textArea;
@@ -168,14 +172,18 @@ class CommentEditor  extends Composite {
 
 			positionPopupBy(this.commentThread);
 
-			textArea.getElement().getStyle().setBackgroundColor("#" + commentThread.getBackgroundColor());
-			textArea.getElement().getStyle().setColor("#" + diagram.getTextColor());
-			textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
+			commentHintBox.getStyle().setBackgroundColor("#" + commentThread.getBackgroundColor());
+			hideCommentHintBox();
+
+			commentArea.getStyle().setBackgroundColor("#" + commentThread.getBackgroundColor());
+			commentArea.getStyle().setColor("#" + diagram.getTextColor());
+			commentArea.getStyle().setWidth(diagram.getWidth(), Unit.PX);
+			textArea.getElement().getStyle().setWidth(diagram.getWidth() - 30, Unit.PX);
 			textArea.getElement().getStyle().setHeight(50, Unit.PX);
-			commentArea.getStyle().setVisibility(Visibility.VISIBLE);
+			showCommentArea();
 
-			writeComment.setVisible(false);
-
+			// if comment thread should be increased dyncamically this is a working
+			// method!
 			commentThread.setIncrementHeight(incrementSize);
 
 			popup.show();
@@ -184,9 +192,9 @@ class CommentEditor  extends Composite {
 
 	private void positionPopupBy(Diagram commentThreadCandidate) {
 		if (this.commentThread == commentThreadCandidate) {
-			MatrixPointJS point = MatrixPointJS.createUnscaledPoint(this.commentThread.getTextAreaLeft(), this.commentThread.getTextAreaTop(), surface.getScaleFactor());
+			MatrixPointJS point = MatrixPointJS.createUnscaledPoint(this.commentThread.getLeft(), this.commentThread.getTop(), surface.getScaleFactor());
 			int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
-			int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop() + 5;
+			int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop() - 15;
 	
 			if (commentThread.getChildElements().size() > 0) {
 				// not first
@@ -200,11 +208,27 @@ class CommentEditor  extends Composite {
 		if (diagram instanceof CommentThreadElement) {
 			this.commentThread = (CommentThreadElement) diagram;
 			commentThread.showResizeHandles();
-			writeComment.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
+			writeComment.getElement().getStyle().setWidth(diagram.getWidth() - 30, Unit.PX);
+			commentHintBox.getStyle().setWidth(diagram.getWidth(), Unit.PX);
 			show(commentThread, calcEditorIncrement(commentThread, true));
-			writeComment.setVisible(true);
-			commentArea.getStyle().setVisibility(Visibility.HIDDEN);
+			showCommentHintBox();
+			hideCommentArea();
 		}		
+	}
+
+	private void showCommentArea() {
+		commentArea.getStyle().setDisplay(Display.BLOCK);
+	}
+	private void hideCommentArea() {
+		commentArea.getStyle().setDisplay(Display.NONE);
+	}
+
+	private void showCommentHintBox() {
+		commentHintBox.getStyle().setDisplay(Display.BLOCK);
+	}
+
+	private void hideCommentHintBox() {
+		commentHintBox.getStyle().setDisplay(Display.NONE);
 	}
 
 	private void hide() {

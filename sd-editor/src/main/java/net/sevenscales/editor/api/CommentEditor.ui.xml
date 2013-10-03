@@ -2,15 +2,15 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
 	</ui:style>
-	<g:HTMLPanel>
-		<div>
+	<g:HTMLPanel ui:field="commentEditorContainer">
+		<div ui:field="commentHintBox" class="comment-hint-box">
 			<g:Label ui:field="writeComment" styleName="write-comment">Write Comment</g:Label>
 		</div>
-		<div ui:field="commentArea">
-			<div>
+		<div ui:field="commentArea" class="comment-editor-area">
+			<div class="comment-editor">
 				<g:TextArea ui:field="textArea"></g:TextArea>
 			</div>
-			<div>
+			<div class="comment-editor post-comment">
 		  	<a ui:field="comment" class="btn btn-mini">Comment</a>
 		  </div>
 		</div>

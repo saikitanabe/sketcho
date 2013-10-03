@@ -142,6 +142,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //    shapes.add(leftShadow);
 //    shapes.add(rightShadow);
     shapes.add(boundary);
+    shapes.add(separator);
 //    shapes.add(fold);
     
     title = new TextElementVerticalFormatUtil(this, hasTitleTextElement, group, surface.getEditorContext());

@@ -114,7 +114,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 //                       shape.rectShape.left, shape.rectShape.top+shape.rectShape.height,
 //                       shape.rectShape.left, shape.rectShape.top};
 		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
-		boundary.setStrokeWidth(1);
+		boundary.setStrokeWidth(0);
 		boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 		
 //    topBlur = IShapeFactory.Util.factory(editable)
@@ -184,7 +184,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 //        left, top+height,
 //        left, top};
 
-		boundary.setShape(left, top, width, height, 0);
+		boundary.setShape(left, top, width, height, 20);
 		
 //		leftShadow.setShape(left - LEFT_SHADOW_LEFT, top + height - LEFT_SHADOW_HEIGHT, 50, 50);
 //		rightShadow.setShape(left + width - RIGHT_SHADOW_LEFT, top + height - RIGHT_SHADOW_HEIGHT, 50, 50);
@@ -618,18 +618,18 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	private void _sort(boolean resizeChild) {
 		int left = doGetLeft();
 		int top = doGetTop();
-		int currentHeight = 0;
+		int currentHeight = 11;
 		int width = getWidth();
 
 		int height = currentHeight;
 		int size = comments.size();
-		// CommentElement last = null;
+		CommentElement last = null;
 		for (int i = 0; i < size; ++i) {
 			CommentElement ce = comments.get(i);
 
 			int commentHeight = ce.getHeight();
 			// if ( ce.doGetTop() != (top + height) ) {
-				ce.setShape(left + 1, top + height, width - 2, commentHeight);
+				ce.setShape(left + 6, top + height, width - 7, commentHeight);
 			if (resizeChild) {
 				ce.resizeText();
 			} else {
@@ -637,16 +637,16 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			}
 			// }
 			height += commentHeight;
-			// last = ce;
+			last = ce;
 		}
 
-		// if (last != null) {
-		// 	last.hideBottomLine();
-		// }
+		if (last != null) {
+			last.hideBottomLine();
+		}
 
 		// if (height != currentHeight) {
 		// 	logger.debug("CommentThreadElement height changed current {} new {}...", currentHeight, height);
-		setShape(left, top, width, height);
+		setShape(left, top, width, height + 9);
 		// }
 	}
 
