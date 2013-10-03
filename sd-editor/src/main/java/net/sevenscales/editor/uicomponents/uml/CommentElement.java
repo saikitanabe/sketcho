@@ -3,6 +3,9 @@ package net.sevenscales.editor.uicomponents.uml;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+
+import com.google.gwt.i18n.client.DateTimeFormat;
 
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.EditorProperty;
@@ -155,7 +158,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     setShape(shape.rectShape.left, shape.rectShape.top, 
              shape.rectShape.width, shape.rectShape.height);
     
-    setUser(jsComment.getDisplayName());
+    setTitle();
     setText(text);
     
     setBorderColor(borderWebColor);
@@ -208,7 +211,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	public void resizeText() {
-		setUser(jsComment.getDisplayName());
+		setTitle();
 		textUtil.setText(getText(), editable, true);
 	}
 
@@ -571,8 +574,10 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		return JsComment.createCommentJsonStr(parentThread.getDiagramItem().getClientId(), "", true);
 	}
 
-	public void setUser(String user) {
-    title.setText("*" + user + "*", editable, true);
+	private void setTitle() {
+		String dateTime = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(new Date((long)jsComment.getUpdatedAt()));
+		String formattedTitle = SLogger.format("*{}* · {} ", jsComment.getDisplayName(), dateTime);
+    title.setText(formattedTitle, editable, true);
 	}
 
 	public CommentThreadElement getParentThread() {
@@ -629,5 +634,16 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		super.copyFrom(diagramItem);
 		parentThread.resizeWithKnownChildren();
 	}	
+
+	/**
+	* Specialize to include title lines as well.
+	*/
+	@Override
+  public List<List<IShape>> getTextElements() {
+  	List<List<IShape>> result = super.getTextElements();
+  	result.addAll(title.getLines());
+  	return result;
+  }
+
 
 }
