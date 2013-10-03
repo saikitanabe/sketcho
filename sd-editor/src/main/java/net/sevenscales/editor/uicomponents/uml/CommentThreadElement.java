@@ -386,6 +386,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 
 	public void resizeStart() {
+		hideChildren();
 	}
 
 	public boolean resize(Point diff) {
@@ -406,7 +407,20 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	public void resizeEnd() {
 		textUtil.setText(getText(), editable, true);
 
+		showChildren();
 		resizeWithKnownChildren();
+	}
+
+	private void hideChildren() {
+		for (CommentElement comment : comments) {
+			comment.setVisible(false);
+		}
+	}
+
+	private void showChildren() {
+		for (CommentElement comment : comments) {
+			comment.setVisible(true);
+		}
 	}
 
 	public void resizeWithKnownChildren() {
