@@ -10,6 +10,7 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
+import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEvent;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
@@ -564,6 +565,9 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 
 	private void queueSorting() {
+		queueSorting(false);
+	}
+	private void queueSorting(final boolean outside) {
 		if (!sorting) {
 			// queue sorting outside this loop
 			sorting = true;
@@ -576,18 +580,11 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 					switch (sortState) {
 						case RESIZE_CHILDREN: {
-							resizeChildren();
-							sortState = SortState.SORT;
-							// now children has correct position and size 
-							// recursively sort again to position comments and thread correctly
-							// according to comments real size (need to redraw => async)
-							queueSorting();
+							resizeChildrenState();
 							break;
 						}
 						case SORT: {
-							_sort(false);
-							// next time start from resize children
-							sortState = SortState.RESIZE_CHILDREN;
+							sortState(outside);
 							break;
 						}
 					}
@@ -596,12 +593,26 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		}
 	}
 
-	private void resizeChildren() {
-		_sort(true);
+	private void resizeChildrenState() {
+		resizeChildren();
+		sortState = SortState.SORT;
+		// now children has correct position and size 
+		// recursively sort again to position comments and thread correctly
+		// according to comments real size (need to redraw => async)
+		queueSorting();
 	}
 
-	private void repositionChildren() {
+	private void sortState(boolean outside) {
 		_sort(false);
+		// next time start from resize children
+		sortState = SortState.RESIZE_CHILDREN;
+		if (outside) {
+			surface.getEditorContext().getEventBus().fireEvent(new CommentThreadModifiedOutsideEvent(this));
+		}
+	}
+
+	private void resizeChildren() {
+		_sort(true);
 	}
 
 	private void _sort(boolean resizeChild) {
@@ -680,7 +691,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	@Override
 	public void copyFrom(IDiagramItemRO diagramItem) {
 		super.copyFrom(diagramItem);
-		queueSorting();
+		queueSorting(true);
 	}
 
 }

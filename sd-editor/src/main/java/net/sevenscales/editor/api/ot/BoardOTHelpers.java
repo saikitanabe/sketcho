@@ -185,7 +185,7 @@ public class BoardOTHelpers {
   		// comments are created through comment factory
   		// doesn't need to create lazily since comment thread is already
   		// on board or it is not possible to create comment
-    	result = commentFactory.createComment(diro, diagramSearch);
+    	result = commentFactory.createCommentInOT(diro, diagramSearch);
 	  } else {
 	    result = DiagramItemFactory.create(diro, surface, true);
 	  }

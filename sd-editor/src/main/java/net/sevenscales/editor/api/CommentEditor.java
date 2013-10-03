@@ -26,6 +26,8 @@ import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.SelectionMouseUpEventHandler;
 import net.sevenscales.editor.api.event.CommentDeletedEvent;
 import net.sevenscales.editor.api.event.CommentDeletedEventHandler;
+import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEvent;
+import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEventHandler;
 
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
 
@@ -114,6 +116,16 @@ class CommentEditor  extends Composite {
 				hide();
 			}
 		});
+
+		surface.getEditorContext().getEventBus().addHandler(CommentThreadModifiedOutsideEvent.TYPE, new CommentThreadModifiedOutsideEventHandler() {
+			public void on(final CommentThreadModifiedOutsideEvent event) {
+				Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+					public void execute() {
+						positionPopupBy(event.getCommentThreadElement());
+					}
+				});
+			}
+		});
 	}
 
 	private void clearAndHide() {
@@ -154,15 +166,7 @@ class CommentEditor  extends Composite {
 			logger.debug("show CommentEditor...");
 			surface.getMouseDiagramManager().getDragHandler().releaseDrag();
 
-			MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
-			int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
-			int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop() + 5;
-
-			if (commentThread.getChildElements().size() > 0) {
-				// not first
-				y += diagram.getHeight();
-			}
-			popup.setPopupPosition(x, y);
+			positionPopupBy(this.commentThread);
 
 			textArea.getElement().getStyle().setBackgroundColor("#" + commentThread.getBackgroundColor());
 			textArea.getElement().getStyle().setColor("#" + diagram.getTextColor());
@@ -175,6 +179,20 @@ class CommentEditor  extends Composite {
 			commentThread.setIncrementHeight(incrementSize);
 
 			popup.show();
+		}
+	}
+
+	private void positionPopupBy(Diagram commentThreadCandidate) {
+		if (this.commentThread == commentThreadCandidate) {
+			MatrixPointJS point = MatrixPointJS.createUnscaledPoint(this.commentThread.getTextAreaLeft(), this.commentThread.getTextAreaTop(), surface.getScaleFactor());
+			int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
+			int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop() + 5;
+	
+			if (commentThread.getChildElements().size() > 0) {
+				// not first
+				y += this.commentThread.getHeight();
+			}
+			popup.setPopupPosition(x, y);
 		}
 	}
 

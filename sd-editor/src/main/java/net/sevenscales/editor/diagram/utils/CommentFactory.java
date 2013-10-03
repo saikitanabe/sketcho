@@ -11,6 +11,7 @@ import  net.sevenscales.domain.JsComment;
 
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSearch;
+import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEvent;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
@@ -52,7 +53,19 @@ public class CommentFactory {
 		}
 	}
 
-	public Diagram createComment(IDiagramItemRO diro, DiagramSearch diagramSearch) {
+	public Diagram createCommentInOT(IDiagramItemRO diro, DiagramSearch diagramSearch) {
+		Diagram result = createComment(diro, diagramSearch);
+
+		// notify that comment has been created outside this editor
+  	CommentElement ce = (CommentElement) result;
+  	CommentThreadElement cte = (CommentThreadElement) ce.getParentThread();
+  	if (cte != null) {
+  		surface.getEditorContext().getEventBus().fireEvent(new CommentThreadModifiedOutsideEvent(cte));
+  	}
+  	return result;
+  }
+
+	private Diagram createComment(IDiagramItemRO diro, DiagramSearch diagramSearch) {
 		CommentElement result = null;
 		JsComment jsComment = JsComment.parseCommentJson(diro.getCustomData());
 		Diagram parent = diagramSearch.findByClientId(jsComment.getParentThread());
