@@ -70,9 +70,14 @@ public class JsonHelpers {
 	}
 
 	public JsonConversion json(List<Diagram> diagrams, boolean updateDiagramItem, JsonFormat jsonFormat) {
-		String json = "";
-		
 		List<IDiagramItem> items = BoardDocumentHelpers.getDiagramsAsDTO(diagrams, updateDiagramItem);
+		String json = jsonStr(items, jsonFormat);
+		JsonConversion result = new JsonConversion(json, jsonFormat, items);
+		return result;
+	}
+
+	public String jsonStr(List<? extends IDiagramItemRO> items, JsonFormat jsonFormat) {
+		String json = "";
 		boolean first = true;
 		for (IDiagramItemRO di : items) {
 		  if (first) {
@@ -82,8 +87,7 @@ public class JsonHelpers {
 		  }
 			json += DiagramItemJS.asJson2((DiagramItemDTO) di, jsonFormat).toString();
 		}
-		JsonConversion result = new JsonConversion("[" + json + "]", jsonFormat, items);
-		return result;
+		return "[" + json + "]";
 	}
 
 	public JsonConversion json(Diagram[] diagrams, JsonFormat jsonFormat) {

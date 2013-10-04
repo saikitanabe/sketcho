@@ -59,10 +59,12 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
 	// used to get previous item state for undo operation json
 	private BoardDocument graphicalDocumentCache;
 	private static final List<ApplyOperation> EMPTY_LIST;
+	private static final List<IDiagramItemRO> EMPTY_ITEM_LIST;
 	// private IGoogleAnalyticsHelper analytics;
 	
 	static {
 		EMPTY_LIST = new ArrayList<ApplyOperation>();
+		EMPTY_ITEM_LIST = new ArrayList<IDiagramItemRO>();
 	}
 	
 	public AbstractBoardHandlerBase(String boardName, Context context, EditorContext editorContext) {
@@ -76,13 +78,13 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
 	
 	private UndoEventHandler undoEventHandler = new UndoEventHandler() {
 		public void on(UndoEvent event) {
-			applyLocalSendOperation(OTOperation.UNDO.getValue(), JsonConversion.EMPTY);
+			applyLocalSendOperation(OTOperation.UNDO.getValue(), EMPTY_ITEM_LIST);
 		}
 	};
 	
 	private RedoEventHandler redoEventHandler = new RedoEventHandler() {
 		public void on(RedoEvent event) {
-			applyLocalSendOperation(OTOperation.REDO.getValue(), JsonConversion.EMPTY);
+			applyLocalSendOperation(OTOperation.REDO.getValue(), EMPTY_ITEM_LIST);
 		}
 	};
 	
@@ -252,22 +254,23 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
 		// update diagram items and generate json from those
 		// make sure that circle elements are not sent to server
 		List<Diagram> filteredDiagrams = DiagramHelpers.filterOwnerDiagramsAsList(diagrams, ActionType.NONE);
-		JsonConversion jsonConversion = getJsonHelpers().json(filteredDiagrams, true, JsonFormat.SEND_FORMAT);
-		logger.debug("sendOperation operation {} json {} filteredDiagrams {}", operation, jsonConversion.getJson(), filteredDiagrams);
-		if (jsonConversion.getJson().length() > 2) {
+		// JsonConversion jsonConversion = getJsonHelpers().json(filteredDiagrams, true, JsonFormat.SEND_FORMAT);
+		// logger.debug("sendOperation operation {} json {} filteredDiagrams {}", operation, jsonConversion.getJson(), filteredDiagrams);
+		List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.getDiagramsAsDTO(filteredDiagrams, true);
+		// if (jsonConversion.getJson().length() > 2) {
 			// at least []
-			applyLocalSendOperation(operation, jsonConversion);
+			applyLocalSendOperation(operation, operationItems);
 			if (notUndoOrRedo(operation)) {
 				// undo and redo are always translated to change operation (insert, move, delete...)
 				// client is responsible to do undo/redo operations, for server those are just normal
 				// change operations
-				sendLocalOperation(boardName, originator, operation, jsonConversion.getJson());
+				sendLocalOperation(boardName, originator, operation, operationItems);
 			}
-		} else if (LogConfiguration.loggingIsEnabled(Level.FINE)){
-			throw new RuntimeException("sendOperation json cannot be empty!! something wrong with the operation");
-		}
+		// } else if (LogConfiguration.loggingIsEnabled(Level.FINE)){
+		// 	throw new RuntimeException("sendOperation json cannot be empty!! something wrong with the operation");
+		// }
 	}
-	protected abstract void sendLocalOperation(String name, String originator, String operation, String jsonContent);
+	protected abstract void sendLocalOperation(String name, String originator, String operation, List<? extends IDiagramItemRO> operationItems);
 
 //	protected abstract void sendLocalOperation(String boardName, String originator, String operation, List<Diagram> diagrams);
 	
@@ -282,14 +285,14 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
 	 * @param operationJson
 	 * @param prevState 
 	 */
-	private final void applyLocalSendOperation(String operation, JsonConversion jsonConversion) {
-		logger.debug("APPLYOPERATION operation {}, operationJson {}", operation, jsonConversion.getJson());
+	private final void applyLocalSendOperation(String operation, List<? extends IDiagramItemRO> operationItems) {
+		// logger.debug("APPLYOPERATION operation {}, operationJson {}", operation, jsonConversion.getJson());
 		OTOperation op = OTOperation.getEnum(operation);
 		switch (op) {
 		case MODIFY:
 		case INSERT:
 		case DELETE:
-			compensateLocalChangeOperation(op, jsonConversion);
+			compensateLocalChangeOperation(op, operationItems);
 			break;
 		case UNDO:
 			applyLocalUndo();
@@ -300,17 +303,17 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
 		}
 	}
 	
-	protected void compensateLocalChangeOperation(OTOperation op, JsonConversion jsonConversion) {
+	protected void compensateLocalChangeOperation(OTOperation op, List<? extends IDiagramItemRO> operationItems) {
 		// runtime action by the user, resolve what compensates this operation and remember that
 //		List<IDiagramItemRO> changes = BoardDocumentHelpers.fromJson(operationJson);
 		CompensationModel model = null;
     try {
-      model = compensationTransformer.compensate(op, graphicalDocumentCache.getDocument(), jsonConversion.getPresentation());
+      model = compensationTransformer.compensate(op, graphicalDocumentCache.getDocument(), operationItems);
       // push operation to OTBuffer
       otBuffer.pushToUndoBufferAndResetRedo(model);
       // apply changes to graphical view document after compensation calculation, to have correct
       // previous state.
-      graphicalDocumentCache.apply(op, jsonConversion.getPresentation());
+      graphicalDocumentCache.apply(op, operationItems);
     } catch (MappingNotFoundException e) {
       // something is seriously wrong if this happens during local operations; what should be done...
       // save the board (on confluence and reload...) now just ignored :)
