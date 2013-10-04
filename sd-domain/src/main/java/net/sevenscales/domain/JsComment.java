@@ -6,9 +6,13 @@ import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.core.client.JsonUtils;
 
+import net.sevenscales.domain.utils.SLogger;
+
 
 // TODO maybe JsCommentMeta if doesn't contain msg itself!
 public class JsComment extends JavaScriptObject {
+	private static final SLogger logger = SLogger.createLogger(JsComment.class);
+
 	protected JsComment() {
 	}
 
@@ -33,7 +37,7 @@ public class JsComment extends JavaScriptObject {
 	}-*/;
 
 	public static JsComment parseCommentJson(String commentJsonStr) {
-    // logger.debug("parseCommentJson.commentJsonStr {}", commentJsonStr);
+    logger.debug("parseCommentJson.commentJsonStr {}", commentJsonStr);
   	JsComment jsComment = JsonUtils.safeEval(commentJsonStr);
     // this.parentThreadId = jsComment.getParentThread();
     return jsComment;

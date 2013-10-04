@@ -40,6 +40,7 @@ import net.sevenscales.editor.api.event.CommentDeletedEvent;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.JsComment;
+import net.sevenscales.domain.ElementType;
 
 import com.google.gwt.core.client.GWT;
 

@@ -3,8 +3,10 @@ package net.sevenscales.domain;
 import java.io.Serializable;
 
 import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.domain.utils.JsonFormat;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.google.gwt.json.client.JSONValue;
 
 public interface IDiagramItemRO extends Serializable, IsSerializable {
 	Long getId();
@@ -24,4 +26,6 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	double getCrc32();
 	IDiagramItem copy();
 	void copyFrom(IDiagramItemRO item);
+
+	JSONValue toJson(JsonFormat jsonFormat);
 }

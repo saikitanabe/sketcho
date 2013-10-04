@@ -3,7 +3,6 @@ package net.sevenscales.editor.api.ot;
 import java.util.List;
 import java.util.ArrayList;
 
-import net.sevenscales.domain.DiagramItemJS;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
@@ -25,10 +24,10 @@ public class BoardDocument implements UniqueChecker {
 		searchHelper = new DiagramItemDTO();
 	}
 
-	public BoardDocument(String boardJson, String logicalName) {
-		this(logicalName);
-		document = BoardDocumentHelpers.fromJson(boardJson);
-	}
+	// public BoardDocument(String boardJson, String logicalName) {
+	// 	this(logicalName);
+	// 	document = BoardDocumentHelpers.fromJson(boardJson);
+	// }
 
 	public BoardDocument(List<? extends IDiagramItemRO> doc, String logicalName) {
 		this(logicalName);

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sevenscales.domain.DiagramItemDTO;
-import net.sevenscales.domain.DiagramItemJS;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.JsonConversion;
@@ -62,7 +61,7 @@ public class JsonHelpers {
 		for (IDiagramItemRO di : items) {
 			// server has in saved format only one \n and also " without 
 			// e.g. \\n \"
-			json += DiagramItemJS.asJson2((DiagramItemDTO) di, jsonFormat).toString() + ",";
+			json += di.toJson(jsonFormat).toString() + ",";
 		}
 		
 		json = removeLastComma(json);
@@ -85,7 +84,7 @@ public class JsonHelpers {
 		  } else {
 		    json += ",";
 		  }
-			json += DiagramItemJS.asJson2((DiagramItemDTO) di, jsonFormat).toString();
+			json += di.toJson(jsonFormat).toString();
 		}
 		return "[" + json + "]";
 	}
@@ -102,7 +101,7 @@ public class JsonHelpers {
 		String result = "";
 		for (IDiagramItemRO di : items) {
 			if (di instanceof DiagramItemDTO) {
-				result += DiagramItemJS.asJson2((DiagramItemDTO) di, jsonFormat) + ",";
+				result += di.toJson(jsonFormat) + ",";
 			}
 		}
 		result = removeLastComma(result);

@@ -4,9 +4,11 @@ import java.io.Serializable;
 
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.domain.utils.JsonFormat;
 import net.sf.hibernate4gwt.pojo.java5.LazyPojo;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.google.gwt.json.client.*;
 
 public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializable, IsSerializable {
 	public static final int DATA_VERSION = 3;
@@ -213,4 +215,58 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		customData = dit.customData;
 		crc32 = dit.crc32;
 	}
+
+	public JSONValue toJson(JsonFormat jsonFormat) {
+    JSONObject result = new JSONObject();
+    String text = safeJsonString(itemText(this, jsonFormat));
+    result.put("text", new JSONString(text));
+    result.put("elementType", new JSONString(safeJsonString(getType())));
+    result.put("shape", new JSONString(safeJsonString(getShape())));
+    result.put("backgroundColor", new JSONString(safeJsonString(getBackgroundColor())));
+    result.put("textColor", new JSONString(safeJsonString(getTextColor())));
+    result.put("version", new JSONNumber(getVersion()));
+    result.put("id", new JSONNumber(getId()));
+    result.put("clientId", new JSONString(safeJsonString(getClientId())));
+    result.put("cd", new JSONString(safeJsonString(getCustomData())));
+    result.put("crc", new JSONNumber(getCrc32()));
+    return result;
+	}
+
+  private static String itemText(DiagramItemDTO item, JsonFormat jsonFormat) {
+    String result = item.getText();
+    result = result != null ? result : "";
+    switch (jsonFormat) {
+    case SEND_FORMAT:
+      result = escapeForSending(result);
+      break;
+    case PRESENTATION_FORMAT:
+      break;
+    case SERVER_FORMAT:
+      result = escapeForServerFormat(result);
+      break;
+    }
+    return result;
+	}
+  
+  protected static String escapeForSending(String value) {
+    return value
+                .replaceAll("\\\\", "\\\\\\\\")
+                .replaceAll("\\n", "\\\\\\\n")
+                .replaceAll("\"", "\\\\\\\"");
+  }
+  
+  protected static String escapeForServerFormat(String value) {
+    return value;
+//                  .replaceAll("\\\\", "\\\\\\")
+//                  .replaceAll("\\n", "\\\\n");
+//                  .replaceAll("\"", "\\\"");
+  }
+	
+	protected static String safeJsonString(String value) {
+		if (value == null) {
+			return "";
+		}
+		return value;
+	}
+
 }

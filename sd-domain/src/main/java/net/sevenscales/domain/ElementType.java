@@ -1,4 +1,4 @@
-package net.sevenscales.editor.uicomponents.uml;
+package net.sevenscales.domain;
 
 public enum ElementType {
 	COMMENT("comment");

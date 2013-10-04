@@ -6,11 +6,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import net.sevenscales.domain.DiagramItemDTO;
-import net.sevenscales.domain.DiagramItemJS;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.content.OperationJS;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.CircleElement;
@@ -74,20 +72,11 @@ public class BoardDocumentHelpers {
 		return result;
 	}
 
-	public static List<IDiagramItemRO> fromJson(String json) {
-		JsArray<DiagramItemJS> items = JsonUtils.safeEval(json);
-		return fromDiagramItemJsArray(items);
-	}
-	
-	public static List<IDiagramItemRO> fromDiagramItemJsArray(JsArray<DiagramItemJS> items) {
-		List<IDiagramItemRO> result = new ArrayList<IDiagramItemRO>();
-		for (int i = 0; i < items.length(); ++i) {
-			DiagramItemDTO di = items.get(i).asDTO();
-			result.add(di);
-		}
-		return result;
-	}
-	
+	// public static List<IDiagramItemRO> fromJson(String json) {
+	// 	JsArray<DiagramItemJS> items = JsonUtils.safeEval(json);
+	// 	return fromDiagramItemJsArray(items);
+	// }
+		
 //	public static List<IDiagramItemRO> applyOperationsToOrderedDiagramItems(List<ApplyOperation> applyOperations) {
 //		List<IDiagramItemRO> result = new ArrayList<IDiagramItemRO>();
 //		for (ApplyOperation ap : applyOperations) {
@@ -110,16 +99,16 @@ public class BoardDocumentHelpers {
     list.add(index, di);
 	}
 
-	public static List<IDiagramItemRO> fromApplyOperations(JsArray<DiagramItemJS> items) {
-		List<IDiagramItemRO> result = new ArrayList<IDiagramItemRO>();
-		for (int i = 0; i < items.length(); ++i) {
-			result.add(items.get(i).asDTO());
-		}
-		return result;
-	}
+	// public static List<IDiagramItemRO> fromApplyOperations(JsArray<DiagramItemJS> items) {
+	// 	List<IDiagramItemRO> result = new ArrayList<IDiagramItemRO>();
+	// 	for (int i = 0; i < items.length(); ++i) {
+	// 		result.add(items.get(i).asDTO());
+	// 	}
+	// 	return result;
+	// }
 	
-	public static JsArray<DiagramItemJS> toJsDiagramItems(String items) {
-		return JsonUtils.safeEval(items);
-	}
+	// public static JsArray<DiagramItemJS> toJsDiagramItems(String items) {
+	// 	return JsonUtils.safeEval(items);
+	// }
 
 }

@@ -3,7 +3,6 @@ package net.sevenscales.editor.api.ot;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.sevenscales.domain.DiagramItemJS;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.IEditor;
@@ -113,25 +112,25 @@ public class OperationQueue {
 	/**
 	 * Finds previous state of the item if any from the queue.
 	 */
-	public DiagramItemJS findPrevItemState(OTOperation operation, IDiagramItemRO tofind) {
-		boolean found = false;
-		for (int x = queuedOperations.size() - 1; x >= 0; --x) {
-			SendOperation so = queuedOperations.get(x);
-			JsArray<DiagramItemJS> items = JsonUtils.safeEval(so.getOperationJson());
-			for (int i = 0; i < items.length(); ++i) {
-				DiagramItemJS dijs = items.get(i);
-				// is	item state and operation exactly the same
-				if (!found && operation == so.operation && tofind.equals(dijs)) {
-					// first occurrence found
-					found = true;
-				}
-				if (found && tofind.getClientId().equals(dijs.getClientId())) {
-					// this is previous
-					return dijs;
-				}
-			}
-		}
-		return null;
-	}
+	// public DiagramItemJS findPrevItemState(OTOperation operation, IDiagramItemRO tofind) {
+	// 	boolean found = false;
+	// 	for (int x = queuedOperations.size() - 1; x >= 0; --x) {
+	// 		SendOperation so = queuedOperations.get(x);
+	// 		JsArray<DiagramItemJS> items = JsonUtils.safeEval(so.getOperationJson());
+	// 		for (int i = 0; i < items.length(); ++i) {
+	// 			DiagramItemJS dijs = items.get(i);
+	// 			// is	item state and operation exactly the same
+	// 			if (!found && operation == so.operation && tofind.equals(dijs)) {
+	// 				// first occurrence found
+	// 				found = true;
+	// 			}
+	// 			if (found && tofind.getClientId().equals(dijs.getClientId())) {
+	// 				// this is previous
+	// 				return dijs;
+	// 			}
+	// 		}
+	// 	}
+	// 	return null;
+	// }
 
 }

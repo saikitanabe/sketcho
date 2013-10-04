@@ -5,10 +5,11 @@ import java.util.ArrayList;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsonUtils;
+import com.google.gwt.json.client.*;
 
-import net.sevenscales.editor.content.OperationJS;
-import net.sevenscales.domain.DiagramItemJS;
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.JSONBoardUserParser;
+import net.sevenscales.domain.JSONDiagramParser;
 import net.sevenscales.editor.api.ot.OTOperation;
 
 public class ApplyHelpers {
@@ -18,21 +19,59 @@ public class ApplyHelpers {
 		result.diagramOperations = new ArrayList<DiagramApplyOperation>();
 		result.userOperations = new ArrayList<BoardUserApplyOperation>();
 
-		JsArray<OperationJS> ops = JsonUtils.safeEval(operations);
-		for (int i = 0; i < ops.length(); ++i) {
-			OperationJS opjs = ops.get(i);
-			OTOperation operation = OTOperation.getEnum(opjs.getOperation());
-			if (opjs.getOperation().startsWith("user.")) {
-				BoardUserApplyOperation applyOperation = createBoardUserApplyOperation(operation, opjs.getUsers());
-				if (applyOperation != null) {
-					result.userOperations.add(applyOperation);
-				}
-			} else {
-				DiagramApplyOperation applyOperation = createDiagramApplyOperation(operation, opjs.getItems());
-				result.diagramOperations.add(applyOperation);
+		// JsArray<OperationJS> ops = JsonUtils.safeEval(operations);
+		JSONValue jvalue = JSONParser.parseStrict(operations);
+		if (jvalue.isArray() != null) {
+			parseOperations(jvalue.isArray(), result);
+		}
+
+		// for (int i = 0; i < ops.length(); ++i) {
+		// 	OperationJS opjs = ops.get(i);
+		// 	OTOperation operation = OTOperation.getEnum(opjs.getOperation());
+		// 	if (opjs.getOperation().startsWith("user.")) {
+		// 		BoardUserApplyOperation applyOperation = createBoardUserApplyOperation(operation, opjs.getUsers());
+		// 		if (applyOperation != null) {
+		// 			result.userOperations.add(applyOperation);
+		// 		}
+		// 	} else {
+		// 		DiagramApplyOperation applyOperation = createDiagramApplyOperation(operation, opjs.getItems());
+		// 		result.diagramOperations.add(applyOperation);
+		// 	}
+		// }
+		return result;
+	}
+
+	private static void parseOperations(JSONArray operations, ApplyOperations applyOperations) {
+		for (int i = 0; i < operations.size(); ++i) {
+			JSONValue operation = operations.get(i);
+			if (operation.isObject() != null) {
+				parseOperation(operation.isObject(), applyOperations);
 			}
 		}
-		return result;
+	}
+
+	private static void parseOperation(JSONObject operation, ApplyOperations applyOperations) {
+		JSONValue o = operation.get("operation");
+		if (o.isString() != null) {
+			parseOperation(OTOperation.getEnum(o.isString().stringValue()), operation, applyOperations);
+		}
+	}
+
+	private static void parseOperation(OTOperation operation, JSONObject operationObject, ApplyOperations applyOperations) {
+		if (operation.getValue().startsWith("user.") && operationObject.get("users").isArray() != null) {
+			JSONArray jusers = operationObject.get("users").isArray();
+			BoardUserApplyOperation applyOperation = createBoardUserApplyOperation(operation, jusers);
+			if (applyOperation != null) {
+				applyOperations.userOperations.add(applyOperation);
+			}
+		} else {
+			JSONArray items = operationObject.get("items").isArray();
+			if (items != null) {
+				DiagramApplyOperation applyOperation = createDiagramApplyOperation(operation, items.isArray());
+				applyOperations.diagramOperations.add(applyOperation);
+			}
+		}
+
 	}
 
 	public static abstract class ApplyOperation {
@@ -120,22 +159,40 @@ public class ApplyHelpers {
 		public List<BoardUserApplyOperation> userOperations;
 	}
 	
-	private static BoardUserApplyOperation createBoardUserApplyOperation(OTOperation operation, JsArray<BoardUser.BoardUserJson> usersJs) {
-		int length = usersJs.length();
+	private static BoardUserApplyOperation createBoardUserApplyOperation(OTOperation operation, JSONArray jusers) {
+		int length = jusers.size();
 		if (length > 0) {
 			// read only last
-			BoardUser.BoardUserJson json = usersJs.get(length - 1);
-			return new BoardUserApplyOperation(operation, json.getUsername(), json.getAvatarUrl(), json.getX(), json.getY(), json.getTargetX(), json.getTargetY(), json.getSelectedCids(), json.getClientIdentifier());
+			JSONValue juser = jusers.get(length - 1);
+			JSONObject juserobj = juser.isObject();
+			if (juserobj != null) {
+				JSONBoardUserParser parser = new JSONBoardUserParser(juserobj);
+				return new BoardUserApplyOperation(operation, 
+																					 parser.getUsername(), 
+																					 parser.getAvatarUrl(), 
+																					 parser.getX(), 
+																					 parser.getY(), 
+																					 parser.getTargetX(), 
+																					 parser.getTargetY(), 
+																					 parser.getSelectedCids(), 
+																					 parser.getClientIdentifier());
+			}
 		}
 		return null;
 	}
 
-	private static DiagramApplyOperation createDiagramApplyOperation(OTOperation operation, JsArray<DiagramItemJS> itemsJs) {
+	private static DiagramApplyOperation createDiagramApplyOperation(OTOperation operation, JSONArray jitems) {
 		List<IDiagramItemRO> items = new ArrayList<IDiagramItemRO>();
-		for (int x = 0; x < itemsJs.length(); ++x) {
-			items.add(itemsJs.get(x).asDTO());
+		for (int i = 0; i < jitems.size(); ++i) {
+			if (jitems.get(i).isObject() != null) {
+				JSONDiagramParser parser = new JSONDiagramParser(jitems.get(i).isObject());
+				if (parser.isDiagram() != null) {
+					items.add(parser.isDiagram());
+				} else if (parser.isComment() != null) {
+					items.add(parser.isComment());
+				}
+			}
 		}
-
 		return new DiagramApplyOperation(operation, items);
 	}
 
