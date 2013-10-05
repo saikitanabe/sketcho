@@ -2,7 +2,11 @@ package net.sevenscales.domain;
 
 import com.google.gwt.json.client.*;
 
+import net.sevenscales.domain.utils.SLogger;
+
 public class JSONContentParser {
+	private static final SLogger logger = SLogger.createLogger(JSONContentParser.class);
+
 	private DiagramContentDTO content;
 
 	public JSONContentParser(String jsonContentStr) {
@@ -14,6 +18,7 @@ public class JSONContentParser {
 	}
 
 	private void parse(JSONObject jsonContent) {
+		// content.setVersion(JSONParserHelpers.getInt(jsonContent.get("version")));
 		JSONArray items = jsonContent.get("items").isArray();
 		if (items != null) {
 			for (int i = 0; i < items.size(); ++i) {
@@ -25,6 +30,7 @@ public class JSONContentParser {
 				}
 			}
 		}
+		// logger.debug("content.getVersion() {} content.getDiagramItems()", content.getVersion(), content.getDiagramItems());
 	}
 
 	public DiagramContentDTO toDTO() {

@@ -19,7 +19,7 @@ public class DiagramContentDTO extends ContentDTO implements IDiagramContent, Is
 	private static final long serialVersionUID = 4975000551782219679L;
 	private List<IDiagramItemRO> diagramItems = new ArrayList<IDiagramItemRO>();
 	// precision will suffer, but should be enough times to update the board...
-  private Integer version = -1;
+  private int version = -1;
 
   public DiagramContentDTO() {
 	}
@@ -52,11 +52,11 @@ public class DiagramContentDTO extends ContentDTO implements IDiagramContent, Is
 		return diagramItems.size() == 0 ? true : false;
 	}
 	
-	public Integer getVersion() {
+	public int getVersion() {
     return version;
   }
 	
-	public void setVersion(Integer version) {
+	public void setVersion(int version) {
 		this.version = version;
 	}
 	
