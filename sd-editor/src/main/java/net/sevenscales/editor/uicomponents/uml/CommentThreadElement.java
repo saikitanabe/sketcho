@@ -38,7 +38,7 @@ import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.diagram.shape.CommentShape;
 import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.JsComment;
+import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.utils.SLogger;
 
 
@@ -555,7 +555,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		Theme.ElementColorScheme commentColor = Theme.getCommentColorScheme();
 
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
-		JsComment jsComment = JsComment.createJsComment(this.getDiagramItem().getClientId(), surface.getEditorContext().getCurrentUser());
+		CommentDTO jsComment = new CommentDTO(this.getDiagramItem().getClientId(), surface.getEditorContext().getCurrentUser());
 		CommentElement commentElement = new CommentElement(surface,
         new CommentShape(doGetLeft(), doGetTop() + getHeight(), getWidth(), 1),
         text,

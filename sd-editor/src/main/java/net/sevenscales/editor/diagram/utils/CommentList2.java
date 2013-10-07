@@ -7,6 +7,7 @@ import java.util.List;
 
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
+import net.sevenscales.domain.CommentDTO;
 
 
 /**
@@ -29,8 +30,11 @@ public class CommentList2 extends ArrayList<CommentElement> {
         return 0;
       }
 
-      double cat1 = c1.getJsComment().getCreatedAt();
-      double cat2 = c2.getJsComment().getCreatedAt();
+      CommentDTO i1 = (CommentDTO) c1.getDiagramItem();
+      CommentDTO i2 = (CommentDTO) c2.getDiagramItem();
+
+      double cat1 = i1.getCreatedAt();
+      double cat2 = i2.getCreatedAt();
       if (cat1 == 0) {
         return -1;
       }

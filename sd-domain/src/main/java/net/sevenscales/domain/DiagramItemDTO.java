@@ -216,6 +216,10 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		crc32 = dit.crc32;
 	}
 
+	public boolean isComment() {
+		return false;
+	}
+
 	public JSONValue toJson(JsonFormat jsonFormat) {
     JSONObject result = new JSONObject();
     String text = safeJsonString(itemText(this, jsonFormat));

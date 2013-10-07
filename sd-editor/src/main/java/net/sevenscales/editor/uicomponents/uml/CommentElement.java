@@ -38,8 +38,8 @@ import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.api.event.CommentDeletedEvent;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.JsComment;
 import net.sevenscales.domain.ElementType;
 
 import com.google.gwt.core.client.GWT;
@@ -68,7 +68,6 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   private TextElementVerticalFormatUtil title;
   private TextElementVerticalFormatUtil textUtil;
   private CommentThreadElement parentThread;
-  private JsComment jsComment;
   
   private static final int LEFT_SHADOW_LEFT = 6; 
   private static final int LEFT_SHADOW_HEIGHT = 41; 
@@ -84,11 +83,11 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   
 	public CommentElement(ISurfaceHandler surface, CommentShape newShape, String text, 
 										 Color backgroundColor, Color borderColor, Color textColor, boolean editable,
-										 CommentThreadElement parentThread, JsComment jsComment) {
+										 CommentThreadElement parentThread, CommentDTO commentData) {
 		super(editable, surface, backgroundColor, borderColor, textColor);
 		this.shape = newShape;
 		this.parentThread = parentThread;
-		this.jsComment = jsComment;
+		setDiagramItem(commentData);
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(parentThread.getGroup());
 		setVisible(false);
@@ -570,23 +569,14 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		return getLeft() + 7;
 	}
 
-	@Override
-	public String getCustomData() {
-		return JsComment.createCommentJsonStr(parentThread.getDiagramItem().getClientId(), "", true);
-	}
-
 	private void setTitle() {
-		String dateTime = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(new Date((long)jsComment.getUpdatedAt()));
-		String formattedTitle = SLogger.format("*{}* · {} ", jsComment.getDisplayName(), dateTime);
+		String dateTime = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(new Date((long)0));
+		String formattedTitle = SLogger.format("*{}* · {} ", "TODO", dateTime);
     title.setText(formattedTitle, editable, true);
 	}
 
 	public CommentThreadElement getParentThread() {
 		return parentThread;
-	}
-
-	public JsComment getJsComment() {
-		return jsComment;
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package net.sevenscales.domain;
 import com.google.gwt.json.client.*;
 
 import net.sevenscales.domain.utils.JsonFormat;
+import net.sevenscales.domain.api.IDiagramItem;
 
 public class CommentDTO extends DiagramItemDTO {
 	private String parentThreadId;
@@ -14,7 +15,27 @@ public class CommentDTO extends DiagramItemDTO {
 	public CommentDTO(String text, String type, String shape, String backgroundColor, String textColor,
 			Integer version, Long id, String clientId, String customData, double crc32, String parentThreadId, String username, String userDisplayName, long createdAt, long updatedAt) {
 		super(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, crc32);
+		this.parentThreadId = parentThreadId;
+		this.username = username;
+		this.userDisplayName = userDisplayName;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
 
+	public CommentDTO(String parentThreadId, String userDisplayName) {
+		this("", "", "", "", "", 0, 0L, "", "", 0, parentThreadId, "", userDisplayName, 0L, 0L);
+	}	
+
+	public CommentDTO(String parentThreadId, String username, String userDisplayName, long createdAt, long updatedAt) {
+		this("", "", "", "", "", 0, 0L, "", "", 0, parentThreadId, username, userDisplayName, createdAt, updatedAt);
+	}	
+
+	public CommentDTO(String clientId) {
+		this("", "", "", "", "", 0, 0L, clientId, "", 0, "", "", "", 0L ,0L);
+	}
+
+	public CommentDTO(IDiagramItemRO di) {
+		copyFrom(di);
 	}
 
 	public String getParentThreadId() {
@@ -35,6 +56,29 @@ public class CommentDTO extends DiagramItemDTO {
 
 	public long getUpdatedAt() {
 		return updatedAt;
+	}
+
+	@Override
+	public boolean isComment() {
+		return true;
+	}
+
+	@Override
+	public IDiagramItem copy() {
+		return new CommentDTO(this);
+	}
+	
+	@Override
+	public void copyFrom(IDiagramItemRO di) {
+		super.copyFrom(di);
+		if (di.isComment()) {
+			CommentDTO c = (CommentDTO) di;
+			parentThreadId = c.parentThreadId;
+			username = c.username;
+			userDisplayName = c.userDisplayName;
+			createdAt = c.createdAt;
+			updatedAt = c.updatedAt;
+		}
 	}
 
 	public JSONValue toJson(JsonFormat jsonFormat) {

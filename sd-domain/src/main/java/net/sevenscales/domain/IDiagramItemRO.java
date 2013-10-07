@@ -27,5 +27,7 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	IDiagramItem copy();
 	void copyFrom(IDiagramItemRO item);
 
+	boolean isComment();
 	JSONValue toJson(JsonFormat jsonFormat);
+
 }

@@ -7,8 +7,8 @@ import java.util.Set;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.IDiagramItemRO;
-import  net.sevenscales.domain.JsComment;
 
+import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSearch;
 import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEvent;
@@ -67,26 +67,30 @@ public class CommentFactory {
 
 	private Diagram createComment(IDiagramItemRO diro, DiagramSearch diagramSearch) {
 		CommentElement result = null;
-		JsComment jsComment = JsComment.parseCommentJson(diro.getCustomData());
-		Diagram parent = diagramSearch.findByClientId(jsComment.getParentThread());
-		if (parent != null) {
-			CommentThreadElement thread = (CommentThreadElement) parent;
-			result = _createComment(diro, jsComment, thread);
+		if (diro.isComment()) {
+			CommentDTO commentData = (CommentDTO) diro;
+			Diagram parent = diagramSearch.findByClientId(commentData.getParentThreadId());
+			if (parent != null) {
+				CommentThreadElement thread = (CommentThreadElement) parent;
+				result = _createComment(commentData, thread);
+			}
 		}
 		return result;
 	}
 
 	private CommentElement createComment(IDiagramItemRO item) {
 		CommentElement result = null;
-		JsComment jsComment = JsComment.parseCommentJson(item.getCustomData());
-		if (commentThreadMapping.containsKey(jsComment.getParentThread())) {
-			CommentThreadElement thread = commentThreadMapping.get(jsComment.getParentThread());
-			result = _createComment(item, jsComment, thread);
+		if (item.isComment()) {
+			CommentDTO citem = (CommentDTO) item;
+			if (commentThreadMapping.containsKey(citem.getParentThreadId())) {
+				CommentThreadElement thread = commentThreadMapping.get(citem.getParentThreadId());
+				result = _createComment(citem, thread);
+			}
 		}
 		return result;
 	}
 
-	private CommentElement _createComment(IDiagramItemRO item, JsComment jsComment, CommentThreadElement thread) {
+	private CommentElement _createComment(CommentDTO item, CommentThreadElement thread) {
 		String[] s = item.getShape().split(",");
     int x = DiagramItemFactory.parseInt(s[0]);
     int y = DiagramItemFactory.parseInt(s[1]);
@@ -103,8 +107,8 @@ public class CommentFactory {
             DiagramItemFactory.parseBorderColor(item),
             DiagramItemFactory.parseTextColor(item),
         editable,
-        thread, 
-        jsComment);
+        thread,
+        item);
     return (CommentElement) DiagramItemFactory.applyDiagramItem(result, item);
 	}
 }
