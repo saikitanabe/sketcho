@@ -9,13 +9,13 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.json.client.JSONValue;
 
 public interface IDiagramItemRO extends Serializable, IsSerializable {
-	Long getId();
+	long getId();
 	String getText();
 	String getType();
 	String getShape();
 	String getBackgroundColor();
 	String getTextColor();
-	Integer getVersion();
+	int getVersion();
 	String getClientId();
 	/**
 	 * This data needs to be parsed separately by each diagram element, no

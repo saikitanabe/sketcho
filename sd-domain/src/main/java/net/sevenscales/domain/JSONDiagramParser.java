@@ -9,9 +9,9 @@ public class JSONDiagramParser {
 	public JSONDiagramParser(JSONObject obj) {
 		String type = JSONParserHelpers.getString(obj.get("elementType"));
 		if (ElementType.COMMENT.getValue().equals(type)) {
-			parseComment(obj);
+			comment = parseComment(obj);
 		} else {
-			parseDiagram(obj);
+			diagramItem = parseDiagram(obj);
 		}
 	}
 

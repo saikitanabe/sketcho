@@ -74,7 +74,7 @@ public class VerifyHelpers {
 	// }
 
 	public interface VerifyCallback {
-		void debugServer(String boardName, String msg, double checksum, String json, double serverChecksum, Integer serverVersion);
+		void debugServer(String boardName, String msg, double checksum, String json, double serverChecksum, int serverVersion);
 		void forceReload(String reason);
 	}
 	public VerifyHelpers(String boardName, VerifyCallback callback, JsonHelpers jsonHelpers, ISurfaceHandler surface, 
@@ -95,7 +95,7 @@ public class VerifyHelpers {
 
 	}
 
-	public void simpleVerify(double checksum, Integer version) {
+	public void simpleVerify(double checksum, int version) {
 		try {
 			simpleDocumentVerify(serverDocument, checksum, version);
 		} catch (MisMatchException e) {
@@ -114,7 +114,7 @@ public class VerifyHelpers {
 		}
 	}
 
-	private void simpleDocumentVerify(BoardDocument document, double checksum, Integer version) throws MisMatchException {
+	private void simpleDocumentVerify(BoardDocument document, double checksum, int version) throws MisMatchException {
 		long time = System.currentTimeMillis();
 		double boardChecksum = document.calculateChecksum();
 		if (boardChecksum != checksum) {

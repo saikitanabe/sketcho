@@ -13,14 +13,14 @@ import com.google.gwt.json.client.*;
 public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializable, IsSerializable {
 	public static final int DATA_VERSION = 3;
 	private static final long serialVersionUID = 5754682876312853660L;
-	private Long id;
+	private long id;
 	private String text;
 	private String type;
 	private String shape;
   private IDiagramContent diagramContent;
 	private String backgroundColor;
 	private String textColor;
-  private Integer version = DATA_VERSION;
+  private int version = DATA_VERSION;
 	private String clientId;
 	private String customData;
 	private double crc32;
@@ -59,11 +59,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		copyFrom(di);
 	}
 
-	public Long getId() {
-		return id != null ? id : -1;
+	public long getId() {
+		return id;
 	}
 	
-	public void setId(Long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -113,11 +113,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		this.textColor = textColor;
 	}
 	
-	public Integer getVersion() {
+	public int getVersion() {
     return version;
   }
 	
-	public void setVersion(Integer version) {
+	public void setVersion(int version) {
 		this.version = version;
 	}
 	
