@@ -173,11 +173,15 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     // clear to be removed so hooks are valid in this cycle
     clearToBeRemovedCycle();
 	  Set<Diagram> removed = new HashSet<Diagram>();
-		for (Diagram d : diagrams) {
+		for (int i = diagrams.size() - 1; i >= 0; --i) {
+      Diagram d = diagrams.get(i);
+      logger.debug("removeSelected: item {}", d);
 		  if (d.isSelected()) {
         _remove(d, removed);
 		  }
 		}
+    logger.debug("removeSelected: removed {}", removed);
+
     handleAdditionalRemovals(removed);
 		surface.getEditorContext().getEventBus().fireEvent(new BoardRemoveDiagramsEvent(removed));
 	}
