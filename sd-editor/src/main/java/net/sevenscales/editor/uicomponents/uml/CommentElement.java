@@ -570,9 +570,12 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	private void setTitle() {
-		String dateTime = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(new Date((long)0));
-		String formattedTitle = SLogger.format("*{}* · {} ", "TODO", dateTime);
-    title.setText(formattedTitle, editable, true);
+		if (getDiagramItem() instanceof CommentDTO) {
+			CommentDTO comment = (CommentDTO) getDiagramItem();
+			String dateTime = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(new Date(comment.getUpdatedAt()));
+			String formattedTitle = SLogger.format("*{}* · {} ", comment.getUserDisplayName(), dateTime);
+	    title.setText(formattedTitle, editable, true);
+		}
 	}
 
 	public CommentThreadElement getParentThread() {

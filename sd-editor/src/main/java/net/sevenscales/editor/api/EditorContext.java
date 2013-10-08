@@ -127,6 +127,11 @@ public class EditorContext {
 	}
 
 	public native String getCurrentUser()/*-{
+		return $wnd.currentUser().email;
+	}-*/;
+
+	public native String getCurrentUserDisplayName()/*-{
 		return $wnd.currentUser().displayName;
 	}-*/;
+
 }

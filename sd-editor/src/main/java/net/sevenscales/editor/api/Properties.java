@@ -17,6 +17,7 @@ import net.sevenscales.editor.api.event.RelationshipTypeSelectedEventHandler;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEventHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
+import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.utils.ColorHelpers;
@@ -459,7 +460,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 	private void showEditor(Diagram diagram, String text, final int left, final int top, boolean justCreated) {
 		logger.info("SHOW EDITOR...");
-		if (!selectedDiagram.supportsTextEditing()) {
+		if (!selectedDiagram.supportsTextEditing() || !AuthHelpers.allowedToEdit(diagram)) {
 			// if diagram text editing is not supported => return
 			return;
 		}
