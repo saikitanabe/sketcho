@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 import net.sevenscales.domain.DiagramContentDTO;
 import net.sevenscales.domain.DiagramItemDTO;
@@ -15,6 +16,7 @@ import net.sevenscales.domain.api.IDiagramContent;
 
 @XmlRootElement(name = "diagramcontent")
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlSeeAlso({DiagramItemJson.class, DiagramChildItemJson.class})
 public class DiagramContentJson {
 	@XmlElement(name = "pageId")
 	private Long pageId = 0L;
@@ -137,7 +139,11 @@ public class DiagramContentJson {
 		result.setVersion(from.getVersion());
 
 		for (IDiagramItemRO item : (List<? extends IDiagramItemRO>) from.getDiagramItems()) {
-			result.getItems().add(DiagramItemJson.fromDTO(item));
+			if ("child".equals(item.getType())) {
+				result.getItems().add(DiagramChildItemJson.fromDTO(item));
+			} else {
+				result.getItems().add(DiagramItemJson.fromDTO(item));
+			}
 		}
 		return result;
 	}

@@ -31,7 +31,7 @@ public class DiagramItemJson {
   @XmlElement(name = "cd")
 	private String cd;
   @XmlElement(required = false, name = "crc")
-	private String crc;
+	private int crc;
 	
 	public String getText() {
 		return text;
@@ -90,7 +90,16 @@ public class DiagramItemJson {
 	}
 	
   public final DiagramItemDTO asDTO() {
-  	return new DiagramItemDTO(getText(), getElementType(), getShape(), getBackgroundColor(), getTextColor(), getVersion(), new Long(getId()), getClientId(), getCd());
+  	return new DiagramItemDTO(getText(), 
+  							  getElementType(),
+  							  getShape(),
+  							  getBackgroundColor(),
+  							  getTextColor(),
+  							  getVersion(), 
+  							  new Long(getId()), 
+  							  getClientId(), 
+  							  getCd(),
+  							  getVersion());
   }
 	public static DiagramItemJson fromDTO(IDiagramItemRO from) {
 		DiagramItemJson result = new DiagramItemJson();
@@ -102,6 +111,7 @@ public class DiagramItemJson {
 		result.setVersion(from.getVersion());
 		result.setId(from.getId());
 		result.setClientId(from.getClientId());
+		result.setCd(from.getCustomData());
 		return result;
 	}
 }
