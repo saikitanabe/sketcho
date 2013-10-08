@@ -1,8 +1,13 @@
 package net.sevenscales.editor.api.ot;
 
 import java.util.LinkedList;
+import java.util.List;
 
+import net.sevenscales.domain.CommentDTO;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.editor.api.ot.ApplyHelpers;
 import net.sevenscales.domain.utils.SLogger;
+
 
 public class OTBuffer {
 	private static final SLogger logger = SLogger.createLogger(OTBuffer.class);
@@ -26,6 +31,43 @@ public class OTBuffer {
 		redoBuffer.clear();
 		
     logger.debug2("pushToUndoBufferAndResetRedo: undo size {}, redo size {}", undoBuffer.size(), redoBuffer.size());
+	}
+
+	public void updateCommentInsertOperationsTimeStamps(List<ApplyHelpers.DiagramApplyOperation> applyOperations) {
+		for (ApplyHelpers.DiagramApplyOperation ap : applyOperations) {
+			updateCommentInsertOperationTimeStamps(ap.getOperation(), ap.getItems());
+		}
+	}
+
+	private void updateCommentInsertOperationTimeStamps(OTOperation operation, List<IDiagramItemRO> updates) {
+		if (OTOperation.INSERT.equals(operation)) {
+			updateBufferComments(undoBuffer, updates);
+			updateBufferComments(redoBuffer, updates);
+		}
+	}
+
+	private void updateBufferComments(LinkedList<CompensationModel> buffer, List<IDiagramItemRO> updates) {
+		for (CompensationModel cm : buffer) {
+			updateCommentItems(cm.undoOperation, cm.undoJson, updates);
+			updateCommentItems(cm.redoOperation, cm.redoJson, updates);
+		}
+	}
+
+	private void updateCommentItems(OTOperation bufferoper, List<IDiagramItemRO> items, List<IDiagramItemRO> updates) {
+		if (OTOperation.INSERT.equals(bufferoper)) {
+			for (IDiagramItemRO diro : items) {
+				for (IDiagramItemRO update : updates) {
+					if (diro.getClientId().equals(update.getClientId())) {
+						if (diro instanceof CommentDTO && update instanceof CommentDTO) {
+							CommentDTO old = (CommentDTO) diro;
+							CommentDTO up = (CommentDTO) update;
+							old.setCreatedAt(up.getCreatedAt());
+							old.setUpdatedAt(up.getUpdatedAt());
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public CompensationModel undoBuffer() {
