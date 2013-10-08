@@ -115,6 +115,7 @@ public class OTCompensationTransformer {
 	private List<IDiagramItemRO> mapToDeleteItems(List<? extends IDiagramItemRO> newItems) {
   	List<IDiagramItemRO> result = new ArrayList<IDiagramItemRO>();
   	for (IDiagramItemRO n : newItems) {
+  		// it is fine to use simple DiagramItemDTO, since delete is just about client id
   		result.add(new DiagramItemDTO(n.getClientId()));
   	}
 		return result;

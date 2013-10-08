@@ -67,7 +67,7 @@ public class BoardDocumentHelpers {
 	public static List<IDiagramItemRO> copyDiagramItems(List<? extends IDiagramItemRO> items) {
 		List<IDiagramItemRO> result = new ArrayList<IDiagramItemRO>();
 		for (IDiagramItemRO di : items) {
-			insertInOrder(new DiagramItemDTO(di), result);
+			insertInOrder(di.copy(), result);
 		}
 		return result;
 	}

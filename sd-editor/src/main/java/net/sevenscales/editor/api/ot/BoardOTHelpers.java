@@ -43,7 +43,7 @@ public class BoardOTHelpers {
 			applyOperationToGraphicalView(originator, ap.getOperation(), ap.getItems());
 		}
 	}
-
+	
 	private void applyOperationToGraphicalView(String originator, OTOperation operation, List<IDiagramItemRO> items) throws MappingNotFoundException {
 		// logger.debug2("applyOperationToGraphicalView: originator({}), clientIdentifier({})", originator, clientIdentifier);
 		surface.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, false);

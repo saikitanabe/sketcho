@@ -555,7 +555,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		Theme.ElementColorScheme commentColor = Theme.getCommentColorScheme();
 
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
-		CommentDTO jsComment = new CommentDTO(this.getDiagramItem().getClientId(), surface.getEditorContext().getCurrentUserDisplayName());
+		CommentDTO jsComment = new CommentDTO(this.getDiagramItem().getClientId(), surface.getEditorContext().getCurrentUser(), surface.getEditorContext().getCurrentUserDisplayName());
 		CommentElement commentElement = new CommentElement(surface,
         new CommentShape(doGetLeft(), doGetTop() + getHeight(), getWidth(), 1),
         text,

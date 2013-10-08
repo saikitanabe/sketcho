@@ -134,7 +134,7 @@ public class BoardDocument implements UniqueChecker {
 	
 	private void insert(List<? extends IDiagramItemRO> from, List<IDiagramItemRO> to) {
 		for (IDiagramItemRO di : from) {
-			BoardDocumentHelpers.insertInOrder(new DiagramItemDTO(di), to);
+			BoardDocumentHelpers.insertInOrder(di.copy(), to);
 		}
 	}
 	
