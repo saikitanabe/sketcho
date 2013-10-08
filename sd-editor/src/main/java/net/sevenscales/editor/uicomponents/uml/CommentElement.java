@@ -569,7 +569,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		return getLeft() + 7;
 	}
 
-	private void setTitle() {
+	public void setTitle() {
 		if (getDiagramItem() instanceof CommentDTO) {
 			CommentDTO comment = (CommentDTO) getDiagramItem();
 			String dateTime = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(new Date(comment.getUpdatedAt()));

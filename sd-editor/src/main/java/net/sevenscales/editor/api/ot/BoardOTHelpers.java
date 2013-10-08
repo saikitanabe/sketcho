@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
@@ -136,10 +137,27 @@ public class BoardOTHelpers {
 		if (originator.equals(clientIdentifier)) {
 			// Update server id by client id to graphical view to have correct graphical view checksum
 			// in case inserted by this client.
-			updateServerIds(items);
+			// updateServerIds(items);
+			updateCommentsTimeStamps(items);
 			return;
 		}
 		insertOT(originator, items);
+	}
+
+	private void updateCommentsTimeStamps(List<IDiagramItemRO> items) {
+		for (IDiagramItemRO diro : items) {
+			if (CommentElement.TYPE.equals(diro.getType())) {
+				CommentDTO sourceComment = (CommentDTO) diro;
+				Diagram d = findDiagramByClientId(diro.getClientId());
+				if (d instanceof CommentElement) {
+					CommentElement ce = (CommentElement) d;
+					CommentDTO cdto = (CommentDTO) d.getDiagramItem();
+					cdto.setCreatedAt(sourceComment.getCreatedAt());
+					cdto.setUpdatedAt(sourceComment.getUpdatedAt());
+					ce.setTitle();
+				}
+			}
+		}
 	}
 
 	private void updateServerIds(List<IDiagramItemRO> items) {

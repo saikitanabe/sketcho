@@ -54,8 +54,16 @@ public class CommentDTO extends DiagramItemDTO {
 		return createdAt;
 	}
 
+	public void setCreatedAt(long cat) {
+		this.createdAt = cat;
+	}
+
 	public long getUpdatedAt() {
 		return updatedAt;
+	}
+
+	public void setUpdatedAt(long uat) {
+		this.updatedAt = uat;
 	}
 
 	@Override
