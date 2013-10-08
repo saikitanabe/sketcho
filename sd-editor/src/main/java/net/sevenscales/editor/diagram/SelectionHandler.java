@@ -170,11 +170,13 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   * work in correct order.
   */
 	public void removeSelected() {
+    Diagram[] items = new Diagram[]{};
+    items = diagrams.toArray(items);
     // clear to be removed so hooks are valid in this cycle
     clearToBeRemovedCycle();
 	  Set<Diagram> removed = new HashSet<Diagram>();
-		for (int i = diagrams.size() - 1; i >= 0; --i) {
-      Diagram d = diagrams.get(i);
+		for (Diagram d : items) {
+      // Diagram d = diagrams.get(i);
       logger.debug("removeSelected: item {}", d);
 		  if (d.isSelected()) {
         _remove(d, removed);
