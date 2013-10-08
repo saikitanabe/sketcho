@@ -26,9 +26,9 @@ public class JSONDiagramParser {
 												  JSONParserHelpers.getString(obj.get("clientId")),
 												  JSONParserHelpers.getString(obj.get("cd")),
 												  JSONParserHelpers.getDouble(obj.get("crc")),
-												  JSONParserHelpers.getString(obj.get("pthread")),
-												  JSONParserHelpers.getString(obj.get("user")),
-												  JSONParserHelpers.getString(obj.get("dname")),
+												  JSONParserHelpers.getString(obj.get("p")),
+												  JSONParserHelpers.getString(obj.get("cby")),
+												  JSONParserHelpers.getString(obj.get("cbyd")),
 												  JSONParserHelpers.getLong(obj.get("cat")),
 												  JSONParserHelpers.getLong(obj.get("uat")));
 	}
