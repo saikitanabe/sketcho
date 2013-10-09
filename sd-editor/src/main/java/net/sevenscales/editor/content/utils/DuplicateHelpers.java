@@ -37,14 +37,17 @@ public class DuplicateHelpers {
 		// reconnect relationships based on mapped client IDs
 
 		duplicateAndMapClientIds(selected, duplicatedDiagrams, relationships, clientIdMapping, reattachHelpers, boardDocument);
-		
-		// replace old connections with new client ids
-		replaceOldConnections(relationships, clientIdMapping);
 
-		boolean force = false;
-		reattachHelpers.reattachRelationships(force);
+		// check if something was really duplicated; item might not support duplication like comment element.		
+		if (duplicatedDiagrams.size() > 0) {
+			// replace old connections with new client ids
+			replaceOldConnections(relationships, clientIdMapping);
 
-		surface.addAsSelected(duplicatedDiagrams, true, true);
+			boolean force = false;
+			reattachHelpers.reattachRelationships(force);
+
+			surface.addAsSelected(duplicatedDiagrams, true, true);
+		}
 	}
 
 	private void duplicateAndMapClientIds(Diagram[] selected, 
@@ -55,20 +58,23 @@ public class DuplicateHelpers {
 		int i = 0;
 		for (Diagram diagram : selected) {
 			Diagram duplicated = diagram.duplicate(selected.length > 1);
-			duplicatedDiagrams.add(duplicated);
-			
-			DiagramItemDTO di = (DiagramItemDTO) DiagramItemFactory.createOrUpdate(duplicated, false);
-			di.setClientId(ClientIdHelpers.generateClientId(++i, boardDocument));
-			
-			// copy also custom data to be handled later
-			di.setCustomData(diagram.getDiagramItem().getCustomData());
-			
-			if (duplicated instanceof Relationship2) {
-				relationships.add((Relationship2) duplicated);
+			if (duplicated != null) {
+				// if item supports duplication
+				duplicatedDiagrams.add(duplicated);
+				
+				DiagramItemDTO di = (DiagramItemDTO) DiagramItemFactory.createOrUpdate(duplicated, false);
+				di.setClientId(ClientIdHelpers.generateClientId(++i, boardDocument));
+				
+				// copy also custom data to be handled later
+				di.setCustomData(diagram.getDiagramItem().getCustomData());
+				
+				if (duplicated instanceof Relationship2) {
+					relationships.add((Relationship2) duplicated);
+				}
+				
+				clientIdMapping.put(diagram.getDiagramItem().getClientId(), di.getClientId());
+				reattachHelpers.processDiagram(duplicated);
 			}
-			
-			clientIdMapping.put(diagram.getDiagramItem().getClientId(), di.getClientId());
-			reattachHelpers.processDiagram(duplicated);
 		}
 	}
 
