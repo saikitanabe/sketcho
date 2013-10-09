@@ -51,7 +51,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //	private Rectangle rectSurface;
 //  private IPolyline boundary;
 	private IRectangle boundary;
-	private ILine separator;
+	// private ILine separator;
 	private int minimumWidth = 25;
 	private int minimumHeight = 25;
 	private CommentShape shape;
@@ -114,10 +114,10 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		// boundary.setStroke(textColor.red, textColor.green, textColor.blue, textColor.opacity);
 		boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 
-		separator = IShapeFactory.Util.factory(editable).createLine(group);
-		// #bbbbbb
-		separator.setStroke(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);
-		separator.setStrokeWidth(1);
+		// separator = IShapeFactory.Util.factory(editable).createLine(group);
+		// // #bbbbbb
+		// separator.setStroke(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);
+		// separator.setStrokeWidth(1);
 		
 //    topBlur = IShapeFactory.Util.factory(editable)
 //    		.createImage(group, shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height, "images/notetopblur.png");
@@ -145,7 +145,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //    shapes.add(leftShadow);
 //    shapes.add(rightShadow);
     shapes.add(boundary);
-    shapes.add(separator);
+    // shapes.add(separator);
 //    shapes.add(fold);
     
     title = new TextElementVerticalFormatUtil(this, hasTitleTextElement, group, surface.getEditorContext());
@@ -201,7 +201,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //        left, top+height,
 //        left, top};
 		boundary.setShape(left, top, width, height, 0);
-		separator.setShape(left, top + height, left + width, top + height);
+		// separator.setShape(left, top + height, left + width, top + height);
 //		leftShadow.setShape(left - LEFT_SHADOW_LEFT, top + height - LEFT_SHADOW_HEIGHT, 50, 50);
 //		rightShadow.setShape(left + width - RIGHT_SHADOW_LEFT, top + height - RIGHT_SHADOW_HEIGHT, 50, 50);
 
@@ -493,6 +493,12 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   }
 
   @Override
+  public void setHighlightColor(String color) {
+    // separator.setStroke(color);
+  }
+
+
+  @Override
   protected void doSetShape(int[] shape) {
   	setShape(shape[0], shape[1], shape[2], shape[3]);
   }
@@ -601,7 +607,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	// }
 
 	public void hideBottomLine() {
-		separator.setVisibility(false);
+		// separator.setVisibility(false);
 	}
 
 	@Override

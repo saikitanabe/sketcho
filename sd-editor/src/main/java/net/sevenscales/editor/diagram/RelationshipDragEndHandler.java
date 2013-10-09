@@ -278,9 +278,9 @@ public class RelationshipDragEndHandler implements
 			CommentThreadElement ne = new CommentThreadElement(surface,
 	        new CommentThreadShape(x, y, CommentThreadElement.MINIMUM_WIDTH, CommentThreadElement.MINIMUM_HEIGHT),
 	        "",
-	        Theme.getCommentColorScheme().getBackgroundColor().create(), 
-	        Theme.getCommentColorScheme().getBorderColor().create(),
-	        Theme.getCommentColorScheme().getTextColor().create(), true);
+	        Theme.getCommentThreadColorScheme().getBackgroundColor().create(), 
+	        Theme.getCommentThreadColorScheme().getBorderColor().create(),
+	        Theme.getCommentThreadColorScheme().getTextColor().create(), true);
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 			result = ne;
 			break;

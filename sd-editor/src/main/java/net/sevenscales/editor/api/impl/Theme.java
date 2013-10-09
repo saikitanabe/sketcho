@@ -12,6 +12,7 @@ public class Theme {
   private ThemeName currentThemeName;
 	private ElementColorScheme currentColorScheme;
   private ElementColorScheme commentColorScheme;
+  private ElementColorScheme commentThreadColorScheme;
 
   public enum ThemeName {
     WHITE("white", "#fff"), BLACK("black", "#272822"), SEPIA("sepia", "#FBF0D9"), PAPER("paper", "#FAFAFA");
@@ -113,6 +114,10 @@ public class Theme {
                                                 createDefaultCommentBorderColor(),
                                                 createDefaultCommentBackgroundColor());
 
+    commentThreadColorScheme = new ElementColorScheme(createDefaultCommentThreadTextColor(),
+                                                      createDefaultCommentThreadBorderColor(),
+                                                      createDefaultCommentThreadBackgroundColor());
+
     currentThemeName = ThemeName.PAPER;
     currentColorScheme = defaultColorMap.get(currentThemeName.name);
 	}
@@ -150,12 +155,22 @@ public class Theme {
 	}
 
   private static Color createDefaultCommentTextColor() {
-    return new Color(0x66, 0x66, 0x66, 1);
+    return new Color(0x44, 0x44, 0x44, 1);
   }
   private static Color createDefaultCommentBorderColor() {
     return new Color(0xFB, 0xE2, 0x80, 1);
   }
   private static Color createDefaultCommentBackgroundColor() {
+    return new Color(0xFC, 0xF7, 0xCA, 0);
+  }
+
+  private static Color createDefaultCommentThreadTextColor() {
+    return new Color(0x66, 0x66, 0x66, 1);
+  }
+  private static Color createDefaultCommentThreadBorderColor() {
+    return new Color(0xFB, 0xE2, 0x80, 1);
+  }
+  private static Color createDefaultCommentThreadBackgroundColor() {
     return new Color(0xFC, 0xF7, 0xCA, 1);
   }
 	
@@ -196,6 +211,10 @@ public class Theme {
 
   public static ElementColorScheme getCommentColorScheme() {
     return instance().commentColorScheme;
+  }
+
+  public static ElementColorScheme getCommentThreadColorScheme() {
+    return instance().commentThreadColorScheme;
   }
 
   public static ElementColorScheme getColorScheme(ThemeName themeName) {
