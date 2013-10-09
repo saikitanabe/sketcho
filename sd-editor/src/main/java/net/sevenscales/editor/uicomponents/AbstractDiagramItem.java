@@ -1242,6 +1242,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       anchorPoint.setVisibility(highlight);
       anchorPoint.setStroke(color);
     }
+
     setHighlightColor(color);
   }
   
@@ -1252,6 +1253,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   @Override
   public boolean supportsTextEditing() {
   	return false;
+  }
+
+  public boolean supportsAlignHighlight() {
+    return true;
   }
   
 //  public Map<Anchor, AnchorElement> getAnchorMap() {

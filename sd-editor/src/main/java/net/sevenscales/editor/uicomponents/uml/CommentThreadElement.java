@@ -114,9 +114,9 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 //                       shape.rectShape.left, shape.rectShape.top+shape.rectShape.height,
 //                       shape.rectShape.left, shape.rectShape.top};
 		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
-		boundary.setStrokeWidth(0);
+		boundary.setStrokeWidth(1);
 		boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
-		
+
 //    topBlur = IShapeFactory.Util.factory(editable)
 //    		.createImage(group, shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height, "images/notetopblur.png");
 		
@@ -166,6 +166,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
     
     setBorderColor(borderWebColor);
     
+		restoreHighlighColor();
+
     super.constructorDone();
 	}
 	
@@ -477,7 +479,22 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
   protected void doSetShape(int[] shape) {
   	setShape(shape[0], shape[1], shape[2], shape[3]);
   }
-  
+
+  @Override
+	public void restoreHighlighColor() {
+		// need to override since default border color restoration
+		// doesn't handle transparent border!
+		boundary.setStroke(0, 0, 0, 0);
+	}
+
+  @Override
+  public void setHighlight(boolean highlight) {
+  	super.setHighlight(highlight);
+  	if (!highlight) {
+  		restoreHighlighColor();
+  	}
+  }
+
   @Override
 	public void setHighlightColor(String color) {
 		boundary.setStroke(color);
@@ -632,7 +649,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	private void _sort(boolean resizeChild) {
 		int left = doGetLeft();
 		int top = doGetTop();
-		int currentHeight = 17;
+		int currentHeight = 18;
 		int width = getWidth();
 
 		int height = currentHeight;
@@ -650,7 +667,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 				ce.setVisible(true);
 			}
 			// }
-			height += commentHeight;
+			height += commentHeight + 1;
 			last = ce;
 		}
 
@@ -660,7 +677,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 		// if (height != currentHeight) {
 		// 	logger.debug("CommentThreadElement height changed current {} new {}...", currentHeight, height);
-		setShape(left, top, width, height + 15);
+		setShape(left, top, width, height + 16);
 		// }
 	}
 

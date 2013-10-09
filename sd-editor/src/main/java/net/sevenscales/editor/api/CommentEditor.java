@@ -196,7 +196,7 @@ class CommentEditor  extends Composite {
 	private void positionPopupBy(Diagram commentThreadCandidate) {
 		if (this.commentThread == commentThreadCandidate) {
 			MatrixPointJS point = MatrixPointJS.createUnscaledPoint(this.commentThread.getLeft(), this.commentThread.getTop(), surface.getScaleFactor());
-			int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
+			int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft() + 1;
 			int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop() - 15;
 	
 			if (commentThread.getChildElements().size() > 0) {
@@ -212,7 +212,7 @@ class CommentEditor  extends Composite {
 			this.commentThread = (CommentThreadElement) diagram;
 			commentThread.showResizeHandles();
 			writeComment.getElement().getStyle().setWidth(diagram.getWidth() - 30, Unit.PX);
-			commentHintBox.getStyle().setWidth(diagram.getWidth(), Unit.PX);
+			commentHintBox.getStyle().setWidth(diagram.getWidth() - 2, Unit.PX);
 			show(commentThread, calcEditorIncrement(commentThread, true));
 			showCommentHintBox();
 			hideCommentArea();

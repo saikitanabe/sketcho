@@ -191,7 +191,8 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 	boolean supportsOnlyTextareaDynamicHeight();
 	String getBorderColor();
 	Color getBorderColorAsColor();
-	public boolean supportsTextEditing();
+	boolean supportsTextEditing();
+  boolean supportsAlignHighlight();
 	int supportedMenuItems();
 	int getMeasurementAreaWidth();
 	String getCustomData();

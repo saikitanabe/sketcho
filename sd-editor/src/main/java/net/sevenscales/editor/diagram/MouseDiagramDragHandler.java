@@ -436,7 +436,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	private List<Diagram> highlightList(List<Diagram> diagrams, Diagram oneSelected) {
 		if (diagrams != null) {
 	    for (Diagram d : diagrams) {
-	    	if (d != oneSelected) {
+	    	if (d != oneSelected && d.supportsAlignHighlight()) {
 	    		d.setHighlightColor(AbstractDiagramItem.DEFAULT_SELECTION_COLOR);
 	    	}
 	    }

@@ -165,6 +165,9 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     setText(text);
     
     setBorderColor(borderWebColor);
+
+    // HACK! need to set border as transparent
+    restoreHighlighColor();
     
     parentThread.accept(this);
     super.constructorDone();
@@ -493,11 +496,30 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   	textUtil.applyTextColor();
   }
 
+	@Override
+	public void restoreHighlighColor() {
+		// need to override since default border color restoration
+		// doesn't handle transparent border!
+		boundary.setStroke(0, 0, 0, 0);
+	}
+
+	/**
+	* Comment element doesn't support hightlight on relationship attach.
+	* TODO better solution would be if diagram can say if it supports
+	* attach or not.
+	*/
+  @Override
+  public void setHighlight(boolean highlight) {
+  }
   @Override
   public void setHighlightColor(String color) {
-    // separator.setStroke(color);
+    boundary.setStroke(color);
   }
 
+  @Override
+  public boolean supportsAlignHighlight() {
+    return false;
+  }
 
   @Override
   protected void doSetShape(int[] shape) {
