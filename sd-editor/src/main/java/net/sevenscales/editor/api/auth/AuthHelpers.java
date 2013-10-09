@@ -3,6 +3,7 @@ package net.sevenscales.editor.api.auth;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
+import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 
 /**
 * Provides authorization utilities to prevent user doing wrong actions.
@@ -21,6 +22,11 @@ public class AuthHelpers {
 	}
 
 	public static boolean allowedToDelete(Diagram diagram) {
+		if (diagram instanceof CommentThreadElement) {
+			// comment thread doesn't support delete at this moment
+			return false;
+		}
+
 		// same rule as with edit, comment owner needs to match
 		return allowedToEdit(diagram);
 	}

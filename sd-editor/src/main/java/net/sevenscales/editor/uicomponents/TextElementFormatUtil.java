@@ -80,6 +80,7 @@ public class TextElementFormatUtil {
 	private boolean forceTextAlign;
 	protected double widestWidth;
 	private int marginTop;
+  private int marginLeft;
 	private int margin;
 	private int marginBottom;
 	private int fontSize = 12;
@@ -118,6 +119,14 @@ public class TextElementFormatUtil {
   }
   public int getMarginTop() {
   	return marginTop;
+  }
+
+  public void setMarginLeft(int marginLeft) {
+    this.marginLeft = marginLeft;
+  }
+
+  public int getMarginLeft() {
+    return marginLeft;
   }
   
   public void setMargin(int margin) {

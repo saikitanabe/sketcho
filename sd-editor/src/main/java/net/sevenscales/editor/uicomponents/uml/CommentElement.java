@@ -152,7 +152,9 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
 
 		title.setMarginTop(0);
+		title.setMarginLeft(6);
     textUtil.setMarginTop(20);
+    textUtil.setMarginLeft(6);
 
     setReadOnly(!editable);
     setShape(shape.rectShape.left, shape.rectShape.top, 

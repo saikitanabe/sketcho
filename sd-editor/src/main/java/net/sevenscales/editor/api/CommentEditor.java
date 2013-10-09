@@ -74,6 +74,7 @@ class CommentEditor  extends Composite {
 		this.textArea.setStyleName(PROPERTIES_EDITOR_STYLE);
 
 		this.popup = new CustomPopupPanel(textArea);
+		this.popup.setStyleName("comment-editor-popup");
 		// popup.setStyleName("propertyPopup");
 		// autohide is not enabled since property editor is closed manually and autohide causes problems
 		this.popup.setAutoHideEnabled(false);

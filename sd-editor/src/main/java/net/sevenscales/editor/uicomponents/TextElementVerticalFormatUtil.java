@@ -38,12 +38,12 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   
   @Override
   public void show() {
-  	calculateLines2(hasTextElement.getX());
+  	calculateLines2();
   	setTextShape();
   	super.show();
   }
   
-  private void calculateLines2(int left) {
+  private void calculateLines2() {
     this.tokens = TokenParser.parse2(getText());
     // token to be reused in html formatting
     
@@ -53,11 +53,11 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
     
     IText text = createText(true);
     currentline.add(text);
-    text.addText(tokens, hasTextElement.getX() + 9, parent.getMeasurementAreaWidth());
+    text.addText(tokens, hasTextElement.getX() + 9 + getMarginLeft(), parent.getMeasurementAreaWidth());
   }
 
 	private void calculateAndNotifyHeight(int width) {
-		MeasurementPanel.setTokens(tokens, width);
+		MeasurementPanel.setTokens(tokens, width - getMarginLeft());
 		MeasurementPanel.setPosition(hasTextElement.getX() + parent.getWidth() + 20, hasTextElement.getY());
     hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + DEFAULT_VERTICAL_TEXT_MARGIN);
   }
@@ -71,7 +71,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
     setText(newText);
     
     if (force || editorContext.isTrue(EditorProperty.ON_SURFACE_LOAD) || editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
-    	calculateLines2(hasTextElement.getX());
+    	calculateLines2();
       if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
         // during OT operation element is NOT resized and everything is 
         // copied as is, element size and text

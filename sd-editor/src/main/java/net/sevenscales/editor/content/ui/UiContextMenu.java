@@ -23,6 +23,7 @@ import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
+import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.utils.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
@@ -105,12 +106,18 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		changeConnection.setWidget(new SelectButtonBox(editorContext, false));
 		
 		editorContext.getEventBus().addHandler(SelectionMouseUpEvent.TYPE, new SelectionMouseUpEventHandler() {
-			private void setMenuItemVisibility(Diagram diagram, Diagram[] selected) {
+
+			/**
+			* Return true if all menu items are hidden.
+			*/
+			private boolean setMenuItemVisibility(Diagram diagram, Diagram[] selected) {
 				Display freehandMenu = Display.NONE;
 				Display reverseMenu = Display.NONE;
 				Display colorMenu = Display.NONE;
 				boolean changeConnectionMenu = false;
-				
+				Display deleteMenuVisibility = Display.NONE;
+				Display duplicateMenuVisibility = Display.NONE;
+
 				if ((diagram.supportedMenuItems() & ContextMenuItem.FREEHAND_MENU.getValue()) == ContextMenuItem.FREEHAND_MENU.getValue()) {
 					freehandMenu = Display.INLINE;
 					freehandOnOff(UiContextMenu.this.editorContext.isTrue(EditorProperty.FREEHAND_MODE));
@@ -120,18 +127,39 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					reverseMenu = Display.INLINE;
 				}
 				if (anySupportsColorMenu(selected)) {
-					colorMenu = Display.INLINE;
+					colorMenu = Display.INLINE_BLOCK;
+				}
+
+				boolean allowedToCRUD = AuthHelpers.allowedToDelete(selected);
+				if (allowedToCRUD) {
+					deleteMenuVisibility = Display.INLINE_BLOCK;
+				}
+
+				if (!ifEvenOneIsComment(selected)) {
+					duplicateMenuVisibility = Display.INLINE_BLOCK;
 				}
 
 				changeConnection.setVisible(allConnections(selected));
 				freehandOff.getStyle().setDisplay(freehandMenu);
 				reverseConnection.getStyle().setDisplay(reverseMenu);
 				colorize.getStyle().setDisplay(colorMenu);
+				delete.getStyle().setDisplay(deleteMenuVisibility);
+				duplicate.getStyle().setDisplay(duplicateMenuVisibility);
+
+				if (freehandMenu == Display.NONE && 
+						reverseMenu == Display.NONE &&
+						colorMenu == Display.NONE &&
+						changeConnectionMenu == false &&
+						deleteMenuVisibility == Display.NONE &&
+						duplicateMenuVisibility == Display.NONE) {
+					return true;
+				}
+				return false;
 			}
 			
 			private boolean anySupportsColorMenu(Diagram[] selected) {
 				for (Diagram diagram : selected) {
-					if ((diagram.supportedMenuItems() & ContextMenuItem.COLOR_MENU.getValue()) == ContextMenuItem.COLOR_MENU.getValue()) {
+					if (AuthHelpers.allowedToEdit(diagram) && (diagram.supportedMenuItems() & ContextMenuItem.COLOR_MENU.getValue()) == ContextMenuItem.COLOR_MENU.getValue()) {
 						return true;
 					}
 				}
@@ -140,7 +168,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 			private boolean ifEvenOneIsComment(Diagram[] selected) {
 				for (Diagram d : selected) {
-					if (d instanceof CommentElement) {
+					if (d instanceof CommentElement || d instanceof CommentThreadElement) {
 						return true;
 					}
 				}
@@ -162,7 +190,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			public void onSelection(SelectionMouseUpEvent event) {
 				Diagram[] selected = new Diagram[]{};
 				selected = UiContextMenu.this.selectionHandler.getSelectedItems().toArray(selected);
-				if (selected.length >= 1 && AuthHelpers.allowedToDelete(selected)) {
+				if (selected.length >= 1) {
 					// do not show popup menu if even one of the items is comment
 					// diagram position is scaled value, so need to translate to screen pixels...
 					Diagram d = event.getLastSelected();
@@ -178,11 +206,13 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 								UiContextMenu.this.surface.getRootLayer().getTransformY();
 					}
 
-					setMenuItemVisibility(d, selected);
+					boolean allMenusHidden = setMenuItemVisibility(d, selected);
 					
-					popup.setPopupPosition(left, top);
-					popup.show();
-					EffectHelpers.tooltipper();
+					if (!allMenusHidden) {
+						popup.setPopupPosition(left, top);
+						popup.show();
+						EffectHelpers.tooltipper();
+					}
 				}
 			}
 		});

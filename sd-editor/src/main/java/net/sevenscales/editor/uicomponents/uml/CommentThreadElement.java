@@ -50,7 +50,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 //	private Rectangle rectSurface;
 //  private IPolyline boundary;
 	private IRectangle boundary;
-	public static int MINIMUM_WIDTH = 200;
+	public static int MINIMUM_WIDTH = 250;
 	public static int MINIMUM_HEIGHT = 40;
 
 	private CommentThreadShape shape;
@@ -632,7 +632,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	private void _sort(boolean resizeChild) {
 		int left = doGetLeft();
 		int top = doGetTop();
-		int currentHeight = 11;
+		int currentHeight = 17;
 		int width = getWidth();
 
 		int height = currentHeight;
@@ -643,7 +643,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 			int commentHeight = ce.getHeight();
 			// if ( ce.doGetTop() != (top + height) ) {
-				ce.setShape(left + 6, top + height, width - 7, commentHeight);
+				ce.setShape(left, top + height, width, commentHeight);
 			if (resizeChild) {
 				ce.resizeText();
 			} else {
@@ -660,7 +660,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 		// if (height != currentHeight) {
 		// 	logger.debug("CommentThreadElement height changed current {} new {}...", currentHeight, height);
-		setShape(left, top, width, height + 9);
+		setShape(left, top, width, height + 15);
 		// }
 	}
 
