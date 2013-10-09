@@ -10,16 +10,26 @@ import net.sevenscales.editor.uicomponents.uml.CommentElement;
 */
 public class AuthHelpers {
 
+	public static boolean allowedToDelete(Diagram diagram) {
+		// same rule as with edit, comment owner needs to match
+		return allowedToEdit(diagram);
+	}
+
 	public static boolean allowedToEdit(Diagram diagram) {
 		boolean result = true;
 		if (diagram instanceof CommentElement) {
-			result = false;
-			if (diagram.getDiagramItem() instanceof CommentDTO) {
-				CommentDTO c = (CommentDTO) diagram.getDiagramItem();
-				String username = diagram.getSurfaceHandler().getEditorContext().getCurrentUser();
-				if (username != null && username.equals(c.getUsername())) {
-					result = true;
-				}
+			result = commentUsernameMatches(diagram);
+		}
+		return result;
+	}
+
+	private static boolean commentUsernameMatches(Diagram diagram) {
+		boolean result = false;
+		if (diagram.getDiagramItem() instanceof CommentDTO) {
+			CommentDTO c = (CommentDTO) diagram.getDiagramItem();
+			String username = diagram.getSurfaceHandler().getEditorContext().getCurrentUser();
+			if (username != null && username.equals(c.getUsername())) {
+				result = true;
 			}
 		}
 		return result;

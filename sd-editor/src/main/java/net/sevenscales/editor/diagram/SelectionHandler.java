@@ -19,6 +19,7 @@ import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
 import net.sevenscales.editor.api.event.SelectionEvent;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.UnselectAllEvent;
+import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.silver.KeyCodeMap;
@@ -215,21 +216,23 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   }
 
   private void _remove(Diagram diagram, Set<Diagram> removed) {
-    Diagram removeItem = diagram.getOwnerComponent();
-    removed.add(removeItem);
+    if (AuthHelpers.allowedToDelete(diagram)) {
+      Diagram removeItem = diagram.getOwnerComponent();
+      removed.add(removeItem);
 
-    // this is not absolutely must in here, but
-    // would require Comment Thread Element to keep state
-    // that it is under deletion, so that child element reference
-    // is not lost. In this way child elements will be deleted even though
-    // parent loses reference to children.
-    List<? extends Diagram> childElements = removeItem.getChildElements();
-    if (childElements != null) {
-      removed.addAll(childElements);
+      // this is not absolutely must in here, but
+      // would require Comment Thread Element to keep state
+      // that it is under deletion, so that child element reference
+      // is not lost. In this way child elements will be deleted even though
+      // parent loses reference to children.
+      List<? extends Diagram> childElements = removeItem.getChildElements();
+      if (childElements != null) {
+        removed.addAll(childElements);
+      }
+
+      removeItem.removeFromParent();
+      dragHandlers.remove(removeItem);
     }
-
-    removeItem.removeFromParent();
-    dragHandlers.remove(removeItem);
   }
 
 //  @Override
