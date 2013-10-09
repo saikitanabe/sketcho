@@ -331,6 +331,8 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 
 				// some connections are following this element drag => drag with relationship connection
 				Collection<AnchorElement> anchors = dd.getAnchors();
+
+				logger.debug("dd {} anchors {} dx {} dy {}", dd, dd.getAnchors(), dx, dy);
 				// System.out.println(anchors.size()+" "+dispachSequence+" dx: "+dx+" dy: "+dy);
 				for (AnchorElement ae : anchors) {
 					ae.dispatch(dx, dy, sequence);

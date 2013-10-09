@@ -366,7 +366,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
  
     // if (TouchHelpers.isSupportsTouch()) {
     	// usability for touch devices, hide in case connection helpers are on a way
-  	connectionHelpers.toggle(this);
+    toggleConnectionHelpers();
 		// } else {
 		// 	connectionHelpers.show(this);
 		// }
@@ -415,7 +415,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     // logger.debugTime();
     // logger.start("AbstractDiagramItem.unselect 4");
 
-    connectionHelpers.hide(this);
+    hideConnectionHelpers();
     
     // logger.debugTime();
     // logger.start("AbstractDiagramItem.unselect 5");
@@ -1328,6 +1328,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	public int getMeasurementAreaWidth() {
 		return getTextAreaWidth();
 	}
+
+  protected void toggleConnectionHelpers() {
+    connectionHelpers.toggle(this);
+  }
 	
 	@Override
 	public void hideConnectionHelpers() {

@@ -35,6 +35,7 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasText
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.editor.uicomponents.Anchor;
 import net.sevenscales.editor.api.event.CommentDeletedEvent;
 
 import net.sevenscales.domain.utils.SLogger;
@@ -447,7 +448,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	protected boolean resize(int left, int top, int width, int height) {
 	   if (width >= minimumWidth && height >= minimumHeight) {
        setShape(left, top, width, height);
-       connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
+       // connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
        dispatchAndRecalculateAnchorPositions();
        return true;
 	   }
@@ -599,6 +600,22 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	public int getTransformY() {
 		return parentThread.getGroup().getTransformY();
 	}
+
+	@Override
+  protected void toggleConnectionHelpers() {
+    connectionHelpers.toggle(parentThread);
+  }
+
+  @Override
+	public AnchorElement getAnchorElement(Anchor anchor) {
+		return parentThread.getAnchorElement(anchor);
+	}
+
+	@Override
+	public String getTextAreaBackgroundColor() {
+		return parentThread.getTextAreaBackgroundColor();
+	}
+
 
 	// @Override
  //  public void select() {
