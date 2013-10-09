@@ -110,8 +110,6 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				Display reverseMenu = Display.NONE;
 				Display colorMenu = Display.NONE;
 				boolean changeConnectionMenu = false;
-				Display deleteMenuVisibility = Display.NONE;
-				Display duplicateMenuVisibility = Display.NONE;
 				
 				if ((diagram.supportedMenuItems() & ContextMenuItem.FREEHAND_MENU.getValue()) == ContextMenuItem.FREEHAND_MENU.getValue()) {
 					freehandMenu = Display.INLINE;
@@ -125,20 +123,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					colorMenu = Display.INLINE;
 				}
 
-				if (AuthHelpers.allowedToDelete(selected)) {
-					deleteMenuVisibility = Display.INLINE;
-				}
-
-				if (!ifEvenOneIsComment(selected)) {
-					duplicateMenuVisibility = Display.INLINE;
-				}
-
 				changeConnection.setVisible(allConnections(selected));
 				freehandOff.getStyle().setDisplay(freehandMenu);
 				reverseConnection.getStyle().setDisplay(reverseMenu);
 				colorize.getStyle().setDisplay(colorMenu);
-				delete.getStyle().setDisplay(deleteMenuVisibility);
-				duplicate.getStyle().setDisplay(duplicateMenuVisibility);
 			}
 			
 			private boolean anySupportsColorMenu(Diagram[] selected) {
@@ -174,7 +162,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			public void onSelection(SelectionMouseUpEvent event) {
 				Diagram[] selected = new Diagram[]{};
 				selected = UiContextMenu.this.selectionHandler.getSelectedItems().toArray(selected);
-				if (selected.length >= 1) {
+				if (selected.length >= 1 && AuthHelpers.allowedToDelete(selected)) {
+					// do not show popup menu if even one of the items is comment
 					// diagram position is scaled value, so need to translate to screen pixels...
 					Diagram d = event.getLastSelected();
 					// logger.debug("Last Selected type {} x({}) y({})", d.toString(), d.getLeft(), d.getTop());
