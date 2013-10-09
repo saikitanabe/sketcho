@@ -85,11 +85,11 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	public CommentElement(ISurfaceHandler surface, CommentShape newShape, String text, 
 										 Color backgroundColor, Color borderColor, Color textColor, boolean editable,
 										 CommentThreadElement parentThread, CommentDTO commentData) {
-		super(editable, surface, backgroundColor, borderColor, textColor);
+		super(editable, surface, backgroundColor, borderColor, backgroundColor.opacity == 0 ? parentThread.getTextColorAsColor() : textColor);
 		this.shape = newShape;
 		this.parentThread = parentThread;
 		setDiagramItem(commentData);
-		
+
 		group = IShapeFactory.Util.factory(editable).createGroup(parentThread.getGroup());
 		setVisible(false);
 		// group = parentThread.getGroup();
@@ -163,7 +163,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     
     setTitle();
     setText(text);
-    
+
     setBorderColor(borderWebColor);
 
     // HACK! need to set border as transparent
@@ -494,6 +494,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	public void setTextColor(int red, int green, int blue) {
   	super.setTextColor(red, green, blue);
   	textUtil.applyTextColor();
+  	title.applyTextColor();
   }
 
 	@Override

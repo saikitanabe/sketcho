@@ -5,23 +5,6 @@ import net.sevenscales.editor.gfx.domain.Color;
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class ColorHelpers {
-
-	public static class Rgb {
-		public Rgb(int r, int g, int b) {
-			red = r;
-			green = g;
-			blue = b;
-		}
-
-		public int red;
-		public int green;
-		public int blue;
-		
-		@Override
-		public String toString() {
-			return "rgb(" + red + "," + green + "," + blue + ")";
-		}
-	}
 	
 	public static String asHexColor(int red, int green, int blue) {
 		String r = Integer.toHexString(0x100 | red).substring(1).toUpperCase();

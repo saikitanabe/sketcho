@@ -573,7 +573,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			textArea.getElement().getStyle().setBackgroundColor(diagram.getTextAreaBackgroundColor());
 		}
 
-		textArea.getElement().getStyle().setColor("#" + diagram.getTextColor());
+		textArea.getElement().getStyle().setColor("#" + diagram.getTextColorAsColor().toHexString());
 		textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
 		setTextAreaHeight(diagram.getTextAreaHeight());
 		textArea.getElement().getStyle().setProperty("textAlign", diagram.getTextAreaAlign());

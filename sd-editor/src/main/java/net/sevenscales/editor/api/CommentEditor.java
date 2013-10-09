@@ -173,16 +173,19 @@ class CommentEditor  extends Composite {
 
 			positionPopupBy(this.commentThread);
 
-			commentHintBox.getStyle().setBackgroundColor("#" + commentThread.getBackgroundColor());
-			commentHintBox.getStyle().setOpacity(commentThread.getBackgroundColorAsColor().opacity);
+			// commentHintBox.getStyle().setBackgroundColor("#" + commentThread.getBackgroundColor());
+			commentHintBox.getStyle().setProperty("background", commentThread.getBackgroundColorAsColor().toRgbaCss());
+			// commentHintBox.getStyle().setOpacity(commentThread.getBackgroundColorAsColor().opacity);
 			hideCommentHintBox();
 
-			commentArea.getStyle().setBackgroundColor("#" + commentThread.getBackgroundColor());
-			commentArea.getStyle().setOpacity(commentThread.getBackgroundColorAsColor().opacity);
+			// commentArea.getStyle().setBackgroundColor("#" + commentThread.getBackgroundColor());
+			commentArea.getStyle().setProperty("background", commentThread.getBackgroundColorAsColor().toRgbaCss());
+			// commentArea.getStyle().setOpacity(commentThread.getBackgroundColorAsColor().opacity);
 			commentArea.getStyle().setColor("#" + diagram.getTextColor());
 			commentArea.getStyle().setWidth(diagram.getWidth(), Unit.PX);
 			textArea.getElement().getStyle().setWidth(diagram.getWidth() - 30, Unit.PX);
 			textArea.getElement().getStyle().setHeight(50, Unit.PX);
+			textArea.getElement().getStyle().setColor("#" + diagram.getTextColorAsColor().toHexString());
 			showCommentArea();
 
 			// if comment thread should be increased dyncamically this is a working

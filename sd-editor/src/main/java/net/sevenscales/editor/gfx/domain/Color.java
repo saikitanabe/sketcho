@@ -51,6 +51,10 @@ public class Color {
     return red+","+green+","+blue+","+opacity;
   }
 
+  public String toRgbaCss() {
+  	return net.sevenscales.editor.content.utils.Rgb.makeRgba(red, green, blue, opacity);
+  }
+
 	public String toHexString() {
 		String red = Integer.toHexString(this.red);
 		String green = Integer.toHexString(this.green);

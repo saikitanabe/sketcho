@@ -9,7 +9,7 @@ import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.content.utils.ColorHelpers;
 import net.sevenscales.editor.content.utils.JQuery;
-import net.sevenscales.editor.content.utils.ColorHelpers.Rgb;
+import net.sevenscales.editor.content.utils.Rgb;
 import net.sevenscales.editor.diagram.utils.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 

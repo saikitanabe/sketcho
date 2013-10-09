@@ -20,6 +20,7 @@ import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.diagram.utils.CommentList2;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IContainer;
 import net.sevenscales.editor.gfx.domain.IGroup;
@@ -164,7 +165,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
     
     setText(text);
     
-    setBorderColor(borderWebColor);
+    // setBorderColor(borderWebColor);
     
 		restoreHighlighColor();
 
@@ -442,6 +443,16 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		return this.shape;
 	}
 
+	@Override
+  protected ElementColorScheme getRefrenceColorScheme() {
+    return Theme.getCommentThreadColorScheme(); // Theme.getColorScheme(ThemeName.PAPER);
+  }
+
+	@Override
+  protected ElementColorScheme getCurrentColorScheme() {
+    return Theme.getCommentThreadColorScheme(); // Theme.getCurrentColorScheme();
+  }
+
 	public void setShape(Info shape) {
 		// TODO Auto-generated method stub
 		
@@ -473,6 +484,11 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	public void setTextColor(int red, int green, int blue) {
   	super.setTextColor(red, green, blue);
   	textUtil.applyTextColor();
+  	for (CommentElement c : comments) {
+  		if (c.getBackgroundColorAsColor().opacity == 0) {
+	  		c.setTextColor(red, green, blue);
+  		}
+  	}
   }
 
   @Override

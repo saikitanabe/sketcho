@@ -131,7 +131,7 @@ public class Theme {
   }
 
   private static Color createDefaultTextColorOnBlack() {
-    return new Color(0xF8, 0xF8, 0xF2, 1);
+    return new Color(0xE8, 0xE8, 0xE9, 1);
   }
 
   private static Color createDefaultTextColorOnWhite() {
@@ -165,7 +165,7 @@ public class Theme {
   }
 
   private static Color createDefaultCommentThreadTextColor() {
-    return new Color(0x66, 0x66, 0x66, 1);
+    return new Color(0x44, 0x44, 0x44, 1);
   }
   private static Color createDefaultCommentThreadBorderColor() {
     return new Color(0xFB, 0xE2, 0x80, 0);

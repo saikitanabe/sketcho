@@ -22,7 +22,7 @@ import net.sevenscales.editor.content.ui.ColorSelections;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.ColorHelpers;
-import net.sevenscales.editor.content.utils.ColorHelpers.Rgb;
+import net.sevenscales.editor.content.utils.Rgb;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.ClickDiagramHandler;
@@ -1285,8 +1285,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
 	  // check if all colors equals with current scheme colors
 	  // if they do then save color information based on white paper theme
-    ElementColorScheme paper = Theme.getColorScheme(ThemeName.PAPER);
-	  if (usesSchemeDefaultColors(Theme.getCurrentColorScheme())) {
+    ElementColorScheme paper = getRefrenceColorScheme();
+	  if (usesSchemeDefaultColors(getCurrentColorScheme())) {
       setColorInfo(info, getDefaultBackgroundColor(paper), getDefaultBorderColor(paper), getDefaultTextColor(paper));
 	  } else {
 	    Color textColor = this.textColor; 
@@ -1300,6 +1300,14 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	    setColorInfo(info, backgroundColor, borderColor, textColor);
 	  }
 	}
+
+  protected ElementColorScheme getRefrenceColorScheme() {
+    return Theme.getColorScheme(ThemeName.PAPER);
+  }
+
+  protected ElementColorScheme getCurrentColorScheme() {
+    return Theme.getCurrentColorScheme();
+  }
 	
 	private void setColorInfo(Info info, Color backgroundColor, Color borderColor, Color textColor) {
     info.setBackgroundColor(backgroundColor.toRgbWithOpacity());
