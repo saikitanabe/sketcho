@@ -22,6 +22,7 @@ import net.sevenscales.editor.content.utils.EffectHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
+import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.utils.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
@@ -110,6 +111,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				Display colorMenu = Display.NONE;
 				boolean changeConnectionMenu = false;
 				Display deleteMenuVisibility = Display.NONE;
+				Display duplicateMenuVisibility = Display.NONE;
 				
 				if ((diagram.supportedMenuItems() & ContextMenuItem.FREEHAND_MENU.getValue()) == ContextMenuItem.FREEHAND_MENU.getValue()) {
 					freehandMenu = Display.INLINE;
@@ -127,16 +129,30 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					deleteMenuVisibility = Display.INLINE;
 				}
 
+				if (!ifEvenOneIsComment(selected)) {
+					duplicateMenuVisibility = Display.INLINE;
+				}
+
 				changeConnection.setVisible(allConnections(selected));
 				freehandOff.getStyle().setDisplay(freehandMenu);
 				reverseConnection.getStyle().setDisplay(reverseMenu);
 				colorize.getStyle().setDisplay(colorMenu);
 				delete.getStyle().setDisplay(deleteMenuVisibility);
+				duplicate.getStyle().setDisplay(duplicateMenuVisibility);
 			}
 			
 			private boolean anySupportsColorMenu(Diagram[] selected) {
 				for (Diagram diagram : selected) {
 					if ((diagram.supportedMenuItems() & ContextMenuItem.COLOR_MENU.getValue()) == ContextMenuItem.COLOR_MENU.getValue()) {
+						return true;
+					}
+				}
+				return false;
+			}
+
+			private boolean ifEvenOneIsComment(Diagram[] selected) {
+				for (Diagram d : selected) {
+					if (d instanceof CommentElement) {
 						return true;
 					}
 				}
