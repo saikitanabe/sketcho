@@ -15,6 +15,7 @@ import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.SelectionMouseUpEventHandler;
 import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.api.impl.TouchHelpers;
+import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.utils.DuplicateHelpers;
 import net.sevenscales.editor.content.utils.EffectHelpers;
@@ -108,6 +109,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				Display reverseMenu = Display.NONE;
 				Display colorMenu = Display.NONE;
 				boolean changeConnectionMenu = false;
+				Display deleteMenuVisibility = Display.NONE;
 				
 				if ((diagram.supportedMenuItems() & ContextMenuItem.FREEHAND_MENU.getValue()) == ContextMenuItem.FREEHAND_MENU.getValue()) {
 					freehandMenu = Display.INLINE;
@@ -121,10 +123,15 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					colorMenu = Display.INLINE;
 				}
 
+				if (AuthHelpers.allowedToDelete(selected)) {
+					deleteMenuVisibility = Display.INLINE;
+				}
+
 				changeConnection.setVisible(allConnections(selected));
 				freehandOff.getStyle().setDisplay(freehandMenu);
 				reverseConnection.getStyle().setDisplay(reverseMenu);
 				colorize.getStyle().setDisplay(colorMenu);
+				delete.getStyle().setDisplay(deleteMenuVisibility);
 			}
 			
 			private boolean anySupportsColorMenu(Diagram[] selected) {

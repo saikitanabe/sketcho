@@ -10,6 +10,16 @@ import net.sevenscales.editor.uicomponents.uml.CommentElement;
 */
 public class AuthHelpers {
 
+	public static boolean allowedToDelete(Diagram[] diagrams) {
+		for (Diagram d : diagrams) {
+			if (!allowedToDelete(d)) {
+				// if even one fails do not allow to delete
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static boolean allowedToDelete(Diagram diagram) {
 		// same rule as with edit, comment owner needs to match
 		return allowedToEdit(diagram);
