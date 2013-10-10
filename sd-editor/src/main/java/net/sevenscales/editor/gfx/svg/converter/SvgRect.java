@@ -20,6 +20,7 @@ public class SvgRect extends StringUtil {
     params.put("%fill%", fill);
     params.put("%fill-opacity%", String.valueOf(rect.getFillColor().getOpacity()));
     params.put("%stroke-width%", String.valueOf(rect.getStrokeWidth()));
+    params.put("%stroke-opacity%", String.valueOf(rect.getStrokeColor().getOpacity()));
     
     // own map for those or use same map, it doesn't really matter
     String transform = "";
@@ -38,7 +39,7 @@ public class SvgRect extends StringUtil {
     }
 
     String template = "<rect x='%x%' y='%y%' width='%width%' height='%height%' rx='%r%' %transform% " +
-    		               "style='fill: rgb(%fill%);fill-opacity: %fill-opacity%;stroke-width: %stroke-width%;%stroke%'/>";
+    		               "style='fill: rgb(%fill%);fill-opacity: %fill-opacity%;stroke-opacity: %stroke-opacity%;stroke-width: %stroke-width%;%stroke%'/>";
     return parse(template, params);
   }
 
