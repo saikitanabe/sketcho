@@ -18,7 +18,11 @@ public class JSONContentParser {
 	}
 
 	private void parse(JSONObject jsonContent) {
-		// content.setVersion(JSONParserHelpers.getInt(jsonContent.get("version")));
+		content.setVersion(JSONParserHelpers.getInt(jsonContent.get("version")));
+		content.setName(JSONParserHelpers.getString(jsonContent.get("name")));
+		content.setCreatedTime(JSONParserHelpers.getLong(jsonContent.get("createdAt")));
+		content.setModifiedTime(JSONParserHelpers.getLong(jsonContent.get("updatedAt")));
+		
 		JSONArray items = jsonContent.get("items").isArray();
 		if (items != null) {
 			for (int i = 0; i < items.size(); ++i) {
