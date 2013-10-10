@@ -9,6 +9,7 @@ import java.util.Set;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.event.ColorSelectedEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEventHandler;
+import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
 import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
 import net.sevenscales.editor.api.event.DiagramElementAddedEventHandler;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
@@ -188,35 +189,15 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			@Override
 			public void onSelection(ColorSelectedEvent event) {
 				logger.debug("onSelection selected {}", Properties.this.selectionHandler.getSelectedItems());
+				Set<Diagram> modified = new HashSet<Diagram>();
 				for (Diagram d : Properties.this.selectionHandler.getSelectedItems()) {
-					switch (event.getColorTarget()) {
-					case BACKGROUND:
-						logger.debug("onSelection background...");
-						if (d.canSetBackgroundColor()) {
-						  Color newbg = new Color(event.getColor().getRr(), event.getColor().getGg(), event.getColor().getBb(), event.getColor().getOpacity());
-							d.setBackgroundColor(newbg);
-					    String borderWebColor = ColorHelpers.borderColorByBackground(newbg.red, newbg.green, newbg.blue);
-				      d.setBorderColor(borderWebColor);
-						}
-						
-						if (!"transparent".equals(d.getTextAreaBackgroundColor())) {
-						  // can set text color only if element has some color as text background
-						  // this is due to theme switching, e.g. actor text element is on always on top of 
-						  // board background color
-  						d.setTextColor(event.getColor().getR(), event.getColor().getG(), event.getColor().getB());
-						}
-						logger.debug("onSelection background... done");
-						break;
-					case BORDER:
-						if (d.canSetBackgroundColor()) {
-							d.setBorderColor(event.getColor().getBorderColor4Web());
-						}
-						break;
+					if (AuthHelpers.allowedToEdit(d)) {
+						setColors(d, event.getColorTarget(), event.getColor());
+						modified.add(d);
 					}
 				}
-				
-				Properties.this.editorContext.getEventBus().fireEvent(new PotentialOnChangedEvent(Properties.this.selectionHandler
-						.getSelectedItems()));
+				Properties.this.editorContext.getEventBus().fireEvent(new PotentialOnChangedEvent(modified));
+
 			}
 		});
 
@@ -270,6 +251,33 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		editorContext.getEventBus().addHandler(ShowDiagramPropertyTextEditorEvent.TYPE, showDiagramText);
 
 		setWidget(panel);
+	}
+
+	private void setColors(Diagram d, ColorTarget colorTarget, net.sevenscales.editor.diagram.utils.Color color) {
+		switch (colorTarget) {
+		case BACKGROUND:
+			logger.debug("onSelection background {}...", d);
+			if (d.canSetBackgroundColor()) {
+		  	Color newbg = new Color(color.getRr(), color.getGg(), color.getBb(), color.getOpacity());
+				d.setBackgroundColor(newbg);
+	    	String borderWebColor = ColorHelpers.borderColorByBackground(newbg.red, newbg.green, newbg.blue);
+	      d.setBorderColor(borderWebColor);
+			}
+		
+			if (!"transparent".equals(d.getTextAreaBackgroundColor())) {
+		  	// can set text color only if element has some color as text background
+		  	// this is due to theme switching, e.g. actor text element is on always on top of 
+		  	// board background color
+				d.setTextColor(color.getR(), color.getG(), color.getB());
+			}
+			logger.debug("onSelection background... done");
+			break;
+		case BORDER:
+			if (d.canSetBackgroundColor()) {
+				d.setBorderColor(color.getBorderColor4Web());
+			}
+			break;
+		}
 	}
 	
 	private void hide() {
