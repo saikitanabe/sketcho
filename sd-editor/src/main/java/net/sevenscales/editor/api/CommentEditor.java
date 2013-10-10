@@ -19,6 +19,8 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.EditorCommon;
@@ -95,12 +97,18 @@ class CommentEditor  extends Composite {
 			}
 		});
 
+		popup.addCloseHandler(new CloseHandler<PopupPanel>() {
+			@Override
+			public void onClose(CloseEvent<PopupPanel> event) {
+				createComment();
+			}
+		});
+
 		new FastElementButton(comment).addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				logger.debug("Comment {}...", textArea.getText());
-				createComment();
-				clearAndHide();
+				hide();
 			}
 		});
 
@@ -133,13 +141,15 @@ class CommentEditor  extends Composite {
 		});
 	}
 
-	private void clearAndHide() {
-		textArea.setText("");
-		hide();
+	private void createComment() {
+		if (isEditorNotEmpty()) {
+			commentThread.createComment(textArea.getText());
+			textArea.setText("");
+		}
 	}
 
-	private void createComment() {
-		commentThread.createComment(textArea.getText());
+	private boolean isEditorNotEmpty() {
+		return !"".equals(textArea.getText());
 	}
 
 	void showEditor(Diagram diagram) {
@@ -242,8 +252,8 @@ class CommentEditor  extends Composite {
 			commentThread.hideResizeHandles();
 			commentThread.restoreSize();
 		}
-		commentThread = null;
 		popup.hide();
+		commentThread = null;
 		CommentEditor.this.editorCommon.fireEditorClosed();
 	}
 

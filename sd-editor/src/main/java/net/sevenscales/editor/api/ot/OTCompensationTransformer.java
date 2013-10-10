@@ -153,11 +153,11 @@ public class OTCompensationTransformer {
   	// ignore in filter condition items that have exactly the same content
 		// those are not very useful to undo/redo
 		
-		if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
-			String ci = formatListToString(currentState);
-			String ni = formatListToString(newItems);
-			logger.debug("mapNewToCurrent operation {}\ncurrentState:\n{}\n\nnewItems:\n{}", operation, ci, ni);
-		}
+		// if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
+		// 	String ci = formatListToString(currentState);
+		// 	String ni = formatListToString(newItems);
+		// 	logger.debug("mapNewToCurrent operation {}\ncurrentState:\n{}\n\nnewItems:\n{}", operation, ci, ni);
+		// }
 
   	List<IDiagramItemRO> result = new DiagramItemList();
   	for (IDiagramItemRO n : newItems) {
