@@ -11,6 +11,21 @@ import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 */
 public class AuthHelpers {
 
+	public static boolean allowedToShowDelete(Diagram[] diagrams) {
+		for (Diagram d : diagrams) {
+			if (!allowedToShowDelete(d)) {
+				// if even one fails do not allow to delete
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static boolean allowedToShowDelete(Diagram diagram) {
+		// same rule as with edit, comment owner needs to match
+		return allowedToEdit(diagram);
+	}
+
 	public static boolean allowedToDelete(Diagram[] diagrams) {
 		for (Diagram d : diagrams) {
 			if (!allowedToDelete(d)) {
@@ -23,7 +38,8 @@ public class AuthHelpers {
 
 	public static boolean allowedToDelete(Diagram diagram) {
 		if (diagram instanceof CommentThreadElement) {
-			// comment thread doesn't support delete at this moment
+			// comment thread doesn't support direct removal
+			// it will be removed when last child is removed, automatically
 			return false;
 		}
 

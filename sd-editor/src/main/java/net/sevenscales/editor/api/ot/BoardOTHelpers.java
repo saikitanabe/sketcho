@@ -180,10 +180,10 @@ public class BoardOTHelpers {
 			Diagram diagram = findDiagramByClientId(diro.getClientId());
 			if (diagram == null) {
 				diagram = createAndAddElement(diro);
+				applyThemeColors(diagram);
+				reattachHelpers.processDiagram(diagram);
 			}
-			applyThemeColors(diagram);
       diagrams.add(diagram);
-			reattachHelpers.processDiagram(diagram);
 		}
 		
 		reattachHelpers.reattachRelationships();
@@ -191,7 +191,7 @@ public class BoardOTHelpers {
 		// 0 on originator
 		boolean validation = (diagrams.size() == items.size() || diagrams.size() == 0);
 		if (!validation) {
-		  throw new MappingNotFoundException(SLogger.format("insertOT failed for {}", items.toString()));
+		  throw new MappingNotFoundException(SLogger.format("insertOT failed for\ndiagrams {}\nitems {}", diagrams.toString(), items.toString()));
 		}
 		
 		highlightChanges(originator, diagrams, new OTHighlight(diagrams));

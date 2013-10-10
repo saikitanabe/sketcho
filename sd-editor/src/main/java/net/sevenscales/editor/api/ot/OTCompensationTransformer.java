@@ -6,8 +6,10 @@ import java.util.logging.Level;
 
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ot.ApplyHelpers.DiagramApplyOperation;
+import net.sevenscales.editor.diagram.utils.DiagramItemList;
 
 import com.google.gwt.logging.client.LogConfiguration;
 
@@ -17,6 +19,10 @@ public class OTCompensationTransformer {
 	private boolean testMode;
 	private List<DiagramApplyOperation> applyOperations;
 	private int currentApplyOperationIndex;
+
+	static {
+		logger.setExclusiveName(OTCompensationTransformer.class);
+	}
 	
 	public OTCompensationTransformer() {
 	}
@@ -121,11 +127,39 @@ public class OTCompensationTransformer {
 		return result;
 	}
 
+	private void handleParent(CommentDTO child, List<? extends IDiagramItemRO> currentState, List<IDiagramItemRO> result) {
+		for (IDiagramItemRO current : currentState) {
+			if (child.getParentThreadId().equals(current.getClientId())) {
+				result.add(current.copy());
+				break;
+			}
+		}
+	}
+
+	private String formatListToString(List<? extends IDiagramItemRO> items) {
+		String result = "";
+		boolean first = true;
+		for (IDiagramItemRO item : items) {
+			if (!first) {
+				result += ",\n";
+			}
+			result += item.toString();
+			first = false;
+		}
+		return result;
+	}
+
 	private List<IDiagramItemRO> mapNewToCurrent(OTOperation operation, List<? extends IDiagramItemRO> currentState, List<? extends IDiagramItemRO> newItems) throws MappingNotFoundException {
   	// ignore in filter condition items that have exactly the same content
 		// those are not very useful to undo/redo
 		
-  	List<IDiagramItemRO> result = new ArrayList<IDiagramItemRO>();
+		if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
+			String ci = formatListToString(currentState);
+			String ni = formatListToString(newItems);
+			logger.debug("mapNewToCurrent operation {}\ncurrentState:\n{}\n\nnewItems:\n{}", operation, ci, ni);
+		}
+
+  	List<IDiagramItemRO> result = new DiagramItemList();
   	for (IDiagramItemRO n : newItems) {
   		boolean mappingFound = false;
   		
@@ -141,6 +175,9 @@ public class OTCompensationTransformer {
 	  		for (IDiagramItemRO c : currentState) {
 	  			if (LogConfiguration.loggingIsEnabled(Level.FINEST) && "".equals(n.getClientId()) || "".equals(c.getClientId())) {
 	  				throw new RuntimeException("Client ID cannot be empty!");
+	  			}
+	  			if (n instanceof CommentDTO) {
+	  				handleParent((CommentDTO) n, currentState, result);
 	  			}
 	    		if (n.getClientId().equals(c.getClientId())) {
 	    			result.add(c.copy());

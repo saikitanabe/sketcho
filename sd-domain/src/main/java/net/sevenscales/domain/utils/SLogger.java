@@ -9,6 +9,7 @@ import com.google.gwt.logging.client.LogConfiguration;
 public class SLogger {
 	private Logger logger;
 	private static CustomErrorHandler customErrorHandler;
+	private static String exclusiveName;
 	private boolean onlyTime = false;
 	private Stack<DebugTime> measurements = new Stack<DebugTime>();
 	
@@ -23,33 +24,46 @@ public class SLogger {
 	public static void setCustomErrorHandler(CustomErrorHandler ceh) {
 		customErrorHandler = ceh;
 	}
+
+	public static void setExclusiveName(Class clazz) {
+		exclusiveName = clazz.getName();
+	}
+
+	private boolean exclusive() {
+		if (exclusiveName != null && exclusiveName.equals(logger.getName())) {
+			return true;
+		} else if (exclusiveName != null) {
+			return false;
+		}
+		return true;
+	}
 	
 	public void debug(String msg) {
 		debug("{}", msg);
 	}
 	
 	public void debug(String format, String... values) {
-		if (LogConfiguration.loggingIsEnabled(Level.FINER) && !onlyTime) {
+		if (LogConfiguration.loggingIsEnabled(Level.FINER) && !onlyTime && exclusive()) {
 			logger.finer(format(format, values));
 		}
 	}
 	
 	public void debug(String format, Object... values) {
-		if (LogConfiguration.loggingIsEnabled(Level.FINER) && !onlyTime) {
+		if (LogConfiguration.loggingIsEnabled(Level.FINER) && !onlyTime && exclusive()) {
 			String[] ints = vals(values);
 			logger.finer(format(format, ints));
 		}
 	}
 	
 	public void debug2(String format, Object... values) {
-		if (LogConfiguration.loggingIsEnabled(Level.FINE) && !onlyTime) {
+		if (LogConfiguration.loggingIsEnabled(Level.FINE) && !onlyTime && exclusive()) {
 			String[] ints = vals(values);
 			logger.fine(format(format, ints));
 		}
 	}
 	
 	public void info(String format, Object... values) {
-		if (LogConfiguration.loggingIsEnabled(Level.INFO) && !onlyTime) {
+		if (LogConfiguration.loggingIsEnabled(Level.INFO) && !onlyTime && exclusive()) {
 			String[] ints = vals(values);
 			logger.info(format(format, ints));
 		}
@@ -136,7 +150,9 @@ public class SLogger {
 			String format = "{} took: {} milliseconds";
 			DebugTime time = measurements.pop();
 			Long diff = System.currentTimeMillis() - time.time;
-			logger.finer(format(format, time.title, diff.toString()));
+			if (exclusive()) {
+				logger.finer(format(format, time.title, diff.toString()));
+			}
 		}
 	}
 }

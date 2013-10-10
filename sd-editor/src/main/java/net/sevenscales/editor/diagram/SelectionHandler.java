@@ -200,11 +200,13 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   private void handleAdditionalRemovals(Set<Diagram> removed) {
     for (Diagram remove : tobeRemovedInCycle) {
       removed.add(remove);
+      dragHandlers.remove(remove);
     }
     clearToBeRemovedCycle();
   }
+
   private void clearToBeRemovedCycle() {
-    tobeRemovedInCycle.clear();    
+    tobeRemovedInCycle.clear();
   }
 
   public void remove(Diagram[] forRemoval) {
@@ -216,20 +218,20 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   }
 
   private void _remove(Diagram diagram, Set<Diagram> removed) {
-    if (AuthHelpers.allowedToDelete(diagram)) {
-      Diagram removeItem = diagram.getOwnerComponent();
-      removed.add(removeItem);
 
-      // this is not absolutely must in here, but
-      // would require Comment Thread Element to keep state
-      // that it is under deletion, so that child element reference
-      // is not lost. In this way child elements will be deleted even though
-      // parent loses reference to children.
-      List<? extends Diagram> childElements = removeItem.getChildElements();
-      if (childElements != null) {
-        removed.addAll(childElements);
+    // first remove children if any since e.g. comment thread
+    // cannot be deleted straight, but through 0 child automatically.
+    Diagram removeItem = diagram.getOwnerComponent();
+    List<? extends Diagram> childElements = removeItem.getChildElements();
+    if (childElements != null) {
+      for (int i = childElements.size() - 1; i >= 0; --i) {
+        Diagram d = childElements.get(i);
+        _remove(d, removed);
       }
+    }
 
+    if (AuthHelpers.allowedToDelete(removeItem)) {
+      removed.add(removeItem);
       removeItem.removeFromParent();
       dragHandlers.remove(removeItem);
     }

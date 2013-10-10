@@ -22,6 +22,17 @@ public class CommentDTO extends DiagramItemDTO {
 		this.updatedAt = updatedAt;
 	}
 
+	@Override
+	public String toString() {
+		return "CommentDTO=" + "[" + super.toString() + "][parentThreadId=" + parentThreadId 
+				+ ", username=" + username 
+				+ ", userDisplayName=" + userDisplayName
+				+ ", createdAt=" + createdAt 
+				+ ", updatedAt=" + updatedAt
+				+ "]";
+	}
+
+
 	public CommentDTO(String parentThreadId, String username, String userDisplayName) {
 		this("", "", "", "", "", 0, 0L, "", "", 0, parentThreadId, username, userDisplayName, 0L, 0L);
 	}	

@@ -130,8 +130,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					colorMenu = Display.INLINE_BLOCK;
 				}
 
-				boolean allowedToCRUD = AuthHelpers.allowedToDelete(selected);
-				if (allowedToCRUD) {
+				boolean allowedToShowDeleteMenu = AuthHelpers.allowedToShowDelete(selected);
+				if (allowedToShowDeleteMenu) {
 					deleteMenuVisibility = Display.INLINE_BLOCK;
 				}
 

@@ -33,7 +33,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		return "DiagramItemDTO [id=" + id + ", text=" + text + ", type=" + type
 				+ ", shape=" + shape + ", diagramContent=" + diagramContent
 				+ ", backgroundColor=" + backgroundColor + ", textColor=" + textColor
-				+ ", version=" + version + ", clientId=" + clientId + ", crc32=" + crc32 + "]";
+				+ ", version=" + version + ", clientId=" + clientId + ", customData=" + customData + ", crc32=" + crc32 + "]";
 	}
 
 	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
