@@ -341,6 +341,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public void accept(ISurfaceHandler surface) {
     surface.addKeyEventHandler(this);
   }
+
+  public void remove() {
+    surface.getSelectionHandler().remove(this);
+  }
   
 	public void removeFromParent() {
 		surface.remove(this);

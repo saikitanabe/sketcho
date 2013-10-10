@@ -309,6 +309,10 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		surface.makeDraggable(this);
 	}
 
+	public boolean allowToDelete() {
+		return comments.size() == 0;
+	}
+
 	public void removeFromParent() {
 		surface.remove(this);
     surface.remove(group.getContainer());

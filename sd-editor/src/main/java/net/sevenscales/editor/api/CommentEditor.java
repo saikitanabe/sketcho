@@ -145,6 +145,10 @@ class CommentEditor  extends Composite {
 		if (isEditorNotEmpty()) {
 			commentThread.createComment(textArea.getText());
 			textArea.setText("");
+		} else {
+			if (commentThread.getChildElements().size() == 0) {
+				commentThread.remove();
+			}
 		}
 	}
 

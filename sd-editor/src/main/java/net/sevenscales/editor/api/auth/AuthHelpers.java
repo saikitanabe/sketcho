@@ -37,7 +37,7 @@ public class AuthHelpers {
 	}
 
 	public static boolean allowedToDelete(Diagram diagram) {
-		if (diagram instanceof CommentThreadElement) {
+		if (diagram instanceof CommentThreadElement && !((CommentThreadElement)diagram).allowToDelete()) {
 			// comment thread doesn't support direct removal
 			// it will be removed when last child is removed, automatically
 			return false;
