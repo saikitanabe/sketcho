@@ -187,8 +187,7 @@ abstract class Shape extends Graphics implements IShape {
 	
 	private native void nativeSetFill(
 			JavaScriptObject rawNode, int red, int green, int blue, double opacity)/*-{
-		var color = new $wnd.dojox.color.Color( {r:red,g:green,b:blue} );
-		color.a = opacity;
+		var color = new $wnd.dojo.Color( {r:red,g:green,b:blue,a:opacity} );
 		rawNode.setFill(color);
 	}-*/;
 	

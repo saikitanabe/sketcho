@@ -116,7 +116,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   private boolean removed;
   private SelectionHandlerCollection selectionHandlers = new SelectionHandlerCollection();
 	protected Color backgroundColor;
-  protected Color backgroundColorSwitch;
 	protected Color borderColor;
   protected Color borderColorSwitch;
 	protected Color textColor;
@@ -145,7 +144,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     this.visible = true; // default value
         
     this.backgroundColor = backgroundColor;
-    this.backgroundColorSwitch = backgroundColor.create();
     this.borderColor = borderColor;
     this.borderColorSwitch = borderColor.create();
     this.textColor = textColor;

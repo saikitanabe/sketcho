@@ -208,7 +208,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 
 	private void addLineHelpersDiagrams(List<Diagram> diagrams) {
     for (Diagram d : diagrams) {
-    	if ( !(d instanceof CircleElement) && !(d instanceof Relationship2)) {
+    	if ( !(d instanceof CircleElement) && !(d instanceof Relationship2) && d.supportsAlignHighlight()) {
     		List<Diagram> xs = highlightCentersX.get(d.getCenterX());
     		if (xs == null) {
     			xs = new ArrayList<Diagram>();
@@ -332,7 +332,6 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 				// some connections are following this element drag => drag with relationship connection
 				Collection<AnchorElement> anchors = dd.getAnchors();
 
-				logger.debug("dd {} anchors {} dx {} dy {}", dd, dd.getAnchors(), dx, dy);
 				// System.out.println(anchors.size()+" "+dispachSequence+" dx: "+dx+" dy: "+dy);
 				for (AnchorElement ae : anchors) {
 					ae.dispatch(dx, dy, sequence);
@@ -436,7 +435,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	private List<Diagram> highlightList(List<Diagram> diagrams, Diagram oneSelected) {
 		if (diagrams != null) {
 	    for (Diagram d : diagrams) {
-	    	if (d != oneSelected && d.supportsAlignHighlight()) {
+	    	if (d != oneSelected) {
 	    		d.setHighlightColor(AbstractDiagramItem.DEFAULT_SELECTION_COLOR);
 	    	}
 	    }

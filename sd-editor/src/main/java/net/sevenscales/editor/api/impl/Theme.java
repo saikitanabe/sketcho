@@ -171,7 +171,10 @@ public class Theme {
     return new Color(0xFB, 0xE2, 0x80, 0);
   }
   private static Color createDefaultCommentThreadBackgroundColor() {
-    return new Color(0xFC, 0xF7, 0xCA, 1);
+    return new Color(255,102,102,0.85);
+    // return new Color(0xF0, 0xF0, 0xF0, 1.0);
+    // return new Color(0x60, 0xC3, 0x32, 1.0);
+    // return new Color(0xF0, 0x60, 0x4C, 1.0);
   }
 	
 	public static net.sevenscales.editor.diagram.utils.Color defaultColor() {
