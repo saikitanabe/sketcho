@@ -96,6 +96,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		this.shape = newShape;
 
 		comments = new CommentList2();
+		getDiagramItem().setAnnotation(1);
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     group.setAttribute("cursor", "default");

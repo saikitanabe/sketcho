@@ -89,6 +89,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		this.shape = newShape;
 		this.parentThread = parentThread;
 		setDiagramItem(commentData);
+		commentData.setAnnotation(1);
 
 		group = IShapeFactory.Util.factory(editable).createGroup(parentThread.getGroup());
 		setVisible(false);

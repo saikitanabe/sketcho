@@ -24,6 +24,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	private String clientId;
 	private String customData;
 	private double crc32;
+	private int annotation;
 	
 	public DiagramItemDTO() {
   }
@@ -33,11 +34,19 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		return "DiagramItemDTO [id=" + id + ", text=" + text + ", type=" + type
 				+ ", shape=" + shape + ", diagramContent=" + diagramContent
 				+ ", backgroundColor=" + backgroundColor + ", textColor=" + textColor
-				+ ", version=" + version + ", clientId=" + clientId + ", customData=" + customData + ", crc32=" + crc32 + "]";
+				+ ", version=" + version + ", clientId=" + clientId + ", customData=" + customData + ", crc32=" + crc32
+				+ ", annotation=" + annotation + "]";
 	}
 
 	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
 			Integer version, Long id, String clientId, String customData, double crc32) {
+		this(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, crc32, 0);
+	}
+
+
+	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
+			Integer version, Long id, String clientId, String customData, double crc32, int annotation
+			) {
 		super();
 		this.text = text;
 		this.type = type;
@@ -49,10 +58,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		this.clientId = clientId;
 		this.customData = customData;
 		this.crc32 = crc32;
+		this.annotation = annotation;
 	}
 	
 	public DiagramItemDTO(String clientId) {
-		this("", "", "", "", "", 0, 0L, clientId, "", 0);
+		this("", "", "", "", "", 0, 0L, clientId, "", 0, 0);
 	}
 
 	public DiagramItemDTO(IDiagramItemRO di) {
@@ -150,7 +160,17 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	public void setCrc32(double crc32) {
 		this.crc32 = crc32;
 	}
-	
+
+	@Override
+	public int getAnnotation() {
+		return annotation;
+	}
+
+	@Override
+	public void setAnnotation(int annotation) {
+		this.annotation = annotation;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		IDiagramItemRO item = (IDiagramItemRO) obj;
@@ -185,6 +205,9 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		if (crc32 != item.getCrc32()) {
 			return false;
 		}
+		if (annotation != item.getAnnotation()) {
+			return false;
+		}
 
 		return true;
 	}
@@ -214,6 +237,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		clientId = dit.clientId;
 		customData = dit.customData;
 		crc32 = dit.crc32;
+		annotation = dit.annotation;
 	}
 
 	public boolean isComment() {
@@ -233,6 +257,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
     result.put("clientId", new JSONString(safeJsonString(getClientId())));
     result.put("cd", new JSONString(safeJsonString(getCustomData())));
     result.put("crc", new JSONNumber(getCrc32()));
+
+    if (annotation == 1) {
+	    result.put("a", new JSONNumber(annotation));
+    }
+
     return result;
 	}
 
