@@ -11,6 +11,7 @@ import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEvent;
+import net.sevenscales.editor.api.event.CommentThreadDeletedEvent;
 import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
@@ -316,6 +317,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	public void removeFromParent() {
 		surface.remove(this);
     surface.remove(group.getContainer());
+
+    surface.getEditorContext().getEventBus().fireEvent(new CommentThreadDeletedEvent(this));
 	}
 
 	protected void removeComment(CommentElement child) {

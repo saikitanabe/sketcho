@@ -30,8 +30,12 @@ import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.SelectionMouseUpEventHandler;
 import net.sevenscales.editor.api.event.CommentDeletedEvent;
 import net.sevenscales.editor.api.event.CommentDeletedEventHandler;
+import net.sevenscales.editor.api.event.CommentThreadDeletedEvent;
+import net.sevenscales.editor.api.event.CommentThreadDeletedEventHandler;
 import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEvent;
 import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEventHandler;
+import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
+import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
 
@@ -66,6 +70,7 @@ class CommentEditor  extends Composite {
 	private CustomPopupPanel popup;
 	private EditorCommon editorCommon;
 	private CommentThreadElement commentThread;
+	private boolean dontCreateComment;
 
 	CommentEditor(ISurfaceHandler surface) {
 		this.surface = surface;
@@ -100,7 +105,7 @@ class CommentEditor  extends Composite {
 		popup.addCloseHandler(new CloseHandler<PopupPanel>() {
 			@Override
 			public void onClose(CloseEvent<PopupPanel> event) {
-				if (CommentEditor.this.surface.getEditorContext().isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
+				if (!dontCreateComment) {
 					createComment();
 				}
 			}
@@ -140,8 +145,27 @@ class CommentEditor  extends Composite {
 					}
 				});
 			}
-		});
+		});		
+
+		surface.getEditorContext().getEventBus().addHandler(CommentThreadDeletedEvent.TYPE, removeHandler);
 	}
+
+	/**
+	* Remove handler is needed if comment thread is removed in OT and current user
+	* has not send the comment. Then comment would not have parent any longer
+	* since it is removed. So lets hide editor and message is kept in comment
+	* editor and user can resend in new comment thread that comment.
+	*/
+	private CommentThreadDeletedEventHandler removeHandler = new CommentThreadDeletedEventHandler() {
+		@Override
+		public void on(CommentThreadDeletedEvent event) {
+			if (event.getCommentThreadElement().getDiagramItem().getClientId().equals(commentThread.getDiagramItem().getClientId())) {
+				dontCreateComment = true;
+				hide();
+				dontCreateComment = false;
+			}
+		}
+	};
 
 	private void createComment() {
 		if (isEditorNotEmpty()) {
