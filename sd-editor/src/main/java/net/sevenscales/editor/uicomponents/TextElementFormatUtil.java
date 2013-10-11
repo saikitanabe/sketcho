@@ -337,11 +337,11 @@ public class TextElementFormatUtil {
   }
 
 	public void hide() {
-		textGroup.setVisible(false);
+    textGroup.setVisible(false);
 	}
 
 	public void show() {
-		textGroup.setVisible(true);
+    textGroup.setVisible(true);
 	}
 
 	public void applyTransformToShape(int dx, int dy) {

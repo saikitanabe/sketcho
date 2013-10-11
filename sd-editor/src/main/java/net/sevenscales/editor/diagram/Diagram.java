@@ -225,6 +225,7 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
   List<? extends Diagram> getChildElements();
 
   void attachedRelationship(AnchorElement anchorElement);
+  boolean isAnnotated();
   void annotate();
   void unannotate();
 

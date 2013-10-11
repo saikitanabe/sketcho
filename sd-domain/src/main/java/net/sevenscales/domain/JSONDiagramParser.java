@@ -26,6 +26,7 @@ public class JSONDiagramParser {
 												  JSONParserHelpers.getString(obj.get("clientId")),
 												  JSONParserHelpers.getString(obj.get("cd")),
 												  JSONParserHelpers.getDouble(obj.get("crc")),
+												  JSONParserHelpers.getInt(obj.get("a")),
 												  JSONParserHelpers.getString(obj.get("p")),
 												  JSONParserHelpers.getString(obj.get("cby")),
 												  JSONParserHelpers.getString(obj.get("cbyd")),
@@ -43,7 +44,8 @@ public class JSONDiagramParser {
 														  JSONParserHelpers.getLong(obj.get("id")),
 														  JSONParserHelpers.getString(obj.get("clientId")),
 														  JSONParserHelpers.getString(obj.get("cd")),
-														  JSONParserHelpers.getDouble(obj.get("crc")));
+														  JSONParserHelpers.getDouble(obj.get("crc")),
+														  JSONParserHelpers.getInt(obj.get("a")));
 	}
 
 	public CommentDTO isComment() {

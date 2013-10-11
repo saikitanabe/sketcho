@@ -5,9 +5,11 @@ import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
+import net.sevenscales.editor.api.event.CommentModeEvent;
+import net.sevenscales.editor.api.event.CommentModeEventHandler;
 import net.sevenscales.editor.api.event.RelationshipTypeSelectedEvent;
-import com.google.gwt.dom.client.Style.Display;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ButtonElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -31,6 +33,7 @@ public class TopButtons extends Composite {
 	private EditorContext editorContext;
 	
 	@UiField ButtonElement freehandOn;
+	@UiField ButtonElement commentModeOn;
 
 	public TopButtons(EditorContext editorContext) {
 		this.editorContext = editorContext;
@@ -45,6 +48,13 @@ public class TopButtons extends Composite {
 				setVisible(event);
 			}
 		});
+
+		editorContext.getEventBus().addHandler(CommentModeEvent.TYPE, new CommentModeEventHandler() {
+			@Override
+			public void on(CommentModeEvent event) {
+				showHideCommentMode(event.isEnabled());
+			}
+		});
 		
 		DOM.sinkEvents((com.google.gwt.user.client.Element) freehandOn.cast(),
 				Event.ONCLICK);
@@ -57,6 +67,21 @@ public class TopButtons extends Composite {
 						case Event.ONCLICK:
 							setVisible(false);
 							TopButtons.this.editorContext.getEventBus().fireEvent(new FreehandModeChangedEvent(false));
+							break;
+						}
+					}
+				});
+
+		DOM.sinkEvents((com.google.gwt.user.client.Element) commentModeOn.cast(),
+				Event.ONCLICK);
+		DOM.setEventListener(
+				(com.google.gwt.user.client.Element) commentModeOn.cast(),
+				new EventListener() {
+					@Override
+					public void onBrowserEvent(Event event) {
+						switch (DOM.eventGetType(event)) {
+						case Event.ONCLICK:
+							hideCommentMode();
 							break;
 						}
 					}
@@ -78,6 +103,22 @@ public class TopButtons extends Composite {
 			// // freehandOn.setInnerText("Freehand " + text);
 			// freehandOn.setInnerText("Freehand ON");
 		} 
+	}
+
+	private void hideCommentMode() {
+		editorContext.getEventBus().fireEvent(new CommentModeEvent(false));
+	}
+
+	private void showHideCommentMode(boolean show) {
+		editorContext.set(EditorProperty.COMMENT_MODE, show);
+
+		if (editorContext.isTrue(EditorProperty.COMMENT_MODE)) {
+			super.setVisible(true);
+			commentModeOn.getStyle().setDisplay(Display.INLINE);
+		} else {
+			super.setVisible(false);
+			commentModeOn.getStyle().setDisplay(Display.NONE);
+		}
 	}
 	
 }

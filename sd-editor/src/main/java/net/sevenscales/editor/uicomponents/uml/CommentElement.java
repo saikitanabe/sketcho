@@ -543,6 +543,11 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	@Override
 		public void setVisible(boolean visible) {
 			super.setVisible(visible);
+			if (visible && textUtil != null) {
+				textUtil.show();
+			} else if (textUtil != null) {
+				textUtil.hide();
+			}
 			applyShadowVisiblity();
 		}
 	

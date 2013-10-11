@@ -26,8 +26,9 @@ public class JSONContentParser {
 		JSONArray items = jsonContent.get("items").isArray();
 		if (items != null) {
 			for (int i = 0; i < items.size(); ++i) {
-				if (items.get(i).isObject() != null) {
-					JSONDiagramParser dp = new JSONDiagramParser(items.get(i).isObject());
+				JSONObject obj = items.get(i).isObject();
+				if (obj != null) {
+					JSONDiagramParser dp = new JSONDiagramParser(obj);
 					if (dp.isItem() != null) {
 						content.addItem(dp.isItem());
 					}

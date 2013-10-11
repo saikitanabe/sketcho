@@ -326,6 +326,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		comments.remove(child);
 		if (comments.size() == 0) {
 			surface.getSelectionHandler().addToBeRemovedCycle(this);
+			// TODO remove all connected relationships if relationship doesn't contain any text!
 			removeFromParent();
 		} else {
 			// resizeWithKnownChildren();

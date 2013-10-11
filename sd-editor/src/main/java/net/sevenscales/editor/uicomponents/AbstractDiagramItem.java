@@ -1422,6 +1422,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public void attachedRelationship(AnchorElement anchorElement) {
   }
 
+  public boolean isAnnotated() {
+    return getDiagramItem().isAnnotation();
+  }
+
   public void annotate() {
     getDiagramItem().annotate();
   }

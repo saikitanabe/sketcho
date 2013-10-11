@@ -9,6 +9,7 @@ import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.IModelingPanel;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.impl.CommentHandler;
 
 import net.sevenscales.editor.api.dojo.FactoryDoJo;
 
@@ -130,6 +131,8 @@ public class UiSketchoBoardEditContent extends UiEditBoardContent implements Key
 //				System.out.println(Window.getClientHeight());
 			}
 		});
+
+    new CommentHandler(getSurface());
   }
   
   @Override

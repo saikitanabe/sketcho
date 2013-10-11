@@ -7,6 +7,7 @@ import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
 import net.sevenscales.editor.api.event.CreateElementEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
+import net.sevenscales.editor.api.event.CommentModeEvent;
 import net.sevenscales.editor.api.event.SaveButtonClickedEvent;
 import net.sevenscales.editor.api.event.SaveButtonClickedEventHandler;
 import net.sevenscales.editor.api.event.StartSelectToolEvent;
@@ -219,6 +220,13 @@ public class UiClickContextMenu extends Composite {
 	public void onFreeHand(ClickEvent event) {
 		stopEvent(event);
 		surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE)));
+		hide();
+	}
+
+	@UiHandler("commentMode")
+	public void onCommentMode(ClickEvent event) {
+		stopEvent(event);
+		surface.getEditorContext().getEventBus().fireEvent(new CommentModeEvent(!surface.getEditorContext().isTrue(EditorProperty.COMMENT_MODE)));
 		hide();
 	}
 

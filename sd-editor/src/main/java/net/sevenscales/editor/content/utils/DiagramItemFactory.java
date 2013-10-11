@@ -607,48 +607,4 @@ public class DiagramItemFactory {
     }
     return result;
   }
-
-  public static IDiagramItemRO createCopy(IDiagramItemRO item) {
-    IDiagramItem result = new DiagramItemDTO();
-//    if (item.getType().equals("ellipseitem")) {
-//      IEllipseItem i = (IEllipseItem) item;
-//      IEllipseItem newei = new EllipseItemDTO();
-//      newei.setTop(i.getTop());
-//      newei.setLeft(i.getLeft());
-//      newei.setWidth(i.getWidth());
-//      newei.setHeight(i.getHeight());
-//      result = newei;
-//    } else if (item.getType().equals("sequenceitem")) {
-//      ISequenceItem i = (ISequenceItem) item;
-//      ISequenceItem newitem = new SequenceItemDTO();
-//      newitem.setTop(i.getTop());
-//      newitem.setLeft(i.getLeft());
-//      newitem.setWidth(i.getWidth());
-//      newitem.setHeight(i.getHeight());
-//      newitem.setLifeLineHeight(i.getLifeLineHeight());
-//      result = newitem;
-//    } else if (item.getType().equals("classitem")) {
-//      IClassItem i = (IClassItem) item;
-//      IClassItem newci = new ClassItemDTO();
-//      newci.setTop(i.getTop());
-//      newci.setLeft(i.getLeft());
-//      newci.setWidth(i.getWidth());
-//      newci.setHeight(i.getHeight());
-//      result = newci;
-//    } else if (item.getType().equals("relationship")) {
-//      IRelationshipItem i = (IRelationshipItem) item;
-//      IRelationshipItem newri = new RelationshipItemDTO();
-//      newri.setStartx(i.getStartx());
-//      newri.setStarty(i.getStarty());
-//      newri.setEndx(i.getEndx());
-//      newri.setEndy(i.getEndy());
-//      newri.setCapabilities(i.getCapabilities());
-//      result = newri;
-//    }
-    result.setShape(item.getShape());
-    result.setText(item.getText());
-    result.setType(item.getType());
-    return result;
-  }
-
 }
