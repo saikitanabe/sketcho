@@ -56,7 +56,7 @@ public class BoardDocumentHelpers {
 			if ( !(d instanceof CircleElement) ) {
 				IDiagramItem di = d.getDiagramItem().copy();
 				if (updateDiagramItem) {
-					di = DiagramItemFactory.createOrUpdate(d, false);
+					di = DiagramItemFactory.createOrUpdate(d);
 				}
 				result.add(di);
 			}

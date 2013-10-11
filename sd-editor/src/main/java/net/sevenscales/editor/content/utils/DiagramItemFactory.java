@@ -413,7 +413,7 @@ public class DiagramItemFactory {
     if (item.getTextColor() != null && !item.getTextColor().equals("")) {
     	result = item.getTextColor().split(",");
     }
-    
+
     if (isLegacyColor(result, LEGACY_TEXT_COLOR)) {
       // convert to new color scheme
       return Theme.getColorScheme(ThemeName.PAPER).getTextColor().create();
@@ -422,11 +422,11 @@ public class DiagramItemFactory {
     return new Color(result);
   }
 
-	public static IDiagramItem createOrUpdate(Diagram diagram, boolean forceCreate) {
-    return createOrUpdate(diagram, forceCreate, 0, 0);
+	public static IDiagramItem createOrUpdate(Diagram diagram) {
+    return createOrUpdate(diagram, 0, 0);
   }
   
-  public static IDiagramItem createOrUpdate(Diagram diagram, boolean forceCreate, int moveX, int moveY) {
+  public static IDiagramItem createOrUpdate(Diagram diagram, int moveX, int moveY) {
     IDiagramItem result = null;
     Info shape = diagram.getInfo();
     
@@ -435,7 +435,7 @@ public class DiagramItemFactory {
 
     if (shape instanceof EllipseShape) {
       EllipseShape rs = (EllipseShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += parseInt(rs.cx+moveX) + ",";
       shapetext += parseInt(rs.cy+moveY) + ",";
       shapetext += parseInt(rs.rx) + ",";
@@ -443,87 +443,87 @@ public class DiagramItemFactory {
       type = "ellipseitem";
     } else if (shape instanceof SequenceShape) {
       SequenceShape ss = (SequenceShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += parseInt(ss.lifeLineHeight) + " ";
       shapetext += rect2ShapeText(ss.rectShape, moveX, moveY);
       type = "sequenceitem";
     } else if (shape instanceof RectShape) {
       RectShape rs = (RectShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += rect2ShapeText(rs, moveX, moveY);
       type = "classitem";
     } else if (shape instanceof ComponentShape) {
     	ComponentShape rs = (ComponentShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += rect2ShapeText(rs.rectShape, moveX, moveY);
       type = "comp";
     } else if (shape instanceof ServerShape) {
     	ServerShape rs = (ServerShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += rect2ShapeText(rs.rectShape, moveX, moveY);
       type = "server";
     } else if (shape instanceof NoteShape) {
       NoteShape note = (NoteShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += rect2ShapeText(note.rectShape, moveX, moveY);
       type = "noteitem";
     } else if (shape instanceof CommentThreadShape) {
       CommentThreadShape note = (CommentThreadShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += rect2ShapeText(note.rectShape, moveX, moveY);
       type = "comments";
     } else if (shape instanceof CommentShape) {
       CommentShape note = (CommentShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += rect2ShapeText(note.rectShape, moveX, moveY);
       type = CommentElement.TYPE;
     } else if (shape instanceof TextShape) {
       TextShape text = (TextShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += rect2ShapeText(text.rectShape, moveX, moveY);
       type = "textitem";
     } else if (shape instanceof ActivityChoiceShape) {
     	ActivityChoiceShape choice = (ActivityChoiceShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += rect2ShapeText(choice.rectShape, moveX, moveY);
       type = "choice";
     } else if (shape instanceof ActivityStartShape) {
     	ActivityStartShape start = (ActivityStartShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += parseInt(start.centerX+moveX) + ",";
       shapetext += parseInt(start.centerY+moveY) + ",";
       shapetext += parseInt(start.radius) + ",";
       type = "activitystart";
     } else if (shape instanceof ActivityEndShape) {
     	ActivityEndShape end = (ActivityEndShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += parseInt(end.centerX+moveX) + ",";
       shapetext += parseInt(end.centerY+moveY) + ",";
       shapetext += parseInt(end.radius) + ",";
       type = "activityend";
     } else if (shape instanceof ActivityShape) {
     	ActivityShape activity = (ActivityShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += rect2ShapeText(activity.rectShape, moveX, moveY);
       type = "activity";
     } else if (shape instanceof MindCentralShape) {
     	MindCentralShape activity = (MindCentralShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += rect2ShapeText(activity.rectShape, moveX, moveY);
       type = "centtop";
     } else if (shape instanceof DbShape) {
     	DbShape db = (DbShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += rect2ShapeText(db.rectShape, moveX, moveY);
       type = "storage";
     } else if (shape instanceof ActorShape) {
       ActorShape actor = (ActorShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += rect2ShapeText(actor.rectShape, moveX, moveY);
       type = "actoritem";
     }  else if (shape instanceof RelationshipShape2) {
       RelationshipShape2 rs = (RelationshipShape2) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       
       for (int i = 0; i < rs.points.size(); ++i) {
         int p = i % 2 == 0 ? rs.points.get(i)+moveX : rs.points.get(i)+moveY ;
@@ -535,7 +535,7 @@ public class DiagramItemFactory {
       type = "relationship";
     } else if (shape instanceof FreehandShape) {
     	FreehandShape rs = (FreehandShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       
       for (int i = 0; i < rs.points.length; ++i) {
         int p = i % 2 == 0 ? rs.points[i]+moveX : rs.points[i]+moveY ;
@@ -547,12 +547,12 @@ public class DiagramItemFactory {
       type = "freehand";
     } else if (shape instanceof UMLPackageShape) {
     	UMLPackageShape rs = (UMLPackageShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += rect2ShapeText(rs.rectShape, moveX, moveY);
       type = "package";
     } else if (shape instanceof RectContainerShape) {
     	RectContainerShape rs = (RectContainerShape) shape;
-      result = getItem(diagram, forceCreate);
+      result = getItem(diagram);
       shapetext += rect2ShapeText(rs.rectShape, moveX, moveY);
       type = "rectcont";
     }
@@ -596,13 +596,11 @@ public class DiagramItemFactory {
     return result;
   }
   
-  private static IDiagramItem getItem(Diagram diagram, boolean forceCreate) {
+  private static IDiagramItem getItem(Diagram diagram) {
     IDiagramItem result = diagram.getDiagramItem();
-    if (result == null || forceCreate) {
+    if (result == null) {
       // new item
       result = new DiagramItemDTO();
-    } else {
-    	result = result.copy();
     }
     return result;
   }

@@ -242,7 +242,7 @@ public class UiSketchoBoardEditContent extends UiEditBoardContent implements Key
     IDiagramContent result = new DiagramContentDTO();
     if (selectedItems == 0) { // copy all
       for (Diagram d : modelingPanel.getSurface().getDiagrams()) {
-        IDiagramItem di = DiagramItemFactory.createOrUpdate(d, true, 10, 10);
+        IDiagramItem di = DiagramItemFactory.createOrUpdate(d, 10, 10);
         if (di != null) {
           // focus circle is not any supported type even though it is in surface
           result.addItem(di);
@@ -251,7 +251,7 @@ public class UiSketchoBoardEditContent extends UiEditBoardContent implements Key
 
     } else { // copy selected
       for (Diagram d : selectionHandler.getSelectedItems()) {
-        IDiagramItem di = DiagramItemFactory.createOrUpdate(d, true, 10, 10);
+        IDiagramItem di = DiagramItemFactory.createOrUpdate(d, 10, 10);
         if (di != null) {
           // focus circle is not any supported type even though it is in surface
           result.addItem(di);

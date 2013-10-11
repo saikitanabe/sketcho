@@ -109,7 +109,7 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
 				boolean addedAnyRealDiagrams = false;
 				for (Diagram diagram : event.getDiagrams()) {
 					if (!(diagram instanceof CircleElement)) {
-						DiagramItemDTO di = (DiagramItemDTO) DiagramItemFactory.createOrUpdate(diagram, false);
+						DiagramItemDTO di = (DiagramItemDTO) DiagramItemFactory.createOrUpdate(diagram);
 						// generate client id if it is missing; 
 						// case duplicate has already client id to have correct references
 						// case redo has already inserted client id, and now we are using the same id to calculate prev state correctly

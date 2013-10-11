@@ -65,7 +65,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 		IDiagramContent dContent = (IDiagramContent) uiContent.getContent();
 		dContent.reset();
 		for (Diagram d : surface.getDiagrams()) {
-			IDiagramItem di = DiagramItemFactory.createOrUpdate(d, false);
+			IDiagramItem di = DiagramItemFactory.createOrUpdate(d);
 			if (di != null) {
 	      // focus circle is not any supported type even though it is in surface
 			  dContent.addItem(di);

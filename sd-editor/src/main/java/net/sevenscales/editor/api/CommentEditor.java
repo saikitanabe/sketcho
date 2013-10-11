@@ -100,7 +100,9 @@ class CommentEditor  extends Composite {
 		popup.addCloseHandler(new CloseHandler<PopupPanel>() {
 			@Override
 			public void onClose(CloseEvent<PopupPanel> event) {
-				createComment();
+				if (CommentEditor.this.surface.getEditorContext().isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
+					createComment();
+				}
 			}
 		});
 

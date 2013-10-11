@@ -62,7 +62,7 @@ public class DuplicateHelpers {
 				// if item supports duplication
 				duplicatedDiagrams.add(duplicated);
 				
-				DiagramItemDTO di = (DiagramItemDTO) DiagramItemFactory.createOrUpdate(duplicated, false);
+				DiagramItemDTO di = (DiagramItemDTO) DiagramItemFactory.createOrUpdate(duplicated);
 				di.setClientId(ClientIdHelpers.generateClientId(++i, boardDocument));
 				
 				// copy also custom data to be handled later
