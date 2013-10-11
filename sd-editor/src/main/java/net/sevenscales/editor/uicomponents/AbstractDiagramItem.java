@@ -352,9 +352,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     }
     if (connectionHelpers != null) {
       connectionHelpers.hide(this);
-      for (Diagram d : getChildElements()) {
-        if (d instanceof AbstractDiagramItem) {
-          connectionHelpers.hide((AbstractDiagramItem)d);
+      if (getChildElements() != null) {
+        for (Diagram d : getChildElements()) {
+          if (d instanceof AbstractDiagramItem) {
+            connectionHelpers.hide((AbstractDiagramItem)d);
+          }
         }
       }
     }
@@ -1415,6 +1417,17 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   public List<? extends Diagram> getChildElements() {
     return null;
+  }
+
+  public void attachedRelationship(AnchorElement anchorElement) {
+  }
+
+  public void annotate() {
+    getDiagramItem().annotate();
+  }
+
+  public void unannotate() {
+
   }
 
 }

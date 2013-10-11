@@ -1,6 +1,7 @@
 package net.sevenscales.editor.uicomponents;
 
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.domain.ElementType;
 
 public class AnchorElement {
 //  private List<AnchorMoveHandler> handlers = new ArrayList<AnchorMoveHandler>();
@@ -35,7 +36,9 @@ public class AnchorElement {
 //    handlers.add(handler);
     // currently support only one handler
     this.handler = handler;
+    diagram.attachedRelationship(this);
   }
+
   public void detach() {
     anchor.clear();
     this.handler = null;

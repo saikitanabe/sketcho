@@ -224,4 +224,8 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
   */
   List<? extends Diagram> getChildElements();
 
+  void attachedRelationship(AnchorElement anchorElement);
+  void annotate();
+  void unannotate();
+
 }

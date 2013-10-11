@@ -11,7 +11,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.json.client.*;
 
 public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializable, IsSerializable {
-	public static final int DATA_VERSION = 3;
+	public static final int DATA_VERSION = 4;
 	private static final long serialVersionUID = 5754682876312853660L;
 	private long id;
 	private String text;
@@ -174,6 +174,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	@Override
 	public boolean isAnnotation() {
 		return annotation == 1;
+	}
+
+	@Override
+	public void annotate() {
+		annotation = 1;
 	}
 
 	@Override

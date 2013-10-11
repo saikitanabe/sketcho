@@ -71,8 +71,11 @@ public class DiagramItemFactory {
   
   /**
    * version 3: each item has something background, border colors and text color fields
+   * version 4: 
+   * - comment fields: p, cby, cbyd, cat, uat
+   * - annotation field: a
    */
-  public static final int ITEM_VERSION = 3;
+  public static final int ITEM_VERSION = 4;
   
   public static Diagram create(IDiagramItemRO item, ISurfaceHandler surface, boolean editable) {
     Diagram result = null;

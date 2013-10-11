@@ -250,7 +250,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     inheritancePoints = new int[8];
     inheritance = IShapeFactory.Util.factory(editable).createPolyline(group, inheritancePoints);
-    inheritance.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
     inheritance.setFill(255, 255, 255, 1);
     
     int endx = points.get(points.size()-2);
@@ -261,14 +260,12 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
           left.x, left.y
         };
     arrow = IShapeFactory.Util.factory(editable).createPolyline(group, arrowPoints);
-    arrow.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
     arrow.setFill(255, 255, 255, 0);
 
     arrowStartPolyline = new ArrowStartPolyline(this);
     
     aggregatePoints = new int[10];
     aggregate = IShapeFactory.Util.factory(editable).createPolyline(group, aggregatePoints);
-    aggregate.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
     aggregate.setFill(255, 255, 255, 1);
     
     this.relLine = new RelLine();
@@ -302,6 +299,21 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     setText(text);
     
     setBorderColor(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+
+    applyAnnotationColors();
+  }
+
+  private void applyAnnotationColors() {
+    if (getDiagramItem().isAnnotation()) {
+      inheritance.setStroke(Theme.getCommentThreadColorScheme().getBackgroundColor().toHexString());
+      arrow.setStroke(Theme.getCommentThreadColorScheme().getBackgroundColor().toHexString());
+      aggregate.setStroke(Theme.getCommentThreadColorScheme().getBackgroundColor().toHexString());
+      setHighlightColor(Theme.getCommentThreadColorScheme().getBackgroundColor().toHexString());
+    } else {
+      inheritance.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+      arrow.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+      aggregate.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+    }
   }
   
   @Override
@@ -444,7 +456,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   public void unselect() {
     super.unselect();
     relationshipHandleHelpers.hide(this);
-    setBorderColor(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+    applyAnnotationColors();
+
+    // setBorderColor(Theme.getCurrentColorScheme().getBorderColor().toHexString());
     
     // allow e.g. connection helpers to higher than line background
 //    relLine.moveBackgroundToBack();
@@ -1086,10 +1100,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	public String getBorderColor() {
 		return Theme.getCurrentColorScheme().getBorderColor().toHexString();
 	}
-	
+
 	@Override
 	public void restoreHighlighColor() {
 		setBorderColor(getBorderColor());
+    applyAnnotationColors();
 	}
   
   @Override
@@ -1293,6 +1308,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     // though this needs to be changed. And now new color is actually stored for
     // relationship on theme change
     return true;
+  }
+
+  public void annotate() {
+    super.annotate();
+    applyAnnotationColors();
   }
 
 }

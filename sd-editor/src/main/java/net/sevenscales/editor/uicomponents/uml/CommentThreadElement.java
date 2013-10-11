@@ -39,6 +39,8 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasText
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.editor.uicomponents.Anchor;
+import net.sevenscales.editor.uicomponents.AnchorElement;
 import net.sevenscales.editor.diagram.shape.CommentShape;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.CommentDTO;
@@ -702,6 +704,14 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
  	public List<? extends Diagram> getChildElements() {
     return comments;
+  }
+
+  public void attachedRelationship(AnchorElement anchorElement) {
+    if (anchorElement.getHandler().connection() != null) {
+      // if attached to this comment thread
+      // all relationships connected to comments are annotations
+      anchorElement.getHandler().connection().annotate();
+    }
   }
 
   public void childResized(CommentElement comment, int diff) {
