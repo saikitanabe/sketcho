@@ -1367,7 +1367,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 		if (resizeHelpers != null) {
 			resizeHelpers.setShape();
 		}
-//  connectionHelpers.setShape(left, top, width, height);
+    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
 	}
 
   // too much is processed and most probably gets executed

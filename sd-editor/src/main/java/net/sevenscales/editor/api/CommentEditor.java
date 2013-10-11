@@ -217,12 +217,19 @@ class CommentEditor  extends Composite {
 			positionPopupBy(this.commentThread);
 
 			// commentHintBox.getStyle().setBackgroundColor("#" + commentThread.getBackgroundColor());
-			commentHintBox.getStyle().setProperty("background", commentThread.getBackgroundColorAsColor().toRgbaCss());
+			// commentHintBox.getStyle().setProperty("background", commentThread.getBackgroundColorAsColor().toRgbaCss());
 			// commentHintBox.getStyle().setOpacity(commentThread.getBackgroundColorAsColor().opacity);
 			hideCommentHintBox();
 
 			// commentArea.getStyle().setBackgroundColor("#" + commentThread.getBackgroundColor());
-			commentArea.getStyle().setProperty("background", commentThread.getBackgroundColorAsColor().toRgbaCss());
+			if (commentThread.getChildElements().size() == 0) {
+				commentHintBox.getStyle().setProperty("background", commentThread.getBackgroundColorAsColor().toRgbaCss());
+				commentArea.getStyle().setProperty("background", commentThread.getBackgroundColorAsColor().toRgbaCss());
+				commentThread.setVisible(false);
+			} else {
+				commentHintBox.getStyle().setProperty("background", "transparent");
+				commentArea.getStyle().setProperty("background", "transparent");
+			}
 			// commentArea.getStyle().setOpacity(commentThread.getBackgroundColorAsColor().opacity);
 			commentArea.getStyle().setColor("#" + diagram.getTextColor());
 			commentArea.getStyle().setWidth(diagram.getWidth(), Unit.PX);
@@ -244,6 +251,10 @@ class CommentEditor  extends Composite {
 			MatrixPointJS point = MatrixPointJS.createUnscaledPoint(this.commentThread.getLeft(), this.commentThread.getTop(), surface.getScaleFactor());
 			int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft() + 1;
 			int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop() - 15;
+
+			if (commentThread.getChildElements().size() == 0) {
+				y += 15;
+			}
 	
 			if (commentThread.getChildElements().size() > 0) {
 				// not first
@@ -284,6 +295,7 @@ class CommentEditor  extends Composite {
 		if (popup.isShowing() && commentThread != null) {
 			commentThread.hideResizeHandles();
 			commentThread.restoreSize();
+			commentThread.setVisible(true);
 		}
 		popup.hide();
 		commentThread = null;

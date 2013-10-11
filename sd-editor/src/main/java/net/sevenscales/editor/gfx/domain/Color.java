@@ -51,6 +51,10 @@ public class Color {
     return red+","+green+","+blue+","+opacity;
   }
 
+  public String toRgbCss() {
+  	return net.sevenscales.editor.content.utils.Rgb.makeRgb(red, green, blue);
+  }
+
   public String toRgbaCss() {
   	return net.sevenscales.editor.content.utils.Rgb.makeRgba(red, green, blue, opacity);
   }

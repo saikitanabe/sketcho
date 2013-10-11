@@ -28,8 +28,12 @@ public class Rgb {
 		return Rgb.makeRgba(red, green, blue, a);
 	}
 
+	public static String makeRgb(int r, int g, int b) {
+		return "rgb(" + r + "," + g + "," + b + ")";
+	}
+
 	public String toRgb() {
-		return "rgb(" + red + "," + green + "," + blue + ")";
+		return makeRgb(red, green, blue);
 	}
 	
 	@Override
