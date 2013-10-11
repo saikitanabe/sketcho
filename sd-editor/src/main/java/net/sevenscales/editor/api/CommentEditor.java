@@ -105,7 +105,10 @@ class CommentEditor  extends Composite {
 		popup.addCloseHandler(new CloseHandler<PopupPanel>() {
 			@Override
 			public void onClose(CloseEvent<PopupPanel> event) {
-				if (!dontCreateComment) {
+				// dontCreateComment: comment creation if thread is deleted in OT
+				// editor open: dont' delete comment thread when write comment hint is closed
+				if (!dontCreateComment && 
+						CommentEditor.this.surface.getEditorContext().isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
 					createComment();
 				}
 			}
@@ -159,7 +162,7 @@ class CommentEditor  extends Composite {
 	private CommentThreadDeletedEventHandler removeHandler = new CommentThreadDeletedEventHandler() {
 		@Override
 		public void on(CommentThreadDeletedEvent event) {
-			if (event.getCommentThreadElement().getDiagramItem().getClientId().equals(commentThread.getDiagramItem().getClientId())) {
+			if (commentThread != null && event.getCommentThreadElement().getDiagramItem().getClientId().equals(commentThread.getDiagramItem().getClientId())) {
 				dontCreateComment = true;
 				hide();
 				dontCreateComment = false;

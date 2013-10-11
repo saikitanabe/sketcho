@@ -347,6 +347,17 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
   
 	public void removeFromParent() {
+    if (resizeHelpers != null) {
+      resizeHelpers.hide(this);
+    }
+    if (connectionHelpers != null) {
+      connectionHelpers.hide(this);
+      for (Diagram d : getChildElements()) {
+        if (d instanceof AbstractDiagramItem) {
+          connectionHelpers.hide((AbstractDiagramItem)d);
+        }
+      }
+    }
 		surface.remove(this);
     removed = true;
 	}

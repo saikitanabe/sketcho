@@ -315,9 +315,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 
 	public void removeFromParent() {
-		surface.remove(this);
-    surface.remove(group.getContainer());
-
+		super.removeFromParent();
     surface.getEditorContext().getEventBus().fireEvent(new CommentThreadDeletedEvent(this));
 	}
 
