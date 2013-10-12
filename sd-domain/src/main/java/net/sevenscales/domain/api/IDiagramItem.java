@@ -17,4 +17,5 @@ public interface IDiagramItem extends IDiagramItemRO {
   void setCrc32(double crc32);
   void setAnnotation(int annotation);
   void annotate();
+  void unannotate();
 }

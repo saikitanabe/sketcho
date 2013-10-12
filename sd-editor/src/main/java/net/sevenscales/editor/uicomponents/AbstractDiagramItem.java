@@ -142,6 +142,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     this.editable = editable;
     this.surface = surface;
     this.visible = true; // default value
+    shouldAnnotate();
         
     this.backgroundColor = backgroundColor;
     this.borderColor = borderColor;
@@ -175,6 +176,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     }
   }
 
+  private void shouldAnnotate() {
+    if (surface.getEditorContext().isTrue(EditorProperty.COMMENT_MODE)) {
+      data.annotate();
+    }
+  }
+
   public void setAnchorPointShape(int ax, int ay) {
     if (anchorPoint != null) {
       anchorPoint.setShape(ax, ay, 6);
@@ -199,6 +206,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
 
 	protected void constructorDone() {
+    applyAnnotationColors();
 //  	if (resizeHelpers != null) {
 //  		resizeHelpers.hide(this);
 //  	}
@@ -765,9 +773,20 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       group.setVisible(visible);
     }
 
-    // for (IShape e : getElements()) {
-    //   e.setVisibility(visible);
-    // }
+    // group visibility doesn't always work for some elements!!!
+    // therefore setting in addition text formatter and shapes as well.
+    TextElementFormatUtil textFormatter = getTextFormatter();
+    if (textFormatter != null) {
+      if (visible) {
+        textFormatter.show();
+      } else {
+        textFormatter.hide();
+      }
+    }
+
+    for (IShape e : getElements()) {
+      e.setVisibility(visible);
+    }
   }
   
   public boolean isVisible() {
@@ -1105,6 +1124,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   	borderColor.blue = bc.blue;
   	borderColor.opacity = 1;
   	setHighlightColor(color);
+    applyAnnotationColors();
   }
   
   @Override
@@ -1258,7 +1278,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       anchorPoint.setStroke(color);
     }
 
-    setHighlightColor(color);
+    if (!highlight && isAnnotation()) {
+      applyAnnotationColors();
+    } else {
+      setHighlightColor(color);
+    }
   }
   
   public boolean isHighlightOn() {
@@ -1422,16 +1446,28 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public void attachedRelationship(AnchorElement anchorElement) {
   }
 
-  public boolean isAnnotated() {
+  public boolean isAnnotation() {
     return getDiagramItem().isAnnotation();
   }
 
   public void annotate() {
     getDiagramItem().annotate();
+    applyAnnotationColors();
+  }
+
+  public void applyAnnotationColors() {
+    if (getDiagramItem().isAnnotation() && supportsAnnotationColors()) {
+      setHighlightColor(Theme.getCommentThreadColorScheme().getBackgroundColor().toHexString());
+    }
+  }
+
+  protected boolean supportsAnnotationColors() {
+    return true;
   }
 
   public void unannotate() {
-
+    getDiagramItem().unannotate();
+    setHighlightColor(getBorderColor());
   }
 
 }

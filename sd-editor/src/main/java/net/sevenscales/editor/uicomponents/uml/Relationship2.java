@@ -302,20 +302,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     
     setBorderColor(Theme.getCurrentColorScheme().getBorderColor().toHexString());
 
-    applyAnnotationColors();
-  }
-
-  private void applyAnnotationColors() {
-    if (getDiagramItem().isAnnotation()) {
-      inheritance.setStroke(Theme.getCommentThreadColorScheme().getBackgroundColor().toHexString());
-      arrow.setStroke(Theme.getCommentThreadColorScheme().getBackgroundColor().toHexString());
-      aggregate.setStroke(Theme.getCommentThreadColorScheme().getBackgroundColor().toHexString());
-      setHighlightColor(Theme.getCommentThreadColorScheme().getBackgroundColor().toHexString());
-    } else {
-      inheritance.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
-      arrow.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
-      aggregate.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
-    }
+    // applyAnnotationColors();
   }
   
   @Override
@@ -452,13 +439,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   public void select() {
     super.select();
     relationshipHandleHelpers.showConditionally(this, true);
-    setBorderColor(DEFAULT_SELECTION_COLOR);
+    // setBorderColor(DEFAULT_SELECTION_COLOR);
   }
 
   public void unselect() {
     super.unselect();
     relationshipHandleHelpers.hide(this);
-    applyAnnotationColors();
+    // applyAnnotationColors();
 
     // setBorderColor(Theme.getCurrentColorScheme().getBorderColor().toHexString());
     
@@ -841,7 +828,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     
     // reapply border color to see dashed and solid line changes
     setBorderColor(getBorderColor());
-    applyAnnotationColors();
+    // applyAnnotationColors();
   }
 
   public void setType(String type) {
@@ -1138,7 +1125,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	@Override
 	public void restoreHighlighColor() {
 		setBorderColor(getBorderColor());
-    applyAnnotationColors();
+    // applyAnnotationColors();
 	}
   
   @Override
@@ -1300,7 +1287,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   	if ("".equals(customData) || se.length < 2) {
   		// legacy implementation calculates anchor always when loaded => flag it to be calculated
   		// later
-  		legacyAnchor = true;
+      if (getDiagramItem().getVersion() <= 3) {
+        // data format after that is no longer a legacy
+        legacyAnchor = true;
+      }
   	} else {
   		getStartAnchor().setClientId(se[0]);
   		getEndAnchor().setClientId(se[1]);
@@ -1342,11 +1332,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     // though this needs to be changed. And now new color is actually stored for
     // relationship on theme change
     return true;
-  }
-
-  public void annotate() {
-    super.annotate();
-    applyAnnotationColors();
   }
 
 }

@@ -693,5 +693,13 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   	return result;
   }
 
+  /**
+  * No need to show annotation colors separately since
+  * comment thread is already by default using annotation
+  * colors.
+  */
+  protected boolean supportsAnnotationColors() {
+    return false;
+  }
 
 }

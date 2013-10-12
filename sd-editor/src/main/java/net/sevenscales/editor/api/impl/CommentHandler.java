@@ -21,7 +21,7 @@ public class CommentHandler {
 
 	private void showHideCommentMode(boolean on) {
 		for (Diagram d : surface.getDiagrams()) {
-			if (d.isAnnotated()) {
+			if (d.isAnnotation()) {
 				d.setVisible(on);
 			}
 		}

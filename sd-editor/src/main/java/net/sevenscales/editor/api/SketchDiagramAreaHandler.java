@@ -20,6 +20,10 @@ import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler
 
 public class SketchDiagramAreaHandler implements MouseDiagramHandler {
 	private static final SLogger logger = SLogger.createLogger(SketchDiagramAreaHandler.class);
+
+  static {
+    SLogger.addFilter(SketchDiagramAreaHandler.class);
+  }
 	
 	private ISurfaceHandler surface;
   private int downX;
@@ -88,7 +92,7 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
     boolean connectionMode = modeManager.isConnectMode();
   	// logger.debug("onMouseDown connectionMode({}), sender({}) ... 1", connectionMode, sender);
     if ( sender != null && !(sender instanceof Relationship2) && connectionMode && notFreehandMode() && createdRelationship == null) {
-    	logger.debug2("Starting to create quick connection sender({})... 2", sender);
+    	logger.debug("Starting to create quick connection sender({})... 2", sender);
       // set connection mode on automatically as long as shift key is down
       modeManual = modeManager.isConnectMode();
       modeManager.setConnectionMode(true);
@@ -114,6 +118,7 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       points.add(yy+1);
       String defaultRelationship = RelationshipHelpers.relationship(sender, surface.getEditorContext());
       this.createdRelationship = new Relationship2(surface, points, defaultRelationship, true);
+      logger.debug("createdRelationship {}...", createdRelationship);
       createdRelationship.setVisible(false);
       
       // attach
@@ -157,18 +162,19 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
    	// }
   	
     if (createdRelationship != null && currentAnchorElement != null) {
-      logger.debug("SketchDiagramAreaHandler.onMouseMove...");
+      logger.debug("SketchDiagramAreaHandler.onMouseMove createdRelationship {}...", createdRelationship);
     	// make surface think that handle is clicked...
       surface.getMouseDiagramManager().getDragHandler().onMouseDown(currentHandle, point, IGraphics.SHIFT);
       surface.getSelectionHandler().onMouseDown(currentHandle, point, 0);
       createdRelationship.setVisible(true);
-      surface.add(createdRelationship, true);
-      createdRelationship.calculateHandles();
       createdRelationship.attachAnchor(
           currentAnchorElement, 
           createdRelationship.getStartPosX(), 
           createdRelationship.getStartPosY(), 
           createdRelationship.getStartAnchor(), true);
+      logger.debug("createdRelationship getStartClientId() {}...", createdRelationship.getStartClientId());
+      surface.add(createdRelationship, true);
+      createdRelationship.calculateHandles();
       currentAnchorElement.dispatch(0);
       
       currentHandle.setVisible(true);

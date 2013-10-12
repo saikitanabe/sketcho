@@ -85,6 +85,9 @@ public class BoardColorHelper {
       // need to switch text color since it might not be visible, e.g. white on white, see actor
       d.setTextColor(d.getDefaultTextColor(newColorScheme));
     }
+
+    // checks if diagram is annotation or not and applies colors accordingly
+    d.applyAnnotationColors();
   }
 
 }

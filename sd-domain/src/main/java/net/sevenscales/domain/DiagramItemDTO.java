@@ -182,6 +182,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 
 	@Override
+	public void unannotate() {
+		annotation = 0;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		IDiagramItemRO item = (IDiagramItemRO) obj;
 

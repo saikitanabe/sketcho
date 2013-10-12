@@ -284,6 +284,7 @@ class SurfaceHandler extends SimplePanel implements
 		
 		// currently all owner diagram items are selectable and double clickable
 		for (Diagram diagram : toAddDiagrams) {
+			// TODO set annotation on for the element if comment mode is on
 //			if (!diagrams.contains(diagram.getOwnerComponent())) {
 //				diagrams.add(diagram.getOwnerComponent());
 //			}
