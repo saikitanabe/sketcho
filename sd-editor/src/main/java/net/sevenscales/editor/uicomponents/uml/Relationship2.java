@@ -126,6 +126,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //	}
 	
 	static {
+    SLogger.addFilter(Relationship2.class);
+
 		if (TouchHelpers.isSupportsTouch()) {
 			SELECTION_AREA_WIDTH = 15;
 		} else {
@@ -764,6 +766,22 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //  	super.endTextEdit();
 //  }
 
+  public String getTextLabel() {
+    return relationshipText.getLabelElement().getText();
+  }
+
+  public String getTextStart() {
+    return relationshipText.getStartElement().getText();
+  }
+
+  public String getTextEnd() {
+    return relationshipText.getEndElement().getText();
+  }
+
+  public boolean noText() {
+    return "".equals(getTextLabel()) && "".equals(getTextStart()) && "".equals(getTextEnd());
+  }
+
   @Override
   public String getText(int x, int y) {
   	currentTextEditLocation = relationshipText.findClickPosition(x, y, points);
@@ -823,6 +841,21 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     
     // reapply border color to see dashed and solid line changes
     setBorderColor(getBorderColor());
+  }
+
+  public void setType(String type) {
+    String text = getText();
+    String what = getRelationshipShape().type.getValue();
+    String to = type;
+    logger.debug("what => to : {} => {}", what, to);
+    if (!"".equals(text)) {
+      text = text.replace(what, to);
+      logger.debug("replaced text {}", text);
+    } else {
+      // fallback to just set the value
+      text = new String(to);
+    }
+    setText(text);
   }
 
   public RelationshipShape2 getRelationshipShape() {

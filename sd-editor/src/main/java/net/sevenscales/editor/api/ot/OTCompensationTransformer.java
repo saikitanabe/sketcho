@@ -20,9 +20,9 @@ public class OTCompensationTransformer {
 	private List<DiagramApplyOperation> applyOperations;
 	private int currentApplyOperationIndex;
 
-	static {
-		logger.setExclusiveName(OTCompensationTransformer.class);
-	}
+	// static {
+	// 	logger.setExclusiveName(OTCompensationTransformer.class);
+	// }
 	
 	public OTCompensationTransformer() {
 	}

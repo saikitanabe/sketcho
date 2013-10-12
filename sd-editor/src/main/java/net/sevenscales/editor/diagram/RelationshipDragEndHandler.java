@@ -186,7 +186,7 @@ public class RelationshipDragEndHandler implements
 			surface.addAsSelected(diagram, true);
 			// this is connect drop element
 			currentRel.anchor(true);
-			currentRel.setText(RelationshipHelpers.relationship(diagram, surface.getEditorContext(), currentRel.getStartAnchor().getDiagram()));
+			currentRel.setType(RelationshipHelpers.relationship(diagram, surface.getEditorContext(), currentRel.getStartAnchor().getDiagram()));
 			surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(currentRel));
 		} else {
 			// surface empty case

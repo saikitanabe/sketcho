@@ -319,6 +319,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	public void removeFromParent() {
 		super.removeFromParent();
+		removeConnections();
     surface.getEditorContext().getEventBus().fireEvent(new CommentThreadDeletedEvent(this));
 	}
 
@@ -337,6 +338,15 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
     // TODO change comments position after this and minus removed heidht from top
     // - find, eachFromIndex(index, c.setTop(-height))
+	}
+
+	private void removeConnections() {
+		for (AnchorElement ae : getAnchors()) {
+			if (ae.getHandler() != null && ae.getHandler().connection() != null && ae.getHandler().connection().noText()) {
+				logger.debug("ae.getHandler().connection().getTextLabel() {}", ae.getHandler().connection().getTextLabel());
+				surface.getSelectionHandler().remove(ae.getHandler().connection());
+			}
+		}
 	}
 	
 	@Override
@@ -707,6 +717,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
     return comments;
   }
 
+  @Override
   public void attachedRelationship(AnchorElement anchorElement) {
     if (anchorElement.getHandler().connection() != null) {
       // if attached to this comment thread

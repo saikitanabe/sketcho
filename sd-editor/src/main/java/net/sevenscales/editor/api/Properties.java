@@ -156,23 +156,12 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			private void changeSelected(Diagram diagram, RelationshipTypeSelectedEvent event) {
 				if (diagram instanceof Relationship2) {
 					Relationship2 rel = (Relationship2) diagram;
-					String text = diagram.getText();
 //					System.out.println("caps: " + ((Relationship2) selectedDiagram).getRelationshipShape().type + " => " + event.getRelationshipType().getValue());
 					if (event.getRelationshipType().equals(RelationShipType.REVERSE)) {
 						rel.reverse();
 				    Properties.this.editorContext.getEventBus().fireEvent(new PotentialOnChangedEvent(rel));
 					} else {
-						String what = ((Relationship2) diagram).getRelationshipShape().type.getValue();
-						String to = event.getRelationshipType().getValue();
-						logger.debug("what => to : {} => {}", what, to);
-						if (!"".equals(text)) {
-							text = text.replace(what, to);
-							logger.debug("replaced text {}", text);
-						} else {
-							// fallback to just set the value
-							text = new String(to);
-						}
-						rel.setText(text);
+						rel.setType(event.getRelationshipType().getValue());
 				    Properties.this.editorContext.getEventBus().fireEvent(new PotentialOnChangedEvent(rel));
 					}
 				}
