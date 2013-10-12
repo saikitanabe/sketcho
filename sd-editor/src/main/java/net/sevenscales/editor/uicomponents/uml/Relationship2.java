@@ -841,6 +841,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     
     // reapply border color to see dashed and solid line changes
     setBorderColor(getBorderColor());
+    applyAnnotationColors();
   }
 
   public void setType(String type) {
