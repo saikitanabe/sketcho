@@ -11,6 +11,16 @@ import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 */
 public class AuthHelpers {
 
+	/**
+	* Forbid changing colors if element is annotation. 
+	* Comment thread and comment element are exceptions that are annotations.
+	*/
+	public static boolean allowColorChange(Diagram d) {
+		return !d.isAnnotation() 
+					 || d instanceof CommentThreadElement
+					 || d instanceof CommentElement;
+	}
+
 	public static boolean allowedToShowDelete(Diagram[] diagrams) {
 		for (Diagram d : diagrams) {
 			if (!allowedToShowDelete(d)) {

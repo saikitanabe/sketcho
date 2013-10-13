@@ -161,7 +161,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				for (Diagram diagram : selected) {
 					if (AuthHelpers.allowedToEdit(diagram) && 
 						  (diagram.supportedMenuItems() & ContextMenuItem.COLOR_MENU.getValue()) == ContextMenuItem.COLOR_MENU.getValue() &&
-						  !diagram.isAnnotation()) {
+						  AuthHelpers.allowColorChange(diagram)) {
 						return true;
 					}
 				}

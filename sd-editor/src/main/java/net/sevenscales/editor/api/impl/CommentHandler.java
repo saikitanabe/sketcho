@@ -4,9 +4,11 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
+import com.google.gwt.core.client.Scheduler;
 
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.CommentModeEvent;
 import net.sevenscales.editor.api.event.CommentModeEventHandler;
 import net.sevenscales.editor.diagram.Diagram;
@@ -55,13 +57,18 @@ public class CommentHandler {
 	}
 
 	private void fireToggleCommentMode() {
-    boolean toggleValue = !surface.getEditorContext().isTrue(EditorProperty.COMMENT_MODE);
-    logger.debug("comment mode toggleValue {}", toggleValue);
-    surface.getEditorContext().set(EditorProperty.COMMENT_MODE, toggleValue);
-    surface.getEditorContext().getEventBus().fireEvent(new CommentModeEvent(toggleValue));
+		Tools.toggleCommentMode();
   }
 
-	private void showHideCommentMode(boolean on) {
+	private void showHideCommentMode(final boolean on) {
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
+				_showHideCommentMode(on);
+			}
+		});
+	}
+
+	private void _showHideCommentMode(boolean on) {
 		for (Diagram d : surface.getDiagrams()) {
 			if (d.isAnnotation()) {
 				d.setVisible(on);

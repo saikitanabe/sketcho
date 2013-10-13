@@ -14,6 +14,7 @@ import net.sevenscales.editor.api.SurfaceLoadedEventListener;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
 import net.sevenscales.editor.api.impl.SurfaceDiagramSearch;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.ClickDiagramHandler;
@@ -361,12 +362,14 @@ class SurfaceHandler extends SimplePanel implements
 //		for (Diagram d : diagrams) {
 		for (int i = diagrams.size() - 1; i >= 0; --i) {
 			Diagram d = diagrams.get(i);
-//			if (result == null) {
-			AnchorElement candidate = d.onAttachArea(anchor, x, y);
-			if (candidate != null && result == null) {
-				result = candidate;
-			} else {
-				d.setHighlight(false);
+			if (Tools.filterDiagramByCurrentTool(d)) {
+	//			if (result == null) {
+				AnchorElement candidate = d.onAttachArea(anchor, x, y);
+				if (candidate != null && result == null) {
+					result = candidate;
+				} else {
+					d.setHighlight(false);
+				}
 			}
 		}
 

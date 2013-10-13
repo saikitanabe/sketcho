@@ -8,6 +8,7 @@ import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.IModelingPanel;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.SurfaceLoadedEventListener;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
@@ -156,6 +157,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 //    });
     
     int i = 0;
+    boolean atLeastOneAnnotation = false;
     for (IDiagramItem item : items) {
     	// client id cannot clash because single user environment and done only for 
     	// legacy Confluence boards that didn't use client id for diagram items.
@@ -168,7 +170,13 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 		  	commentFactory.process(diagram);
     		_addDiagram(diagram, surface, reattachHelpers, commentFactory, asSelected);
     	}
+
+    	if (item.isAnnotation()) {
+    		atLeastOneAnnotation = true;
+    	}
     }
+
+    Tools.setAtLeastOneAnnotation(atLeastOneAnnotation);
 
     // could be more common; interface ChildElement e.g. with Relationship
     // Text for reusing "Just Text" elements

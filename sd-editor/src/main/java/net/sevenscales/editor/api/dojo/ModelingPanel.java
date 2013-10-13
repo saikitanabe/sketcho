@@ -5,6 +5,7 @@ import java.util.List;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.IModelingPanel;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.ToolFrame;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
@@ -93,6 +94,8 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		surface = GWT.create(SurfaceHandlerImplFirefox.class);
 		surface.setName(SurfaceHandler.DRAWING_AREA);
 		surface.init(width, height, editable, modeManager, true, editorContext);
+
+		Tools.create(surface);
 		
 		editorContext.getEventBus().addHandler(SurfaceScaleEvent.TYPE, new SurfaceScaleEventHandler() {
 			@Override

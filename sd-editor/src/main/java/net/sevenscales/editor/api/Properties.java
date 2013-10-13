@@ -180,7 +180,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 				logger.debug("onSelection selected {}", Properties.this.selectionHandler.getSelectedItems());
 				Set<Diagram> modified = new HashSet<Diagram>();
 				for (Diagram d : Properties.this.selectionHandler.getSelectedItems()) {
-					if (AuthHelpers.allowedToEdit(d) && !d.isAnnotation()) {
+					if (AuthHelpers.allowedToEdit(d) && AuthHelpers.allowColorChange(d)) {
 						setColors(d, event.getColorTarget(), event.getColor());
 						modified.add(d);
 					}

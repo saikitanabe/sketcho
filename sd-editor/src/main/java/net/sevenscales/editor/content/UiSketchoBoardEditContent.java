@@ -10,6 +10,7 @@ import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.IModelingPanel;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.CommentHandler;
+import net.sevenscales.editor.content.ui.TopButtons;
 
 import net.sevenscales.editor.api.dojo.FactoryDoJo;
 
@@ -76,6 +77,9 @@ public class UiSketchoBoardEditContent extends UiEditBoardContent implements Key
     modelingPanel = FactoryDoJo.createModelingPanel(this, getContent().getWidth(), getContent().getHeight(), editable, getModeManager(), getEditorContext());
     modelingPanel.addKeyEventHandler(this);
     modelHandler = new UiModelContentHandler(this, editable, getEditorContext(), getModeManager());
+
+    getEditorContext().registerAndAddToRootPanel(new TopButtons(getEditorContext()));
+
     
     // default note, not added for now
 //    modelingPanel.getSurface().addLoadEventListener(new SurfaceLoadedEventListener() {

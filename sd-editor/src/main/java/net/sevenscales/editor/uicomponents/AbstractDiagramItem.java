@@ -13,6 +13,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.SurfaceUtil;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
@@ -142,7 +143,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     this.editable = editable;
     this.surface = surface;
     this.visible = true; // default value
-    shouldAnnotate();
+    shouldAutoAnnotate();
         
     this.backgroundColor = backgroundColor;
     this.borderColor = borderColor;
@@ -176,8 +177,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     }
   }
 
-  private void shouldAnnotate() {
-    if (surface.getEditorContext().isTrue(EditorProperty.COMMENT_MODE)) {
+  private void shouldAutoAnnotate() {
+    if (Tools.isCommentMode()) {
       data.annotate();
     }
   }

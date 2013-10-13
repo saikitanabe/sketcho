@@ -6,6 +6,7 @@ import java.util.Set;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.StartSelectToolEvent;
 import net.sevenscales.editor.api.event.StartSelectToolEventHandler;
@@ -22,7 +23,6 @@ import net.sevenscales.editor.uicomponents.CircleElement;
 public class LassoSelectionHandler implements MouseDiagramHandler {
 	private static final SLogger logger = SLogger.createLogger(LassoSelectionHandler.class);
 
-  private List<Diagram> diagrams;
   private GridUtils gridUtils;
   private int downX;
   private int downY;
@@ -85,8 +85,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 		}
 	}
 
-  public LassoSelectionHandler(List<Diagram> diagrams, ISurfaceHandler surface) {
-    this.diagrams = diagrams;
+  public LassoSelectionHandler(ISurfaceHandler surface) {
     this.surface = surface;
     
 	  gridUtils = new GridUtils();
@@ -201,10 +200,10 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 		x = x - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformX(), surface.getScaleFactor());
 		y = y - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor());
 
-		for (Diagram d : diagrams) {
+		for (Diagram d : surface.getDiagrams()) {
 			if (d.onArea(x, y, x + width, y + height)) {
 //				d.select();
-				if (!d.isSelected()) {
+				if (!d.isSelected() && Tools.filterDiagramByCurrentTool(d)) {
 					// guarantee to keep last selected item as correct
 					surface.getSelectionHandler().selectInMultimode(d);
 				}

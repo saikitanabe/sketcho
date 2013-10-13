@@ -56,7 +56,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		selectionHandler = new SelectionHandler(surface, diagrams, dragHandler.getDragHandlers());
 		resizeHandler = new MouseDiagramResizeHandler(this, surface, modeManager);
 		backgroundMoveHandler = new BackgroundMoveHandler(diagrams, surface);
-		lassoSelectionHandler = new LassoSelectionHandler(diagrams, surface);
+		lassoSelectionHandler = new LassoSelectionHandler(surface);
 		if (ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
 			// free hand drawing is not possible on library area
 			freehandDrawHandler = new FreehandDrawerHandler(surface);

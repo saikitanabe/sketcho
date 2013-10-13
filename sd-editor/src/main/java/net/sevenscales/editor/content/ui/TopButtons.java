@@ -2,6 +2,7 @@ package net.sevenscales.editor.content.ui;
 
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
@@ -89,7 +90,7 @@ public class TopButtons extends Composite {
 	}
 
 	public void setVisible(FreehandModeChangedEvent event) {
-		super.setVisible(editorContext.isTrue(EditorProperty.COMMENT_MODE));
+		super.setVisible(Tools.isCommentMode());
 		freehandOn.getStyle().setDisplay(Display.NONE);
 		if (event.isEnabled()) {
 			// do not set visible if freehand mode is not on
@@ -106,13 +107,13 @@ public class TopButtons extends Composite {
 	}
 
 	private void hideCommentMode() {
-		editorContext.getEventBus().fireEvent(new CommentModeEvent(false));
+		Tools.setCommentTool(false);
 	}
 
 	private void showHideCommentMode(boolean show) {
-		editorContext.set(EditorProperty.COMMENT_MODE, show);
+		Tools.setCommentTool(show);
 
-		if (editorContext.isTrue(EditorProperty.COMMENT_MODE)) {
+		if (Tools.isCommentMode()) {
 			super.setVisible(true);
 			commentModeOn.getStyle().setDisplay(Display.INLINE);
 		} else {

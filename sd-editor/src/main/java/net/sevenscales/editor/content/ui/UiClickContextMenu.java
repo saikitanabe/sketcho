@@ -2,6 +2,7 @@ package net.sevenscales.editor.content.ui;
 
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickEventHandler;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
 import net.sevenscales.editor.api.event.CreateElementEvent;
@@ -226,7 +227,7 @@ public class UiClickContextMenu extends Composite {
 	@UiHandler("commentMode")
 	public void onCommentMode(ClickEvent event) {
 		stopEvent(event);
-		surface.getEditorContext().getEventBus().fireEvent(new CommentModeEvent(!surface.getEditorContext().isTrue(EditorProperty.COMMENT_MODE)));
+		Tools.toggleCommentMode();
 		hide();
 	}
 

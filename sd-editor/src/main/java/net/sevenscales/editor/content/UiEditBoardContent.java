@@ -20,7 +20,6 @@ import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.ui.ModeBarUi;
 import net.sevenscales.editor.content.ui.SelectButtonBox;
 import net.sevenscales.editor.content.ui.SimpleColorHandler;
-import net.sevenscales.editor.content.ui.TopButtons;
 import net.sevenscales.editor.content.ui.UndoMenu;
 import net.sevenscales.editor.ui.UpDownController.ISizeCallback;
 
@@ -98,7 +97,6 @@ public abstract class UiEditBoardContent extends UiContent implements KeyDownHan
 //		decorator.add(container);
 		saveListeners = new ArrayList();
 		
-		getEditorContext().registerAndAddToRootPanel(new TopButtons(getEditorContext()));
 		getEditorContext().registerAndAddToRootPanel(createButtonsArea());
 //		RootPanel.get().add(new TopButtons(getEditorContext()));
 //		RootPanel.get().add(createButtonsArea());
