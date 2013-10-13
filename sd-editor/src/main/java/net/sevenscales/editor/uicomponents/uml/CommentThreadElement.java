@@ -707,9 +707,11 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			last.hideBottomLine();
 		}
 
+
 		// if (height != currentHeight) {
 		// 	logger.debug("CommentThreadElement height changed current {} new {}...", currentHeight, height);
 		setShape(left, top, width, height + 16);
+		dispatchAndRecalculateAnchorPositions();
 		// }
 	}
 
