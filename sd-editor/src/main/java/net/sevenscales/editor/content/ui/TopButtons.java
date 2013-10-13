@@ -89,7 +89,7 @@ public class TopButtons extends Composite {
 	}
 
 	public void setVisible(FreehandModeChangedEvent event) {
-		super.setVisible(false);
+		super.setVisible(editorContext.isTrue(EditorProperty.COMMENT_MODE));
 		freehandOn.getStyle().setDisplay(Display.NONE);
 		if (event.isEnabled()) {
 			// do not set visible if freehand mode is not on
@@ -116,7 +116,7 @@ public class TopButtons extends Composite {
 			super.setVisible(true);
 			commentModeOn.getStyle().setDisplay(Display.INLINE);
 		} else {
-			super.setVisible(false);
+			super.setVisible(editorContext.isTrue(EditorProperty.FREEHAND_MODE));
 			commentModeOn.getStyle().setDisplay(Display.NONE);
 		}
 	}

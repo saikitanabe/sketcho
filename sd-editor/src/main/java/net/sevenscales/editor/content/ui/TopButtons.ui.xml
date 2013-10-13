@@ -7,8 +7,6 @@
 	<g:HTMLPanel styleName="topButtons">
 		<div>
 			<button ui:field="freehandOn" class="btn btn-success" style="display: none;">Freehand</button>
-		</div>
-		<div>
 			<button ui:field="commentModeOn" class="btn btn-success" style="display: none;" title="Hide Commments">Comments</button>
 		</div>
 	</g:HTMLPanel>
