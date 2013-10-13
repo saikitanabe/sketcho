@@ -156,10 +156,12 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				}
 				return false;
 			}
-			
+
 			private boolean anySupportsColorMenu(Diagram[] selected) {
 				for (Diagram diagram : selected) {
-					if (AuthHelpers.allowedToEdit(diagram) && (diagram.supportedMenuItems() & ContextMenuItem.COLOR_MENU.getValue()) == ContextMenuItem.COLOR_MENU.getValue()) {
+					if (AuthHelpers.allowedToEdit(diagram) && 
+						  (diagram.supportedMenuItems() & ContextMenuItem.COLOR_MENU.getValue()) == ContextMenuItem.COLOR_MENU.getValue() &&
+						  !diagram.isAnnotation()) {
 						return true;
 					}
 				}

@@ -237,6 +237,11 @@ public class CircleElement extends AbstractDiagramItem {
 		return ContextMenuItem.NO_CUSTOM.getValue();
 	}
 
+	@Override
+	public boolean isAnnotation() {
+		return false;
+	}
+
 //	@Override
 //	public void applyTransform(MatrixPointJS point) {
 //		mygroup.applyTransform(point.getDX(), point.getDY());

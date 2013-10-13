@@ -12,6 +12,7 @@ import net.sevenscales.editor.content.utils.SortHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.editor.uicomponents.CircleElement;
 
 public class SvgConverter {
 	private static final SLogger logger = SLogger.createLogger(SvgConverter.class);
@@ -103,17 +104,19 @@ public class SvgConverter {
     
     List<List<IShape>> shapes = new ArrayList<List<IShape>>();
     for (Diagram d : diagrams) {
-      d.toSvgStart();
-    	d.unselect();
-    	shapes.clear();
-    	shapes.add(d.getElements());
-      items += toSvg(d, shapes, editorContext);
-      // text helper elements are not included in getElements
-      List<List<IShape>> textElements = d.getTextElements();
-      if (textElements != null) {
-      	items += toSvg(d, textElements, editorContext);
+      if (!(d instanceof CircleElement)) {
+        d.toSvgStart();
+        d.unselect();
+        shapes.clear();
+        shapes.add(d.getElements());
+        items += toSvg(d, shapes, editorContext);
+        // text helper elements are not included in getElements
+        List<List<IShape>> textElements = d.getTextElements();
+        if (textElements != null) {
+          items += toSvg(d, textElements, editorContext);
+        }
+        d.toSvgEnd();
       }
-      d.toSvgEnd();
     }
 
 		if (diagrams.length > 0) {

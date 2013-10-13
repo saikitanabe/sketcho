@@ -118,6 +118,18 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       }
     }
 
+    void setVisibility(boolean visible) {
+      if (arrowStart != null) {
+        arrowStart.setVisibility(visible);
+      }
+    }
+
+    void setStroke(String color) {
+      if (arrowStart != null) {
+        arrowStart.setStroke(color);
+      }
+    }
+
   }
 	
 //	private TextPosition textUnderEdit = TextPosition.TEXT_ALL;
@@ -1132,8 +1144,18 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   public void setHighlightColor(String color) {
   	relLine.setStroke(color);
     arrow.setStroke(color);
+    arrowStartPolyline.setStroke(color);
     inheritance.setStroke(color);
     aggregate.setStroke(color);
+  }
+
+  @Override
+  public void setVisible(boolean visible) {
+    super.setVisible(visible);
+    arrow.setVisibility(visible && info.isDirected());
+    arrowStartPolyline.setVisibility(visible && info.isDirectedStart());
+    inheritance.setVisibility(visible && info.isInheritance());
+    aggregate.setVisibility(visible && info.isAggregate());
   }
   
   @Override
