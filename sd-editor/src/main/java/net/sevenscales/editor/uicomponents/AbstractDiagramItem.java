@@ -143,7 +143,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     this.editable = editable;
     this.surface = surface;
     this.visible = true; // default value
-    shouldAutoAnnotate();
+
+    // NOTE automatic annotations cannot be enabled at this moment
+    // this is too confusing for the user! Instead elements can be
+    // marked as annotated if needed from context menu
+    // shouldAutoAnnotate();
         
     this.backgroundColor = backgroundColor;
     this.borderColor = borderColor;
