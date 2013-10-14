@@ -778,32 +778,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       group.setVisible(visible);
     }
 
-    // group visibility doesn't always work for some elements!!!
-    // therefore setting in addition text formatter and shapes as well.
-    TextElementFormatUtil textFormatter = getTextFormatter();
-    if (textFormatter != null) {
-      if (visible) {
-        textFormatter.show();
-      } else {
-        textFormatter.hide();
-      }
-    }
-
     if (getChildElements() != null) {
       for (Diagram child : getChildElements()) {
         child.setVisible(visible);
       }
-    }
-
-    for (IShape e : getElements()) {
-      e.setVisibility(visible);
-    }
-
-    if (resizeHelpers != null) {
-      resizeHelpers.hide(this);
-    }
-    if (connectionHelpers != null) {
-      connectionHelpers.hide(this);
     }
   }
   
@@ -1467,8 +1445,14 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public void attachedRelationship(AnchorElement anchorElement) {
   }
 
+  @Override
   public boolean isAnnotation() {
     return getDiagramItem().isAnnotation();
+  }
+
+  @Override
+  public boolean isResolved() {
+    return getDiagramItem().isResolved();
   }
 
   public void annotate() {

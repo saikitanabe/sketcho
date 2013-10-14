@@ -70,7 +70,7 @@ public class CommentHandler {
 
 	private void _showHideCommentMode(boolean on) {
 		for (Diagram d : surface.getDiagrams()) {
-			if (d.isAnnotation()) {
+			if (d.isAnnotation() && !d.isResolved()) {
 				d.setVisible(on);
 			}
 		}

@@ -227,6 +227,7 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
   void attachedRelationship(AnchorElement anchorElement);
   void applyAnnotationColors();
   boolean isAnnotation();
+  boolean isResolved();
   void annotate();
   void unannotate();
 

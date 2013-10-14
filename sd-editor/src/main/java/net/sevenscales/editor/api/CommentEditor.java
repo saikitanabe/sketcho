@@ -187,7 +187,10 @@ class CommentEditor  extends Composite {
 	private void markDone() {
 		if (commentThread != null) {
 			commentThread.markDone();
+			commentThread.hideResizeHandles();
+			commentThread.hideConnectionHelpers();
 			commentThread = null;
+			hide();
 		}
 	}
 

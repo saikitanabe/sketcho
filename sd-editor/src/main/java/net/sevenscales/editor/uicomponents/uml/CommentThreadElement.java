@@ -699,7 +699,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			if (resizeChild) {
 				ce.resizeText();
 			} else {
-				ce.setVisible(true);
+				ce.setVisible(isVisible());
 			}
 			// }
 			height += commentHeight + 1;
