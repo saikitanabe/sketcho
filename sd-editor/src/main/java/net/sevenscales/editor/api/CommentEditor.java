@@ -21,6 +21,8 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.ui.HTML;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.EditorCommon;
@@ -36,7 +38,7 @@ import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEvent;
 import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEventHandler;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
-
+import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
 
 import net.sevenscales.editor.diagram.Diagram;
@@ -68,6 +70,7 @@ class CommentEditor  extends Composite {
 	@UiField TextArea textArea;
 	@UiField AnchorElement comment;
 	private CustomPopupPanel popup;
+	private PopupPanel donePopup;
 	private EditorCommon editorCommon;
 	private CommentThreadElement commentThread;
 	private boolean dontCreateComment;
@@ -88,6 +91,9 @@ class CommentEditor  extends Composite {
 		this.popup.setAutoHideOnHistoryEventsEnabled(false);
 
 		this.popup.setWidget(this);
+
+		donePopup = new PopupPanel();
+		donePopup.setWidget(new HTML(SafeHtmlUtils.fromSafeConstant("<button class='btn btn-mini'>Done</button>")));
 
 		editorCommon = new EditorCommon(surface, new EditorCommon.HideEditor() {
 			public void hide() {
@@ -258,9 +264,18 @@ class CommentEditor  extends Composite {
 	
 			if (commentThread.getChildElements().size() > 0) {
 				// not first
-				y += this.commentThread.getHeight();
+				y += ScaleHelpers.unscaleValue(this.commentThread.getHeight(), surface.getScaleFactor());
 			}
 			popup.setPopupPosition(x, y);
+
+			if (commentThread.getChildElements().size() > 0) {
+				// Diagram firstChild = commentThread.getChildElements().get(0);
+				// MatrixPointJS childPoint = MatrixPointJS.createUnscaledPoint(firstChild.getLeft(), firstChild.getTop(), surface.getScaleFactor());
+				// int top = ScaleHelpers.unscaleValue(childPoint.getY(), surface.getScaleFactor()) + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop() + 3;
+				int top = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop() + 20;
+				int donex = + ScaleHelpers.unscaleValue(commentThread.getWidth() - 52, surface.getScaleFactor());
+				donePopup.setPopupPosition(x + donex, top);
+			}
 		}
 	}
 
@@ -285,6 +300,9 @@ class CommentEditor  extends Composite {
 
 	private void showCommentHintBox() {
 		commentHintBox.getStyle().setDisplay(Display.BLOCK);
+		if (commentThread.getChildElements().size() > 0) {
+			donePopup.show();
+		}
 	}
 
 	private void hideCommentHintBox() {
@@ -298,6 +316,7 @@ class CommentEditor  extends Composite {
 			commentThread.setVisible(true);
 		}
 		popup.hide();
+		donePopup.hide();
 		commentThread = null;
 		CommentEditor.this.editorCommon.fireEditorClosed();
 	}
