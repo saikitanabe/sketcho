@@ -1,7 +1,8 @@
 package net.sevenscales.domain;
 
 public enum ElementType {
-	COMMENT("comment");
+	COMMENT("comment"),
+	COMMENT_THREAD("comments");
 
 	private String value;
 

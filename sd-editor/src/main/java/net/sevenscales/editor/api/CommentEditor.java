@@ -93,7 +93,15 @@ class CommentEditor  extends Composite {
 		this.popup.setWidget(this);
 
 		donePopup = new PopupPanel();
-		donePopup.setWidget(new HTML(SafeHtmlUtils.fromSafeConstant("<button class='btn btn-mini'>Done</button>")));
+		HTML doneButton = new HTML(SafeHtmlUtils.fromSafeConstant("<button class='btn btn-mini'>Done</button>"));
+		donePopup.setWidget(doneButton);
+
+		doneButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				markDone();
+			}
+		});
 
 		editorCommon = new EditorCommon(surface, new EditorCommon.HideEditor() {
 			public void hide() {
@@ -175,6 +183,12 @@ class CommentEditor  extends Composite {
 			}
 		}
 	};
+
+	private void markDone() {
+		if (commentThread != null) {
+			commentThread.markDone();
+		}
+	}
 
 	private void createComment() {
 		if (isEditorNotEmpty()) {

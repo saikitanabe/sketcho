@@ -42,7 +42,9 @@ import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.uicomponents.Anchor;
 import net.sevenscales.editor.uicomponents.AnchorElement;
 import net.sevenscales.editor.diagram.shape.CommentShape;
+import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.CommentThreadDTO;
 import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.utils.SLogger;
 
@@ -766,6 +768,17 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	public void copyFrom(IDiagramItemRO diagramItem) {
 		super.copyFrom(diagramItem);
 		queueSorting(true);
+	}
+
+	public void markDone() {
+		IDiagramItem di = getDiagramItem();
+		if (di instanceof CommentThreadDTO) {
+			CommentThreadDTO t = (CommentThreadDTO) di;
+			if (t.getResolved() != 1) {
+				t.setResolved(1);
+				surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
+			}
+		}
 	}
 
 }
