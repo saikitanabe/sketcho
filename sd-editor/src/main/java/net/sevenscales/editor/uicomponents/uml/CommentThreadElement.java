@@ -3,6 +3,8 @@ package net.sevenscales.editor.uicomponents.uml;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -44,7 +46,6 @@ import net.sevenscales.editor.uicomponents.AnchorElement;
 import net.sevenscales.editor.diagram.shape.CommentShape;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.CommentThreadDTO;
 import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.utils.SLogger;
 
@@ -100,7 +101,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		this.shape = newShape;
 
 		comments = new CommentList2();
-		getDiagramItem().setAnnotation(1);
+		getDiagramItem().annotate();
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     group.setAttribute("cursor", "default");
@@ -542,10 +543,10 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	// }
 	
 	@Override
-		public void setVisible(boolean visible) {
-			super.setVisible(visible);
-			applyShadowVisiblity();
-		}
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		applyShadowVisiblity();
+	}
 	
 	// @Override
 	// public void saveLastTransform(int dx, int dy) {
@@ -772,13 +773,25 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	public void markDone() {
 		IDiagramItem di = getDiagramItem();
-		if (di instanceof CommentThreadDTO) {
-			CommentThreadDTO t = (CommentThreadDTO) di;
-			if (t.getResolved() != 1) {
-				t.setResolved(1);
-				surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
+		if (!di.isResolved()) {
+			Set<Diagram> resolved = new HashSet<Diagram>();
+			di.resolve();
+			resolved.add(this);
+
+			for (Diagram ce : getChildElements()) {
+				ce.getDiagramItem().resolve();
+				resolved.add(ce);
+				ce.setVisible(false);
 			}
+			// in case connections contain text those are kept on board as annotations
+			// removeConnections();
+			surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(resolved));
+
+			// remove thread with comments, user need to restore thread from comments dialog or using undo/redo
+			// hmm, for this session it needs to be hidden with children since undo is modify operation
+			// and cannot deal with removal
+			// removeFromParent();
+			setVisible(false);
 		}
 	}
-
 }

@@ -789,8 +789,21 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       }
     }
 
+    if (getChildElements() != null) {
+      for (Diagram child : getChildElements()) {
+        child.setVisible(visible);
+      }
+    }
+
     for (IShape e : getElements()) {
       e.setVisibility(visible);
+    }
+
+    if (resizeHelpers != null) {
+      resizeHelpers.hide(this);
+    }
+    if (connectionHelpers != null) {
+      connectionHelpers.hide(this);
     }
   }
   
@@ -1044,6 +1057,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
 	@Override
 	public void copyFrom(IDiagramItemRO diagramItem) {
+    getDiagramItem().copyFrom(diagramItem);
 //		setDiagramText(diagramItem);
 		
 //		IDiagramItem me = DiagramItemFactory.createOrUpdate(this, false);
@@ -1080,6 +1094,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 		if (connectionHelpers.isShownFor(this)) {
 			connectionHelpers.show(this);
 		}
+
+    setVisible(!diagramItem.isResolved());
 	}
 
 	private void setDiagramText(IDiagramItemRO diagramItem) {

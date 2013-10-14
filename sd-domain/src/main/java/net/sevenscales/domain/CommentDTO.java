@@ -13,8 +13,8 @@ public class CommentDTO extends DiagramItemDTO {
 	private long updatedAt;
 
 	public CommentDTO(String text, String type, String shape, String backgroundColor, String textColor,
-			Integer version, Long id, String clientId, String customData, double crc32, int annotation, String parentThreadId, String username, String userDisplayName, long createdAt, long updatedAt) {
-		super(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, crc32, annotation);
+			Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, String parentThreadId, String username, String userDisplayName, long createdAt, long updatedAt) {
+		super(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, crc32, annotation, resolved);
 		this.parentThreadId = parentThreadId;
 		this.username = username;
 		this.userDisplayName = userDisplayName;
@@ -34,15 +34,15 @@ public class CommentDTO extends DiagramItemDTO {
 
 
 	public CommentDTO(String parentThreadId, String username, String userDisplayName) {
-		this("", "", "", "", "", 0, 0L, "", "", 0, 1, parentThreadId, username, userDisplayName, 0L, 0L);
+		this("", "", "", "", "", 0, 0L, "", "", 0, 1, 0, parentThreadId, username, userDisplayName, 0L, 0L);
 	}	
 
 	public CommentDTO(String parentThreadId, String username, String userDisplayName, long createdAt, long updatedAt) {
-		this("", "", "", "", "", 0, 0L, "", "", 0, 1, parentThreadId, username, userDisplayName, createdAt, updatedAt);
+		this("", "", "", "", "", 0, 0L, "", "", 0, 1, 0, parentThreadId, username, userDisplayName, createdAt, updatedAt);
 	}	
 
 	public CommentDTO(String clientId) {
-		this("", "", "", "", "", 0, 0L, clientId, "", 0, 1, "", "", "", 0L ,0L);
+		this("", "", "", "", "", 0, 0L, clientId, "", 0, 1, 0, "", "", "", 0L ,0L);
 	}
 
 	public CommentDTO(IDiagramItemRO di) {

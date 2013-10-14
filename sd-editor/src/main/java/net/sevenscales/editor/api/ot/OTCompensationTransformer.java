@@ -15,14 +15,15 @@ import com.google.gwt.logging.client.LogConfiguration;
 
 public class OTCompensationTransformer {
 	private static SLogger logger = SLogger.createLogger(OTCompensationTransformer.class);
+
+	static {
+		SLogger.addFilter(OTCompensationTransformer.class);
+	}
+
 	private List<? extends IDiagramItemRO> currentState;
 	private boolean testMode;
 	private List<DiagramApplyOperation> applyOperations;
 	private int currentApplyOperationIndex;
-
-	// static {
-	// 	logger.setExclusiveName(OTCompensationTransformer.class);
-	// }
 	
 	public OTCompensationTransformer() {
 	}

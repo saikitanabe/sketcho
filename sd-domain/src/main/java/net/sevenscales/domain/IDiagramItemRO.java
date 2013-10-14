@@ -25,7 +25,9 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	String getCustomData();
 	double getCrc32();
 	int getAnnotation();
+	int getResolved();
 	boolean isAnnotation();
+	boolean isResolved();
 	IDiagramItem copy();
 	void copyFrom(IDiagramItemRO item);
 
