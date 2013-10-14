@@ -134,7 +134,7 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
 
     setReadOnly(!editable);
 		setText(text);
-		setBorderColor(borderWebColor);
+		// setBorderColor(borderWebColor);
 		
     super.constructorDone();
 	}

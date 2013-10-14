@@ -1063,7 +1063,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 		Color borderColor = DiagramItemFactory.parseBorderColor(diagramItem);
 		if (borderColor != null) {
 			// legacy impl didn't have border color
-			setBorderColor(borderColor.toHexString());
+			setBorderColor(borderColor);
 		}
 
 		Color bgColor = DiagramItemFactory.parseBackgroundColor(diagramItem);
@@ -1107,29 +1107,31 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	
 	@Override
 	public void restoreHighlighColor() {
-		setBorderColor(getBorderColor());
+		setBorderColor(getBorderColorAsColor());
 	}
 	
   @Override
 	public void setHighlightColor(String color) {
 	}
 
-  @Override
-  public void setBorderColor(String color) {
-  	this.borderWebColor = color;
-  	Rgb bc = ColorHelpers.toRgb(color);
-  	borderColor.red = bc.red;
-  	borderColor.green = bc.green;
-  	borderColor.blue = bc.blue;
-  	borderColor.opacity = 1;
-  	setHighlightColor(color);
-    applyAnnotationColors();
-  }
+  // @Override
+  // public void setBorderColor(String color) {
+  // 	this.borderWebColor = color;
+  // 	Rgb bc = ColorHelpers.toRgb(color);
+  // 	borderColor.red = bc.red;
+  // 	borderColor.green = bc.green;
+  // 	borderColor.blue = bc.blue;
+  // 	borderColor.opacity = 1;
+  // 	setHighlightColor(color);
+  //   applyAnnotationColors();
+  // }
   
   @Override
   public void setBorderColor(Color color) {
     borderColor.copy(color);
-    setBorderColor(borderColor.toHexString());
+    this.borderWebColor = color.toHexString();
+    setHighlightColor(borderWebColor);
+    applyAnnotationColors();
   }
 
 	public void registerOnAttachArea(OnAttachAreaListener listener) {

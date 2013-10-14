@@ -172,7 +172,7 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 	// simple border color changes
 	void setHighlightColor(String color);
 	void restoreHighlighColor();
-	void setBorderColor(String color);
+	// void setBorderColor(String color);
 	void setBorderColor(Color color);
 	IGroup getGroup();
 	

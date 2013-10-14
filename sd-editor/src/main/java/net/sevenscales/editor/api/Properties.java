@@ -250,7 +250,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		  	Color newbg = new Color(color.getRr(), color.getGg(), color.getBb(), color.getOpacity());
 				d.setBackgroundColor(newbg);
 	    	String borderWebColor = ColorHelpers.borderColorByBackground(newbg.red, newbg.green, newbg.blue);
-	      d.setBorderColor(borderWebColor);
+	    	net.sevenscales.editor.content.utils.Rgb rgb = ColorHelpers.toRgb(borderWebColor);
+	    	rgb.a = 1;
+	    	Color newbordercolor = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
+	      d.setBorderColor(newbordercolor);
 			}
 		
 			if (!"transparent".equals(d.getTextAreaBackgroundColor())) {
@@ -263,7 +266,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			break;
 		case BORDER:
 			if (d.canSetBackgroundColor()) {
-				d.setBorderColor(color.getBorderColor4Web());
+				Color borcolor = new Color(color.getBorR(), color.getBorG(), color.getBorB(), color.getOpacity());
+				d.setBorderColor(borcolor);
 			}
 			break;
 		}

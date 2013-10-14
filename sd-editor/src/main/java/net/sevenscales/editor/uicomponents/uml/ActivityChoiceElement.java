@@ -107,7 +107,7 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
     setShape(shape.rectShape.left, shape.rectShape.top, 
              shape.rectShape.width, shape.rectShape.height);
     
-    setBorderColor(borderWebColor);
+    // setBorderColor(borderWebColor);
     
     super.constructorDone();
 	}

@@ -68,7 +68,7 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
     textUtil = new TextElementFormatUtil(this, hasTextElement, group, surface.getEditorContext());
     
     setText(text);
-    setBorderColor(borderWebColor);
+    // setBorderColor(borderWebColor);
     
     super.constructorDone();
 	}

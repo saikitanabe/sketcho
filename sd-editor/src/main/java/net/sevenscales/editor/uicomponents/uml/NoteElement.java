@@ -139,7 +139,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
     
     setText(text);
     
-    setBorderColor(borderWebColor);
+    // setBorderColor(borderWebColor);
     
     super.constructorDone();
 	}

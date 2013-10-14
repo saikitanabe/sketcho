@@ -165,7 +165,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     setTitle();
     setText(text);
 
-    setBorderColor(borderWebColor);
+    // setBorderColor(borderWebColor);
 
     // HACK! need to set border as transparent
     restoreHighlighColor();

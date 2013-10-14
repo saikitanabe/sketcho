@@ -89,7 +89,7 @@ public class UMLPackageElement extends AbstractDiagramItem implements SupportsRe
 
     setReadOnly(!editable);
     
-    setBorderColor(borderWebColor);
+    // setBorderColor(borderWebColor);
     
     super.constructorDone();
   }

@@ -312,7 +312,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     setReadOnly(!editable);
     setText(text);
     
-    setBorderColor(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+    setBorderColor(Theme.getCurrentColorScheme().getBorderColor());
 
     // applyAnnotationColors();
   }
@@ -839,7 +839,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     fireSizeChanged();
     
     // reapply border color to see dashed and solid line changes
-    setBorderColor(getBorderColor());
+    setBorderColor(getBorderColorAsColor());
     // applyAnnotationColors();
   }
 
@@ -1136,7 +1136,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
 	@Override
 	public void restoreHighlighColor() {
-		setBorderColor(getBorderColor());
+		setBorderColor(getBorderColorAsColor());
     // applyAnnotationColors();
 	}
   

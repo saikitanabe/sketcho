@@ -158,17 +158,17 @@ public class Theme {
     return new Color(0x44, 0x44, 0x44, 1);
   }
   private static Color createDefaultCommentBorderColor() {
-    return new Color(0xFB, 0xE2, 0x80, 0);
+    return new Color(255,102,102,0);
   }
   private static Color createDefaultCommentBackgroundColor() {
-    return new Color(0xFC, 0xF7, 0xCA, 0);
+    return new Color(255,102,102,0);
   }
 
   private static Color createDefaultCommentThreadTextColor() {
     return new Color(0x44, 0x44, 0x44, 1);
   }
   private static Color createDefaultCommentThreadBorderColor() {
-    return new Color(0xFB, 0xE2, 0x80, 0);
+    return new Color(255,102,102,0);
   }
   private static Color createDefaultCommentThreadBackgroundColor() {
     return new Color(255,102,102,0.85);
