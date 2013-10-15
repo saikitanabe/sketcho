@@ -109,7 +109,7 @@ public class OTCompensationTransformer {
 	}
 
 	private List<IDiagramItemRO> findChildren(String parentClientId) {
-		List<IDiagramItemRO> result = new ArrayList<IDiagramItemRO>();
+		List<IDiagramItemRO> result = new DiagramItemList();
 		for (IDiagramItemRO item : currentState) {
 			CommentDTO child = cast(item);
 			if (child != null && parentClientId.equals(child.getParentThreadId())) {
@@ -177,7 +177,7 @@ public class OTCompensationTransformer {
 	}
 
 	private List<IDiagramItemRO> mapToDeleteItems(List<? extends IDiagramItemRO> newItems) {
-  	List<IDiagramItemRO> result = new ArrayList<IDiagramItemRO>();
+  	List<IDiagramItemRO> result = new DiagramItemList();
   	for (IDiagramItemRO n : newItems) {
   		if (n instanceof CommentDTO) {
   			CommentDTO c = (CommentDTO) n;

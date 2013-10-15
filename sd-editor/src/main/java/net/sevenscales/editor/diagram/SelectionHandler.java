@@ -201,6 +201,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     for (Diagram remove : tobeRemovedInCycle) {
       removed.add(remove);
       dragHandlers.remove(remove);
+      remove.removeFromParent();
     }
     clearToBeRemovedCycle();
   }
