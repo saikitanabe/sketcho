@@ -136,6 +136,10 @@ public class UMLDiagramSelections extends Composite {
 	public void oncomments(ClickEvent event) {
 		fire(UMLDiagramType.COMMENT_THREAD);
 	}
+	@UiHandler("_comments")
+	public void oncommentsMind(ClickEvent event) {
+		fire(UMLDiagramType.COMMENT_THREAD);
+	}
 	
 	@UiHandler("choice")
 	public void onchoice(ClickEvent event) {

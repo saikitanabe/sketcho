@@ -52,13 +52,6 @@
 <!-- 		</g:HTML> -->
 		<g:HorizontalPanel ui:field="diagramGroups">
 			<g:VerticalPanel styleName="uml-selection-table class-diagram">
-				<c:FastButton ui:field="comments" styleName="{style.focuspanel}">
-					<c:child>
-						<g:SimplePanel styleName="{style.asbutton}">
-							<g:Image resource="{elcomments}" styleName="{style.relationship}"></g:Image>
-						</g:SimplePanel>
-					</c:child>
-				</c:FastButton>
 				<c:FastButton ui:field="note" styleName="{style.focuspanel}">
 					<c:child>
 						<g:SimplePanel styleName="{style.asbutton}">
@@ -93,6 +86,13 @@
 					<c:child>
 						<g:SimplePanel styleName="{style.asbutton}">
 							<g:Image resource="{umlusecase}" styleName="{style.relationship}"></g:Image>
+						</g:SimplePanel>
+					</c:child>
+				</c:FastButton>
+				<c:FastButton ui:field="comments" styleName="{style.focuspanel}">
+					<c:child>
+						<g:SimplePanel styleName="{style.asbutton}">
+							<g:Image resource="{elcomments}" styleName="{style.relationship}"></g:Image>
 						</g:SimplePanel>
 					</c:child>
 				</c:FastButton>
@@ -176,6 +176,13 @@
 					<c:child>
 						<g:SimplePanel styleName="{style.asbutton}">
 							<g:Image resource="{umlnote}" styleName="{style.relationship}"></g:Image>
+						</g:SimplePanel>
+					</c:child>
+				</c:FastButton>
+				<c:FastButton ui:field="_comments" styleName="{style.focuspanel}">
+					<c:child>
+						<g:SimplePanel styleName="{style.asbutton}">
+							<g:Image resource="{elcomments}" styleName="{style.relationship}"></g:Image>
 						</g:SimplePanel>
 					</c:child>
 				</c:FastButton>
