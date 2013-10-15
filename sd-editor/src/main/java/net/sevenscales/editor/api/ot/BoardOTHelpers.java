@@ -180,9 +180,13 @@ public class BoardOTHelpers {
 			Diagram diagram = findDiagramByClientId(diro.getClientId());
 			if (diagram == null) {
 				diagram = createAndAddElement(diro);
-				applyThemeColors(diagram);
-				reattachHelpers.processDiagram(diagram);
+			} else {
+				// insert could be reopen comment thread and element might be
+				// just hidden
+				diagram.copyFrom(diro);
 			}
+			applyThemeColors(diagram);
+			reattachHelpers.processDiagram(diagram);
       diagrams.add(diagram);
 		}
 		

@@ -6,8 +6,7 @@ public enum OTOperation {
 	UNDO_DELETE("undo.delete"), REDO_DELETE("redo.delete"), 
 	UNDO_INSERT("undo.insert"), REDO_INSERT("redo.insert"),
 	UNDO_MODIFY("undo.modify"), REDO_MODIFY("redo.modify"), 
-	USER_JOIN("user.join"), USER_LEFT("user.left"), USER_MOVE("user.move"),
-	REOPEN_COMMENT_THREAD("reopen");
+	USER_JOIN("user.join"), USER_LEFT("user.left"), USER_MOVE("user.move");
 
 	private String value;
 	private OTOperation(String value) {
