@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.CommentDTO;
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ot.ApplyHelpers.DiagramApplyOperation;
 import net.sevenscales.editor.diagram.utils.DiagramItemList;
@@ -125,7 +126,19 @@ public class OTCompensationTransformer {
 		return null;
 	}
 
+	private boolean undoForInsertExists(List<? extends IDiagramItemRO> items) {
+		if (items.size() == 1 && items.get(0).getType().equals(ElementType.COMMENT_THREAD.getValue())) {
+			// comment thread single insert undo does not exists since first comment
+			// undo includes parent element insert
+			return false;
+		}
+		return true;
+	}
+
 	private CompensationModel compensateInsertOperation(OTOperation operation, List<? extends IDiagramItemRO> items) {
+		if (!undoForInsertExists(items)) {
+			return null;
+		}
   	checkOperation(operation, OTOperation.INSERT);
 		List<IDiagramItemRO> undoItems = mapToDeleteItems(items);
 

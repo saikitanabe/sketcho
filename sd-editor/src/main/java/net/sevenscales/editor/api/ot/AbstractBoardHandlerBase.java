@@ -310,7 +310,9 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
     try {
       model = compensationTransformer.compensate(op, graphicalDocumentCache.getDocument(), operationItems);
       // push operation to OTBuffer
-      otBuffer.pushToUndoBufferAndResetRedo(model);
+      if (model != null) {
+	      otBuffer.pushToUndoBufferAndResetRedo(model);
+      }
       // apply changes to graphical view document after compensation calculation, to have correct
       // previous state.
       graphicalDocumentCache.apply(op, operationItems);
