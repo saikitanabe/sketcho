@@ -23,6 +23,12 @@
 			<a ui:field="colorize" title="Change Color" class="btn btn-custom tooltipper">
 				<i class="icon-colorize"></i>
 			</a>
+			<a ui:field="annotate" title="Annotate" class="btn btn-custom tooltipper">
+				A
+			</a>
+			<a ui:field="unannotate" title="Unannotate" class="btn btn-custom tooltipper">
+				A
+			</a>
 			<a ui:field="delete" title="Delete" class="btn btn-custom tooltipper">
 				<i class="icon-trash"></i>
 			</a>

@@ -1,5 +1,8 @@
 package net.sevenscales.editor.content.ui;
 
+import java.util.Set;
+import java.util.HashSet;
+
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
@@ -13,6 +16,7 @@ import net.sevenscales.editor.api.event.SaveButtonClickedEvent;
 import net.sevenscales.editor.api.event.SaveButtonClickedEventHandler;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.SelectionMouseUpEventHandler;
+import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.auth.AuthHelpers;
@@ -69,6 +73,9 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement reverseConnection;
 	@UiField AnchorElement colorize;
 	@UiField AnchorElement delete;
+	@UiField AnchorElement annotate;
+	@UiField AnchorElement unannotate;
+
 	private PopupPanel colorpopup;
 	private Color color = new Color("444444", 0x44, 0x44, 0x44, "6699ff", 0x66, 0x99, 0xff, "FFFFFF", 255, 255, 255, AbstractDiagramItem.DEFAULT_FILL_OPACITY);
 	private ColorSelections colorSelections;
@@ -117,6 +124,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				boolean changeConnectionMenu = false;
 				Display deleteMenuVisibility = Display.NONE;
 				Display duplicateMenuVisibility = Display.NONE;
+				Display annotateVisibility = Display.NONE;
+				Display unannotateVisibility = Display.NONE;
 
 				if ((diagram.supportedMenuItems() & ContextMenuItem.FREEHAND_MENU.getValue()) == ContextMenuItem.FREEHAND_MENU.getValue()) {
 					freehandMenu = Display.INLINE;
@@ -128,6 +137,12 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				}
 				if (anySupportsColorMenu(selected)) {
 					colorMenu = Display.INLINE_BLOCK;
+				}
+
+				if (anyIsAnnotated(selected)) {
+					unannotateVisibility = Display.INLINE_BLOCK;
+				} else {
+					annotateVisibility = Display.INLINE_BLOCK;
 				}
 
 				boolean allowedToShowDeleteMenu = AuthHelpers.allowedToShowDelete(selected);
@@ -145,6 +160,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				colorize.getStyle().setDisplay(colorMenu);
 				delete.getStyle().setDisplay(deleteMenuVisibility);
 				duplicate.getStyle().setDisplay(duplicateMenuVisibility);
+				annotate.getStyle().setDisplay(annotateVisibility);
+				unannotate.getStyle().setDisplay(unannotateVisibility);
 
 				if (freehandMenu == Display.NONE && 
 						reverseMenu == Display.NONE &&
@@ -162,6 +179,16 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					if (AuthHelpers.allowedToEdit(diagram) && 
 						  (diagram.supportedMenuItems() & ContextMenuItem.COLOR_MENU.getValue()) == ContextMenuItem.COLOR_MENU.getValue() &&
 						  AuthHelpers.allowColorChange(diagram)) {
+						return true;
+					}
+				}
+				return false;
+			}
+
+			private boolean anyIsAnnotated(Diagram[] selected) {
+				for (Diagram diagram : selected) {
+					if (diagram.isAnnotation() && 
+						!(diagram instanceof CommentThreadElement || diagram instanceof CommentElement)) {
 						return true;
 					}
 				}
@@ -265,7 +292,23 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				delete();
 			}
 		});
-		
+
+		new FastElementButton(annotate).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				stopEvent(event);
+				annotate();
+			}
+		});
+
+		new FastElementButton(unannotate).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				stopEvent(event);
+				unannotate();
+			}
+		});
+
 		// do not handle undo/redo if property editor is open
 		Event.addNativePreviewHandler(new NativePreviewHandler() {
 		  @Override
@@ -310,6 +353,34 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			setColorPopupRelativePosition();
 		}
 		EffectHelpers.tooltipperHide();
+	}
+
+	private void annotate() {
+		Set<Diagram> annotated = new HashSet<Diagram>();
+		for (Diagram d : selectionHandler.getSelectedItems()) {
+			if (!d.isAnnotation()) {
+				if (!(d instanceof CommentThreadElement &&  d instanceof CommentElement)) {
+					d.annotate();
+					annotated.add(d);
+				}
+			}
+		}
+		hide();
+		surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(annotated));
+	}
+
+	private void unannotate() {
+		Set<Diagram> annotated = new HashSet<Diagram>();
+		for (Diagram d : selectionHandler.getSelectedItems()) {
+			if (d.isAnnotation()) {
+				if (!(d instanceof CommentThreadElement &&  d instanceof CommentElement)) {
+					d.unannotate();
+					annotated.add(d);
+				}
+			}
+		}
+		hide();
+		surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(annotated));
 	}
 	
 	private void setColorPopupRelativePosition() {

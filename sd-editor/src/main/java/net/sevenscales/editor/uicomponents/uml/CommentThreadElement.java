@@ -798,4 +798,14 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			setVisible(false);
 		}
 	}
+
+	/**
+	* To prevent accidental annotation removal.
+	*/
+	@Override
+	public void annotate() {
+	}
+	@Override
+	public void unannotate() {
+	}
 }

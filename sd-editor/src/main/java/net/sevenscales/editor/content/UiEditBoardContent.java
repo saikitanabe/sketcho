@@ -273,7 +273,7 @@ public abstract class UiEditBoardContent extends UiContent implements KeyDownHan
 //			}
 //		});
   	
-  	final SelectButtonBox relationShipType = new SelectButtonBox(getEditorContext());
+  	// final SelectButtonBox relationShipType = new SelectButtonBox(getEditorContext());
 //  	getEditorContext().getEventBus().addHandler(SelectionEvent.TYPE, new SelectionEventHandler() {
 //			@Override
 //			public void onSelection(SelectionEvent event) {
@@ -300,7 +300,7 @@ public abstract class UiEditBoardContent extends UiContent implements KeyDownHan
 //    result.add(scaleButton);
 //  	result.add(deleteSelected);
 //  	result.add(modeBar);
-  	result.add(relationShipType);
+  	// result.add(relationShipType);
 //  	result.add(colorButton);
   	result.add(freehandMode);
   	if (supportsUndoMenu) {

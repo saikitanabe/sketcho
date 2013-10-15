@@ -223,13 +223,13 @@ public abstract class UiEditContent extends UiContent implements KeyDownHandler 
 			}
 		});
   	
-  	final SelectButtonBox relationShipType = new SelectButtonBox(getEditorContext());
-  	getEditorContext().getEventBus().addHandler(SelectionEvent.TYPE, new SelectionEventHandler() {
-			@Override
-			public void onSelection(SelectionEvent event) {
-				deleteSelected.setEnabled(true);
-			}
-		});
+  // 	final SelectButtonBox relationShipType = new SelectButtonBox(getEditorContext());
+  // 	getEditorContext().getEventBus().addHandler(SelectionEvent.TYPE, new SelectionEventHandler() {
+		// 	@Override
+		// 	public void onSelection(SelectionEvent event) {
+		// 		deleteSelected.setEnabled(true);
+		// 	}
+		// });
 
     getEditorContext().getEventBus().addHandler(UnselectAllEvent.TYPE, new UnselecteAllEventHandler() {
 			@Override
@@ -246,7 +246,7 @@ public abstract class UiEditContent extends UiContent implements KeyDownHandler 
   	result.add(cancel);
   	result.add(deleteSelected);
 //  	result.add(modeBar);
-  	result.add(relationShipType);
+  	// result.add(relationShipType);
   	result.add(colorButton);
 
   	result.add(freehandMode);
