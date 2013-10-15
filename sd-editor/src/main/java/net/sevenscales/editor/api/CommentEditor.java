@@ -38,6 +38,8 @@ import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEvent;
 import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEventHandler;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
+import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
+import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
 
@@ -163,6 +165,12 @@ class CommentEditor  extends Composite {
 				});
 			}
 		});		
+
+		surface.getEditorContext().getEventBus().addHandler(EditDiagramPropertiesStartedEvent.TYPE, new EditDiagramPropertiesStartedEventHandler() {
+			public void on(EditDiagramPropertiesStartedEvent event) {
+				donePopup.hide();
+			}
+		});
 
 		surface.getEditorContext().getEventBus().addHandler(CommentThreadDeletedEvent.TYPE, removeHandler);
 	}
