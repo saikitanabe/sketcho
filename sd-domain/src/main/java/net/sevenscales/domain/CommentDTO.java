@@ -41,8 +41,8 @@ public class CommentDTO extends DiagramItemDTO {
 		this("", "", "", "", "", 0, 0L, "", "", 0, 1, 0, parentThreadId, username, userDisplayName, createdAt, updatedAt);
 	}	
 
-	public CommentDTO(String clientId) {
-		this("", "", "", "", "", 0, 0L, clientId, "", 0, 1, 0, "", "", "", 0L ,0L);
+	public CommentDTO(String clientId, String parentThreadId) {
+		this("", "", "", "", "", 0, 0L, clientId, "", 0, 1, 0, parentThreadId, "", "", 0L ,0L);
 	}
 
 	public CommentDTO(IDiagramItemRO di) {

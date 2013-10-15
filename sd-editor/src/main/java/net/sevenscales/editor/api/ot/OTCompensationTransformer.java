@@ -83,12 +83,56 @@ public class OTCompensationTransformer {
 		return new CompensationModel(OTOperation.INSERT, toInsert, operation, BoardDocumentHelpers.copyDiagramItems(items));
 	}
 
+	private void handleParentOnInsert(List<IDiagramItemRO> undoItems, List<IDiagramItemRO> redoItems) {
+		// if insert is first on comment thread, then needs to include also comment thread
+		// insert first comment => 
+		// 				undo: delete comment + delete parent
+		// 				redo: insert parent + insert comment
+		if (undoItems.size() == 1 && undoItems.get(0) instanceof CommentDTO) {
+			CommentDTO comment = (CommentDTO) undoItems.get(0);
+			List<IDiagramItemRO> children = findChildren(comment.getParentThreadId());
+			if (children.size() == 0) {
+				// first comment on this thread
+				handleParent(comment, undoItems);
+			}
+		}
+
+		if (redoItems.size() == 1 && redoItems.get(0) instanceof CommentDTO) {
+			CommentDTO comment = (CommentDTO) redoItems.get(0);
+			List<IDiagramItemRO> children = findChildren(comment.getParentThreadId());
+			if (children.size() == 0) {
+				// first comment on this thread
+				handleParentBefore(comment, redoItems);
+			}
+		}
+	}
+
+	private List<IDiagramItemRO> findChildren(String parentClientId) {
+		List<IDiagramItemRO> result = new ArrayList<IDiagramItemRO>();
+		for (IDiagramItemRO item : currentState) {
+			CommentDTO child = cast(item);
+			if (child != null && parentClientId.equals(child.getParentThreadId())) {
+				result.add(item);
+			}
+		}
+		return result;
+	}
+
+	private CommentDTO cast(IDiagramItemRO item) {
+		if (item instanceof CommentDTO) {
+			return (CommentDTO) item;
+		}
+		return null;
+	}
+
 	private CompensationModel compensateInsertOperation(OTOperation operation, List<? extends IDiagramItemRO> items) {
   	checkOperation(operation, OTOperation.INSERT);
-		List<IDiagramItemRO> justToDelete = mapToDeleteItems(items);
-//		String undoJson = JsonHelpers.json(justToDelete);
-//		String redoJson = JsonHelpers.json(items);
-    return new CompensationModel(OTOperation.DELETE, justToDelete, operation, BoardDocumentHelpers.copyDiagramItems(items));
+		List<IDiagramItemRO> undoItems = mapToDeleteItems(items);
+
+		List<IDiagramItemRO> redoItems = BoardDocumentHelpers.copyDiagramItems(items);
+		handleParentOnInsert(undoItems, redoItems);
+
+    return new CompensationModel(OTOperation.DELETE, undoItems, operation, redoItems);
 	}
 
 	private CompensationModel compensateModifyOperation(OTOperation operation, List<? extends IDiagramItemRO> items) throws MappingNotFoundException {
@@ -122,18 +166,38 @@ public class OTCompensationTransformer {
 	private List<IDiagramItemRO> mapToDeleteItems(List<? extends IDiagramItemRO> newItems) {
   	List<IDiagramItemRO> result = new ArrayList<IDiagramItemRO>();
   	for (IDiagramItemRO n : newItems) {
-  		// it is fine to use simple DiagramItemDTO, since delete is just about client id
-  		result.add(new DiagramItemDTO(n.getClientId()));
+  		if (n instanceof CommentDTO) {
+  			CommentDTO c = (CommentDTO) n;
+  			// for comments parent needs to be found as well and handled
+  			result.add(new CommentDTO(c.getClientId(), c.getParentThreadId()));
+  		} else {
+	  		// it is fine to use simple DiagramItemDTO, since delete is just about client id
+	  		result.add(new DiagramItemDTO(n.getClientId()));
+  		}
   	}
 		return result;
 	}
 
-	private void handleParent(CommentDTO child, List<? extends IDiagramItemRO> currentState, List<IDiagramItemRO> result) {
+	private IDiagramItemRO findItem(String clientId) {
 		for (IDiagramItemRO current : currentState) {
-			if (child.getParentThreadId().equals(current.getClientId())) {
-				result.add(current.copy());
-				break;
+			if (clientId.equals(current.getClientId())) {
+				return current;
 			}
+		}
+		return null;
+	}
+
+	private void handleParent(CommentDTO child, List<IDiagramItemRO> result) {
+		IDiagramItemRO parent = findItem(child.getParentThreadId());
+		if (parent != null) {
+			result.add(parent.copy());
+		}
+	}
+
+	private void handleParentBefore(CommentDTO child, List<IDiagramItemRO> result) {
+		IDiagramItemRO parent = findItem(child.getParentThreadId());
+		if (parent != null) {
+			result.add(0, parent.copy());
 		}
 	}
 
@@ -178,7 +242,7 @@ public class OTCompensationTransformer {
 	  				throw new RuntimeException("Client ID cannot be empty!");
 	  			}
 	  			if (n instanceof CommentDTO) {
-	  				handleParent((CommentDTO) n, currentState, result);
+	  				handleParent((CommentDTO) n, result);
 	  			}
 	    		if (n.getClientId().equals(c.getClientId())) {
 	    			result.add(c.copy());

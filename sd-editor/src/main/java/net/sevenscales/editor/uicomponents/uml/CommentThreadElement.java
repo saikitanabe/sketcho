@@ -784,7 +784,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 				ce.setVisible(false);
 			}
 			// in case connections contain text those are kept on board as annotations
-			// removeConnections();
+			removeConnections();
 			surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(resolved));
 
 			// remove thread with comments, user need to restore thread from comments dialog or using undo/redo
