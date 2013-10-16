@@ -344,6 +344,10 @@ public class TextElementFormatUtil {
     textGroup.setVisible(true);
 	}
 
+  public void setVisible(boolean visible) {
+    textGroup.setVisible(visible);
+  }
+
 	public void applyTransformToShape(int dx, int dy) {
   	for (List<IShape> line : lines) {
 	    for (IShape ltext : line) {

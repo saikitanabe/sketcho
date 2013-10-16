@@ -369,4 +369,10 @@ public class TextElement extends AbstractDiagramItem implements
   	return false;
   }
 
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		textUtil.setVisible(visible);
+	}
+
 }

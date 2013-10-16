@@ -276,7 +276,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	  super.accept(surface);
 		surface.makeDraggable(this);
 	}
-	
+
 	@Override
 	protected int doGetLeft() {
 		return boundary.getX();
@@ -429,10 +429,11 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	// }
 	
 	@Override
-		public void setVisible(boolean visible) {
-			super.setVisible(visible);
-			applyShadowVisiblity();
-		}
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		textUtil.setVisible(visible);
+		applyShadowVisiblity();
+	}
 	
 	// @Override
 	// public void saveLastTransform(int dx, int dy) {
