@@ -72,7 +72,8 @@ public class BoardColorHelper {
 
   public static void applyThemeToDiagram(Diagram d, ElementColorScheme currentColorScheme, ElementColorScheme newColorScheme) {
     if (currentColorScheme.equals(newColorScheme)) {
-      // don't do anything
+      // don't do anything except apply annotations if needed
+      d.applyAnnotationColors();
       return;
     }
 

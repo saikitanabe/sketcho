@@ -215,10 +215,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
 
 	protected void constructorDone() {
-    applyAnnotationColors();
-//  	if (resizeHelpers != null) {
-//  		resizeHelpers.hide(this);
-//  	}
   }
 	
 	@Override
