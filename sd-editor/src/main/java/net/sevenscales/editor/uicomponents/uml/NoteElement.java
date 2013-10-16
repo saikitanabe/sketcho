@@ -276,11 +276,6 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	  super.accept(surface);
 		surface.makeDraggable(this);
 	}
-
-	public void removeFromParent() {
-		surface.remove(this);
-    surface.remove(group.getContainer());
-	}
 	
 	@Override
 	protected int doGetLeft() {

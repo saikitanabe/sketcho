@@ -372,4 +372,9 @@ public class TextElementFormatUtil {
 		this.fontSize  = fontSize;
 	}
 
+  public void remove() {
+    clearLines();
+    textGroup.remove();
+  }
+
 }

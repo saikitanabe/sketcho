@@ -334,6 +334,7 @@ class SurfaceHandler extends SimplePanel implements
 	public void remove(Diagram diagram) {
 		diagrams.remove(diagram);
 		mouseDiagramManager.diagramRemoved(diagram);
+		clickListenerCollection.remove(diagram);
 		IGroup group = diagram.getGroup(); 
 		if (group != null) {
 			_removeShape(group.getContainer());

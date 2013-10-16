@@ -538,27 +538,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	public void setHighlightColor(String color) {
 		boundary.setStroke(color);
 	}
-  
-	// @Override
-	// public void resetTransform() {
-	// 	// unrotate before saving
-	// 	tape.unrotate(-2, getLeft(), getTop());
-	// 	group.resetAllTransforms();
-	// }
-	
-	@Override
-	public void setVisible(boolean visible) {
-		super.setVisible(visible);
-		applyShadowVisiblity();
-	}
-	
-	// @Override
-	// public void saveLastTransform(int dx, int dy) {
-	// 	super.saveLastTransform(dx, dy);
-	// 	tape.rotate(-2, getLeft(), getTop());
-	// 	textUtil.show();
-	// }
-	
+  	
 	@Override
 	public IGroup getGroup() {
 		return group;
@@ -703,7 +683,9 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			if (resizeChild) {
 				ce.resizeText();
 			} else {
-				ce.setVisible(isVisible());
+				if (ce.isVisible() != isVisible()) {
+					ce.setVisible(isVisible());
+				}
 			}
 			// }
 			height += commentHeight + 1;

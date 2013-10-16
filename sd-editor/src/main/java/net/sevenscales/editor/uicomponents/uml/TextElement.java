@@ -151,11 +151,6 @@ public class TextElement extends AbstractDiagramItem implements
 		surface.makeDraggable(this);
 	}
 
-	public void removeFromParent() {
-		surface.remove(this);
-		surface.remove(group.getContainer());
-	}
-
 //	public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
 //		if (AnchorUtils.onAttachArea(x, y, attachBoundary)) {
 //			AnchorElement result = anchorMap.get(anchor);

@@ -65,13 +65,13 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   public void setText(String newText, boolean editable, boolean force) {
   	// convert json text line (\\n) breaks to line breaks
 //  	newText = newText.replaceAll("\\\\n", "\n");
-  	newText = newText.replaceAll("\\\\r", ""); // remove \r chars and handle only \n later
-//    boolean changed = getText() != null && getText().equals(newText) ? false : true;
-//    if (changed || force) {
+    newText = newText.replaceAll("\\\\r", ""); // remove \r chars and handle only \n later
+    // boolean changed = getText() != null && getText().equals(newText) ? false : true;
+    // if (changed || force) {
     setText(newText);
-    
+  
     if (force || editorContext.isTrue(EditorProperty.ON_SURFACE_LOAD) || editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
-    	calculateLines2();
+  	 calculateLines2();
       if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
         // during OT operation element is NOT resized and everything is 
         // copied as is, element size and text
@@ -79,8 +79,9 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
         calculateAndNotifyHeight(parent.getMeasurementAreaWidth());
       }
       this.tokens = null; // cleanup some memory
-    	setTextShape();
+  	 setTextShape();
     }
+    // }
 
 //    if ((hasTextElement.forceAutoResize()) && 
 //   		 editorContext.get(EditorProperty.AUTO_RESIZE_ENABLED).equals(true)) {

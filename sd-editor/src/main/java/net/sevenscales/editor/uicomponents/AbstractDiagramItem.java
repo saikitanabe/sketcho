@@ -78,6 +78,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
                                           GraphicsTouchEndHandler {
 	private final static SLogger logger = SLogger.createLogger(AbstractDiagramItem.class);
 	
+  static {
+    SLogger.addFilter(AbstractDiagramItem.class);
+  }
+
 	public static double DEFAULT_FILL_OPACITY = 0;
 //	public static Color createDefaultBackgroundColor() { return new Color(0x66, 0x99, 0xff, 0); }
 //	public static Color createDefaultBorderColor() { return null; } // create legacy color that is null
@@ -375,6 +379,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     }
 		surface.remove(this);
     removed = true;
+
+    TextElementFormatUtil textFormatter = getTextFormatter();
+    if (textFormatter != null) {
+      textFormatter.remove();
+    }
 	}
 
   public boolean isRemoved() {
@@ -772,15 +781,17 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   public void setVisible(boolean visible) {
-    this.visible = visible; 
-    IGroup group = getGroup();
-    if (group != null) {
-      group.setVisible(visible);
-    }
+    if (this.visible != visible) {
+      this.visible = visible; 
+      IGroup group = getGroup();
+      if (group != null) {
+        group.setVisible(visible);
+      }
 
-    if (getChildElements() != null) {
-      for (Diagram child : getChildElements()) {
-        child.setVisible(visible);
+      if (getChildElements() != null) {
+        for (Diagram child : getChildElements()) {
+          child.setVisible(visible);
+        }
       }
     }
   }
@@ -1035,7 +1046,13 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
 	@Override
 	public void copyFrom(IDiagramItemRO diagramItem) {
-    getDiagramItem().copyFrom(diagramItem);
+    logger.start("copyFrom SUM");
+    logger.start("copyFrom 1");
+    IDiagramItemRO current = getDiagramItem();
+    // getDiagramItem().copyFrom(diagramItem);
+
+    logger.debugTime();
+    logger.start("copyFrom 2");
 //		setDiagramText(diagramItem);
 		
 //		IDiagramItem me = DiagramItemFactory.createOrUpdate(this, false);
@@ -1043,37 +1060,84 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 			// cannot change shape at the same time
 			// it will fail
 			// sequence item has wrong format!! => convert first space to comma
-			String shapestr = diagramItem.getShape().replaceFirst("\\s", ",");
-			String[] shapeString = shapestr.split(",");
-			int[] shape = new int[shapeString.length];
-			int i = 0;
-			for (String val : shapeString) {
-				shape[i] = Integer.valueOf(val);
-				i = i + 1;
-			}
-			setShape(shape);
-			parseCustomData(diagramItem.getCustomData());
+    String newshape = diagramItem.getShape();
+    boolean shapeChanged = false;
+    if (newshape != null && !newshape.equals(current.getShape())) {
+      shapeChanged = true;
+      String shapestr = newshape.replaceFirst("\\s", ",");
+      String[] shapeString = shapestr.split(",");
+      int[] shape = new int[shapeString.length];
+      int i = 0;
+      for (String val : shapeString) {
+        shape[i] = Integer.valueOf(val);
+        i = i + 1;
+      }
+      setShape(shape);
+    }
+
+    logger.debugTime();
+    logger.start("copyFrom 3");
+
+    String newCustomData = diagramItem.getCustomData();
+    if (newCustomData != null && !newCustomData.equals(current.getCustomData())) {
+      parseCustomData(newCustomData);
+    }
 			
-			setDiagramText(diagramItem);
+    logger.debugTime();
+    logger.start("copyFrom 4");
+
+    String newText = diagramItem.getText();
+    if (shapeChanged || newText != null && !newText.equals(current.getText())) {
+      setDiagramText(diagramItem);
+    }
+
+    logger.debugTime();
+    logger.start("copyFrom 5");
+
 //		}
 		
-		Color textColor = DiagramItemFactory.parseTextColor(diagramItem);
-		setTextColor(textColor.red, textColor.green, textColor.blue);
+    String newTextColor = diagramItem.getTextColor();
+    if (newTextColor != null && !newTextColor.equals(current.getTextColor())) {
+      Color textColor = DiagramItemFactory.parseTextColor(diagramItem);
+      setTextColor(textColor.red, textColor.green, textColor.blue);
+    }
 
-		Color borderColor = DiagramItemFactory.parseBorderColor(diagramItem);
-		if (borderColor != null) {
-			// legacy impl didn't have border color
-			setBorderColor(borderColor);
-		}
+    logger.debugTime();
+    logger.start("copyFrom 6");
 
-		Color bgColor = DiagramItemFactory.parseBackgroundColor(diagramItem);
-		setBackgroundColor(bgColor.red, bgColor.green, bgColor.blue, bgColor.opacity);
+    String newBackgroundColor = diagramItem.getBackgroundColor();
+    if (newBackgroundColor != null && !newBackgroundColor.equals(current.getBackgroundColor())) {
+  		Color borderColor = DiagramItemFactory.parseBorderColor(diagramItem);
+  		if (borderColor != null) {
+  			// legacy impl didn't have border color
+  			setBorderColor(borderColor);
+  		}
+
+      Color bgColor = DiagramItemFactory.parseBackgroundColor(diagramItem);
+      setBackgroundColor(bgColor.red, bgColor.green, bgColor.blue, bgColor.opacity);
+    }
+
+    logger.debugTime();
+    logger.start("copyFrom 7");
 		
 		if (connectionHelpers.isShownFor(this)) {
 			connectionHelpers.show(this);
 		}
 
-    setVisible(!diagramItem.isResolved());
+    logger.debugTime();
+    logger.start("copyFrom 9");
+
+    boolean newResolved = diagramItem.isResolved();
+    if (newResolved != current.isResolved()) {
+      // item is shown if it is not resolved
+      setVisible(!newResolved);
+    }
+
+    // just all fields
+    getDiagramItem().copyFrom(diagramItem);
+
+    logger.debugTime();
+    logger.debugTime();
 	}
 
 	private void setDiagramText(IDiagramItemRO diagramItem) {
@@ -1087,6 +1151,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	public final void setShape(int[] shape) {
     doSetShape(shape);
     resetTransform();
+
+    TextElementFormatUtil textFormatter = getTextFormatter();
+    if (textFormatter != null) {
+      textFormatter.setTextShape();
+    }
+
 	}
 
   protected abstract void doSetShape(int[] shape);
