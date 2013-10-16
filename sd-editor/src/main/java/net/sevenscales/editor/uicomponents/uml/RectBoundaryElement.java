@@ -177,11 +177,6 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
     super.accept(surface);
     surface.makeDraggable(this);
   }
-
-  public void removeFromParent() {
-    surface.remove(this);
-    surface.remove(group.getContainer());
-  }
   
   public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
   	return ContainerAttachHelpers.onAttachArea(this, anchor, x, y);

@@ -150,10 +150,6 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
     super.accept(surface);
     surface.makeDraggable(this);
   }
-
-  public void removeFromParent() {
-    super.removeFromParent();
-  }
   
   public String getText() {
     return textUtil.getText();

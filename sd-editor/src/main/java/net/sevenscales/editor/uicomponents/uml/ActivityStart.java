@@ -140,14 +140,6 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
 	  super.accept(surface);
 		surface.makeDraggable(this);
 	}
-
-	public void removeFromParent() {
-		surface.remove(this);
-    surface.remove(group.getContainer());
-//		for (Shape s : shapes) {
-//		  surface.remove(s.getRawNode());
-//		}
-	}
   
   @Override
 	public Diagram duplicate(boolean partOfMultiple) {

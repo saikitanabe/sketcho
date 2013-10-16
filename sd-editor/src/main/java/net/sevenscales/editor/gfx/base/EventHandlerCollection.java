@@ -1,7 +1,7 @@
 package net.sevenscales.editor.gfx.base;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.sevenscales.editor.gfx.domain.IEventHandler;
 import net.sevenscales.editor.gfx.domain.IGraphics;
@@ -9,7 +9,7 @@ import net.sevenscales.editor.gfx.domain.IGraphics;
 import com.google.gwt.user.client.Event;
 
 public class EventHandlerCollection {
-	private List<Handler> eventHandlers = new ArrayList<Handler>();
+	private Set<Handler> eventHandlers = new HashSet<Handler>();
 	
 	class Handler {
 		public IEventHandler eventHandler;
@@ -63,10 +63,6 @@ public class EventHandlerCollection {
 			if (IGraphics.ON_MOUSE_UP.equals(h.eventType))
 				h.eventHandler.onMouseUp(shape, event);
 		}
-	}
-
-	public List<Handler> getEventHandlers() {
-		return eventHandlers;
 	}
 
 	public void fireOnTouchMove(GraphicsBase shape, GraphicsEvent event) {

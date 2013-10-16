@@ -205,11 +205,6 @@ public class RectBoundaryVerticalElement extends AbstractDiagramItem implements 
     super.accept(surface);
     surface.makeDraggable(this);
   }
-
-  public void removeFromParent() {
-    surface.remove(this);
-    surface.remove(group.getContainer());
-  }
   
   public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
 		// container attach is different only border areas can attach

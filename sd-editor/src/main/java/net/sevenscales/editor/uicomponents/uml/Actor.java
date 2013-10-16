@@ -239,14 +239,6 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 	  super.accept(surface);
 		surface.makeDraggable(this);
 	}
-
-	public void removeFromParent() {
-		surface.remove(this);
-    surface.remove(group.getContainer());
-//		for (Shape s : shapes) {
-//		  surface.remove(s.getRawNode());
-//		}
-	}
 	
 	@Override
 	protected int doGetLeft() {

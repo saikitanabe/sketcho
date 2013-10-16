@@ -113,11 +113,6 @@ public class CircleElement extends AbstractDiagramItem {
 	    setVisible(getOwnerComponent().isSelected());
     }
 	}
-
-	public void removeFromParent() {
-    surface.remove(this);
-//    surface.remove(group.getContainer());
-	}
 	
 	public List<IShape> getElements() {
 		return shapes;

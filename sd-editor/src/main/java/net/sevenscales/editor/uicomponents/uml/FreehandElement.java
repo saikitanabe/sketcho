@@ -108,11 +108,6 @@ public class FreehandElement extends AbstractDiagramItem {
 	  super.accept(surface);
 		surface.makeDraggable(this);
 	}
-
-	public void removeFromParent() {
-		surface.remove(this);
-    surface.remove(group.getContainer());
-	}
 	
 	@Override
 	public AnchorElement onAttachArea(Anchor anchor, int x, int y) {

@@ -193,11 +193,6 @@ public class ComponentElement extends AbstractDiagramItem implements SupportsRec
     super.accept(surface);
     surface.makeDraggable(this);
   }
-
-  public void removeFromParent() {
-    surface.remove(this);
-//    surface.remove(group.getContainer());
-  }
   
   public String getText() {
     return textUtil.getText();

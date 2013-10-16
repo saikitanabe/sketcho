@@ -182,11 +182,6 @@ public class UMLPackageElement extends AbstractDiagramItem implements SupportsRe
     surface.makeDraggable(this);
   }
 
-  public void removeFromParent() {
-    surface.remove(this);
-    surface.remove(group.getContainer());
-  }
-
   public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
     return ContainerAttachHelpers.onAttachArea(this, anchor, x, y);
 

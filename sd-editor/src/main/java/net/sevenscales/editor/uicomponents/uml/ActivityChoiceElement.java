@@ -196,10 +196,6 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 		surface.makeDraggable(this);
 	}
 
-	public void removeFromParent() {
-		surface.remove(this);
-	}
-	
 	@Override
 	protected int doGetLeft() {
 		return boundary.getX();
