@@ -380,9 +380,9 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	public void removeFromParent() {
+		super.removeFromParent();
+		title.remove();
 		parentThread.removeComment(this);
-		surface.remove(this);
-    surface.remove(group.getContainer());
     surface.getEditorContext().getEventBus().fireEvent(new CommentDeletedEvent(this));
 	}
 	
