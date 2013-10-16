@@ -48,11 +48,11 @@ public class ActivityEnd extends AbstractDiagramItem implements SupportsRectangl
     group.setAttribute("cursor", "default");
 
 		innerCircle = IShapeFactory.Util.factory(editable).createCircle(group);
-		innerCircle.setStroke(borderWebColor);
+		innerCircle.setStroke(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 		innerCircle.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 		
 		visible = IShapeFactory.Util.factory(editable).createCircle(group);
-		visible.setStroke(borderWebColor);
+		visible.setStroke(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);
 		visible.setFill(0, 0, 0, 0);
 		
 		boundary = IShapeFactory.Util.factory(editable).createCircle(group);
@@ -88,8 +88,7 @@ public class ActivityEnd extends AbstractDiagramItem implements SupportsRectangl
     
     setReadOnly(!editable);
     setShape(shape.centerX, shape.centerY, shape.radius);
-    setBorderColor(Theme.createDefaultBorderColor());
-    
+    setBorderColor(borderColor);
     super.constructorDone();
 	}
 	
@@ -139,6 +138,7 @@ public class ActivityEnd extends AbstractDiagramItem implements SupportsRectangl
   public void setBackgroundColor(int red, int green, int blue, double opacity) {
     super.setBackgroundColor(red, green, blue, opacity);
     visible.setStroke(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+		innerCircle.setStroke(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     innerCircle.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }
 	

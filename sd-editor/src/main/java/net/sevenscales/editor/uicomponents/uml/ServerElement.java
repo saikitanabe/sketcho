@@ -137,6 +137,8 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
     }
 
     setReadOnly(!editable);
+
+    setBorderColor(borderColor);
     super.constructorDone();
   }
   

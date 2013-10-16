@@ -102,8 +102,7 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
     textUtil.setMarginTop(TextElementFormatUtil.DEFAULT_MARGIN_TOP + RY);
     
     setText(text);
-    // setBorderColor(borderWebColor);
-    
+    setBorderColor(borderColor);
     super.constructorDone();
 	}
 

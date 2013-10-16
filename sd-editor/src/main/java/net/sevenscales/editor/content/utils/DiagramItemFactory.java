@@ -227,6 +227,9 @@ public class DiagramItemFactory {
           new ActivityEndShape(cx, 
               cy,
               r),
+              parseBackgroundColor(item),
+              parseBorderColor(item),
+              parseTextColor(item),
           editable);
       result = ee;
     } else if (item.getType().equals("activity")) {

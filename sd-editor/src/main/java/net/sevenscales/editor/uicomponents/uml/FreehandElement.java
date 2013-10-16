@@ -79,6 +79,8 @@ public class FreehandElement extends AbstractDiagramItem {
 
     enableDisableBackgroundEvents();
     
+    setBorderColor(borderColor);
+
     super.constructorDone();
 	}
 	

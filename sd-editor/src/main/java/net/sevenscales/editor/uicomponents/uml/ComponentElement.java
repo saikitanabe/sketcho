@@ -94,7 +94,7 @@ public class ComponentElement extends AbstractDiagramItem implements SupportsRec
     }
 
     setReadOnly(!editable);
-    
+    setBorderColor(borderColor);
     super.constructorDone();
   }
   

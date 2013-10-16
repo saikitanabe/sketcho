@@ -84,8 +84,7 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
 
     setReadOnly(!editable);
     
-    // setBorderColor(borderWebColor);
-    
+    setBorderColor(borderColor);
     super.constructorDone();
   }
   

@@ -170,6 +170,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
     // tape.rotate(-3, getCenterX(), getLeft() + (getWidth() / 2));
     
     textUtil.setTextShape();
+    setBorderColor(borderColor);
     super.applyHelpersShape();
 	}
 

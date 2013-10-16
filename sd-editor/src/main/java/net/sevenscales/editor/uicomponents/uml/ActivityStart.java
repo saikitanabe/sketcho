@@ -81,6 +81,8 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
 //    shapes.add(resizeElement);
     setReadOnly(!editable);
     setShape(shape.centerX, shape.centerY, shape.radius);
+
+    setBorderColor(borderColor);
     
     super.constructorDone();
 	}
