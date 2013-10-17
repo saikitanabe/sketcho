@@ -45,6 +45,12 @@ public class ReattachHelpers {
 		if (diagram != null && !(diagram instanceof CircleElement)) {
 	    if (diagram instanceof Relationship2) {
 	    	Relationship2 r = (Relationship2) diagram;
+
+	    	// OT operations might have updated custom data anchor points
+	    	// not visible yet on screen, but underlying model has been
+	    	// changed and this algorightm uses underlying model
+	    	r.applyCustomData();
+
 	    	relationships.add(r);
 	    	
 	    	if (searchConnections) {

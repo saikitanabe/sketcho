@@ -1298,6 +1298,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   	return StringUtil.stringOrEmpty(getStartClientId()) + ":" 
   					+ StringUtil.stringOrEmpty(getEndClientId());
   }
+
+  public void applyCustomData() {
+    parseCustomData(getDiagramItem().getCustomData());
+  }
   
   @Override
   public void parseCustomData(String customData) {
