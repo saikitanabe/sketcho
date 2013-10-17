@@ -87,6 +87,8 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
 
 	public void setShape(int left, int top, int width, int height) {
     setDimensions(left, top, width, height);
+    textUtil.setTextShape();
+    super.applyHelpersShape();
 	}
 	
   // nice way to clearly separate interface methods :)
@@ -209,8 +211,6 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
     if (width >= minimumWidth && height >= minimumHeight) {
       setShape(left, top, width, height);
       dispatchAndRecalculateAnchorPositions();
-      textUtil.setTextShape();
-      super.applyHelpersShape();
       return true;
     }
 	   return false;
