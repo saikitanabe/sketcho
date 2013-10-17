@@ -139,9 +139,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					colorMenu = Display.INLINE_BLOCK;
 				}
 
-				if (anyIsAnnotated(selected)) {
+				boolean onlyComms = onlyComments(selected);
+				if (anyIsAnnotated(selected) && !onlyComms) {
 					unannotateVisibility = Display.INLINE_BLOCK;
-				} else {
+				} else if (!onlyComms) {
 					annotateVisibility = Display.INLINE_BLOCK;
 				}
 
@@ -193,6 +194,16 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					}
 				}
 				return false;
+			}
+
+			private boolean onlyComments(Diagram[] selected) {
+				boolean result = true;
+				for (Diagram diagram : selected) {
+					if (!(diagram instanceof CommentThreadElement || diagram instanceof CommentElement)) {
+						result = false;
+					}
+				}
+				return result;
 			}
 
 			private boolean ifEvenOneIsComment(Diagram[] selected) {

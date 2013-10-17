@@ -78,10 +78,29 @@ public class OTCompensationTransformer {
 	
   private CompensationModel compensateDeleteOperation(OTOperation operation, List<? extends IDiagramItemRO> items) throws MappingNotFoundException {
   	checkOperation(operation, OTOperation.DELETE);
-		List<IDiagramItemRO> toInsert = mapNewToCurrent(operation, currentState, items);
-//		String undoJson = JsonHelpers.json(toInsert);
-//		String redoJson = JsonHelpers.json(items);
-		return new CompensationModel(OTOperation.INSERT, toInsert, operation, BoardDocumentHelpers.copyDiagramItems(items));
+		List<IDiagramItemRO> undoItems = mapNewToCurrent(operation, currentState, items);
+		List<IDiagramItemRO> redoItems = BoardDocumentHelpers.copyDiagramItems(items);
+		
+		handleParentOnDelete(undoItems);
+		handleParentOnDelete(redoItems);
+
+		return new CompensationModel(OTOperation.INSERT, undoItems, operation, redoItems);
+	}
+
+	private void handleParentOnDelete(List<IDiagramItemRO> items) {
+		// if delete is last on comment thread, then needs to include also comment thread
+		// delete last comment => 
+		// 				undo: insert parent + insert comment
+		// 				redo: delete parent + delete comment
+		for (IDiagramItemRO item : items) {
+			if (item instanceof CommentDTO) {
+				CommentDTO comment = (CommentDTO) item;
+				List<IDiagramItemRO> children = findChildren(comment.getParentThreadId());
+				if (children.size() == 0) {
+					handleParentBefore(comment, items);
+				}
+			}
+		}
 	}
 
 	private void handleParentOnInsert(List<IDiagramItemRO> undoItems, List<IDiagramItemRO> redoItems) {
@@ -253,9 +272,6 @@ public class OTCompensationTransformer {
 	  		for (IDiagramItemRO c : currentState) {
 	  			if (LogConfiguration.loggingIsEnabled(Level.FINEST) && "".equals(n.getClientId()) || "".equals(c.getClientId())) {
 	  				throw new RuntimeException("Client ID cannot be empty!");
-	  			}
-	  			if (n instanceof CommentDTO) {
-	  				handleParent((CommentDTO) n, result);
 	  			}
 	    		if (n.getClientId().equals(c.getClientId())) {
 	    			result.add(c.copy());
