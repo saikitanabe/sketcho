@@ -1,5 +1,0 @@
-rm -rf target/classes
-cd target
-ln -s ../../sketcho/war/WEB-INF/classes classes
-cd ..
-
