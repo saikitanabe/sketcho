@@ -395,7 +395,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     // List<Diagram> diagrams = new ArrayList<Diagram>();
     // diagrams.add(this);
     // selectionHandlers.fireSelection(diagrams);
-    setHighlightColor("#1D00FF");
+    setHighlightColor(DEFAULT_SELECTION_COLOR);
  
     // if (TouchHelpers.isSupportsTouch()) {
     	// usability for touch devices, hide in case connection helpers are on a way
@@ -1173,9 +1173,13 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	
 	@Override
 	public void restoreHighlighColor() {
-		setBorderColor(getBorderColorAsColor());
+    if (selected) {
+      setHighlightColor(DEFAULT_SELECTION_COLOR);
+    } else {
+      setBorderColor(getBorderColorAsColor());
+    }
 	}
-	
+
   @Override
 	public void setHighlightColor(String color) {
 	}
