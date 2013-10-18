@@ -535,10 +535,6 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
 		return textUtil;
 	}
 	
-	public String getTextAreaBackgroundColor() {
-		return "transparent"; // other wise looks little bit funny with rect background
-	}
-	
 	@Override
 	public String getTextAreaAlign() {
 		return "center";
