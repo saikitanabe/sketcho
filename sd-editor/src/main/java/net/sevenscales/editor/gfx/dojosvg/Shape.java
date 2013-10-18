@@ -293,6 +293,12 @@ abstract class Shape extends Graphics implements IShape {
 	private native String _getAttribute(JavaScriptObject rawNode, String name)/*-{
 		return rawNode.rawNode.getAttribute(name);
 	}-*/;
+
+	@Override
+	public void rotatedxdy(int degree, int x, int y, int dx, int dy) {
+		this.rotateDegree = degree;
+		_rotate(rawNode, degree, x, y, dx, dy);
+	}
 	
 	@Override
 	public void rotate(int degree, int x, int y) {
@@ -303,6 +309,29 @@ abstract class Shape extends Graphics implements IShape {
 		var m = $wnd.dojox.gfx.matrix;
 		var r = m.rotategAt(degree, a, b);
 		rawNode.applyTransform(r);
+	}-*/;
+
+	private native void _rotate(JavaScriptObject rawNode, int degree, int centerX, int centerY, int translateX, int translateY)/*-{
+		var m = $wnd.dojox.gfx.matrix;
+		// var m2 = $wnd.dojox.gfx.matrix;
+		// var m3 = $wnd.dojox.gfx.matrix;
+		var r = m.multiply(m.rotategAt(degree, centerX, centerY), m.translate(translateX, translateY));
+		// var r = m3.multiply(m.rotateg(degree)); // , m2.translate(dx, dy)
+		// rawNode.setTransform([
+  //           m.rotategAt(degree, centerX, centerY), 
+  //           // m.scaleAt(2, centerX, centerY),
+  //           m.translate(translateX, translateY)
+  //       ]);		
+		rawNode.setTransform(r);
+
+		// var r
+		// m.translate(x, y), 
+		// var r = m.multiply(m.translate(a, b), m.rotateg(degree))
+		// r.dx = dx;
+		// r.dy = dy;
+		// var r = m.multiply(m.translate(250, 250),m.rotateg(−30), m.scale(2), m.translate(-250, -250))
+		// var r = m.multiply(m.translate(dx, dy));
+		// rawNode.applyTransform(r);
 	}-*/;
 	
 	public void rotateg(int degree) {

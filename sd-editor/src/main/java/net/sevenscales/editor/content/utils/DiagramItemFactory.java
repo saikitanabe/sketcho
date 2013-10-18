@@ -10,6 +10,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
@@ -30,6 +31,7 @@ import net.sevenscales.editor.diagram.shape.NoteShape;
 import net.sevenscales.editor.diagram.shape.CommentThreadShape;
 import net.sevenscales.editor.diagram.shape.CommentShape;
 import net.sevenscales.editor.diagram.shape.RectContainerShape;
+import net.sevenscales.editor.diagram.shape.HorizontalPartitionShape;
 import net.sevenscales.editor.diagram.shape.RectShape;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
 import net.sevenscales.editor.diagram.shape.SequenceShape;
@@ -52,6 +54,7 @@ import net.sevenscales.editor.uicomponents.uml.NoteElement;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.uicomponents.uml.RectBoundaryElement;
+import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
@@ -358,6 +361,15 @@ public class DiagramItemFactory {
               parseTextColor(item),
           editable);
       result = packagee;
+    } else if (item.getType().equals(ElementType.HORIZONTAL_PARTITION.getValue())) {
+      HorizontalPartitionElement hpart = new HorizontalPartitionElement(surface,
+          new HorizontalPartitionShape(item.getShape().split(",")),
+              item.getText(),
+              parseBackgroundColor(item),
+              parseBorderColor(item),
+              parseTextColor(item),
+          editable);
+      result = hpart;
     }
 
     return applyDiagramItem(result, item);
@@ -561,6 +573,11 @@ public class DiagramItemFactory {
       result = getItem(diagram);
       shapetext += rect2ShapeText(rs.rectShape, moveX, moveY);
       type = "rectcont";
+    } else if (shape instanceof HorizontalPartitionShape) {
+      HorizontalPartitionShape rs = (HorizontalPartitionShape) shape;
+      result = getItem(diagram);
+      shapetext += rect2ShapeText(rs.rectShape, moveX, moveY);
+      type = ElementType.HORIZONTAL_PARTITION.getValue();
     }
     
     if (result != null) {

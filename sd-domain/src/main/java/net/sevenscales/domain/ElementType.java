@@ -2,7 +2,8 @@ package net.sevenscales.domain;
 
 public enum ElementType {
 	COMMENT("comment"),
-	COMMENT_THREAD("comments");
+	COMMENT_THREAD("comments"),
+	HORIZONTAL_PARTITION("hpart");
 
 	private String value;
 

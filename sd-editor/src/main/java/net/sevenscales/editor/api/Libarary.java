@@ -30,6 +30,7 @@ import net.sevenscales.editor.diagram.shape.EllipseShape;
 import net.sevenscales.editor.diagram.shape.MindCentralShape;
 import net.sevenscales.editor.diagram.shape.NoteShape;
 import net.sevenscales.editor.diagram.shape.RectContainerShape;
+import net.sevenscales.editor.diagram.shape.HorizontalPartitionShape;
 import net.sevenscales.editor.diagram.shape.RectShape;
 import net.sevenscales.editor.diagram.shape.SequenceShape;
 import net.sevenscales.editor.diagram.shape.ServerShape;
@@ -48,6 +49,7 @@ import net.sevenscales.editor.uicomponents.uml.EllipseElement;
 import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
 import net.sevenscales.editor.uicomponents.uml.RectBoundaryElement;
+import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
 import net.sevenscales.editor.uicomponents.uml.StorageElement;
@@ -83,6 +85,10 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
 	private static final int MINDMAP_GROUP = CLASS_GROUP + CLASS_GROUP_HEIGHT + GROUP_SPACE;
 	private static final int MINDMAP_GROUP_HEIGHT = 260;
+
+    private static final int ROADMAP_GROUP = MINDMAP_GROUP + MINDMAP_GROUP_HEIGHT;
+    private static final int ROADMAP_GROUP_HEIGHT = 260;
+
 	
 	private LibrarySelectedHandler librarySelectedHandler = new LibrarySelectedHandler() {
 		@Override
@@ -377,6 +383,9 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 //    result.add(new NoteElement(this.toolpool,
 //        new NoteShape(30, MINDMAP_GROUP + 205, 140, 30),
 //        "*Notes!*", AbstractDiagramItem.createDefaultBackgroundColor(), Color.createDefaultTextColor(), true));
+
+
+    result.add(new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, ROADMAP_GROUP, 220, ROADMAP_GROUP_HEIGHT), "RoadMap", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
 
     // restore value back
 		editorContext.set(EditorProperty.AUTO_RESIZE_ENABLED, currentValue);

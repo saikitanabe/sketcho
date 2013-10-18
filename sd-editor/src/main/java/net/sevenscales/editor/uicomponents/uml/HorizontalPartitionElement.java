@@ -4,15 +4,13 @@ package net.sevenscales.editor.uicomponents.uml;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
+import net.sevenscales.editor.content.utils.ContainerAttachHelpers;
 import net.sevenscales.editor.diagram.ContainerType;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
-import net.sevenscales.editor.diagram.shape.RectContainerShape;
+import net.sevenscales.editor.diagram.shape.HorizontalPartitionShape;
 import net.sevenscales.editor.diagram.utils.GridUtils;
-import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
-import net.sevenscales.editor.gfx.base.GraphicsMouseEnterHandler;
-import net.sevenscales.editor.gfx.base.GraphicsMouseLeaveHandler;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IContainer;
 import net.sevenscales.editor.gfx.domain.IGroup;
@@ -23,32 +21,31 @@ import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.Anchor;
 import net.sevenscales.editor.uicomponents.AnchorElement;
-import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.uicomponents.Point;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
+import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public class RectBoundaryVerticalElement extends AbstractDiagramItem implements SupportsRectangleShape, ContainerType {
+public class HorizontalPartitionElement extends AbstractDiagramItem implements SupportsRectangleShape, ContainerType {
   private IRectangle rectSurface;
   private IRectangle headerBackground;
   private int minimumWidth = 25;
   private int minimumHeight = 25;
-  private RectContainerShape shape;
+  private HorizontalPartitionShape shape;
   private Point coords = new Point();
-  private IRectangle resizeElement;
-  private boolean onResizeArea;
   private IGroup group;
   private TextElementFormatUtil textUtil;
   private static final int HEADER_HEIGHT = 25;
 	
-  public RectBoundaryVerticalElement(ISurfaceHandler surface, RectContainerShape  newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
+  public HorizontalPartitionElement(ISurfaceHandler surface, HorizontalPartitionShape newShape, String text, 
+  		Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
     this(surface, newShape, text, backgroundColor, borderColor, textColor, editable, false);
   }
   
-  public RectBoundaryVerticalElement(ISurfaceHandler surface, RectContainerShape newShape, String text, 
+  public HorizontalPartitionElement(ISurfaceHandler surface, HorizontalPartitionShape newShape, String text, 
   		Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText) {
     super(editable, surface, backgroundColor, borderColor, textColor);
     this.shape = newShape;
@@ -61,58 +58,34 @@ public class RectBoundaryVerticalElement extends AbstractDiagramItem implements 
 
     rectSurface = (IRectangle) createElement(group);
 //    rectSurface.setAttribute("cursor", "pointer");
-    rectSurface.setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height, 2);
-    rectSurface.setStrokeWidth(3.0);
+    // rectSurface.setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height, 2);
+    rectSurface.setStrokeWidth(2.0);
     rectSurface.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 0); // force transparent
     
     headerBackground = (IRectangle) createElement(group);
-    headerBackground.setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, HEADER_HEIGHT, 2);
-    headerBackground.setStrokeWidth(3.0);
+    // headerBackground.setShape(shape.rectShape.left, shape.rectShape.top, HEADER_HEIGHT, shape.rectShape.height, 2);
+    headerBackground.setStrokeWidth(2.0);
     headerBackground.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
-    
-    resizeElement = IShapeFactory.Util.factory(editable).createRectangle(group);
-    resizeElement.setShape(shape.rectShape.left + shape.rectShape.width - 10, shape.rectShape.top + shape.rectShape.height - 10, 10, 10, 1);
-    resizeElement.setFill(200, 200, 200, 0.4);
-
-//    addObserver(rectSurface.getRawNode(), AbstractDiagramItem.EVENT_DOUBLE_CLICK);
-//    rectSurface.addGraphicsMouseDownHandler(this);
-//    rectSurface.addGraphicsMouseUpHandler(this);
-//    rectSurface.addGraphicsMouseMoveHandler(this);
-//    rectSurface.addGraphicsMouseEnterHandler(this);
-//    rectSurface.addGraphicsMouseLeaveHandler(this);
     
     addEvents(headerBackground);
 
-    // resize support
-    resizeElement.addGraphicsMouseEnterHandler(new GraphicsMouseEnterHandler() {
-      public void onMouseEnter(GraphicsEvent event) {
-        onResizeArea = true;
-      }
-    });
-    resizeElement.addGraphicsMouseLeaveHandler(new GraphicsMouseLeaveHandler() {
-      public void onMouseLeave(GraphicsEvent event) {
-        onResizeArea = false;
-      }
-    });
-
-    resizeElement.addGraphicsMouseDownHandler(this);
-    resizeElement.addGraphicsMouseUpHandler(this);
-    
     addMouseDiagramHandler(this);
     
     shapes.add(rectSurface);
     shapes.add(headerBackground);
-    shapes.add(resizeElement);
     
+    resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
     textUtil = new TextElementFormatUtil(this, hasTextElement, group, surface.getEditorContext());
     textUtil.setMarginTop(0);
+    textUtil.setRotate(-90);
     
     if (!delayText) {
     	setText(text);
     }
 
+    setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
+
     setReadOnly(!editable);
-    moveToBack();
     
     setBorderColor(borderColor);
     super.constructorDone();
@@ -133,15 +106,16 @@ public class RectBoundaryVerticalElement extends AbstractDiagramItem implements 
       return rectSurface.getY();
     }
     public int getHeight() {
-    	return rectSurface.getHeight();
+      return rectSurface.getHeight();
     }
+    
     public void removeShape(IShape shape) {
       group.remove(shape);
       shapes.remove(shape);
     }
 
     public String getLink() {
-      return RectBoundaryVerticalElement.this.getLink();
+      return HorizontalPartitionElement.this.getLink();
     }
 
     public boolean isAutoResize() {
@@ -150,14 +124,14 @@ public class RectBoundaryVerticalElement extends AbstractDiagramItem implements 
 
     public void resize(int x, int y, int width, int height) {
       // Text Element doesn't support resize
-      RectBoundaryVerticalElement.this.resize(x, y, width, height);
+      HorizontalPartitionElement.this.resize(x, y, width, height);
     }
 
     public void setLink(String link) {
-      RectBoundaryVerticalElement.this.setLink(link);      
+      HorizontalPartitionElement.this.setLink(link);      
     }
     public boolean supportsTitleCenter() {
-      return true;
+      return false;
     }
     public int getTextMargin() {
       return 30;
@@ -167,12 +141,12 @@ public class RectBoundaryVerticalElement extends AbstractDiagramItem implements 
     }
     
     public GraphicsEventHandler getGraphicsMouseHandler() {
-      return RectBoundaryVerticalElement.this;
+      return HorizontalPartitionElement.this;
     };
     
 		@Override
 		public String getTextColorAsString() {
-			return "#444444"; // #" + textColor.toHexString();
+			return "#" + textColor.toHexString();
 		};
 
   };
@@ -207,29 +181,7 @@ public class RectBoundaryVerticalElement extends AbstractDiagramItem implements 
   }
   
   public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
-		// container attach is different only border areas can attach
-		// TODO make this as utility to be used by other container elements
-	//	return super.onAttachArea(anchor, x, y, rectSurface.getX(), rectSurface.getY() - CORNER_HEIGHT, rectSurface.getWidth(), rectSurface.getHeight() + CORNER_HEIGHT);
-		// put all values to 0 not to attach any other than connection handle
-		AnchorElement a = super.onAttachArea(anchor, x, y, 0, 0, 0, 0);
-		if (a != null) {
-			return a;
-		}
-		
-	  if (AnchorUtils.onAttachArea(x, y, rectSurface.getX(), rectSurface.getY(), rectSurface.getWidth(), rectSurface.getHeight(), 20)) {
-	    AnchorElement result = getAnchorElement(anchor);
-	    AnchorUtils.anchorPoint(x, y, tempAnchorProperties , rectSurface.getX(), rectSurface.getY(), rectSurface.getWidth(), rectSurface.getHeight());
-	
-	    result.setAx(tempAnchorProperties.x);
-	    result.setAy(tempAnchorProperties.y);
-	    result.setRelativeX(tempAnchorProperties.relativeValueX);
-	    result.setRelativeY(tempAnchorProperties.relativeValueY);
-	    
-      setAnchorPointShape(tempAnchorProperties.x, tempAnchorProperties.y);
-	
-	    return result;
-	  }
-	  return null;
+  	return ContainerAttachHelpers.onAttachArea(this, anchor, x, y);
   }
 
   public String getText() {
@@ -253,22 +205,21 @@ public class RectBoundaryVerticalElement extends AbstractDiagramItem implements 
   
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-  	RectContainerShape newShape = new RectContainerShape(x, y, rectSurface.getWidth(), rectSurface.getHeight());
+  	HorizontalPartitionShape newShape = new HorizontalPartitionShape(x, y, rectSurface.getWidth(), rectSurface.getHeight());
     Diagram result = createDiagram(surface, newShape, getText(), getEditable());
     return result;
   }
   
-  protected Diagram createDiagram(ISurfaceHandler surface, RectContainerShape newShape,
+  protected Diagram createDiagram(ISurfaceHandler surface, HorizontalPartitionShape newShape,
       String text, boolean editable) {
-    return new RectBoundaryVerticalElement(surface, newShape, text, 
-    		new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+    return new HorizontalPartitionElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
   }
   
 
 //////////////////////////////////////////////////////////////////////
   
   public boolean onResizeArea(int x, int y) {
-    return onResizeArea;
+    return resizeHelpers.isOnResizeArea();
   }
 
   public JavaScriptObject getResizeElement() {
@@ -284,41 +235,24 @@ public class RectBoundaryVerticalElement extends AbstractDiagramItem implements 
   }
   
   public void setShape(int left, int top, int width, int height) {
-  	resize(left, top, width, height);
+    rectSurface.setShape(left, top, width, height, 2);
+    headerBackground.setShape(left, top, HEADER_HEIGHT, height, 2);
+    textUtil.setTextShape();
   }
 
   protected boolean resize(int left, int top, int width, int height) {
-     if (width >= minimumWidth && height >= minimumHeight) {
-       left = GridUtils.align(left);
-       top = GridUtils.align(top);
-       width = GridUtils.align(width);
-       height = GridUtils.align(height);
-       
-       // some bug in with package element... => disabled
-//       if (resizeAnchors()) {
-//         ++this.dispachSequence;
-//         for (AnchorElement a : anchorMap.values()) {
-//           a.setAx(((int)(width*a.getRelativeX()))+left);
-//           a.setAy(((int)(height*a.getRelativeY()))+top);
-//           a.dispatch(dispachSequence);
-//         }
-//       }
-       
-       rectSurface.moveToBack();
-       rectSurface.setShape(left, top, width, height, 2);
-       headerBackground.setShape(left, top, width, HEADER_HEIGHT, 2);
-       resizeElement.setShape(
-          rectSurface.getX() + rectSurface.getWidth() - 10, rectSurface.getY() + rectSurface.getHeight() - 10, 10, 10, 1);
-       
-       // set clipping area => text is visible only within canvas boundary
-//       group.setClip(rectSurface.getX(), rectSurface.getY(), rectSurface.getWidth(), rectSurface.getHeight());
-  
-  //    setText(getText());
-      textUtil.setTextShape();
+    if (width >= minimumWidth && height >= minimumHeight) {
+      setShape(left, top, width, height);
       super.applyHelpersShape();
+      dispatchAndRecalculateAnchorPositions();
       return true;
-     }
-     return false;
+    }
+    return false;
+  }
+  
+  @Override
+  public int getResizeIndentX() {
+  	return 0;
   }
 
   /**
@@ -333,6 +267,10 @@ public class RectBoundaryVerticalElement extends AbstractDiagramItem implements 
   }
 
   public Info getInfo() {
+    shape.rectShape.left = rectSurface.getX();
+    shape.rectShape.top = rectSurface.getY();
+    shape.rectShape.width = rectSurface.getWidth();
+    shape.rectShape.height = rectSurface.getHeight();
     super.fillInfo(shape);
     return this.shape;
   }
@@ -344,7 +282,6 @@ public class RectBoundaryVerticalElement extends AbstractDiagramItem implements 
 
   public void setReadOnly(boolean value) {
     super.setReadOnly(value);
-    resizeElement.setVisibility(!value);
   }
   
   public String getDefaultRelationship() {
@@ -431,11 +368,6 @@ public class RectBoundaryVerticalElement extends AbstractDiagramItem implements 
 	@Override
 	public String getTextAreaAlign() {
 		return "center";
-	}
-	
-	@Override
-	public String getTextColor() {
-		return "#444444";
 	}
 	
   @Override

@@ -84,6 +84,7 @@ public class TextElementFormatUtil {
 	private int margin;
 	private int marginBottom;
 	private int fontSize = 12;
+  private int degrees;
   
   public TextElementFormatUtil(Diagram parent, HasTextElement hasTextElement, IGroup group, EditorContext editorContext) {
   	this.parent = parent;
@@ -252,6 +253,10 @@ public class TextElementFormatUtil {
     setTextShape();
 	}
 
+  public void setRotate(int degrees) {
+    this.degrees = degrees;
+  }
+
 	public void setTextShape() {
     int row = 1;
 //    double rowHeight = 13.0;
@@ -300,6 +305,20 @@ public class TextElementFormatUtil {
 	        		
 	        t.setShape(x, y);
 	        t.setAlignment(align);
+          if (hasTextElement.boldText()) {
+            t.setFontWeight(IText.WEIGHT_BOLD);
+          }
+          if (degrees != 0) {
+            
+
+            int twidth = (int) t.getTextWidth();
+            // -(hasTextElement.getHeight() / 2 + twidth / 2)
+            t.rotatedxdy(degrees, hasTextElement.getX(), hasTextElement.getY(), -(hasTextElement.getHeight() / 2 + twidth / 2) , 0);
+            // t.rotatedxdy(degrees, x, y, -(hasTextElement.getWidth() / 2), -(hasTextElement.getHeight() / 2));
+
+            // t.rotatedxdy(degrees, 0, 0, 0, 0);
+            // t.rotate(degrees, x, y);
+          }
 	        prevtext = t;
 	      }
 	    }

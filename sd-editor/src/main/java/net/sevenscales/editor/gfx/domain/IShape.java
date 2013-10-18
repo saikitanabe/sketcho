@@ -25,6 +25,7 @@ public interface IShape extends IGraphics {
   boolean isVisible();
   String getAttribute(String name);
   void setAttribute(String name, String value);
+  void rotatedxdy(int degree, int x, int y, int dx, int dy);
   void rotate(int degrees, int x, int y);
   void rotateg(int degree);
   void skewg(int skew);
