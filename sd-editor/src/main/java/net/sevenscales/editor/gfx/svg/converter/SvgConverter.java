@@ -79,8 +79,9 @@ public class SvgConverter {
   	scaleSize = ScaleSize.ORICINAL_SIZE;
 	}
   
-  public SvgConverter(ScaleSize scaleSize) {
+  public SvgConverter(ScaleSize scaleSize, boolean onlySelected) {
   	this.scaleSize = scaleSize;
+    this.onlySelected = onlySelected;
   }
 
   /**
