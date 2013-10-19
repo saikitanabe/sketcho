@@ -314,13 +314,7 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
 		fillrect.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 		topCircle.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }
-  
-  @Override
-	public void setTextColor(int red, int green, int blue) {
-  	super.setTextColor(red, green, blue);
-  	textUtil.applyTextColor();
-  }
-  
+    
   @Override
 	protected int doGetLeft() {
   	return background.getX();
@@ -366,10 +360,6 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
 	@Override
 	public int getTextAreaTop() {
 		return getTop() + RY + 11;
-	}
-
-	public String getTextAreaBackgroundColor() {
-		return "transparent"; // other wise looks little bit funny with rect background
 	}
 	
 	@Override
