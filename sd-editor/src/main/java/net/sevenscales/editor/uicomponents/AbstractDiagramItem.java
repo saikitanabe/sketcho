@@ -134,6 +134,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   private Point coords = new Point();
   private int transformX;
   private int transformY;
+  protected int factorX = 1;
+  protected int factorY = 1;
 	
   public static final String EVENT_DOUBLE_CLICK = "ondblclick";
 
@@ -1545,6 +1547,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public void unannotate() {
     getDiagramItem().unannotate();
     setHighlightColor(getBorderColor());
+  }
+
+  public void setDuplicateMultiplySize(int factorX, int factorY) {
+    this.factorX = factorX;
+    this.factorY = factorY;
   }
 
 }

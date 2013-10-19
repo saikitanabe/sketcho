@@ -78,7 +78,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 //	private static final int SOFTWARE_SKETCHING_GROUP_START = 70;
 
   private static final int ACTIVITY_GROUP = SOFTWARE_SKETCHING_GROUP + SOFTWARE_SKETCHING_GROUP_HEIGHT + GROUP_SPACE;
-  private static final int ACTIVITY_GROUP_HEIGHT = 275;
+  private static final int ACTIVITY_GROUP_HEIGHT = 305;
 
   private static final int CLASS_GROUP = ACTIVITY_GROUP + ACTIVITY_GROUP_HEIGHT + GROUP_SPACE;
   private static final int CLASS_GROUP_HEIGHT = 210;
@@ -279,9 +279,13 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
     
     result.add(new ActivityElement(this.toolpool,
-        new ActivityShape(80, ACTIVITY_GROUP + 210, 100, 30),
+        new ActivityShape(80, ACTIVITY_GROUP + 220, 100, 30),
         "Collaboration",
         Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+
+    Diagram swimline = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(22, ACTIVITY_GROUP + 200, 190, 90), "Swimline", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
+    swimline.setDuplicateMultiplySize(3, 3);
+    result.add(swimline);
 
 
 //    List<Integer> points = new ArrayList<Integer>();
@@ -386,7 +390,19 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 //        "*Notes!*", AbstractDiagramItem.createDefaultBackgroundColor(), Color.createDefaultTextColor(), true));
 
 
-    result.add(new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, ROADMAP_GROUP, 220, ROADMAP_GROUP_HEIGHT), "RoadMap", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+    result.add(new RectBoundaryElement(this.toolpool,
+        new RectContainerShape(35, ROADMAP_GROUP, 195, ROADMAP_GROUP_HEIGHT),
+        "Q1",
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), 
+        Theme.createDefaultTextColor(), true));
+
+    int marketingY = ROADMAP_GROUP + 25;
+    int marketingHeight = ROADMAP_GROUP_HEIGHT / 2 - 10;
+    result.add(new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, marketingY, 220, marketingHeight), "Marketing", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+
+    int productY = marketingY + marketingHeight;
+    int productHeight = ROADMAP_GROUP_HEIGHT / 2 - 15;
+    result.add(new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, productY, 220, productHeight), "Product Line", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
 
     // restore value back
 		editorContext.set(EditorProperty.AUTO_RESIZE_ENABLED, currentValue);

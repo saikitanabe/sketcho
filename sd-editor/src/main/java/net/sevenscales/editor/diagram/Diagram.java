@@ -231,4 +231,7 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
   void annotate();
   void unannotate();
 
+  // menu support
+  void setDuplicateMultiplySize(int factorX, int factorY);
+
 }

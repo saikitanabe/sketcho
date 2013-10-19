@@ -205,7 +205,7 @@ public class HorizontalPartitionElement extends AbstractDiagramItem implements S
   
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-  	HorizontalPartitionShape newShape = new HorizontalPartitionShape(x, y, rectSurface.getWidth(), rectSurface.getHeight());
+  	HorizontalPartitionShape newShape = new HorizontalPartitionShape(x, y, rectSurface.getWidth() * factorX, rectSurface.getHeight() * factorY);
     Diagram result = createDiagram(surface, newShape, getText(), getEditable());
     return result;
   }
