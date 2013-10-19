@@ -9,6 +9,7 @@ public interface IGroup extends IContainer, IGraphics {
   public void resetTransform();
   public int getTransformX();
   public int getTransformY();
+  String getTransformMatrix();
 
   public void setAttribute(String name, String value);
   public void moveToBack();

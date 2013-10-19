@@ -11,6 +11,7 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.utils.SortHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.IShape;
+import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.uicomponents.CircleElement;
 
@@ -110,12 +111,18 @@ public class SvgConverter {
         d.unselect();
         shapes.clear();
         shapes.add(d.getElements());
+
+        // TODO set group begin
+        IGroup group = d.getGroup();
+        items += groupStart(group);
         items += toSvg(d, shapes, editorContext);
         // text helper elements are not included in getElements
         List<List<IShape>> textElements = d.getTextElements();
         if (textElements != null) {
           items += toSvg(d, textElements, editorContext);
         }
+        items += groupEnd();
+        // TODO set group end
         d.toSvgEnd();
       }
     }
@@ -162,6 +169,21 @@ public class SvgConverter {
 		return scaleSize.width - MARGIN_WIDTH + "mm";
 	}
 
+  // <g transform="matrix(1.00000000,0.00000000,0.00000000,1.00000000,0.00000000,0.00000000)" style="visibility: visible;"></g>
+  private String groupStart(IGroup group) {
+    String result = "<g";
+    String matrix = group.getTransformMatrix();
+    if (matrix != null) {
+      result += " transform='" + matrix + "'";
+    }
+    result += ">";
+    return result;
+  }
+
+  private String groupEnd() {
+    return "</g>";
+  }
+
 	private String toSvg(Diagram d, List<List<IShape>> shapes, EditorContext editorContext) {
   	String result = "";
     if (d.isVisible()) {
@@ -190,7 +212,7 @@ public class SvgConverter {
 	      for (IShape s : line) {
 	        // convert to concrete svg shape with factory
 	        if (s.isVisible()) {
-	          String svg = SvgFactory.convert(s, d.getTransformX(), d.getTransformY(), editorContext);
+	          String svg = SvgFactory.convert(s, 0, 0, editorContext);
 	          result += svg;
 	        }
 	      }

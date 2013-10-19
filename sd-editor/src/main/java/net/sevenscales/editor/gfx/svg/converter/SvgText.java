@@ -51,7 +51,7 @@ public class SvgText extends StringUtil {
     String encoded = SafeHtmlUtils.htmlEscape(t.getText());
     params.put("%text", encoded);
 
-    logger.debug("transform: {}", t.getTransformMatrix());
+    // logger.debug("transform: {}", t.getTransformMatrix(transformX, transformY));
     String matrix = t.getTransformMatrix();
     if (matrix != null) {
       params.put("%transform%", "transform='" + matrix + "'");
