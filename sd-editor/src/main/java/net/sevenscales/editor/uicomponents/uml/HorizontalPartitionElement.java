@@ -361,10 +361,6 @@ public class HorizontalPartitionElement extends AbstractDiagramItem implements S
 		return getTop() + 5;
 	}
 	
-	public String getTextAreaBackgroundColor() {
-		return "transparent"; // other wise looks little bit funny with rect background
-	}
-	
 	@Override
 	public String getTextAreaAlign() {
 		return "center";

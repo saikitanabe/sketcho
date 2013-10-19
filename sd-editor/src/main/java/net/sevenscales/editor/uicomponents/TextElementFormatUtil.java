@@ -312,7 +312,7 @@ public class TextElementFormatUtil {
 
             int twidth = (int) t.getTextWidth();
             // -(hasTextElement.getHeight() / 2 + twidth / 2)
-            t.rotatedxdy(degrees, hasTextElement.getX(), hasTextElement.getY(), -(hasTextElement.getHeight() / 2 + twidth / 2) , 0);
+            t.rotatedxdy(degrees, hasTextElement.getX(), hasTextElement.getY() + 1, -(hasTextElement.getHeight() / 2 + twidth / 2) , 0);
             // t.rotatedxdy(degrees, x, y, -(hasTextElement.getWidth() / 2), -(hasTextElement.getHeight() / 2));
 
             // t.rotatedxdy(degrees, 0, 0, 0, 0);
