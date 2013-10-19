@@ -313,25 +313,8 @@ abstract class Shape extends Graphics implements IShape {
 
 	private native void _rotate(JavaScriptObject rawNode, int degree, int centerX, int centerY, int translateX, int translateY)/*-{
 		var m = $wnd.dojox.gfx.matrix;
-		// var m2 = $wnd.dojox.gfx.matrix;
-		// var m3 = $wnd.dojox.gfx.matrix;
 		var r = m.multiply(m.rotategAt(degree, centerX, centerY), m.translate(translateX, translateY));
-		// var r = m3.multiply(m.rotateg(degree)); // , m2.translate(dx, dy)
-		// rawNode.setTransform([
-  //           m.rotategAt(degree, centerX, centerY), 
-  //           // m.scaleAt(2, centerX, centerY),
-  //           m.translate(translateX, translateY)
-  //       ]);		
 		rawNode.setTransform(r);
-
-		// var r
-		// m.translate(x, y), 
-		// var r = m.multiply(m.translate(a, b), m.rotateg(degree))
-		// r.dx = dx;
-		// r.dy = dy;
-		// var r = m.multiply(m.translate(250, 250),m.rotateg(−30), m.scale(2), m.translate(-250, -250))
-		// var r = m.multiply(m.translate(dx, dy));
-		// rawNode.applyTransform(r);
 	}-*/;
 	
 	/**
@@ -349,7 +332,8 @@ abstract class Shape extends Graphics implements IShape {
 		var t = rawNode.getTransform();
 		if (t) {
 			// {xx: 1, xy: 0, yx: 0, yy: 1, dx: 0, dy: 0}
-			// currently supports only rotation and transformation
+			// currently supports only rotation and transformation; uses parent group xx and yy values
+			// therefore 0 (current understanding...)
 			return 'matrix(' + 0 + ',' + t.yx +',' + t.xy + ',' + 0 + ',' + t.dx + ',' + t.dy + ')';
 		}
 		return null;
