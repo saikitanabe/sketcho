@@ -334,6 +334,27 @@ abstract class Shape extends Graphics implements IShape {
 		// rawNode.applyTransform(r);
 	}-*/;
 	
+	/**
+	* Currently supports only rotation
+	*/
+	public String getTransformMatrix() {
+		if (rotateDegree != 0) {
+			return _getTransformMatrix(rawNode);
+		} else {
+			return null;
+		}
+	}
+
+	private native String _getTransformMatrix(JavaScriptObject rawNode)/*-{
+		var t = rawNode.getTransform();
+		if (t) {
+			// {xx: 1, xy: 0, yx: 0, yy: 1, dx: 0, dy: 0}
+			// currently supports only rotation and transformation
+			return 'matrix(' + 0 + ',' + t.yx +',' + t.xy + ',' + 0 + ',' + t.dx + ',' + t.dy + ')';
+		}
+		return null;
+	}-*/;
+
 	public void rotateg(int degree) {
 		_rotateg(rawNode, degree);
 	}

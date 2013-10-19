@@ -31,6 +31,7 @@ public interface IShape extends IGraphics {
   void skewg(int skew);
   int getRotateDegree();
   void unrotate(int degree, int x, int y);
+  String getTransformMatrix();
   void resetAllTransforms();
 	void remove();
 	

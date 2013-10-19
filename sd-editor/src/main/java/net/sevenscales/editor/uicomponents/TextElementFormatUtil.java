@@ -305,11 +305,10 @@ public class TextElementFormatUtil {
 	        		
 	        t.setShape(x, y);
 	        t.setAlignment(align);
-          if (hasTextElement.boldText()) {
-            t.setFontWeight(IText.WEIGHT_BOLD);
-          }
           if (degrees != 0) {
-            
+            if (hasTextElement.boldText()) {
+              t.setFontWeight(IText.WEIGHT_BOLD);
+            }
 
             int twidth = (int) t.getTextWidth();
             // -(hasTextElement.getHeight() / 2 + twidth / 2)

@@ -50,13 +50,23 @@ public class SvgText extends StringUtil {
     
     String encoded = SafeHtmlUtils.htmlEscape(t.getText());
     params.put("%text", encoded);
+
+    logger.debug("transform: {}", t.getTransformMatrix());
+    String matrix = t.getTransformMatrix();
+    if (matrix != null) {
+      params.put("%transform%", "transform='" + matrix + "'");
+    } else {
+      params.put("%transform%", "");
+    }
+
+    // <text fill="rgb(232, 232, 233)" fill-opacity="1" stroke="none" stroke-opacity="0" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4" x="82" y="474" text-anchor="start" text-decoration="none" rotate="0" fill-rule="evenodd" font-style="normal" font-variant="normal" font-weight="bold" font-size="12px" font-family="arial,helvetica,sans-serif" transform="matrix(0.00000000,-1.00000000,1.00000000,0.00000000,-380.00000000,648.00000000)">Bank</text>    
     
 //    String text = t.getText();
     if (encoded == null || encoded.length() == 0) {
     	encoded = escapeAmp(t.getChildElements(transformX));
     }
     params.put("%text", encoded);
-    String template = "<text x='%x' y='%y' style='font-weight:%weight; font-size: %sizepx; text-anchor: %anchor; font-family: %font-family; fill: %fill;'>%text</text>";
+    String template = "<text x='%x' y='%y' style='font-weight:%weight; font-size: %sizepx; text-anchor: %anchor; font-family: %font-family; fill: %fill;' %transform%>%text</text>";
 //    String result = "<text x='"++"' y='"+t.getY()+"' style='font-weight:bold; font-size: 12px; text-anchor: middle; font-family: Arial;'>"+t.getText()+"</text>";
     
     return parse(template, params);
