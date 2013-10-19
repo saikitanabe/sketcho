@@ -32,6 +32,7 @@ public class LibrarySelections extends Composite {
 
 	@UiField AnchorElement software;
 	@UiField AnchorElement mindmap;
+	@UiField AnchorElement roadmap;
 	@UiField DivElement btnGroup;
 //	@UiField AnchorElement roadmap;
 
@@ -68,6 +69,22 @@ public class LibrarySelections extends Composite {
 						}
 					}
 				});
+
+		DOM.sinkEvents((com.google.gwt.user.client.Element) roadmap.cast(),
+				Event.ONCLICK);
+		DOM.setEventListener(
+				(com.google.gwt.user.client.Element) roadmap.cast(),
+				new EventListener() {
+					@Override
+					public void onBrowserEvent(Event event) {
+						switch (DOM.eventGetType(event)) {
+						case Event.ONCLICK:
+							LibrarySelections.this.librarySelectedHandler.onSelected(Library.ROADMAP);
+							break;
+						}
+					}
+				});
+		
 
 //		DOM.sinkEvents((com.google.gwt.user.client.Element) roadmap.cast(),
 //				Event.ONCLICK);

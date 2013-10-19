@@ -86,7 +86,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 	private static final int MINDMAP_GROUP = CLASS_GROUP + CLASS_GROUP_HEIGHT + GROUP_SPACE;
 	private static final int MINDMAP_GROUP_HEIGHT = 260;
 
-    private static final int ROADMAP_GROUP = MINDMAP_GROUP + MINDMAP_GROUP_HEIGHT;
+    private static final int ROADMAP_GROUP = MINDMAP_GROUP + MINDMAP_GROUP_HEIGHT + GROUP_SPACE;
     private static final int ROADMAP_GROUP_HEIGHT = 260;
 
 	
@@ -102,6 +102,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 				toolpool.getRootLayer().applyTransform(0, -MINDMAP_GROUP + 25);
 				break;
 			case ROADMAP:
+                toolpool.getRootLayer().applyTransform(0, -ROADMAP_GROUP + 25);
 				break;
 			}
 			editorContext.getEventBus().fireEvent(new LibrarySelectionEvent(library));
@@ -115,7 +116,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		this.toolpool = FactoryDoJo.createSurfaceHandler();
 		toolpool.setName(ISurfaceHandler.LIBRARY_AREA);
 		toolpool.setDisableOnArea(true);
-		toolpool.init(200, 1100, true, modeManager, false, editorContext);
+		toolpool.init(200, 1300, true, modeManager, false, editorContext);
 		
 		setStyle();
 		editorContext.getEventBus().addHandler(ThemeChangedEvent.TYPE, new ThemeChangedEventHandler() {
