@@ -112,7 +112,7 @@ public class SvgConverter {
         shapes.clear();
         shapes.add(d.getElements());
 
-        // TODO set group begin
+        // all shapes are under group
         IGroup group = d.getGroup();
         items += groupStart(group);
         items += toSvg(d, shapes, editorContext);
@@ -122,7 +122,6 @@ public class SvgConverter {
           items += toSvg(d, textElements, editorContext);
         }
         items += groupEnd();
-        // TODO set group end
         d.toSvgEnd();
       }
     }
