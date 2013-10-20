@@ -390,19 +390,40 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 //        "*Notes!*", AbstractDiagramItem.createDefaultBackgroundColor(), Color.createDefaultTextColor(), true));
 
 
+    int roadmapIndent = 35;
     result.add(new RectBoundaryElement(this.toolpool,
-        new RectContainerShape(35, ROADMAP_GROUP, 195, ROADMAP_GROUP_HEIGHT),
+        new RectContainerShape(roadmapIndent, ROADMAP_GROUP, 195, ROADMAP_GROUP_HEIGHT),
         "Q1",
         Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), 
         Theme.createDefaultTextColor(), true));
 
     int marketingY = ROADMAP_GROUP + 25;
     int marketingHeight = ROADMAP_GROUP_HEIGHT / 2 - 10;
-    result.add(new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, marketingY, 220, marketingHeight), "Marketing", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+    Diagram marketing = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, marketingY, 220, marketingHeight), "Marketing", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
+    marketing.setDuplicateMultiplySize(3, 3);
+    result.add(marketing);
+
+    int activityIndent = roadmapIndent + 10;
+    result.add(new ActivityChoiceElement(this.toolpool,
+        new ActivityChoiceShape(activityIndent, marketingY + 45, 32, 32),
+        "",
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+
+    result.add(new MindCentralElement(this.toolpool,
+        new MindCentralShape(roadmapIndent + 50, marketingY + 10, 100, 30),
+        "Keynote",
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
 
     int productY = marketingY + marketingHeight;
     int productHeight = ROADMAP_GROUP_HEIGHT / 2 - 15;
-    result.add(new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, productY, 220, productHeight), "Product Line", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+    Diagram productLine = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, productY, 220, productHeight), "Product Line", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
+    productLine.setDuplicateMultiplySize(3, 3);
+    result.add(productLine);
+
+    result.add(new ActivityElement(this.toolpool,
+        new ActivityShape(roadmapIndent + 10, productY + 30, 100, 30),
+        "Release X",
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
 
     // restore value back
 		editorContext.set(EditorProperty.AUTO_RESIZE_ENABLED, currentValue);
