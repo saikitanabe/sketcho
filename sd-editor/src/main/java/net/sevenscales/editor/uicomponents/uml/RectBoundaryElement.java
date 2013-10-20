@@ -202,7 +202,7 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
   
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-  	RectContainerShape newShape = new RectContainerShape(x, y, rectSurface.getWidth(), rectSurface.getHeight());
+  	RectContainerShape newShape = new RectContainerShape(x, y, rectSurface.getWidth() * factorX, rectSurface.getHeight() * factorY);
     Diagram result = createDiagram(surface, newShape, getText(), getEditable());
     return result;
   }

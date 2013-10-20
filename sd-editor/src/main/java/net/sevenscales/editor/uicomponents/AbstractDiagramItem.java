@@ -791,6 +791,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
           child.setVisible(visible);
         }
       }
+
+      TextElementFormatUtil textFormatter = getTextFormatter();
+      if (textFormatter != null) {
+        textFormatter.setVisible(visible);
+      }
     }
   }
   

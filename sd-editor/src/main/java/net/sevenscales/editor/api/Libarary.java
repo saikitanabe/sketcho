@@ -391,11 +391,13 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
 
     int roadmapIndent = 35;
-    result.add(new RectBoundaryElement(this.toolpool,
+    Diagram q1 = new RectBoundaryElement(this.toolpool,
         new RectContainerShape(roadmapIndent, ROADMAP_GROUP, 195, ROADMAP_GROUP_HEIGHT),
         "Q1",
         Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), 
-        Theme.createDefaultTextColor(), true));
+        Theme.createDefaultTextColor(), true);
+    q1.setDuplicateMultiplySize(2, 2);
+    result.add(q1);
 
     int marketingY = ROADMAP_GROUP + 25;
     int marketingHeight = ROADMAP_GROUP_HEIGHT / 2 - 10;
