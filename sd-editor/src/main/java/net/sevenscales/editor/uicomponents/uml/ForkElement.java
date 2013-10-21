@@ -189,7 +189,10 @@ public class ForkElement extends AbstractDiagramItem implements SupportsRectangl
   
   @Override
   public UMLDiagramType getDiagramType() {
-  	return UMLDiagramType.START;
+  	if (shape.orientation == 0) {
+	  	return UMLDiagramType.FORK;
+  	}
+  	return UMLDiagramType.VFORK;
   }
   
   @Override

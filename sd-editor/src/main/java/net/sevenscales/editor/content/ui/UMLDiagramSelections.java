@@ -45,6 +45,7 @@ public class UMLDiagramSelections extends Composite {
 		END("", UMLDiagramGroup.ACTIVITY_DIAGRAM),
 		ACTIVITY("My Activity", UMLDiagramGroup.ACTIVITY_DIAGRAM),
 		FORK("", UMLDiagramGroup.ACTIVITY_DIAGRAM),
+		VFORK("", UMLDiagramGroup.ACTIVITY_DIAGRAM),
 		TEXT("Text", UMLDiagramGroup.SEQUENCE_DIAGRAM),
 		PACKAGE("package", UMLDiagramGroup.CLASS_DIAGRAM),
 		DB("Db", UMLDiagramGroup.SEQUENCE_DIAGRAM),
@@ -150,6 +151,16 @@ public class UMLDiagramSelections extends Composite {
 	@UiHandler("start")
 	public void onstart(ClickEvent event) {
 		fire(UMLDiagramType.START);
+	}
+
+	@UiHandler("hfork")
+	public void onfork(ClickEvent event) {
+		fire(UMLDiagramType.FORK);
+	}
+
+	@UiHandler("vfork")
+	public void onvfork(ClickEvent event) {
+		fire(UMLDiagramType.VFORK);
 	}
 
 	@UiHandler("end")

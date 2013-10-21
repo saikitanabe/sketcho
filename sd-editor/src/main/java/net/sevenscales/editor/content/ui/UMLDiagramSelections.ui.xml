@@ -35,6 +35,8 @@
 	<ui:image field="umlstart" src="start-white.png"></ui:image>
 	<ui:image field="umlend" src="end-white.png"></ui:image>
 	<ui:image field="umlactivity" src="activity-white.png"></ui:image>
+	<ui:image field="umlhfork" src="hfork.png"></ui:image>
+	<ui:image field="umlvfork" src="vfork.png"></ui:image>
 	<ui:image field="umltext" src="text-white.png"></ui:image>
 	<ui:image field="umlpackage" src="package-white.png"></ui:image>
 	<ui:image field="umlstorage" src="db-white.png"></ui:image>
@@ -116,6 +118,20 @@
 					<c:child>
 						<g:SimplePanel styleName="{style.asbutton}">
 							<g:Image resource="{umlchoice}" styleName="{style.relationship}"></g:Image>
+						</g:SimplePanel>
+					</c:child>
+				</c:FastButton>
+				<c:FastButton ui:field="hfork" styleName="{style.focuspanel}">
+					<c:child>
+						<g:SimplePanel styleName="{style.asbutton}">
+							<g:Image resource="{umlhfork}" styleName="{style.relationship}"></g:Image>
+						</g:SimplePanel>
+					</c:child>
+				</c:FastButton>
+				<c:FastButton ui:field="vfork" styleName="{style.focuspanel}">
+					<c:child>
+						<g:SimplePanel styleName="{style.asbutton}">
+							<g:Image resource="{umlvfork}" styleName="{style.relationship}"></g:Image>
 						</g:SimplePanel>
 					</c:child>
 				</c:FastButton>

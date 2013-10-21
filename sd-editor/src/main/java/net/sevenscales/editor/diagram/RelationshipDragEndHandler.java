@@ -24,6 +24,7 @@ import net.sevenscales.editor.diagram.shape.ActivityChoiceShape;
 import net.sevenscales.editor.diagram.shape.ActivityEndShape;
 import net.sevenscales.editor.diagram.shape.ActivityShape;
 import net.sevenscales.editor.diagram.shape.ActivityStartShape;
+import net.sevenscales.editor.diagram.shape.ForkShape;
 import net.sevenscales.editor.diagram.shape.ActorShape;
 import net.sevenscales.editor.diagram.shape.DbShape;
 import net.sevenscales.editor.diagram.shape.EllipseShape;
@@ -45,6 +46,7 @@ import net.sevenscales.editor.uicomponents.uml.ActivityChoiceElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityEnd;
 import net.sevenscales.editor.uicomponents.uml.ActivityStart;
+import net.sevenscales.editor.uicomponents.uml.ForkElement;
 import net.sevenscales.editor.uicomponents.uml.Actor;
 import net.sevenscales.editor.uicomponents.uml.ClassElement2;
 import net.sevenscales.editor.uicomponents.uml.EllipseElement;
@@ -307,6 +309,16 @@ public class RelationshipDragEndHandler implements
 			ActivityStart as = new ActivityStart(surface,
 	        new ActivityStartShape(x, y, ActivityStart.ACTIVITY_START_RADIUS), true);
 			result = as;
+			break;
+		}
+		case FORK: {
+			ForkElement e = new ForkElement(surface, new ForkShape(x, y, 50, 5), Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
+			result = e;
+			break;
+		}
+		case VFORK: {
+			ForkElement e = new ForkElement(surface, new ForkShape(x, y, 5, 50, 1), Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
+			result = e;
 			break;
 		}
 		case END: {
