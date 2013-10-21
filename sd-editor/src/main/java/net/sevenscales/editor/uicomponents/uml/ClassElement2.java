@@ -185,10 +185,6 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
 
 //////////////////////////////////////////////////////////////////////
   
-  public boolean onResizeArea(int x, int y) {
-    return resizeHelpers.isOnResizeArea();
-  }
-
   public JavaScriptObject getResizeElement() {
     return rectSurface.getRawNode();
   }

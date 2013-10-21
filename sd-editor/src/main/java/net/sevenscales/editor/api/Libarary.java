@@ -22,6 +22,7 @@ import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.shape.ActivityChoiceShape;
 import net.sevenscales.editor.diagram.shape.ActivityEndShape;
 import net.sevenscales.editor.diagram.shape.ActivityShape;
+import net.sevenscales.editor.diagram.shape.ForkShape;
 import net.sevenscales.editor.diagram.shape.ActivityStartShape;
 import net.sevenscales.editor.diagram.shape.ActorShape;
 import net.sevenscales.editor.diagram.shape.ComponentShape;
@@ -40,6 +41,7 @@ import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.uicomponents.uml.ActivityChoiceElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityElement;
+import net.sevenscales.editor.uicomponents.uml.ForkElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityEnd;
 import net.sevenscales.editor.uicomponents.uml.ActivityStart;
 import net.sevenscales.editor.uicomponents.uml.Actor;
@@ -186,6 +188,51 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 	  }
 	}
 
+  private void flows(List<Diagram> result) {
+    final Color flowGroupColor = new Color(0x99, 0x99, 0xff, 0);
+    result.add(new RectBoundaryElement(this.toolpool,
+        new RectContainerShape(10, ACTIVITY_GROUP, 220, ACTIVITY_GROUP_HEIGHT),
+        "Flows",
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+    
+    result.add(new ActivityChoiceElement(this.toolpool,
+        new ActivityChoiceShape(185, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 10, 32, 32),
+        "",
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+
+    result.add(new ActivityStart(this.toolpool,
+        new ActivityStartShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE, ActivityStart.ACTIVITY_START_RADIUS), true));
+
+    result.add(new ActivityEnd(this.toolpool,
+        new ActivityEndShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 50, ActivityEnd.ACTIVITY_END_RADIUS), true));
+
+    result.add(new ActivityElement(this.toolpool,
+        new ActivityShape(30, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 10, 100, 30),
+        "My Activity",
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+    
+    result.add(new SequenceElement(this.toolpool, 
+        new SequenceShape(50, ACTIVITY_GROUP + 130, 100, 25, 25),
+        "Sequence",
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+    
+    result.add(new ActivityElement(this.toolpool,
+        new ActivityShape(80, ACTIVITY_GROUP + 220, 100, 30),
+        "Collaboration",
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+
+    result.add(new ForkElement(this.toolpool,
+      new ForkShape(160, ACTIVITY_GROUP + 140, 40, 5),
+      Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+    result.add(new ForkElement(this.toolpool,
+      new ForkShape(210, ACTIVITY_GROUP + 140, 5, 40, 1),
+      Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+
+    Diagram swimline = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(22, ACTIVITY_GROUP + 200, 190, 90), "Swimline", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
+    swimline.setDuplicateMultiplySize(3, 3);
+    result.add(swimline);
+  }
+
 	private List<Diagram> createToolbarItems() {
 		boolean currentValue = editorContext.isTrue(EditorProperty.AUTO_RESIZE_ENABLED);
 		
@@ -251,42 +298,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     
     // ACTIVITY DIAGRAM
     
-		final Color flowGroupColor = new Color(0x99, 0x99, 0xff, 0);
-    result.add(new RectBoundaryElement(this.toolpool,
-        new RectContainerShape(10, ACTIVITY_GROUP, 220, ACTIVITY_GROUP_HEIGHT),
-        "Flows",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
-    
-    result.add(new ActivityChoiceElement(this.toolpool,
-        new ActivityChoiceShape(185, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 10, 32, 32),
-        "",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
-
-    result.add(new ActivityStart(this.toolpool,
-        new ActivityStartShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE, ActivityStart.ACTIVITY_START_RADIUS), true));
-
-    result.add(new ActivityEnd(this.toolpool,
-        new ActivityEndShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 50, ActivityEnd.ACTIVITY_END_RADIUS), true));
-
-    result.add(new ActivityElement(this.toolpool,
-        new ActivityShape(30, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 10, 100, 30),
-        "My Activity",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
-    
-    result.add(new SequenceElement(this.toolpool, 
-        new SequenceShape(50, ACTIVITY_GROUP + 130, 100, 25, 25),
-        "Sequence",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
-    
-    result.add(new ActivityElement(this.toolpool,
-        new ActivityShape(80, ACTIVITY_GROUP + 220, 100, 30),
-        "Collaboration",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
-
-    Diagram swimline = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(22, ACTIVITY_GROUP + 200, 190, 90), "Swimline", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
-    swimline.setDuplicateMultiplySize(3, 3);
-    result.add(swimline);
-
+    flows(result);
 
 //    List<Integer> points = new ArrayList<Integer>();
 //

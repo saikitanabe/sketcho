@@ -58,7 +58,7 @@ public class RectShape extends Info {
 	}
 	@Override
 	public int getWidth() {
-		return height;
+		return width;
 	}
 	
 	@Override
@@ -67,7 +67,7 @@ public class RectShape extends Info {
 	}
 	@Override
 	public int getHeight() {
-		return width;
+		return height;
 	}
 
 }

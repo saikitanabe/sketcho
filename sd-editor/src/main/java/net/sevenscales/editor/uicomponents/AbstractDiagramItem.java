@@ -644,6 +644,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
   
 	public boolean onResizeArea(int x, int y) {
+    if (resizeHelpers != null) {
+      return resizeHelpers.isOnResizeArea();
+    }
     // doesn't support resize
     return false;
   }

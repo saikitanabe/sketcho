@@ -7,11 +7,12 @@ import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.editor.diagram.shape.ActivityStartShape;
+import net.sevenscales.editor.diagram.shape.ForkShape;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.ICircle;
+import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
@@ -19,66 +20,52 @@ import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.silver.SilverUtils;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 
-public class ActivityStart extends AbstractDiagramItem implements SupportsRectangleShape {
+
+public class ForkElement extends AbstractDiagramItem implements SupportsRectangleShape {
 	public static int ACTIVITY_START_RADIUS = 10;
 	public static int BOUNDARY_RADIUS = 20;
 //	private Rectangle rectSurface;
-  private ICircle visible;
-  private ICircle boundary;
+  private IRectangle visible;
+  private IRectangle boundary;
 
 	private int minimumWidth = 25;
 	private int minimumHeight = 25;
-	private ActivityStartShape shape;
+	private ForkShape shape;
 	private Point coords = new Point();
 //	private IRectangle resizeElement;
 //	private boolean onResizeArea;
   private IGroup group;
   
-  public ActivityStart(ISurfaceHandler surface, ActivityStartShape newShape, boolean editable) {
+  public ForkElement(ISurfaceHandler surface, ForkShape newShape, boolean editable) {
     this(surface, newShape, Theme.createDefaultBorderColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), editable);
   }
-  
-	public ActivityStart(ISurfaceHandler surface, ActivityStartShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
+
+	public ForkElement(ISurfaceHandler surface, ForkShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
 		super(editable, surface, backgroundColor, borderColor, textColor);
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     group.setAttribute("cursor", "default");
 
-		visible = IShapeFactory.Util.factory(editable).createCircle(group);
-		visible.setStroke("#" + this.borderColor.toHexString());
-		visible.setFill("#" + this.backgroundColor.toHexString());
+		visible = IShapeFactory.Util.factory(editable).createRectangle(group);
+		visible.setStroke(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);
+		visible.setFill(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);
 		
-		boundary = IShapeFactory.Util.factory(editable).createCircle(group);
+		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
 		boundary.setStroke(0, 0, 0, 0);
 		boundary.setFill(200, 200, 200, 0);
 		
-//		resizeElement = IShapeFactory.Util.factory(editable).createRectangle(group);
-//		resizeElement.setFill(240, 255, 240, 0.4);
+		resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
 		
 		addEvents(boundary);
-		
-		// resize support
-//		resizeElement.addGraphicsMouseEnterHandler(new GraphicsMouseEnterHandler() {
-//      public void onMouseEnter(GraphicsEvent event) {
-//        onResizeArea = true;
-//      }
-//    });
-//		resizeElement.addGraphicsMouseLeaveHandler(new GraphicsMouseLeaveHandler() {
-//      public void onMouseLeave(GraphicsEvent event) {
-//        onResizeArea = false;
-//      }
-//    });
-		
-//		resizeElement.addGraphicsMouseDownHandler(this);
-//    resizeElement.addGraphicsMouseUpHandler(this);
 		
 		addMouseDiagramHandler(this);
 		
     shapes.add(visible);
     setReadOnly(!editable);
-    setShape(shape.centerX, shape.centerY, shape.radius);
+    setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
 
     setBorderColor(borderColor);
     
@@ -87,51 +74,28 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
 	
 	@Override
 	protected int doGetLeft() {
-		return visible.getX() - shape.radius;
+		return visible.getX();
 	}
 	@Override
 	protected int doGetTop() {
-		return visible.getY() - shape.radius;
+		return visible.getY();
 	}
 	@Override
 	public int getWidth() {
-		return 2 * shape.radius;
+		return visible.getWidth();
 	}
 	@Override
 	public int getHeight() {
-		return 2 * shape.radius;
+		return visible.getHeight();
 	}
 	
 	@Override
 	public void setShape(int left, int top, int width, int height) {
-    visible.setShape(left + width / 2, top + height / 2, width / 2);
-    boundary.setShape(left + width / 2, top + height / 2, BOUNDARY_RADIUS);
-    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
+    visible.setShape(left, top, width, height, 3);
+    boundary.setShape(left, top, width, height, 0);
+    super.applyHelpersShape();
 	}
 	
-	public void setShape(int cx, int cy, int radius) {
-    visible.setShape(cx, cy, radius);
-    boundary.setShape(cx, cy, BOUNDARY_RADIUS);
-    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
-//    resizeElement.setShape(cx + radius * 2, cy, 10, 10, 0);
-    
-//    relationshipHandle.setShape(left+width/2, top);
-	}
-	
-	// public void saveLastTransform() {
-	//   // get transformation
- //    int dx = SilverUtils.getTransformX(group.getContainer());
- //    int dy = SilverUtils.getTransformY(group.getContainer());
-	    
-	//   // reset transformations
- //    SilverUtils.resetRenderTransform(group.getContainer());
-	    
- //    // apply transformations to shapes
- //    for (IShape s : shapes) {
- //      s.applyTransform(dx, dy);
- //    }
-	// }
-
 	public Point getDiffFromMouseDownLocation() {
 		return new Point(diffFromMouseDownX, diffFromMouseDownY);
 	}
@@ -154,14 +118,14 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
 	
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-    ActivityStartShape newShape = new ActivityStartShape(x, y, visible.getRadius());
+    ForkShape newShape = new ForkShape(x, y, getWidth(), getHeight(), shape.orientation);
     Diagram result = createDiagram(surface, newShape, getEditable());
     return result;
   }
 	
-  protected Diagram createDiagram(ISurfaceHandler surface, ActivityStartShape newShape,
+  protected Diagram createDiagram(ISurfaceHandler surface, ForkShape newShape,
       boolean editable) {
-    return new ActivityStart(surface, newShape, editable);
+    return new ForkElement(surface, newShape, editable);
   }
 	
 //////////////////////////////////////////////////////////////////////
@@ -178,29 +142,32 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
 	}
 
 	public boolean resize(Point diff) {
-		return resize(visible.getX(), visible.getY(), visible.getRadius() + diff.x, visible.getRadius() + diff.y);			
+		int width = shape.orientation == 0 ? visible.getWidth() + diff.x : visible.getWidth();
+		int height = shape.orientation == 1 ? visible.getHeight() + diff.y : visible.getHeight();
+		return resize(visible.getX(), visible.getY(), width, height);
 	}
 
 	protected boolean resize(int left, int top, int width, int height) {
-	   if (width >= minimumWidth && height >= minimumHeight) {
-  	   left = GridUtils.align(left);
-       top = GridUtils.align(top);
-       width = GridUtils.align(width);
-       height = GridUtils.align(height);
-       
-       setShape(left, top, width);
+	  if ( (shape.orientation == 0 && width >= minimumWidth) || (shape.orientation == 1 && height >= minimumHeight) ) {
+      setShape(left, top, width, height);
+      dispatchAndRecalculateAnchorPositions();
   		return true;
-	   }
-	   return false;
+	  }
+	  return false;
 	}
 
 	public void resizeEnd() {
 	}
 
+  public int getResizeIndentX() {
+  	return shape.orientation == 0 ? -7 : -10;
+  }
+
+  public int getResizeIndentY() {
+  	return -10;
+  }
+
 	public Info getInfo() {
-	  shape.centerX = visible.getX() + getTransformX();
-	  shape.centerY = visible.getY() + getTransformY();
-	  shape.radius = visible.getRadius();
     super.fillInfo(shape);
 		return this.shape;
 	}
@@ -227,7 +194,7 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
   
   @Override
 	protected void doSetShape(int[] shape) {
-    setShape(shape[0], shape[1], shape[2]);
+    setShape(shape[0], shape[1], shape[2], shape[3]);
 	}
   
   public void setHighlightColor(String color) {

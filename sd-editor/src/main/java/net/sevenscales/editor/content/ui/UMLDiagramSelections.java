@@ -44,6 +44,7 @@ public class UMLDiagramSelections extends Composite {
 		START("", UMLDiagramGroup.ACTIVITY_DIAGRAM),
 		END("", UMLDiagramGroup.ACTIVITY_DIAGRAM),
 		ACTIVITY("My Activity", UMLDiagramGroup.ACTIVITY_DIAGRAM),
+		FORK("", UMLDiagramGroup.ACTIVITY_DIAGRAM),
 		TEXT("Text", UMLDiagramGroup.SEQUENCE_DIAGRAM),
 		PACKAGE("package", UMLDiagramGroup.CLASS_DIAGRAM),
 		DB("Db", UMLDiagramGroup.SEQUENCE_DIAGRAM),

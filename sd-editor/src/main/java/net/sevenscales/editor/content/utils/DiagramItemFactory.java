@@ -32,6 +32,7 @@ import net.sevenscales.editor.diagram.shape.CommentThreadShape;
 import net.sevenscales.editor.diagram.shape.CommentShape;
 import net.sevenscales.editor.diagram.shape.RectContainerShape;
 import net.sevenscales.editor.diagram.shape.HorizontalPartitionShape;
+import net.sevenscales.editor.diagram.shape.ForkShape;
 import net.sevenscales.editor.diagram.shape.RectShape;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
 import net.sevenscales.editor.diagram.shape.SequenceShape;
@@ -55,6 +56,7 @@ import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.uicomponents.uml.RectBoundaryElement;
 import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement;
+import net.sevenscales.editor.uicomponents.uml.ForkElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
@@ -370,6 +372,14 @@ public class DiagramItemFactory {
               parseTextColor(item),
           editable);
       result = hpart;
+    } else if (item.getType().equals(ElementType.FORK.getValue())) {
+      ForkElement fork = new ForkElement(surface,
+          new ForkShape(item.getShape().split(",")),
+              parseBackgroundColor(item),
+              parseBorderColor(item),
+              parseTextColor(item),
+          editable);
+      result = fork;
     }
 
     return applyDiagramItem(result, item);
@@ -578,6 +588,12 @@ public class DiagramItemFactory {
       result = getItem(diagram);
       shapetext += rect2ShapeText(rs.rectShape, moveX, moveY);
       type = ElementType.HORIZONTAL_PARTITION.getValue();
+    } else if (shape instanceof ForkShape) {
+      ForkShape s = (ForkShape) shape;
+      result = getItem(diagram);
+      shapetext += rect2ShapeText(s.rectShape, moveX, moveY);
+      shapetext += "," +s.orientation;
+      type = ElementType.FORK.getValue();
     }
     
     if (result != null) {
