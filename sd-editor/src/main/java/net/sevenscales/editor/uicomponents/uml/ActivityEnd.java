@@ -142,20 +142,6 @@ public class ActivityEnd extends AbstractDiagramItem implements SupportsRectangl
     innerCircle.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }
 	
-	public void saveLastTransform() {
-	  // get transformation
-    int dx = SilverUtils.getTransformX(group.getContainer());
-    int dy = SilverUtils.getTransformY(group.getContainer());
-	    
-	  // reset transformations
-    SilverUtils.resetRenderTransform(group.getContainer());
-	    
-    // apply transformations to shapes
-    for (IShape s : shapes) {
-      s.applyTransform(dx, dy);
-    }
-	}
-
 	public Point getDiffFromMouseDownLocation() {
 		return new Point(diffFromMouseDownX, diffFromMouseDownY);
 	}

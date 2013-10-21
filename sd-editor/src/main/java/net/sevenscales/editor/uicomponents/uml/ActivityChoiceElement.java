@@ -39,7 +39,10 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 //	private int boundaryHeight;
   private IPath.PathTransformer pathTransformer = new IPath.PathTransformer() {
   	public String getShapeStr(int dx, int dy) {
-  		return calcShape(0, 0);
+  		// removing transformation is needed since fixedAnchorPoints
+  		// are updated on saveLastTransform(int dx, int dy)
+  		// this is only for svg generation
+  		return calcShape(-getTransformX(), -getTransformY());
   	}
   };
   

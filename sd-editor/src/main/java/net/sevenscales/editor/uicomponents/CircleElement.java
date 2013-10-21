@@ -76,18 +76,6 @@ public class CircleElement extends AbstractDiagramItem {
 		return ConnectionHelpers.createEmptyConnectionHelpers();
 	}
 
-//	public void saveLastTransform() {
-////		shape.centerX = circle.getX();
-////		shape.centerY = circle.getY();
-//	  int dx = SilverUtils.getTransformX(circle.getRawNode());
-//	  int dy = SilverUtils.getTransformY(circle.getRawNode());
-//    
-//    for (IShape s : shapes) {
-//      s.applyTransform(dx, dy);
-//      SilverUtils.resetRenderTransform(s.getRawNode());
-//    }
-//	}
-		
 	public Point getDiffFromMouseDownLocation() {
 		return new Point(diffFromMouseDownX, diffFromMouseDownY);
 	}
