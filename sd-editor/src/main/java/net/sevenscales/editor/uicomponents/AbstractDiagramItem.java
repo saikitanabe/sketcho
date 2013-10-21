@@ -1543,7 +1543,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   public void applyAnnotationColors() {
-    if (getDiagramItem().isAnnotation() && supportsAnnotationColors()) {
+    if (getDiagramItem() != null && getDiagramItem().isAnnotation() && supportsAnnotationColors()) {
       setHighlightColor(Theme.getCommentThreadColorScheme().getBackgroundColor().toHexString());
     }
   }

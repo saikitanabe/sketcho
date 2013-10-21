@@ -151,24 +151,8 @@ public class HorizontalPartitionElement extends AbstractDiagramItem implements S
 
   };
 
-
   protected IShape createElement(IContainer surface) {
     return IShapeFactory.Util.factory(editable).createRectangle(surface);
-  }
-
-  public void saveLastTransform() {
-    // get transformation
-    int dx = group.getTransformX();
-    int dy = group.getTransformY();
-      
-    // reset transformations
-//    SilverUtils.resetRenderTransform(group.getContainer());
-    group.resetTransform();
-      
-    // apply transformations to shapes
-    for (IShape s : shapes) {
-      s.applyTransform(dx, dy);
-    }
   }
 
   public Point getDiffFromMouseDownLocation() {

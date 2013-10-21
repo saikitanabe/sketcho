@@ -96,6 +96,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		@Override
 		public void onSelected(Library library) {
 			toolpool.getRootLayer().resetTransform();
+      getWidget().getElement().setScrollTop(0);
 			
 			switch (library) {
 			case SOFTWARE:

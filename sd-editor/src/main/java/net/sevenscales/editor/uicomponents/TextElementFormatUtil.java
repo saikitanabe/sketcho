@@ -312,7 +312,7 @@ public class TextElementFormatUtil {
 
             int twidth = (int) t.getTextWidth();
             // + 1 to y align little bit higher
-            t.rotatedxdy(degrees, hasTextElement.getX(), hasTextElement.getY() + 1, -(hasTextElement.getHeight() / 2 + twidth / 2) , 0);
+            t.rotatedxdy(degrees, hasTextElement.getX(), hasTextElement.getY() + 1, -(hasTextElement.getHeight() / 2 + twidth / 2 + 5) , 0);
           }
 	        prevtext = t;
 	      }
