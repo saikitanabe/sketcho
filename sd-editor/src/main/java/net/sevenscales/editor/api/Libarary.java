@@ -233,6 +233,45 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     result.add(swimline);
   }
 
+  private void roadmap(List<Diagram> result) {
+    int roadmapIndent = 35;
+    Diagram q1 = new RectBoundaryElement(this.toolpool,
+        new RectContainerShape(roadmapIndent, ROADMAP_GROUP, 195, ROADMAP_GROUP_HEIGHT),
+        "Q1",
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), 
+        Theme.createDefaultTextColor(), true);
+    q1.setDuplicateMultiplySize(2, 2);
+    result.add(q1);
+
+    int marketingY = ROADMAP_GROUP + 25;
+    int marketingHeight = ROADMAP_GROUP_HEIGHT / 2 - 10;
+    Diagram marketing = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, marketingY, 220, marketingHeight), "Marketing", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
+    marketing.setDuplicateMultiplySize(3, 3);
+    result.add(marketing);
+
+    int activityIndent = roadmapIndent + 10;
+    result.add(new ActivityChoiceElement(this.toolpool,
+        new ActivityChoiceShape(activityIndent, marketingY + 45, 32, 32),
+        "",
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+
+    result.add(new MindCentralElement(this.toolpool,
+        new MindCentralShape(roadmapIndent + 50, marketingY + 10, 100, 30),
+        "Keynote",
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+
+    int productY = marketingY + marketingHeight;
+    int productHeight = ROADMAP_GROUP_HEIGHT / 2 - 15;
+    Diagram productLine = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, productY, 220, productHeight), "Product Line", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
+    productLine.setDuplicateMultiplySize(3, 3);
+    result.add(productLine);
+
+    result.add(new ActivityElement(this.toolpool,
+        new ActivityShape(roadmapIndent + 10, productY + 30, 100, 30),
+        "Release X",
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+  }
+
 	private List<Diagram> createToolbarItems() {
 		boolean currentValue = editorContext.isTrue(EditorProperty.AUTO_RESIZE_ENABLED);
 		
@@ -402,42 +441,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 //        "*Notes!*", AbstractDiagramItem.createDefaultBackgroundColor(), Color.createDefaultTextColor(), true));
 
 
-    int roadmapIndent = 35;
-    Diagram q1 = new RectBoundaryElement(this.toolpool,
-        new RectContainerShape(roadmapIndent, ROADMAP_GROUP, 195, ROADMAP_GROUP_HEIGHT),
-        "Q1",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), 
-        Theme.createDefaultTextColor(), true);
-    q1.setDuplicateMultiplySize(2, 2);
-    result.add(q1);
-
-    int marketingY = ROADMAP_GROUP + 25;
-    int marketingHeight = ROADMAP_GROUP_HEIGHT / 2 - 10;
-    Diagram marketing = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, marketingY, 220, marketingHeight), "Marketing", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
-    marketing.setDuplicateMultiplySize(3, 3);
-    result.add(marketing);
-
-    int activityIndent = roadmapIndent + 10;
-    result.add(new ActivityChoiceElement(this.toolpool,
-        new ActivityChoiceShape(activityIndent, marketingY + 45, 32, 32),
-        "",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
-
-    result.add(new MindCentralElement(this.toolpool,
-        new MindCentralShape(roadmapIndent + 50, marketingY + 10, 100, 30),
-        "Keynote",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
-
-    int productY = marketingY + marketingHeight;
-    int productHeight = ROADMAP_GROUP_HEIGHT / 2 - 15;
-    Diagram productLine = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, productY, 220, productHeight), "Product Line", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
-    productLine.setDuplicateMultiplySize(3, 3);
-    result.add(productLine);
-
-    result.add(new ActivityElement(this.toolpool,
-        new ActivityShape(roadmapIndent + 10, productY + 30, 100, 30),
-        "Release X",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+    roadmap(result);
 
     // restore value back
 		editorContext.set(EditorProperty.AUTO_RESIZE_ENABLED, currentValue);

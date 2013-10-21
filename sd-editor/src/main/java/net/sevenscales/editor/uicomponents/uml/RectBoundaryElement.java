@@ -197,7 +197,7 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
   @Override
   public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
     Point p = getCoords();
-    return duplicate(surface, p.x + 20, p.y + 20);
+    return duplicate(surface, p.x + getWidth(), p.y);
   }
   
   @Override
