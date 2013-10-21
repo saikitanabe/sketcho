@@ -111,8 +111,8 @@
 				</c:FastButton>
 				<c:FastButton ui:field="hfork" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton uml-hfork">
-							<g:Image resource="{umlhfork}"></g:Image>
+						<g:SimplePanel styleName="asbutton">
+							<g:Image resource="{umlhfork}" styleName="uml-hfork"></g:Image>
 						</g:SimplePanel>
 					</c:child>
 				</c:FastButton>
