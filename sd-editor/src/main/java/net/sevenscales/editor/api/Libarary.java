@@ -222,10 +222,10 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
 
     result.add(new ForkElement(this.toolpool,
-      new ForkShape(160, ACTIVITY_GROUP + 140, 40, 5),
+      new ForkShape(150, ACTIVITY_GROUP + 130, 50, 5),
       Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
     result.add(new ForkElement(this.toolpool,
-      new ForkShape(210, ACTIVITY_GROUP + 140, 5, 40, 1),
+      new ForkShape(210, ACTIVITY_GROUP + 130, 5, 50, 1),
       Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
 
     Diagram swimline = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(22, ACTIVITY_GROUP + 200, 190, 90), "Swimline", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
