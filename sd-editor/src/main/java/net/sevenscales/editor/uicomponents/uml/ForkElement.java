@@ -13,6 +13,7 @@ import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.ICircle;
 import net.sevenscales.editor.gfx.domain.IRectangle;
+import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
@@ -28,14 +29,12 @@ public class ForkElement extends AbstractDiagramItem implements SupportsRectangl
 	public static int BOUNDARY_RADIUS = 20;
 //	private Rectangle rectSurface;
   private IRectangle visible;
-  private IRectangle boundary;
+  private ILine boundary;
 
 	private int minimumWidth = 25;
 	private int minimumHeight = 25;
 	private ForkShape shape;
 	private Point coords = new Point();
-//	private IRectangle resizeElement;
-//	private boolean onResizeArea;
   private IGroup group;
   
   public ForkElement(ISurfaceHandler surface, ForkShape newShape, boolean editable) {
@@ -53,9 +52,10 @@ public class ForkElement extends AbstractDiagramItem implements SupportsRectangl
 		visible.setStroke(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);
 		visible.setFill(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);
 		
-		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
+		boundary = IShapeFactory.Util.factory(editable).createLine(group);
 		boundary.setStroke(0, 0, 0, 0);
 		boundary.setFill(200, 200, 200, 0);
+		boundary.setStrokeWidth(10);
 		
 		resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
 		
@@ -92,7 +92,11 @@ public class ForkElement extends AbstractDiagramItem implements SupportsRectangl
 	@Override
 	public void setShape(int left, int top, int width, int height) {
     visible.setShape(left, top, width, height, 3);
-    boundary.setShape(left, top, width, height, 0);
+    
+		int x2 = shape.orientation == 0 ? left + width: left;
+		int y2 = shape.orientation == 0 ? top : top + height;
+    boundary.setShape(left, top, x2, y2);
+    boundary.setStrokeWidth(10);
     super.applyHelpersShape();
 	}
 	
@@ -142,8 +146,11 @@ public class ForkElement extends AbstractDiagramItem implements SupportsRectangl
 	}
 
 	public boolean resize(Point diff) {
-		int width = shape.orientation == 0 ? visible.getWidth() + diff.x : visible.getWidth();
-		int height = shape.orientation == 1 ? visible.getHeight() + diff.y : visible.getHeight();
+		int width = visible.getWidth();
+		width = shape.orientation == 0 ? width + diff.x : width;
+
+		int height = visible.getHeight();
+		height = shape.orientation == 1 ? height + diff.y : height;
 		return resize(visible.getX(), visible.getY(), width, height);
 	}
 
