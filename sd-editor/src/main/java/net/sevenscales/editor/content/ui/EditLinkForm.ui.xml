@@ -1,0 +1,26 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	</ui:style>
+	<g:HTMLPanel>
+		<div class="popover bottom edit-link-popover">
+      <div class="arrow edit-link-arrow"></div>
+      <h3 class="popover-title">Edit Link</h3>
+      <div class="popover-content">
+        <form name="editLinkForm" class="form-inline">
+		        <input ui:field="urlField" type="text" class="span4"></input>
+		        <a ui:field="apply" class="btn">Apply</a>
+		    </form>
+      </div>
+    </div>
+<!-- 		<div class="menu-popover">
+			<div class="menu-arrow menu-arrow-bottom edit-url-arrow"></div>
+			<div class="menu-bubble">
+		    <form name="editLinkForm" class="form-inline">
+		        <input ui:field="urlField" type="text" class="span4"></input>
+		        <a ui:field="apply" class="btn">Apply</a>
+		    </form>
+		  </div>
+		</div>
+ -->	</g:HTMLPanel>
+</ui:UiBinder>

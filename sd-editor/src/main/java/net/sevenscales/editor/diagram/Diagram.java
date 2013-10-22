@@ -117,7 +117,8 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 //  void copyAppliedDiagramItem(IDiagramItemRO apply);
 //  IDiagramItem getAppliedDiagramItem();
   
-  public void setLink(String link);
+  void setLink(String link);
+  String getLink();
   
   /**
   * These are needed if element needs to do something differently

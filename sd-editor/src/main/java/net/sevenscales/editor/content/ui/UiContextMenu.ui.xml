@@ -29,6 +29,12 @@
 			<a ui:field="unannotate" title="Unannotate" class="btn btn-custom tooltipper">
 				A
 			</a>
+			<a ui:field="openLink" title="Open Link" class="btn btn-custom tooltipper">
+				<i class="icon-open-link"></i>
+			</a>
+			<a ui:field="editlink" title="Edit Link" class="btn btn-custom tooltipper">
+				<i class="icon-link"></i>
+			</a>
 			<a ui:field="delete" title="Delete" class="btn btn-custom tooltipper">
 				<i class="icon-trash"></i>
 			</a>
