@@ -63,10 +63,10 @@ public class DuplicateHelpers {
 				duplicatedDiagrams.add(duplicated);
 				
 				DiagramItemDTO di = (DiagramItemDTO) DiagramItemFactory.createOrUpdate(duplicated);
-				di.setClientId(ClientIdHelpers.generateClientId(++i, boardDocument));
-				
 				// copy also custom data to be handled later
-				di.setCustomData(diagram.getDiagramItem().getCustomData());
+				di.copyFrom(diagram.getDiagramItem());
+				// generate new client id
+				di.setClientId(ClientIdHelpers.generateClientId(++i, boardDocument));
 				
 				if (duplicated instanceof Relationship2) {
 					relationships.add((Relationship2) duplicated);
