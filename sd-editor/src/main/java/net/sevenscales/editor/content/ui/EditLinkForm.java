@@ -7,10 +7,12 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
@@ -24,6 +26,10 @@ import net.sevenscales.editor.api.impl.FastElementButton;
 
 public class EditLinkForm extends Composite {
 	private static final SLogger logger = SLogger.createLogger(EditLinkForm.class);
+	static {
+		TEMPLATE = GWT.create(Template.class);
+		SLogger.addFilter(EditLinkForm.class);
+	}
 
 	private static EditLinkFormUiBinder uiBinder = GWT
 			.create(EditLinkFormUiBinder.class);
@@ -46,9 +52,6 @@ public class EditLinkForm extends Composite {
 	private ApplyCallback applyCallback;
 	private static final Template TEMPLATE;
 
-	static {
-		TEMPLATE = GWT.create(Template.class);
-	}
 
 	public EditLinkForm(ApplyCallback applyCallback) {
 		this.applyCallback = applyCallback;
@@ -62,13 +65,24 @@ public class EditLinkForm extends Composite {
 			}
 		});
 
-		Event.sinkEvents(urlField, Event.ONKEYPRESS | Event.ONKEYUP);
+		Event.sinkEvents(urlField, Event.ONKEYPRESS | Event.ONKEYUP | Event.ONCLICK);
     Event.setEventListener(urlField, new EventListener() {
       @Override
       public void onBrowserEvent(Event event) {
-      	logger.debug("event: " + event);
-      }
-    });
+				switch (event.getTypeInt()) {
+					case Event.ONCLICK:
+					urlField.select();
+					break;
+					case Event.ONKEYDOWN:
+					break;
+					case Event.ONKEYUP:
+					if (KeyCodes.KEY_ENTER == event.getKeyCode()) {
+						apply();
+					}
+					break;
+      	}
+    	}
+  	});
 	}
 
 	public void setLink(String link) {
