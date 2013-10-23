@@ -119,6 +119,7 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
   
   void setLink(String link);
   String getLink();
+  boolean hasLink();
   
   /**
   * These are needed if element needs to do something differently

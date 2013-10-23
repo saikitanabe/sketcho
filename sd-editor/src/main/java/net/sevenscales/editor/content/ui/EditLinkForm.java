@@ -28,6 +28,7 @@ public class EditLinkForm extends Composite {
 	private static final SLogger logger = SLogger.createLogger(EditLinkForm.class);
 	static {
 		TEMPLATE = GWT.create(Template.class);
+		TEMPLATE_TRUNCATED = GWT.create(NameTruncatedTemplate.class);
 		SLogger.addFilter(EditLinkForm.class);
 	}
 
@@ -42,8 +43,13 @@ public class EditLinkForm extends Composite {
 	}
 
   interface Template extends SafeHtmlTemplates {
-    @Template("<a href=\"{0}\" target=\"_blank\" class=\"white-text\">{0}</a>")
-    SafeHtml a(String url);
+    @Template("<a href=\"{0}\" target=\"_blank\" class=\"white-text\">{1}</a>")
+    SafeHtml a(String url, String name);
+  }
+
+  interface NameTruncatedTemplate extends SafeHtmlTemplates {
+    @Template("<a href=\"{0}\" target=\"_blank\" class=\"white-text\">{1}&hellip;{2}</a>")
+    SafeHtml a(String url, String nameStart, String nameEnd);
   }
 
 	@UiField Element popoverTitle;
@@ -51,7 +57,7 @@ public class EditLinkForm extends Composite {
 	@UiField InputElement urlField;
 	private ApplyCallback applyCallback;
 	private static final Template TEMPLATE;
-
+	private static final NameTruncatedTemplate TEMPLATE_TRUNCATED;
 
 	public EditLinkForm(ApplyCallback applyCallback) {
 		this.applyCallback = applyCallback;
@@ -86,11 +92,18 @@ public class EditLinkForm extends Composite {
 	}
 
 	public void setLink(String link) {
+		urlField.setValue("");
 		if (link != null && !"".equals(link)) {
 			urlField.setValue(link);
-			popoverTitle.setInnerSafeHtml(TEMPLATE.a(link));
+			SafeHtml name = null;
+			if (link.length() > 50) {
+				name = TEMPLATE_TRUNCATED.a(link, link.substring(0, 20), link.substring(link.length() - 25));
+			} else {
+				name = TEMPLATE.a(link, link);
+			}
+			popoverTitle.setInnerSafeHtml(name);
 		} else {
-			popoverTitle.setInnerSafeHtml(SafeHtmlUtils.fromSafeConstant("Edit Link"));
+			popoverTitle.setInnerSafeHtml(SafeHtmlUtils.fromSafeConstant("Add Link"));
 		}
 	}
 

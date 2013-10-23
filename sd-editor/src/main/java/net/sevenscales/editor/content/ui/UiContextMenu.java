@@ -76,7 +76,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement delete;
 	@UiField AnchorElement annotate;
 	@UiField AnchorElement unannotate;
-	@UiField AnchorElement editlink;
+	@UiField AnchorElement addlink;
+	@UiField AnchorElement openlink;
 
 	private PopupPanel editLinkPopup;
 	private PopupPanel colorpopup;
@@ -102,7 +103,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		editLinkPopup = new PopupPanel();
 		editLinkPopup.setStyleName("edit-link-popup");
 		editLinkPopup.setAutoHideEnabled(true);
-		editLinkPopup.addAutoHidePartner(editlink);
+		editLinkPopup.addAutoHidePartner(addlink);
+		editLinkPopup.addAutoHidePartner(openlink);
 		this.editLinkForm = new EditLinkForm(applyLink);
 		editLinkPopup.setWidget(editLinkForm);
 
@@ -137,6 +139,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				Display duplicateMenuVisibility = Display.NONE;
 				Display annotateVisibility = Display.NONE;
 				Display unannotateVisibility = Display.NONE;
+				Display addLinkMenuVisibility = Display.NONE;
+				Display openEditLinkMenuVisibility = Display.NONE;
 
 				if ((diagram.supportedMenuItems() & ContextMenuItem.FREEHAND_MENU.getValue()) == ContextMenuItem.FREEHAND_MENU.getValue()) {
 					freehandMenu = Display.INLINE;
@@ -148,6 +152,12 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				}
 				if (anySupportsColorMenu(selected)) {
 					colorMenu = Display.INLINE_BLOCK;
+				}
+
+				if (selected.length == 1 && selected[0].hasLink()) {
+					openEditLinkMenuVisibility = Display.INLINE_BLOCK;
+				} else if (selected.length == 1) {
+					addLinkMenuVisibility = Display.INLINE_BLOCK;
 				}
 
 				boolean onlyComms = onlyComments(selected);
@@ -174,6 +184,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				duplicate.getStyle().setDisplay(duplicateMenuVisibility);
 				annotate.getStyle().setDisplay(annotateVisibility);
 				unannotate.getStyle().setDisplay(unannotateVisibility);
+				addlink.getStyle().setDisplay(addLinkMenuVisibility);
+				openlink.getStyle().setDisplay(openEditLinkMenuVisibility);
 
 				if (freehandMenu == Display.NONE && 
 						reverseMenu == Display.NONE &&
@@ -331,7 +343,15 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			}
 		});
 
-		new FastElementButton(editlink).addClickHandler(new ClickHandler() {
+		new FastElementButton(addlink).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				stopEvent(event);
+				showEditLink();
+			}
+		});
+
+		new FastElementButton(openlink).addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				stopEvent(event);
@@ -419,8 +439,16 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}
 
 	private void positionEditLinkPopup(int offsetWidth, int offsetHeight) {
-		int left = editlink.getAbsoluteLeft() + 0;
-		int top = editlink.getAbsoluteTop() + 30;
+		int left = 0;
+		int top = 0;
+		Diagram selected = selectionHandler.getOnlyOneSelected();
+		if (selected != null && !selected.hasLink()) {
+			left = addlink.getAbsoluteLeft() + 0;
+			top = addlink.getAbsoluteTop() + 30;
+		} else {
+			left = openlink.getAbsoluteLeft() + 0;
+			top = openlink.getAbsoluteTop() + 30;
+		}
 		editLinkPopup.setPopupPosition(left, top);
 	}
 

@@ -780,6 +780,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     return data.getFirstLink();
   }
 
+  public boolean hasLink() {
+    String link = getLink();
+    // need to have at least something, event this is too little.
+    return link != null && link.length() > 3;
+  }
+
   public void setVisible(boolean visible) {
     if (this.visible != visible) {
       this.visible = visible; 
