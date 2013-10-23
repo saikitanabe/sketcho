@@ -79,8 +79,9 @@ public class DiagramItemFactory {
    * version 4: 
    * - comment fields: p, cby, cbyd, cat, uat
    * - annotation field: a
+   * version 5: links
    */
-  public static final int ITEM_VERSION = 4;
+  public static final int ITEM_VERSION = 5;
   
   public static Diagram create(IDiagramItemRO item, ISurfaceHandler surface, boolean editable) {
     Diagram result = null;
