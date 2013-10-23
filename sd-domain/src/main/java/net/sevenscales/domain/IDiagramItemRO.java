@@ -1,6 +1,7 @@
 package net.sevenscales.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.JsonFormat;
@@ -28,6 +29,8 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	int getResolved();
 	boolean isAnnotation();
 	boolean isResolved();
+	List<String> getLinks();
+	String getFirstLink();
 	IDiagramItem copy();
 	void copyFrom(IDiagramItemRO item);
 

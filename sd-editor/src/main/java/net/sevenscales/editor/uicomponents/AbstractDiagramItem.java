@@ -101,7 +101,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   protected int diffFromMouseDownY;
   private IDiagramItem data;
   protected boolean editable;
-  private String link;
   private boolean ctrlDown;
   private boolean verticalMovement;
   private boolean visible;
@@ -774,11 +773,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
     
   public void setLink(String link) {
-    this.link = link;
+    data.setLink(link);
   }
   
   public String getLink() {
-    return link;
+    return data.getFirstLink();
   }
 
   public void setVisible(boolean visible) {

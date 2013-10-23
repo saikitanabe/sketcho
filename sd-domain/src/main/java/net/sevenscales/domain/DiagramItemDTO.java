@@ -1,6 +1,8 @@
 package net.sevenscales.domain;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.ArrayList;
 
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
@@ -26,6 +28,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	private double crc32;
 	private int annotation;
 	private int resolved;
+	private List<String> links;
 
 	public DiagramItemDTO() {
   }
@@ -37,18 +40,19 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 				+ ", backgroundColor=" + backgroundColor + ", textColor=" + textColor
 				+ ", version=" + version + ", clientId=" + clientId + ", customData=" + customData + ", crc32=" + crc32
 				+ ", annotation=" + annotation 
-				+ ", resolved=" + resolved 
+				+ ", resolved=" + resolved
+				+ ", links=" + links
 				+ "]";
 	}
 
 	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
 			Integer version, Long id, String clientId, String customData, double crc32) {
-		this(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, crc32, 0, 0);
+		this(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, crc32, 0, 0, null);
 	}
 
 
 	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
-			Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved
+			Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, List<String> links
 			) {
 		super();
 		this.text = text;
@@ -63,10 +67,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		this.crc32 = crc32;
 		this.annotation = annotation;
 		this.resolved = resolved;
+		this.links = links;
 	}
 	
 	public DiagramItemDTO(String clientId) {
-		this("", "", "", "", "", 0, 0L, clientId, "", 0, 0, 0);
+		this("", "", "", "", "", 0, 0L, clientId, "", 0, 0, 0, null);
 	}
 
 	public DiagramItemDTO(IDiagramItemRO di) {
@@ -205,6 +210,34 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		resolved = 0;
 	}
 
+	@Override 
+	public List<String> getLinks() {
+		return links;
+	}
+
+	public void addLink(String link) {
+		createLinks();
+		links.add(link);
+	}
+
+	public void setLink(String link) {
+		createLinks();
+		links.clear();
+		links.add(link);
+	}
+
+	public String getFirstLink() {
+		if (links != null && links.size() > 0) {
+			return links.get(0);
+		} 
+		return null;
+	}
+
+	private void createLinks() {
+		if (links == null) {
+			links = new ArrayList<String>();
+		}
+	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -246,6 +279,9 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		if (resolved != item.getResolved()) {
 			return false;
 		}
+		if (!links.equals(item.getLinks())) {
+			return false;
+		}
 
 		return true;
 	}
@@ -277,6 +313,13 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		crc32 = dit.crc32;
 		annotation = dit.annotation;
 		resolved = dit.resolved;
+
+		List<String> fromLinks = di.getLinks();
+		if (fromLinks != null) {
+			createLinks();
+			links.clear();
+			links.addAll(fromLinks);
+		}
 	}
 
 	public boolean isComment() {
@@ -302,6 +345,13 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
     }
     if (resolved == 1) {
 	    result.put("r", new JSONNumber(resolved));
+    }
+    if (links != null && links.size() > 0) {
+    	JSONArray jlinks = new JSONArray();
+    	for (int i = 0; i < links.size(); ++i) {
+    		jlinks.set(i, new JSONString(links.get(i)));
+    	}
+    	result.put("links", jlinks);
     }
 
     return result;

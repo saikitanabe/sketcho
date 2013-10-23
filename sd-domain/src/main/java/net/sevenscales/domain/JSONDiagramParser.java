@@ -31,6 +31,7 @@ public class JSONDiagramParser {
 												  JSONParserHelpers.getDouble(obj.get("crc")),
 												  JSONParserHelpers.getInt(obj.get("a")),
 												  JSONParserHelpers.getInt(obj.get("r")),
+												  JSONParserHelpers.getListString(obj.get("links")),
 												  JSONParserHelpers.getString(obj.get("p")),
 												  JSONParserHelpers.getString(obj.get("cby")),
 												  JSONParserHelpers.getString(obj.get("cbyd")),
@@ -66,7 +67,8 @@ public class JSONDiagramParser {
 														  JSONParserHelpers.getString(obj.get("cd")),
 														  JSONParserHelpers.getDouble(obj.get("crc")),
 														  JSONParserHelpers.getInt(obj.get("a")),
-														  JSONParserHelpers.getInt(obj.get("r")));
+														  JSONParserHelpers.getInt(obj.get("r")),
+														  JSONParserHelpers.getListString(obj.get("links")));
 	}
 
 	public CommentDTO isComment() {

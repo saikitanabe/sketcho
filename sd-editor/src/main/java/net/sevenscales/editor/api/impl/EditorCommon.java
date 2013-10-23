@@ -60,14 +60,23 @@ public class EditorCommon {
 		});
 	}
 
-	public void fireEditorOpen() {
+	public static void fireEditorOpen(ISurfaceHandler surface) {
 		surface.getEditorContext().set(EditorProperty.PROPERTY_EDITOR_IS_OPEN, true);
 		surface.getEditorContext().getEventBus().fireEvent(new EditDiagramPropertiesStartedEvent());
 	}
 
-	public void fireEditorClosed() {
+	public static void fireEditorClosed(ISurfaceHandler surface) {
 		surface.getEditorContext().set(EditorProperty.PROPERTY_EDITOR_IS_OPEN, false);
 		surface.getEditorContext().getEventBus().fireEvent(new EditDiagramPropertiesEndedEvent());
+	}
+
+
+	public void fireEditorOpen() {
+		EditorCommon.fireEditorOpen(surface);
+	}
+
+	public void fireEditorClosed() {
+		EditorCommon.fireEditorClosed(surface);
 	}
 
 	public void fireChanged(Diagram diagram) {

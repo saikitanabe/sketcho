@@ -3,7 +3,6 @@ package net.sevenscales.domain.api;
 import net.sevenscales.domain.IDiagramItemRO;
 
 
-
 public interface IDiagramItem extends IDiagramItemRO {
   void setText(String text);
 	void setType(String type);
@@ -19,4 +18,6 @@ public interface IDiagramItem extends IDiagramItemRO {
   void unannotate();
   void resolve();
   void unresolve();
+  void addLink(String link);
+  void setLink(String link);
 }

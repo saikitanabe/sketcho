@@ -19,6 +19,7 @@ import net.sevenscales.editor.api.event.SelectionMouseUpEventHandler;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.api.impl.TouchHelpers;
+import net.sevenscales.editor.api.impl.EditorCommon;
 import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.utils.DuplicateHelpers;
@@ -81,6 +82,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	private PopupPanel colorpopup;
 	private Color color = new Color("444444", 0x44, 0x44, 0x44, "6699ff", 0x66, 0x99, 0xff, "FFFFFF", 255, 255, 255, AbstractDiagramItem.DEFAULT_FILL_OPACITY);
 	private ColorSelections colorSelections;
+	private EditLinkForm editLinkForm;
 
 	public UiContextMenu(ISurfaceHandler surface, EditorContext editorContext, SelectionHandler selectionHandler) {
 		this.surface = surface;
@@ -101,7 +103,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		editLinkPopup.setStyleName("edit-link-popup");
 		editLinkPopup.setAutoHideEnabled(true);
 		editLinkPopup.addAutoHidePartner(editlink);
-		editLinkPopup.setWidget(new EditLinkForm(applyLink));
+		this.editLinkForm = new EditLinkForm(applyLink);
+		editLinkPopup.setWidget(editLinkForm);
 
 		this.colorSelections = new ColorSelections(editorContext);
 		colorSelections.setSelectionHandler(this);
@@ -332,7 +335,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			@Override
 			public void onClick(ClickEvent event) {
 				stopEvent(event);
-				editLink();
+				showEditLink();
 			}
 		});
 
@@ -390,42 +393,34 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}
 
 	private void applyLink(String url) {
-		Diagram[] selected = new Diagram[]{};
-		selected = selectionHandler.getSelectedItems().toArray(selected);
-		if (selected.length == 1) {
-			Diagram diagram = selected[0];
-			if (!url.equals(diagram.getLink())) {
+		Diagram selected = selectionHandler.getOnlyOneSelected();
+		if (selected != null) {
+			if (!url.equals(selected.getLink())) {
 				// url is set only if it differs
-				diagram.setLink(url);
-				surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(diagram));
+				selected.setLink(url);
+				surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(selected));
 			}
 		}
 		hide();
 	}
 
-	private void editLink() {
-		editLinkPopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
-			@Override
-			public void setPosition(int offsetWidth, int offsetHeight) {
-				positionEditLinkPopup(offsetWidth, offsetHeight);
-			}
-		});
+	private void showEditLink() {
+		Diagram selected = selectionHandler.getOnlyOneSelected();
+		if (selected != null) {
+			editLinkForm.setLink(selected.getLink());
+			editLinkPopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+				@Override
+				public void setPosition(int offsetWidth, int offsetHeight) {
+					positionEditLinkPopup(offsetWidth, offsetHeight);
+				}
+			});
+			EditorCommon.fireEditorOpen(surface);
+		}
 	}
 
 	private void positionEditLinkPopup(int offsetWidth, int offsetHeight) {
 		int left = editlink.getAbsoluteLeft() + 0;
 		int top = editlink.getAbsoluteTop() + 30;
-		Diagram[] selected = new Diagram[]{};
-		selected = selectionHandler.getSelectedItems().toArray(selected);
-		// int selectedTop = ScaleHelpers.scaleAndTranslateY(selected[0].getTop(), surface);
-		// int selectedLeft = ScaleHelpers.scaleAndTranslateX(selected[0].getLeft() + selected[0].getWidth(), surface);
-		// if (selected.length == 1 && selectedTop - offsetHeight - 30 >= 0) {
-		// 	top = UiContextMenu.this.getAbsoluteTop() - offsetHeight;
-		// }
-		// if (selected.length == 1 && selectedLeft + offsetWidth >= Window.getClientWidth()) {
-		// 	left = Window.getClientWidth() - offsetWidth; 
-		// }
-		// colorSelections.setCurrentDiagramColor(selected[0].getTextColor(), selected[0].getBackgroundColor());
 		editLinkPopup.setPopupPosition(left, top);
 	}
 
@@ -511,6 +506,9 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}
 	
 	private void hide() {
+		if (editLinkPopup.isShowing()) {
+			EditorCommon.fireEditorClosed(surface);
+		}
 		editLinkPopup.hide();
 		colorpopup.hide();
 		popup.hide();

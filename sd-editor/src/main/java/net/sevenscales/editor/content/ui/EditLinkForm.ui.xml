@@ -5,9 +5,9 @@
 	<g:HTMLPanel>
 		<div class="popover bottom edit-link-popover">
       <div class="arrow edit-link-arrow"></div>
-      <h3 class="popover-title">Edit Link</h3>
+      <h3 class="popover-title"><span ui:field="popoverTitle"></span></h3>
       <div class="popover-content">
-        <form name="editLinkForm" class="form-inline">
+        <form name="editLinkForm" class="form-inline" onsubmit="return false;">
 		        <input ui:field="urlField" type="text" class="span4"></input>
 		        <a ui:field="apply" class="btn">Apply</a>
 		    </form>
