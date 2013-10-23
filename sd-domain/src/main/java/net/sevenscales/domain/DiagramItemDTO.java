@@ -28,7 +28,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	private double crc32;
 	private int annotation;
 	private int resolved;
-	private List<String> links;
+	private List<UrlLinkDTO> links;
 
 	public DiagramItemDTO() {
   }
@@ -50,9 +50,8 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		this(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, crc32, 0, 0, null);
 	}
 
-
 	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
-			Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, List<String> links
+			Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, List<UrlLinkDTO> links
 			) {
 		super();
 		this.text = text;
@@ -211,31 +210,31 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 
 	@Override 
-	public List<String> getLinks() {
+	public List<? extends IUrlLinkRO> getLinks() {
 		return links;
 	}
 
-	public void addLink(String link) {
+	public void addLink(String url) {
 		createLinks();
-		links.add(link);
+		links.add(new UrlLinkDTO(url));
 	}
 
 	public void setLink(String link) {
 		createLinks();
 		links.clear();
-		links.add(link);
+		links.add(new UrlLinkDTO(link));
 	}
 
 	public String getFirstLink() {
 		if (links != null && links.size() > 0) {
-			return links.get(0);
+			return links.get(0).getUrl();
 		} 
 		return null;
 	}
 
 	private void createLinks() {
 		if (links == null) {
-			links = new ArrayList<String>();
+			links = new ArrayList<UrlLinkDTO>();
 		}
 	}
 
@@ -279,9 +278,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		if (resolved != item.getResolved()) {
 			return false;
 		}
-		if (!links.equals(item.getLinks())) {
-			return false;
-		}
+
+		// TODO for time being equals should not be used and links are not compared
+		// if (!links.equals(item.getLinks())) {
+		// 	return false;
+		// }
 
 		return true;
 	}
@@ -314,11 +315,13 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		annotation = dit.annotation;
 		resolved = dit.resolved;
 
-		List<String> fromLinks = di.getLinks();
+		List<? extends IUrlLinkRO> fromLinks = di.getLinks();
 		if (fromLinks != null) {
 			createLinks();
 			links.clear();
-			links.addAll(fromLinks);
+			for (IUrlLinkRO link : fromLinks) {
+				links.add(new UrlLinkDTO(link.getUrl()));
+			}
 		}
 	}
 
@@ -349,7 +352,12 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
     if (links != null && links.size() > 0) {
     	JSONArray jlinks = new JSONArray();
     	for (int i = 0; i < links.size(); ++i) {
-    		jlinks.set(i, new JSONString(links.get(i)));
+    		JSONObject jlink = new JSONObject();
+    		jlink.put("url", new JSONString(links.get(i).getUrl()));
+    		if (links.get(i).getName() != null) {
+	    		jlink.put("name", new JSONString(links.get(i).getName()));
+    		}
+    		jlinks.set(i, jlink);
     	}
     	result.put("links", jlinks);
     }

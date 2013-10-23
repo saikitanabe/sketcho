@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONObject;
 
 public class JSONParserHelpers {
 	public static int getInt(JSONValue value) {
@@ -33,6 +34,31 @@ public class JSONParserHelpers {
 				JSONString link = array.get(i).isString();
 				if (link != null) {
 					result.add(link.stringValue());	
+				}
+			}
+		}
+		return result;
+	}
+
+	public static List<UrlLinkDTO> getListUrl(JSONValue value) {
+		List<UrlLinkDTO> result = null;
+		if (value != null && value.isArray() != null && value.isArray().size() > 0) {
+			JSONArray array = value.isArray();
+			result = new ArrayList<UrlLinkDTO>();
+			for (int i = 0; i < array.size(); ++i) {
+				JSONObject jlink = array.get(i).isObject();
+				if (jlink != null) {
+					JSONValue jurl = jlink.get("url");
+					JSONValue jname = jlink.get("name");
+					String url = null;
+					String name = null;
+					if (jurl != null && jurl.isString() != null) {
+						url = jurl.isString().stringValue();
+					}
+					if (jname != null && jname.isString() != null) {
+						name = jname.isString().stringValue();
+					}
+					result.add(new UrlLinkDTO(url, name));
 				}
 			}
 		}

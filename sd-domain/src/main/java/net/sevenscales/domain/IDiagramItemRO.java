@@ -29,7 +29,7 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	int getResolved();
 	boolean isAnnotation();
 	boolean isResolved();
-	List<String> getLinks();
+	List<? extends IUrlLinkRO> getLinks();
 	String getFirstLink();
 	IDiagramItem copy();
 	void copyFrom(IDiagramItemRO item);
