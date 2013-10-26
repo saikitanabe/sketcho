@@ -9,6 +9,7 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.JsonConversion;
 import net.sevenscales.domain.utils.JsonFormat;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.json.JsonExtraction;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.BoardDocumentGraphicalViewHelpers;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
@@ -61,7 +62,7 @@ public class JsonHelpers {
 		for (IDiagramItemRO di : items) {
 			// server has in saved format only one \n and also " without 
 			// e.g. \\n \"
-			json += di.toJson(jsonFormat).toString() + ",";
+			json += JsonExtraction.decompose(di, jsonFormat).toString() + ",";
 		}
 		
 		json = removeLastComma(json);
@@ -84,7 +85,7 @@ public class JsonHelpers {
 		  } else {
 		    json += ",";
 		  }
-			json += di.toJson(jsonFormat).toString();
+			json += JsonExtraction.decompose(di, jsonFormat).toString();
 		}
 		return "[" + json + "]";
 	}
@@ -101,7 +102,7 @@ public class JsonHelpers {
 		String result = "";
 		for (IDiagramItemRO di : items) {
 			if (di instanceof DiagramItemDTO) {
-				result += di.toJson(jsonFormat) + ",";
+				result += JsonExtraction.decompose(di, jsonFormat) + ",";
 			}
 		}
 		result = removeLastComma(result);

@@ -102,16 +102,4 @@ public class CommentDTO extends DiagramItemDTO {
 		}
 	}
 
-	public JSONValue toJson(JsonFormat jsonFormat) {
-		JSONValue result = super.toJson(jsonFormat);
-		JSONObject obj = result.isObject();
-		if (obj != null) {
-    	obj.put("p", new JSONString(safeJsonString(parentThreadId)));
-    	obj.put("cby", new JSONString(safeJsonString(username)));
-    	obj.put("cbyd", new JSONString(safeJsonString(userDisplayName)));
-    	obj.put("cat", new JSONNumber(createdAt));
-    	obj.put("uat", new JSONNumber(updatedAt));
-    }
-		return result;
-	}
 }

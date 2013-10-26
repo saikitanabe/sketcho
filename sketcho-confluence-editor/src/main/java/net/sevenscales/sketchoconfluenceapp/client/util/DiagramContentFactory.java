@@ -1,9 +1,10 @@
 package net.sevenscales.sketchoconfluenceapp.client.util;
 
 import net.sevenscales.domain.DiagramContentDTO;
-import net.sevenscales.domain.DiagramContentJS;
+import net.sevenscales.domain.JSONContentParser;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.utils.JsonFormat;
+import net.sevenscales.domain.json.JsonExtraction;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.content.Context;
 import net.sevenscales.editor.gfx.svg.converter.SvgData;
@@ -11,7 +12,6 @@ import net.sevenscales.sketchoconfluenceapp.client.ContentService;
 import net.sevenscales.sketchoconfluenceapp.client.Sketcho_confluence_app;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -114,8 +114,9 @@ public class DiagramContentFactory {
 	private static void processResponse(String name, String json,
 			Context context, AsyncCallback<IDiagramContent> callback, EditorContext editorContext) {
 		System.out.println("json: " + json);
-		DiagramContentJS contentJs = JsonUtils.safeEval(json);
-		DiagramContentDTO result = contentJs.asDTO();
+//		DiagramContentJS contentJs = JsonUtils.safeEval(json);
+		JSONContentParser parser = new JSONContentParser(json);
+		DiagramContentDTO result = parser.toDTO();
 		callback.onSuccess(result);
 	}
 
@@ -135,7 +136,7 @@ public class DiagramContentFactory {
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, restService());
 		builder.setHeader("Content-Type", "application/json");
 		// System.out.println("JSON: " + dto.asJson().toString());
-		JSONValue json = DiagramContentJS.asJson2(dto, JsonFormat.PRESENTATION_FORMAT);
+		JSONValue json = JsonExtraction.decompose(dto, JsonFormat.PRESENTATION_FORMAT); // DiagramContentJS.asJson2(dto, JsonFormat.PRESENTATION_FORMAT);
 		JSONObject obj = (JSONObject) json;
 		obj.put("svg", new JSONString(svg.svg)); // add SVG separately; not in DTO
 		obj.put("pageId", new JSONNumber(pageId)); // add SVG separately; not

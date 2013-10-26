@@ -30,7 +30,7 @@ public class TestUtils {
 					 1L, 
 					 id,
 					 "",
-					 0f);
+					 null);
 			result.add(di);
 			System.out.println(di);
 		}

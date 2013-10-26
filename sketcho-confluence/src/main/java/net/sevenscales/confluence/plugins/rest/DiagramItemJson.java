@@ -1,11 +1,15 @@
 package net.sevenscales.confluence.plugins.rest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.UrlLinkDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 
 
@@ -32,6 +36,14 @@ public class DiagramItemJson {
 	private String cd;
   @XmlElement(required = false, name = "crc")
 	private int crc;
+  @XmlElement(required = false, name = "a")
+  private int a;
+  @XmlElement(required = false, name = "r")
+  private int r;
+  @XmlElement(required = false, name = "uat")
+  private long uat;
+  @XmlElement(required = false, name = "links")
+  private List<UrlLinkJson> links;
 	
 	public String getText() {
 		return text;
@@ -89,7 +101,47 @@ public class DiagramItemJson {
 		this.cd = cd;
 	}
 	
+  public int getCrc() {
+    return crc;
+  }
+  public void setCrc(int crc) {
+    this.crc = crc;
+  }
+  public int getA() {
+    return a;
+  }
+  public void setA(int a) {
+    this.a = a;
+  }
+  public int getR() {
+    return r;
+  }
+  public void setR(int r) {
+    this.r = r;
+  }
+  public long getUat() {
+    return uat;
+  }
+  public void setUat(long uat) {
+    this.uat = uat;
+  }
+    
+  public List<UrlLinkJson> getLinks() {
+    return links;
+  }
+  public void setLinks(List<UrlLinkJson> links) {
+    this.links = links;
+  }
+  
   public final DiagramItemDTO asDTO() {
+    List<UrlLinkJson> jlinks = getLinks();
+    List<UrlLinkDTO> links = null;
+    if (jlinks != null) {
+      links = new ArrayList<UrlLinkDTO>();
+      for (UrlLinkJson link : getLinks()) {
+        links.add(link.asDTO());
+      }
+    }
   	return new DiagramItemDTO(getText(), 
   							  getElementType(),
   							  getShape(),
@@ -99,8 +151,9 @@ public class DiagramItemJson {
   							  new Long(getId()), 
   							  getClientId(), 
   							  getCd(),
-  							  getVersion());
+  							  links);
   }
+  
 	public static DiagramItemJson fromDTO(IDiagramItemRO from) {
 		DiagramItemJson result = new DiagramItemJson();
 		result.setText(from.getText());
