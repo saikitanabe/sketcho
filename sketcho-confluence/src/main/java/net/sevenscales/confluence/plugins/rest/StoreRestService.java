@@ -34,7 +34,7 @@ import com.thoughtworks.xstream.XStream;
  */
 @Path("/sketch")
 public class StoreRestService {
-	private static final Logger log = LoggerFactory.getLogger(StoreRestService.class);
+	// private static final Logger log = LoggerFactory.getLogger(StoreRestService.class);
 
 	private IStore store = null;
 	private XStream xstream = new XStream();
