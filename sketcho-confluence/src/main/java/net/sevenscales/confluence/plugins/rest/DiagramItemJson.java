@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.IUrlLinkRO;
 import net.sevenscales.domain.UrlLinkDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 
@@ -35,15 +36,17 @@ public class DiagramItemJson {
   @XmlElement(name = "cd")
 	private String cd;
   @XmlElement(required = false, name = "crc")
-	private int crc;
+	private Integer crc;
   @XmlElement(required = false, name = "a")
-  private int a;
+  private Integer a;
   @XmlElement(required = false, name = "r")
-  private int r;
+  private Integer r;
   @XmlElement(required = false, name = "uat")
-  private long uat;
+  private Long uat;
   @XmlElement(required = false, name = "links")
   private List<UrlLinkJson> links;
+  
+  
 	
 	public String getText() {
 		return text;
@@ -101,28 +104,28 @@ public class DiagramItemJson {
 		this.cd = cd;
 	}
 	
-  public int getCrc() {
+  public Integer getCrc() {
     return crc;
   }
-  public void setCrc(int crc) {
+  public void setCrc(Integer crc) {
     this.crc = crc;
   }
-  public int getA() {
+  public Integer getA() {
     return a;
   }
-  public void setA(int a) {
+  public void setA(Integer a) {
     this.a = a;
   }
-  public int getR() {
+  public Integer getR() {
     return r;
   }
-  public void setR(int r) {
+  public void setR(Integer r) {
     this.r = r;
   }
-  public long getUat() {
+  public Long getUat() {
     return uat;
   }
-  public void setUat(long uat) {
+  public void setUat(Long uat) {
     this.uat = uat;
   }
     
@@ -165,6 +168,15 @@ public class DiagramItemJson {
 		result.setId(from.getId());
 		result.setClientId(from.getClientId());
 		result.setCd(from.getCustomData());
+
+		List<? extends IUrlLinkRO> links = from.getLinks();
+		if (links != null) {
+			List<UrlLinkJson> jlinks = new ArrayList<UrlLinkJson>();
+			for (IUrlLinkRO link : links) {
+				jlinks.add(new UrlLinkJson(link.getUrl(), link.getName()));
+			}
+			result.setLinks(jlinks);
+		}
 		return result;
 	}
 }

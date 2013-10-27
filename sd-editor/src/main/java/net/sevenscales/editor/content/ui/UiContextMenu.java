@@ -161,9 +161,9 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				}
 
 				boolean onlyComms = onlyComments(selected);
-				if (anyIsAnnotated(selected) && !onlyComms) {
+				if (notConfluence() && anyIsAnnotated(selected) && !onlyComms) {
 					unannotateVisibility = Display.INLINE_BLOCK;
-				} else if (!onlyComms) {
+				} else if (notConfluence() && !onlyComms) {
 					annotateVisibility = Display.INLINE_BLOCK;
 				}
 
@@ -375,6 +375,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		});
 		
 		closeOnSave();
+	}
+
+	private boolean notConfluence() {
+		return !surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE);
 	}
 
 	private EditLinkForm.ApplyCallback applyLink = new EditLinkForm.ApplyCallback() {

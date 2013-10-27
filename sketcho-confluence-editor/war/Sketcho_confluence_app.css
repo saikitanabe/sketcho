@@ -765,7 +765,6 @@ background-repeat: no-repeat;
 width: 15px;
 height: 15px;
 line-height: 15px;
-padding-bottom: 2px;
 }
 
 .icon-undo {
@@ -1023,4 +1022,18 @@ img.skme-img {
 
 .popover.bottom .arrow::after {
 border-bottom-color: #333;
+}
+
+.popover-title {
+background-color: #333;
+color: #fff;
+}
+.popover-content {
+background-color: #333;
+width: auto;
+}
+.popover {
+    background-color: #333;
+    max-width: 500px;
+    width:auto;
 }

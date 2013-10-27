@@ -25,20 +25,27 @@ public class CommentHandler {
 	public CommentHandler(ISurfaceHandler surface) {
 		this.surface = surface;
 
-		surface.getEditorContext().getEventBus().addHandler(CommentModeEvent.TYPE, new CommentModeEventHandler() {
-			@Override
-			public void on(CommentModeEvent event) {
-				showHideCommentMode(event.isEnabled());
-			}
-		});
+		if (notConfluence()) {
+			// comments mode is not enabled on Confluence
+			surface.getEditorContext().getEventBus().addHandler(CommentModeEvent.TYPE, new CommentModeEventHandler() {
+				@Override
+				public void on(CommentModeEvent event) {
+					showHideCommentMode(event.isEnabled());
+				}
+			});
 
-    Event.addNativePreviewHandler(new NativePreviewHandler() {
-      @Override
-      public void onPreviewNativeEvent(NativePreviewEvent event) {
-      	handleOnPreviewNativeEvent(event);
-      }
-    });
+	    Event.addNativePreviewHandler(new NativePreviewHandler() {
+	      @Override
+	      public void onPreviewNativeEvent(NativePreviewEvent event) {
+	      	handleOnPreviewNativeEvent(event);
+	      }
+	    });
+		}
 	}
+
+	private boolean notConfluence() {
+		return !surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE);
+	}	
 
 	private void handleOnPreviewNativeEvent(NativePreviewEvent event) {
     NativeEvent ne = event.getNativeEvent();

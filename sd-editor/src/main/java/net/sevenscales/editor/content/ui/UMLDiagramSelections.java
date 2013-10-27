@@ -3,6 +3,8 @@ package net.sevenscales.editor.content.ui;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.LibrarySelections.Library;
 import net.sevenscales.editor.api.event.CreateElementEvent;
+import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.impl.FastButton;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -82,11 +84,19 @@ public class UMLDiagramSelections extends Composite {
 	private EditorContext editorContext;
 	
 	@UiField HorizontalPanel diagramGroups;
+	@UiField FastButton comments;
+	@UiField FastButton _comments;
 //	@UiField ButtonElement freehandBtn;
 
 	public UMLDiagramSelections(EditorContext editorContext) {
 		this.editorContext = editorContext;
 		initWidget(uiBinder.createAndBindUi(this));
+
+		if (!notConfluence()) {
+			// hide comments on confluence
+			comments.setVisible(false);
+			_comments.setVisible(false);
+		}
 		
 //		editorContext.getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
 //			@Override
@@ -136,13 +146,19 @@ public class UMLDiagramSelections extends Composite {
 	}
 	@UiHandler("comments")
 	public void oncomments(ClickEvent event) {
-		fire(UMLDiagramType.COMMENT_THREAD);
+		fireCommentThread();
 	}
 	@UiHandler("_comments")
 	public void oncommentsMind(ClickEvent event) {
-		fire(UMLDiagramType.COMMENT_THREAD);
+		fireCommentThread();
 	}
 	
+	private void fireCommentThread() {
+		if (notConfluence()) {
+			fire(UMLDiagramType.COMMENT_THREAD);
+		}
+	}
+
 	@UiHandler("choice")
 	public void onchoice(ClickEvent event) {
 		fire(UMLDiagramType.CHOICE);
@@ -204,6 +220,10 @@ public class UMLDiagramSelections extends Composite {
 	public void onmindnote(ClickEvent event) {
 		fire(UMLDiagramType.NOTE);
 	}
+
+	private boolean notConfluence() {
+		return !editorContext.isTrue(EditorProperty.CONFLUENCE_MODE);
+	}	
 	
 //	@UiHandler("freehand")
 //	public void onFreehand(ClickEvent event) {

@@ -72,10 +72,10 @@ public class JsonExtraction {
     result.put("cd", new JSONString(safeJsonString(item.getCustomData())));
     result.put("crc", new JSONNumber(item.getCrc32()));
 
-    if (item.getAnnotation() == 1) {
+    if (item.isAnnotation()) {
 	    result.put("a", new JSONNumber(item.getAnnotation()));
     }
-    if (item.getResolved() == 1) {
+    if (item.isResolved()) {
 	    result.put("r", new JSONNumber(item.getResolved()));
     }
     if (item.getLinks() != null && item.getLinks().size() > 0) {
