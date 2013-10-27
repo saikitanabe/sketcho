@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import net.sevenscales.domain.DiagramContentDTO;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.UrlLinkDTO;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.sketchoconfluenceapp.server.utils.IStore;
 import net.sevenscales.sketchoconfluenceapp.server.utils.StoreEntry;
@@ -41,6 +42,9 @@ public class StoreRestService {
 	public StoreRestService() {
 		xstream.alias("net.sevenscales.domain.dto.DiagramContentDTO", DiagramContentDTO.class);
 		xstream.alias("net.sevenscales.domain.dto.DiagramItemDTO", DiagramItemDTO.class);
+		xstream.alias("url", UrlLinkDTO.class);
+//		XStream.omitField(DiagramItemDTO.class, "annotation");
+//		XStream.omitField(DiagramItemDTO.class, "resolved");
 	}
 	
 	public void setStoreHandler(IStore store) {
