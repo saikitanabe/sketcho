@@ -20,8 +20,8 @@ import net.sevenscales.sketchoconfluenceapp.server.utils.SvgUtil;
 
 import com.thoughtworks.xstream.XStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+// import org.slf4j.Logger;
+// import org.slf4j.LoggerFactory;
 
 /**
  * A resource of message.
@@ -78,7 +78,7 @@ public class StoreRestService {
 //			log.debug("getSketch: pageId(" + pageId + ") name(" + name + ")");
 
 			String modelXML = store.loadContent(pageId, name);
-			log.debug("getSketch {0}", modelXML);
+			// log.debug("getSketch {0}", modelXML);
 			if (modelXML != null) {
 				IDiagramContent fromStore = (IDiagramContent) xstream.fromXML(modelXML);
 				json = DiagramContentJson.fromDTO(fromStore);
