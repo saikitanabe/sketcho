@@ -63,7 +63,7 @@ public class JsonExtraction {
 	public static JSONValue decompose(DiagramItemDTO item, JsonFormat jsonFormat) {
     JSONObject result = new JSONObject();
     String text = safeJsonString(itemText(item, jsonFormat));
-    result.put("text", new JSONString(item.getText()));
+    result.put("text", new JSONString(text));
     result.put("elementType", new JSONString(safeJsonString(item.getType())));
     result.put("shape", new JSONString(safeJsonString(item.getShape())));
     result.put("backgroundColor", new JSONString(safeJsonString(item.getBackgroundColor())));
