@@ -37,10 +37,12 @@ public class JsonExtraction {
 	}
 
 	public static JSONValue decompose(IDiagramItemRO item, JsonFormat jsonFormat) {
-		if (item instanceof DiagramItemDTO) {
+    // NOTE that this needs to be leaf first order!
+    // otherwise DiagramItemDTO catches all!
+		if (item instanceof CommentDTO) {
+      return decompose((CommentDTO) item, jsonFormat);
+    } else if (item instanceof DiagramItemDTO) {
 			return decompose((DiagramItemDTO) item, jsonFormat);
-		} else if (item instanceof CommentDTO) {
-			return decompose((CommentDTO) item, jsonFormat);
 		}
 		return null;
 	}
