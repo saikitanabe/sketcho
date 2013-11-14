@@ -257,7 +257,9 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		if (moveItems().size() == 1) {
 			// do not show line helpers for multiple selected items
 			verticalLine.setVisibility(true);
+			verticalLine.moveToBack();
 			horizontalLine.setVisibility(true);
+			horizontalLine.moveToBack();
 		}
 	}
 
