@@ -13,6 +13,7 @@ public class AnchorElement {
   private double relativeY = 0;
 //  private Rectangle boundary;
   private Anchor anchor;
+  private boolean fixedPoint;
   
   public AnchorElement(int ax, int ay, Diagram diagram) {
     this.ax = ax;
@@ -116,6 +117,14 @@ public class AnchorElement {
   public void setDiff(int dx, int dy) {
     ax += dx;
     ay += dy;
+  }
+
+  public void setFixedPoint(boolean fixedPoint) {
+    this.fixedPoint = fixedPoint;
+  }
+
+  public boolean isFixedPoint() {
+    return fixedPoint;
   }
 
 }

@@ -53,6 +53,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
   private static final int CONNECT_DISTANCE = 15;
   
   public interface LifelineCall {
+    void begin();
   	void makeCircle(int cx, int cy);
   }
 
@@ -107,6 +108,9 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 	}
 
 	private LifelineCall addExtraConnections = new LifelineCall() {
+    @Override
+    public void begin() {
+    }
 		@Override
 		public void makeCircle(int cx, int cy) {
 			connectionHelpers.addExtraConnectionHandle(SequenceElement.this, cx, cy, RADIUS_EXTRA);
@@ -180,8 +184,9 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 	  line.setShape(x1, y1, x2, y2);
 		selectionArea.setShape(x1 - SELECTION_AREA_WIDTH, y1, SELECTION_AREA_WIDTH * 2, y2-y1, 0);
     
+    makeFixedAnchorPoints();
     lifeLineEditor.setShape(this);
-    
+
 //    ++this.dispatchSequence;
 //    for (AnchorElement a : anchorMap.values()) {
 //      a.setAx(x1);
@@ -190,11 +195,11 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 //    }
     
 //    addRemoveVisibleConnectionHelpers();
-    makeFixedAnchorPoints();
 	}
 	
 	private void iterateLifelinePoints(LifelineCall call) {
-		for (int y = getCenterY() + (CONNECT_DISTANCE * 2); y < line.getY2() + getTransformY() - CONNECT_DISTANCE; y += CONNECT_DISTANCE) {
+    call.begin();
+		for (int y = getTop() + getHeight() + CONNECT_DISTANCE; y < line.getY2() + getTransformY() - CONNECT_DISTANCE; y += CONNECT_DISTANCE) {
 			call.makeCircle(line.getX1() + getTransformX(), y);
 		}
 	}
@@ -207,23 +212,60 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 	private class FixedPointsCalc implements LifelineCall {
 		public FixedPointsCalc() {
 		}
+    @Override
+    public void begin() {
+    }
 		
 		@Override
 		public void makeCircle(int cx, int cy) {
 		}
 	};
 
+  private static class MakeLifeLineFactory implements LifelineCall {
+    private List<Integer> fixed;
+
+    @Override
+    public void begin() {
+    }
+
+    @Override
+    public void makeCircle(int cx, int cy) {
+      if (fixed != null) {
+        fixed.add(cx);
+        fixed.add(cy);
+      }
+    }
+
+    public void setFixed(List<Integer> fixed) {
+      this.fixed = fixed;
+    }
+  }
+
+  private MakeLifeLineFactory makeLifeLineFactory = new MakeLifeLineFactory();
+
+  private LifelineCall updateLifeLineFactory = new LifelineCall() {
+    private int index = 0;
+
+    @Override
+    public void begin() {
+      index = 0;
+    }
+
+    @Override
+    public void makeCircle(int cx, int cy) {
+      if (fixedAnchorPoints != null && index + 1 < fixedAnchorPoints.length) {
+        fixedAnchorPoints[index] = cx;
+        fixedAnchorPoints[++index] = cy;
+      }
+    }
+  };
+
   private void makeFixedAnchorPoints() {
 //		List<Integer> fixed = new ArrayList<Integer>(connectionHelpers.getExtraConnectionHandles().size() * 2 + (2 * 4));
   	final List<Integer> fixed = new ArrayList<Integer>();
 		
-  	iterateLifelinePoints(new LifelineCall() {
-			@Override
-			public void makeCircle(int cx, int cy) {
-				fixed.add(cx);
-				fixed.add(cy);
-			}
-		});
+    makeLifeLineFactory.setFixed(fixed);
+  	iterateLifelinePoints(makeLifeLineFactory);
 //		DiagramHelpers.fill4FixedRectPoints(fixed, getLeft(), getTop(), getWidth(), getHeight());
 		
 //		for (ConnectionHandle c : connectionHelpers.getExtraConnectionHandles()) {
@@ -241,6 +283,10 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 		fixedAnchorPoints = fixed.toArray(fixedAnchorPoints);
 //  	logger.debug("makeFixedAnchorPoints {} ... done", this);
 	}
+
+  private void updateFixedAnchorPoints() {
+    iterateLifelinePoints(updateLifeLineFactory);
+  }
 
 	public void setShape(int left, int top, int width, int height) {
   	super.setShape(left, top, width, height);
@@ -350,33 +396,16 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
     	result = makeFixedTempAnchorProperties(anchor, x, y);
     }
     return result;
-//  	AnchorElement result = super.onAttachArea(anchor, x, y);
-//  	if (result == null) {
-//  		result = super.onAttachArea(anchor, x, y, selectionArea.getX(), selectionArea.getY(), selectionArea.getWidth(), selectionArea.getHeight());
-//  	}
-//  	return result;
   }
-  
-  @Override
-  protected void setRelativeAnchor(int x, int y) {
-  	if (AnchorUtils.onAttachArea(x, y, getLeft(), getTop(), getWidth(), getHeight())) {
-  		AnchorUtils.relativeValue(tempAnchorProperties, getLeft(), getTop(), getWidth(), getHeight());
-  	} else {
-  		// fix anchor points, just in case
-  		makeFixedAnchorPoints();
-  		AnchorUtils.anchorPoint(x, y, tempAnchorProperties, fixedAnchorPoints);
-  	}
-  }
-  
+    
   @Override
 	protected void dispatch(AnchorElement a, int left, int top, int width, int height, long dispatchSequence) {
-  	if (AnchorUtils.onAttachArea(a.getAx(), a.getAy(), left, top, width, height)) {
-  		// dispatch based on rect (object) area if anchor was attached to it; otherwise let do fixed anchoring
-			AnchorUtils.setRelativePosition(a, left, top, width, height);
-			a.dispatch(dispatchSequence);
-  	} else {
-  		super.dispatch(a, left, top, width, height, dispatchSequence);
-  	}
+    if (a.isFixedPoint()) {
+      super.dispatch(a, left, top, width, height, dispatchSequence);
+    } else {
+      AnchorUtils.setRelativePosition(a, left, top, width, height);
+      a.dispatch(dispatchSequence);
+    }
   }
   
   @Override
@@ -397,11 +426,15 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 	    RectShape rs = (RectShape) super.getInfo();
 	    SequenceShape result = new SequenceShape();
 	    result.rectShape = rs;
-	    result.lifeLineHeight = line.getY2() - line.getY1();
+	    result.lifeLineHeight = getLifelineHeight();
 	    
 	    super.fillInfo(result);
 	    return result;
 	}
+
+  private int getLifelineHeight() {
+    return line.getY2() - line.getY1();
+  }
   
   @Override
   public void setReadOnly(boolean value) {
