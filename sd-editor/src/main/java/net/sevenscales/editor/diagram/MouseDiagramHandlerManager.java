@@ -340,6 +340,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 
 	@Override
 	public void onDoubleClick(Diagram sender, MatrixPointJS point) {
+		resizeHandler.onDoubleClick(sender, point);
 		surfaceClickHandler.onDoubleClick(sender, point);
 	}
 	
