@@ -14,7 +14,7 @@ import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.uicomponents.Point;
 import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
 
-public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiagramDoubleClickHandler {
+public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiagramDoubleClickHandler, MouseLongPressHandler {
 	private static final SLogger logger = SLogger.createLogger(MouseDiagramResizeHandler.class);
 
 	private Diagram sender;
@@ -174,7 +174,12 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 
 	@Override
 	public void onDoubleClick(Diagram sender, MatrixPointJS point) {
-		clearResize();		
+		clearResize();
+	}
+
+	@Override
+	public void onLongPress(int x, int y) {
+		clearResize();
 	}
 	
 	@Override

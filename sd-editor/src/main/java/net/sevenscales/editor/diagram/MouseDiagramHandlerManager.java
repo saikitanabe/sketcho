@@ -365,6 +365,8 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			// User is probably trying to draw connection. 
 			return;
 		}
+
+		resizeHandler.onLongPress(x, y);
 		
 		Set<Diagram> selected = selectionHandler.getSelectedItems();
 		if (selected.size() == 1) {
