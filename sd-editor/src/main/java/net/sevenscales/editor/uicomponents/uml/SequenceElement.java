@@ -399,6 +399,21 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
   }
 
   @Override
+  protected boolean setFixedOrRelativeAnchor(int x, int y) {
+    if (AnchorUtils.onAttachArea(x, y, getLeft(), getTop(), getWidth(), getHeight())) {
+      // if on rectangle area
+      AnchorUtils.relativeValue(tempAnchorProperties, x, y, getLeft(), getTop(), getWidth(), getHeight());
+      return false;
+    } else {
+      // it's on fixed anchor area
+      // fix anchor points, just in case
+      makeFixedAnchorPoints();
+      AnchorUtils.anchorPoint(x, y, tempAnchorProperties, fixedAnchorPoints);
+      return true;
+    }  
+  }
+
+  @Override
   public boolean onArea(int left, int top, int right, int bottom) {
   	if (super.onArea(left, top, right, bottom)) {
   		// check first rectangle area

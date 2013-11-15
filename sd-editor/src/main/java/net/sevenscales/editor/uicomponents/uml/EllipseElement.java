@@ -264,9 +264,10 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
 	}
   
   @Override
-  protected void setRelativeAnchor(int x, int y) {
+  protected boolean setFixedOrRelativeAnchor(int x, int y) {
   	double alpha = calcAnchorPoint(x, y, tempAnchorPoint, angles);
   	tempAnchorProperties.relativeValueX = alpha;
+    return false; // relative
   }
   
   private void calcAnchorPointWithAngle(int x, int y, double angle, Point anchorPoint) {

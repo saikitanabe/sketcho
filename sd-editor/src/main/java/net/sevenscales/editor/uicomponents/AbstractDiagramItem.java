@@ -549,9 +549,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	  tempAnchorProperties.x = x;
 	  tempAnchorProperties.y = y;
 	 
-	  setRelativeAnchor(x, y);
+	  boolean fixedOrRelative = setFixedOrRelativeAnchor(x, y);
 	  result.setRelativeX(tempAnchorProperties.relativeValueX);
 	  result.setRelativeY(tempAnchorProperties.relativeValueY);
+    result.setFixedPoint(fixedOrRelative);
 	 
     surface.getMouseDiagramManager().getDragHandler().attach(anchor.getRelationship(), result);
     return result;
@@ -561,14 +562,17 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
    * To be overriden if relative anchor has some exotic calculation like ellipse.
    * @param x
    * @param y
+   * @return false if relative point; true if fixed point
    */
-  protected void setRelativeAnchor(int x, int y) {
+  protected boolean setFixedOrRelativeAnchor(int x, int y) {
     Integer[] fixedAnchorPoints = getFixedAnchorPoints();
     if (fixedAnchorPoints == null) {
     	// do not recalculate relationship position, but use x, y, that's why not using anchorPoint method
    	 	AnchorUtils.relativeValue(tempAnchorProperties, x, y, getLeft(), getTop(), getWidth(), getHeight());
+      return false;
     } else {
       AnchorUtils.anchorPoint(x, y, tempAnchorProperties, fixedAnchorPoints);
+      return true;
     }
 	}
 	protected Integer[] getFixedAnchorPoints() {
