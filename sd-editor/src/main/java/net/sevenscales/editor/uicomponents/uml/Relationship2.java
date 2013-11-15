@@ -995,9 +995,18 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   // ///////////////////////////////////////
   public void anchor(boolean highlight) {
     // Attach/deattach anchor
+    anchorEnd(highlight);
+    anchorStart(highlight);
+  }
+
+  public void anchorEnd(boolean highlight) {
     findAndAttachAnchor(points.size()-2, points.size()-1, endAnchor, highlight);
+  }
+
+  public void anchorStart(boolean highlight) {
     findAndAttachAnchor(0, 1, startAnchor, highlight);
   }
+
   
 //  @Override
 //  public void applyTransform(int dx, int dy) {

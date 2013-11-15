@@ -566,7 +566,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     Integer[] fixedAnchorPoints = getFixedAnchorPoints();
     if (fixedAnchorPoints == null) {
     	// do not recalculate relationship position, but use x, y, that's why not using anchorPoint method
-   	 	AnchorUtils.relativeValue(tempAnchorProperties, getLeft(), getTop(), getWidth(), getHeight());
+   	 	AnchorUtils.relativeValue(tempAnchorProperties, x, y, getLeft(), getTop(), getWidth(), getHeight());
     } else {
       AnchorUtils.anchorPoint(x, y, tempAnchorProperties, fixedAnchorPoints);
     }

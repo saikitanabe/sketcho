@@ -3,13 +3,23 @@ package net.sevenscales.editor.uicomponents;
 import java.util.List;
 
 import net.sevenscales.editor.gfx.domain.IRectangle;
+import net.sevenscales.domain.utils.SLogger;
 
 public class AnchorUtils {
+  private static final SLogger logger = SLogger.createLogger(AnchorUtils.class);
+  static {
+    logger.addFilter(AnchorUtils.class);
+  }
+
   public static class AnchorProperties {
     public int x;
     public int y;
     public double relativeValueX;
     public double relativeValueY;
+  }
+
+  public enum CardinalDirection {
+    NORTH, EAST, SOUTH, WEST;
   }
   
   private static final int MAGNETIC_VALUE = 3;
@@ -66,6 +76,50 @@ public class AnchorUtils {
   }
   
   public static void anchorPoint(int x, int y, AnchorProperties ap, int left, int top, int width, int height) {
+//    tempax = GridUtils.align(tempax);
+//    tempay = GridUtils.align(tempay);
+    int tempax = 0;
+    int tempay = 0;
+
+    // Sharp values are without extra distance, used just for relative calculation
+    // to have as accurate relative result from real element dimension.
+    int sharpX = 0;
+    int sharpY = 0;
+
+    CardinalDirection cd = findCardinalDirection(x, y, left, top, width, height);
+    switch (cd) {
+      case WEST:
+        tempax = left - ATTACH_EXTRA_DISTANCE;
+        tempay = y;
+        sharpX = left;
+        sharpY = y;
+      break;
+      case NORTH:
+        tempax = x;
+        tempay = top - ATTACH_EXTRA_DISTANCE;
+        sharpX = x;
+        sharpY = top;
+      break;
+      case EAST:
+        tempax = left + width + ATTACH_EXTRA_DISTANCE;
+        tempay = y;
+        sharpX = left + width;
+        sharpY = y;
+      break;
+      case SOUTH:
+        tempax = x;
+        tempay = top + height + ATTACH_EXTRA_DISTANCE;
+        sharpX = x;
+        sharpY = top + height;
+      break;
+    }
+
+    ap.x = tempax;
+    ap.y = tempay;
+    relativeValue(ap, sharpX, sharpY, left, top, width, height);
+  }
+
+  public static CardinalDirection findCardinalDirection(int x, int y, int left, int top, int width, int height) {
     int dx = Math.abs(x - left);
     int dy = Math.abs(y - top);
     int dxw = Math.abs(x - (left + width));
@@ -74,27 +128,16 @@ public class AnchorUtils {
     int smallest = Math.min(dx, dy);
     smallest = Math.min(smallest, dxw); 
     smallest = Math.min(smallest, dyh); 
-    int tempax = 0;
-    int tempay = 0;
     if (smallest == dx) {
-      tempax = left - ATTACH_EXTRA_DISTANCE;
-      tempay = y;
+      return CardinalDirection.WEST;
     } else if (smallest == dy) {
-      tempax = x;
-      tempay = top - ATTACH_EXTRA_DISTANCE;
+      return CardinalDirection.NORTH;
     } else if (smallest == dxw) {
-      tempax = left + width + ATTACH_EXTRA_DISTANCE;
-      tempay = y;
+      return CardinalDirection.EAST;
     } else if (smallest == dyh) {
-      tempax = x;
-      tempay = top + height + ATTACH_EXTRA_DISTANCE;
+      return CardinalDirection.SOUTH;
     }
-    
-//    tempax = GridUtils.align(tempax);
-//    tempay = GridUtils.align(tempay);
-    ap.x = tempax;
-    ap.y = tempay;
-    relativeValue(ap, left, top, width, height);
+    return CardinalDirection.WEST;
   }
 
   /**
@@ -102,12 +145,15 @@ public class AnchorUtils {
   * In this way center positions are not rounded little bit of all the time.
   */
   public static double round(double value) {
-    return Math.round(value * 10) / 10.0;
+    double result = Math.round(value * 10) / 10.0;
+    return result > 1 ? 1 : result;
   }
   
-  public static void relativeValue(AnchorProperties ap, int elementLeft, int elementTop, int elementWidth, int elementHeight) {
-    ap.relativeValueX = round(Math.abs((ap.x - elementLeft) / (double) elementWidth));
-    ap.relativeValueY = round(Math.abs((ap.y - elementTop) / (double) elementHeight));
+  public static void relativeValue(AnchorProperties ap, int sharpX, int sharpY, int elementLeft, int elementTop, int elementWidth, int elementHeight) {
+    ap.relativeValueX = round(Math.abs((sharpX - elementLeft) / (double) elementWidth));
+    ap.relativeValueY = round(Math.abs((sharpY - elementTop) / (double) elementHeight));
+
+    logger.debug("ap.relativeValueY {}", ap.relativeValueY);
   }
   
   /**
@@ -156,29 +202,48 @@ public class AnchorUtils {
     }
   }
 
-	public static void setRelativePosition(AnchorElement ae, int left, int top,
-			int width, int height) {
-		int extraDistanceX = 0;
-		int extraDistanceY = 0;
-		if (ae.getAx() == left - AnchorUtils.ATTACH_EXTRA_DISTANCE) {
-			extraDistanceX = -AnchorUtils.ATTACH_EXTRA_DISTANCE;
-		} else if (ae.getAx() == left + width + AnchorUtils.ATTACH_EXTRA_DISTANCE) {
-			extraDistanceX = AnchorUtils.ATTACH_EXTRA_DISTANCE;
-		}
+	public static void setRelativePosition(AnchorElement ae, int left, int top,	int width, int height) {
+		// int extraDistanceX = 0;
+		// int extraDistanceY = 0;
+		// if (ae.getAx() == left - AnchorUtils.ATTACH_EXTRA_DISTANCE) {
+		// 	extraDistanceX = -AnchorUtils.ATTACH_EXTRA_DISTANCE;
+		// } else if (ae.getAx() == left + width + AnchorUtils.ATTACH_EXTRA_DISTANCE) {
+		// 	extraDistanceX = AnchorUtils.ATTACH_EXTRA_DISTANCE;
+		// }
 		
-		if (ae.getAy() == top - ATTACH_EXTRA_DISTANCE) {
-			extraDistanceY = -ATTACH_EXTRA_DISTANCE;
-		} else if (ae.getAy() == top + height + ATTACH_EXTRA_DISTANCE) {
-			extraDistanceY = ATTACH_EXTRA_DISTANCE;
-		}
-		
+		// if (ae.getAy() == top - ATTACH_EXTRA_DISTANCE) {
+		// 	extraDistanceY = -ATTACH_EXTRA_DISTANCE;
+		// } else if (ae.getAy() == top + height + ATTACH_EXTRA_DISTANCE) {
+		// 	extraDistanceY = ATTACH_EXTRA_DISTANCE;
+		// }
+
+    CardinalDirection cd = findCardinalDirection(ae.getAx(), ae.getAy(), left, top, width, height);
+    switch (cd) {
+      case WEST:
+        ae.setAx(((int)(width * ae.getRelativeFactorX())) + left - ATTACH_EXTRA_DISTANCE);
+        ae.setAy(((int)(height * ae.getRelativeFactorY())) + top);
+      break;
+      case NORTH:
+        ae.setAx(((int)(width * ae.getRelativeFactorX())) + left);
+        ae.setAy(((int)(height * ae.getRelativeFactorY())) + top - ATTACH_EXTRA_DISTANCE);
+      break;
+      case EAST:
+        ae.setAx(((int)(width * ae.getRelativeFactorX())) + left + ATTACH_EXTRA_DISTANCE);
+        ae.setAy(((int)(height * ae.getRelativeFactorY())) + top);
+      break;
+      case SOUTH:
+        ae.setAx(((int)(width * ae.getRelativeFactorX())) + left);
+        ae.setAy(((int)(height * ae.getRelativeFactorY())) + top + ATTACH_EXTRA_DISTANCE);
+      break;
+    }
+
 		// if extra distance has not been changed then this is a relative movement and do the movement
-		if (extraDistanceX == 0) { 
-			ae.setAx(((int)(width * ae.getRelativeFactorX())) + left);
-		}
-		if (extraDistanceY == 0) {
-			ae.setAy(((int)(height * ae.getRelativeFactorY())) + top);
-		}
+		// if (extraDistanceX == 0) { 
+		// 	ae.setAx(((int)(width * ae.getRelativeFactorX())) + left);
+		// }
+		// if (extraDistanceY == 0) {
+		// 	ae.setAy(((int)(height * ae.getRelativeFactorY())) + top);
+		// }
 	}
 
 }
