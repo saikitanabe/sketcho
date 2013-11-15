@@ -199,8 +199,13 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 	
 	private void iterateLifelinePoints(LifelineCall call) {
     call.begin();
-		for (int y = getTop() + getHeight() + CONNECT_DISTANCE; y < line.getY2() + getTransformY() - CONNECT_DISTANCE; y += CONNECT_DISTANCE) {
-			call.makeCircle(line.getX1() + getTransformX(), y);
+    // This would be correct implementation, but due to early bug data is already attached to different points!
+		// for (int y = getTop() + getHeight() + CONNECT_DISTANCE - 4; y < line.getY2() + getTransformY() - CONNECT_DISTANCE; y += CONNECT_DISTANCE) {
+    for (int y = getCenterY() + (CONNECT_DISTANCE * 2); y < line.getY2() + getTransformY() - CONNECT_DISTANCE; y += CONNECT_DISTANCE) {
+      if (y > getTop() + getHeight()) {
+        // HACK: do not create circles if not over the edge
+        call.makeCircle(line.getX1() + getTransformX(), y);
+      }
 		}
 	}
 
