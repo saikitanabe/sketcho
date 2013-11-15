@@ -397,17 +397,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
     }
     return result;
   }
-    
-  @Override
-	protected void dispatch(AnchorElement a, int left, int top, int width, int height, long dispatchSequence) {
-    if (a.isFixedPoint()) {
-      super.dispatch(a, left, top, width, height, dispatchSequence);
-    } else {
-      AnchorUtils.setRelativePosition(a, left, top, width, height);
-      a.dispatch(dispatchSequence);
-    }
-  }
-  
+
   @Override
   public boolean onArea(int left, int top, int right, int bottom) {
   	if (super.onArea(left, top, right, bottom)) {

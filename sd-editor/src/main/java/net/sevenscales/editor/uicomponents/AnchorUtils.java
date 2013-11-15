@@ -96,10 +96,18 @@ public class AnchorUtils {
     ap.y = tempay;
     relativeValue(ap, left, top, width, height);
   }
+
+  /**
+  * Rounds to use only one decimal, e.g. 0.492 => 0.5.
+  * In this way center positions are not rounded little bit of all the time.
+  */
+  public static double round(double value) {
+    return Math.round(value * 10) / 10.0;
+  }
   
   public static void relativeValue(AnchorProperties ap, int elementLeft, int elementTop, int elementWidth, int elementHeight) {
-    ap.relativeValueX = Math.abs((ap.x - elementLeft) / (double) elementWidth);
-    ap.relativeValueY = Math.abs((ap.y - elementTop) / (double) elementHeight);
+    ap.relativeValueX = round(Math.abs((ap.x - elementLeft) / (double) elementWidth));
+    ap.relativeValueY = round(Math.abs((ap.y - elementTop) / (double) elementHeight));
   }
   
   /**

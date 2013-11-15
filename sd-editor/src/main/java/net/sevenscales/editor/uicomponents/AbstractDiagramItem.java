@@ -1307,9 +1307,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	
 	protected void dispatch(AnchorElement a, int left, int top, int width, int height, long dispachSequence) {
 		Integer[] fixedPoints = getFixedAnchorPoints();
-		if (fixedPoints == null) {
-			AnchorUtils.setRelativePosition(a, left, top, width, height);
-		} else {
+		if (a.isFixedPoint() && fixedPoints != null) {
 			// use fixed point index
 		  double ax = a.getRelativeFactorX();
 		  double ay = a.getRelativeFactorY();
@@ -1326,7 +1324,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   			a.setAx(x);
   			a.setAy(y);
 		  }
-		}
+		} else {
+      AnchorUtils.setRelativePosition(a, left, top, width, height);
+    }
 		a.dispatch(dispachSequence);
 	}
 
