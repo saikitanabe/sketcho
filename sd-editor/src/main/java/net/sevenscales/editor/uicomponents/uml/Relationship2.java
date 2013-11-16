@@ -647,7 +647,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //      System.out.println(posX + ","+posY+" "+"points.get(posX)"+points.get(posX)+" attachAnchor:" + ax+","+ay);
       points.set(posX, ax);
       points.set(posY, ay);
-      anchor.setAnchorElement(anchorElement);
+      anchor.applyAnchorElement(anchorElement);
       anchor.setDiagram(anchorElement.getSource(), false);
   
       surface.getMouseDiagramManager().getDragHandler().attach(this, anchorElement);
@@ -997,6 +997,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     // Attach/deattach anchor
     anchorEnd(highlight);
     anchorStart(highlight);
+
+    relationshipHandleHelpers.showConditionally(this, true);
   }
 
   public void anchorEnd(boolean highlight) {
@@ -1310,6 +1312,26 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   public void applyCustomData() {
     parseCustomData(getDiagramItem().getCustomData());
+  }
+
+  /**
+  * This is not absolutely necessary and could be removed, since
+  * runtime model for end client ids are anchors that are set using anchor
+  * when dragging relationship as a whole, e.g. in case of seq diagram connection
+  * reposition.
+  */
+  public void applyAnchor(Anchor anchor) {
+    // if (anchor == startAnchor) {
+    //   setAnchorClientId()
+    //   startAnchor.setClientId(anchor.getAnchorElement().getSource().getDiagramItem().getClientId());
+    // } else if (anchor == endAnchor) {
+    //   endAnchor.setClientId(anchor.getAnchorElement().getSource().getDiagramItem().getClientId());
+    // }
+
+    anchor.setClientId(anchor.getAnchorElement().getSource().getDiagramItem().getClientId());
+
+    // apply anchor cliend id handles to model
+    getDiagramItem().setCustomData(getCustomData());
   }
   
   @Override

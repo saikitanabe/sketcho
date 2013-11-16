@@ -89,8 +89,11 @@ public class Anchor {
 		return onDiagram;
 	}
 
-  public void setAnchorElement(AnchorElement anchorElement) {
+  public void applyAnchorElement(AnchorElement anchorElement) {
     this.anchorElement = anchorElement;
+    if (relationship != null) {
+    	relationship.applyAnchor(this);
+    }
   }
   public AnchorElement getAnchorElement() {
     return anchorElement;

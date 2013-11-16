@@ -252,7 +252,8 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     
     int diffx = 0;
     int diffy = 0;
-    if (sender == parentRelationship) {
+    boolean wholeRelationShipIsDragged = sender == parentRelationship;
+    if (wholeRelationShipIsDragged) {
       // need to translate according to transform
       // otherwise point is not in correct place
       diffx = parentRelationship.getTransformX(); // SilverUtils.getTransformX(shapes.get(0).getRawNode());
@@ -260,12 +261,12 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     }
 
     // pre highlight if selection is on attach area
-    if (handles.size() > 0 && handles.get(0) == sender || sender == parentRelationship) { // whole relationship is moved
+    if (handles.size() > 0 && handles.get(0) == sender || wholeRelationShipIsDragged) { // whole relationship is moved
       int x = points.get(0) + diffx;
       int y = points.get(1) + diffy;
       highlightOnHover(x, y, parentRelationship.getStartAnchor()); // startAnchor
     } 
-    if (handles.size() > parentRelHandlesCount - 1 && handles.get(parentRelHandlesCount - 1) == sender || sender == parentRelationship) {
+    if (handles.size() > parentRelHandlesCount - 1 && handles.get(parentRelHandlesCount - 1) == sender || wholeRelationShipIsDragged) {
       int x = points.get(points.size()-2) + diffx;
       int y = points.get(points.size()-1) + diffy;
       highlightOnHover(x, y, parentRelationship.getEndAnchor());
@@ -308,7 +309,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
 //    if (anchorElement != null && (prev != null && prev.getSource() != anchorElement.getSource()) ) {
     if (anchorElement != null) {
       anchorElement.highlight(true);
-      anchor.setAnchorElement(anchorElement);
+      anchor.applyAnchorElement(anchorElement);
     } else {
       if (anchor.getAnchorElement() != null) {
         anchor.getAnchorElement().highlight(false);
@@ -435,7 +436,6 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   public void doSetShape(Diagram currentDragged) {
-    // logger.debug("RelationshipHandleHelpers.doSetShape...");
   }
 
   public CircleElement getEndHandle() {

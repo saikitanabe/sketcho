@@ -586,13 +586,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		
 		ReattachHelpers reattachHelpers = new ReattachHelpers();
 		for (Diagram dd : selectedItems) {
-//			System.out.println("EL: " + dd + " dp.getDX(): " + dp.getDX() + " dp.getDY(); " + dp.getDY());
-			// logger.start("MouseDiagramDragHandler.dragEnd 2 a {}...", dd.toString());
-
 			dd.saveLastTransform(prevDX, prevDY);
-
-			// logger.debugTime();
-			// logger.start("MouseDiagramDragHandler.dragEnd 2 b {}...", dd.toString());
 
 			for (DiagramDragHandler h : dragHandlers) {
 				if (!h.isSelected()) {
@@ -604,9 +598,6 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 				}
 			}
 
-			// logger.debugTime();
-			// logger.start("MouseDiagramDragHandler.dragEnd 2 c {}...", dd.toString());
-
 	    if (dd instanceof CircleElement) {
 	      Diagram owner = dd.getOwnerComponent();
 	      if (owner instanceof DiagramDragHandler) {
@@ -615,22 +606,17 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	    }
 			
 			reattachHelpers.processDiagram(dd);
-
-			// logger.debugTime();
 		}
 
-		// logger.debugTime();
-		// logger.start("MouseDiagramDragHandler.dragEnd 2");
-		
-		reattachHelpers.reattachRelationships();
-
-		// logger.debugTime();
-		// logger.start("MouseDiagramDragHandler.dragEnd 2");
+		// relationship can be dragged as a whole and force it to find anchor both ends.
+		// E.g. to fixed anchor element and adjust it's position.
+		// There are not usually many relationships dragged at once
+		// and in that sence it is fast. Makes possible to drag sequence relationships
+		// and fix position to a new location.
+		boolean reanchorMovedRelationships = true;
+		reattachHelpers.reattachRelationships(reanchorMovedRelationships);
 
 		MouseDiagramEventHelpers.fireDiagramsChangedEvenet(selectedItems, surface, ActionType.DRAGGING);
-
-		// logger.debugTime();
-		// logger.debugTime();
 	}
 		
 	private class ConnectionMoveHandler implements AnchorMoveHandler {
