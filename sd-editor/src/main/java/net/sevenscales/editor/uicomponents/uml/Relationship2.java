@@ -1341,14 +1341,18 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   		se = customData.split(":");	
   	}
   	
-  	if ("".equals(customData) || se.length < 2) {
+  	if ("".equals(customData) || se.length == 0) {
   		// legacy implementation calculates anchor always when loaded => flag it to be calculated
   		// later
       if (getDiagramItem().getVersion() <= 3) {
         // data format after that is no longer a legacy
         legacyAnchor = true;
       }
-  	} else {
+  	} else if (se.length == 1 && customData.startsWith(":")) {
+      getEndAnchor().setClientId(se[0]);
+    } else if (se.length == 1 && customData.endsWith(":")) {
+      getStartAnchor().setClientId(se[0]);
+    } else if (se.length == 2) {
   		getStartAnchor().setClientId(se[0]);
   		getEndAnchor().setClientId(se[1]);
   	}

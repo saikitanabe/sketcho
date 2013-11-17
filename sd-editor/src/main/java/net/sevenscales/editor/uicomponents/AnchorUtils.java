@@ -141,17 +141,23 @@ public class AnchorUtils {
   }
 
   /**
-  * Rounds to use only one decimal, e.g. 0.492 => 0.5.
+  * Rounds to use only one decimal, e.g. 0.492 => 0.5 and between 0 - 1.
   * In this way center positions are not rounded little bit of all the time.
+  * 0 - 1 position cannot be relatively outside of this element.
   */
   public static double round(double value) {
     double result = Math.round(value * 10) / 10.0;
-    return result > 1 ? 1 : result;
+    if (result > 1) {
+      return 1;
+    } else if (result < 0) {
+      return 0;
+    }
+    return result;
   }
   
   public static void relativeValue(AnchorProperties ap, int sharpX, int sharpY, int elementLeft, int elementTop, int elementWidth, int elementHeight) {
-    ap.relativeValueX = round(Math.abs((sharpX - elementLeft) / (double) elementWidth));
-    ap.relativeValueY = round(Math.abs((sharpY - elementTop) / (double) elementHeight));
+    ap.relativeValueX = round((sharpX - elementLeft) / (double) elementWidth);
+    ap.relativeValueY = round((sharpY - elementTop) / (double) elementHeight);
 
     logger.debug("ap.relativeValueY {}", ap.relativeValueY);
   }
