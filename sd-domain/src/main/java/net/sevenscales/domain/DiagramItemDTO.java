@@ -282,10 +282,9 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 			return false;
 		}
 
-		// TODO for time being equals should not be used and links are not compared
-		// if (!links.equals(item.getLinks())) {
-		// 	return false;
-		// }
+		if (!links.equals(item.getLinks())) {
+			return false;
+		}
 
 		return true;
 	}

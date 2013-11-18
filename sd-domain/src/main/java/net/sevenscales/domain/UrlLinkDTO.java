@@ -6,6 +6,9 @@ public class UrlLinkDTO implements IUrlLink {
 	private String url;
 	private String name;
 
+	public UrlLinkDTO() {
+	}
+
 	public UrlLinkDTO(String url) {
 		this(url, null);
 	}
@@ -30,4 +33,16 @@ public class UrlLinkDTO implements IUrlLink {
 	public String getName() {
 		return name;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		UrlLinkDTO item = (UrlLinkDTO) obj;
+		if (obj == this) {
+			return true;
+		}
+		if (item != null && item.url != null && item.url.equals(url)) {
+			return true;
+		}
+		return false;
+	}	
 }
