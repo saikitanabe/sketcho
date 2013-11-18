@@ -282,7 +282,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 			return false;
 		}
 
-		if (!links.equals(item.getLinks())) {
+		if (links != item.getLinks() || (links != null && !links.equals(item.getLinks()))) {
 			return false;
 		}
 
