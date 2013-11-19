@@ -1037,3 +1037,14 @@ width: auto;
     max-width: 500px;
     width:auto;
 }
+.white-text {
+  color: #F8F8F2;
+}
+
+.white-text a, .white-text a {
+  color: #F8F8F2;
+}
+
+a.white-text {
+  color: #F8F8F2;
+}
