@@ -22,12 +22,13 @@ public class BoardOTConfluenceHandler extends AbstractBoardHandlerBase {
 		initHandlers();
 		initHelpers();
 	}
-	
-	@Override
-	protected void sendLocalOperation(String name, String originator,
-			String operation, String jsonContent) {
-		// no specific implementation for Confluence
-	}
+
+  @Override
+  protected void sendLocalOperation(String name, String originator,
+      String operation, List<? extends IDiagramItemRO> operationItems) {
+    // TODO Auto-generated method stub
+    
+  }
 
 	@Override
 	protected void extendApplyLocalUndo(OTOperation undoop,

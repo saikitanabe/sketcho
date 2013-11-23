@@ -1,11 +1,16 @@
 package net.sevenscales.confluence.plugins.rest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.IUrlLinkRO;
+import net.sevenscales.domain.UrlLinkDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 
 
@@ -31,7 +36,17 @@ public class DiagramItemJson {
   @XmlElement(name = "cd")
 	private String cd;
   @XmlElement(required = false, name = "crc")
-	private int crc;
+	private Integer crc;
+  @XmlElement(required = false, name = "a")
+  private Integer a;
+  @XmlElement(required = false, name = "r")
+  private Integer r;
+  @XmlElement(required = false, name = "uat")
+  private Long uat;
+  @XmlElement(required = false, name = "links")
+  private List<UrlLinkJson> links;
+  
+  
 	
 	public String getText() {
 		return text;
@@ -89,7 +104,47 @@ public class DiagramItemJson {
 		this.cd = cd;
 	}
 	
+  public Integer getCrc() {
+    return crc;
+  }
+  public void setCrc(Integer crc) {
+    this.crc = crc;
+  }
+  public Integer getA() {
+    return a;
+  }
+  public void setA(Integer a) {
+    this.a = a;
+  }
+  public Integer getR() {
+    return r;
+  }
+  public void setR(Integer r) {
+    this.r = r;
+  }
+  public Long getUat() {
+    return uat;
+  }
+  public void setUat(Long uat) {
+    this.uat = uat;
+  }
+    
+  public List<UrlLinkJson> getLinks() {
+    return links;
+  }
+  public void setLinks(List<UrlLinkJson> links) {
+    this.links = links;
+  }
+  
   public final DiagramItemDTO asDTO() {
+    List<UrlLinkJson> jlinks = getLinks();
+    List<UrlLinkDTO> links = null;
+    if (jlinks != null) {
+      links = new ArrayList<UrlLinkDTO>();
+      for (UrlLinkJson link : getLinks()) {
+        links.add(link.asDTO());
+      }
+    }
   	return new DiagramItemDTO(getText(), 
   							  getElementType(),
   							  getShape(),
@@ -99,8 +154,9 @@ public class DiagramItemJson {
   							  new Long(getId()), 
   							  getClientId(), 
   							  getCd(),
-  							  getVersion());
+  							  links);
   }
+  
 	public static DiagramItemJson fromDTO(IDiagramItemRO from) {
 		DiagramItemJson result = new DiagramItemJson();
 		result.setText(from.getText());
@@ -112,6 +168,15 @@ public class DiagramItemJson {
 		result.setId(from.getId());
 		result.setClientId(from.getClientId());
 		result.setCd(from.getCustomData());
+
+		List<? extends IUrlLinkRO> links = from.getLinks();
+		if (links != null) {
+			List<UrlLinkJson> jlinks = new ArrayList<UrlLinkJson>();
+			for (IUrlLinkRO link : links) {
+				jlinks.add(new UrlLinkJson(link.getUrl(), link.getName()));
+			}
+			result.setLinks(jlinks);
+		}
 		return result;
 	}
 }

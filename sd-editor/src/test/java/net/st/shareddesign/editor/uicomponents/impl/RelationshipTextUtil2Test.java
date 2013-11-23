@@ -1,24 +1,13 @@
 package net.st.shareddesign.editor.uicomponents.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import junit.framework.TestCase;
-import org.junit.Before;
-import org.junit.After;
-
-import com.google.gson.Gson;
-
+import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
 import net.sevenscales.editor.uicomponents.impl.RelationshipTextUtil2;
-import net.sevenscales.domain.DiagramItemDTO;
-import net.sevenscales.editor.content.RelationShipType;
 
 
 public class RelationshipTextUtil2Test extends TestCase {
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
 
     // private static class JsonFactoryImpl implements RelationshipParser.JsonFactory {
     //   public RelationshipType fromJson(String jsonStr) {
@@ -28,19 +17,6 @@ public class RelationshipTextUtil2Test extends TestCase {
     // }
 
     // private JsonFactoryImpl jsonFactoryImpl = new JsonFactoryImpl();
-
-    @Before
-    public void setUpStreams() {
-        System.out.println("setUpStreams...");
-        System.setOut(new PrintStream(outContent));
-        System.setErr(new PrintStream(errContent));
-    }
-
-    @After
-    public void cleanUpStreams() {
-        System.setOut(null);
-        System.setErr(null);
-    }    
 
   public void testLegacyAssociation() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();

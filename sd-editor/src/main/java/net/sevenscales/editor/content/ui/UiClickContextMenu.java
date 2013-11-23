@@ -16,6 +16,7 @@ import net.sevenscales.editor.api.event.SurfaceMouseUpNoHandlingYetEvent;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.EffectHelpers;
 import net.sevenscales.editor.uicomponents.helpers.ElementHelpers;
+import net.sevenscales.editor.api.impl.FastButton;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -54,6 +55,8 @@ public class UiClickContextMenu extends Composite {
 	private PopupPanel popup;
 	private ISurfaceHandler surface;
 
+	@UiField FastButton commentMode;
+
 	// @UiField LIElement freehandMore;
 	// @UiField LIElement freehandSmooth;
 	// @UiField LIElement freehandLess;
@@ -65,6 +68,11 @@ public class UiClickContextMenu extends Composite {
 		this.surface = surface;
 		
 		initWidget(uiBinder.createAndBindUi(this));
+
+		if (!notConfluence()) {
+			// hide comments on confluence
+			commentMode.setVisible(false);
+		}
 		
 //		new FastElementButton(newNote).addClickHandler(new ClickHandler() {
 //			@Override
@@ -178,6 +186,11 @@ public class UiClickContextMenu extends Composite {
 
 		closeOnSave();
 	}
+
+	private boolean notConfluence() {
+		return !surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE);
+	}
+
 	
 	private void closeOnSave() {
 		surface.getEditorContext().getEventBus().addHandler(SaveButtonClickedEvent.TYPE, new SaveButtonClickedEventHandler() {

@@ -10,7 +10,6 @@ import net.sevenscales.domain.utils.JsonFormat;
 import net.sf.hibernate4gwt.pojo.java5.LazyPojo;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.google.gwt.json.client.*;
 
 public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializable, IsSerializable {
 	public static final int DATA_VERSION = 4;
@@ -44,11 +43,15 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 				+ ", links=" + links
 				+ "]";
 	}
+  
+	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor, int version, Long id, String clientId, String customData, List<UrlLinkDTO> links) {
+    this(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, 0, 0, 0, links);
+  }
 
-	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
-			Integer version, Long id, String clientId, String customData, double crc32) {
-		this(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, crc32, 0, 0, null);
-	}
+//	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
+//			Integer version, Long id, String clientId, String customData, double crc32) {
+//		this(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, crc32, 0, 0, null);
+//	}
 
 	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
 			Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, List<UrlLinkDTO> links
@@ -279,10 +282,9 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 			return false;
 		}
 
-		// TODO for time being equals should not be used and links are not compared
-		// if (!links.equals(item.getLinks())) {
-		// 	return false;
-		// }
+		if (links != item.getLinks() || (links != null && !links.equals(item.getLinks()))) {
+			return false;
+		}
 
 		return true;
 	}
@@ -327,79 +329,6 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 
 	public boolean isComment() {
 		return false;
-	}
-
-	public JSONValue toJson(JsonFormat jsonFormat) {
-    JSONObject result = new JSONObject();
-    String text = safeJsonString(itemText(this, jsonFormat));
-    result.put("text", new JSONString(text));
-    result.put("elementType", new JSONString(safeJsonString(getType())));
-    result.put("shape", new JSONString(safeJsonString(getShape())));
-    result.put("backgroundColor", new JSONString(safeJsonString(getBackgroundColor())));
-    result.put("textColor", new JSONString(safeJsonString(getTextColor())));
-    result.put("version", new JSONNumber(getVersion()));
-    result.put("id", new JSONNumber(getId()));
-    result.put("clientId", new JSONString(safeJsonString(getClientId())));
-    result.put("cd", new JSONString(safeJsonString(getCustomData())));
-    result.put("crc", new JSONNumber(getCrc32()));
-
-    if (annotation == 1) {
-	    result.put("a", new JSONNumber(annotation));
-    }
-    if (resolved == 1) {
-	    result.put("r", new JSONNumber(resolved));
-    }
-    if (links != null && links.size() > 0) {
-    	JSONArray jlinks = new JSONArray();
-    	for (int i = 0; i < links.size(); ++i) {
-    		JSONObject jlink = new JSONObject();
-    		jlink.put("url", new JSONString(links.get(i).getUrl()));
-    		if (links.get(i).getName() != null) {
-	    		jlink.put("name", new JSONString(links.get(i).getName()));
-    		}
-    		jlinks.set(i, jlink);
-    	}
-    	result.put("links", jlinks);
-    }
-
-    return result;
-	}
-
-  private static String itemText(DiagramItemDTO item, JsonFormat jsonFormat) {
-    String result = item.getText();
-    result = result != null ? result : "";
-    switch (jsonFormat) {
-    case SEND_FORMAT:
-      result = escapeForSending(result);
-      break;
-    case PRESENTATION_FORMAT:
-      break;
-    case SERVER_FORMAT:
-      result = escapeForServerFormat(result);
-      break;
-    }
-    return result;
-	}
-  
-  protected static String escapeForSending(String value) {
-    return value
-                .replaceAll("\\\\", "\\\\\\\\")
-                .replaceAll("\\n", "\\\\\\\n")
-                .replaceAll("\"", "\\\\\\\"");
-  }
-  
-  protected static String escapeForServerFormat(String value) {
-    return value;
-//                  .replaceAll("\\\\", "\\\\\\")
-//                  .replaceAll("\\n", "\\\\n");
-//                  .replaceAll("\"", "\\\"");
-  }
-	
-	protected static String safeJsonString(String value) {
-		if (value == null) {
-			return "";
-		}
-		return value;
 	}
 
 }

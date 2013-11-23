@@ -16,7 +16,8 @@ import net.sevenscales.domain.api.IDiagramContent;
 
 @XmlRootElement(name = "diagramcontent")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlSeeAlso({DiagramItemJson.class, DiagramChildItemJson.class})
+//@XmlSeeAlso({DiagramItemJson.class, DiagramChildItemJson.class})
+//@XmlSeeAlso({DiagramItemJson.class})
 public class DiagramContentJson {
 	@XmlElement(name = "pageId")
 	private Long pageId = 0L;
@@ -139,11 +140,11 @@ public class DiagramContentJson {
 		result.setVersion(from.getVersion());
 
 		for (IDiagramItemRO item : (List<? extends IDiagramItemRO>) from.getDiagramItems()) {
-			if ("child".equals(item.getType())) {
-				result.getItems().add(DiagramChildItemJson.fromDTO(item));
-			} else {
+//			if ("child".equals(item.getType())) {
+//				result.getItems().add(DiagramChildItemJson.fromDTO(item));
+//			} else {
 				result.getItems().add(DiagramItemJson.fromDTO(item));
-			}
+//			}
 		}
 		return result;
 	}

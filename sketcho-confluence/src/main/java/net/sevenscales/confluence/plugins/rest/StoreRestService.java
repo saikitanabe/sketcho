@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import net.sevenscales.domain.DiagramContentDTO;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.UrlLinkDTO;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.sketchoconfluenceapp.server.utils.IStore;
 import net.sevenscales.sketchoconfluenceapp.server.utils.StoreEntry;
@@ -19,8 +20,8 @@ import net.sevenscales.sketchoconfluenceapp.server.utils.SvgUtil;
 
 import com.thoughtworks.xstream.XStream;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
+// import org.slf4j.Logger;
+// import org.slf4j.LoggerFactory;
 
 /**
  * A resource of message.
@@ -33,7 +34,7 @@ import com.thoughtworks.xstream.XStream;
  */
 @Path("/sketch")
 public class StoreRestService {
-//	private static final Logger log = LoggerFactory.getLogger(StoreRestService.class);
+	// private static final Logger log = LoggerFactory.getLogger(StoreRestService.class);
 
 	private IStore store = null;
 	private XStream xstream = new XStream();
@@ -41,6 +42,9 @@ public class StoreRestService {
 	public StoreRestService() {
 		xstream.alias("net.sevenscales.domain.dto.DiagramContentDTO", DiagramContentDTO.class);
 		xstream.alias("net.sevenscales.domain.dto.DiagramItemDTO", DiagramItemDTO.class);
+		xstream.alias("url", UrlLinkDTO.class);
+//		XStream.omitField(DiagramItemDTO.class, "annotation");
+//		XStream.omitField(DiagramItemDTO.class, "resolved");
 	}
 	
 	public void setStoreHandler(IStore store) {
@@ -72,8 +76,9 @@ public class StoreRestService {
 			String name = id.substring(index + 1);
 //			log.debug("@GET id: " + id);
 //			log.debug("getSketch: pageId(" + pageId + ") name(" + name + ")");
-			
+
 			String modelXML = store.loadContent(pageId, name);
+			// log.debug("getSketch {0}", modelXML);
 			if (modelXML != null) {
 				IDiagramContent fromStore = (IDiagramContent) xstream.fromXML(modelXML);
 				json = DiagramContentJson.fromDTO(fromStore);

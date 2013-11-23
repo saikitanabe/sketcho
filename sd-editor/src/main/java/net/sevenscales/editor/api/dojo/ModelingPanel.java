@@ -126,7 +126,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		final SimplePanel fp = new SimplePanel();
 		fp.setWidget(surface);
 		add(fp);
-		if (editable) {
+		// if (editable) {
 			surface.setStyleName("sd-editor-surface-modeling-area");
 			this.toolFrame = new ToolFrame(surface, 700, modeManager, editorContext, autohide);
 			surface.setPropertiesTextArea(toolFrame.getProperties());
@@ -176,12 +176,12 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 				public void unselect(Diagram sender) {
 				}
 			});
-		}
+		// }
 		
 		dragAndDropHandler = new DragAndDropHandler(surface, toolFrame.getToolbar());
 		touchManager = new TouchDragAndDrop(dragAndDropHandler, toolFrame.getToolbar().getHasTouchStartHandlers());
 		new SurfaceEventWrapper(surface, dragAndDropHandler);
-		
+		// 
 		this.scaleSlider = new ScaleSlider(surface);
 
 
@@ -264,12 +264,12 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 
 		new ModelingPanelEventHandler(surface, toolFrame);
 		
-		new LongPressHandler(surface);
-		
-		new UiContextMenu(surface, editorContext, surface.getSelectionHandler());
-		
 		// click menu is not used at the moment...
-		new UiClickContextMenu(surface);
+		if (editable) {
+			new LongPressHandler(surface);
+			new UiContextMenu(surface, editorContext, surface.getSelectionHandler());
+			new UiClickContextMenu(surface);
+		}
 	}
 	
 	public ISurfaceHandler getSurface() {
