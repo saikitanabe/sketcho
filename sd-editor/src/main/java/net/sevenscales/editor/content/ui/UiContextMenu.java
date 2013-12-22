@@ -4,6 +4,8 @@ import java.util.Set;
 import java.util.HashSet;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.content.ui.textsize.TextSizePopup;
+import net.sevenscales.editor.content.ui.textsize.TextSizeHandler;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -54,7 +56,8 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class UiContextMenu extends Composite implements net.sevenscales.editor.content.ui.ColorSelections.SelectionHandler {
+
+public class UiContextMenu extends Composite implements net.sevenscales.editor.content.ui.ColorSelections.SelectionHandler, TextSizeHandler {
 	private static final SLogger logger = SLogger.createLogger(UiContextMenu.class);
 	
 	private static UiContextMenuUiBinder uiBinder = GWT
@@ -78,9 +81,12 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement unannotate;
 	@UiField AnchorElement addlink;
 	@UiField AnchorElement openlink;
+	@UiField AnchorElement textSize;
 
 	private PopupPanel editLinkPopup;
 	private PopupPanel colorpopup;
+	private TextSizePopup textSizePopup;
+
 	private Color color = new Color("444444", 0x44, 0x44, 0x44, "6699ff", 0x66, 0x99, 0xff, "FFFFFF", 255, 255, 255, AbstractDiagramItem.DEFAULT_FILL_OPACITY);
 	private ColorSelections colorSelections;
 	private EditLinkForm editLinkForm;
@@ -113,6 +119,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		colorpopup.setWidget(colorSelections);
 		colorpopup.setAutoHideEnabled(true);
 		colorpopup.addAutoHidePartner(colorize);
+
+		textSizePopup = new TextSizePopup(this);
 		
 		surface.addDomHandler(new TouchStartHandler() {
 			@Override
@@ -359,6 +367,14 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			}
 		});
 
+		new FastElementButton(textSize).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				stopEvent(event);
+				showTextSizeEditor();
+			}
+		});
+
 
 		// do not handle undo/redo if property editor is open
 		Event.addNativePreviewHandler(new NativePreviewHandler() {
@@ -456,6 +472,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		editLinkPopup.setPopupPosition(left, top);
 	}
 
+	private void showTextSizeEditor() {
+		textSizePopup.show(textSize.getAbsoluteLeft(), textSize.getAbsoluteTop() + 30);
+	}
+
 	private void annotate() {
 		Set<Diagram> annotated = new HashSet<Diagram>();
 		for (Diagram d : selectionHandler.getSelectedItems()) {
@@ -535,6 +555,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 //		setCurrentColors();
 		popup.hide();
 		editorContext.getEventBus().fireEvent(new ColorSelectedEvent(color, colorTarget));
+	}
+
+	@Override
+	public void textSizeChanged(int textSize) {
+		hide();
 	}
 	
 	private void hide() {

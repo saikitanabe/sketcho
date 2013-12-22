@@ -1,0 +1,26 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	</ui:style>
+	<g:HTMLPanel>
+		<g:Label ui:field="currentSize"></g:Label>
+		<div class="text-sizes">
+			<g:VerticalPanel ui:field="sizes">
+				<g:Label ui:field="size1" styleName="text-size-option">8</g:Label>
+				<g:Label ui:field="size2" styleName="text-size-option">9</g:Label>
+				<g:Label ui:field="size3" styleName="text-size-option">10</g:Label>
+				<g:Label ui:field="size4" styleName="text-size-option">11</g:Label>
+				<g:Label ui:field="size5" styleName="text-size-option">12</g:Label>
+				<g:Label ui:field="size6" styleName="text-size-option">14</g:Label>
+				<g:Label ui:field="size7" styleName="text-size-option">18</g:Label>
+				<g:Label ui:field="size8" styleName="text-size-option">24</g:Label>
+				<g:Label ui:field="size9" styleName="text-size-option">30</g:Label>
+				<g:Label ui:field="size10" styleName="text-size-option">36</g:Label>
+				<g:Label ui:field="size11" styleName="text-size-option">48</g:Label>
+				<g:Label ui:field="size12" styleName="text-size-option">60</g:Label>
+				<g:Label ui:field="size13" styleName="text-size-option">72</g:Label>
+				<g:Label ui:field="size14" styleName="text-size-option">96</g:Label>
+			</g:VerticalPanel>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder> 

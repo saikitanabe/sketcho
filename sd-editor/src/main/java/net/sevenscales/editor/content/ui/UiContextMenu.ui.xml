@@ -23,6 +23,9 @@
 			<a ui:field="colorize" title="Change Color" class="btn btn-custom tooltipper">
 				<i class="icon-colorize"></i>
 			</a>
+			<a ui:field="textSize" title="Change Text Size" class="btn btn-custom tooltipper">
+				&#187;T&#171;
+			</a>
 			<a ui:field="annotate" title="Annotate" class="btn btn-custom tooltipper">
 				A
 			</a>
