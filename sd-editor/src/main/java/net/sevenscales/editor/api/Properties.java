@@ -17,6 +17,8 @@ import net.sevenscales.editor.api.event.RelationshipTypeSelectedEvent;
 import net.sevenscales.editor.api.event.RelationshipTypeSelectedEventHandler;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEventHandler;
+import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
+import net.sevenscales.editor.api.event.ChangeTextSizeEventHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
@@ -187,6 +189,19 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 				}
 				Properties.this.editorContext.getEventBus().fireEvent(new PotentialOnChangedEvent(modified));
 
+			}
+		});
+
+		editorContext.getEventBus().addHandler(ChangeTextSizeEvent.TYPE, new ChangeTextSizeEventHandler() {
+			@Override
+			public void on(ChangeTextSizeEvent event) {
+				logger.debug("change text size {}", Properties.this.selectionHandler.getSelectedItems());
+				Set<Diagram> modified = new HashSet<Diagram>();
+				for (Diagram d : Properties.this.selectionHandler.getSelectedItems()) {
+					d.setTextSize(event.getTextSize());
+					modified.add(d);
+				}
+				Properties.this.editorContext.getEventBus().fireEvent(new PotentialOnChangedEvent(modified));
 			}
 		});
 

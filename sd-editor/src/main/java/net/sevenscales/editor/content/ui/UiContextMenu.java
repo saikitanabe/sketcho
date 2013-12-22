@@ -19,6 +19,7 @@ import net.sevenscales.editor.api.event.SaveButtonClickedEventHandler;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.SelectionMouseUpEventHandler;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
+import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
 import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.impl.EditorCommon;
@@ -121,7 +122,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		colorpopup.addAutoHidePartner(colorize);
 
 		textSizePopup = new TextSizePopup(this);
-		
+
 		surface.addDomHandler(new TouchStartHandler() {
 			@Override
 			public void onTouchStart(TouchStartEvent event) {
@@ -560,6 +561,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@Override
 	public void textSizeChanged(int textSize) {
 		hide();
+		editorContext.getEventBus().fireEvent(new ChangeTextSizeEvent(textSize));
 	}
 	
 	private void hide() {

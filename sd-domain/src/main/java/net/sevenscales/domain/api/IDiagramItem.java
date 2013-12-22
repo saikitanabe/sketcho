@@ -9,6 +9,7 @@ public interface IDiagramItem extends IDiagramItemRO {
 	void setShape(String shape);
 	void setBackgroundColor(String backgroundColor);
 	void setTextColor(String textColor);
+  void setTextSize(Integer textSize);
 	void setVersion(int version);
   void setClientId(String clientId);
   void setId(long id);

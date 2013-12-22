@@ -1002,6 +1002,19 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public Color getTextColorAsColor() {
     return textColor;
   }
+
+  @Override
+  public void setTextSize(int textSize) {
+    getDiagramItem().setTextSize(textSize);
+  }
+  
+  @Override
+  public int getTextSize() {
+    if (getDiagramItem().getTextSize() == null) {
+      return 12;
+    }
+    return getDiagramItem().getTextSize();
+  }
   
   @Override
   public boolean onArea(int left, int top, int right, int bottom) {    
