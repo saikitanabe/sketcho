@@ -19,6 +19,9 @@ import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.silver.SilverUtils;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
+
 
 public class ActivityStart extends AbstractDiagramItem implements SupportsRectangleShape {
 	public static int ACTIVITY_START_RADIUS = 10;
@@ -35,12 +38,12 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
 //	private boolean onResizeArea;
   private IGroup group;
   
-  public ActivityStart(ISurfaceHandler surface, ActivityStartShape newShape, boolean editable) {
-    this(surface, newShape, Theme.createDefaultBorderColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), editable);
+  public ActivityStart(ISurfaceHandler surface, ActivityStartShape newShape, boolean editable, IDiagramItemRO item) {
+    this(surface, newShape, Theme.createDefaultBorderColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), editable, item);
   }
   
-	public ActivityStart(ISurfaceHandler surface, ActivityStartShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-		super(editable, surface, backgroundColor, borderColor, textColor);
+	public ActivityStart(ISurfaceHandler surface, ActivityStartShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
@@ -161,7 +164,7 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
 	
   protected Diagram createDiagram(ISurfaceHandler surface, ActivityStartShape newShape,
       boolean editable) {
-    return new ActivityStart(surface, newShape, editable);
+    return new ActivityStart(surface, newShape, editable, new DiagramItemDTO());
   }
 	
 //////////////////////////////////////////////////////////////////////

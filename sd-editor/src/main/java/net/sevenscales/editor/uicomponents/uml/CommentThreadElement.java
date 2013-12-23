@@ -48,7 +48,7 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.utils.SLogger;
-
+import net.sevenscales.domain.DiagramItemDTO;
 
 import com.google.gwt.core.client.GWT;
 
@@ -96,8 +96,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
   
 	public CommentThreadElement(ISurfaceHandler surface, CommentThreadShape newShape, String text, 
-										 Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-		super(editable, surface, backgroundColor, borderColor, textColor);
+										 Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		this.shape = newShape;
 
 		comments = new CommentList2();
@@ -396,13 +396,13 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		return textUtil.getText();
 	}
 
-	public void setText(String newText) {
+	public void doSetText(String newText) {
     textUtil.setText(newText, editable);
 	}
 	
   protected CommentThreadElement createDiagram(ISurfaceHandler surface, CommentThreadShape newShape,
       String text, boolean editable) {
-    return new CommentThreadElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+    return new CommentThreadElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
   }
 	
 //////////////////////////////////////////////////////////////////////
@@ -600,7 +600,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
         commentColor.getTextColor().create(), 
         true, 
         this, 
-        jsComment);
+        jsComment,
+        new DiagramItemDTO());
 
 		// get current user to show quickly
     // commentElement.setUser(surface.getEditorContext().getCurrentUser());

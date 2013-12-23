@@ -32,6 +32,8 @@ import net.sevenscales.editor.uicomponents.Point;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
 
 import com.google.gwt.user.client.Event;
 
@@ -55,8 +57,8 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 	protected int textareaWidth;
 	protected int textareaHeight;
   
-	public Actor(ISurfaceHandler surface, ActorShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-		super(editable, surface, backgroundColor, borderColor, textColor); 
+	public Actor(ISurfaceHandler surface, ActorShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		// actor doesn't use saved text color, it is always based on theme
 		this.shape = newShape;
 		
@@ -261,7 +263,7 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 		return textUtil.getText();
 	}
 	
-	public void setText(String newText) {
+	public void doSetText(String newText) {
 		textUtil.setText(newText, editable);
 //	  this.text = newText != null ? newText.replaceAll("\\\\n", "\n") : "";
 //
@@ -354,7 +356,7 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 	
   protected Diagram createDiagram(ISurfaceHandler surface, ActorShape newShape,
       String text, boolean editable) {
-    return new Actor(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+    return new Actor(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
   }
 	
 //////////////////////////////////////////////////////////////////////

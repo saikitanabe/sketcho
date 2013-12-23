@@ -24,6 +24,9 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasText
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
+
 
 public class TextElement extends AbstractDiagramItem implements
 		SupportsRectangleShape {
@@ -36,8 +39,8 @@ public class TextElement extends AbstractDiagramItem implements
 	private int minimumHeight = 20;
 
 	public TextElement(ISurfaceHandler surface, TextShape newShape,
-			Color backgroundColor, Color borderColor, Color textColor, String text, boolean editable) {
-		super(editable, surface, backgroundColor, borderColor, textColor);
+			Color backgroundColor, Color borderColor, Color textColor, String text, boolean editable, IDiagramItemRO item) {
+		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		this.shape = newShape;
 
 		group = IShapeFactory.Util.factory(editable).createGroup(
@@ -200,7 +203,7 @@ public class TextElement extends AbstractDiagramItem implements
 	}
 
 	@Override
-	public void setText(String text) {
+	public void doSetText(String text) {
 		textUtil.setText(text, editable);
 	}
 
@@ -225,7 +228,7 @@ public class TextElement extends AbstractDiagramItem implements
 
 	protected Diagram createDiagram(ISurfaceHandler surface, TextShape newShape,
 			String text, boolean editable) {
-		return new TextElement(surface, newShape, new Color(backgroundColor), new Color(borderColor), new Color(textColor), text, editable);
+		return new TextElement(surface, newShape, new Color(backgroundColor), new Color(borderColor), new Color(textColor), text, editable, new DiagramItemDTO());
 	}
 
 	// ////////////////////////////////////////////////////////////////////

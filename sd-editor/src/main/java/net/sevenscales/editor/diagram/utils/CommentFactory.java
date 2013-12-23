@@ -9,6 +9,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.IDiagramItemRO;
 
 import net.sevenscales.domain.CommentDTO;
+import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSearch;
 import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEvent;
@@ -108,7 +109,8 @@ public class CommentFactory {
             DiagramItemFactory.parseTextColor(item),
         editable,
         thread,
-        item);
+        item,
+        new DiagramItemDTO());
     return (CommentElement) DiagramItemFactory.applyDiagramItem(result, item);
 	}
 }

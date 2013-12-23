@@ -13,6 +13,10 @@ public class JSONParserHelpers {
 		return value != null && value.isNumber() != null ? (int) value.isNumber().doubleValue() : 0;
 	}
 
+	public static Integer getInteger(JSONValue value) {
+		return value != null && value.isNumber() != null ? (int) value.isNumber().doubleValue() : null;
+	}
+
 	public static long getLong(JSONValue value) {
 		return value != null && value.isNumber() != null ? (long) value.isNumber().doubleValue() : 0L;
 	}

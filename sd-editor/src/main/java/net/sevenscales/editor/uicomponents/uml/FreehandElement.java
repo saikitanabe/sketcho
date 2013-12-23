@@ -25,6 +25,8 @@ import net.sevenscales.editor.uicomponents.Anchor;
 import net.sevenscales.editor.uicomponents.AnchorElement;
 import net.sevenscales.editor.uicomponents.Point;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
 
 public class FreehandElement extends AbstractDiagramItem {
 	private static SLogger logger = SLogger.createLogger(FreehandElement.class);
@@ -52,8 +54,8 @@ public class FreehandElement extends AbstractDiagramItem {
   	}
   };
   
-	public FreehandElement(ISurfaceHandler surface, FreehandShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-		super(editable, surface, backgroundColor, borderColor, textColor);
+	public FreehandElement(ISurfaceHandler surface, FreehandShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
@@ -130,7 +132,7 @@ public class FreehandElement extends AbstractDiagramItem {
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     FreehandShape newShape = new FreehandShape(DiagramHelpers.map(shape.points, 20 + getTransformX(), 20 + getTransformY()));
-    Diagram result = new FreehandElement(surface, newShape, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+    Diagram result = new FreehandElement(surface, newShape, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
     return result;
   }
 	

@@ -100,7 +100,8 @@ public class DiagramItemFactory {
               parseBackgroundColor(item),
               parseBorderColor(item),
               parseTextColor(item),
-          editable);
+              editable,
+              item);
       result = ee;
     } else if (item.getType().equals("sequenceitem")) {
       String[] s1 = item.getShape().split(" ");
@@ -111,12 +112,13 @@ public class DiagramItemFactory {
       int width = parseInt(s2[2]);
       int height = parseInt(s2[3]);
       SequenceElement se = new SequenceElement(surface,
-          new SequenceShape(x, y, width, height, lifeline),
+              new SequenceShape(x, y, width, height, lifeline),
               item.getText(),
               parseBackgroundColor(item),
               parseBorderColor(item),
               parseTextColor(item),
-          editable);
+              editable,
+              item);
       result = se;
     } else if (item.getType().equals("comp")) {
       String[] s = item.getShape().split(",");
@@ -125,7 +127,9 @@ public class DiagramItemFactory {
           item.getText(), 
           parseBackgroundColor(item),
           parseBorderColor(item),
-          parseTextColor(item), editable);
+          parseTextColor(item), 
+          editable,
+          item);
       result = ce;
     } else if (item.getType().equals("server")) {
       String[] s = item.getShape().split(",");
@@ -134,7 +138,9 @@ public class DiagramItemFactory {
           item.getText(), 
           parseBackgroundColor(item),
           parseBorderColor(item),
-          parseTextColor(item), editable);
+          parseTextColor(item),
+          editable,
+          item);
       result = ce;
     } else if (item.getType().equals("classitem")) {
       String[] s = item.getShape().split(",");
@@ -143,7 +149,9 @@ public class DiagramItemFactory {
           item.getText(), 
           parseBackgroundColor(item),
           parseBorderColor(item),
-          parseTextColor(item), editable);
+          parseTextColor(item),
+          editable,
+          item);
       result = ce;
     } else if (item.getType().equals("noteitem")) {
       String[] s = item.getShape().split(",");
@@ -160,7 +168,8 @@ public class DiagramItemFactory {
               parseBackgroundColor(item),
               parseBorderColor(item),
               parseTextColor(item),
-          editable);
+          editable,
+          item);
       result = ne;
     } else if (item.getType().equals("comments")) {
       String[] s = item.getShape().split(",");
@@ -177,7 +186,8 @@ public class DiagramItemFactory {
               parseBackgroundColor(item),
               parseBorderColor(item),
               parseTextColor(item),
-          editable);
+          editable,
+          item);
       result = thread;
     } else if (item.getType().equals("choice")) {
       String[] s = item.getShape().split(",");
@@ -194,7 +204,8 @@ public class DiagramItemFactory {
               parseBackgroundColor(item),
               parseBorderColor(item),
               parseTextColor(item),
-          editable);
+          editable,
+          item);
       result = choice;
     } else if (item.getType().equals("activitystart")) {
       String[] s = item.getShape().split(",");
@@ -210,7 +221,8 @@ public class DiagramItemFactory {
             parseBackgroundColor(item),
             parseBorderColor(item),
             parseTextColor(item),
-            editable);
+            editable,
+            item);
       } else {
         // legacy activity start colors => update to new color scheme
         ElementColorScheme paperScheme = Theme.getColorScheme(ThemeName.PAPER);
@@ -221,7 +233,8 @@ public class DiagramItemFactory {
             paperScheme.getBorderColor().create(),
             paperScheme.getBorderColor().create(),
             paperScheme.getTextColor().create(),
-            editable);
+            editable,
+            item);
       }
       result = ee;
     } else if (item.getType().equals("activityend")) {
@@ -236,7 +249,8 @@ public class DiagramItemFactory {
               parseBackgroundColor(item),
               parseBorderColor(item),
               parseTextColor(item),
-          editable);
+          editable,
+          item);
       result = ee;
     } else if (item.getType().equals("activity")) {
       String[] s = item.getShape().split(",");
@@ -253,7 +267,8 @@ public class DiagramItemFactory {
               parseBackgroundColor(item),
               parseBorderColor(item),
               parseTextColor(item),
-          editable);
+          editable,
+          item);
       result = choice;
     } else if (item.getType().equals("centtop")) {
       String[] s = item.getShape().split(",");
@@ -270,7 +285,8 @@ public class DiagramItemFactory {
               parseBackgroundColor(item),
               parseBorderColor(item),
               parseTextColor(item),
-          editable);
+          editable,
+          item);
       result = choice;
     } else if (item.getType().equals("storage")) {
       String[] s = item.getShape().split(",");
@@ -287,7 +303,8 @@ public class DiagramItemFactory {
               parseBackgroundColor(item),
               parseBorderColor(item),
               parseTextColor(item),
-          editable);
+          editable,
+          item);
       result = db;
     } else if (item.getType().equals("textitem")) {
       String[] s = item.getShape().split(",");
@@ -304,7 +321,8 @@ public class DiagramItemFactory {
               parseBorderColor(item),
               parseTextColor(item),
               item.getText(),
-          editable);
+          editable,
+          item);
       result = ne;
     } else if (item.getType().equals("actoritem")) {
       String[] s = item.getShape().split(",");
@@ -321,7 +339,8 @@ public class DiagramItemFactory {
               parseBackgroundColor(item),
               parseBorderColor(item),
               parseTextColor(item),
-          editable);
+          editable,
+          item);
       result = ne;
     } else if (item.getType().equals("relationship")) {
       List<Integer> points = new ArrayList<Integer>();
@@ -329,7 +348,7 @@ public class DiagramItemFactory {
       for (String p : ps) {
         points.add(parseInt(p));
       }
-      Relationship2 r = new Relationship2(surface, points, item.getText(), editable);
+      Relationship2 r = new Relationship2(surface, points, item.getText(), editable, item);
       result = r;
     } else if (item.getType().equals("freehand")) {
       String[] ps = item.getShape().split(",");
@@ -344,7 +363,8 @@ public class DiagramItemFactory {
       		parseBackgroundColor(item), 
       		parseBorderColor(item),
       		parseTextColor(item),
-      		editable);
+      		editable,
+          item);
       result = r;
     } else if (item.getType().equals("package")) {
       UMLPackageElement packagee = new UMLPackageElement(surface,
@@ -353,7 +373,8 @@ public class DiagramItemFactory {
               parseBackgroundColor(item),
               parseBorderColor(item),
               parseTextColor(item),
-          editable);
+          editable,
+          item);
       result = packagee;
     } else if (item.getType().equals("rectcont")) {
       RectBoundaryElement packagee = new RectBoundaryElement(surface,
@@ -362,7 +383,8 @@ public class DiagramItemFactory {
               parseBackgroundColor(item),
               parseBorderColor(item),
               parseTextColor(item),
-          editable);
+          editable,
+          item);
       result = packagee;
     } else if (item.getType().equals(ElementType.HORIZONTAL_PARTITION.getValue())) {
       HorizontalPartitionElement hpart = new HorizontalPartitionElement(surface,
@@ -371,7 +393,8 @@ public class DiagramItemFactory {
               parseBackgroundColor(item),
               parseBorderColor(item),
               parseTextColor(item),
-          editable);
+          editable,
+          item);
       result = hpart;
     } else if (item.getType().equals(ElementType.FORK.getValue())) {
       ForkElement fork = new ForkElement(surface,
@@ -379,7 +402,8 @@ public class DiagramItemFactory {
               parseBackgroundColor(item),
               parseBorderColor(item),
               parseTextColor(item),
-          editable);
+          editable,
+          item);
       result = fork;
     }
 
@@ -388,7 +412,8 @@ public class DiagramItemFactory {
 
   public static Diagram applyDiagramItem(Diagram result, IDiagramItemRO item) {
     if (result != null) {
-      result.setDiagramItem(item.copy());
+      // result.setDiagramItem(item.copy());
+      // TODO this could be done in abstract diagram item constructor
       result.parseCustomData(item.getCustomData());
     }
     return result;    

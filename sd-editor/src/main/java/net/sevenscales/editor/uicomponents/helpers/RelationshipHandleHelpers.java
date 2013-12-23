@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.RelationshipNotAttachedEvent;
 import net.sevenscales.editor.api.impl.TouchHelpers;
@@ -200,7 +201,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
 
   private CircleElement createHandle(int x, int y, int radius, int selectionRadius, String color) {
     boolean editable = true;
-    CircleElement h = new CircleElement(surface.getInteractionLayer(), surface, this, x, y, radius, selectionRadius, editable);
+    CircleElement h = new CircleElement(surface.getInteractionLayer(), surface, this, x, y, radius, selectionRadius, editable, new DiagramItemDTO());
     h.setStroke(color);
     surface.add(h, true);
     // pass events to parent relationship

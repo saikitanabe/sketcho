@@ -23,6 +23,8 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -48,8 +50,8 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
 	
 	public EllipseElement(
 			ISurfaceHandler surface, EllipseShape info, 
-			String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-		super(editable, surface, backgroundColor, borderColor, textColor);
+			String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		
 //		tempLine = new Line(surface.getSurface());
 //		tempLine.setStroke("red");
@@ -336,7 +338,7 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
 		return textUtil.getText();
 	}
 
-	public void setText(String newText) {
+	public void doSetText(String newText) {
     textUtil.setText(newText, editable);
 	}
 
@@ -357,7 +359,7 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
     super.fillInfo(info);
 		Diagram result = 
 			new EllipseElement(surface, info,
-			getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), getEditable());
+			getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), getEditable(), new DiagramItemDTO());
 		return result;
 	}
 	

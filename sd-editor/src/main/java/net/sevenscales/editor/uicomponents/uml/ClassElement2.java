@@ -27,6 +27,8 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -42,12 +44,12 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
   private TextElementFormatUtil textUtil;
   private static final int DEFAULT_CLASS_RADIUS = 2;
 
-  public ClassElement2(ISurfaceHandler surface, RectShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-    this(surface, newShape, text, backgroundColor, borderColor, textColor, editable, false);
+  public ClassElement2(ISurfaceHandler surface, RectShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+    this(surface, newShape, text, backgroundColor, borderColor, textColor, editable, false, item);
   }
   
-  public ClassElement2(ISurfaceHandler surface, RectShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText) {
-    super(editable, surface, backgroundColor, borderColor, textColor);
+  public ClassElement2(ISurfaceHandler surface, RectShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText, IDiagramItemRO item) {
+    super(editable, surface, backgroundColor, borderColor, textColor, item);
     this.shape = newShape;
     
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
@@ -155,7 +157,7 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
     return textUtil.getText();
   }
 
-  public void setText(String newText) {
+  public void doSetText(String newText) {
     textUtil.setText(newText, editable);
   }
 
@@ -179,7 +181,7 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
   
   protected Diagram createDiagram(ISurfaceHandler surface, RectShape newShape,
       String text, boolean editable) {
-    return new ClassElement2(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+    return new ClassElement2(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
   }
   
 

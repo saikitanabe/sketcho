@@ -29,6 +29,8 @@ import net.sevenscales.editor.uicomponents.Point;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers.IExtraConnectionHandler;
 import net.sevenscales.editor.uicomponents.helpers.ILifeLineEditor;
 import net.sevenscales.editor.uicomponents.helpers.LifeLineEditorHelper;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -58,8 +60,8 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
   }
 
 	public SequenceElement(
-	      ISurfaceHandler parent, SequenceShape shape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-		super(parent, shape.rectShape, text, backgroundColor, borderColor, textColor, editable, true);
+	      ISurfaceHandler parent, SequenceShape shape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+		super(parent, shape.rectShape, text, backgroundColor, borderColor, textColor, editable, true, item);
 		this.surface = parent;
 // 		this.seqShape = shape;
 //		lineShape.x1 = shape.rectShape.left + shape.rectShape.width/2;
@@ -166,7 +168,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
     RectShape rs = (RectShape) super.getInfo();
     SequenceShape ss = new SequenceShape(x, y, 
         rs.width, rs.height, line.getY2() - line.getY1()); 
-    return new SequenceElement(surface, ss, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+    return new SequenceElement(surface, ss, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
   }
 
 	public void setShape(int left, int top, int width, int height, int lifelineheight) {

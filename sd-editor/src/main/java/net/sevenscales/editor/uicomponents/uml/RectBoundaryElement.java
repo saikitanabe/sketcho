@@ -26,6 +26,8 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -41,13 +43,13 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
   private static final int HEADER_HEIGHT = 25;
 	
   public RectBoundaryElement(ISurfaceHandler surface, RectContainerShape  newShape, String text, 
-  		Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-    this(surface, newShape, text, backgroundColor, borderColor, textColor, editable, false);
+  		Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+    this(surface, newShape, text, backgroundColor, borderColor, textColor, editable, false, item);
   }
   
   public RectBoundaryElement(ISurfaceHandler surface, RectContainerShape newShape, String text, 
-  		Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText) {
-    super(editable, surface, backgroundColor, borderColor, textColor);
+  		Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText, IDiagramItemRO item) {
+    super(editable, surface, backgroundColor, borderColor, textColor, item);
     this.shape = newShape;
     
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getContainerLayer());
@@ -185,7 +187,7 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
     return textUtil.getText();
   }
 
-  public void setText(String newText) {
+  public void doSetText(String newText) {
     textUtil.setText(newText, editable);
   }
 
@@ -209,7 +211,7 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
   
   protected Diagram createDiagram(ISurfaceHandler surface, RectContainerShape newShape,
       String text, boolean editable) {
-    return new RectBoundaryElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+    return new RectBoundaryElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
   }
   
 

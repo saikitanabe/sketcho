@@ -36,6 +36,8 @@ import net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.RelationshipHandleHelpers;
 import net.sevenscales.editor.uicomponents.impl.RelationshipTextUtil2;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -243,8 +245,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
   
   public Relationship2(ISurfaceHandler surface, List<Integer> points, String text,
-      boolean editable) {
-    super(editable, surface, Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor());
+      boolean editable, IDiagramItemRO item) {
+    super(editable, surface, Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), item);
     this.points = points;
     
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getConnectionLayer());
@@ -624,8 +626,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
         ps.add(val+diffy);
       }
     }
-    Relationship2 result = new Relationship2(surface, ps, getText(),
-        getEditable());
+    Relationship2 result = new Relationship2(surface, ps, getText(), getEditable(), new DiagramItemDTO());
     return result;
   }
 
@@ -796,7 +797,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
   
   @Override
-  public void setText(String text, int x, int y) {
+  public void doSetText(String text, int x, int y) {
   	currentTextEditLocation = relationshipText.findClickPosition(x, y, points);
   	switch (currentTextEditLocation) {
   	case START:
@@ -815,7 +816,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   	}
   }
 
-  public void setText(String text) {
+  public void doSetText(String text) {
   	text = text.replaceAll("\\\\n", "\n");
   	text = text.replaceAll("\\\\r", ""); // windows line breaks removed
   	this.text = text;

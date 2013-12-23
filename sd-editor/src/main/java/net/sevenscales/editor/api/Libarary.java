@@ -10,6 +10,7 @@ import net.sevenscales.editor.api.LibrarySelections.LibrarySelectedHandler;
 import net.sevenscales.editor.api.event.LibrarySelectionEvent;
 import net.sevenscales.editor.api.event.ThemeChangedEvent;
 import net.sevenscales.editor.api.event.ThemeChangedEventHandler;
+import net.sevenscales.domain.DiagramItemDTO;
 
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.TouchHelpers;
@@ -194,42 +195,51 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     result.add(new RectBoundaryElement(this.toolpool,
         new RectContainerShape(10, ACTIVITY_GROUP, 220, ACTIVITY_GROUP_HEIGHT),
         "Flows",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
     
     result.add(new ActivityChoiceElement(this.toolpool,
         new ActivityChoiceShape(185, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 10, 32, 32),
         "",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
 
     result.add(new ActivityStart(this.toolpool,
-        new ActivityStartShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE, ActivityStart.ACTIVITY_START_RADIUS), true));
+        new ActivityStartShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE, ActivityStart.ACTIVITY_START_RADIUS), true,
+        new DiagramItemDTO()));
 
     result.add(new ActivityEnd(this.toolpool,
-        new ActivityEndShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 50, ActivityEnd.ACTIVITY_END_RADIUS), true));
+        new ActivityEndShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 50, ActivityEnd.ACTIVITY_END_RADIUS), true,
+        new DiagramItemDTO()));
 
     result.add(new ActivityElement(this.toolpool,
         new ActivityShape(30, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 10, 100, 30),
         "My Activity",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
     
     result.add(new SequenceElement(this.toolpool, 
         new SequenceShape(50, ACTIVITY_GROUP + 130, 100, 25, 25),
         "Sequence",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
     
     result.add(new ActivityElement(this.toolpool,
         new ActivityShape(80, ACTIVITY_GROUP + 220, 100, 30),
         "Collaboration",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
 
     result.add(new ForkElement(this.toolpool,
       new ForkShape(150, ACTIVITY_GROUP + 130, 50, 5),
-      Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+      Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+      new DiagramItemDTO()));
     result.add(new ForkElement(this.toolpool,
       new ForkShape(210, ACTIVITY_GROUP + 130, 5, 50, 1),
-      Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+      Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+      new DiagramItemDTO()));
 
-    Diagram swimline = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(22, ACTIVITY_GROUP + 200, 190, 90), "Swimline", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
+    Diagram swimline = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(22, ACTIVITY_GROUP + 200, 190, 90), "Swimline", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, new DiagramItemDTO());
     swimline.setDuplicateMultiplySize(3, 3);
     result.add(swimline);
   }
@@ -240,13 +250,15 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         new RectContainerShape(roadmapIndent, ROADMAP_GROUP, 195, ROADMAP_GROUP_HEIGHT),
         "Q1",
         Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), 
-        Theme.createDefaultTextColor(), true);
+        Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO());
     q1.setDuplicateMultiplySize(2, 2);
     result.add(q1);
 
     int marketingY = ROADMAP_GROUP + 25;
     int marketingHeight = ROADMAP_GROUP_HEIGHT / 2 - 10;
-    Diagram marketing = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, marketingY, 220, marketingHeight), "Marketing", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
+    Diagram marketing = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, marketingY, 220, marketingHeight), "Marketing", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, 
+      new DiagramItemDTO());
     marketing.setDuplicateMultiplySize(3, 3);
     result.add(marketing);
 
@@ -254,23 +266,27 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     result.add(new ActivityChoiceElement(this.toolpool,
         new ActivityChoiceShape(activityIndent, marketingY + 45, 32, 32),
         "",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
 
     result.add(new MindCentralElement(this.toolpool,
         new MindCentralShape(roadmapIndent + 50, marketingY + 10, 100, 30),
         "Keynote",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
 
     int productY = marketingY + marketingHeight;
     int productHeight = ROADMAP_GROUP_HEIGHT / 2 - 15;
-    Diagram productLine = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, productY, 220, productHeight), "Product Line", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
+    Diagram productLine = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, productY, 220, productHeight), "Product Line", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+      new DiagramItemDTO());
     productLine.setDuplicateMultiplySize(3, 3);
     result.add(productLine);
 
     result.add(new ActivityElement(this.toolpool,
         new ActivityShape(roadmapIndent + 10, productY + 30, 100, 30),
         "Release X",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
   }
 
 	private List<Diagram> createToolbarItems() {
@@ -293,24 +309,29 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     result.add(new RectBoundaryElement(this.toolpool,
         new RectContainerShape(10, SOFTWARE_SKETCHING_GROUP, 220, SOFTWARE_SKETCHING_GROUP_HEIGHT),
         "Software Sketching",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
     
     result.add(new NoteElement(this.toolpool,
         new NoteShape(30, SOFTWARE_SKETCHING_GROUP + GROUP_HEADING_SPACE, 170, 30),
-        "*Note* this!", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        "*Note* this!", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
 
     result.add(new Actor(this.toolpool,
         new ActorShape(30, SOFTWARE_SKETCHING_GROUP + 120, 25, 40),
-        "<<system>>\nActor", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        "<<system>>\nActor", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
 
     result.add(new EllipseElement(this.toolpool, 
         new EllipseShape(145, SOFTWARE_SKETCHING_GROUP + 150, 50, 25),
-        "Use Case", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        "Use Case", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
     
     result.add(new StorageElement(this.toolpool,
         new DbShape(160, SOFTWARE_SKETCHING_GROUP + 220, 100, 30),
         "Db",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
 
 //    result.add(new SketchLine(this.toolpool,
 //        new SketchLineShape(30, SOFTWARE_SKETCHING_GROUP_START + 160, 100, 30),
@@ -321,19 +342,21 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 				"Component",
 				Theme.createDefaultBackgroundColor(), 
 				Theme.createDefaultBorderColor(), 
-				Theme.createDefaultTextColor(), true));
+				Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
 
 		// special border => no border
     result.add(new TextElement(this.toolpool,
         new TextShape(120, SOFTWARE_SKETCHING_GROUP + 300, 100, 30),
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), "Just text", true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), "Just text", true, new DiagramItemDTO()));
     
 		result.add(new ServerElement(this.toolpool,
 				new ServerShape(30, SOFTWARE_SKETCHING_GROUP + 215, 60, 80),
 				"Server",
 				Theme.createDefaultBackgroundColor(), 
 				Theme.createDefaultBorderColor(),
-				Theme.createDefaultTextColor(), true));
+				Theme.createDefaultTextColor(), true, 
+        new DiagramItemDTO()));
 
     
     // ACTIVITY DIAGRAM
@@ -385,7 +408,8 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     result.add(new RectBoundaryElement(this.toolpool,
         new RectContainerShape(10, CLASS_GROUP, 220, CLASS_GROUP_HEIGHT),
         "Class and Package",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
 
 		result.add(new ClassElement2(this.toolpool,
 				new RectShape(30, CLASS_GROUP + 40, 100, 60),
@@ -395,21 +419,24 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 				"method()",
 				Theme.createDefaultBackgroundColor(), 
 				Theme.createDefaultBorderColor(),
-				Theme.createDefaultTextColor(), true));
+				Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
 
     result.add(new UMLPackageElement(this.toolpool,
         new UMLPackageShape(120, CLASS_GROUP + 150, 100, 40),
         "package",
         Theme.createDefaultBackgroundColor(), 
         Theme.createDefaultBorderColor(), 
-        Theme.createDefaultTextColor(), true));
+        Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
     
 		// mindmap group
     result.add(new RectBoundaryElement(this.toolpool,
         new RectContainerShape(10, MINDMAP_GROUP, 220, MINDMAP_GROUP_HEIGHT),
         "Mind Map Library",
         Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), 
-        Theme.createDefaultTextColor(), true));
+        Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
     
 //    result.add(new TextElement(this.toolpool,
 //        new TextShape(20, MINDMAP_GROUP, 100, 30),
@@ -422,20 +449,22 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     result.add(new MindCentralElement(this.toolpool,
         new MindCentralShape(30, MINDMAP_GROUP + 40, 100, 30),
         "Central Topic",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
     
     result.add(new ActivityElement(this.toolpool,
         new ActivityShape(30, MINDMAP_GROUP + 120, 100, 30),
         "Main Topic",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
+        new DiagramItemDTO()));
     
     result.add(new TextElement(this.toolpool,
         new TextShape(30, MINDMAP_GROUP + 170, 100, 30),
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), "Subtopic", true));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), "Subtopic", true, new DiagramItemDTO()));
 
     result.add(new NoteElement(this.toolpool,
         new NoteShape(30, MINDMAP_GROUP + 205, 170, 30),
-        "*Notes!*", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true));
+        "*Notes!*", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, new DiagramItemDTO()));
     
 //    result.add(new NoteElement(this.toolpool,
 //        new NoteShape(30, MINDMAP_GROUP + 205, 140, 30),

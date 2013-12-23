@@ -1,6 +1,7 @@
 package net.sevenscales.editor.diagram;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.CreateElementEvent;
@@ -235,14 +236,14 @@ public class RelationshipDragEndHandler implements
 			ClassElement2 ce = new ClassElement2(surface, new RectShape(x,
 					y, 1, // auto resizes
 					1), // auto resizes
-					type.getValue(), background, borderColor, color, true);
+					type.getValue(), background, borderColor, color, true, new DiagramItemDTO());
 			result = ce;
 			break;
 		}
 		case USE_CASE: {
       EllipseElement usecase = new EllipseElement(surface, 
           new EllipseShape(x, y, 1, 1), 
-          type.getValue(), background, borderColor, color, true);
+          type.getValue(), background, borderColor, color, true, new DiagramItemDTO());
 			result = usecase;
 			break;
 		}
@@ -250,7 +251,7 @@ public class RelationshipDragEndHandler implements
 			SequenceElement se = new SequenceElement(surface, 
 	        new SequenceShape(x, y, 1, 1, 25),
 	        type.getValue(),
-	        background, borderColor, color, true);
+	        background, borderColor, color, true, new DiagramItemDTO());
 			result = se;
 			break;
 		}
@@ -262,7 +263,8 @@ public class RelationshipDragEndHandler implements
               40),
               type.getValue(),
               background, borderColor, color, 
-              true);
+              true,
+              new DiagramItemDTO());
 			result = actor;
 			break;
 		}
@@ -271,7 +273,9 @@ public class RelationshipDragEndHandler implements
 			NoteElement ne = new NoteElement(surface,
 	        new NoteShape(x, y, 150, 1),
 	        type.getValue(),
-	        background, borderColor, color, true);
+	        background, borderColor, color,
+	        true, 
+	        new DiagramItemDTO());
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 			result = ne;
 			break;
@@ -284,7 +288,9 @@ public class RelationshipDragEndHandler implements
 	        "",
 	        Theme.getCommentThreadColorScheme().getBackgroundColor().create(), 
 	        Theme.getCommentThreadColorScheme().getBorderColor().create(),
-	        Theme.getCommentThreadColorScheme().getTextColor().create(), true);
+	        Theme.getCommentThreadColorScheme().getTextColor().create(), 
+	        true, 
+	        new DiagramItemDTO());
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 			result = ne;
 			break;
@@ -301,29 +307,29 @@ public class RelationshipDragEndHandler implements
 			ActivityChoiceElement ace = new ActivityChoiceElement(surface,
 	        new ActivityChoiceShape(x, y, 32, 32),
 	        type.getValue(),
-	        background, borderColor, color, true);
+	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ace;
 			break;
 		}
 		case START: {
 			ActivityStart as = new ActivityStart(surface,
-	        new ActivityStartShape(x, y, ActivityStart.ACTIVITY_START_RADIUS), true);
+	        new ActivityStartShape(x, y, ActivityStart.ACTIVITY_START_RADIUS), true, new DiagramItemDTO());
 			result = as;
 			break;
 		}
 		case FORK: {
-			ForkElement e = new ForkElement(surface, new ForkShape(x, y, 50, 5), Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
+			ForkElement e = new ForkElement(surface, new ForkShape(x, y, 50, 5), Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, new DiagramItemDTO());
 			result = e;
 			break;
 		}
 		case VFORK: {
-			ForkElement e = new ForkElement(surface, new ForkShape(x, y, 5, 50, 1), Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true);
+			ForkElement e = new ForkElement(surface, new ForkShape(x, y, 5, 50, 1), Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, new DiagramItemDTO());
 			result = e;
 			break;
 		}
 		case END: {
 			ActivityEnd ae = new ActivityEnd(surface,
-	        new ActivityEndShape(x, y, ActivityEnd.ACTIVITY_END_RADIUS), true);
+	        new ActivityEndShape(x, y, ActivityEnd.ACTIVITY_END_RADIUS), true, new DiagramItemDTO());
 			result = ae;
 			break;
 		}
@@ -331,7 +337,7 @@ public class RelationshipDragEndHandler implements
 			ActivityElement ae = new ActivityElement(surface,
 	        new ActivityShape(x, y, 1, 1),
 	        type.getValue(),
-	        background, borderColor, color, true);
+	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ae;
 			break;
 			}
@@ -339,7 +345,7 @@ public class RelationshipDragEndHandler implements
 			StorageElement ae = new StorageElement(surface,
 	        new DbShape(x, y, 1, 1),
 	        type.getValue(),
-	        background, borderColor, color, true);
+	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ae;
 			break;
 			}
@@ -347,7 +353,7 @@ public class RelationshipDragEndHandler implements
 			UMLPackageElement ce = new UMLPackageElement(surface, new UMLPackageShape(x,
 					y, 100, // package has no auto resizes
 					40), // package has no auto resizes
-					type.getValue(), background, borderColor, color, true);
+					type.getValue(), background, borderColor, color, true, new DiagramItemDTO());
 			result = ce;
 			break;
 		}
@@ -355,7 +361,7 @@ public class RelationshipDragEndHandler implements
 			MindCentralElement ae = new MindCentralElement(surface,
 	        new MindCentralShape(x, y, 1, 1),
 	        type.getValue(),
-	        background, borderColor, color, true);
+	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ae;
 			break;
 		}
@@ -363,7 +369,7 @@ public class RelationshipDragEndHandler implements
 			ActivityElement ae = new ActivityElement(surface,
 	        new ActivityShape(x, y, 1, 1),
 	        type.getValue(),
-	        background, borderColor, color, true);
+	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ae;
 			break;
 			}
@@ -383,7 +389,7 @@ public class RelationshipDragEndHandler implements
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 		TextElement result = new TextElement(surface,
         new TextShape(x, y, 100, 1),
-        background, borderColor, color, type.getValue(), true);
+        background, borderColor, color, type.getValue(), true, new DiagramItemDTO());
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 		return result;
 	}

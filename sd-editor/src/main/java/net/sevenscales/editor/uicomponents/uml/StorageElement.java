@@ -28,6 +28,8 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
 
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
@@ -55,8 +57,8 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
   private HalfEllipseTransformer halfEllipseTransformer = new HalfEllipseTransformer();
   
 	public StorageElement(ISurfaceHandler surface, DbShape newShape, String text, 
-			Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-		super(editable, surface, backgroundColor, borderColor, textColor);
+			Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
@@ -229,7 +231,7 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
 		return textUtil.getText();
 	}
 
-	public void setText(String newText) {
+	public void doSetText(String newText) {
     textUtil.setText(newText, editable);
 	}
 
@@ -254,7 +256,7 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
   protected Diagram createDiagram(ISurfaceHandler surface, DbShape newShape,
       String text, boolean editable) {
     return new StorageElement(surface, newShape, text, 
-    		new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+    		new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
   }
 	
 //////////////////////////////////////////////////////////////////////

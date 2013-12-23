@@ -19,6 +19,9 @@ import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.silver.SilverUtils;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
+
 
 public class ActivityEnd extends AbstractDiagramItem implements SupportsRectangleShape {
 	public static int ACTIVITY_END_RADIUS = 10;
@@ -36,12 +39,12 @@ public class ActivityEnd extends AbstractDiagramItem implements SupportsRectangl
 //	private boolean onResizeArea;
   private IGroup group;
   
-  public ActivityEnd(ISurfaceHandler surface, ActivityEndShape newShape, boolean editable) {
-    this(surface, newShape, Theme.createDefaultBorderColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), editable);
+  public ActivityEnd(ISurfaceHandler surface, ActivityEndShape newShape, boolean editable, IDiagramItemRO item) {
+    this(surface, newShape, Theme.createDefaultBorderColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), editable, item);
   }
   
-	public ActivityEnd(ISurfaceHandler surface, ActivityEndShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-		super(editable, surface, backgroundColor, borderColor, textColor);
+	public ActivityEnd(ISurfaceHandler surface, ActivityEndShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
@@ -171,7 +174,7 @@ public class ActivityEnd extends AbstractDiagramItem implements SupportsRectangl
 	
   protected Diagram createDiagram(ISurfaceHandler surface, ActivityEndShape newShape,
       boolean editable) {
-    return new ActivityEnd(surface, newShape, editable);
+    return new ActivityEnd(surface, newShape, editable, new DiagramItemDTO());
   }
 	
 //////////////////////////////////////////////////////////////////////

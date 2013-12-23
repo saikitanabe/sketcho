@@ -22,6 +22,8 @@ import net.sevenscales.editor.silver.SilverUtils;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.Point;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
 
 
 public class ForkElement extends AbstractDiagramItem implements SupportsRectangleShape {
@@ -37,12 +39,12 @@ public class ForkElement extends AbstractDiagramItem implements SupportsRectangl
 	private Point coords = new Point();
   private IGroup group;
   
-  public ForkElement(ISurfaceHandler surface, ForkShape newShape, boolean editable) {
-    this(surface, newShape, Theme.createDefaultBorderColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), editable);
+  public ForkElement(ISurfaceHandler surface, ForkShape newShape, boolean editable, IDiagramItemRO item) {
+    this(surface, newShape, Theme.createDefaultBorderColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), editable, item);
   }
 
-	public ForkElement(ISurfaceHandler surface, ForkShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-		super(editable, surface, backgroundColor, borderColor, textColor);
+	public ForkElement(ISurfaceHandler surface, ForkShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
@@ -129,7 +131,7 @@ public class ForkElement extends AbstractDiagramItem implements SupportsRectangl
 	
   protected Diagram createDiagram(ISurfaceHandler surface, ForkShape newShape,
       boolean editable) {
-    return new ForkElement(surface, newShape, editable);
+    return new ForkElement(surface, newShape, editable, new DiagramItemDTO());
   }
 	
 //////////////////////////////////////////////////////////////////////

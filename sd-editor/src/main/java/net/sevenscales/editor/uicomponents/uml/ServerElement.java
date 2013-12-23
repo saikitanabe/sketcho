@@ -31,6 +31,8 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -60,13 +62,13 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
   private Map<String,String> params = new HashMap<String, String>();
 
   public ServerElement(ISurfaceHandler surface, ServerShape newShape, String text, 
-  		Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-    this(surface, newShape, text, backgroundColor, borderColor, textColor, editable, false);
+  		Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+    this(surface, newShape, text, backgroundColor, borderColor, textColor, editable, false, item);
   }
   
   public ServerElement(ISurfaceHandler surface, ServerShape newShape, String text, 
-  		Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText) {
-    super(editable, surface, backgroundColor, borderColor, textColor);
+  		Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText, IDiagramItemRO item) {
+    super(editable, surface, backgroundColor, borderColor, textColor, item);
     // text color is skipped and theme color is always used => text has board as background, text is always visible
     this.shape = newShape;
     
@@ -242,7 +244,7 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
     return textUtil.getText();
   }
 
-  public void setText(String newText) {
+  public void doSetText(String newText) {
     textUtil.setText(newText, editable);
   }
 
@@ -266,7 +268,7 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
   
   protected Diagram createDiagram(ISurfaceHandler surface, ServerShape newShape,
       String text, boolean editable) {
-    return new ServerElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+    return new ServerElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
   }
   
 

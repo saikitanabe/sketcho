@@ -18,6 +18,8 @@ import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.silver.SilverUtils;
 import net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers;
+import net.sevenscales.domain.IDiagramItemRO;
+
 
 public class CircleElement extends AbstractDiagramItem {
 	private static final SLogger logger = SLogger.createLogger(CircleElement.class);
@@ -28,8 +30,8 @@ public class CircleElement extends AbstractDiagramItem {
 	private IGroup group;
 	private ICircle selectionArea;
 
-	public CircleElement(IGroup layer, ISurfaceHandler surface, DiagramProxy parent, int circleX, int circleY, int radius, boolean editable) {
-		this(layer, surface, parent, circleX, circleY, radius, 0, editable);
+	public CircleElement(IGroup layer, ISurfaceHandler surface, DiagramProxy parent, int circleX, int circleY, int radius, boolean editable, IDiagramItemRO item) {
+		this(layer, surface, parent, circleX, circleY, radius, 0, editable, item);
 	}
 	
 	public CircleElement(IGroup layer, 
@@ -39,8 +41,8 @@ public class CircleElement extends AbstractDiagramItem {
 											int circleY, 
 											int radius, 
 											int selectionRadius, 
-											boolean editable) {
-		super(editable, surface);
+											boolean editable, IDiagramItemRO item) {
+		super(editable, surface, item);
 		setOwnerComponent(parent);
 		addMouseDiagramHandler(this);
 		group = IShapeFactory.Util.factory(editable).createGroup(layer);

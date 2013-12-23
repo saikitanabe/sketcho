@@ -138,13 +138,15 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	
   public static final String EVENT_DOUBLE_CLICK = "ondblclick";
 
-  public AbstractDiagramItem(boolean editable, ISurfaceHandler surface) {
+  public AbstractDiagramItem(boolean editable, ISurfaceHandler surface, IDiagramItemRO item) {
   	this(editable, surface, Theme.createDefaultBackgroundColor(), 
   													Theme.createDefaultBorderColor(), 
-  													Theme.createDefaultTextColor());
+  													Theme.createDefaultTextColor(), item);
   }
-  public AbstractDiagramItem(boolean editable, ISurfaceHandler surface, Color backgroundColor, Color borderColor, Color textColor) {
-  	this.data = new DiagramItemDTO(); // set default item
+  public AbstractDiagramItem(boolean editable, ISurfaceHandler surface, Color backgroundColor, Color borderColor, Color textColor, IDiagramItemRO item) {
+    // Always a valid state from the very beginning!
+    this.data = item.copy();
+
     this.editable = editable;
     this.surface = surface;
     this.visible = true; // default value
@@ -622,11 +624,30 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   	return getText();
   }
   
-  public void setText(String text) {
-  }
   @Override
-  public void setText(String text, int x, int y) {
-  	setText(text);
+  public final void setText(String text) {
+    applyFontDecorations();
+    doSetText(text);
+  }
+
+  @Override
+  public final void setText(String text, int x, int y) {
+    applyFontDecorations();
+    doSetText(text, x, y);
+  }
+
+  protected void doSetText(String text) {
+  }
+
+  protected void doSetText(String text, int x, int y) {
+    doSetText(text);
+  }
+
+  private void applyFontDecorations() {
+    TextElementFormatUtil textFormatter = getTextFormatter();
+    if (textFormatter != null && getDiagramItem().getTextSize() != null) {
+      textFormatter.setFontSize(getDiagramItem().getTextSize());
+    }
   }
   
   public void toSvgStart() {
@@ -1007,12 +1028,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public void setTextSize(int textSize) {
     getDiagramItem().setTextSize(textSize);
   }
-  
+
   @Override
-  public int getTextSize() {
-    if (getDiagramItem().getTextSize() == null) {
-      return 12;
-    }
+  public Integer getTextSize() {
     return getDiagramItem().getTextSize();
   }
   

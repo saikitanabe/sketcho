@@ -19,6 +19,7 @@ import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 import net.sevenscales.editor.content.ui.UIKeyHelpers;
+import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.utils.SLogger;
 
 import com.google.gwt.dom.client.NativeEvent;
@@ -71,7 +72,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
         
         FreehandElement diagram = new FreehandElement(surface, new FreehandShape(IntegerHelpers.toIntArray(filteredPoints)),
             Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(),
-            surface.getEditorContext().isEditable());
+            surface.getEditorContext().isEditable(), new DiagramItemDTO());
         // surface.add(diagram, true);
         polyline.setVisibility(false);
         points.clear();

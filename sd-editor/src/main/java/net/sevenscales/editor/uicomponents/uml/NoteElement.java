@@ -29,6 +29,8 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasText
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
 
 import com.google.gwt.core.client.GWT;
 
@@ -65,8 +67,8 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 
   
 	public NoteElement(ISurfaceHandler surface, NoteShape newShape, String text, 
-										 Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-		super(editable, surface, backgroundColor, borderColor, textColor);
+										 Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
@@ -318,7 +320,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 		return textUtil.getText();
 	}
 
-	public void setText(String newText) {
+	public void doSetText(String newText) {
     textUtil.setText(newText, editable);
 	}
 
@@ -344,7 +346,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	
   protected NoteElement createDiagram(ISurfaceHandler surface, NoteShape newShape,
       String text, boolean editable) {
-    return new NoteElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+    return new NoteElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
   }
 	
 //////////////////////////////////////////////////////////////////////

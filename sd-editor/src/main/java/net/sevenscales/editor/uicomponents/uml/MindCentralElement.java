@@ -8,11 +8,14 @@ import net.sevenscales.editor.diagram.shape.MindCentralShape;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
+
 
 public class MindCentralElement extends ActivityElement implements SupportsRectangleShape {
 	public MindCentralElement(ISurfaceHandler surface, MindCentralShape newShape, String text, 
-			Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-		super(surface, newShape, text, backgroundColor, borderColor, textColor, editable);
+			Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+		super(surface, newShape, text, backgroundColor, borderColor, textColor, editable, item);
 		
 		textUtil.setMarginTop(18);
 		textUtil.setMargin(80);
@@ -47,7 +50,7 @@ public class MindCentralElement extends ActivityElement implements SupportsRecta
   protected Diagram createDiagram(ISurfaceHandler surface, MindCentralShape newShape,
       String text, boolean editable) {
     return new MindCentralElement(surface, newShape, text, 
-    		new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+    		new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
   }
 	
   public String getDefaultRelationship() {

@@ -62,7 +62,7 @@ public class JSONDiagramParser {
 														  JSONParserHelpers.getString(obj.get("shape")),
 														  JSONParserHelpers.getString(obj.get("backgroundColor")),
 														  JSONParserHelpers.getString(obj.get("textColor")),
-														  JSONParserHelpers.getInt(obj.get("tsize")),
+														  JSONParserHelpers.getInteger(obj.get("tsize")),
 														  JSONParserHelpers.getInt(obj.get("version")),
 														  JSONParserHelpers.getLong(obj.get("id")),
 														  JSONParserHelpers.getString(obj.get("clientId")),

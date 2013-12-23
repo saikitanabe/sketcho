@@ -11,6 +11,7 @@ import net.sevenscales.editor.diagram.shape.CircleShape;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement;
+import net.sevenscales.domain.DiagramItemDTO;
 
 public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
   private static SLogger logger = SLogger.createLogger(LifeLineEditorHelper.class);
@@ -69,7 +70,7 @@ public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
     this.parent = parent;
     
     // use it as global singleton element, it is actually a visual editor that can be visible only once on the board.
-    startSelection = new CircleElement(surface.getInteractionLayer(), surface, this, 0, 0, SequenceElement.RADIUS_START, SequenceElement.RADIUS_SELECTION, editable);
+    startSelection = new CircleElement(surface.getInteractionLayer(), surface, this, 0, 0, SequenceElement.RADIUS_START, SequenceElement.RADIUS_SELECTION, editable, new DiagramItemDTO());
     startSelection.setVerticalMovement(true);
     surface.add(startSelection, true);
     startSelection.setStroke("#1D00FF");

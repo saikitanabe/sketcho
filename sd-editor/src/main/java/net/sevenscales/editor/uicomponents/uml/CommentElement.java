@@ -37,6 +37,7 @@ import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.uicomponents.Anchor;
 import net.sevenscales.editor.api.event.CommentDeletedEvent;
+import net.sevenscales.domain.IDiagramItemRO;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.CommentDTO;
@@ -84,8 +85,8 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   
 	public CommentElement(ISurfaceHandler surface, CommentShape newShape, String text, 
 										 Color backgroundColor, Color borderColor, Color textColor, boolean editable,
-										 CommentThreadElement parentThread, CommentDTO commentData) {
-		super(editable, surface, backgroundColor, borderColor, backgroundColor.opacity == 0 ? parentThread.getTextColorAsColor() : textColor);
+										 CommentThreadElement parentThread, CommentDTO commentData, IDiagramItemRO item) {
+		super(editable, surface, backgroundColor, borderColor, backgroundColor.opacity == 0 ? parentThread.getTextColorAsColor() : textColor, item);
 		this.shape = newShape;
 		this.parentThread = parentThread;
 		setDiagramItem(commentData);
@@ -432,7 +433,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		return textUtil.getText();
 	}
 
-	public void setText(String newText) {
+	public void doSetText(String newText) {
     textUtil.setText(newText, editable);
 	}
 	

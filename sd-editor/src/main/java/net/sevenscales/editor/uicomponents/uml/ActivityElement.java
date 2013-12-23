@@ -27,6 +27,8 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
 
 public class ActivityElement extends AbstractDiagramItem implements SupportsRectangleShape {
 //	private Rectangle rectSurface;
@@ -43,8 +45,8 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
   private long dispachSequence;
   
 	public ActivityElement(ISurfaceHandler surface, HasRectShape newShape, String text, 
-												 Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-		super(editable, surface, backgroundColor, borderColor, textColor);
+												 Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
@@ -166,7 +168,7 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
 		return textUtil.getText();
 	}
 
-	public void setText(String newText) {
+	public void doSetText(String newText) {
     textUtil.setText(newText, editable);
 	}
 
@@ -191,7 +193,7 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
 	
   protected Diagram createDiagram(ISurfaceHandler surface, ActivityShape newShape,
       String text, boolean editable) {
-    return new ActivityElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+    return new ActivityElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
   }
 	
 //////////////////////////////////////////////////////////////////////

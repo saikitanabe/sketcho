@@ -22,6 +22,9 @@ import net.sevenscales.editor.uicomponents.Point;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.DiagramItemDTO;
+
 
 public class ActivityChoiceElement extends AbstractDiagramItem implements SupportsRectangleShape {
 	private IRectangle boundary;
@@ -47,8 +50,8 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
   };
   
 	public ActivityChoiceElement(ISurfaceHandler surface, ActivityChoiceShape newShape, String text, 
-			Color backgroundColor, Color borderColor, Color textColor, boolean editable) {
-		super(editable, surface, backgroundColor, borderColor, textColor); 
+			Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
@@ -230,7 +233,7 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 		return textUtil.getText();
 	}
 
-	public void setText(String newText) {
+	public void doSetText(String newText) {
     textUtil.setText(newText, editable);
 	}
 
@@ -255,7 +258,7 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
   protected Diagram createDiagram(ISurfaceHandler surface, ActivityChoiceShape newShape,
       String text, boolean editable) {
     return new ActivityChoiceElement(surface, newShape, text, 
-    		new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable);
+    		new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
   }
 	
 //////////////////////////////////////////////////////////////////////
