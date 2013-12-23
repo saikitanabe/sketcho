@@ -157,25 +157,36 @@ public class TextElementFormatUtil {
   }
 
   private void _setText(String newText, boolean editable) {
-  	// convert json text line (\\n) breaks to line breaks
-  	newText = newText.replaceAll("\\\\n", "\n");
-  	newText = newText.replaceAll("\\\\r", "");
-  	
+    // convert json text line (\\n) breaks to line breaks
+    newText = newText.replaceAll("\\\\n", "\n");
+    newText = newText.replaceAll("\\\\r", "");
     boolean changed = text != null && text.equals(newText) ? false : true;
     
+    createRows(newText, editable);
+
+   if ((changed || hasTextElement.forceAutoResize()) && 
+  		 editorContext.get(EditorProperty.AUTO_RESIZE_ENABLED).equals(true)) {
+      if (hasTextElement.forceAutoResize() || hasTextElement.isAutoResize()) {
+        resizeElement();
+      }
+    }
+     
+    setTextShape();
+	}
+
+  private void createRows(String newText, boolean editable) {
     text = newText;
-
     clearLines();
-
     widestWidth = 0;
+
     // split with \n
     // convert text to shapes
-  	// space is to keep last line if last is \n
-  	newText += " ";
+    // space is to keep last line if last is \n
+    newText += " ";
     String[] texts = newText.split("\n");
     for (String t : texts) {
-    	t = t.trim();
-    	List<IShape> currentline = new ArrayList<IShape>();
+      t = t.trim();
+      List<IShape> currentline = new ArrayList<IShape>();
       if (t.length()>0 && t.charAt(t.length()-1) == '\r') {
         // on windows line feeds are \r\n
         t = t.substring(0, t.length()-1);
@@ -232,26 +243,28 @@ public class TextElementFormatUtil {
       }
       lines.add(currentline);
     }
+  }
 
-     if ((changed || hasTextElement.forceAutoResize()) && 
-    		 editorContext.get(EditorProperty.AUTO_RESIZE_ENABLED).equals(true)) {
-        if (hasTextElement.forceAutoResize() || hasTextElement.isAutoResize()) {
-          int width = getTextWidth();
-          int height = getMarginTop() + texts.length * ROW_HEIGHT + marginBottom;
-    
-          // only resize when size increases; currently disabled
-    //      width = width > rectSurface.getWidth() ? width : rectSurface.getWidth();
-    //      height = height > rectSurface.getHeight() ? height : rectSurface.getHeight();
-          if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
-            // during OT operation element is not resized and everything is 
-            // copied as is, element size and text
-            hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), width, height);
-          }
-        }
-      }
-     
+  public void reapplyText() {
+    createRows(text, true);
+    resizeElement();
     setTextShape();
-	}
+  }
+
+  private void resizeElement() {
+    int width = getTextWidth();
+    int rows = lines.size();
+    int height = getMarginTop() + rows * ROW_HEIGHT + marginBottom;
+
+    // only resize when size increases; currently disabled
+//      width = width > rectSurface.getWidth() ? width : rectSurface.getWidth();
+//      height = height > rectSurface.getHeight() ? height : rectSurface.getHeight();
+    if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
+      // during OT operation element is not resized and everything is 
+      // copied as is, element size and text
+      hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), width, height);
+    }
+  }
 
   public void setRotate(int degrees) {
     this.degrees = degrees;

@@ -129,9 +129,22 @@ class Text extends Shape implements IText {
 
 	public double getTextWidth() {
 		if ((UiUtils.isSafari() || UiUtils.isFirefox()) && justTextNoTspan(rawNode)) {
-			return MeasurementPanel.getOffsetWidth(getText());
+			int fontSize = parseFontSize(getFontSize());
+			return MeasurementPanel.getOffsetWidth(getText(), fontSize);
 		}
 		return getTextWidth(rawNode);
+	}
+
+	private int parseFontSize(String fontSize) {
+		int result = 12;
+		if (fontSize.length() - 2 > 0) {
+			try {
+				return Integer.valueOf(fontSize.substring(0, fontSize.length() - 2));
+			} catch (NumberFormatException e) {
+				// return default value
+			}
+		}
+		return result;
 	}
 	
 	private native boolean justTextNoTspan(JavaScriptObject rawNode)/*-{

@@ -74,7 +74,8 @@ public class MeasurementPanel {
 		return measurementPanel.getOffsetHeight();
 	}
 	
-	public static int getOffsetWidth(String text) {
+	public static int getOffsetWidth(String text, int fontSize) {
+		measurementHorizontalPanel.getElement().getStyle().setFontSize((double) fontSize, Unit.PX);
 		return calcWidth(measurementHorizontalPanel.getElement(), SafeHtmlUtils.htmlEscape(text));
 	}
 	
