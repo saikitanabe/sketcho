@@ -20,7 +20,7 @@ public class MindCentralElement extends ActivityElement implements SupportsRecta
 		textUtil.setMarginTop(18);
 		textUtil.setMargin(80);
 		textUtil.setMarginBottom(27);
-		textUtil.setFontSize(15);
+		textUtil.setFontSize(18);
 		
 		// set text again to format shape correctly
 		textUtil.setText(text, editable);

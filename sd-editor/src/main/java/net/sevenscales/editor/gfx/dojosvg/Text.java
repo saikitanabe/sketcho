@@ -58,7 +58,9 @@ class Text extends Shape implements IText {
 		_setFontSize(rawNode, fontSize);
 	}
 	private native void _setFontSize(JavaScriptObject rawNode, String fontSize)/*-{
-		rawNode.getFont().size = fontSize;
+		var f = rawNode.getFont()
+		f.size = fontSize
+		rawNode.setFont(f)
 	}-*/;
 	
   public String getFontWeight() {

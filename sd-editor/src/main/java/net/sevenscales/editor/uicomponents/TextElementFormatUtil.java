@@ -32,28 +32,44 @@ public class TextElementFormatUtil {
   // Legacy font height based row height, e.g. properties editor row height to calculate text area height
   public static final int ROW_HEIGHT = 17;
 
-  private static final float ROW_HEIGHT_FACTORIAL = 1.4f;
+  // private static final float ROW_HEIGHT_FACTORIAL = 1.4f;
+  // private static final float MARGIN_HEIGHT_FACTORIAL = 0.85f;
 
-  private static final Map<Integer, Integer> fontToRowSizeMap;
   // private int rowHeight = ROW_HEIGHT;
-  private Integer currentRowHeight = ROW_HEIGHT;
+
+  private static final Map<Integer, FontProperty> fontToRowSizeMap;
+  private FontProperty fontProperty;
+
+  private static class FontProperty {
+    public int rowHeight;
+    public int marginTop;
+    public int marginBottom;
+    public int marging;
+
+    FontProperty(int rowHeight, int marginTop, int marginBottom, int marging) {
+      this.rowHeight = rowHeight;
+      this.marginTop = marginTop;
+      this.marginBottom = marginBottom;
+      this.marging = marging;
+    }
+  }
 
   static {
-    fontToRowSizeMap = new HashMap<Integer, Integer>();
-    fontToRowSizeMap.put(8, 13);
-    fontToRowSizeMap.put(9, 14);
-    fontToRowSizeMap.put(10, 15);
-    fontToRowSizeMap.put(11, 16);
-    fontToRowSizeMap.put(12, 17);
-    fontToRowSizeMap.put(14, 18);
-    fontToRowSizeMap.put(18, 19);
-    fontToRowSizeMap.put(24, 20);
-    fontToRowSizeMap.put(30, 21);
-    fontToRowSizeMap.put(36, 22);
-    fontToRowSizeMap.put(48, 23);
-    fontToRowSizeMap.put(60, 24);
-    fontToRowSizeMap.put(72, 25);
-    fontToRowSizeMap.put(96, 26);
+    fontToRowSizeMap = new HashMap<Integer, FontProperty>();
+    fontToRowSizeMap.put(8, new FontProperty(17, 7, 14, 10));
+    fontToRowSizeMap.put(9, new FontProperty(17, 7, 14, 10));
+    fontToRowSizeMap.put(10, new FontProperty(17, 7, 14, 10));
+    fontToRowSizeMap.put(11, new FontProperty(17, 7, 14, 10));
+    fontToRowSizeMap.put(12, new FontProperty(17, 7, 14, 30));
+    fontToRowSizeMap.put(14, new FontProperty(19, 8, 18, 35));
+    fontToRowSizeMap.put(18, new FontProperty(25, 8, 20, 48));
+    fontToRowSizeMap.put(24, new FontProperty(32, 8, 27, 58));
+    fontToRowSizeMap.put(30, new FontProperty(17, 7, 14, 10));
+    fontToRowSizeMap.put(36, new FontProperty(17, 7, 14, 10));
+    fontToRowSizeMap.put(48, new FontProperty(17, 7, 14, 10));
+    fontToRowSizeMap.put(60, new FontProperty(17, 7, 14, 10));
+    fontToRowSizeMap.put(72, new FontProperty(17, 7, 14, 10));
+    fontToRowSizeMap.put(96, new FontProperty(17, 7, 14, 10));
   }
 
   public interface HasTextElement {
@@ -106,10 +122,10 @@ public class TextElementFormatUtil {
 	protected Diagram parent;
 	private boolean forceTextAlign;
 	protected double widestWidth;
-	private int marginTop;
-  private int marginLeft;
-	private int margin;
-	private int marginBottom;
+	// private int marginTop;
+ //  private int marginLeft;
+	// private int margin;
+	// private int marginBottom;
 	private int fontSize = 12;
   private int degrees;
   
@@ -118,11 +134,12 @@ public class TextElementFormatUtil {
   	this.editorContext = editorContext;
     this.hasTextElement = hasTextElement;
     this.group = group;
-    marginTop = DEFAULT_MARGIN_TOP;
-    marginBottom = DEFAULT_MARGIN_BOTTOM;
+    // marginTop = DEFAULT_MARGIN_TOP;
+    // marginBottom = DEFAULT_MARGIN_BOTTOM;
     
 //    group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     textGroup = IShapeFactory.Util.factory(true).createGroup(group);
+    fontProperty = fontToRowSizeMap.get(12);
   }
   
   public void applyTextColor() {
@@ -143,36 +160,38 @@ public class TextElementFormatUtil {
   }
   
   public void setMarginTop(int marginTop) {
-  	this.marginTop = marginTop;
+  	// this.marginTop = marginTop;
   }
   public int getMarginTop() {
-  	return marginTop;
+  	return fontProperty.marginTop;
   }
 
   public void setMarginLeft(int marginLeft) {
-    this.marginLeft = marginLeft;
+    // this.marginLeft = marginLeft;
   }
 
   public int getMarginLeft() {
-    return marginLeft;
+    // return marginLeft;
+    return 0;
   }
   
   public void setMargin(int margin) {
-  	this.margin = margin;
+  	// this.margin = margin;
   }
   public int getMargin() {
-  	if (margin > 0) {
+  	if (fontProperty.marging > 0) {
   		// default margin has been set
-  		return margin;
+  		return fontProperty.marging;
   	}
   	return hasTextElement.getTextMargin();
   }
   
   public void setMarginBottom(int marginBottom) {
-		this.marginBottom = marginBottom;
+		// this.marginBottom = marginBottom;
 	}
   public int getMarginBottom() {
-		return marginBottom;
+		// return marginBottom;
+    return fontProperty.marginBottom;
 	}
   
   public void setText(String newText, boolean editable) {
@@ -205,11 +224,11 @@ public class TextElementFormatUtil {
     text = newText;
     clearLines();
     widestWidth = 0;
-    currentRowHeight = fontToRowSizeMap.get(fontSize);
-    if (currentRowHeight == null) {
-      // fall back to default row height if bug that fontsize is not found from mappings
-      currentRowHeight = ROW_HEIGHT;
-    }
+    // rowHeight = fontToRowSizeMap.get(fontSize);
+    // if (rowHeight == null) {
+    //   // fall back to default row height if bug that fontsize is not found from mappings
+    //   rowHeight = ROW_HEIGHT;
+    // }
 
     // split with \n
     // convert text to shapes
@@ -286,7 +305,7 @@ public class TextElementFormatUtil {
   private void resizeElement() {
     int width = getTextWidth();
     int rows = lines.size();
-    int height = getMarginTop() + rows * currentRowHeight + marginBottom;
+    int height = getMarginTop() + rows * fontProperty.rowHeight + fontProperty.marginBottom;
 
     // only resize when size increases; currently disabled
 //      width = width > rectSurface.getWidth() ? width : rectSurface.getWidth();
@@ -312,9 +331,9 @@ public class TextElementFormatUtil {
 	      if (s instanceof ILine) {
 	        ILine l = (ILine) s;
 	        l.setShape(hasTextElement.getX() + 1, 
-	        					 hasTextElement.getY() + (row * ROW_HEIGHT) + 4, 
+	        					 hasTextElement.getY() + (row * fontProperty.rowHeight) + 4, 
 	        				   hasTextElement.getX() + hasTextElement.getWidth() - 1, 
-	        				   hasTextElement.getY() + (row * ROW_HEIGHT) + 4);
+	        				   hasTextElement.getY() + (row * fontProperty.rowHeight) + 4);
 	        if (separated == -1) {
 	          separated = row;
 	        }
@@ -341,10 +360,10 @@ public class TextElementFormatUtil {
 	        }
 	        int y = 0;
 	        if (!hasTextElement.verticalAlignMiddle()) {
-	        	y = hasTextElement.getY() + getMarginTop() + (row * (int) currentRowHeight);
+	        	y = hasTextElement.getY() + getMarginTop() + (row * fontProperty.rowHeight);
 	        } else {
 	        	// find middle and then find start y based on all lines
-	        	y = hasTextElement.getY() + hasTextElement.getHeight() / 2 - (lines.size() * (int) currentRowHeight / 2) + (row * (int) currentRowHeight);
+	        	y = hasTextElement.getY() + hasTextElement.getHeight() / 2 - (lines.size() * fontProperty.rowHeight / 2) + (row * fontProperty.rowHeight);
 	        	y -= 5; // some base line align
 	        }
 	        		
@@ -424,7 +443,7 @@ public class TextElementFormatUtil {
 	}
 	
 	public int getTextHeight() {
-		return (lines.size() + 1) * currentRowHeight;
+		return (lines.size() + 1) * fontProperty.rowHeight;
 	}
 	
 	public List<List<IShape>> getLines() {
@@ -433,6 +452,10 @@ public class TextElementFormatUtil {
 
 	public void setFontSize(int fontSize) {
 		this.fontSize  = fontSize;
+    fontProperty = fontToRowSizeMap.get(fontSize);
+    // rowHeight = (int) (fontSize * ROW_HEIGHT_FACTORIAL);
+    // marginBottom = (int) (rowHeight * MARGIN_HEIGHT_FACTORIAL);
+    // margin = (int) rowHeight;
 	}
 
   public void remove() {
