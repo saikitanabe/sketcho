@@ -2,6 +2,8 @@ package net.sevenscales.editor.uicomponents;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
@@ -27,7 +29,32 @@ public class TextElementFormatUtil {
 	
   public final static int DEFAULT_MARGIN_TOP = 7;
   public final static int DEFAULT_MARGIN_BOTTOM = 14;
-  public final static int ROW_HEIGHT = 17;
+  // Legacy font height based row height, e.g. properties editor row height to calculate text area height
+  public static final int ROW_HEIGHT = 17;
+
+  private static final float ROW_HEIGHT_FACTORIAL = 1.4f;
+
+  private static final Map<Integer, Integer> fontToRowSizeMap;
+  // private int rowHeight = ROW_HEIGHT;
+  private Integer currentRowHeight = ROW_HEIGHT;
+
+  static {
+    fontToRowSizeMap = new HashMap<Integer, Integer>();
+    fontToRowSizeMap.put(8, 13);
+    fontToRowSizeMap.put(9, 14);
+    fontToRowSizeMap.put(10, 15);
+    fontToRowSizeMap.put(11, 16);
+    fontToRowSizeMap.put(12, 17);
+    fontToRowSizeMap.put(14, 18);
+    fontToRowSizeMap.put(18, 19);
+    fontToRowSizeMap.put(24, 20);
+    fontToRowSizeMap.put(30, 21);
+    fontToRowSizeMap.put(36, 22);
+    fontToRowSizeMap.put(48, 23);
+    fontToRowSizeMap.put(60, 24);
+    fontToRowSizeMap.put(72, 25);
+    fontToRowSizeMap.put(96, 26);
+  }
 
   public interface HasTextElement {
     int getY();
@@ -164,7 +191,7 @@ public class TextElementFormatUtil {
     
     createRows(newText, editable);
 
-   if ((changed || hasTextElement.forceAutoResize()) && 
+    if ((changed || hasTextElement.forceAutoResize()) && 
   		 editorContext.get(EditorProperty.AUTO_RESIZE_ENABLED).equals(true)) {
       if (hasTextElement.forceAutoResize() || hasTextElement.isAutoResize()) {
         resizeElement();
@@ -178,6 +205,11 @@ public class TextElementFormatUtil {
     text = newText;
     clearLines();
     widestWidth = 0;
+    currentRowHeight = fontToRowSizeMap.get(fontSize);
+    if (currentRowHeight == null) {
+      // fall back to default row height if bug that fontsize is not found from mappings
+      currentRowHeight = ROW_HEIGHT;
+    }
 
     // split with \n
     // convert text to shapes
@@ -254,7 +286,7 @@ public class TextElementFormatUtil {
   private void resizeElement() {
     int width = getTextWidth();
     int rows = lines.size();
-    int height = getMarginTop() + rows * ROW_HEIGHT + marginBottom;
+    int height = getMarginTop() + rows * currentRowHeight + marginBottom;
 
     // only resize when size increases; currently disabled
 //      width = width > rectSurface.getWidth() ? width : rectSurface.getWidth();
@@ -309,10 +341,10 @@ public class TextElementFormatUtil {
 	        }
 	        int y = 0;
 	        if (!hasTextElement.verticalAlignMiddle()) {
-	        	y = hasTextElement.getY() + getMarginTop() + (row * (int) ROW_HEIGHT);
+	        	y = hasTextElement.getY() + getMarginTop() + (row * (int) currentRowHeight);
 	        } else {
 	        	// find middle and then find start y based on all lines
-	        	y = hasTextElement.getY() + hasTextElement.getHeight() / 2 - (lines.size() * (int) ROW_HEIGHT / 2) + (row * (int) ROW_HEIGHT);
+	        	y = hasTextElement.getY() + hasTextElement.getHeight() / 2 - (lines.size() * (int) currentRowHeight / 2) + (row * (int) currentRowHeight);
 	        	y -= 5; // some base line align
 	        }
 	        		
@@ -392,7 +424,7 @@ public class TextElementFormatUtil {
 	}
 	
 	public int getTextHeight() {
-		return (lines.size() + 1) * ROW_HEIGHT;
+		return (lines.size() + 1) * currentRowHeight;
 	}
 	
 	public List<List<IShape>> getLines() {
