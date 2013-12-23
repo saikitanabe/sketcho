@@ -142,8 +142,16 @@ public class ComponentElement extends AbstractDiagramItem implements SupportsRec
     public boolean supportsTitleCenter() {
       return true;
     }
-    public int getTextMargin() {
-      return 45;
+    public int getTextMargin(int defaultMargin) {
+      switch (textUtil.getFontSize()) {
+        case 12:
+          return 45;
+        case 14:
+          return 47;
+        default:
+          return 0;
+      }
+      // return (int) (defaultMargin * 45f / 30f);
     }
     public boolean forceAutoResize() {
       return true;

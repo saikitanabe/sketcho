@@ -121,9 +121,6 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
     public boolean supportsTitleCenter() {
       return true;
     }
-    public int getTextMargin() {
-      return 30;
-    }
     public boolean forceAutoResize() {
       return true;
     }

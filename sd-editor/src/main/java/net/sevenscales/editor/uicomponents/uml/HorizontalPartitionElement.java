@@ -135,9 +135,6 @@ public class HorizontalPartitionElement extends AbstractDiagramItem implements S
     public boolean supportsTitleCenter() {
       return false;
     }
-    public int getTextMargin() {
-      return 30;
-    }
     public boolean forceAutoResize() {
       return false;
     }

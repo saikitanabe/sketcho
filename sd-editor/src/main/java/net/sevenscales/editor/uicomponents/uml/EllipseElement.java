@@ -185,8 +185,9 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
     public boolean supportsTitleCenter() {
       return false;
     }
-    public int getTextMargin() {
-      return 70;
+    public int getTextMargin(int defaultMargin) {
+      // return 70;
+      return (int) (defaultMargin * 70f / 30f);
     }
     public boolean forceAutoResize() {
       return true;

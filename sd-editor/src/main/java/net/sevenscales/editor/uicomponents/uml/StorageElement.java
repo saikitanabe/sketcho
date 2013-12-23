@@ -200,9 +200,6 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
     public boolean supportsTitleCenter() {
       return true;
     }
-    public int getTextMargin() {
-      return 30;
-    }
     public boolean forceAutoResize() {
       return true;
     }

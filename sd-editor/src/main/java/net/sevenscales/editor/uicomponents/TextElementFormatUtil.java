@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import java.util.logging.Level;
+import com.google.gwt.logging.client.LogConfiguration;
+
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
@@ -31,12 +34,12 @@ public class TextElementFormatUtil {
   public final static int DEFAULT_MARGIN_BOTTOM = 14;
   // Legacy font height based row height, e.g. properties editor row height to calculate text area height
   public static final int ROW_HEIGHT = 17;
+  private static final int START_X = 10;
 
   // private static final float ROW_HEIGHT_FACTORIAL = 1.4f;
   // private static final float MARGIN_HEIGHT_FACTORIAL = 0.85f;
 
   // private int rowHeight = ROW_HEIGHT;
-
   private static final Map<Integer, FontProperty> fontToRowSizeMap;
   private FontProperty fontProperty;
 
@@ -54,22 +57,54 @@ public class TextElementFormatUtil {
     }
   }
 
+  private static final int REFERENCE_FONT_SIZE = 12;
+  private static final int REF_MARGIN = 45;
+  private static final int REF_MARGIN_TOP = 8;
+
   static {
     fontToRowSizeMap = new HashMap<Integer, FontProperty>();
-    fontToRowSizeMap.put(8, new FontProperty(17, 7, 14, 10));
-    fontToRowSizeMap.put(9, new FontProperty(17, 7, 14, 10));
-    fontToRowSizeMap.put(10, new FontProperty(17, 7, 14, 10));
-    fontToRowSizeMap.put(11, new FontProperty(17, 7, 14, 10));
+
+    fontToRowSizeMap.put(8, new FontProperty(13, 3, 12, 26));
+    fontToRowSizeMap.put(9, new FontProperty(14, 4, 13, 27));
+    fontToRowSizeMap.put(10, new FontProperty(15, 5, 14, 28));
+    fontToRowSizeMap.put(11, new FontProperty(16, 6, 15, 29));
     fontToRowSizeMap.put(12, new FontProperty(17, 7, 14, 30));
     fontToRowSizeMap.put(14, new FontProperty(19, 8, 18, 35));
     fontToRowSizeMap.put(18, new FontProperty(25, 8, 20, 48));
-    fontToRowSizeMap.put(24, new FontProperty(32, 8, 27, 58));
-    fontToRowSizeMap.put(30, new FontProperty(17, 7, 14, 10));
-    fontToRowSizeMap.put(36, new FontProperty(17, 7, 14, 10));
-    fontToRowSizeMap.put(48, new FontProperty(17, 7, 14, 10));
-    fontToRowSizeMap.put(60, new FontProperty(17, 7, 14, 10));
-    fontToRowSizeMap.put(72, new FontProperty(17, 7, 14, 10));
-    fontToRowSizeMap.put(96, new FontProperty(17, 7, 14, 10));
+    fontToRowSizeMap.put(24, new FontProperty(31, 8, 25, 58));
+    fontToRowSizeMap.put(30, new FontProperty(37, 8, 30, 64));
+    fontToRowSizeMap.put(36, new FontProperty(43, 8, 32, 75));
+    fontToRowSizeMap.put(48, new FontProperty(55, 8, 36, 84));
+    fontToRowSizeMap.put(60, new FontProperty(67, 8, 44, 103));
+    // fontToRowSizeMap.put(72, new FontProperty(82, 8, 60, 105));
+    // fontToRowSizeMap.put(96, new FontProperty(75, 8, 70, 112));
+
+    // createMapping(8);
+    // createMapping(9);
+    // createMapping(10);
+    // createMapping(11);
+    // createMapping(12);
+    // createMapping(14);
+    // createMapping(18);
+    // createMapping(24);
+    // createMapping(30);
+    // createMapping(36);
+    // createMapping(48);
+    // createMapping(60);
+  }
+
+  private static void createMapping(int fontSize) {
+    double factorial = (double) fontSize/ (double) REFERENCE_FONT_SIZE;
+    int topextra = (fontSize - REFERENCE_FONT_SIZE);
+    if (topextra > 0) {
+      // need to adjust for below ref font top margin
+      topextra = 0;
+    }
+    FontProperty fp = new FontProperty((int)(ROW_HEIGHT * factorial), 
+                                       REF_MARGIN_TOP + topextra, 
+                                       (int)(ROW_HEIGHT * factorial), 
+                                       (int)(REF_MARGIN * factorial));
+    fontToRowSizeMap.put(fontSize, fp);
   }
 
   public interface HasTextElement {
@@ -86,12 +121,13 @@ public class TextElementFormatUtil {
     void setLink(String lik);
     String getLink();
     boolean supportsTitleCenter();
-    int getTextMargin();
+    int getTextMargin(int fontSize);
     boolean forceAutoResize();
     GraphicsEventHandler getGraphicsMouseHandler();
 		String getTextColorAsString();
 		boolean verticalAlignMiddle();
 		boolean boldText();
+    boolean supportElementResize();
   }
   
   /**
@@ -108,6 +144,13 @@ public class TextElementFormatUtil {
   	public boolean boldText() {
   		return true;
   	}
+    public int getTextMargin(int defaultMargin) {
+      return 0;
+    }
+    public boolean supportElementResize() {
+      return true;
+    }
+
   }
 
   protected HasTextElement hasTextElement;
@@ -122,9 +165,12 @@ public class TextElementFormatUtil {
 	protected Diagram parent;
 	private boolean forceTextAlign;
 	protected double widestWidth;
-	// private int marginTop;
- //  private int marginLeft;
-	// private int margin;
+	private int marginTop;
+  // marginTop is used if this is defined
+  private boolean marginTopDefined;
+  private int marginLeft;
+	private int margin;
+  private boolean marginDefined;
 	// private int marginBottom;
 	private int fontSize = 12;
   private int degrees;
@@ -134,6 +180,7 @@ public class TextElementFormatUtil {
   	this.editorContext = editorContext;
     this.hasTextElement = hasTextElement;
     this.group = group;
+
     // marginTop = DEFAULT_MARGIN_TOP;
     // marginBottom = DEFAULT_MARGIN_BOTTOM;
     
@@ -160,30 +207,37 @@ public class TextElementFormatUtil {
   }
   
   public void setMarginTop(int marginTop) {
-  	// this.marginTop = marginTop;
+    marginTopDefined = true;
+  	this.marginTop = marginTop;
   }
   public int getMarginTop() {
+    if (marginTopDefined) {
+      return marginTop;
+    }
+    // otherwise use default marginTop
   	return fontProperty.marginTop;
   }
 
   public void setMarginLeft(int marginLeft) {
-    // this.marginLeft = marginLeft;
+    this.marginLeft = marginLeft;
   }
 
   public int getMarginLeft() {
-    // return marginLeft;
-    return 0;
+    return marginLeft;
   }
   
   public void setMargin(int margin) {
-  	// this.margin = margin;
+    marginDefined = true;
+  	this.margin = margin;
   }
   public int getMargin() {
-  	if (fontProperty.marging > 0) {
-  		// default margin has been set
-  		return fontProperty.marging;
-  	}
-  	return hasTextElement.getTextMargin();
+    if (marginDefined) {
+      return margin;
+    }
+    if (hasTextElement.getTextMargin(fontProperty.marging) > 0) {
+      return hasTextElement.getTextMargin(fontProperty.marging);
+    }
+		return fontProperty.marging;
   }
   
   public void setMarginBottom(int marginBottom) {
@@ -310,7 +364,7 @@ public class TextElementFormatUtil {
     // only resize when size increases; currently disabled
 //      width = width > rectSurface.getWidth() ? width : rectSurface.getWidth();
 //      height = height > rectSurface.getHeight() ? height : rectSurface.getHeight();
-    if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
+    if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION) && hasTextElement.supportElementResize()) {
       // during OT operation element is not resized and everything is 
       // copied as is, element size and text
       hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), width, height);
@@ -352,7 +406,7 @@ public class TextElementFormatUtil {
 	  	        t.setFontWeight(weight);
 	          }
 	        } else {
-	          x += 5;
+	          x += START_X;
 	        }
 	        
 	        if (prevtext != null) {
@@ -445,6 +499,10 @@ public class TextElementFormatUtil {
 	public int getTextHeight() {
 		return (lines.size() + 1) * fontProperty.rowHeight;
 	}
+
+  public int getFontSize() {
+    return fontSize;
+  }
 	
 	public List<List<IShape>> getLines() {
 		return lines;
@@ -452,7 +510,14 @@ public class TextElementFormatUtil {
 
 	public void setFontSize(int fontSize) {
 		this.fontSize  = fontSize;
-    fontProperty = fontToRowSizeMap.get(fontSize);
+    FontProperty fp = fontToRowSizeMap.get(fontSize);
+    if (fp != null) {
+      fontProperty = fp;
+    }
+    if (LogConfiguration.loggingIsEnabled(Level.FINEST) && fontProperty == null) {
+      throw new RuntimeException("fontProperty is null");
+    }
+
     // rowHeight = (int) (fontSize * ROW_HEIGHT_FACTORIAL);
     // marginBottom = (int) (rowHeight * MARGIN_HEIGHT_FACTORIAL);
     // margin = (int) rowHeight;

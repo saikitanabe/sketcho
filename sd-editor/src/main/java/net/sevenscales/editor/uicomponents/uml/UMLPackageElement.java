@@ -136,9 +136,6 @@ public class UMLPackageElement extends AbstractDiagramItem implements SupportsRe
     public boolean supportsTitleCenter() {
       return true;
     }
-    public int getTextMargin() {
-      return 30;
-    }
     public boolean forceAutoResize() {
       return false;
     }

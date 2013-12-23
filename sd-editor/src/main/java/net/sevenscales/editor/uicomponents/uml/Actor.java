@@ -170,8 +170,8 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
     public boolean supportsTitleCenter() {
       return false;
     }
-    public int getTextMargin() {
-      return 20;
+    public int getTextMargin(int defaultMarging) {
+      return (int) (defaultMarging * 20f / 30f);
     }
     public boolean forceAutoResize() {
       return true;
@@ -504,7 +504,7 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 	
 	@Override
 	public int getTextAreaLeft() {
-		return getLeft() - getTextAreaWidth() / 2 + hasTextElement.getTextMargin() - 8; // need to add mystical margin from text width and something :)
+		return getLeft() - getTextAreaWidth() / 2  + textUtil.getMargin() - 8; // need to add mystical margin from text width and something :)
 	}
 	
 	@Override

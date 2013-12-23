@@ -42,6 +42,15 @@ class TextSizeEditor extends Composite {
 		}
 	}
 
+	void setCurrentSize(int currentFontSize) {
+		if (currentFontSize == 0) {
+			// multiple sizes
+			currentSize.setText("");
+		} else {
+			currentSize.setText(String.valueOf(currentFontSize));
+		}
+	}
+
 	@UiHandler("size1")
 	public void onSize1(ClickEvent event) {
 		handle(event.getSource());
@@ -90,13 +99,13 @@ class TextSizeEditor extends Composite {
 	public void onSize12(ClickEvent event) {
 		handle(event.getSource());
 	}
-	@UiHandler("size13")
-	public void onSize13(ClickEvent event) {
-		handle(event.getSource());
-	}
-	@UiHandler("size14")
-	public void onSize14(ClickEvent event) {
-		handle(event.getSource());
-	}
+	// @UiHandler("size13")
+	// public void onSize13(ClickEvent event) {
+	// 	handle(event.getSource());
+	// }
+	// @UiHandler("size14")
+	// public void onSize14(ClickEvent event) {
+	// 	handle(event.getSource());
+	// }
 
 }

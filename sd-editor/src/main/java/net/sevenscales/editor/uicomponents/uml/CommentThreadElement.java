@@ -579,7 +579,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
   
   @Override
 	public int getMeasurementAreaWidth() {
-  	return getWidth() - hasTextElement.getTextMargin() - 3;
+  	return getWidth() - textUtil.getMargin() - 3;
 	}
   
 	@Override

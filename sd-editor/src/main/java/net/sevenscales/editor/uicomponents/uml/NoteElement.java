@@ -250,7 +250,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
     public boolean supportsTitleCenter() {
       return false;
     }
-    public int getTextMargin() {
+    public int getTextMargin(int defaultMargin) {
       return 21;
     }
     public boolean forceAutoResize() {
@@ -485,7 +485,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
   
   @Override
 	public int getMeasurementAreaWidth() {
-  	return getWidth() - hasTextElement.getTextMargin() - 3;
+  	return getWidth() - textUtil.getMargin() - 3;
 	}
   
 	@Override

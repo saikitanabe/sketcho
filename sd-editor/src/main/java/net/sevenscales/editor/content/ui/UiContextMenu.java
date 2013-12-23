@@ -474,7 +474,32 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}
 
 	private void showTextSizeEditor() {
+		int fontSize = getFontSize();
+		textSizePopup.setCurrentSize(fontSize);
 		textSizePopup.show(textSize.getAbsoluteLeft(), textSize.getAbsoluteTop() + 30);
+	}
+
+	/**
+	* 0 means that there are multiple sizes.
+	*/
+	private int getFontSize() {
+		Set<Diagram> selected = selectionHandler.getSelectedItems();
+		int result = 0;
+		boolean first = true;
+		for (Diagram d : selected) {
+			if (!first && result != d.getTextSize()) {
+				return 0;
+			}
+			first = false;
+
+			Integer newSize = d.getTextSize();
+			if (newSize == null) {
+				// font size could be null if never set
+				newSize = 12;
+			}
+			result = newSize;
+		}
+		return result;
 	}
 
 	private void annotate() {

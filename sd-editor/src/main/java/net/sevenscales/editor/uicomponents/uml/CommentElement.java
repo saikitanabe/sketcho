@@ -603,7 +603,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   
   @Override
 	public int getMeasurementAreaWidth() {
-  	return getWidth() - hasTextElement.getTextMargin() - 3;
+  	return getWidth() - textUtil.getMargin() - 3;
 	}
   
 	@Override

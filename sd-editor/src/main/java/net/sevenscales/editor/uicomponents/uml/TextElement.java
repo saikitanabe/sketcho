@@ -122,9 +122,9 @@ public class TextElement extends AbstractDiagramItem implements
 			return false;
 		}
 
-		public int getTextMargin() {
-			return 0;
-		}
+		// public int getTextMargin() {
+		// 	return 0;
+		// }
 
 		public boolean forceAutoResize() {
 			return true;

@@ -186,13 +186,15 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
     public boolean supportsTitleCenter() {
       return true;
     }
-    public int getTextMargin() {
+    public int getTextMargin(int defaultMargin) {
       return 45;
     }
     public boolean forceAutoResize() {
       return false;
     }
-    
+    public boolean supportElementResize() {
+      return false;
+    }
     public GraphicsEventHandler getGraphicsMouseHandler() {
       return ServerElement.this;
     };

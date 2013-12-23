@@ -17,6 +17,10 @@ public class TextSizePopup extends PopupPanel implements TextSizeHandler {
 		setWidget(editor);
 	}
 
+	public void setCurrentSize(int currentSize) {
+		editor.setCurrentSize(currentSize);
+	}
+
 	public void show(final int left, final int top) {
 		setPopupPositionAndShow(new PopupPanel.PositionCallback() {
 			@Override

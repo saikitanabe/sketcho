@@ -21,6 +21,7 @@ import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.Point;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
+import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
@@ -70,7 +71,7 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 	  path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 
     textUtil = new TextElementFormatUtil(this, hasTextElement, group, surface.getEditorContext());
-    textUtil.setMargin(50);
+    // textUtil.setMargin(50);
 
 		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
 //	boundaryWidth = (int) Math.sqrt(Math.pow(shape.rectShape.width / 2, 2) + Math.pow(shape.rectShape.height / 2, 2));
@@ -124,7 +125,7 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 //	}
 	
   // nice way to clearly separate interface methods :)
-  private HasTextElement hasTextElement = new HasTextElement() {
+  private HasTextElement hasTextElement = new AbstractHasTextElement() {
     public void addShape(IShape shape) {
       shapes.add(shape);    
     }
@@ -175,8 +176,8 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
     public boolean supportsTitleCenter() {
       return true;
     }
-    public int getTextMargin() {
-      return 25;
+    public int getTextMargin(int defaultMargin) {
+    	return (int) (defaultMargin * 50f/30f);
     }
     public boolean forceAutoResize() {
       return false;

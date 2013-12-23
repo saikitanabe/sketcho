@@ -3,7 +3,7 @@
 	<ui:style>
 	</ui:style>
 	<g:HTMLPanel>
-		<g:Label ui:field="currentSize"></g:Label>
+		<g:Label ui:field="currentSize" styleName="current-size"></g:Label>
 		<div class="text-sizes">
 			<g:VerticalPanel ui:field="sizes">
 				<g:Label ui:field="size1" styleName="text-size-option">8</g:Label>
@@ -18,8 +18,6 @@
 				<g:Label ui:field="size10" styleName="text-size-option">36</g:Label>
 				<g:Label ui:field="size11" styleName="text-size-option">48</g:Label>
 				<g:Label ui:field="size12" styleName="text-size-option">60</g:Label>
-				<g:Label ui:field="size13" styleName="text-size-option">72</g:Label>
-				<g:Label ui:field="size14" styleName="text-size-option">96</g:Label>
 			</g:VerticalPanel>
 		</div>
 	</g:HTMLPanel>
