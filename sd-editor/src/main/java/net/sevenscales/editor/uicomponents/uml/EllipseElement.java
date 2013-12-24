@@ -1,6 +1,7 @@
 package net.sevenscales.editor.uicomponents.uml;
 
 
+import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
@@ -547,6 +548,11 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
   @Override
   public boolean supportsTextEditing() {
   	return true;
+  }
+
+  @Override
+  public int supportedMenuItems() {
+    return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue();
   }
   
 }

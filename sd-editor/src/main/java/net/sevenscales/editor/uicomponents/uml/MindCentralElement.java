@@ -10,6 +10,7 @@ import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.editor.content.ui.ContextMenuItem;
 
 
 public class MindCentralElement extends ActivityElement implements SupportsRectangleShape {
@@ -67,6 +68,11 @@ public class MindCentralElement extends ActivityElement implements SupportsRecta
   @Override
   public String getTextAreaAlign() {
   	return "center";
+  }
+
+  @Override
+  public int supportedMenuItems() {
+  	return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue();
   }
 
 }

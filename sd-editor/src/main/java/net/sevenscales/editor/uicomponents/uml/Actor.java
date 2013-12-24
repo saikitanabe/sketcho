@@ -3,6 +3,7 @@ package net.sevenscales.editor.uicomponents.uml;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
@@ -551,6 +552,11 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
   @Override
   public boolean isTextColorAccordingToBackgroundColor() {
     return true;
+  }
+
+  @Override
+  public int supportedMenuItems() {
+  	return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue();
   }
 
 }

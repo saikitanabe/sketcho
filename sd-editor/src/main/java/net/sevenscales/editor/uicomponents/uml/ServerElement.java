@@ -33,6 +33,7 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.editor.content.ui.ContextMenuItem;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -519,6 +520,11 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
   @Override
   public boolean isTextColorAccordingToBackgroundColor() {
     return true;
+  }
+
+  @Override
+  public int supportedMenuItems() {
+    return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue();
   }
 
 }

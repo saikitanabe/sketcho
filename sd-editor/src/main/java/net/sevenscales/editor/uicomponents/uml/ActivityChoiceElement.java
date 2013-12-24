@@ -4,6 +4,7 @@ package net.sevenscales.editor.uicomponents.uml;
 import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.ActivityChoiceShape;
@@ -410,6 +411,11 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
   @Override
   public boolean supportsTextEditing() {
   	return true;
+  }
+
+  @Override
+  public int supportedMenuItems() {
+  	return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue();
   }
 
 }
