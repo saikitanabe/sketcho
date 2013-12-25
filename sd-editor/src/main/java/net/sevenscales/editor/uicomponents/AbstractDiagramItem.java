@@ -1025,12 +1025,14 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   @Override
-  public void setTextSize(int textSize) {
-    getDiagramItem().setTextSize(textSize);
-    TextElementFormatUtil formatter = getTextFormatter();
-    if (formatter != null) {
-      formatter.setFontSize(textSize);
-      formatter.reapplyText();
+  public void setTextSize(Integer textSize) {
+    if (textSize != null) {
+      getDiagramItem().setTextSize(textSize);
+      TextElementFormatUtil formatter = getTextFormatter();
+      if (formatter != null) {
+        formatter.setFontSize(textSize);
+        formatter.reapplyText();
+      }
     }
   }
 
@@ -1099,22 +1101,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	public void setHeight(int height) {
 	}
 
-	@Override
-	public void copyFrom(IDiagramItemRO diagramItem) {
-    logger.start("copyFrom SUM");
-    logger.start("copyFrom 1");
+  @Override
+  public void copyFrom(IDiagramItemRO diagramItem) {
     IDiagramItemRO current = getDiagramItem();
-    // getDiagramItem().copyFrom(diagramItem);
 
-    logger.debugTime();
-    logger.start("copyFrom 2");
-//		setDiagramText(diagramItem);
-		
-//		IDiagramItem me = DiagramItemFactory.createOrUpdate(this, false);
-//		if (!me.getShape().equals(diagramItem.getShape())) {
-			// cannot change shape at the same time
-			// it will fail
-			// sequence item has wrong format!! => convert first space to comma
+    // sequence item has wrong format!! => convert first space to comma
     String newshape = diagramItem.getShape();
     boolean shapeChanged = false;
     if (newshape != null && !newshape.equals(current.getShape())) {
@@ -1130,6 +1121,28 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       setShape(shape);
     }
 
+    duplicateFrom(diagramItem, shapeChanged);
+  }
+
+  @Override
+  public void duplicateFrom(IDiagramItemRO diagramItem) {
+    duplicateFrom(diagramItem, true);
+  }
+
+	private void duplicateFrom(IDiagramItemRO diagramItem, boolean shapeChanged) {
+    logger.start("copyFrom SUM");
+    logger.start("copyFrom 1");
+    IDiagramItemRO current = getDiagramItem();
+    // getDiagramItem().copyFrom(diagramItem);
+
+    logger.debugTime();
+    logger.start("copyFrom 2");
+//		setDiagramText(diagramItem);
+		
+//		IDiagramItem me = DiagramItemFactory.createOrUpdate(this, false);
+//		if (!me.getShape().equals(diagramItem.getShape())) {
+			// cannot change shape at the same time
+			// it will fail
     logger.debugTime();
     logger.start("copyFrom 3");
 
@@ -1190,6 +1203,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
     // just all fields
     getDiagramItem().copyFrom(diagramItem);
+
+    setTextSize(getDiagramItem().getTextSize());
 
     logger.debugTime();
     logger.debugTime();

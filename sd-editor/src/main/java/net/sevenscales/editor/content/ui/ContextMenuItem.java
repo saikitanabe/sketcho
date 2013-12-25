@@ -7,7 +7,7 @@ public enum ContextMenuItem {
 	COLOR_MENU(0x0004), 
 	CHANGE_CONNECTION(0x0008),
 	DUPLICATE_MENU(0x0010),
-	FONT_SIZE(0x0011);
+	FONT_SIZE(0x0020);
 	
 	private int value;
 

@@ -64,7 +64,12 @@ public class DuplicateHelpers {
 				
 				DiagramItemDTO di = (DiagramItemDTO) DiagramItemFactory.createOrUpdate(duplicated);
 				// copy also custom data to be handled later
-				di.copyFrom(diagram.getDiagramItem());
+				// di.copyFrom(diagram.getDiagramItem());
+
+				// same as copyFrom but doesn't copy location that has been just set in 
+				// diagram.duplicate
+				duplicated.duplicateFrom(diagram.getDiagramItem());
+
 				// generate new client id
 				di.setClientId(ClientIdHelpers.generateClientId(++i, boardDocument));
 				

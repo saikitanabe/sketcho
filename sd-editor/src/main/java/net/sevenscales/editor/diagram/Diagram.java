@@ -152,7 +152,7 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 	Color getBackgroundColorAsColor();
 	public void setTextColor(int red, int green, int blue);
 	void setTextColor(Color color);
-  void setTextSize(int textSize);
+  void setTextSize(Integer textSize);
   Integer getTextSize();
 	String getTextColor();
 	Color getTextColorAsColor();
@@ -160,7 +160,17 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 	// to check it point hovers this element; element can have magnetic area
 	public boolean onArea(int x, int y);
 	public void moveToBack();
+
+  /**
+  * Copies all fields to be shown in this diagram element.
+  */
 	void copyFrom(IDiagramItemRO diagramItem);
+  /**
+  * Copies all fields except position that has been set elsewhere.
+  * NOTE: could modify postion in here and duplicate method could be
+  * simpler.
+  */
+  void duplicateFrom(IDiagramItemRO diagramItem);
 	
 	// each element needs to calculate own values based on these
 	void setShape(int[] shape);
