@@ -14,6 +14,7 @@ public class AnchorElement {
 //  private Rectangle boundary;
   private Anchor anchor;
   private boolean fixedPoint;
+  private CardinalDirection cardinalDirection;
   
   public AnchorElement(int ax, int ay, Diagram diagram) {
     this.ax = ax;
@@ -125,6 +126,14 @@ public class AnchorElement {
 
   public boolean isFixedPoint() {
     return fixedPoint;
+  }
+
+  public void setCardinalDirection(CardinalDirection cardinalDirection) {
+    this.cardinalDirection = cardinalDirection;
+  }
+
+  public CardinalDirection getCardinalDirection() {
+    return cardinalDirection;
   }
 
 }

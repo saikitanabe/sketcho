@@ -529,6 +529,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     result.setAy(tempAnchorProperties.y);
     result.setRelativeX(tempAnchorProperties.relativeValueX);
     result.setRelativeY(tempAnchorProperties.relativeValueY);
+    result.setCardinalDirection(tempAnchorProperties.cardinalDirection);
 
     setAnchorPointShape(tempAnchorProperties.x, tempAnchorProperties.y);
     return result;
@@ -554,7 +555,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	  boolean fixedOrRelative = setFixedOrRelativeAnchor(x, y);
 	  result.setRelativeX(tempAnchorProperties.relativeValueX);
 	  result.setRelativeY(tempAnchorProperties.relativeValueY);
+
+    boolean fixedOrRelative = setFixedOrRelativeAnchor(x, y);
+    result.setRelativeX(tempAnchorProperties.relativeValueX);
+    result.setRelativeY(tempAnchorProperties.relativeValueY);
     result.setFixedPoint(fixedOrRelative);
+    result.setCardinalDirection(tempAnchorProperties.cardinalDirection);
 	 
     surface.getMouseDiagramManager().getDragHandler().attach(anchor.getRelationship(), result);
     return result;

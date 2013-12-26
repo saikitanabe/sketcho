@@ -16,10 +16,7 @@ public class AnchorUtils {
     public int y;
     public double relativeValueX;
     public double relativeValueY;
-  }
-
-  public enum CardinalDirection {
-    NORTH, EAST, SOUTH, WEST;
+    public CardinalDirection cardinalDirection = CardinalDirection.NORTH;
   }
   
   private static final int MAGNETIC_VALUE = 3;
@@ -116,7 +113,7 @@ public class AnchorUtils {
 
     ap.x = tempax;
     ap.y = tempay;
-    relativeValue(ap, sharpX, sharpY, left, top, width, height);
+    makeRelativeValue(cd, ap, sharpX, sharpY, left, top, width, height);
   }
 
   public static CardinalDirection findCardinalDirection(int x, int y, int left, int top, int width, int height) {
@@ -156,8 +153,14 @@ public class AnchorUtils {
   }
   
   public static void relativeValue(AnchorProperties ap, int sharpX, int sharpY, int elementLeft, int elementTop, int elementWidth, int elementHeight) {
+    CardinalDirection cd = findCardinalDirection(sharpX, sharpY, elementLeft, elementTop, elementWidth, elementHeight);
+    makeRelativeValue(cd, ap, sharpX, sharpY, elementLeft, elementTop, elementWidth, elementHeight);
+  }
+
+  private static void makeRelativeValue(CardinalDirection cardinalDirection, AnchorProperties ap, int sharpX, int sharpY, int elementLeft, int elementTop, int elementWidth, int elementHeight) {
     ap.relativeValueX = round((sharpX - elementLeft) / (double) elementWidth);
     ap.relativeValueY = round((sharpY - elementTop) / (double) elementHeight);
+    ap.cardinalDirection = cardinalDirection;
 
     logger.debug("ap.relativeValueY {}", ap.relativeValueY);
   }
@@ -223,7 +226,25 @@ public class AnchorUtils {
 		// 	extraDistanceY = ATTACH_EXTRA_DISTANCE;
 		// }
 
-    CardinalDirection cd = findCardinalDirection(ae.getAx(), ae.getAy(), left, top, width, height);
+    CardinalDirection cd = ae.getCardinalDirection();
+
+    if (cd == null) {
+      // fallback to calculate cardinal direction... what is the case?
+      cd = findCardinalDirection(ae.getAx(), ae.getAy(), left, top, width, height);
+    }
+
+    doSetRelativePostion(cd, ae, left, top, width, height);
+
+		// if extra distance has not been changed then this is a relative movement and do the movement
+		// if (extraDistanceX == 0) { 
+		// 	ae.setAx(((int)(width * ae.getRelativeFactorX())) + left);
+		// }
+		// if (extraDistanceY == 0) {
+		// 	ae.setAy(((int)(height * ae.getRelativeFactorY())) + top);
+		// }
+	}
+
+  private static void doSetRelativePostion(CardinalDirection cd, AnchorElement ae, int left, int top, int width, int height) {
     switch (cd) {
       case WEST:
         ae.setAx(((int)(width * ae.getRelativeFactorX())) + left - ATTACH_EXTRA_DISTANCE);
@@ -242,14 +263,6 @@ public class AnchorUtils {
         ae.setAy(((int)(height * ae.getRelativeFactorY())) + top + ATTACH_EXTRA_DISTANCE);
       break;
     }
-
-		// if extra distance has not been changed then this is a relative movement and do the movement
-		// if (extraDistanceX == 0) { 
-		// 	ae.setAx(((int)(width * ae.getRelativeFactorX())) + left);
-		// }
-		// if (extraDistanceY == 0) {
-		// 	ae.setAy(((int)(height * ae.getRelativeFactorY())) + top);
-		// }
-	}
+  }
 
 }
