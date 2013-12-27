@@ -106,6 +106,10 @@ public class Anchor implements AnchorMoveHandler {
       anchorElement.remove();
       anchorElement = null;
     }
+
+    if (diagram != null) {
+	    diagram.removeAnchor(this);
+    }
     clientId = null;
   }
 

@@ -17,21 +17,33 @@ public class MouseDiagramEventHelpers {
       // get all follow up connections
       Set<Diagram> diagrams = followers(selectedItems);
       diagrams.addAll(DiagramHelpers.filterOwnerDiagramsAsList(selectedItems, actionType));
-      surface.getEditorContext().getEventBus()
-        .fireEvent(new PotentialOnChangedEvent(diagrams));
+      surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(diagrams));
+    }
+  }
+
+  public static void fireChangedWithRelatedRelationships(ISurfaceHandler surface, Diagram diagram, ActionType actionType) {
+    if (surface.getEditorContext().isTrue(EditorProperty.ON_CHANGE_ENABLED)) {
+      Set<Diagram> diagrams = new HashSet<Diagram>();
+      addRelatedConnections(diagram, diagrams);
+      diagrams.add(diagram.getOwnerComponent(actionType));
+      surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(diagrams));
     }
   }
 
   private static Set<Diagram> followers(Set<Diagram> selectedItems) {
     Set<Diagram> diagrams = new HashSet<Diagram>();
     for (Diagram d : selectedItems) {
-      for (AnchorElement ae : d.getAnchors()) {
-        if (ae.getRelationship() != null) {
-          diagrams.add(ae.getRelationship());
-        }
-      }
+      addRelatedConnections(d, diagrams);
     }
     return diagrams;
+  }
+
+  private static void addRelatedConnections(Diagram diagram, Set<Diagram> diagrams) {
+    for (AnchorElement ae : diagram.getAnchors()) {
+      if (ae.getRelationship() != null) {
+        diagrams.add(ae.getRelationship());
+      }
+    }
   }
 
 }

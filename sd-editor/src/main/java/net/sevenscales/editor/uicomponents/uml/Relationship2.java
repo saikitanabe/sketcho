@@ -1106,15 +1106,15 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 		startAnchor.copyFrom(tmp);
 	}
 
-	private Diagram resetAndGetDiagram(Anchor anchor) {
-		Diagram result = null;
-		if (anchor.getAnchorElement() != null) {
-			anchor.getAnchorElement().remove();
-			result = anchor.getDiagram();
-			anchor.setDiagram(null);
-		}
-		return result;
-	}
+	// private Diagram resetAndGetDiagram(Anchor anchor) {
+	// 	Diagram result = null;
+	// 	if (anchor.getAnchorElement() != null) {
+	// 		anchor.getAnchorElement().remove();
+	// 		result = anchor.getDiagram();
+	// 		anchor.setDiagram(null);
+	// 	}
+	// 	return result;
+	// }
 
 	private void swapCustomData() {
 		String cd = getDiagramItem().getCustomData();

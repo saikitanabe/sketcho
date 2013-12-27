@@ -21,6 +21,7 @@ import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
 import net.sevenscales.editor.api.event.ChangeTextSizeEventHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.auth.AuthHelpers;
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.utils.ColorHelpers;
@@ -38,7 +39,7 @@ import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.EditorCommon;
-import net.sevenscales.editor.diagram.utils.DiagramEventHelpers;
+import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
@@ -259,7 +260,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			d.setTextSize(fontSize);
 			modified.add(d);
 		}
-		DiagramEventHelpers.fireChangedWithRelatedRelationships(surface, modified);
+		MouseDiagramEventHelpers.fireDiagramsChangedEvenet(modified, surface, ActionType.FONT_CHANGE);
 	}
 
 	private void setColors(Diagram d, ColorTarget colorTarget, net.sevenscales.editor.diagram.utils.Color color) {

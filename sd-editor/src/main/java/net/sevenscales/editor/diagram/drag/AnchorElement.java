@@ -92,10 +92,8 @@ public class AnchorElement {
   }
 
   public void remove() {
-//    System.out.println("REMOVE anchor: "+anchor+ " "+this);
   	if (diagram != null) {
   	  diagram.getAnchors().remove(this);
-  		diagram.removeAnchor(anchor);
   		diagram = null;
   	}
   }

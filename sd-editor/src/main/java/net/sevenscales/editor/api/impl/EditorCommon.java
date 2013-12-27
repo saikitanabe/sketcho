@@ -12,7 +12,8 @@ import net.sevenscales.editor.api.event.UnselectAllEvent;
 import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesEndedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
-import net.sevenscales.editor.diagram.utils.DiagramEventHelpers;
+import net.sevenscales.editor.api.ActionType;
+import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 
 
@@ -75,7 +76,7 @@ public class EditorCommon {
 	}
 
 	public void fireChangedWithRelatedRelationships(Diagram diagram) {
-		DiagramEventHelpers.fireChangedWithRelatedRelationships(surface, diagram);
+		MouseDiagramEventHelpers.fireChangedWithRelatedRelationships(surface, diagram, ActionType.FONT_CHANGE);
 	}
 
 }

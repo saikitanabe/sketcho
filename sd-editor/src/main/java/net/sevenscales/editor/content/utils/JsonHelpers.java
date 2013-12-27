@@ -85,7 +85,10 @@ public class JsonHelpers {
 		  } else {
 		    json += ",";
 		  }
-			json += JsonExtraction.decompose(di, jsonFormat).toString();
+		  if (di.getClientId() != null && !"".equals(di.getClientId())) {
+		  	// prevent bugs in the ui to send server ghost elements!!!
+				json += JsonExtraction.decompose(di, jsonFormat).toString();
+		  }
 		}
 		return "[" + json + "]";
 	}
