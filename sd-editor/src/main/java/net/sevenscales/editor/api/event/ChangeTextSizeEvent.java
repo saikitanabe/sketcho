@@ -5,14 +5,14 @@ import com.google.gwt.event.shared.GwtEvent;
 public class ChangeTextSizeEvent extends GwtEvent<ChangeTextSizeEventHandler> {
   public static Type<ChangeTextSizeEventHandler> TYPE = new Type<ChangeTextSizeEventHandler>();
 
-  private int textSize;
+  private int fontSize;
 
-  public ChangeTextSizeEvent(int textSize) {
-  	this.textSize = textSize;
+  public ChangeTextSizeEvent(int fontSize) {
+  	this.fontSize = fontSize;
   }
 
-  public int getTextSize() {
-  	return textSize;
+  public int getFontSize() {
+  	return fontSize;
   }
 
   @Override

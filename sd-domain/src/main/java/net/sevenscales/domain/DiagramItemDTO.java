@@ -21,7 +21,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
   private IDiagramContent diagramContent;
 	private String backgroundColor;
 	private String textColor;
-	private Integer textSize;
+	private Integer fontSize;
   private int version = DATA_VERSION;
 	private String clientId;
 	private String customData;
@@ -40,7 +40,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 				+ ", diagramContent=" + diagramContent
 				+ ", backgroundColor=" + backgroundColor
 				+ ", textColor=" + textColor
-				+ ", textSize=" + textSize
+				+ ", fontSize=" + fontSize
 				+ ", version=" + version + ", clientId=" + clientId + ", customData=" + customData + ", crc32=" + crc32
 				+ ", annotation=" + annotation 
 				+ ", resolved=" + resolved
@@ -48,8 +48,8 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 				+ "]";
 	}
   
-	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor, Integer textSize, int version, Long id, String clientId, String customData, List<UrlLinkDTO> links) {
-    this(text, type, shape, backgroundColor, textColor, textSize, version, id, clientId, customData, 0, 0, 0, links);
+	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor, Integer fontSize, int version, Long id, String clientId, String customData, List<UrlLinkDTO> links) {
+    this(text, type, shape, backgroundColor, textColor, fontSize, version, id, clientId, customData, 0, 0, 0, links);
   }
 
 //	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
@@ -57,7 +57,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 //		this(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, crc32, 0, 0, null);
 //	}
 
-	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor, Integer textSize, Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, List<UrlLinkDTO> links
+	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor, Integer fontSize, Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, List<UrlLinkDTO> links
 			) {
 		super();
 		this.text = text;
@@ -65,7 +65,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		this.shape = shape;
 		this.backgroundColor = backgroundColor;
 		this.textColor = textColor;
-		this.textSize = textSize;
+		this.fontSize = fontSize;
 		this.version = version;
 		this.id = id;
 		this.clientId = clientId;
@@ -139,12 +139,12 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 
 	@Override
-	public Integer getTextSize() {
-		return textSize;
+	public Integer getFontSize() {
+		return fontSize;
 	}
 	@Override
-	public void setTextSize(Integer textSize) {
-		this.textSize = textSize;
+	public void setFontSize(Integer fontSize) {
+		this.fontSize = fontSize;
 	}
 	
 	public int getVersion() {
@@ -323,7 +323,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		shape = dit.shape;
 		backgroundColor = dit.backgroundColor;
 		textColor = dit.textColor;
-		textSize = dit.textSize;
+		fontSize = dit.fontSize;
 		version = dit.version;
 		clientId = dit.clientId;
 		customData = dit.customData;

@@ -152,8 +152,8 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 	Color getBackgroundColorAsColor();
 	public void setTextColor(int red, int green, int blue);
 	void setTextColor(Color color);
-  void setTextSize(Integer textSize);
-  Integer getTextSize();
+  void setFontSize(Integer fontSize);
+  Integer getFontSize();
 	String getTextColor();
 	Color getTextColorAsColor();
 	public boolean onArea(int left, int top, int right, int bottom);

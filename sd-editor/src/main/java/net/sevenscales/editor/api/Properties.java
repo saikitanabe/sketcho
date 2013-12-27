@@ -198,7 +198,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			@Override
 			public void on(ChangeTextSizeEvent event) {
 				logger.debug("change text size {}", Properties.this.selectionHandler.getSelectedItems());
-				changeFontSize(event.getTextSize());
+				changeFontSize(event.getFontSize());
 			}
 		});
 
@@ -257,7 +257,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private void changeFontSize(Integer fontSize) {
 		Set<Diagram> modified = new HashSet<Diagram>();
 		for (Diagram d : Properties.this.selectionHandler.getSelectedItems()) {
-			d.setTextSize(fontSize);
+			d.setFontSize(fontSize);
 			modified.add(d);
 		}
 		MouseDiagramEventHelpers.fireDiagramsChangedEvenet(modified, surface, ActionType.FONT_CHANGE);

@@ -652,8 +652,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   private void applyFontDecorations() {
     TextElementFormatUtil textFormatter = getTextFormatter();
-    if (textFormatter != null && getDiagramItem().getTextSize() != null) {
-      textFormatter.setFontSize(getDiagramItem().getTextSize());
+    if (textFormatter != null && getDiagramItem().getFontSize() != null) {
+      textFormatter.setFontSize(getDiagramItem().getFontSize());
     }
   }
   
@@ -1032,20 +1032,20 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   @Override
-  public void setTextSize(Integer textSize) {
-    if (textSize != null) {
-      getDiagramItem().setTextSize(textSize);
+  public void setFontSize(Integer fontSize) {
+    if (fontSize != null) {
+      getDiagramItem().setFontSize(fontSize);
       TextElementFormatUtil formatter = getTextFormatter();
       if (formatter != null) {
-        formatter.setFontSize(textSize);
+        formatter.setFontSize(fontSize);
         formatter.reapplyText();
       }
     }
   }
 
   @Override
-  public Integer getTextSize() {
-    return getDiagramItem().getTextSize();
+  public Integer getFontSize() {
+    return getDiagramItem().getFontSize();
   }
   
   @Override
@@ -1211,7 +1211,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     // just all fields
     getDiagramItem().copyFrom(diagramItem);
 
-    setTextSize(getDiagramItem().getTextSize());
+    setFontSize(getDiagramItem().getFontSize());
 
     logger.debugTime();
     logger.debugTime();

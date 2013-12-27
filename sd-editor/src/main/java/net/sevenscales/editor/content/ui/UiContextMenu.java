@@ -86,7 +86,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 	private PopupPanel editLinkPopup;
 	private PopupPanel colorpopup;
-	private TextSizePopup textSizePopup;
+	private TextSizePopup fontSizePopup;
 
 	private Color color = new Color("444444", 0x44, 0x44, 0x44, "6699ff", 0x66, 0x99, 0xff, "FFFFFF", 255, 255, 255, AbstractDiagramItem.DEFAULT_FILL_OPACITY);
 	private ColorSelections colorSelections;
@@ -121,7 +121,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		colorpopup.setAutoHideEnabled(true);
 		colorpopup.addAutoHidePartner(colorize);
 
-		textSizePopup = new TextSizePopup(this);
+		fontSizePopup = new TextSizePopup(this);
 
 		surface.addDomHandler(new TouchStartHandler() {
 			@Override
@@ -494,8 +494,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 	private void showTextSizeEditor() {
 		int fontSize = getFontSize();
-		textSizePopup.setCurrentSize(fontSize);
-		textSizePopup.show(textSize.getAbsoluteLeft(), textSize.getAbsoluteTop() + 30);
+		fontSizePopup.setCurrentSize(fontSize);
+		fontSizePopup.show(textSize.getAbsoluteLeft(), textSize.getAbsoluteTop() + 30);
 	}
 
 	/**
@@ -506,7 +506,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		Integer result = null;
 		boolean first = true;
 		for (Diagram d : selected) {
-			Integer currentSize = d.getTextSize();
+			Integer currentSize = d.getFontSize();
 			if (first) {
 				result = currentSize;
 				first = false;
@@ -607,9 +607,9 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}
 
 	@Override
-	public void textSizeChanged(int textSize) {
+	public void fontSizeChanged(int fontSize) {
 		hide();
-		editorContext.getEventBus().fireEvent(new ChangeTextSizeEvent(textSize));
+		editorContext.getEventBus().fireEvent(new ChangeTextSizeEvent(fontSize));
 	}
 	
 	private void hide() {

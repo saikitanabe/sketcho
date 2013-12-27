@@ -21,7 +21,7 @@ public class MindCentralElement extends ActivityElement implements SupportsRecta
 		// textUtil.setMarginTop(4);
 		// textUtil.setMargin(80);
 		// textUtil.setMarginBottom(27);
-		if (item.getTextSize() == null) {
+		if (item.getFontSize() == null) {
 			textUtil.setFontSize(18);
 		}
 		

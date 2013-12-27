@@ -35,7 +35,7 @@ class TextSizeEditor extends Composite {
 			Label l = (Label) source;
 			try {
 				int size = Integer.parseInt(l.getText());
-				handler.textSizeChanged(size);
+				handler.fontSizeChanged(size);
 			} catch (NumberFormatException e) {
 				logger.error("Check value", e);
 			}

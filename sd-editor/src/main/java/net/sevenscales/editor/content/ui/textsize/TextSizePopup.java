@@ -30,8 +30,8 @@ public class TextSizePopup extends PopupPanel implements TextSizeHandler {
 		});
 	}
 
-	public void textSizeChanged(int textSize) {
-		handler.textSizeChanged(textSize);
+	public void fontSizeChanged(int fontSize) {
+		handler.fontSizeChanged(fontSize);
 		hide();
 	}
 }
