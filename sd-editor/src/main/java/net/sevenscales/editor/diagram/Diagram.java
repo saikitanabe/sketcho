@@ -13,8 +13,8 @@ import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
-import net.sevenscales.editor.uicomponents.Anchor;
-import net.sevenscales.editor.uicomponents.AnchorElement;
+import net.sevenscales.editor.diagram.drag.Anchor;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.Point;
 
 import com.google.gwt.core.client.JavaScriptObject;

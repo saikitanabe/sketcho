@@ -32,8 +32,8 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.ISurface;
-import net.sevenscales.editor.uicomponents.AnchorElement;
-import net.sevenscales.editor.uicomponents.Anchor;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
+import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.content.ui.IModeManager;
 
 

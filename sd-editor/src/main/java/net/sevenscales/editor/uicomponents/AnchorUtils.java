@@ -3,6 +3,7 @@ package net.sevenscales.editor.uicomponents;
 import java.util.List;
 
 import net.sevenscales.editor.gfx.domain.IRectangle;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.domain.utils.SLogger;
 
 public class AnchorUtils {

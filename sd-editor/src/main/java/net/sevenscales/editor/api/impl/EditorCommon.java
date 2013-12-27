@@ -19,7 +19,7 @@ import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 
 import net.sevenscales.editor.diagram.Diagram;
 
-import net.sevenscales.editor.uicomponents.AnchorElement;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 
 
 public class EditorCommon {
@@ -85,8 +85,8 @@ public class EditorCommon {
 			// this starts to fail, null pointer
 			// but where is the actual problem!!
 			// should be cleaned up!!, difficult to track down.
-			if (ae.getHandler() != null) {
-				diagrams.add(ae.getHandler().connection());
+			if (ae.getRelationship() != null) {
+				diagrams.add(ae.getRelationship());
 			}
 		}
 		

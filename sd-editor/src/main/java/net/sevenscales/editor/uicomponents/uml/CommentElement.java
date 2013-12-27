@@ -27,7 +27,7 @@ import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
-import net.sevenscales.editor.uicomponents.AnchorElement;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.Point;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
@@ -35,7 +35,7 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasText
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
-import net.sevenscales.editor.uicomponents.Anchor;
+import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.api.event.CommentDeletedEvent;
 import net.sevenscales.domain.IDiagramItemRO;
 

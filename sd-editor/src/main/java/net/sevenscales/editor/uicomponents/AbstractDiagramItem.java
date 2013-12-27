@@ -37,6 +37,8 @@ import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.diagram.MouseDiagramListenerCollection;
 import net.sevenscales.editor.diagram.SelectionHandlerCollection;
 import net.sevenscales.editor.diagram.shape.Info;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
+import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.base.GraphicsMouseDownHandler;
 import net.sevenscales.editor.gfx.base.GraphicsMouseEnterHandler;
@@ -551,18 +553,16 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	  result.setAy(y);
 	  tempAnchorProperties.x = x;
 	  tempAnchorProperties.y = y;
-	 
-	  boolean fixedOrRelative = setFixedOrRelativeAnchor(x, y);
-	  result.setRelativeX(tempAnchorProperties.relativeValueX);
-	  result.setRelativeY(tempAnchorProperties.relativeValueY);
 
     boolean fixedOrRelative = setFixedOrRelativeAnchor(x, y);
     result.setRelativeX(tempAnchorProperties.relativeValueX);
     result.setRelativeY(tempAnchorProperties.relativeValueY);
     result.setFixedPoint(fixedOrRelative);
     result.setCardinalDirection(tempAnchorProperties.cardinalDirection);
-	 
-    surface.getMouseDiagramManager().getDragHandler().attach(anchor.getRelationship(), result);
+    result.attach();
+    // anchor.getDiagram().attachedRelationship(result);
+    // surface.getMouseDiagramManager().getDragHandler().attach(anchor.getRelationship(), result);
+
     return result;
   }
   
@@ -583,6 +583,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       return true;
     }
 	}
+
 	protected Integer[] getFixedAnchorPoints() {
 		return null;
 	}

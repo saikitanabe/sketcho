@@ -23,7 +23,7 @@ import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.silver.KeyCodeMap;
-import net.sevenscales.editor.uicomponents.AnchorElement;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.api.EditorProperty;

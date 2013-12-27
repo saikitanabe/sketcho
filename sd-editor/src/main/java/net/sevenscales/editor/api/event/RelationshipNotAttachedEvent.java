@@ -1,6 +1,6 @@
 package net.sevenscales.editor.api.event;
 
-import net.sevenscales.editor.uicomponents.Anchor;
+import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
 import com.google.gwt.event.shared.GwtEvent;

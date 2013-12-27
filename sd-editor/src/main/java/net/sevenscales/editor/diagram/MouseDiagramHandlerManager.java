@@ -9,6 +9,7 @@ import net.sevenscales.editor.api.SketchDiagramAreaHandler;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
+import net.sevenscales.editor.diagram.drag.MouseDiagramDragHandler;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 

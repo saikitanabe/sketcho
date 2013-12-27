@@ -4,8 +4,8 @@ import java.util.Map;
 
 import net.sevenscales.editor.gfx.domain.ICircle;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
-import net.sevenscales.editor.uicomponents.Anchor;
-import net.sevenscales.editor.uicomponents.AnchorElement;
+import net.sevenscales.editor.diagram.drag.Anchor;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.uicomponents.AnchorUtils.AnchorProperties;
 

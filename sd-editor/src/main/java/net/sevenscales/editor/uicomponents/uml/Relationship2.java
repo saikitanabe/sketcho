@@ -24,8 +24,10 @@ import net.sevenscales.editor.gfx.domain.IPolyline;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
-import net.sevenscales.editor.uicomponents.Anchor;
-import net.sevenscales.editor.uicomponents.AnchorElement;
+import net.sevenscales.editor.diagram.drag.Anchor;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
+import net.sevenscales.editor.diagram.drag.AnchorMoveHandler;
+import net.sevenscales.editor.diagram.drag.ConnectionMoveHandler;
 import net.sevenscales.editor.uicomponents.AngleUtil2;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.Point;
@@ -84,6 +86,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	private ClickTextPosition currentTextEditLocation;
 	private boolean legacyAnchor;
   private RelationshipHandleHelpers relationshipHandleHelpers;
+  private AnchorMoveHandler handler;
 
   private static class ArrowStartPolyline {
     private IPolyline arrowStart;
@@ -248,11 +251,12 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       boolean editable, IDiagramItemRO item) {
     super(editable, surface, Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), item);
     this.points = points;
+    handler = new ConnectionMoveHandler();
     
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getConnectionLayer());
 
-    startAnchor = new Anchor();
-    endAnchor = new Anchor();
+    startAnchor = new Anchor(this);
+    endAnchor = new Anchor(this);
     
     startAnchor.setTheOtherEnd(endAnchor);
     endAnchor.setTheOtherEnd(startAnchor);
@@ -527,14 +531,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     super.removeFromParent();
 
     relationshipHandleHelpers.hide(this);
-    
-    detachAnchor(startAnchor);
-    detachAnchor(endAnchor);
+
+    detachConnections();    
 
     startAnchor.clear();
     endAnchor.clear();
     
-    surface.getMouseDiagramManager().getDragHandler().detach(this);
+    // surface.getMouseDiagramManager().getDragHandler().detach(this);
   }
 
   private void detachAnchor(Anchor anchor) {
@@ -650,8 +653,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       points.set(posY, ay);
       anchor.applyAnchorElement(anchorElement);
       anchor.setDiagram(anchorElement.getSource(), false);
-  
-      surface.getMouseDiagramManager().getDragHandler().attach(this, anchorElement);
+      anchorElement.attach();
+      // anchor.getDiagram().attachedRelationship(anchorElement);
+      // surface.getMouseDiagramManager().getDragHandler().attach(this, anchorElement);
+
       anchorElement.highlight(false);
       doSetShape();
       result = true;
@@ -676,7 +681,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
   
   public void detachConnections() {
-  	surface.getMouseDiagramManager().getDragHandler().detach(this);
+    detachAnchor(startAnchor);
+    detachAnchor(endAnchor);
+  	// surface.getMouseDiagramManager().getDragHandler().detach(this);
   }
 
   private void calculateArrowHead(double angle, int width,
@@ -1394,6 +1401,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     // though this needs to be changed. And now new color is actually stored for
     // relationship on theme change
     return true;
+  }
+
+  public AnchorMoveHandler getAnchorMoveHandler() {
+    return handler;
   }
 
 }

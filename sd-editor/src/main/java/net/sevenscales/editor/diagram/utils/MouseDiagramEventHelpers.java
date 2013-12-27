@@ -7,7 +7,7 @@ import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.uicomponents.AnchorElement;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 
@@ -26,8 +26,8 @@ public class MouseDiagramEventHelpers {
     Set<Diagram> diagrams = new HashSet<Diagram>();
     for (Diagram d : selectedItems) {
       for (AnchorElement ae : d.getAnchors()) {
-        if (ae.getHandler() != null && ae.getHandler().connection() != null) {
-          diagrams.add(ae.getHandler().connection());
+        if (ae.getRelationship() != null) {
+          diagrams.add(ae.getRelationship());
         }
       }
     }

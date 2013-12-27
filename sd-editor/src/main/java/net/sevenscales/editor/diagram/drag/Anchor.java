@@ -1,9 +1,10 @@
-package net.sevenscales.editor.uicomponents;
+package net.sevenscales.editor.diagram.drag;
 
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
+import net.sevenscales.editor.uicomponents.Point;
 
-public class Anchor {
+public class Anchor implements AnchorMoveHandler {
 	private Diagram diagram;
 	private Relationship2 relationship;
 	private Point point = new Point();
@@ -13,7 +14,8 @@ public class Anchor {
 	private Anchor theOtherEnd;
 	private String clientId;
 	
-	public Anchor() {
+	public Anchor(Relationship2 relationship) {
+		this.relationship = relationship;
 	}
 	
 	public Anchor(Anchor anchor) {
@@ -55,9 +57,9 @@ public class Anchor {
 		return diagram;
 	}
 	
-	public void setRelationship(Relationship2 relationship) {
-		this.relationship = relationship;
-	}
+	// public void setRelationship(Relationship2 relationship) {
+	// 	this.relationship = relationship;
+	// }
 	
 	public Relationship2 getRelationship() {
 		return relationship;
@@ -133,6 +135,10 @@ public class Anchor {
 	
 	public void setClientId(String clientId) {
 		this.clientId = clientId;
+	}
+
+	public void moving(AnchorElement anchorElement, int dx, int dy, long dispachSequence) {
+		relationship.getAnchorMoveHandler().moving(anchorElement, dx, dy, dispachSequence);
 	}
 
 }

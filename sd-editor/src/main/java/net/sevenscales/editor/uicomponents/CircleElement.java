@@ -11,6 +11,8 @@ import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramProxy;
 import net.sevenscales.editor.diagram.shape.CircleShape;
 import net.sevenscales.editor.diagram.shape.Info;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
+import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.gfx.domain.ICircle;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;

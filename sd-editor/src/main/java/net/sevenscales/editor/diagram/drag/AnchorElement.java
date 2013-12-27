@@ -1,11 +1,12 @@
-package net.sevenscales.editor.uicomponents;
+package net.sevenscales.editor.diagram.drag;
 
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.editor.uicomponents.CardinalDirection;
+import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
 public class AnchorElement {
 //  private List<AnchorMoveHandler> handlers = new ArrayList<AnchorMoveHandler>();
-  private AnchorMoveHandler handler;
   private int ax = 0;
   private int ay = 0;
   private Diagram diagram;
@@ -16,10 +17,11 @@ public class AnchorElement {
   private boolean fixedPoint;
   private CardinalDirection cardinalDirection;
   
-  public AnchorElement(int ax, int ay, Diagram diagram) {
+  public AnchorElement(int ax, int ay, Diagram diagram, Anchor anchor) {
     this.ax = ax;
     this.ay = ay;
     this.diagram = diagram;
+    this.anchor = anchor;
   }
   
   public AnchorElement(Anchor anchor, Diagram diagram) {
@@ -34,24 +36,28 @@ public class AnchorElement {
     return ay;
   }
   
-  public void attach(AnchorMoveHandler handler) {
+  public void attach() {
 //    handlers.add(handler);
     // currently support only one handler
-    this.handler = handler;
+    // this.handler = handler;
     diagram.attachedRelationship(this);
   }
 
   public void detach() {
     anchor.clear();
-    this.handler = null;
+    // this.handler = null;
   }
   public Diagram getSource() {
     return diagram;
   }
 
-  public AnchorMoveHandler getHandler() {
-		return handler;
-	}
+  public Relationship2 getRelationship() {
+    return anchor.getRelationship();
+  }
+
+ //  public AnchorMoveHandler getHandler() {
+	// 	return handler;
+	// }
   
   /**
    * 
@@ -63,20 +69,20 @@ public class AnchorElement {
 //    for (AnchorMoveHandler h : handlers) {
 //      h.moving(this, dx, dy);
 //    }
-    if (handler != null) {
-      ax += dx;
-      ay += dy;
-      handler.moving(this, dx, dy, dispatchSequence);
-    }
+    // if (handler != null) {
+    ax += dx;
+    ay += dy;
+    anchor.moving(this, dx, dy, dispatchSequence);
+    // }
   }
 
   public void dispatch(long dispachSequence) {
 //  for (AnchorMoveHandler h : handlers) {
 //    h.moving(this, dx, dy);
 //  }
-    if (handler != null) {
-      handler.moving(this, 0, 0, dispachSequence);
-    }
+    // if (handler != null) {
+    anchor.moving(this, 0, 0, dispachSequence);
+    // }
 }
 
   public void highlight(boolean value) {

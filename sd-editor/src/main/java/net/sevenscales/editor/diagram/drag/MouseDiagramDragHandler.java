@@ -1,4 +1,4 @@
-package net.sevenscales.editor.diagram;
+package net.sevenscales.editor.diagram.drag;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,6 +27,14 @@ import net.sevenscales.editor.api.event.UnselectAllEvent;
 import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
+
+import net.sevenscales.editor.diagram.MouseDiagramHandler;
+import net.sevenscales.editor.diagram.DragState;
+import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.DiagramDragHandler;
+import net.sevenscales.editor.diagram.MouseDiagramHandlerManager;
+import net.sevenscales.editor.diagram.ISelectionHandler;
+
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
@@ -36,8 +44,7 @@ import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
-import net.sevenscales.editor.uicomponents.AnchorElement;
-import net.sevenscales.editor.uicomponents.AnchorMoveHandler;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
@@ -64,7 +71,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	private ISelectionHandler selectionHandler;
 	private Set<Diagram> forcedItems = new HashSet<Diagram>();
 	private ISurfaceHandler surface;
-	private Map<Relationship2, ConnectionMoveHandler> moveHandlers = new HashMap<Relationship2, ConnectionMoveHandler>();
+	// private Map<Relationship2, ConnectionMoveHandler> moveHandlers = new HashMap<Relationship2, ConnectionMoveHandler>();
 	private int prevDX;
 	private int prevDY;
 	private ILine verticalLine;
@@ -619,79 +626,24 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		MouseDiagramEventHelpers.fireDiagramsChangedEvenet(selectedItems, surface, ActionType.DRAGGING);
 	}
 		
-	private class ConnectionMoveHandler implements AnchorMoveHandler {
-    private long lastDispachSequence = Long.MAX_VALUE;
-		private Relationship2 relationship;
+// 	public void attach(Relationship2 relationship, AnchorElement anchorElement) {
+// 		ConnectionMoveHandler moveHandler = moveHandlers.get(relationship);
+// 		if (moveHandler == null) {
+// 			// one connection move handler/relationship
+// 			moveHandler = new ConnectionMoveHandler(relationship);
+// 			moveHandlers.put(relationship, moveHandler);
+// 		}
+//     anchorElement.attach(moveHandler);
+// 	}
 
-    public ConnectionMoveHandler(Relationship2 relationship) {
-    	this.relationship = relationship;
-		}
-    
-    @Override
-    public Relationship2 connection() {
-    	return relationship;
-    }
-
-		public void moving(AnchorElement anchorElement, int dx, int dy, long dispachSequence) {
-      // need to compare dispachSequence not to move twice when both anchors refer to same 
-      // diagram
-      if (relationship.isSelected()) {
-        // don't do anything, just move with the selection
-        return;
-      }
-      
-      List<Integer> points = relationship.getPoints();
-//      System.out.println("moving:"+points);
-      if (((relationship.getStartAnchor().getDiagram() == anchorElement.getSource() && 
-      		relationship.getEndAnchor().getDiagram() == anchorElement.getSource()) || 
-           (relationship.getStartAnchor().isSelected() && relationship.getEndAnchor().isSelected())) &&
-          lastDispachSequence != dispachSequence) {
-        // both points to same diagram => move all the points
-        for (int i = 0; i < points.size(); i+=2) {
-          points.set(i, points.get(i) + dx);
-          points.set(i+1, points.get(i+1) + dy);
-        }
-//        System.out.println("moving:"+points);
-        relationship.doSetShape();
-      } else if (relationship.getStartAnchor().getDiagram() == anchorElement.getSource() && 
-                 lastDispachSequence != dispachSequence) {
-        // if anchor dragged => move according to those
-        points.set(0, anchorElement.getAx());
-        points.set(1, anchorElement.getAy());
-//        System.out.println("moving2:"+points);
-        relationship.doSetShape();
-      } else if (relationship.getEndAnchor().getDiagram() == anchorElement.getSource() && 
-                 lastDispachSequence != dispachSequence) {
-        // if anchor dragged => move according to those
-        int endxpos = points.size()-2;
-        int endypos = points.size()-1;
-        points.set(endxpos, anchorElement.getAx());//points.get(endxpos)+dx);
-        points.set(endypos, anchorElement.getAy());//points.get(endypos)+dy);
-//        System.out.println("moving3:"+points);
-        relationship.doSetShape();
-      }
-      lastDispachSequence = dispachSequence;
-    }
-  };
-
-	public void attach(Relationship2 relationship, AnchorElement anchorElement) {
-		ConnectionMoveHandler moveHandler = moveHandlers.get(relationship);
-		if (moveHandler == null) {
-			// one connection move handler/relationship
-			moveHandler = new ConnectionMoveHandler(relationship);
-			moveHandlers.put(relationship, moveHandler);
-		}
-    anchorElement.attach(moveHandler);
-	}
-
-	public void detach(Relationship2 relationship) {
-//		ConnectionMoveHandler handler = moveHandlers.get(relationship);
-//		relationship.getStartAnchor().getDiagram().getAnchors()
-//		if (handler != null) {
-//			handler.
-			moveHandlers.remove(relationship);
-//		}
-	}
+// 	public void detach(Relationship2 relationship) {
+// //		ConnectionMoveHandler handler = moveHandlers.get(relationship);
+// //		relationship.getStartAnchor().getDiagram().getAnchors()
+// //		if (handler != null) {
+// //			handler.
+// 			moveHandlers.remove(relationship);
+// //		}
+// 	}
 
 	public void releaseDrag() {
 		currentDiagram = null;

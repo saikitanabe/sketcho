@@ -41,7 +41,7 @@ import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
-import net.sevenscales.editor.uicomponents.Anchor;
+import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.uicomponents.Point;
 import net.sevenscales.editor.uicomponents.uml.ActivityChoiceElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityElement;

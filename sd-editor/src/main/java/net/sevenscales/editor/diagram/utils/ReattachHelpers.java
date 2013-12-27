@@ -10,7 +10,7 @@ import com.google.gwt.logging.client.LogConfiguration;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSearch;
-import net.sevenscales.editor.uicomponents.Anchor;
+import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
@@ -127,7 +127,7 @@ public class ReattachHelpers {
 	public static void anchorPositionToDiagram(Relationship2 relationship, int x, int y, Anchor anchor, Diagram anchorTarget) {
 		if (anchorTarget != null) {
 		 	anchor.setDiagram(anchorTarget, false);
-		 	anchor.setRelationship(relationship);
+		 	// anchor.setRelationship(relationship);
 		 	anchorTarget.anchorWith(anchor, x, y);
 		}
 	}
