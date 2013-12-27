@@ -38,6 +38,7 @@ import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.EditorCommon;
+import net.sevenscales.editor.diagram.utils.DiagramEventHelpers;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
@@ -196,12 +197,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			@Override
 			public void on(ChangeTextSizeEvent event) {
 				logger.debug("change text size {}", Properties.this.selectionHandler.getSelectedItems());
-				Set<Diagram> modified = new HashSet<Diagram>();
-				for (Diagram d : Properties.this.selectionHandler.getSelectedItems()) {
-					d.setTextSize(event.getTextSize());
-					modified.add(d);
-				}
-				Properties.this.editorContext.getEventBus().fireEvent(new PotentialOnChangedEvent(modified));
+				changeFontSize(event.getTextSize());
 			}
 		});
 
@@ -255,6 +251,15 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		editorContext.getEventBus().addHandler(ShowDiagramPropertyTextEditorEvent.TYPE, showDiagramText);
 
 		setWidget(panel);
+	}
+
+	private void changeFontSize(Integer fontSize) {
+		Set<Diagram> modified = new HashSet<Diagram>();
+		for (Diagram d : Properties.this.selectionHandler.getSelectedItems()) {
+			d.setTextSize(fontSize);
+			modified.add(d);
+		}
+		DiagramEventHelpers.fireChangedWithRelatedRelationships(surface, modified);
 	}
 
 	private void setColors(Diagram d, ColorTarget colorTarget, net.sevenscales.editor.diagram.utils.Color color) {
@@ -433,7 +438,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			public boolean execute() {
 				lastSentText = buffer.diagram.getText(textEditX, textEditY);
 				
-				Properties.this.editorCommon.fireChanged(buffer.diagram);
+				Properties.this.editorCommon.fireChangedWithRelatedRelationships(buffer.diagram);
 		    sending = false;
 		    
 //		    System.out.println("buffer != lastSentText: " + buffer + " " + lastSentText + " " + buffer != lastSentText);

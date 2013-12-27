@@ -1,8 +1,5 @@
 package net.sevenscales.editor.api.impl;
 
-import java.util.Set;
-import java.util.HashSet;
-
 import net.sevenscales.domain.utils.SLogger;
 
 import net.sevenscales.editor.api.EditorProperty;
@@ -15,11 +12,9 @@ import net.sevenscales.editor.api.event.UnselectAllEvent;
 import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesEndedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
-import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
-
+import net.sevenscales.editor.diagram.utils.DiagramEventHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 
-import net.sevenscales.editor.diagram.drag.AnchorElement;
 
 
 public class EditorCommon {
@@ -79,19 +74,8 @@ public class EditorCommon {
 		EditorCommon.fireEditorClosed(surface);
 	}
 
-	public void fireChanged(Diagram diagram) {
-		Set<Diagram> diagrams = new HashSet<Diagram>();
-		for (AnchorElement ae : diagram.getAnchors()) {
-			// this starts to fail, null pointer
-			// but where is the actual problem!!
-			// should be cleaned up!!, difficult to track down.
-			if (ae.getRelationship() != null) {
-				diagrams.add(ae.getRelationship());
-			}
-		}
-		
-		diagrams.add(diagram);
-    surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(diagrams));
+	public void fireChangedWithRelatedRelationships(Diagram diagram) {
+		DiagramEventHelpers.fireChangedWithRelatedRelationships(surface, diagram);
 	}
 
 }
