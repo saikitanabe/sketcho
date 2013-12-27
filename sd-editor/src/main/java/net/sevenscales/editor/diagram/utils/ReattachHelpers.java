@@ -107,6 +107,8 @@ public class ReattachHelpers {
    	 		// to make sure removal worked; it will be restored if connection still 
    	 		// exists
    	 		r.detachConnections();
+   	 		// read again from data model to run time anchor
+   	 		r.applyCustomData();
    	 		reattachRelationship(r, clientIdMapping);
    	 	}
     }
