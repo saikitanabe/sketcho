@@ -69,7 +69,7 @@ public class JsonExtraction {
     result.put("backgroundColor", new JSONString(safeJsonString(item.getBackgroundColor())));
     result.put("textColor", new JSONString(safeJsonString(item.getTextColor())));
     if (item.getTextSize() != null) {
-        result.put("tsize", new JSONNumber(item.getTextSize()));
+        result.put("fsize", new JSONNumber(item.getTextSize()));
     }
     result.put("version", new JSONNumber(item.getVersion()));
     result.put("id", new JSONNumber(item.getId()));
