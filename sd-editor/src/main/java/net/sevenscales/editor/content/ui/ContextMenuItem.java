@@ -22,4 +22,8 @@ public enum ContextMenuItem {
 	public static boolean supported(int value, ContextMenuItem menu) {
 		return (value & menu.value) == menu.value;
 	}
+
+	public static boolean supportsFontSize(int value) {
+		return supported(value, FONT_SIZE);
+	}
 }

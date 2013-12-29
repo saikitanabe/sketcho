@@ -23,6 +23,7 @@ import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
+import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.utils.ColorHelpers;
 import net.sevenscales.editor.diagram.ClickDiagramHandler;
@@ -257,8 +258,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private void changeFontSize(Integer fontSize) {
 		Set<Diagram> modified = new HashSet<Diagram>();
 		for (Diagram d : Properties.this.selectionHandler.getSelectedItems()) {
-			d.setFontSize(fontSize);
-			modified.add(d);
+			if (ContextMenuItem.supportsFontSize(d.supportedMenuItems())) {
+				d.setFontSize(fontSize);
+				modified.add(d);
+			}
 		}
 		MouseDiagramEventHelpers.fireDiagramsChangedEvenet(modified, surface, ActionType.FONT_CHANGE);
 	}
