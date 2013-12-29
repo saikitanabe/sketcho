@@ -64,9 +64,9 @@ public class TextElementFormatUtil {
   static {
     fontToRowSizeMap = new HashMap<Integer, FontProperty>();
 
-    fontToRowSizeMap.put(8, new FontProperty(13, 3, 12, 26));
-    fontToRowSizeMap.put(9, new FontProperty(14, 4, 13, 27));
-    fontToRowSizeMap.put(10, new FontProperty(15, 5, 14, 28));
+    fontToRowSizeMap.put(8, new FontProperty(13, 5, 12, 26));
+    fontToRowSizeMap.put(9, new FontProperty(14, 5, 13, 27));
+    fontToRowSizeMap.put(10, new FontProperty(15, 6, 14, 28));
     fontToRowSizeMap.put(11, new FontProperty(16, 6, 15, 29));
     fontToRowSizeMap.put(12, new FontProperty(17, 7, 14, 30));
     fontToRowSizeMap.put(14, new FontProperty(19, 8, 18, 35));

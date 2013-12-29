@@ -27,6 +27,8 @@ public class DiagramItemJson {
 	private String backgroundColor;
   @XmlElement(name = "textColor")
 	private String textColor;
+  @XmlElement(required = false, name = "fsize")
+	private Integer fontSize;
   @XmlElement(name = "version")
 	private Integer version;
   @XmlElement(name = "id")
@@ -81,6 +83,14 @@ public class DiagramItemJson {
 	public Integer getVersion() {
 		return version;
 	}
+	
+	public void setFontSize(Integer fontSize) {
+		this.fontSize = fontSize;
+	}
+	public Integer getFontSize() {
+		return fontSize;
+	}
+	
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
@@ -150,6 +160,7 @@ public class DiagramItemJson {
   							  getShape(),
   							  getBackgroundColor(),
   							  getTextColor(),
+  							  getFontSize(),
   							  getVersion(), 
   							  new Long(getId()), 
   							  getClientId(), 
@@ -164,6 +175,7 @@ public class DiagramItemJson {
 		result.setShape(from.getShape());
 		result.setBackgroundColor(from.getBackgroundColor());
 		result.setTextColor(from.getTextColor());
+		result.setFontSize(from.getFontSize());
 		result.setVersion(from.getVersion());
 		result.setId(from.getId());
 		result.setClientId(from.getClientId());

@@ -1048,3 +1048,36 @@ width: auto;
 a.white-text {
   color: #F8F8F2;
 }
+
+/* font size START */
+.text-size-popup {
+	color: #eee;
+  background-color:#444;
+  filter:alpha(opacity=80);
+  opacity:0.8;
+  z-index: 1004 !important;
+}
+
+.text-sizes {
+	padding: 10px 0 10px 0;
+}
+
+.text-size-option {
+	padding-top: 1px;
+	padding-left: 15px;
+	min-width: 60px;
+	min-height: 18px;
+	color: #eee;
+}
+
+.text-size-option:hover {
+	background-color: #666666;
+	cursor: pointer;
+}
+.current-size {
+	padding-top: 6px;
+	padding-left: 15px;
+	min-height: 24px;
+	border-bottom: 1px #eee solid;
+}
+/* font size END */
