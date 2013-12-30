@@ -624,6 +624,10 @@ margin: 0;
     background: url("images/btn-freehand-disabled.png") no-repeat center center;
 }
 
+.btn-primary {
+/* Override confluence color */
+color: #ffffff !important;
+}
 
 
 .UiContextMenu {
@@ -637,6 +641,10 @@ margin: 0;
   opacity:0.8;
   background-color:#444;
   z-index: 1004 !important;
+}
+
+.UiContextMenu a {
+	color: #eee !important;
 }
 
 .icon-reverse-connection {
@@ -763,7 +771,7 @@ display: inline-block;
 background-position: -150px 0px;
 background-repeat: no-repeat;
 width: 15px;
-height: 15px;
+height: 13px;
 line-height: 15px;
 }
 
