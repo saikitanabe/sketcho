@@ -282,13 +282,7 @@ public class HorizontalPartitionElement extends AbstractDiagramItem implements S
     rectSurface.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 0);
     headerBackground.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }
-  
-  @Override
-	public void setTextColor(int red, int green, int blue) {
-  	super.setTextColor(red, green, blue);
-  	textUtil.applyTextColor();
-  }
-  
+    
   @Override
   public void moveToBack() {
   	group.moveToBack();

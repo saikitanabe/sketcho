@@ -295,13 +295,7 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
     rectSurface.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 0);
     headerBackground.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }
-  
-  @Override
-	public void setTextColor(int red, int green, int blue) {
-  	super.setTextColor(red, green, blue);
-  	textUtil.applyTextColor();
-  }
-  
+    
   @Override
   public void moveToBack() {
   	group.moveToBack();
@@ -356,11 +350,7 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
 	public int getTextAreaTop() {
 		return getTop() + 5;
 	}
-	
-	public String getTextAreaBackgroundColor() {
-		return "transparent"; // other wise looks little bit funny with rect background
-	}
-	
+		
 	@Override
 	public String getTextAreaAlign() {
 		return "center";
