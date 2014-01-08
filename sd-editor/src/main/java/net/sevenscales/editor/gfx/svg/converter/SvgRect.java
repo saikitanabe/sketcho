@@ -3,13 +3,14 @@ package net.sevenscales.editor.gfx.svg.converter;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.utils.StringUtil;
 import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.Color;
 
 public class SvgRect extends SvgBase {
 
-  public static String svg(IRectangle rect, int transformX, int transformY, boolean usesSchemeDefaultColors) {
+  public static String svg(IRectangle rect, int transformX, int transformY, Diagram diagram) {
     String fill = rgb(rect.getFillColor().toRgb());
     
     Map<String,String> params = new HashMap<String, String>();
@@ -35,7 +36,7 @@ public class SvgRect extends SvgBase {
       						(rect.getY()));
       params.put("%translate%", (width + 2) + "," + 1); // some magic to look better
       String transtemplate = "transform='translate(%translate%) rotate(%rotate%)' ";
-      transform = parse(transtemplate, params, usesSchemeDefaultColors);
+      transform = parse(transtemplate, params, diagram);
     }
     params.put("%transform%", transform);
     if (rect.getStrokeColor() != null) {
@@ -44,7 +45,7 @@ public class SvgRect extends SvgBase {
 
     String template = "<rect x='%x%' y='%y%' width='%width%' height='%height%' rx='%r%' %transform% " +
     		               "style='fill: %fill%;fill-opacity: %fill-opacity%;%stroke-opacity%stroke-width: %stroke-width%;stroke:%stroke%;'/>";
-    return parse(template, params, usesSchemeDefaultColors);
+    return parse(template, params, diagram);
   }
 
 }

@@ -4,13 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IPolyline;
 
 public class SvgPolyline extends SvgLine {
 
-  public static String svg(IPolyline poly, int transformX, int transformY, boolean usesSchemeDefaultColors) {
+  public static String svg(IPolyline poly, int transformX, int transformY, Diagram diagram) {
     Map<String,String> params = new HashMap<String, String>();
     
     List<Integer> points = poly.getShape();
@@ -37,7 +38,7 @@ public class SvgPolyline extends SvgLine {
       params.put("%style", "4,3");
     }
 
-    return parse(template, params, usesSchemeDefaultColors);
+    return parse(template, params, diagram);
   }
 
   public static String convertPoints2Pairs(int[] points, int transformX, int transformY) {

@@ -214,7 +214,7 @@ public class SvgConverter {
 	      for (IShape s : line) {
 	        // convert to concrete svg shape with factory
 	        if (s.isVisible()) {
-	          String svg = SvgFactory.convert(s, 0, 0, editorContext, d.usesSchemeDefaultColors(Theme.getCurrentColorScheme()));
+	          String svg = SvgFactory.convert(s, 0, 0, editorContext, d);
 	          result += svg;
 	        }
 	      }

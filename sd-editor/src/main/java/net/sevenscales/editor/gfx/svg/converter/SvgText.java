@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 
+import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.IText;
 import net.sevenscales.domain.utils.SLogger;
 
@@ -28,7 +29,7 @@ public class SvgText extends SvgBase {
     return s;
 	}
   
-  public static String svg(IText t, int transformX, int transformY, boolean usesSchemeDefaultColors) {
+  public static String svg(IText t, int transformX, int transformY, Diagram diagram) {
     Map<String,String> params = new HashMap<String, String>();
     params.put("%x", String.valueOf(t.getX() + transformX));
     params.put("%y", String.valueOf(t.getY() + transformY));
@@ -68,7 +69,7 @@ public class SvgText extends SvgBase {
     String template = "<text x='%x' y='%y' style='font-weight:%weight; font-size: %sizepx; text-anchor: %anchor; font-family: %font-family; fill: %textcolor%;' %transform%>%text</text>";
 //    String result = "<text x='"++"' y='"+t.getY()+"' style='font-weight:bold; font-size: 12px; text-anchor: middle; font-family: Arial;'>"+t.getText()+"</text>";
     
-    return parse(template, params, usesSchemeDefaultColors);
+    return parse(template, params, diagram);
   }
 
 }

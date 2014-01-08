@@ -3,11 +3,12 @@ package net.sevenscales.editor.gfx.svg.converter;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.IEllipse;
 
 public class SvgEllipse extends SvgBase {
 
-  public static String svg(IEllipse ellipse, int transformX, int transformY, boolean usesSchemeDefaultColors) {
+  public static String svg(IEllipse ellipse, int transformX, int transformY, Diagram diagram) {
     Map<String,String> params = new HashMap<String, String>();
     params.put("%cx", String.valueOf(ellipse.getCx() + transformX));
     params.put("%cy", String.valueOf(ellipse.getCy() + transformY));
@@ -20,7 +21,7 @@ public class SvgEllipse extends SvgBase {
     
     String template = "<ellipse cx='%cx' cy='%cy' rx='%rx' ry='%ry' " +
     		               "style='fill:%fill%;fill-opacity: %fill-opacity%;stroke:%stroke%;stroke-width:%stroke-width%'/>";
-    return parse(template, params, usesSchemeDefaultColors);
+    return parse(template, params, diagram);
   }
 
 }

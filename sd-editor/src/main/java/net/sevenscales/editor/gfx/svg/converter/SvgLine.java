@@ -3,6 +3,7 @@ package net.sevenscales.editor.gfx.svg.converter;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.ILine;
 
 public class SvgLine extends SvgBase {
@@ -14,7 +15,7 @@ public class SvgLine extends SvgBase {
     map.put("solid", "none");
   }
   
-  public static String svg(ILine line, int transformX, int transformY, boolean usesSchemeDefaultColors) {
+  public static String svg(ILine line, int transformX, int transformY, Diagram diagram) {
     Map<String,String> params = new HashMap<String, String>();
     params.put("%x1", String.valueOf(line.getX1() + transformX));
     params.put("%y1", String.valueOf(line.getY1() + transformY));
@@ -29,6 +30,6 @@ public class SvgLine extends SvgBase {
     params.put("%width%", strokeWidth);
     
     String template = "<line x1='%x1' y1='%y1' x2='%x2' y2='%y2' style='stroke:%stroke%;stroke-width:%width%;stroke-dasharray:%style;'/>";
-    return parse(template, params, usesSchemeDefaultColors);
+    return parse(template, params, diagram);
   }
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.domain.utils.SLogger;
@@ -11,7 +12,7 @@ import net.sevenscales.domain.utils.SLogger;
 public class SvgPath extends SvgLine {
   private static SLogger logger = SLogger.createLogger(SvgPath.class);
 
-  public static String svg(IPath path, int transformX, int transformY, boolean usesSchemeDefaultColors) {
+  public static String svg(IPath path, int transformX, int transformY, Diagram diagram) {
     Map<String,String> params = new HashMap<String, String>();
     
 //    List<Integer> points = poly.getShape();
@@ -39,7 +40,7 @@ public class SvgPath extends SvgLine {
 //      params.put("%style", String.valueOf(map.get(poly.getStyle())));
 //    }
 
-    return parse(template, params, usesSchemeDefaultColors);
+    return parse(template, params, diagram);
   }
 
   public static String convertPoints2Pairs(int[] points) {
