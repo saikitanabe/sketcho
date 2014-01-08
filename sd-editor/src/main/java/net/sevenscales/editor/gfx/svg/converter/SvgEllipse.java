@@ -21,7 +21,7 @@ public class SvgEllipse extends SvgBase {
     
     String template = "<ellipse cx='%cx' cy='%cy' rx='%rx' ry='%ry' " +
     		               "style='fill:%fill%;fill-opacity: %fill-opacity%;stroke:%stroke%;stroke-width:%stroke-width%'/>";
-    return parse(template, params, diagram);
+    return parse(ellipse, template, params, diagram);
   }
 
 }

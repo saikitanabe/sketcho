@@ -20,7 +20,7 @@ public class SvgCircle extends SvgBase {
     params.put("%fill-opacity%", String.valueOf(c.getOpacity()));
     
     String template = "<circle cx='%cx' cy='%cy' r='%r' stroke='%stroke%' stroke-width='1' fill='%fill%' fill-opacity='%fill-opacity%'/>";
-    return parse(template, params, diagram);
+    return parse(circle, template, params, diagram);
   }
 
 }

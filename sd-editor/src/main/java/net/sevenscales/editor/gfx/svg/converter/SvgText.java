@@ -69,7 +69,7 @@ public class SvgText extends SvgBase {
     String template = "<text x='%x' y='%y' style='font-weight:%weight; font-size: %sizepx; text-anchor: %anchor; font-family: %font-family; fill: %textcolor%;' %transform%>%text</text>";
 //    String result = "<text x='"++"' y='"+t.getY()+"' style='font-weight:bold; font-size: 12px; text-anchor: middle; font-family: Arial;'>"+t.getText()+"</text>";
     
-    return parse(template, params, diagram);
+    return parse(t, template, params, diagram);
   }
 
 }

@@ -40,7 +40,7 @@ public class SvgPath extends SvgLine {
 //      params.put("%style", String.valueOf(map.get(poly.getStyle())));
 //    }
 
-    return parse(template, params, diagram);
+    return parse(path, template, params, diagram);
   }
 
   public static String convertPoints2Pairs(int[] points) {

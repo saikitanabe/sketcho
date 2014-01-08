@@ -15,6 +15,7 @@ abstract class Shape extends Graphics implements IShape {
 	private int rotateDegree;
 	private int svgdx;
 	private int svgdy;
+	private boolean themeSupported = true;
 	
 	final public void setStroke(String color) {
 		if (visibility) {
@@ -424,5 +425,12 @@ abstract class Shape extends Graphics implements IShape {
     }
     return "";
   }-*/;
+
+  public boolean isThemeSupported() {
+  	return themeSupported;
+  }
+  public void setSupportsTheme(boolean themeSupported) {
+  	this.themeSupported = themeSupported;
+  }
 	
 }

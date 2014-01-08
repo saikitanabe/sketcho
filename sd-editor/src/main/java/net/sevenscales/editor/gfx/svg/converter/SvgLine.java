@@ -30,6 +30,6 @@ public class SvgLine extends SvgBase {
     params.put("%width%", strokeWidth);
     
     String template = "<line x1='%x1' y1='%y1' x2='%x2' y2='%y2' style='stroke:%stroke%;stroke-width:%width%;stroke-dasharray:%style;'/>";
-    return parse(template, params, diagram);
+    return parse(line, template, params, diagram);
   }
 }

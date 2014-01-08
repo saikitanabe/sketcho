@@ -38,7 +38,7 @@ public class SvgPolyline extends SvgLine {
       params.put("%style", "4,3");
     }
 
-    return parse(template, params, diagram);
+    return parse(poly, template, params, diagram);
   }
 
   public static String convertPoints2Pairs(int[] points, int transformX, int transformY) {

@@ -29,7 +29,7 @@ public class SvgImage extends SvgBase {
     
     String template = "<image x='%x%' y='%y%' width='%width%' height='%height%' " +
     		               "xlink:href='%src%' />";
-    return parse(template, params, diagram);
+    return parse(image, template, params, diagram);
   }
 
 }

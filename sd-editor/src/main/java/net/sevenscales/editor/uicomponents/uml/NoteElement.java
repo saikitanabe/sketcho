@@ -114,6 +114,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 		}
 
 		tape.setStrokeWidth(1);
+		tape.setSupportsTheme(false);
 
 		// tape.setSvgFixX(-17);
 		// tape.setSvgFixY(-5);

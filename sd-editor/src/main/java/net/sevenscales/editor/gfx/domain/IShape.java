@@ -44,4 +44,14 @@ public interface IShape extends IGraphics {
   void setStyle(String style);
   String getStyle();
 
+  /**
+  * Possibility to define constant colors for shape inside a element.
+  * E.g. Note element uses tape with constant colors, that doesn't change
+  * according to theme. 
+  * Needed on svg generation to know if shape is converted according to theme colors or not.
+  */
+  boolean isThemeSupported();
+  void setSupportsTheme(boolean themeSupported);
+
+
 }

@@ -2,6 +2,7 @@ package net.sevenscales.editor.gfx.svg.converter;
 
 import java.util.Map;
 
+import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ThemeName;
@@ -26,7 +27,12 @@ class SvgBase {
     }
 	}
 
-	public static String parse(String template, Map<String,String> params, Diagram diagram) {
+	private static void checkToApplyColor(IShape shape, String template, Map<String,String> params, Diagram diagram) {
+		if (!shape.isThemeSupported()) {
+			// this shape doesn't support theme colors and is constant
+			return;
+		}
+
 		boolean usersDefaultColors = diagram.usesSchemeDefaultColors(Theme.getCurrentColorScheme());
 		if (usersDefaultColors) {
 			applyDefaultColors(params, diagram);
@@ -36,7 +42,10 @@ class SvgBase {
     	// if text background color is transparent then apply paper text color
     	params.put(TEXT_COLOR_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getTextColor().toHexString());
     }
+	}
 
+	public static String parse(IShape shape, String template, Map<String,String> params, Diagram diagram) {
+		checkToApplyColor(shape, template, params, diagram);
 		return StringUtil.parse(template, params);
 	}
 

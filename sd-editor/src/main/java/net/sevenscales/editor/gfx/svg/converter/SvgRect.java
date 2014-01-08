@@ -36,7 +36,7 @@ public class SvgRect extends SvgBase {
       						(rect.getY()));
       params.put("%translate%", (width + 2) + "," + 1); // some magic to look better
       String transtemplate = "transform='translate(%translate%) rotate(%rotate%)' ";
-      transform = parse(transtemplate, params, diagram);
+      transform = parse(rect, transtemplate, params, diagram);
     }
     params.put("%transform%", transform);
     if (rect.getStrokeColor() != null) {
@@ -45,7 +45,7 @@ public class SvgRect extends SvgBase {
 
     String template = "<rect x='%x%' y='%y%' width='%width%' height='%height%' rx='%r%' %transform% " +
     		               "style='fill: %fill%;fill-opacity: %fill-opacity%;%stroke-opacity%stroke-width: %stroke-width%;stroke:%stroke%;'/>";
-    return parse(template, params, diagram);
+    return parse(rect, template, params, diagram);
   }
 
 }
