@@ -10,7 +10,7 @@ import net.sevenscales.editor.gfx.domain.IPolyline;
 
 public class SvgPolyline extends SvgLine {
 
-  public static String svg(IPolyline poly, int transformX, int transformY) {
+  public static String svg(IPolyline poly, int transformX, int transformY, boolean usesSchemeDefaultColors) {
     Map<String,String> params = new HashMap<String, String>();
     
     List<Integer> points = poly.getShape();
@@ -18,26 +18,26 @@ public class SvgPolyline extends SvgLine {
     
     params.put("%points", pairs.trim());
     params.put("%stroke-width", String.valueOf(poly.getStrokeWidth()));
-    params.put("%stroke%", String.valueOf(poly.getStrokeColor().toRgb()));
+    params.put("%stroke%", rgb(String.valueOf(poly.getStrokeColor().toRgb())));
     
-    String fill = "fill:none";
+    String fill = "none";
     Color color = poly.getFillColor();
     if (color != null) {
 //      fill-opacity:0.1
-      fill = "fill:rgb("+color.red+","+color.green+","+color.blue+")";
+      fill = rgb(color.toRgb());
     	params.put("%fill-opacity", "fill-opacity:"+Double.toString(color.opacity));
     }
 
-    params.put("%fill", fill);
+    params.put("%fill%", fill);
 
-    String template = "<polyline points='%points' style='%fill;stroke:rgb(%stroke%);stroke-width:%stroke-width;%fill-opacity;'/>";
+    String template = "<polyline points='%points' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width;%fill-opacity;'/>";
     if (poly.getStyle() != null && poly.getStyle().equals(ILine.DASH)) {
-      template = "<polyline points='%points' style='%fill;stroke:rgb(%stroke%);stroke-width:%stroke-width;stroke-dasharray:%style;%fill-opacity;'/>";
+      template = "<polyline points='%points' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width;stroke-dasharray:%style;%fill-opacity;'/>";
 //      System.out.println("STYLE: " + String.valueOf(poly.getStyle()));
       params.put("%style", "4,3");
     }
 
-    return parse(template, params);
+    return parse(template, params, usesSchemeDefaultColors);
   }
 
   public static String convertPoints2Pairs(int[] points, int transformX, int transformY) {

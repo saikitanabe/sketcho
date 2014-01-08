@@ -7,10 +7,10 @@ import net.sevenscales.domain.utils.StringUtil;
 import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.Color;
 
-public class SvgRect extends StringUtil {
+public class SvgRect extends SvgBase {
 
-  public static String svg(IRectangle rect, int transformX, int transformY) {
-    String fill = rect.getFillColor().toRgb();
+  public static String svg(IRectangle rect, int transformX, int transformY, boolean usesSchemeDefaultColors) {
+    String fill = rgb(rect.getFillColor().toRgb());
     
     Map<String,String> params = new HashMap<String, String>();
     params.put("%x%", String.valueOf(rect.getX() + transformX + rect.getSvgFixX()));
@@ -35,16 +35,16 @@ public class SvgRect extends StringUtil {
       						(rect.getY()));
       params.put("%translate%", (width + 2) + "," + 1); // some magic to look better
       String transtemplate = "transform='translate(%translate%) rotate(%rotate%)' ";
-      transform = parse(transtemplate, params);
+      transform = parse(transtemplate, params, usesSchemeDefaultColors);
     }
     params.put("%transform%", transform);
     if (rect.getStrokeColor() != null) {
-    	params.put("%stroke%", "stroke: rgb(" + rect.getStrokeColor().toRgb() + ");");
+    	params.put("%stroke%", rgb(rect.getStrokeColor().toRgb()));
     }
 
     String template = "<rect x='%x%' y='%y%' width='%width%' height='%height%' rx='%r%' %transform% " +
-    		               "style='fill: rgb(%fill%);fill-opacity: %fill-opacity%;%stroke-opacity%stroke-width: %stroke-width%;%stroke%'/>";
-    return parse(template, params);
+    		               "style='fill: %fill%;fill-opacity: %fill-opacity%;%stroke-opacity%stroke-width: %stroke-width%;stroke:%stroke%;'/>";
+    return parse(template, params, usesSchemeDefaultColors);
   }
 
 }

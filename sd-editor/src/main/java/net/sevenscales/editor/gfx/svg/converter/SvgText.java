@@ -6,11 +6,10 @@ import java.util.Map;
 import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 
-import net.sevenscales.domain.utils.StringUtil;
 import net.sevenscales.editor.gfx.domain.IText;
 import net.sevenscales.domain.utils.SLogger;
 
-public class SvgText extends StringUtil {
+public class SvgText extends SvgBase {
   private static final SLogger logger = SLogger.createLogger(SvgText.class);
 
   private static final RegExp AMP_RE = RegExp.compile("&", "g");
@@ -29,7 +28,7 @@ public class SvgText extends StringUtil {
     return s;
 	}
   
-  public static String svg(IText t, int transformX, int transformY) {
+  public static String svg(IText t, int transformX, int transformY, boolean usesSchemeDefaultColors) {
     Map<String,String> params = new HashMap<String, String>();
     params.put("%x", String.valueOf(t.getX() + transformX));
     params.put("%y", String.valueOf(t.getY() + transformY));
@@ -46,7 +45,7 @@ public class SvgText extends StringUtil {
     // yeps, this is needed when working with client side svg => canvas => png
     // with confluence, not working at the moment
 //    params.put("%font-family", "sans-serif, Arial");
-    params.put("%fill", "#" + t.getFillColor().toHexString());
+    params.put("%textcolor%", "#" + t.getFillColor().toHexString());
     
     String encoded = SafeHtmlUtils.htmlEscape(t.getText());
     params.put("%text", encoded);
@@ -66,10 +65,10 @@ public class SvgText extends StringUtil {
     	encoded = escapeAmp(t.getChildElements(transformX));
     }
     params.put("%text", encoded);
-    String template = "<text x='%x' y='%y' style='font-weight:%weight; font-size: %sizepx; text-anchor: %anchor; font-family: %font-family; fill: %fill;' %transform%>%text</text>";
+    String template = "<text x='%x' y='%y' style='font-weight:%weight; font-size: %sizepx; text-anchor: %anchor; font-family: %font-family; fill: %textcolor%;' %transform%>%text</text>";
 //    String result = "<text x='"++"' y='"+t.getY()+"' style='font-weight:bold; font-size: 12px; text-anchor: middle; font-family: Arial;'>"+t.getText()+"</text>";
     
-    return parse(template, params);
+    return parse(template, params, usesSchemeDefaultColors);
   }
 
 }

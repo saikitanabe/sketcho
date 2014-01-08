@@ -11,7 +11,7 @@ import net.sevenscales.domain.utils.SLogger;
 public class SvgPath extends SvgLine {
   private static SLogger logger = SLogger.createLogger(SvgPath.class);
 
-  public static String svg(IPath path, int transformX, int transformY) {
+  public static String svg(IPath path, int transformX, int transformY, boolean usesSchemeDefaultColors) {
     Map<String,String> params = new HashMap<String, String>();
     
 //    List<Integer> points = poly.getShape();
@@ -20,26 +20,26 @@ public class SvgPath extends SvgLine {
     // logger.debug("path: {}", d);
     params.put("%d%", d);
     params.put("%stroke-width", String.valueOf(path.getStrokeWidth()));
-    params.put("%stroke%", String.valueOf(path.getStrokeColor().toRgb()));
+    params.put("%stroke%", rgb(String.valueOf(path.getStrokeColor().toRgb())));
     
-    String fill = "fill:none";
+    String fill = "none";
     Color color = path.getFillColor();
     if (color != null && color.opacity > 0) {
 //      fill-opacity:0.1
-      fill = "fill:rgb("+color.red+","+color.green+","+color.blue+")";
+      fill = rgb(color.toRgb());
     	params.put("%fill-opacity", "fill-opacity:"+Double.toString(color.opacity));
     }
 
     params.put("%fill%", fill);
 
-    String template = "<path d='%d%' style='%fill%;stroke:rgb(%stroke%);stroke-width:%stroke-width;'/>";
+    String template = "<path d='%d%' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width;'/>";
 //    String template = "<polyline points='%points' style='%fill;stroke:rgb(%stroke%);stroke-width:%stroke-width;%fill-opacity;'/>";
 //    if (poly.getStyle() != null) {
 //      template = "<polyline points='%points' style='%fill;stroke:rgb(%stroke%);stroke-width:%stroke-width;stroke-dasharray:%style;%fill-opacity;'/>";
 //      params.put("%style", String.valueOf(map.get(poly.getStyle())));
 //    }
 
-    return parse(template, params);
+    return parse(template, params, usesSchemeDefaultColors);
   }
 
   public static String convertPoints2Pairs(int[] points) {

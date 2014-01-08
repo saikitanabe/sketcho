@@ -14,6 +14,9 @@ import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.uicomponents.CircleElement;
+import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.api.impl.Theme.ThemeName;
+
 
 public class SvgConverter {
 	private static final SLogger logger = SLogger.createLogger(SvgConverter.class);
@@ -211,7 +214,7 @@ public class SvgConverter {
 	      for (IShape s : line) {
 	        // convert to concrete svg shape with factory
 	        if (s.isVisible()) {
-	          String svg = SvgFactory.convert(s, 0, 0, editorContext);
+	          String svg = SvgFactory.convert(s, 0, 0, editorContext, d.usesSchemeDefaultColors(Theme.getCurrentColorScheme()));
 	          result += svg;
 	        }
 	      }

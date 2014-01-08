@@ -13,32 +13,32 @@ import net.sevenscales.editor.gfx.domain.IText;
 
 public class SvgFactory {
 
-  public static String convert(IShape s, int transformX, int transformY, EditorContext editorContext) {
+  public static String convert(IShape s, int transformX, int transformY, EditorContext editorContext, boolean usesSchemeDefaultColors) {
     String result = "";
     if (s instanceof IRectangle) {
       IRectangle r = (IRectangle) s;
-      result = SvgRect.svg(r, transformX, transformY);
+      result = SvgRect.svg(r, transformX, transformY, usesSchemeDefaultColors);
     } else if (s instanceof IText) {
       IText t = (IText)s;
-      result = SvgText.svg(t, transformX, transformY);
+      result = SvgText.svg(t, transformX, transformY, usesSchemeDefaultColors);
     } else if (s instanceof ILine) {
       ILine l = (ILine) s;
-      result = SvgLine.svg(l, transformX, transformY);
+      result = SvgLine.svg(l, transformX, transformY, usesSchemeDefaultColors);
     } else if (s instanceof IPolyline) {
       IPolyline p = (IPolyline) s;
-      result = SvgPolyline.svg(p, transformX, transformY);
+      result = SvgPolyline.svg(p, transformX, transformY, usesSchemeDefaultColors);
     } else if (s instanceof ICircle) {
       ICircle c = (ICircle) s;
-      result = SvgCircle.svg(c, transformX, transformY);
+      result = SvgCircle.svg(c, transformX, transformY, usesSchemeDefaultColors);
     } else if (s instanceof IEllipse) {
       IEllipse e = (IEllipse) s;
-      result = SvgEllipse.svg(e, transformX, transformY);
+      result = SvgEllipse.svg(e, transformX, transformY, usesSchemeDefaultColors);
     } else if (s instanceof IImage) {
     	IImage i = (IImage) s;
-    	result = SvgImage.svg(i, transformX, transformY, editorContext);
+    	result = SvgImage.svg(i, transformX, transformY, editorContext, usesSchemeDefaultColors);
     } else if (s instanceof IPath) {
       IPath p = (IPath) s;
-      result = SvgPath.svg(p, transformX, transformY);
+      result = SvgPath.svg(p, transformX, transformY, usesSchemeDefaultColors);
     }
     return result;
   }
