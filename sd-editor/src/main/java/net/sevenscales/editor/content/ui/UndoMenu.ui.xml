@@ -6,7 +6,8 @@
 			display: inline;
 		}
 	</ui:style>
-	<g:HTMLPanel>
+	<!-- <g:HTMLPanel> -->
+	<g:HorizontalPanel>
 		<c:FastButton ui:field="undo" addStyleNames="{style.simple}">
 			<c:child>
 				<g:HTML>
@@ -25,5 +26,6 @@
 				</g:HTML>
 			</c:child>
 		</c:FastButton>
-	</g:HTMLPanel>
+	</g:HorizontalPanel>
+	<!-- </g:HTMLPanel> -->
 </ui:UiBinder> 
