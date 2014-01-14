@@ -9,41 +9,41 @@
 	
 	<g:HTMLPanel>
 		<div class="btn-group">
-			<a ui:field="freehandOff" title="Freehand ON/Off" class="btn btn-custom tooltipper">
-				<i class="icon-pen-white"></i>
+			<a ui:field="freehandOff" title="Freehand ON/Off" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-pen-white2"></i>
 			</a>
-			<a ui:field="duplicate" title="Duplicate" class="btn btn-custom tooltipper">
-				<i class="icon-duplicate"></i>
+			<a ui:field="duplicate" title="Duplicate" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-duplicate2"></i>
 			</a>
 			<g:SimplePanel ui:field="changeConnection" styleName="inline-change-connection">
 			</g:SimplePanel>
-			<a ui:field="reverseConnection" title="Reverse Connection" class="btn btn-custom tooltipper">
-				<i class="icon-reverse-connection"></i>
+			<a ui:field="reverseConnection" title="Reverse Connection" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-reverse-connection2"></i>
 			</a>
-			<a ui:field="colorize" title="Change Color" class="btn btn-custom tooltipper">
-				<i class="icon-colorize"></i>
+			<a ui:field="colorize" title="Change Color" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-colorize2"></i>
 			</a>
-			<a ui:field="textSize" title="Change Text Size" class="btn btn-custom tooltipper">
+			<a ui:field="textSize" title="Change Font Size" class="btn btn-custom btn-context-menu tooltipper">
 				&#187;T&#171;
 			</a>
-			<a ui:field="annotate" title="Annotate" class="btn btn-custom tooltipper">
+			<a ui:field="annotate" title="Annotate" class="btn btn-custom btn-context-menu tooltipper">
 				A
 			</a>
-			<a ui:field="unannotate" title="Unannotate" class="btn btn-custom tooltipper">
+			<a ui:field="unannotate" title="Unannotate" class="btn btn-custom btn-context-menu tooltipper">
 				A
 			</a>
-<!-- 			<a ui:field="openLink" title="Open Link" class="btn btn-custom tooltipper">
-				<i class="icon-open-link"></i>
+<!-- 			<a ui:field="openLink" title="Open Link" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-open-link"></i>
 			</a>
  -->			
- 			<a ui:field="addlink" title="Add Link" class="btn btn-custom tooltipper">
-				<i class="icon-link"></i>
+ 			<a ui:field="addlink" title="Add Link" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-link2"></i>
 			</a>
- 			<a ui:field="openlink" title="Open/Edit Link" class="btn btn-custom tooltipper">
-				<i class="icon-link"></i>
+ 			<a ui:field="openlink" title="Open/Edit Link" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-link2"></i>
 			</a>
-			<a ui:field="delete" title="Delete" class="btn btn-custom tooltipper">
-				<i class="icon-trash"></i>
+			<a ui:field="delete" title="Delete" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-trash2"></i>
 			</a>
 		</div>
 	</g:HTMLPanel>

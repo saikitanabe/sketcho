@@ -153,17 +153,17 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				Display changeFontSizeVisibility = Display.NONE;
 
 				if ((diagram.supportedMenuItems() & ContextMenuItem.FREEHAND_MENU.getValue()) == ContextMenuItem.FREEHAND_MENU.getValue()) {
-					freehandMenu = Display.INLINE;
+					freehandMenu = Display.INLINE_BLOCK;
 					freehandOnOff(UiContextMenu.this.editorContext.isTrue(EditorProperty.FREEHAND_MODE));
 				}
 
 				if (selected.length == 1 && (diagram.supportedMenuItems() & ContextMenuItem.REVERSE_CONNECTION_MENU.getValue()) == ContextMenuItem.REVERSE_CONNECTION_MENU.getValue()) {
 					// cannot show reverse menu if multiple items, at least for now
-					reverseMenu = Display.INLINE;
+					reverseMenu = Display.INLINE_BLOCK;
 				}
 
 				if (allSupportsFontSizeChange(selected)) {
-					changeFontSizeVisibility = Display.INLINE;
+					changeFontSizeVisibility = Display.INLINE_BLOCK;
 				}
 
 				if (anySupportsColorMenu(selected)) {

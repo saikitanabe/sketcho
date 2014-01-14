@@ -12,7 +12,7 @@
 			<c:child>
 				<g:HTML>
 					<a title="Undo (Ctrl+Z)" class="btn btn-custom download-btn tooltipper">
-						<i class="icon-undo"></i>
+						<i class="menu-icon-undo"></i>
 					</a>
 				</g:HTML>
 			</c:child>
@@ -21,7 +21,7 @@
 			<c:child>
 				<g:HTML>
 					<a title="Redo (Cntrl+Shift+Z)" class="btn btn-custom download-btn tooltipper">
-						<i class="icon-redo"></i>
+						<i class="menu-icon-redo"></i>
 					</a>
 				</g:HTML>
 			</c:child>
