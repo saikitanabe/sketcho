@@ -1,12 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style>
-		.relationship {
-			min-height: 18px;
-			min-width: 50px;
-		}
-				
+	<ui:style>				
 		.focuspanel:focus {
 			outline: none;
 		}
@@ -14,33 +9,33 @@
 
 	<g:HorizontalPanel>
 		<g:VerticalPanel styleName="uml-selection-table">
-			<g:FocusPanel ui:field="dline" styleName="{style.focuspanel} {style.relationship} icon-conn-directed">
+			<g:FocusPanel ui:field="dline" styleName="{style.focuspanel} relationship icon-conn-directed">
 			</g:FocusPanel>
-			<g:FocusPanel ui:field="dlineboth" styleName="{style.focuspanel} {style.relationship} icon-conn-directed-both">
+			<g:FocusPanel ui:field="dlineboth" styleName="{style.focuspanel} relationship icon-conn-directed-both">
 			</g:FocusPanel>
-			<g:FocusPanel ui:field="iline" styleName="{style.focuspanel} {style.relationship} icon-conn-inheritance">
+			<g:FocusPanel ui:field="iline" styleName="{style.focuspanel} relationship icon-conn-inheritance">
 			</g:FocusPanel>
-			<g:FocusPanel ui:field="rline" styleName="{style.focuspanel} {style.relationship} icon-conn-line">
-			</g:FocusPanel>
-		</g:VerticalPanel>
-		<g:VerticalPanel styleName="uml-selection-table">
-			<g:FocusPanel ui:field="depline" styleName="{style.focuspanel} {style.relationship} icon-conn-dependency">
-			</g:FocusPanel>
-			<g:FocusPanel ui:field="deplineboth" styleName="{style.focuspanel} {style.relationship} icon-conn-dependency-both">
-			</g:FocusPanel>
-			<g:FocusPanel ui:field="dashed" styleName="{style.focuspanel} {style.relationship} icon-conn-dashedline">
-			</g:FocusPanel>
-			<g:FocusPanel ui:field="reverseline" styleName="{style.focuspanel} {style.relationship} icon-conn-reverse">
+			<g:FocusPanel ui:field="rline" styleName="{style.focuspanel} relationship icon-conn-line">
 			</g:FocusPanel>
 		</g:VerticalPanel>
 		<g:VerticalPanel styleName="uml-selection-table">
-			<g:FocusPanel ui:field="aline" styleName="{style.focuspanel} {style.relationship} icon-conn-aggregation">
+			<g:FocusPanel ui:field="depline" styleName="{style.focuspanel} relationship icon-conn-dependency">
 			</g:FocusPanel>
-			<g:FocusPanel ui:field="alinefilled" styleName="{style.focuspanel} {style.relationship} icon-conn-aggregation-filled">
+			<g:FocusPanel ui:field="deplineboth" styleName="{style.focuspanel} relationship icon-conn-dependency-both">
 			</g:FocusPanel>
-			<g:FocusPanel ui:field="aggrboth" styleName="{style.focuspanel} {style.relationship} icon-conn-aggregationboth">
+			<g:FocusPanel ui:field="dashed" styleName="{style.focuspanel} relationship icon-conn-dashedline">
 			</g:FocusPanel>
-			<g:FocusPanel ui:field="aggrbothfilled" styleName="{style.focuspanel} {style.relationship} icon-conn-aggregationboth-filled">
+			<g:FocusPanel ui:field="reverseline" styleName="{style.focuspanel} relationship icon-conn-reverse">
+			</g:FocusPanel>
+		</g:VerticalPanel>
+		<g:VerticalPanel styleName="uml-selection-table">
+			<g:FocusPanel ui:field="aline" styleName="{style.focuspanel} relationship icon-conn-aggregation">
+			</g:FocusPanel>
+			<g:FocusPanel ui:field="alinefilled" styleName="{style.focuspanel} relationship icon-conn-aggregation-filled">
+			</g:FocusPanel>
+			<g:FocusPanel ui:field="aggrboth" styleName="{style.focuspanel} relationship icon-conn-aggregationboth">
+			</g:FocusPanel>
+			<g:FocusPanel ui:field="aggrbothfilled" styleName="{style.focuspanel} relationship icon-conn-aggregationboth-filled">
 			</g:FocusPanel>
 		</g:VerticalPanel>
 	</g:HorizontalPanel>
