@@ -13,7 +13,7 @@
 				<c:child>
 					<g:HTML>
 						<a title="New Note" class="btn btn-custom download-btn tooltipper">
-							<i class="icon-note"></i>
+							<i class="context-icon-note"></i>
 						</a>
 					</g:HTML>
 				</c:child>
@@ -22,7 +22,7 @@
 				<c:child>
 					<g:HTML>
 						<a title="Add Diagram Element" class="btn btn-custom download-btn tooltipper">
-							<i class="icon-add-diagram"></i>
+							<i class="context-icon-add-diagram"></i>
 						</a>
 					</g:HTML>
 				</c:child>
@@ -31,7 +31,7 @@
 				<c:child>
 					<g:HTML>
 						<a title="Freehand" class="btn btn-custom download-btn tooltipper">
-							<i class="icon-pen-white"></i>
+							<i class="context-icon-pen-white"></i>
 						</a>
 					</g:HTML>
 				</c:child>
@@ -41,7 +41,7 @@
 					<c:child>
 						<g:HTML>
 							<a title="Freehand" class="btn btn-custom download-btn tooltipper">
-								<i class="icon-pen-white"></i>
+								<i class="context-icon-pen-white"></i>
 							</a>
 						</g:HTML>
 					</c:child>
@@ -74,7 +74,7 @@
 				<c:child>
 					<g:HTML>
 						<a title="Lasso Select (by dragging)" class="btn btn-custom download-btn tooltipper">
-							<i class="icon-select"></i>
+							<i class="context-icon-select"></i>
 						</a>
 					</g:HTML>
 				</c:child>

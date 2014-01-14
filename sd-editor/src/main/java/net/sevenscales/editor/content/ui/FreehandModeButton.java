@@ -33,7 +33,7 @@ public class FreehandModeButton extends HTML {
 		});
 
 		setHTML(SafeHtmlUtils
-				.fromSafeConstant("<button class='btn' style='white-space: nowrap;'><i class='icon-pen'></i>Freehand</button>"));
+				.fromSafeConstant("<button class='btn' style='white-space: nowrap;'><i class='context-icon-pen'></i>Freehand</button>"));
 		// freehandMode.setStyleName("btn-freehand");
 		// freehandMode.addStyleName("btn-freehand-disabled");
 		addClickHandler(new ClickHandler() {
@@ -52,14 +52,14 @@ public class FreehandModeButton extends HTML {
 	private void disabled() {
 		logger.debug("freehand disabled");
 		setHTML(SafeHtmlUtils
-				.fromSafeConstant("<button class='btn' style='white-space: nowrap;'><i class='icon-pen'></i>Freehand</button>"));
+				.fromSafeConstant("<button class='btn' style='white-space: nowrap;'><i class='context-icon-pen'></i>Freehand</button>"));
 		editorContext.set(EditorProperty.FREEHAND_MODE, false);
 	}
 	
 	private void enabled(FreehandModeChangedEvent event) {
 		logger.debug("freehand enabled");
 		setHTML(SafeHtmlUtils
-						.fromSafeConstant("<button class='btn btn-success' style='white-space: nowrap;'><i class='icon-pen-white'></i>Freehand</button>"));
+						.fromSafeConstant("<button class='btn btn-success' style='white-space: nowrap;'><i class='context-icon-pen-white'></i>Freehand</button>"));
 		if (event.isModeTypeChanged()) {
 			editorContext.set(EditorProperty.FREEHAND_MODE_TYPE, event.getModeType());
 		}
