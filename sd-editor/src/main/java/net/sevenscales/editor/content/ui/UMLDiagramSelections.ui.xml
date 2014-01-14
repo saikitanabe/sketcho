@@ -44,150 +44,150 @@
 			<g:VerticalPanel styleName="uml-selection-table class-diagram">
 				<c:FastButton ui:field="note" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umlnote}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-note"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="classf" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umlclass}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-class"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="umlpackagef" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umlpackage}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-package"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 			</g:VerticalPanel>
 			<g:VerticalPanel styleName="uml-selection-table use-case-diagram">
 				<c:FastButton ui:field="actor" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umlactor}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-actor"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="usecase" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umlusecase}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-usecase"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="comments" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{elcomments}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-elcomments"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 			</g:VerticalPanel>
 			<g:VerticalPanel styleName="uml-selection-table activity-diagram">
 				<c:FastButton ui:field="start" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umlstart}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-start"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="activity" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umlactivity}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-activity"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="choice" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umlchoice}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-choice"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="hfork" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umlhfork}" styleName="uml-hfork"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-hfork"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="vfork" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umlvfork}"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-vfork"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="end" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umlend}"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-end"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 			</g:VerticalPanel>
 			<g:VerticalPanel styleName="uml-selection-table sequence-diagram">
 				<c:FastButton ui:field="sequence" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umlsequence}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-sequence"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="text" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umltext}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-text"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="storage" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umlstorage}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-storage"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 			</g:VerticalPanel>
 			<g:VerticalPanel styleName="uml-selection-table mindmap-diagram">
 				<c:FastButton ui:field="_centtopic" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{centtopic}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-centtopic"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="_maintopic" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{maintopic}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-maintopic"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="_subtopic" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{subtopic}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-subtopic"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="_mindnote" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{umlnote}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-note"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 				<c:FastButton ui:field="_comments" styleName="{style.focuspanel}">
 					<c:child>
-						<g:SimplePanel styleName="asbutton">
-							<g:Image resource="{elcomments}" styleName="uml-selection"></g:Image>
-						</g:SimplePanel>
+						<g:HTML>
+							<div class="icon-uml-elcomments"></div>
+						</g:HTML>
 					</c:child>
 				</c:FastButton>
 			</g:VerticalPanel>
