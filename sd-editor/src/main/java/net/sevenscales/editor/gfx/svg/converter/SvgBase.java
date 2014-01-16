@@ -19,11 +19,15 @@ class SvgBase {
     // params.put("%fill%", fill);
     // params.put("%fill-opacity%", String.valueOf(rect.getFillColor().getOpacity()));
     if (params.get(STROKE_TEMPLATE) != null) {
-	    params.put(STROKE_TEMPLATE, "rgb(" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toRgb() + ")");
+	    // params.put(STROKE_TEMPLATE, "rgb(" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toRgb() + ")");
+	    // batik doesn't support functions in style
+	    params.put(STROKE_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toHexString());
     }
 		String fill = params.get(FILL_TEMPLATE);
     if (fill != null && !"none".equals(fill)) {
-	    params.put(FILL_TEMPLATE, "rbg(" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toRgb() + ")");
+	    // params.put(FILL_TEMPLATE, "rbg(" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toRgb() + ")");
+	    // Batik doesn't support functions!
+	    params.put(FILL_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toHexString());
     }
 	}
 
@@ -51,6 +55,10 @@ class SvgBase {
 
 	protected static String rgb(String rgbValue) {
 		return "rgb(" + rgbValue + ")";
+	}
+
+	protected static String hex(String value) {
+		return "#" + value;
 	}
 
 }

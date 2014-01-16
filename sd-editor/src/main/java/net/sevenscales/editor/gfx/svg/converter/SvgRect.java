@@ -11,7 +11,9 @@ import net.sevenscales.editor.gfx.domain.Color;
 public class SvgRect extends SvgBase {
 
   public static String svg(IRectangle rect, int transformX, int transformY, Diagram diagram) {
-    String fill = rgb(rect.getFillColor().toRgb());
+    // Batik doesn't support functions
+    // String fill = rgb(rect.getFillColor().toRgb());
+    String fill = hex(rect.getFillColor().toHexString());
     
     Map<String,String> params = new HashMap<String, String>();
     params.put("%x%", String.valueOf(rect.getX() + transformX + rect.getSvgFixX()));

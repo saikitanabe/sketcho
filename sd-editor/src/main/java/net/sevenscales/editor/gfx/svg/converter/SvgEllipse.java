@@ -14,7 +14,9 @@ public class SvgEllipse extends SvgBase {
     params.put("%cy", String.valueOf(ellipse.getCy() + transformY));
     params.put("%rx", String.valueOf(ellipse.getRx()));
     params.put("%ry", String.valueOf(ellipse.getRy()));
-    params.put("%fill%", rgb(ellipse.getFillColor().toRgb()));
+    // Batik doesn't support functions for fill in style
+    // params.put("%fill%", rgb(ellipse.getFillColor().toRgb()));
+    params.put("%fill%", hex(ellipse.getFillColor().toHexString()));
     params.put("%fill-opacity%", String.valueOf(ellipse.getFillColor().getOpacity()));
     params.put("%stroke%", rgb(ellipse.getStrokeColor().toRgb()));
     params.put("%stroke-width%", String.valueOf(ellipse.getStrokeWidth()));
