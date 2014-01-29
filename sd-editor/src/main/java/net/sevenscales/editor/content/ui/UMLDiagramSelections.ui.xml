@@ -13,33 +13,7 @@
 		
 	</ui:style>
 
-	<ui:image field="umlclass" src="class-white.png"></ui:image>
-	<ui:image field="umlusecase" src="usecase-white.png"></ui:image>
-	<ui:image field="umlsequence" src="sequence-white.png"></ui:image>
-	<ui:image field="umlactor" src="actor-white.png"></ui:image>
-	<ui:image field="umlnote" src="note-white.png"></ui:image>
-	<ui:image field="elcomments" src="comments-white.png"></ui:image>
-	<ui:image field="umlchoice" src="choice-white.png"></ui:image>
-	<ui:image field="umlstart" src="start-white.png"></ui:image>
-	<ui:image field="umlend" src="end-white.png"></ui:image>
-	<ui:image field="umlactivity" src="activity-white.png"></ui:image>
-	<ui:image field="umlhfork" src="hfork.png"></ui:image>
-	<ui:image field="umlvfork" src="vfork.png"></ui:image>
-	<ui:image field="umltext" src="text-white.png"></ui:image>
-	<ui:image field="umlpackage" src="package-white.png"></ui:image>
-	<ui:image field="umlstorage" src="db-white.png"></ui:image>
-	<ui:image field="centtopic" src="centtopic-white.png"></ui:image>
-	<ui:image field="maintopic" src="maintopic-white.png"></ui:image>
-	<ui:image field="subtopic" src="subtopic-white.png"></ui:image>
-
-	<!-- <g:VerticalPanel styleName="{style.selectionTable}"> -->
 	<g:VerticalPanel>
-<!-- 		<g:HTML ui:field="freehand"> -->
-<!-- 			<button ui:field="freehandBtn" class="btn" style="width: 100%"> -->
-<!-- 				<i class="icon-pencil"></i> -->
-<!-- 				Freehand -->
-<!-- 			</button> -->
-<!-- 		</g:HTML> -->
 		<g:HorizontalPanel ui:field="diagramGroups">
 			<g:VerticalPanel styleName="uml-selection-table class-diagram">
 				<c:FastButton ui:field="note" styleName="{style.focuspanel}">
@@ -193,6 +167,5 @@
 			</g:VerticalPanel>
 		</g:HorizontalPanel>
 	</g:VerticalPanel>
-	<!-- </g:VerticalPanel> -->
 
 </ui:UiBinder> 

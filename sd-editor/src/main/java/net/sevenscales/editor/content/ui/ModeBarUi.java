@@ -1,42 +1,23 @@
 package net.sevenscales.editor.content.ui;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.ToggleButton;
-import com.google.gwt.user.client.ui.Widget;
+public class ModeBarUi implements IModeManager {
 
-public class ModeBarUi extends Composite implements IModeManager {
-
-  private static ModeBarUiUiBinder uiBinder = GWT.create(ModeBarUiUiBinder.class);
-
-  interface ModeBarUiUiBinder extends UiBinder<Widget, ModeBarUi> {
-  }
-  
-  @UiField ToggleButton relationshipMode;
-  @UiField ImageResource relationship;
-//  @UiField VerticalPanel mainpanel;
 	private int x;
 	private int y;
 	private boolean forceConnectionPoint;
+  private boolean connectionMode;
 
   public ModeBarUi() {
-    initWidget(uiBinder.createAndBindUi(this));
-    // for some reason IE doesn't accept background-color in ui.xml
-//    mainpanel.getElement().getStyle().setBackgroundColor("#d0e4f6");  
-    relationshipMode.getUpFace().setHTML("<img src='"+relationship.getURL()+"'></img>");
   }
   
   @Override
   public boolean isConnectMode() {
-    return relationshipMode.isDown();
+    return connectionMode;
   }
   
   @Override
   public void setConnectionMode(boolean enable) {
-    relationshipMode.setDown(enable);
+    connectionMode = enable;
   }
   
   @Override
