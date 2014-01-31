@@ -1,18 +1,16 @@
 package net.sevenscales.editor.diagram.shape;
 
 
-public class CircleShape extends Info {
+public class CircleShape extends CenterShape {
 
-	public int centerX;
-	public int centerY;
 	public int radius;
 
 	public CircleShape() {
+		super(0, 0);
 	}
 
 	public CircleShape(int x, int y, int radius) {
-		this.centerX = x;
-		this.centerY = y;
+		super(x, y);
 		this.radius = radius;
 	}
 	

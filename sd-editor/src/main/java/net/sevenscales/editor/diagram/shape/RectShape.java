@@ -26,6 +26,13 @@ public class RectShape extends Info {
 		this.width = width;
 		this.height = height;
 	}
+
+	@Override
+	public Info move(int moveX, int moveY) {
+		this.left += moveX;
+		this.top += moveY;
+		return this;
+	}
 	
 	public void reset() {
 	  left = 0;

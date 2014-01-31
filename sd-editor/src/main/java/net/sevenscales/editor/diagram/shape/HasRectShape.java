@@ -18,6 +18,12 @@ public class HasRectShape extends Info {
 	}
 
 	@Override
+	public Info move(int moveX, int moveY) {
+		rectShape.move(moveX, moveY);
+		return this;
+	}
+
+	@Override
 	public void setLeft(int left) {
 		rectShape.setLeft(left);
 	}

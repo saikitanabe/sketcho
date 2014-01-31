@@ -1,18 +1,12 @@
 package net.sevenscales.editor.diagram.shape;
 
 
-public class ActivityStartShape extends Info {
+public class ActivityStartShape extends CenterShape {
 
-	public int centerX;
-	public int centerY;
 	public int radius;
 
-	public ActivityStartShape() {
-	}
-
 	public ActivityStartShape(int x, int y, int radius) {
-		this.centerX = x;
-		this.centerY = y;
+		super(x, y);
 		this.radius = radius;
 	}
 	

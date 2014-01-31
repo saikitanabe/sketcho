@@ -50,6 +50,15 @@ class ShapeParser {
 		new ParserMap(ElementType.FORK, new AbstractDiagramFactory.ForkFactory())
 	};
 
+	static AbstractDiagramFactory factory(IDiagramItemRO diro) {
+		for (ParserMap pm : PARSER_MAP) {
+			if (pm.elementType.getValue().equals(diro.getType())) {
+				return pm.factory;
+			}
+		}
+		throw new RuntimeException("Factory not found for " + diro.getType());
+	}
+
 	static Info parse(IDiagramItemRO diro, int moveX, int moveY) {
 		for (ParserMap pm : PARSER_MAP) {
 			if (pm.elementType.getValue().equals(diro.getType())) {

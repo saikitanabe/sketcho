@@ -33,6 +33,15 @@ public class RelationshipShape2 extends Info {
 		this.caps = caps;
 	}
 
+  @Override
+  public Info move(int moveX, int moveY) {
+    for (int i = 0; i < points.size(); i += 2) {
+      points.set(i, points.get(i) + moveX);
+      points.set(i + 1, points.get(i + 1) + moveY);
+    }
+    return this;
+  }
+
 	public boolean isInheritance() {
 		return (caps & RelationshipShape2.INHERITANCE) == RelationshipShape2.INHERITANCE;
 	}

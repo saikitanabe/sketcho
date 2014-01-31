@@ -1,21 +1,15 @@
 package net.sevenscales.editor.diagram.shape;
 
 
-public class ActivityEndShape extends Info {
+public class ActivityEndShape extends CenterShape {
 
-	public int centerX;
-	public int centerY;
 	public int radius;
 
-	public ActivityEndShape() {
-	}
-
 	public ActivityEndShape(int x, int y, int radius) {
-		this.centerX = x;
-		this.centerY = y;
+		super(x, y);
 		this.radius = radius;
 	}
-	
+
 	public void reset() {
 	  centerX = 0;
 	  centerY = 0;

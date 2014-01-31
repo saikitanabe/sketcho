@@ -29,6 +29,8 @@ public abstract class Info {
 	public int getHeight() {
 		return 0;
 	}
+
+	public abstract Info move(int moveX, int moveY);
 	
 	public final void setTextColor(String textColor) {
 		this.textColor = textColor;

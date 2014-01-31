@@ -3,7 +3,6 @@ package net.sevenscales.editor.uicomponents.impl;
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
-import net.sevenscales.editor.silver.RelationshipShape;
 
 public class RelationshipTextUtil2 implements RelationshipParser {
 	public static final int LEGACY_REL_FORMAT_VERSION_NUMBER = 3;

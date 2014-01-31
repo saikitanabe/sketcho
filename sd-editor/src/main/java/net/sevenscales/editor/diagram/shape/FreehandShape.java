@@ -9,6 +9,15 @@ public class FreehandShape extends Info {
   public FreehandShape(int[] points) {
     this.points = points;
   }	
+
+  @Override
+  public Info move(int moveX, int moveY) {
+    for (int i = 0; i < points.length; i += 2) {
+      points[i] += moveX;
+      points[i + 1] += moveY;
+    }
+    return this;
+  }
   
   @Override
   public int getLeft() {
