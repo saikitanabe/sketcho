@@ -247,10 +247,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   }
   
-  public Relationship2(ISurfaceHandler surface, List<Integer> points, String text,
+  public Relationship2(ISurfaceHandler surface, RelationshipShape2 points, String text,
       boolean editable, IDiagramItemRO item) {
     super(editable, surface, Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), item);
-    this.points = points;
+    this.points = points.points;
     handler = new ConnectionMoveHandler();
     
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getConnectionLayer());
@@ -272,8 +272,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     inheritance = IShapeFactory.Util.factory(editable).createPolyline(group, inheritancePoints);
     inheritance.setFill(255, 255, 255, 1);
     
-    int endx = points.get(points.size()-2);
-    int endy = points.get(points.size()-1);
+    int endx = this.points.get(this.points.size()-2);
+    int endy = this.points.get(this.points.size()-1);
     arrowPoints = new int[]{
           right.x, right.y,
           endx, endy, 
@@ -629,7 +629,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
         ps.add(val+diffy);
       }
     }
-    Relationship2 result = new Relationship2(surface, ps, getText(), getEditable(), new DiagramItemDTO());
+    Relationship2 result = new Relationship2(surface, new RelationshipShape2(ps), getText(), getEditable(), new DiagramItemDTO());
     return result;
   }
 

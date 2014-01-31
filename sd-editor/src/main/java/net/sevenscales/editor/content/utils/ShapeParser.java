@@ -26,8 +26,28 @@ class ShapeParser {
 	}
 
 	private static ParserMap[] PARSER_MAP = {
-		new ParserMap(ElementType.ELLIPSE, new AbstractDiagramFactory.EllipseFactory())
-		// new ParserMap(ElementType.COMMENT),
+		new ParserMap(ElementType.ELLIPSE, new AbstractDiagramFactory.EllipseFactory()),
+		new ParserMap(ElementType.SEQUENCE, new AbstractDiagramFactory.SequenceFactory()),
+		new ParserMap(ElementType.COMPONENT, new AbstractDiagramFactory.ComponentFactory()),
+		new ParserMap(ElementType.SERVER, new AbstractDiagramFactory.ServerFactory()),
+		new ParserMap(ElementType.CLASS, new AbstractDiagramFactory.ClassFactory()),
+		new ParserMap(ElementType.NOTE, new AbstractDiagramFactory.NoteFactory()),
+		new ParserMap(ElementType.CHOICE, new AbstractDiagramFactory.ActivityChoiceFactory()),
+		new ParserMap(ElementType.ACTIVITY_START, new AbstractDiagramFactory.ActivityStartFactory()),
+		new ParserMap(ElementType.ACTIVITY_END, new AbstractDiagramFactory.ActivityEndFactory()),
+		new ParserMap(ElementType.ACTIVITY, new AbstractDiagramFactory.ActivityFactory()),
+		new ParserMap(ElementType.MIND_CENTRAL, new AbstractDiagramFactory.MindCentralFactory()),
+		new ParserMap(ElementType.STORAGE, new AbstractDiagramFactory.StorageFactory()),
+		// new ParserMap(ElementType.COMMENT, new AbstractDiagramFactory.CommentFactory()),
+		new ParserMap(ElementType.TEXT_ITEM, new AbstractDiagramFactory.TextItemFactory()),
+		new ParserMap(ElementType.ACTOR, new AbstractDiagramFactory.ActorFactory()),
+		new ParserMap(ElementType.RELATIONSHIP, new AbstractDiagramFactory.RelationshipFactory()),
+		new ParserMap(ElementType.FREEHAND, new AbstractDiagramFactory.FreehandFactory()),
+		new ParserMap(ElementType.PACKAGE, new AbstractDiagramFactory.PackageFactory()),
+		new ParserMap(ElementType.VERTICAL_PARTITION, new AbstractDiagramFactory.VerticalPartitionFactory()),
+		new ParserMap(ElementType.COMMENT_THREAD, new AbstractDiagramFactory.CommentThreadFactory()),
+		new ParserMap(ElementType.HORIZONTAL_PARTITION, new AbstractDiagramFactory.HorizontalPartitionFactory()),
+		new ParserMap(ElementType.FORK, new AbstractDiagramFactory.ForkFactory())
 	};
 
 	static Info parse(IDiagramItemRO diro, int moveX, int moveY) {

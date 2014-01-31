@@ -101,7 +101,7 @@ public class DiagramItemFactory {
               editable,
               item);
       result = ee;
-    } else if (item.getType().equals("sequenceitem")) {
+    } else if (item.getType().equals(ElementType.SEQUENCE.getValue())) {
       String[] s1 = item.getShape().split(" ");
       int lifeline = parseInt(s1[0]);
       String[] s2 = s1[1].split(",");
@@ -118,7 +118,7 @@ public class DiagramItemFactory {
               editable,
               item);
       result = se;
-    } else if (item.getType().equals("comp")) {
+    } else if (item.getType().equals(ElementType.COMPONENT.getValue())) {
       String[] s = item.getShape().split(",");
       ComponentElement ce = new ComponentElement(surface,
           new ComponentShape(s), 
@@ -129,7 +129,7 @@ public class DiagramItemFactory {
           editable,
           item);
       result = ce;
-    } else if (item.getType().equals("server")) {
+    } else if (item.getType().equals(ElementType.SERVER.getValue())) {
       String[] s = item.getShape().split(",");
       ServerElement ce = new ServerElement(surface,
           new ServerShape(s), 
@@ -140,7 +140,7 @@ public class DiagramItemFactory {
           editable,
           item);
       result = ce;
-    } else if (item.getType().equals("classitem")) {
+    } else if (item.getType().equals(ElementType.CLASS.getValue())) {
       String[] s = item.getShape().split(",");
       ClassElement2 ce = new ClassElement2(surface,
           new RectShape(s), 
@@ -151,7 +151,7 @@ public class DiagramItemFactory {
           editable,
           item);
       result = ce;
-    } else if (item.getType().equals("noteitem")) {
+    } else if (item.getType().equals(ElementType.NOTE.getValue())) {
       String[] s = item.getShape().split(",");
       int x = parseInt(s[0]);
       int y = parseInt(s[1]);
@@ -169,7 +169,7 @@ public class DiagramItemFactory {
           editable,
           item);
       result = ne;
-    } else if (item.getType().equals("comments")) {
+    } else if (item.getType().equals(ElementType.COMMENT_THREAD.getValue())) {
       String[] s = item.getShape().split(",");
       int x = parseInt(s[0]);
       int y = parseInt(s[1]);
@@ -187,7 +187,7 @@ public class DiagramItemFactory {
           editable,
           item);
       result = thread;
-    } else if (item.getType().equals("choice")) {
+    } else if (item.getType().equals(ElementType.CHOICE.getValue())) {
       String[] s = item.getShape().split(",");
       int x = parseInt(s[0]);
       int y = parseInt(s[1]);
@@ -205,7 +205,7 @@ public class DiagramItemFactory {
           editable,
           item);
       result = choice;
-    } else if (item.getType().equals("activitystart")) {
+    } else if (item.getType().equals(ElementType.ACTIVITY_START.getValue())) {
       String[] s = item.getShape().split(",");
       int cx = parseInt(s[0]);
       int cy = parseInt(s[1]);
@@ -235,7 +235,7 @@ public class DiagramItemFactory {
             item);
       }
       result = ee;
-    } else if (item.getType().equals("activityend")) {
+    } else if (item.getType().equals(ElementType.ACTIVITY_END.getValue())) {
       String[] s = item.getShape().split(",");
       int cx = parseInt(s[0]);
       int cy = parseInt(s[1]);
@@ -250,7 +250,7 @@ public class DiagramItemFactory {
           editable,
           item);
       result = ee;
-    } else if (item.getType().equals("activity")) {
+    } else if (item.getType().equals(ElementType.ACTIVITY.getValue())) {
       String[] s = item.getShape().split(",");
       int x = parseInt(s[0]);
       int y = parseInt(s[1]);
@@ -268,7 +268,7 @@ public class DiagramItemFactory {
           editable,
           item);
       result = choice;
-    } else if (item.getType().equals("centtop")) {
+    } else if (item.getType().equals(ElementType.MIND_CENTRAL.getValue())) {
       String[] s = item.getShape().split(",");
       int x = parseInt(s[0]);
       int y = parseInt(s[1]);
@@ -286,7 +286,7 @@ public class DiagramItemFactory {
           editable,
           item);
       result = choice;
-    } else if (item.getType().equals("storage")) {
+    } else if (item.getType().equals(ElementType.STORAGE.getValue())) {
       String[] s = item.getShape().split(",");
       int x = parseInt(s[0]);
       int y = parseInt(s[1]);
@@ -304,7 +304,7 @@ public class DiagramItemFactory {
           editable,
           item);
       result = db;
-    } else if (item.getType().equals("textitem")) {
+    } else if (item.getType().equals(ElementType.TEXT_ITEM.getValue())) {
       String[] s = item.getShape().split(",");
       int x = parseInt(s[0]);
       int y = parseInt(s[1]);
@@ -322,7 +322,7 @@ public class DiagramItemFactory {
           editable,
           item);
       result = ne;
-    } else if (item.getType().equals("actoritem")) {
+    } else if (item.getType().equals(ElementType.ACTOR.getValue())) {
       String[] s = item.getShape().split(",");
       int x = parseInt(s[0]);
       int y = parseInt(s[1]);
@@ -340,7 +340,7 @@ public class DiagramItemFactory {
           editable,
           item);
       result = ne;
-    } else if (item.getType().equals("relationship")) {
+    } else if (item.getType().equals(ElementType.RELATIONSHIP.getValue())) {
       List<Integer> points = new ArrayList<Integer>();
       String[] ps = item.getShape().split(",");
       for (String p : ps) {
@@ -348,7 +348,7 @@ public class DiagramItemFactory {
       }
       Relationship2 r = new Relationship2(surface, points, item.getText(), editable, item);
       result = r;
-    } else if (item.getType().equals("freehand")) {
+    } else if (item.getType().equals(ElementType.FREEHAND.getValue())) {
       String[] ps = item.getShape().split(",");
       int[] points = new int[ps.length];
       int i = 0;
@@ -364,7 +364,7 @@ public class DiagramItemFactory {
       		editable,
           item);
       result = r;
-    } else if (item.getType().equals("package")) {
+    } else if (item.getType().equals(ElementType.PACKAGE.getValue())) {
       UMLPackageElement packagee = new UMLPackageElement(surface,
           new UMLPackageShape(item.getShape().split(",")),
               item.getText(),
@@ -374,7 +374,7 @@ public class DiagramItemFactory {
           editable,
           item);
       result = packagee;
-    } else if (item.getType().equals("rectcont")) {
+    } else if (item.getType().equals(ElementType.VERTICAL_PARTITION.getValue())) {
       RectBoundaryElement packagee = new RectBoundaryElement(surface,
           new RectContainerShape(item.getShape().split(",")),
               item.getText(),
