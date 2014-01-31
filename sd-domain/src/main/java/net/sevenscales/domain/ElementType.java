@@ -1,6 +1,7 @@
 package net.sevenscales.domain;
 
 public enum ElementType {
+	ELLIPSE("ellipseitem"),
 	COMMENT("comment"),
 	COMMENT_THREAD("comments"),
 	HORIZONTAL_PARTITION("hpart"),

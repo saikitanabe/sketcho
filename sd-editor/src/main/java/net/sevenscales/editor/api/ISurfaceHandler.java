@@ -63,6 +63,8 @@ public interface ISurfaceHandler {
 	void addAsDragging(Diagram diagram, boolean ownerComponent, MatrixPointJS point, int keys);
 	int getCurrentClientX();
 	int getCurrentClientY();
+	int getCurrentClientMouseMoveX();
+	int getCurrentClientMouseMoveY();
 	void remove(Diagram diagram);
 	void remove(JavaScriptObject element);
 	void clear();

@@ -15,6 +15,7 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.BoardDocument;
 import net.sevenscales.editor.content.ClientIdHelpers;
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
@@ -103,28 +104,42 @@ public class DuplicateHelpers {
 		return result;
 	}
 
-	public void paste(List<IDiagramItemRO> items, BoardDocument boardDocument, boolean editable) {
+	public void paste(int x, int y, List<IDiagramItemRO> items, BoardDocument boardDocument, boolean editable) {
 		// TODO check if editable, should be checked already before copy!!
 		// TODO what do to with comments!! is it allowed to copy those!!!???
 		if (editable) {
 			logger.debug("paste... {}", items);
 
-			State state = copyAndMapClientIds(items, boardDocument);
+			State state = copyAndMapClientIds(x, y, items, boardDocument);
 			addItemsToTheBoard(state);
 		}
 	}
 
-	private State copyAndMapClientIds(List<IDiagramItemRO> items, BoardDocument boardDocument) {
+	private State copyAndMapClientIds(int x, int y, List<IDiagramItemRO> items, BoardDocument boardDocument) {
 		State state = new State();
 		int i = 0;
 
+		int left = Integer.MAX_VALUE;
+		int top = Integer.MAX_VALUE;
 		for (IDiagramItemRO di : items) {
-  		copyAndMap(di, ++i, state, boardDocument);
+			Info shape = ShapeParser.parse(di, 0, 0);
+			// Info shape = di.parseShape();
+			int l = shape.getLeft();
+			int t = shape.getTop();
+			left = l < left ? l : left;
+			top = t < top ? t : top;
+		}
+
+		int moveX = x - left;
+		int moveY = y - top;
+
+		for (IDiagramItemRO di : items) {
+  		copyAndMap(moveX, moveY, di, ++i, state, boardDocument);
 		}
 		return state;
 	}
 
-	private void copyAndMap(IDiagramItemRO diro, int i, State state, BoardDocument boardDocument) {
+	private void copyAndMap(int x, int y, IDiagramItemRO diro, int i, State state, BoardDocument boardDocument) {
 		if (allowedToPasteType(diro) && diro instanceof IDiagramItem) {
 			IDiagramItem di = (IDiagramItem) diro;
 			String newClientId = ClientIdHelpers.generateClientId(i, boardDocument);
@@ -132,7 +147,7 @@ public class DuplicateHelpers {
 			di.setClientId(newClientId);
 
 			// always editable at this point
-			Diagram copied = DiagramItemFactory.create(di, surface, true);
+			Diagram copied = DiagramItemFactory.create(x, y, di, surface, true);
 			state.newItems.add(copied);
 			state.reattachHelpers.processDiagram(copied);
 			state.addRelationshipIfAny(copied);

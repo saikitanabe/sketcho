@@ -84,18 +84,16 @@ public class DiagramItemFactory {
   public static final int ITEM_VERSION = 5;
   
   public static Diagram create(IDiagramItemRO item, ISurfaceHandler surface, boolean editable) {
+    // 0, 0 create to exact position
+    return DiagramItemFactory.create(0, 0, item, surface, editable);
+  }
+
+  public static Diagram create(int moveX, int moveY, IDiagramItemRO item, ISurfaceHandler surface, boolean editable) {
     Diagram result = null;
-    if (item.getType().equals("ellipseitem")) {
-      String[] s = item.getShape().split(",");
-      int cx = parseInt(s[0]);
-      int cy = parseInt(s[1]);
-      int rx = parseInt(s[2]);
-      int ry = parseInt(s[3]);
+    if (ElementType.ELLIPSE.getValue().equals(item.getType())) {
+      EllipseShape shape = new EllipseShape(item.getShape().split(","), moveX, moveY);
       EllipseElement ee = new EllipseElement(surface,
-          new EllipseShape(cx, 
-              cy,
-              rx,
-              ry),
+              shape,
               item.getText(),
               parseBackgroundColor(item),
               parseBorderColor(item),

@@ -113,6 +113,8 @@ class SurfaceHandler extends SimplePanel implements
 	private Integer height;
 	private int currentClientX;
 	private int currentClientY;
+	private int currentClientMouseMoveX;
+	private int currentClientMouseMoveY;
 	
 	// configuration parameter that e.g. library enables for background movement
 	private boolean verticalDragOnly;
@@ -161,6 +163,13 @@ class SurfaceHandler extends SimplePanel implements
 		  public void onPreviewNativeEvent(NativePreviewEvent event) {
 				NativeEvent ne = event.getNativeEvent();
 				switch (event.getTypeInt()) {
+					case Event.ONMOUSEMOVE: {
+						// store mouse move position separately,
+						// not to break any currentclientx and y position logic
+						currentClientMouseMoveX = ne.getClientX();
+						currentClientMouseMoveY = ne.getClientY();
+						break;
+					}
 					case Event.ONMOUSEDOWN:
 					case Event.ONMOUSEUP: {
 						// store mouse up event location before it happens
@@ -171,6 +180,7 @@ class SurfaceHandler extends SimplePanel implements
 						// getting mouse up location
 						currentClientX = ne.getClientX();
 						currentClientY = ne.getClientY();
+						break;
 					}
 		  	}
 			}
@@ -322,6 +332,14 @@ class SurfaceHandler extends SimplePanel implements
 
 	public int getCurrentClientY() {
 		return currentClientY;
+	}
+
+	public int getCurrentClientMouseMoveX() {
+		return currentClientMouseMoveX;
+	}
+
+	public int getCurrentClientMouseMoveY() {
+		return currentClientMouseMoveY;
 	}
 	
 	public void removeAll() {
