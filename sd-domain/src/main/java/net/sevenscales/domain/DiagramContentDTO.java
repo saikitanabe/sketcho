@@ -8,13 +8,14 @@ import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.dto.ContentDTO;
+import net.sevenscales.editor.diagram.utils.DiagramItemList;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 public class DiagramContentDTO extends ContentDTO implements IDiagramContent, IsSerializable {
 	private static final long serialVersionUID = 4975000551782219679L;
-	private List<IDiagramItemRO> diagramItems = new ArrayList<IDiagramItemRO>();
+	private List<IDiagramItemRO> diagramItems = new DiagramItemList();
 	// precision will suffer, but should be enough times to update the board...
   private int version = -1;
 
@@ -36,9 +37,8 @@ public class DiagramContentDTO extends ContentDTO implements IDiagramContent, Is
 	}
 
 	public void addItem(IDiagramItemRO diagramItem) {
-		if (!diagramItems.contains(diagramItem)) {
-			diagramItems.add(diagramItem);
-		}
+		// checks by client id that doesn't add duplicates
+		diagramItems.add(diagramItem);
 	}
 
 	public void reset() {

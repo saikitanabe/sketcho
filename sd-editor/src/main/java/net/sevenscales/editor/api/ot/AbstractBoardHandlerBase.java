@@ -249,26 +249,21 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
 //		}
 //	}
 
-	protected final void sendOperation(String boardName, String originator, String operation, Iterable<Diagram> diagrams) {
-//		List<IDiagramItem> prevState = BoardDocumentHelpers.getDiagramsAsDTO(diagrams, false);
-		// update diagram items and generate json from those
-		// make sure that circle elements are not sent to server
+	protected List<? extends IDiagramItemRO> diagramsToItems(Iterable<Diagram> diagrams) {
 		List<Diagram> filteredDiagrams = DiagramHelpers.filterOwnerDiagramsAsList(diagrams, ActionType.NONE);
-		// JsonConversion jsonConversion = getJsonHelpers().json(filteredDiagrams, true, JsonFormat.SEND_FORMAT);
-		// logger.debug("sendOperation operation {} json {} filteredDiagrams {}", operation, jsonConversion.getJson(), filteredDiagrams);
 		List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.getDiagramsAsDTO(filteredDiagrams, true);
-		// if (jsonConversion.getJson().length() > 2) {
-			// at least []
-			applyLocalSendOperation(operation, operationItems);
-			if (notUndoOrRedo(operation)) {
-				// undo and redo are always translated to change operation (insert, move, delete...)
-				// client is responsible to do undo/redo operations, for server those are just normal
-				// change operations
-				sendLocalOperation(boardName, originator, operation, operationItems);
-			}
-		// } else if (LogConfiguration.loggingIsEnabled(Level.FINE)){
-		// 	throw new RuntimeException("sendOperation json cannot be empty!! something wrong with the operation");
-		// }
+		return operationItems;
+	}
+
+	protected final void sendOperation(String boardName, String originator, String operation, Iterable<Diagram> diagrams)  {
+		List<? extends IDiagramItemRO> operationItems = diagramsToItems(diagrams);
+		applyLocalSendOperation(operation, operationItems);
+		if (notUndoOrRedo(operation)) {
+			// undo and redo are always translated to change operation (insert, move, delete...)
+			// client is responsible to do undo/redo operations, for server those are just normal
+			// change operations
+			sendLocalOperation(boardName, originator, operation, operationItems);
+		}
 	}
 	protected abstract void sendLocalOperation(String name, String originator, String operation, List<? extends IDiagramItemRO> operationItems);
 

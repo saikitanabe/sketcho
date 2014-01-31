@@ -20,4 +20,17 @@ public class UIKeyHelpers {
 	public static boolean noMetaKeys(NativeEvent ne) {
 	  return !ne.getCtrlKey() && !ne.getMetaKey() && !ne.getShiftKey();
 	}
+
+	public static boolean cntrlOrCmdKey(NativeEvent ne) {
+		if (!ne.getCtrlKey() && ne.getMetaKey() && !ne.getShiftKey()) {
+			return true;
+		}
+
+		if (ne.getCtrlKey() && !ne.getMetaKey() && !ne.getShiftKey()) {
+			return true;
+		}
+
+		return false;
+	}
+
 }

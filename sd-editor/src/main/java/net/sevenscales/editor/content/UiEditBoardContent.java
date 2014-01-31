@@ -193,7 +193,6 @@ public abstract class UiEditBoardContent extends UiContent implements KeyDownHan
 	}
 	
   protected void paste(IContent content) {
-	  
 	}
   
   protected Class pasteType() {
