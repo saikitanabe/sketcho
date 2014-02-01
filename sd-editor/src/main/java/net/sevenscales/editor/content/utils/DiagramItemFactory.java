@@ -179,87 +179,87 @@ public class DiagramItemFactory {
       shapetext += parseInt(rs.centerY+moveY) + ",";
       shapetext += parseInt(rs.rx) + ",";
       shapetext += parseInt(rs.ry);
-      type = "ellipseitem";
+      type = ElementType.ELLIPSE.getValue();
     } else if (shape instanceof SequenceShape) {
       SequenceShape ss = (SequenceShape) shape;
       result = getItem(diagram);
       shapetext += parseInt(ss.lifeLineHeight) + " ";
       shapetext += rect2ShapeText(ss.rectShape, moveX, moveY);
-      type = "sequenceitem";
+      type = ElementType.SEQUENCE.getValue();
     } else if (shape instanceof RectShape) {
       RectShape rs = (RectShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(rs, moveX, moveY);
-      type = "classitem";
+      type = ElementType.CLASS.getValue();
     } else if (shape instanceof ComponentShape) {
     	ComponentShape rs = (ComponentShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(rs.rectShape, moveX, moveY);
-      type = "comp";
+      type = ElementType.COMPONENT.getValue();
     } else if (shape instanceof ServerShape) {
     	ServerShape rs = (ServerShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(rs.rectShape, moveX, moveY);
-      type = "server";
+      type = ElementType.SERVER.getValue();
     } else if (shape instanceof NoteShape) {
       NoteShape note = (NoteShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(note.rectShape, moveX, moveY);
-      type = "noteitem";
+      type = ElementType.NOTE.getValue();
     } else if (shape instanceof CommentThreadShape) {
       CommentThreadShape note = (CommentThreadShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(note.rectShape, moveX, moveY);
-      type = "comments";
+      type = ElementType.COMMENT_THREAD.getValue();
     } else if (shape instanceof CommentShape) {
       CommentShape note = (CommentShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(note.rectShape, moveX, moveY);
-      type = CommentElement.TYPE;
+      type = ElementType.CommentElement.TYPE.getValue();
     } else if (shape instanceof TextShape) {
       TextShape text = (TextShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(text.rectShape, moveX, moveY);
-      type = "textitem";
+      type = ElementType.TEXT_ITEM.getValue();
     } else if (shape instanceof ActivityChoiceShape) {
     	ActivityChoiceShape choice = (ActivityChoiceShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(choice.rectShape, moveX, moveY);
-      type = "choice";
+      type = ElementType.CHOICE.getValue();
     } else if (shape instanceof ActivityStartShape) {
     	ActivityStartShape start = (ActivityStartShape) shape;
       result = getItem(diagram);
       shapetext += parseInt(start.centerX+moveX) + ",";
       shapetext += parseInt(start.centerY+moveY) + ",";
       shapetext += parseInt(start.radius) + ",";
-      type = "activitystart";
+      type = ElementType.ACTIVITY_START.getValue();
     } else if (shape instanceof ActivityEndShape) {
     	ActivityEndShape end = (ActivityEndShape) shape;
       result = getItem(diagram);
       shapetext += parseInt(end.centerX+moveX) + ",";
       shapetext += parseInt(end.centerY+moveY) + ",";
       shapetext += parseInt(end.radius) + ",";
-      type = "activityend";
+      type = ElementType.ACTIVITY_END.getValue();
     } else if (shape instanceof ActivityShape) {
     	ActivityShape activity = (ActivityShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(activity.rectShape, moveX, moveY);
-      type = "activity";
+      type = ElementType.ACTIVITY.getValue();
     } else if (shape instanceof MindCentralShape) {
     	MindCentralShape activity = (MindCentralShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(activity.rectShape, moveX, moveY);
-      type = "centtop";
+      type = ElementType.MIND_CENTRAL.getValue();
     } else if (shape instanceof DbShape) {
     	DbShape db = (DbShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(db.rectShape, moveX, moveY);
-      type = "storage";
+      type = ElementType.STORAGE.getValue();
     } else if (shape instanceof ActorShape) {
       ActorShape actor = (ActorShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(actor.rectShape, moveX, moveY);
-      type = "actoritem";
+      type = ElementType.ACTOR.getValue();
     }  else if (shape instanceof RelationshipShape2) {
       RelationshipShape2 rs = (RelationshipShape2) shape;
       result = getItem(diagram);
@@ -271,7 +271,7 @@ public class DiagramItemFactory {
       }
       // skip last ,
       shapetext = shapetext.substring(0, shapetext.length()-1);
-      type = "relationship";
+      type = ElementType.RELATIONSHIP.getValue();
     } else if (shape instanceof FreehandShape) {
     	FreehandShape rs = (FreehandShape) shape;
       result = getItem(diagram);
@@ -283,17 +283,17 @@ public class DiagramItemFactory {
       }
       // skip last ,
       shapetext = shapetext.substring(0, shapetext.length()-1);
-      type = "freehand";
+      type = ElementType.FREEHAND.getValue();
     } else if (shape instanceof UMLPackageShape) {
     	UMLPackageShape rs = (UMLPackageShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(rs.rectShape, moveX, moveY);
-      type = "package";
+      type = ElementType.PACKAGE.getValue();
     } else if (shape instanceof RectContainerShape) {
     	RectContainerShape rs = (RectContainerShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(rs.rectShape, moveX, moveY);
-      type = "rectcont";
+      type = ElementType.VERTICAL_PARTITION.getValue();
     } else if (shape instanceof HorizontalPartitionShape) {
       HorizontalPartitionShape rs = (HorizontalPartitionShape) shape;
       result = getItem(diagram);
