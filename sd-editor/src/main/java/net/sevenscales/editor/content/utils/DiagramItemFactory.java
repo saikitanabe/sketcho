@@ -215,7 +215,7 @@ public class DiagramItemFactory {
       CommentShape note = (CommentShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(note.rectShape, moveX, moveY);
-      type = ElementType.CommentElement.TYPE.getValue();
+      type = ElementType.COMMENT.getValue();
     } else if (shape instanceof TextShape) {
       TextShape text = (TextShape) shape;
       result = getItem(diagram);
