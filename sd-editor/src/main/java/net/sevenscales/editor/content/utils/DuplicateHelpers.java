@@ -126,12 +126,14 @@ public class DuplicateHelpers {
 		int left = Integer.MAX_VALUE;
 		int top = Integer.MAX_VALUE;
 		for (IDiagramItemRO di : items) {
-			Info shape = ShapeParser.parse(di, 0, 0);
-			// Info shape = di.parseShape();
-			int l = shape.getLeft();
-			int t = shape.getTop();
-			left = l < left ? l : left;
-			top = t < top ? t : top;
+			if (allowedToPasteType(di)) {
+				Info shape = ShapeParser.parse(di, 0, 0);
+				// Info shape = di.parseShape();
+				int l = shape.getLeft();
+				int t = shape.getTop();
+				left = l < left ? l : left;
+				top = t < top ? t : top;
+			}
 		}
 
 		int moveX = x - left;
