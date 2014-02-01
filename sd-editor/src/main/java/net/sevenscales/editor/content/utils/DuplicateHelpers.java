@@ -13,6 +13,7 @@ import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.BoardDocument;
+import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.content.ClientIdHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
@@ -109,9 +110,15 @@ public class DuplicateHelpers {
 		// TODO what do to with comments!! is it allowed to copy those!!!???
 		if (editable) {
 			logger.debug("paste... {}", items);
+			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 
 			State state = copyAndMapClientIds(x, y, items, boardDocument);
+
+			TODO
+			- line breaking kopiointi ei toimi
+
 			addItemsToTheBoard(state);
+			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 		}
 	}
 
