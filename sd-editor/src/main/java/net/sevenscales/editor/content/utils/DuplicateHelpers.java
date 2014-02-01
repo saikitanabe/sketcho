@@ -114,9 +114,6 @@ public class DuplicateHelpers {
 
 			State state = copyAndMapClientIds(x, y, items, boardDocument);
 
-			TODO
-			- line breaking kopiointi ei toimi
-
 			addItemsToTheBoard(state);
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 		}
