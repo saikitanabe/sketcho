@@ -12,7 +12,7 @@
 			<a ui:field="freehandOff" title="Freehand ON/Off" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-pen-white2"></i>
 			</a>
-			<a ui:field="duplicate" title="Duplicate" class="btn btn-custom btn-context-menu tooltipper">
+			<a ui:field="duplicate" title="Duplicate | Ctrl+C, Ctrl+V (copy-paste)" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-duplicate2"></i>
 			</a>
 			<g:SimplePanel ui:field="changeConnection" styleName="inline-change-connection">
