@@ -15,11 +15,13 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.BoardDocument;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.content.ClientIdHelpers;
+import net.sevenscales.editor.content.BoardColorHelper;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
+import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.domain.utils.SLogger;
 
 
@@ -157,6 +159,9 @@ public class DuplicateHelpers {
 			state.newItems.add(copied);
 			state.reattachHelpers.processDiagram(copied);
 			state.addRelationshipIfAny(copied);
+
+			// Apply theme colors
+			BoardColorHelper.applyThemeToDiagram(copied, Theme.getColorScheme(Theme.ThemeName.PAPER), Theme.getCurrentColorScheme());
 		}
 	}
 
