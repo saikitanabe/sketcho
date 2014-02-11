@@ -372,7 +372,13 @@ public interface AbstractDiagramFactory {
 		}
 
 		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
-			return new Relationship2(surface, (RelationshipShape2)shape, item.getText(), editable, item);
+			return new Relationship2(surface, 
+                               (RelationshipShape2)shape, 
+                               item.getText(),
+                               DiagramItemFactory.parseBackgroundColor(item), 
+                               DiagramItemFactory.parseBorderColor(item), 
+                               editable,
+                               item);
 		}
 	}
 

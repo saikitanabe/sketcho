@@ -17,6 +17,7 @@ import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler;
+import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
 
@@ -120,7 +121,7 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       points.add(xx+1);
       points.add(yy+1);
       String defaultRelationship = RelationshipHelpers.relationship(sender, surface.getEditorContext());
-      this.createdRelationship = new Relationship2(surface, new RelationshipShape2(points), defaultRelationship, true, new DiagramItemDTO());
+      this.createdRelationship = new Relationship2(surface, new RelationshipShape2(points), defaultRelationship, Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), true, new DiagramItemDTO());
       logger.debug("createdRelationship {}...", createdRelationship);
       createdRelationship.setVisible(false);
       

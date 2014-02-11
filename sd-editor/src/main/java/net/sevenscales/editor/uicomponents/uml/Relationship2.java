@@ -23,6 +23,7 @@ import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IPolyline;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
@@ -247,9 +248,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   }
   
-  public Relationship2(ISurfaceHandler surface, RelationshipShape2 points, String text,
-      boolean editable, IDiagramItemRO item) {
-    super(editable, surface, Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), item);
+  public Relationship2(ISurfaceHandler surface, RelationshipShape2 points, String text, Color backgroundColor, Color borderColor, boolean editable, IDiagramItemRO item) {
+    super(editable, surface, backgroundColor, borderColor, Theme.createDefaultTextColor(), item);
     this.points = points.points;
     handler = new ConnectionMoveHandler();
     
@@ -318,7 +318,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     setReadOnly(!editable);
     setText(text);
     
-    setBorderColor(Theme.getCurrentColorScheme().getBorderColor());
+    // setBorderColor(Theme.getCurrentColorScheme().getBorderColor());
 
     // applyAnnotationColors();
   }
@@ -629,7 +629,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
         ps.add(val+diffy);
       }
     }
-    Relationship2 result = new Relationship2(surface, new RelationshipShape2(ps), getText(), getEditable(), new DiagramItemDTO());
+    Relationship2 result = new Relationship2(surface, new RelationshipShape2(ps), getText(), new Color(backgroundColor), new Color(borderColor), getEditable(), new DiagramItemDTO());
     return result;
   }
 
@@ -1309,7 +1309,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   
   @Override
   public int supportedMenuItems() {
-  	return ContextMenuItem.REVERSE_CONNECTION_MENU.getValue();
+  	return ContextMenuItem.REVERSE_CONNECTION_MENU.getValue() | ContextMenuItem.COLOR_MENU.getValue();
   }
   
   @Override
@@ -1395,14 +1395,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return true;
   }
   
-  @Override
-  public boolean usesSchemeDefaultColors(ElementColorScheme colorScheme) {
-    // At the moment it is not possible to change any colors for relationship
-    // though this needs to be changed. And now new color is actually stored for
-    // relationship on theme change
-    return true;
-  }
-
   public AnchorMoveHandler getAnchorMoveHandler() {
     return handler;
   }
