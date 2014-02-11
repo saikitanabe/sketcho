@@ -289,11 +289,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					
 					int left = ScaleHelpers.unscaleValue(UiContextMenu.this.surface.getAbsoluteLeft() + d.getLeft(), UiContextMenu.this.surface.getScaleFactor()) + 
 							UiContextMenu.this.surface.getRootLayer().getTransformX(); 
-					int top = ScaleHelpers.unscaleValue(UiContextMenu.this.surface.getAbsoluteTop() + d.getTop(), UiContextMenu.this.surface.getScaleFactor()) - 40 + 
+					int top = ScaleHelpers.unscaleValue(UiContextMenu.this.surface.getAbsoluteTop() + d.getTop(), UiContextMenu.this.surface.getScaleFactor()) + adjustByDiagramType(d) + 
 							UiContextMenu.this.surface.getRootLayer().getTransformY();
 					
 					if (UiContextMenu.this.surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE)) {
-						top = UiContextMenu.this.surface.getAbsoluteTop() + ScaleHelpers.unscaleValue(d.getTop(), UiContextMenu.this.surface.getScaleFactor()) - 40 + 
+						top = UiContextMenu.this.surface.getAbsoluteTop() + ScaleHelpers.unscaleValue(d.getTop(), UiContextMenu.this.surface.getScaleFactor()) + adjustByDiagramType(d) + 
 								UiContextMenu.this.surface.getRootLayer().getTransformY();
 					}
 
@@ -411,6 +411,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		});
 		
 		closeOnSave();
+	}
+
+	private int adjustByDiagramType(Diagram diagram) {
+		return (diagram instanceof Relationship2) ? -55 : -40;
 	}
 
 	private boolean notConfluence() {
