@@ -15,7 +15,7 @@ public class Theme {
   private ElementColorScheme commentThreadColorScheme;
 
   public enum ThemeName {
-    WHITE("white", "#fff"), BLACK("black", "#272822"), SEPIA("sepia", "#FBF0D9"), PAPER("paper", "#FAFAFA");
+    WHITE("white", "#fff"), BLACK("black", "#272822"), SEPIA("sepia", "#FBF0D9"), PAPER("paper", "#FAFAFA"), GRID("grid", "#FAFAFA");
     
     private String name;
     private String boardBackgroundColor;
@@ -108,6 +108,9 @@ public class Theme {
                                                                      createDefaultBackgroundColor()));
     defaultColorMap.put(ThemeName.SEPIA.name, new ElementColorScheme(createDefaultTextColorOnSepia(), 
                                                                      createDefaultBorderColorOnSepia(), 
+                                                                     createDefaultBackgroundColor()));
+    defaultColorMap.put(ThemeName.GRID.name, new ElementColorScheme(createDefaultTextColorOnWhite(),
+                                                                     createDefaultBorderColorOnWhite(),
                                                                      createDefaultBackgroundColor()));
 
     commentColorScheme = new ElementColorScheme(createDefaultCommentTextColor(),
