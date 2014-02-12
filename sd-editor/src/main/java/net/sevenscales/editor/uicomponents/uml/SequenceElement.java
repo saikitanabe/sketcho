@@ -481,9 +481,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
   @Override
   public void setHighlightColor(String color) {
   	super.setHighlightColor(color);
-  	
-  	// for now...
-	  line.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+	  line.setStroke(color);
   }
 
   @Override
