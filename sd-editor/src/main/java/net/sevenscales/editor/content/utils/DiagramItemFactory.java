@@ -80,8 +80,10 @@ public class DiagramItemFactory {
    * - comment fields: p, cby, cbyd, cat, uat
    * - annotation field: a
    * version 5: links
+   * version 6: 
+   * - relationship supports border colors, legacy border color is interpreted as default rel border color
    */
-  public static final int ITEM_VERSION = 5;
+  public static final int ITEM_VERSION = 6;
   
   public static Diagram create(IDiagramItemRO item, ISurfaceHandler surface, boolean editable) {
     // 0, 0 create to exact position

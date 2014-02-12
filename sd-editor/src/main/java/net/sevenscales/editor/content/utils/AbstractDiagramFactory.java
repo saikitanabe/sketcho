@@ -377,6 +377,7 @@ public interface AbstractDiagramFactory {
                                item.getText(),
                                DiagramItemFactory.parseBackgroundColor(item), 
                                DiagramItemFactory.parseBorderColor(item), 
+                               DiagramItemFactory.parseTextColor(item),
                                editable,
                                item);
 		}

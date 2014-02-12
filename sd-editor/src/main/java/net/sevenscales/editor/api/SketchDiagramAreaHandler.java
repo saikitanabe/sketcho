@@ -121,7 +121,7 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       points.add(xx+1);
       points.add(yy+1);
       String defaultRelationship = RelationshipHelpers.relationship(sender, surface.getEditorContext());
-      this.createdRelationship = new Relationship2(surface, new RelationshipShape2(points), defaultRelationship, Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), true, new DiagramItemDTO());
+      this.createdRelationship = new Relationship2(surface, new RelationshipShape2(points), defaultRelationship, Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, new DiagramItemDTO());
       logger.debug("createdRelationship {}...", createdRelationship);
       createdRelationship.setVisible(false);
       

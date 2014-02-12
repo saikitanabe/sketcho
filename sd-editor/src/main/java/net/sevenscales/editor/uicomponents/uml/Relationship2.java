@@ -48,6 +48,9 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 
 public class Relationship2 extends AbstractDiagramItem implements DiagramDragHandler, DiagramResizeHandler {
 	private static final SLogger logger = SLogger.createLogger(Relationship2.class);
+
+  private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
+
 	private IPolyline inheritance;
   private IPolyline arrow;
   private IPolyline aggregate;
@@ -247,9 +250,17 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 		}
 
   }
-  
-  public Relationship2(ISurfaceHandler surface, RelationshipShape2 points, String text, Color backgroundColor, Color borderColor, boolean editable, IDiagramItemRO item) {
-    super(editable, surface, backgroundColor, borderColor, Theme.createDefaultTextColor(), item);
+
+  public Relationship2(ISurfaceHandler surface, RelationshipShape2 points, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+    super(editable, 
+          surface, 
+          backgroundColor,
+          borderColor,
+          textColor,
+          // Relationship2.fixLegacyBackgroundColor(backgroundColor, item), 
+          // Relationship2.fixLegacyBorderColor(borderColor, item), 
+          // Relationship2.fixLegacyTextColor(textColor, item), 
+          item);
     this.points = points.points;
     handler = new ConnectionMoveHandler();
     
@@ -629,7 +640,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
         ps.add(val+diffy);
       }
     }
-    Relationship2 result = new Relationship2(surface, new RelationshipShape2(ps), getText(), new Color(backgroundColor), new Color(borderColor), getEditable(), new DiagramItemDTO());
+    Relationship2 result = new Relationship2(surface, new RelationshipShape2(ps), getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), getEditable(), new DiagramItemDTO());
     return result;
   }
 
@@ -1394,7 +1405,12 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   public boolean isTextElementBackgroundTransparent() {
     return true;
   }
-  
+
+  @Override
+  public boolean isTextColorAccordingToBackgroundColor() {
+    return true;
+  }
+
   public AnchorMoveHandler getAnchorMoveHandler() {
     return handler;
   }
