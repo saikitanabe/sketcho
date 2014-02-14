@@ -25,7 +25,7 @@
 			</g:FocusPanel>
 			<g:FocusPanel ui:field="dashed" styleName="{style.focuspanel} relationship icon-conn-dashedline">
 			</g:FocusPanel>
-			<g:FocusPanel ui:field="reverseline" styleName="{style.focuspanel} relationship icon-conn-reverse">
+			<g:FocusPanel ui:field="synchline" styleName="{style.focuspanel} relationship icon-conn-synch">
 			</g:FocusPanel>
 		</g:VerticalPanel>
 		<g:VerticalPanel styleName="uml-selection-table">

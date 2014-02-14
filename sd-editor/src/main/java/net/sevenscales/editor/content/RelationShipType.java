@@ -12,6 +12,7 @@ public enum RelationShipType {
 	AGGREGATION_DIRECTED_FILLED("<*>->"),
 	AGGREGATION("<>-"), 
 	AGGREGATION_FILLED("<*>-"), 
+	SYNCHRONIZED("-|*>"),
 	REVERSE("");
 	
 	private String value;

@@ -75,9 +75,9 @@ public class LineSelections extends Composite {
 	public void onAggregationBothFilled(ClickEvent event) {
 		selectionHandler.itemSelected(RelationShipType.AGGREGATION_FILLED);
 	}
-	@UiHandler("reverseline")
+	@UiHandler("synchline")
 	public void onReverse(ClickEvent event) {
-		selectionHandler.itemSelected(RelationShipType.REVERSE);
+		selectionHandler.itemSelected(RelationShipType.SYNCHRONIZED);
 	}
 
 }

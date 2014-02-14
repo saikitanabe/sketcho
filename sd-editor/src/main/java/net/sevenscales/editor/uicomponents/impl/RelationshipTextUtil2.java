@@ -99,7 +99,12 @@ public class RelationshipTextUtil2 implements RelationshipParser {
 					
 			// NOTE: order matters! Put most complex as first
 			// sub elements needs be after more complex ones!
-			if (arrowLine.matches(".*-\\|>.*")) {
+			if (arrowLine.matches(".*-\\|\\*>.*")) {
+				result |= RelationshipShape2.INHERITANCE | RelationshipShape2.FILLED;
+				leftEnd = arrowLine.indexOf(RelationShipType.SYNCHRONIZED.getValue());
+				rightStart = leftEnd + RelationShipType.SYNCHRONIZED.getValue().length();
+				relationshipShape.type = RelationShipType.SYNCHRONIZED;
+			} else if (arrowLine.matches(".*-\\|>.*")) {
 				result |= RelationshipShape2.INHERITANCE;
 				leftEnd = arrowLine.indexOf(RelationShipType.INHERITANCE.getValue());
 				rightStart = leftEnd + RelationShipType.INHERITANCE.getValue().length();

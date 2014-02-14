@@ -25,7 +25,7 @@ public class SvgPolyline extends SvgLine {
     Color color = poly.getFillColor();
     if (color != null) {
 //      fill-opacity:0.1
-      fill = rgb(color.toRgb());
+      fill = hex(color.toHexString());
     	params.put("%fill-opacity", "fill-opacity:"+Double.toString(color.opacity));
     }
 

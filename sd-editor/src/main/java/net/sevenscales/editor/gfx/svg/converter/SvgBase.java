@@ -15,6 +15,16 @@ class SvgBase {
 	protected static final String FILL_TEMPLATE = "%fill%";
 	protected static final String TEXT_COLOR_TEMPLATE = "%textcolor%";
 
+	/**
+	* Relationships use background color as transparent color to hide line.
+	*/
+	private static boolean isThemeBackgroundColor(String color) {
+		if (color != null && color.equals(Theme.getCurrentThemeName().getBoardBackgroundColor())) {
+			return true;
+		}
+		return false;
+	}
+
 	private static void applyDefaultColors(Map<String,String> params, Diagram diagram) {
     // params.put("%fill%", fill);
     // params.put("%fill-opacity%", String.valueOf(rect.getFillColor().getOpacity()));
@@ -23,12 +33,28 @@ class SvgBase {
 	    // batik doesn't support functions in style
 	    params.put(STROKE_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toHexString());
     }
+    applyDefaultFillColors(params);
+	}
+
+	private static void applyDefaultFillColors(Map<String, String> params) {
 		String fill = params.get(FILL_TEMPLATE);
-    if (fill != null && !"none".equals(fill)) {
-	    // params.put(FILL_TEMPLATE, "rbg(" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toRgb() + ")");
-	    // Batik doesn't support functions!
-	    params.put(FILL_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toHexString());
-    }
+		boolean themeBgcolor = isThemeBackgroundColor(fill);
+
+		if (fill != null && fill.equals("#"+ Theme.getCurrentColorScheme().getBorderColor().toHexString())) {
+			params.put(FILL_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toHexString());
+		} else if (isThemeBackgroundColor(fill)) {
+			params.put(FILL_TEMPLATE, ThemeName.PAPER.getBoardBackgroundColor());
+		}
+
+    // if (fill != null && !"none".equals(fill) || themeBgcolor) {
+	   //  // params.put(FILL_TEMPLATE, "rbg(" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toRgb() + ")");
+	   //  // Batik doesn't support functions!
+	   //  if (themeBgcolor) {
+		  //   params.put(FILL_TEMPLATE, ThemeName.PAPER.getBoardBackgroundColor());
+	   //  } else if () {
+		  //   params.put(FILL_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toHexString());
+	   //  }
+    // }
 	}
 
 	private static void checkToApplyColor(IShape shape, String template, Map<String,String> params, Diagram diagram) {
@@ -40,6 +66,8 @@ class SvgBase {
 		boolean usersDefaultColors = diagram.usesSchemeDefaultColors(Theme.getCurrentColorScheme());
 		if (usersDefaultColors) {
 			applyDefaultColors(params, diagram);
+		} else {
+			applyDefaultFillColors(params);
 		}
 
     if (diagram.isTextElementBackgroundTransparent() || (usersDefaultColors && params.get(TEXT_COLOR_TEMPLATE) != null)) {

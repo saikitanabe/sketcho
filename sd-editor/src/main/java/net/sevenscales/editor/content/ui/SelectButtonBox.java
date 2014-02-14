@@ -111,7 +111,7 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 		relationarrow.removeClassName("icon-conn-aggregation-filled");
 		relationarrow.removeClassName("icon-conn-aggregationboth");
 		relationarrow.removeClassName("icon-conn-aggregationboth-filled");
-		relationarrow.removeClassName("icon-conn-reverse");
+		relationarrow.removeClassName("icon-conn-synch");
 	}
 
 	@Override
@@ -151,8 +151,8 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 		case AGGREGATION_FILLED:
 			relationarrow.addClassName("icon-conn-aggregationboth-filled");
 			break;
-		case REVERSE:
-			relationarrow.addClassName("icon-conn-reverse");
+		case SYNCHRONIZED:
+			relationarrow.addClassName("icon-conn-synch");
 			break;
 		}
 		select(type);

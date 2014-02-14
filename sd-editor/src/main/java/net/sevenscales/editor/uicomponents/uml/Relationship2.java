@@ -282,6 +282,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     inheritancePoints = new int[8];
     inheritance = IShapeFactory.Util.factory(editable).createPolyline(group, inheritancePoints);
     inheritance.setFill(255, 255, 255, 1);
+    // inheritance.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
     
     int endx = this.points.get(this.points.size()-2);
     int endy = this.points.get(this.points.size()-1);
@@ -999,6 +1000,18 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     relationshipHandleHelpers.doSetShape(currentDragged);
   }
 
+  private void fillInheritance(String color) {
+    if (info != null && info.isInheritance() && info.isFilled()) {
+      inheritance.setFill("#" + color);
+      // inheritance.setFill(Theme.getCurrentColorScheme().getBorderColor().red,
+      //                     Theme.getCurrentColorScheme().getBorderColor().green,
+      //                     Theme.getCurrentColorScheme().getBorderColor().blue,
+      //                     Theme.getCurrentColorScheme().getBorderColor().opacity);
+    } else {
+      inheritance.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
+    }
+  }
+
   private void fillAggregate() {
     if (info != null && info.isAggregate() && info.isFilled()) {
       aggregate.setFill(Theme.getCurrentColorScheme().getBorderColor().red,
@@ -1006,10 +1019,20 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
                         Theme.getCurrentColorScheme().getBorderColor().blue,
                         Theme.getCurrentColorScheme().getBorderColor().opacity);
     } else {
-      // TODO set background color and on print set white bg color
-      aggregate.setFill(255, 255, 255, 1);
+      // set background color and on print set white bg color
+      aggregate.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
     }
   }
+
+  // @Override
+  // public void toSvgStart() {
+  //   fillInheritance(true);
+  // }
+  // @Override
+  // public void toSvgEnd() {
+  //   fillInheritance(false);
+  // }
+
 
   // ///////////////////////////////////////
   public void anchor(boolean highlight) {
@@ -1176,6 +1199,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     arrow.setStroke(color);
     arrowStartPolyline.setStroke(color);
     inheritance.setStroke(color);
+    fillInheritance(color);
     aggregate.setStroke(color);
   }
 
