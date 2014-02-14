@@ -25,6 +25,18 @@ class SvgBase {
 		return false;
 	}
 
+	private static void applyDefaultFillColors(Map<String, String> params) {
+		String fill = params.get(FILL_TEMPLATE);
+		if (fill != null && fill.equals("#"+ Theme.getCurrentColorScheme().getBorderColor().toHexString())) {
+			// if fill is scheme border color then switch to paper
+			params.put(FILL_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toHexString());
+		} else if (isThemeBackgroundColor(fill)) {
+			// if fill is theme background then use paper background
+			// used in arrows to hide line, e.g. in inheritance
+			params.put(FILL_TEMPLATE, ThemeName.PAPER.getBoardBackgroundColor());
+		}
+	}
+
 	private static void applyDefaultColors(Map<String,String> params, Diagram diagram) {
     // params.put("%fill%", fill);
     // params.put("%fill-opacity%", String.valueOf(rect.getFillColor().getOpacity()));
@@ -36,27 +48,6 @@ class SvgBase {
     applyDefaultFillColors(params);
 	}
 
-	private static void applyDefaultFillColors(Map<String, String> params) {
-		String fill = params.get(FILL_TEMPLATE);
-		boolean themeBgcolor = isThemeBackgroundColor(fill);
-
-		if (fill != null && fill.equals("#"+ Theme.getCurrentColorScheme().getBorderColor().toHexString())) {
-			params.put(FILL_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toHexString());
-		} else if (isThemeBackgroundColor(fill)) {
-			params.put(FILL_TEMPLATE, ThemeName.PAPER.getBoardBackgroundColor());
-		}
-
-    // if (fill != null && !"none".equals(fill) || themeBgcolor) {
-	   //  // params.put(FILL_TEMPLATE, "rbg(" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toRgb() + ")");
-	   //  // Batik doesn't support functions!
-	   //  if (themeBgcolor) {
-		  //   params.put(FILL_TEMPLATE, ThemeName.PAPER.getBoardBackgroundColor());
-	   //  } else if () {
-		  //   params.put(FILL_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toHexString());
-	   //  }
-    // }
-	}
-
 	private static void checkToApplyColor(IShape shape, String template, Map<String,String> params, Diagram diagram) {
 		if (!shape.isThemeSupported()) {
 			// this shape doesn't support theme colors and is constant
@@ -66,8 +57,6 @@ class SvgBase {
 		boolean usersDefaultColors = diagram.usesSchemeDefaultColors(Theme.getCurrentColorScheme());
 		if (usersDefaultColors) {
 			applyDefaultColors(params, diagram);
-		} else {
-			applyDefaultFillColors(params);
 		}
 
     if (diagram.isTextElementBackgroundTransparent() || (usersDefaultColors && params.get(TEXT_COLOR_TEMPLATE) != null)) {

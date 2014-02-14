@@ -281,7 +281,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     inheritancePoints = new int[8];
     inheritance = IShapeFactory.Util.factory(editable).createPolyline(group, inheritancePoints);
-    inheritance.setFill(255, 255, 255, 1);
+    // inheritance.setFill(255, 255, 255, 1);
     // inheritance.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
     
     int endx = this.points.get(this.points.size()-2);
@@ -988,7 +988,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       aggregatePoints[4] = dline.x; aggregatePoints[5] = dline.y;
       aggregatePoints[6] = dright.x; aggregatePoints[7] = dright.y;
       aggregatePoints[8] = startx; aggregatePoints[9] = starty;
-      fillAggregate();
       aggregate.setShape(aggregatePoints);
     }
     aggregate.setVisibility(info.isAggregate());
@@ -1002,24 +1001,20 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   private void fillInheritance(String color) {
     if (info != null && info.isInheritance() && info.isFilled()) {
+      // if solid then use board color
       inheritance.setFill("#" + color);
-      // inheritance.setFill(Theme.getCurrentColorScheme().getBorderColor().red,
-      //                     Theme.getCurrentColorScheme().getBorderColor().green,
-      //                     Theme.getCurrentColorScheme().getBorderColor().blue,
-      //                     Theme.getCurrentColorScheme().getBorderColor().opacity);
     } else {
+      // no fill => hide line under the shape
       inheritance.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
     }
   }
 
-  private void fillAggregate() {
+  private void fillAggregate(String color) {
     if (info != null && info.isAggregate() && info.isFilled()) {
-      aggregate.setFill(Theme.getCurrentColorScheme().getBorderColor().red,
-                        Theme.getCurrentColorScheme().getBorderColor().green,
-                        Theme.getCurrentColorScheme().getBorderColor().blue,
-                        Theme.getCurrentColorScheme().getBorderColor().opacity);
+      // if solid then use board color
+      aggregate.setFill("#" + color);
     } else {
-      // set background color and on print set white bg color
+      // no fill => hide line under the shape
       aggregate.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
     }
   }
@@ -1201,6 +1196,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     inheritance.setStroke(color);
     fillInheritance(color);
     aggregate.setStroke(color);
+    fillAggregate(color);
   }
 
   @Override
