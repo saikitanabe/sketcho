@@ -57,7 +57,10 @@ class SvgBase {
 		boolean usersDefaultColors = diagram.usesSchemeDefaultColors(Theme.getCurrentColorScheme());
 		if (usersDefaultColors) {
 			applyDefaultColors(params, diagram);
-		}
+		} else {
+			// if using custom colors need to check if fill needs to be according to paper
+			applyDefaultFillColors(params);
+ 		}
 
     if (diagram.isTextElementBackgroundTransparent() || (usersDefaultColors && params.get(TEXT_COLOR_TEMPLATE) != null)) {
     	// if text background color is transparent then apply paper text color
