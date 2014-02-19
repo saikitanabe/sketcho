@@ -36,6 +36,20 @@ public class Image extends Shape implements IImage {
 	}-*/;
 
 	@Override
+	public void setXY(int x, int y) {
+		_setShape(rawNode, x, y, getWidth(), getHeight());
+	}
+
+	@Override
+	public void setClipCircle(int x, int y, int r) {
+		_setClipCircle(rawNode, x, y, r);
+	}
+
+	private native void _setClipCircle(JavaScriptObject rawNode, int x, int y, int r)/*-{
+		rawNode.setClip({cx:x, cy:y, rx:r, ry:r});
+	}-*/;
+
+	@Override
 	public int getX() {
 		return _getX(rawNode);
 	}

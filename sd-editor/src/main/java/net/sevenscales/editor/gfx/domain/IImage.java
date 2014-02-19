@@ -14,4 +14,6 @@ public interface IImage extends IShape {
   void setSrc(String src);
   String getSrc();
   void setShape(int x, int y, int width, int height, String src);
+  void setXY(int x, int y);
+  void setClipCircle(int x, int y, int r);
 }
