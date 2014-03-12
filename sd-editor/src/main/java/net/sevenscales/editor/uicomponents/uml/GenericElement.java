@@ -25,6 +25,7 @@ import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.IDiagramItemRO;
@@ -43,10 +44,12 @@ public class GenericElement extends AbstractDiagramItem {
   private IPath path;
   private IRectangle background;
   private IGroup group;
+  private IGroup subgroup;
   private int left;
   private int top;
   private int width;
   private int height;
+  private Shapes.Proto theshape;
 
   private boolean tosvg;
   
@@ -65,11 +68,18 @@ public class GenericElement extends AbstractDiagramItem {
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     group.setAttribute("cursor", "default");
 
-    path = IShapeFactory.Util.factory(editable).createPath(group, pathTransformer);
+		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
+    subgroup.setAttribute("cursor", "default");
+
+    path = IShapeFactory.Util.factory(editable).createPath(subgroup, pathTransformer);
     path.setStroke(borderWebColor);
     path.setStrokeWidth(FREEHAND_STROKE_WIDTH);
     path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
-    
+    path.setAttribute("vector-effect", "non-scaling-stroke");
+
+  	theshape = Shapes.get(getDiagramItem().getType());
+  	path.setShape(theshape.path);
+
     // backgroundPath = IShapeFactory.Util.factory(editable).createPath(group, pathTransformer);
     // backgroundPath.setStroke(0, 0, 0, 0);
     // backgroundPath.setStrokeWidth(FREEHAND_TOUCH_WIDTH);
@@ -83,7 +93,10 @@ public class GenericElement extends AbstractDiagramItem {
 		
     shapes.add(path);
     // shapes.add(background);
-    
+
+    resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
+
+
     setReadOnly(!editable);
     setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
 
@@ -114,11 +127,11 @@ public class GenericElement extends AbstractDiagramItem {
 
 	@Override
 	protected int doGetLeft() {
-		return background.getX();
+		return left;
 	}
 	@Override
 	protected int doGetTop() {
-		return background.getY();
+		return top;
 	}
 	@Override
 	public int getWidth() {
@@ -164,13 +177,15 @@ public class GenericElement extends AbstractDiagramItem {
 	public void resizeStart() {
 	}
 
-	public boolean resize(Point diff) {
-		return false;
-	}
+  public boolean resize(Point diff) {
+    return resize(doGetLeft(), doGetTop(), getWidth() + diff.x, getHeight() + diff.y);
+  }
 
-	protected boolean resize(int left, int top, int width, int height) {
-	   return false;
-	}
+  protected boolean resize(int left, int top, int width, int height) {
+    setShape(left, top, width, height);
+    dispatchAndRecalculateAnchorPositions();
+    return true;
+  }
 
 	public void resizeEnd() {
 	}
@@ -252,21 +267,22 @@ public class GenericElement extends AbstractDiagramItem {
   }
 
   public void setShape(int left, int top, int width, int height) {
-    background.setShape(0, 0, width, height, 0);
-
-  	Shapes.Proto theshape = Shapes.get(getDiagramItem().getType());
-  	path.setShape(theshape.path);
-  	path.setTranslate(theshape.translateX, theshape.translateY);
-
-  	// 3.1311035e-7,-308.2677
-
-  	// // group.setTransform(theshape.translateX + left, theshape.translateY + top);
-  	group.setTransform(left, top);
-
   	this.left = left;
   	this.top = top;
   	this.width = width;
   	this.height = height;
+
+    background.setShape(left, top, width, height, 0);
+
+  	path.setMatrix(theshape.matrix.xx, theshape.matrix.xy, theshape.matrix.yx, theshape.matrix.yy, theshape.matrix.dx, theshape.matrix.dy);
+
+  	// path.setTranslate(theshape.width / 2, theshape.height / 2);
+  	// path.setScale(width / theshape.width, height / theshape.height);
+  	// path.setTranslate((theshape.matrix.dx / width / theshape.width), (theshape.matrix.dy / height / theshape.height));
+
+  	subgroup.setScale(width / theshape.width, height / theshape.height);
+  	subgroup.setTransform(left, top);
+
 
   	// this.left = DiagramHelpers.getLeftCoordinate(shape);
   	// this.top = DiagramHelpers.getTopCoordinate(shape);

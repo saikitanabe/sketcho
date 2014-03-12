@@ -21,7 +21,9 @@ public interface IShape extends IGraphics {
   void applyTransformToShape(int dx, int dy);
   int getDX();
   int getDY();
-  void setTranslate(float x, float y);
+  void setTranslate(double x, double y);
+  void setScale(double xx, double yy);
+  void setMatrix(double xx, double xy, double yx, double yy, double dx, double dy);
   void setVisibility(boolean visibility);
   boolean isVisible();
   String getAttribute(String name);

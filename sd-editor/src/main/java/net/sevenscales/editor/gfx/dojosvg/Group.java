@@ -127,6 +127,15 @@ class Group extends Graphics implements IContainer, IGroup {
   	_setTransform(group, dx, dy);
   }
 
+  public void setScale(double xx, double yy) {
+    _setScale(group, xx, yy);
+  }
+  private native void _setScale(JavaScriptObject rawNode, double xx, double yy)/*-{
+    var m = $wnd.dojox.gfx.matrix;
+    rawNode.applyTransform(m.scale(xx, yy));
+  }-*/; 
+
+
   private native void _setTransform(JavaScriptObject rawNode, int dx, int dy)/*-{
   	var t = rawNode.getTransform();
   	if (t != null) {
@@ -136,8 +145,27 @@ class Group extends Graphics implements IContainer, IGroup {
   	} else {
   		rawNode.setTransform({dx: dx, dy: dy});
   	}
-  	
 	}-*/;
+
+  @Override
+  public void setTransform(int x, int y, float scaleX, float scaleY) {
+    _setTransform(group, x, y, scaleX, scaleY);
+  }
+
+  private native void _setTransform(JavaScriptObject rawNode, int x, int y, float scaleX, float scaleY)/*-{
+    var m = $wnd.dojox.gfx.matrix;
+    // {dx: dx, dy: dy}
+    rawNode.setTransform([m.translate(x, y), m.scale(scaleX, scaleY)]);
+    // var t = rawNode.getTransform();
+    // if (t != null) {
+    //   t.dx = dx;
+    //   t.dy = dy;
+    //   rawNode.setTransform(t);
+    // } else {
+    //   rawNode.setTransform({dx: dx, dy: dy});
+    // }
+    
+  }-*/;
 
 	@Override
   public void setAttribute(String name, String value) {

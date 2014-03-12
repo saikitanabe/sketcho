@@ -237,13 +237,35 @@ abstract class Shape extends Graphics implements IShape {
 		return 0; 
 	}-*/;
 
-	public void setTranslate(float x, float y) {
+	public void setTranslate(double x, double y) {
 		_setTranslate(rawNode, x, y);
 	}
-	private native void _setTranslate(JavaScriptObject rawNode, float x, float y)/*-{
+	private native void _setTranslate(JavaScriptObject rawNode, double x, double y)/*-{
 		var m = $wnd.dojox.gfx.matrix;
 		rawNode.applyTransform(m.translate(x, y));
 	}-*/;
+
+	public void setMatrix(double xx, double xy, double yx, double yy, double dx, double dy) {
+		_setMatrix(rawNode, xx, xy, yx, yy, dx, dy);
+	}
+	private native void _setMatrix(JavaScriptObject rawNode, double xx, double xy, double yx, double yy, double dx, double dy)/*-{
+		var m = $wnd.dojox.gfx.matrix;
+		m.xx = xx;
+		m.xy = xy;
+		m.yx = yx;
+		m.yy = yy;
+		m.dx = dx;
+		m.dy = dy;
+		rawNode.applyTransform(m);
+	}-*/;
+
+	public void setScale(double xx, double yy) {
+		_setScale(rawNode, xx, yy);
+	}
+	private native void _setScale(JavaScriptObject rawNode, double xx, double yy)/*-{
+		var m = $wnd.dojox.gfx.matrix;
+		rawNode.applyTransform(m.scale(xx, yy));
+	}-*/;	
 	
 	final public boolean isVisible() {
 	  return visibility;
