@@ -11,6 +11,7 @@ import net.sevenscales.editor.api.event.LibrarySelectionEvent;
 import net.sevenscales.editor.api.event.ThemeChangedEvent;
 import net.sevenscales.editor.api.event.ThemeChangedEventHandler;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.ElementType;
 
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.TouchHelpers;
@@ -38,6 +39,7 @@ import net.sevenscales.editor.diagram.shape.SequenceShape;
 import net.sevenscales.editor.diagram.shape.ServerShape;
 import net.sevenscales.editor.diagram.shape.TextShape;
 import net.sevenscales.editor.diagram.shape.UMLPackageShape;
+import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.uicomponents.uml.ActivityChoiceElement;
@@ -58,6 +60,7 @@ import net.sevenscales.editor.uicomponents.uml.ServerElement;
 import net.sevenscales.editor.uicomponents.uml.StorageElement;
 import net.sevenscales.editor.uicomponents.uml.TextElement;
 import net.sevenscales.editor.uicomponents.uml.UMLPackageElement;
+import net.sevenscales.editor.uicomponents.uml.GenericElement;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -326,6 +329,14 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         new EllipseShape(145, SOFTWARE_SKETCHING_GROUP + 150, 50, 25),
         "Use Case", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
         new DiagramItemDTO()));
+
+    result.add(new GenericElement(this.toolpool, 
+        new GenericShape(ElementType.STAR5.getValue(), 145, SOFTWARE_SKETCHING_GROUP + 150, 50, 25), 
+          Theme.createDefaultBackgroundColor(), 
+          Theme.createDefaultBorderColor(), 
+          Theme.createDefaultTextColor(), 
+          true,
+          DiagramItemDTO.createGenericItem(ElementType.STAR5)));
     
     result.add(new StorageElement(this.toolpool,
         new DbShape(160, SOFTWARE_SKETCHING_GROUP + 220, 100, 30),

@@ -47,7 +47,8 @@ class ShapeParser {
 		new ParserMap(ElementType.VERTICAL_PARTITION, new AbstractDiagramFactory.VerticalPartitionFactory()),
 		new ParserMap(ElementType.COMMENT_THREAD, new AbstractDiagramFactory.CommentThreadFactory()),
 		new ParserMap(ElementType.HORIZONTAL_PARTITION, new AbstractDiagramFactory.HorizontalPartitionFactory()),
-		new ParserMap(ElementType.FORK, new AbstractDiagramFactory.ForkFactory())
+		new ParserMap(ElementType.FORK, new AbstractDiagramFactory.ForkFactory()),
+		new ParserMap(ElementType.STAR5, new AbstractDiagramFactory.GenericFactory())
 	};
 
 	static AbstractDiagramFactory factory(IDiagramItemRO diro) {

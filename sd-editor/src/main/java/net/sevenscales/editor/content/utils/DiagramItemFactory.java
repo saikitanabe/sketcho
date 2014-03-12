@@ -33,6 +33,7 @@ import net.sevenscales.editor.diagram.shape.CommentShape;
 import net.sevenscales.editor.diagram.shape.RectContainerShape;
 import net.sevenscales.editor.diagram.shape.HorizontalPartitionShape;
 import net.sevenscales.editor.diagram.shape.ForkShape;
+import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.shape.RectShape;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
 import net.sevenscales.editor.diagram.shape.SequenceShape;
@@ -307,6 +308,12 @@ public class DiagramItemFactory {
       shapetext += rect2ShapeText(s.rectShape, moveX, moveY);
       shapetext += "," +s.orientation;
       type = ElementType.FORK.getValue();
+    } else if (shape instanceof GenericShape) {
+      GenericShape s = (GenericShape) shape;
+      result = getItem(diagram);
+      shapetext += rect2ShapeText(s.rectShape, moveX, moveY);
+      // makes sure that type is not manipulated
+      type = ElementType.getEnum(result.getType()).getValue();
     }
     
     if (result != null) {

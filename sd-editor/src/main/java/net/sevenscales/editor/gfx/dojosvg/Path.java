@@ -54,6 +54,10 @@ class Path extends Shape implements IPath {
 	private native void _setShape(JavaScriptObject rawNode, String shape)/*-{
 		rawNode.setShape({path: shape});
 	}-*/;
+
+	public String getRawShape() {
+		return _getShape(rawNode);
+	}
 	
 	private native String _getShape(JavaScriptObject rawNode)/*-{
 		return rawNode.getShape().path;

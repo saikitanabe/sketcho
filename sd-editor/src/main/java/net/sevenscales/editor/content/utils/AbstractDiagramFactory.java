@@ -406,6 +406,26 @@ public interface AbstractDiagramFactory {
 		}
 	}
 
+
+  public class GenericFactory implements AbstractDiagramFactory {
+    public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
+      String[] s = item.getShape().split(",");
+      return new GenericShape(item.getType(), s).move(moveX, moveY);
+    }
+
+    public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+      return new GenericElement(surface,
+          (GenericShape) shape,
+          // item.getText(), 
+          DiagramItemFactory.parseBackgroundColor(item),
+          DiagramItemFactory.parseBorderColor(item),
+          DiagramItemFactory.parseTextColor(item),
+          editable,
+          item);
+    }
+  }
+
+
 	public class PackageFactory implements AbstractDiagramFactory {
 		public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
       return new UMLPackageShape(item.getShape().split(",")).move(moveX, moveY);

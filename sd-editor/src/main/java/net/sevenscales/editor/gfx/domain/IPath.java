@@ -15,6 +15,7 @@ public interface IPath extends IShape {
   void setShape(int[] points);
   void setShape(List<Integer> points);
   List<Integer> getShape();
+  String getRawShape();
   int getArrayValue(int index);
   void setShape(String shape);
   String getShapeStr(int dx, int dy);

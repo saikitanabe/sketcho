@@ -30,6 +30,12 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	private int resolved;
 	private List<UrlLinkDTO> links;
 
+	public static DiagramItemDTO createGenericItem(ElementType type) {
+		DiagramItemDTO result = new DiagramItemDTO();
+		result.setType(type.getValue());
+		return result;
+	}
+
 	public DiagramItemDTO() {
   }
 	

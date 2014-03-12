@@ -22,7 +22,8 @@ public enum ElementType {
 	VERTICAL_PARTITION("rectcont"),
 	COMMENT_THREAD("comments"),
 	HORIZONTAL_PARTITION("hpart"),
-	FORK("fork");
+	FORK("fork"),
+	STAR5("star5");
 
 	private String value;
 
@@ -33,4 +34,16 @@ public enum ElementType {
 	public String getValue() {
 		return this.value;
 	}
+
+	public static ElementType getEnum(String operation) {
+		if (operation == null) {
+      throw new IllegalArgumentException();
+		}
+		
+		for (ElementType v : values()) {
+      if (operation.equalsIgnoreCase(v.getValue())) return v;
+		}
+		throw new IllegalArgumentException();
+	}
+	
 }
