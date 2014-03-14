@@ -132,7 +132,7 @@ class Group extends Graphics implements IContainer, IGroup {
   }
   private native void _setScale(JavaScriptObject rawNode, double xx, double yy)/*-{
     var m = $wnd.dojox.gfx.matrix;
-    rawNode.applyTransform(m.scale(xx, yy));
+    rawNode.setTransform(m.scale(xx, yy));
   }-*/; 
 
 

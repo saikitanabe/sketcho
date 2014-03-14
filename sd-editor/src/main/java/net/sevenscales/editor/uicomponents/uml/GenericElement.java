@@ -274,20 +274,17 @@ public class GenericElement extends AbstractDiagramItem {
 
     background.setShape(left, top, width, height, 0);
 
-  	path.setMatrix(theshape.matrix.xx, theshape.matrix.xy, theshape.matrix.yx, theshape.matrix.yy, theshape.matrix.dx, theshape.matrix.dy);
+    // if (!resizing) {
+	  	// path.setMatrix(theshape.matrix.xx, theshape.matrix.xy, theshape.matrix.yx, theshape.matrix.yy, theshape.matrix.dx, theshape.matrix.dy);
+	  	// subgroup.resetTransform();
+	  	// subgroup.setTransform(0, 0);
+	  	// subgroup.setScale(0, 0);
+	  	subgroup.setScale(width / theshape.width, height / theshape.height);
+	  	subgroup.setTransform(left, top);
+	  	// subgroup.setTransform(left + width / 2, top - height / 2);
+    // }
 
-  	// path.setTranslate(theshape.width / 2, theshape.height / 2);
-  	// path.setScale(width / theshape.width, height / theshape.height);
-  	// path.setTranslate((theshape.matrix.dx / width / theshape.width), (theshape.matrix.dy / height / theshape.height));
 
-  	subgroup.setScale(width / theshape.width, height / theshape.height);
-  	subgroup.setTransform(left, top);
-
-
-  	// this.left = DiagramHelpers.getLeftCoordinate(shape);
-  	// this.top = DiagramHelpers.getTopCoordinate(shape);
-  	// this.width = DiagramHelpers.getWidth(shape);
-  	// this.height = DiagramHelpers.getHeight(shape);
     connectionHelpers.setShape(left, top, width, height);
   }
   

@@ -29,13 +29,11 @@ public class Shapes {
 
 	public static class Proto {
 		public String path;
-		public Matrix matrix;
 		public float width;
 		public float height;
 
-		private Proto(String path, Matrix matrix, float width, float height) {
+		private Proto(String path, float width, float height) {
 			this.path = path;
-			this.matrix = matrix;
 			this.width = width;
 			this.height = height;
 		}
@@ -47,7 +45,7 @@ public class Shapes {
 
 	static {
 		shapes = new HashMap<ElementType,Proto>();
-		shapes.put(ElementType.STAR5, new Proto("m83.703402,82.745628a24.375166,17.936443,0,1,1,-48.750332,0,24.375166,17.936443,0,1,1,48.750332,0z", new Matrix(0.98377617,0,0,1.0581645,-83.365705 + 25.000001,275.7121 + -323.27059), 50, 40));
+		shapes.put(ElementType.STAR5, new Proto("m 49.000000,30.306925 -16.538481,2.842886 -7.135087,15.850195 -7.697727,-15.559991 -16.628705,-2.193970 11.781024,-12.459489 -3.142017,-17.206143 14.978800,7.859603 14.686831,-8.440012 -2.523617,17.316991 z", 50, 50));
 	}
 
 	public static Proto get(String elementType) {

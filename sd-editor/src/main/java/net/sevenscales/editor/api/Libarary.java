@@ -331,7 +331,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         new DiagramItemDTO()));
 
     result.add(new GenericElement(this.toolpool, 
-        new GenericShape(ElementType.STAR5.getValue(), 145, SOFTWARE_SKETCHING_GROUP + 150, 50, 25), 
+        new GenericShape(ElementType.STAR5.getValue(), 145, SOFTWARE_SKETCHING_GROUP + 150, 50, 50), 
           Theme.createDefaultBackgroundColor(), 
           Theme.createDefaultBorderColor(), 
           Theme.createDefaultTextColor(), 
