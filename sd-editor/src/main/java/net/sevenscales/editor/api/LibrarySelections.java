@@ -21,7 +21,7 @@ public class LibrarySelections extends Composite {
 	}
 
 	public enum Library {
-		SOFTWARE, MINDMAP, ROADMAP
+		SOFTWARE, MINDMAP, ROADMAP, GENERAL
 	}
 
 	public interface LibrarySelectedHandler {
@@ -33,6 +33,7 @@ public class LibrarySelections extends Composite {
 	@UiField AnchorElement software;
 	@UiField AnchorElement mindmap;
 	@UiField AnchorElement roadmap;
+	@UiField AnchorElement general;
 	@UiField DivElement btnGroup;
 //	@UiField AnchorElement roadmap;
 
@@ -80,6 +81,21 @@ public class LibrarySelections extends Composite {
 						switch (DOM.eventGetType(event)) {
 						case Event.ONCLICK:
 							LibrarySelections.this.librarySelectedHandler.onSelected(Library.ROADMAP);
+							break;
+						}
+					}
+				});
+
+		DOM.sinkEvents((com.google.gwt.user.client.Element) general.cast(),
+				Event.ONCLICK);
+		DOM.setEventListener(
+				(com.google.gwt.user.client.Element) general.cast(),
+				new EventListener() {
+					@Override
+					public void onBrowserEvent(Event event) {
+						switch (DOM.eventGetType(event)) {
+						case Event.ONCLICK:
+							LibrarySelections.this.librarySelectedHandler.onSelected(Library.GENERAL);
 							break;
 						}
 					}

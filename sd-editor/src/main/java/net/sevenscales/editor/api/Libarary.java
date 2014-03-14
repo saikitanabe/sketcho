@@ -92,8 +92,11 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 	private static final int MINDMAP_GROUP = CLASS_GROUP + CLASS_GROUP_HEIGHT + GROUP_SPACE;
 	private static final int MINDMAP_GROUP_HEIGHT = 260;
 
-    private static final int ROADMAP_GROUP = MINDMAP_GROUP + MINDMAP_GROUP_HEIGHT + GROUP_SPACE;
-    private static final int ROADMAP_GROUP_HEIGHT = 260;
+  private static final int ROADMAP_GROUP = MINDMAP_GROUP + MINDMAP_GROUP_HEIGHT + GROUP_SPACE;
+  private static final int ROADMAP_GROUP_HEIGHT = 260;
+
+  private static final int GENERAL_GROUP = ROADMAP_GROUP + ROADMAP_GROUP_HEIGHT + GROUP_SPACE;
+  private static final int GENERAL_GROUP_HEIGHT = 260;
 
 	
 	private LibrarySelectedHandler librarySelectedHandler = new LibrarySelectedHandler() {
@@ -109,9 +112,13 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 				toolpool.getRootLayer().applyTransform(0, -MINDMAP_GROUP + 25);
 				break;
 			case ROADMAP:
-                toolpool.getRootLayer().applyTransform(0, -ROADMAP_GROUP + 25);
+        toolpool.getRootLayer().applyTransform(0, -ROADMAP_GROUP + 25);
 				break;
+      case GENERAL:
+        toolpool.getRootLayer().applyTransform(0, -GENERAL_GROUP + 25);
+        break;
 			}
+
 			editorContext.getEventBus().fireEvent(new LibrarySelectionEvent(library));
 			editorContext.set(EditorProperty.CURRENT_LIBRARY, library);
 		}
@@ -292,6 +299,16 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         new DiagramItemDTO()));
   }
 
+  private void general(List<Diagram> result) {
+    result.add(new GenericElement(this.toolpool, 
+        new GenericShape(ElementType.STAR5.getValue(), 10, GENERAL_GROUP, 50, 50), 
+          Theme.createDefaultBackgroundColor(), 
+          Theme.createDefaultBorderColor(), 
+          Theme.createDefaultTextColor(), 
+          true,
+          DiagramItemDTO.createGenericItem(ElementType.STAR5)));
+  }
+
 	private List<Diagram> createToolbarItems() {
 		boolean currentValue = editorContext.isTrue(EditorProperty.AUTO_RESIZE_ENABLED);
 		
@@ -329,14 +346,6 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         new EllipseShape(145, SOFTWARE_SKETCHING_GROUP + 150, 50, 25),
         "Use Case", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
         new DiagramItemDTO()));
-
-    result.add(new GenericElement(this.toolpool, 
-        new GenericShape(ElementType.STAR5.getValue(), 145, SOFTWARE_SKETCHING_GROUP + 150, 50, 50), 
-          Theme.createDefaultBackgroundColor(), 
-          Theme.createDefaultBorderColor(), 
-          Theme.createDefaultTextColor(), 
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.STAR5)));
     
     result.add(new StorageElement(this.toolpool,
         new DbShape(160, SOFTWARE_SKETCHING_GROUP + 220, 100, 30),
@@ -483,6 +492,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
 
     roadmap(result);
+    general(result);
 
     // restore value back
 		editorContext.set(EditorProperty.AUTO_RESIZE_ENABLED, currentValue);
