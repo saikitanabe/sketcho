@@ -92,7 +92,6 @@ public class GenericElement extends AbstractDiagramItem {
 		addMouseDiagramHandler(this);
 		
     shapes.add(path);
-    // shapes.add(background);
 
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
 
@@ -100,8 +99,6 @@ public class GenericElement extends AbstractDiagramItem {
     setReadOnly(!editable);
     setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
 
-    enableDisableBackgroundEvents();
-    
     setBorderColor(borderColor);
 
     super.constructorDone();
@@ -274,45 +271,23 @@ public class GenericElement extends AbstractDiagramItem {
 
     background.setShape(left, top, width, height, 0);
 
-    // if (!resizing) {
-	  	// path.setMatrix(theshape.matrix.xx, theshape.matrix.xy, theshape.matrix.yx, theshape.matrix.yy, theshape.matrix.dx, theshape.matrix.dy);
-	  	// subgroup.resetTransform();
-	  	// subgroup.setTransform(0, 0);
-	  	// subgroup.setScale(0, 0);
-	  	subgroup.setScale(width / theshape.width, height / theshape.height);
-	  	subgroup.setTransform(left, top);
-	  	// subgroup.setTransform(left + width / 2, top - height / 2);
-    // }
-
+  	subgroup.setScale(width / theshape.width, height / theshape.height);
+  	subgroup.setTransform(left, top);
 
     connectionHelpers.setShape(left, top, width, height);
   }
   
   public void setHighlightColor(String color) {
-		// path.setStroke(color);
-		background.setStroke(color);
+		path.setStroke(color);
+		// background.setStroke(color);
   }
   
   @Override
   public void setBackgroundColor(int red, int green, int blue, double opacity) {
   	super.setBackgroundColor(red, green, blue, opacity);
-    // path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
-
-    // need to draw differently with or without background, so redraw
-    // doSetShape(this.shape.points);
-    // enableDisableBackgroundEvents();
+    path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }
 
-  private void enableDisableBackgroundEvents() {
-    // if (backgroundColor.opacity == 0) {
-    // 	// clear events from background
-	   //  backgroundPath.setFill(null);
-    // } else {
-	   //  // enable mouse events from background
-	   //  backgroundPath.setFill(0, 0, 0, 0);
-    // }
-  }
-  	
 	@Override
 	public IGroup getGroup() {
 		return group;
