@@ -29,10 +29,12 @@ public class Shapes {
 
 	public static class Group {
 		public Proto[] protos;
-		public int width;
-		public int height;
 
-		public Group(Proto[] protos, int width, int height) {
+		// NOTE: important to keep as float or double; int will be really slow!
+		public double width;
+		public double height;
+
+		public Group(Proto[] protos, double width, double height) {
 			this.protos = protos;
 			this.width = width;
 			this.height = height;
