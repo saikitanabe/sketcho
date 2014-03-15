@@ -61,14 +61,23 @@ public class Shapes {
 
 	static {
 		shapes = new HashMap<ElementType,Group>();
+
+		shapes.put(ElementType.STAR4, new Group(new Proto[]{
+			new Proto("m 25,49.004685 -8.485281,-15.514719 -15.514719,-8.485280 15.514719,-8.485281 8.485280,-15.514719 8.485281,15.514719 15.514719,8.485280 -15.514719,8.485281 z ", "")
+		}, 50, 50));
+
 		shapes.put(ElementType.STAR5, new Group(new Proto[]{
 			new Proto("m 49,19.434298 -12.098453,12.212955 2.693801,17.352755 -14.767181,-8.266410 -14.898450,8.104734 2.971834,-17.321878 -11.901550,-12.343754 16.603875,-2.439099 7.542888,-15.733593 7.289926,15.814431 z")
 		}, 50, 50));
 
 		shapes.put(ElementType.ENVELOPE, new Group(new Proto[]{
-			new Proto("m 1,1 0,48 98,0 0,-47.875000 -48.375000,25.281250 z ", "stroke-linejoin:round;"),
-			new Proto("m 1.345292,1.121100 97.464868,0 ", "stroke-linejoin:round;")
+			new Proto("m 1,1 98,0 0,48 -98,0 z ", "stroke-linejoin:round;"),
+			new Proto("m 1.268353,1.485500 48.725893,23.358900 48.620198,-23.676000 ", "stroke-linejoin:round;")
 		}, 100, 50));
+
+		shapes.put(ElementType.TRIANGLE, new Group(new Proto[]{
+			new Proto("m 0.5,46.5 49,0 -24.5,-43 z ", "")
+		}, 50, 50));
 
 		// shapes.put(ElementType.ENVELOPE, new Group(new Proto[]{
 		// 	new Proto("m 1,1 0,48 98,0 0,-47.875 -48.375000,25.281250 z"),

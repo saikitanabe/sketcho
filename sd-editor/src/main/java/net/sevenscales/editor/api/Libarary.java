@@ -300,20 +300,34 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
   }
 
   private void general(List<Diagram> result) {
+    result.add(new GenericElement(this.toolpool,
+        new GenericShape(ElementType.STAR4.getValue(), 10, GENERAL_GROUP, 40, 40),
+          Theme.createDefaultBackgroundColor(),
+          Theme.createDefaultBorderColor(),
+          Theme.createDefaultTextColor(),
+          true,
+          DiagramItemDTO.createGenericItem(ElementType.STAR4)));
     result.add(new GenericElement(this.toolpool, 
-        new GenericShape(ElementType.STAR5.getValue(), 10, GENERAL_GROUP, 50, 50), 
+        new GenericShape(ElementType.STAR5.getValue(), 10 + 1*40 + 1*10, GENERAL_GROUP, 40, 40), 
           Theme.createDefaultBackgroundColor(), 
           Theme.createDefaultBorderColor(), 
           Theme.createDefaultTextColor(), 
           true,
           DiagramItemDTO.createGenericItem(ElementType.STAR5)));
     result.add(new GenericElement(this.toolpool, 
-        new GenericShape(ElementType.ENVELOPE.getValue(), 10 + 50 + 20, GENERAL_GROUP, 100, 50), 
+        new GenericShape(ElementType.ENVELOPE.getValue(), 10 + 2*40 + 2*10, GENERAL_GROUP, 50, 35), 
           Theme.createDefaultBackgroundColor(), 
           Theme.createDefaultBorderColor(), 
           Theme.createDefaultTextColor(), 
           true,
           DiagramItemDTO.createGenericItem(ElementType.ENVELOPE)));
+    result.add(new GenericElement(this.toolpool,
+        new GenericShape(ElementType.TRIANGLE.getValue(), 10 + 2*40 + 50 + 3*10, GENERAL_GROUP, 40, 40),
+          Theme.createDefaultBackgroundColor(),
+          Theme.createDefaultBorderColor(),
+          Theme.createDefaultTextColor(),
+          true,
+          DiagramItemDTO.createGenericItem(ElementType.TRIANGLE)));
   }
 
 	private List<Diagram> createToolbarItems() {
