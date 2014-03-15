@@ -57,7 +57,7 @@ public class ShowHideHelpers {
 				System.out.println(Element.as(event.getNativeEvent().getEventTarget()).getId());
 //				if (!Element.as(event.getNativeEvent().getEventTarget()).isOrHasChild(inner.getElement())) {
 					onOuterElement = false;
-					Scheduler.get().scheduleFixedDelay(hideslider, 2000);
+					// Scheduler.get().scheduleFixedDelay(hideslider, 2000);
 //				}
 			}
 		}, MouseOutEvent.getType());
