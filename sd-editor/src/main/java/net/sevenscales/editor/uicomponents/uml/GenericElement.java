@@ -1,6 +1,8 @@
 
 package net.sevenscales.editor.uicomponents.uml;
 
+import java.util.List;
+import java.util.ArrayList;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
@@ -41,7 +43,7 @@ public class GenericElement extends AbstractDiagramItem {
 
 	private GenericShape shape;
 	private Point coords = new Point();
-  private IPath path;
+  private List<IPath> paths;
   private IRectangle background;
   private IGroup group;
   private IGroup subgroup;
@@ -49,7 +51,7 @@ public class GenericElement extends AbstractDiagramItem {
   private int top;
   private int width;
   private int height;
-  private Shapes.Proto theshape;
+  private Shapes.Group theshape;
 
   private boolean tosvg;
   
@@ -57,7 +59,7 @@ public class GenericElement extends AbstractDiagramItem {
 
   private IPath.PathTransformer pathTransformer = new IPath.PathTransformer() {
   	public String getShapeStr(int dx, int dy) {
-  		return path.getRawShape();
+  		return "";
   	}
   };
   
@@ -71,18 +73,10 @@ public class GenericElement extends AbstractDiagramItem {
 		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
     subgroup.setAttribute("cursor", "default");
 
-    path = IShapeFactory.Util.factory(editable).createPath(subgroup, pathTransformer);
-    path.setStroke(borderWebColor);
-    path.setStrokeWidth(FREEHAND_STROKE_WIDTH);
-    path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
-    path.setAttribute("vector-effect", "non-scaling-stroke");
-
   	theshape = Shapes.get(getDiagramItem().getType());
-  	path.setShape(theshape.path);
 
-    // backgroundPath = IShapeFactory.Util.factory(editable).createPath(group, pathTransformer);
-    // backgroundPath.setStroke(0, 0, 0, 0);
-    // backgroundPath.setStrokeWidth(FREEHAND_TOUCH_WIDTH);
+  	paths = new ArrayList<IPath>(theshape.protos.length);
+    createSubPaths(theshape);
 
     background = IShapeFactory.Util.factory(editable).createRectangle(group);
     background.setFill(0, 0 , 0, 0); // transparent
@@ -90,8 +84,10 @@ public class GenericElement extends AbstractDiagramItem {
 		addEvents(background);
 		
 		addMouseDiagramHandler(this);
-		
-    shapes.add(path);
+
+		for (IPath path : paths) {
+	    shapes.add(path);
+		}
 
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
 
@@ -102,6 +98,23 @@ public class GenericElement extends AbstractDiagramItem {
     setBorderColor(borderColor);
 
     super.constructorDone();
+	}
+
+	private void createSubPaths(Shapes.Group groupData) {
+		for (Shapes.Proto p : groupData.protos) {
+			IPath path = createSubPath(p);
+			paths.add(path);
+		}
+	}
+
+	private IPath createSubPath(Shapes.Proto proto) {
+    IPath path = IShapeFactory.Util.factory(editable).createPath(subgroup, pathTransformer);
+    path.setStroke(borderWebColor);
+    path.setStrokeWidth(FREEHAND_STROKE_WIDTH);
+    path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+    path.setAttribute("vector-effect", "non-scaling-stroke");
+  	path.setShape(proto.path);
+  	return path;
 	}
 	
 	// @Override
@@ -278,14 +291,18 @@ public class GenericElement extends AbstractDiagramItem {
   }
   
   public void setHighlightColor(String color) {
-		path.setStroke(color);
+  	for (IPath path : paths) {
+			path.setStroke(color);
+  	}
 		// background.setStroke(color);
   }
   
   @Override
   public void setBackgroundColor(int red, int green, int blue, double opacity) {
   	super.setBackgroundColor(red, green, blue, opacity);
-    path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+  	for (IPath path : paths) {
+	    path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+  	}
   }
 
 	@Override

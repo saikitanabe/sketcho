@@ -7,35 +7,43 @@ import net.sevenscales.domain.ElementType;
 
 
 public class Shapes {
-	private static final Map<ElementType,Proto> shapes;
+	private static final Map<ElementType,Group> shapes;
 
 	public static class Matrix {
-		public double xx;
-		public double xy;
-		public double yx;
-		public double yy;
-		public double dx;
-		public double dy;
+		public double a;
+		public double b;
+		public double c;
+		public double d;
+		public double e;
+		public double f;
 
-		public Matrix(double xx, double xy, double yx, double yy, double dx, double dy) {
-			this.xx = xx;
-			this.xy = xy;
-			this.yx = yx;
-			this.yy = yy;
-			this.dx = dx;
-			this.dy = dy;
+		public Matrix(double a, double b, double c, double d, double e, double f) {
+			this.a = a;
+			this.b = b;
+			this.c = c;
+			this.d = d;
+			this.e = e;
+			this.f = f;
+		}
+	}
+
+	public static class Group {
+		public Proto[] protos;
+		public int width;
+		public int height;
+
+		public Group(Proto[] protos, int width, int height) {
+			this.protos = protos;
+			this.width = width;
+			this.height = height;
 		}
 	}
 
 	public static class Proto {
 		public String path;
-		public float width;
-		public float height;
 
-		private Proto(String path, float width, float height) {
+		private Proto(String path) {
 			this.path = path;
-			this.width = width;
-			this.height = height;
 		}
 	}
 
@@ -44,15 +52,17 @@ public class Shapes {
  // </g>
 
 	static {
-		shapes = new HashMap<ElementType,Proto>();
-		shapes.put(ElementType.STAR5, new Proto("m 49.000000,19.434298 -12.098453,12.212955 2.693801,17.352755 -14.767181,-8.266410 -14.898450,8.104734 2.971834,-17.321878 -11.901550,-12.343754 16.603875,-2.439099 7.542888,-15.733593 7.289926,15.814431 z", 50, 50));
+		shapes = new HashMap<ElementType,Group>();
+		shapes.put(ElementType.STAR5, new Group(new Proto[]{
+			new Proto("m 49.000000,19.434298 -12.098453,12.212955 2.693801,17.352755 -14.767181,-8.266410 -14.898450,8.104734 2.971834,-17.321878 -11.901550,-12.343754 16.603875,-2.439099 7.542888,-15.733593 7.289926,15.814431 z")
+		}, 50, 50));
 	}
 
-	public static Proto get(String elementType) {
+	public static Group get(String elementType) {
 		return get(ElementType.getEnum(elementType));
 	}
 
-	public static Proto get(ElementType type) {
+	public static Group get(ElementType type) {
 		return shapes.get(type);
 	}
 }
