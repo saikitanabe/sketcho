@@ -112,6 +112,10 @@ public class GenericElement extends AbstractDiagramItem {
     path.setStroke(borderWebColor);
     path.setStrokeWidth(FREEHAND_STROKE_WIDTH);
     path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+    // path.setStrokeCap("round");
+    if (proto.style != null) {
+	    path.setAttribute("style", proto.style);
+    }
     path.setAttribute("vector-effect", "non-scaling-stroke");
   	path.setShape(proto.path);
   	return path;

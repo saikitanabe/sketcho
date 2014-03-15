@@ -126,6 +126,25 @@ abstract class Shape extends Graphics implements IShape {
 	  }
 	  return getColor(raw);
 	}
+
+	public void setStrokeCap(String value) {
+		_setStrokeCap(rawNode, value);
+	}
+	private native void _setStrokeCap(JavaScriptObject rawNode, String value)/*-{
+		var stroke = rawNode.getStroke()
+		if (stroke != null) {
+			stroke.cap = value;
+		} else {
+			rawNode.setStroke({cap:value});
+		}
+	}-*/;
+  public String getStrokeCap() {
+		return _getStrokeCap(rawNode);
+  }
+  private native String _getStrokeCap(JavaScriptObject rawNode)/*-{
+  	return rawNode.getStroke().cap;
+  }-*/;
+
 	private native double getOpacity(JavaScriptObject rawNode)/*-{
 		if (rawNode.color != null) {
   		return rawNode.color.a;

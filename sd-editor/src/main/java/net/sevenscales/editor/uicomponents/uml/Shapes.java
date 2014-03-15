@@ -43,9 +43,15 @@ public class Shapes {
 
 	public static class Proto {
 		public String path;
+		public String style;
 
 		private Proto(String path) {
 			this.path = path;
+		}
+
+		private Proto(String path, String style) {
+			this.path = path;
+			this.style = style;
 		}
 	}
 
@@ -56,12 +62,18 @@ public class Shapes {
 	static {
 		shapes = new HashMap<ElementType,Group>();
 		shapes.put(ElementType.STAR5, new Group(new Proto[]{
-			new Proto("m 49.000000,19.434298 -12.098453,12.212955 2.693801,17.352755 -14.767181,-8.266410 -14.898450,8.104734 2.971834,-17.321878 -11.901550,-12.343754 16.603875,-2.439099 7.542888,-15.733593 7.289926,15.814431 z")
+			new Proto("m 49,19.434298 -12.098453,12.212955 2.693801,17.352755 -14.767181,-8.266410 -14.898450,8.104734 2.971834,-17.321878 -11.901550,-12.343754 16.603875,-2.439099 7.542888,-15.733593 7.289926,15.814431 z")
 		}, 50, 50));
+
 		shapes.put(ElementType.ENVELOPE, new Group(new Proto[]{
-			new Proto("m 1.000000,1.000000 0.000000,48.000000 98.000000,0.000000 0.000000,-47.875000 -48.375000,25.281250 -48.593750,-25.406250 -1.031250,0.000000 z"),
-			new Proto("m 1.345292,1.121100 97.464868,0.000000")
+			new Proto("m 1,1 0,48 98,0 0,-47.875000 -48.375000,25.281250 z ", "stroke-linejoin:round;"),
+			new Proto("m 1.345292,1.121100 97.464868,0 ", "stroke-linejoin:round;")
 		}, 100, 50));
+
+		// shapes.put(ElementType.ENVELOPE, new Group(new Proto[]{
+		// 	new Proto("m 1,1 0,48 98,0 0,-47.875 -48.375000,25.281250 z"),
+		// 	new Proto("m 1.345292,1.121100 97.464868,0")
+		// }, 100, 50));
 	}
 
 	public static Group get(String elementType) {

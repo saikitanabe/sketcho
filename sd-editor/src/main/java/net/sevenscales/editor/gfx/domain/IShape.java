@@ -9,6 +9,8 @@ public interface IShape extends IGraphics {
   void setStrokeWidth(double width);
   double getStrokeWidth();
   Color getStrokeColor();
+  void setStrokeCap(String value);
+  String getStrokeCap();
 //  public abstract JavaScriptObject getStroke();
   void setFill(String color);
   void setFill(int red, int green, int blue, double opacity);
