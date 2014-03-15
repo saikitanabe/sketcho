@@ -23,7 +23,8 @@ public enum ElementType {
 	COMMENT_THREAD("comments"),
 	HORIZONTAL_PARTITION("hpart"),
 	FORK("fork"),
-	STAR5("star5");
+	STAR5("star5"),
+	ENVELOPE("envelope");
 
 	private String value;
 

@@ -307,6 +307,13 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
           Theme.createDefaultTextColor(), 
           true,
           DiagramItemDTO.createGenericItem(ElementType.STAR5)));
+    result.add(new GenericElement(this.toolpool, 
+        new GenericShape(ElementType.ENVELOPE.getValue(), 10 + 50 + 20, GENERAL_GROUP, 100, 50), 
+          Theme.createDefaultBackgroundColor(), 
+          Theme.createDefaultBorderColor(), 
+          Theme.createDefaultTextColor(), 
+          true,
+          DiagramItemDTO.createGenericItem(ElementType.ENVELOPE)));
   }
 
 	private List<Diagram> createToolbarItems() {

@@ -71,7 +71,7 @@ public class GenericElement extends AbstractDiagramItem {
     group.setAttribute("cursor", "default");
 
 		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
-    subgroup.setAttribute("cursor", "default");
+    // subgroup.setAttribute("cursor", "default");
 
   	theshape = Shapes.get(getDiagramItem().getType());
 
