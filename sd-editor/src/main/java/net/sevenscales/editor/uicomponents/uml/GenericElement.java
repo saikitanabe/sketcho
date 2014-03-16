@@ -183,7 +183,7 @@ public class GenericElement extends AbstractDiagramItem {
 	
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-    GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth(), getHeight());
+    GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth() * factorX, getHeight() * factorY);
     Diagram result = new GenericElement(surface, newShape, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, DiagramItemDTO.createGenericItem(ElementType.getEnum(getDiagramItem().getType())));
     return result;
   }

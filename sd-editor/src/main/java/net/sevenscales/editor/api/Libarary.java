@@ -130,7 +130,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		this.toolpool = FactoryDoJo.createSurfaceHandler();
 		toolpool.setName(ISurfaceHandler.LIBRARY_AREA);
 		toolpool.setDisableOnArea(true);
-		toolpool.init(200, 1300, true, modeManager, false, editorContext);
+		toolpool.init(200, 1700, true, modeManager, false, editorContext);
 		
 		setStyle();
 		editorContext.getEventBus().addHandler(ThemeChangedEvent.TYPE, new ThemeChangedEventHandler() {
@@ -328,6 +328,17 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
           Theme.createDefaultTextColor(),
           true,
           DiagramItemDTO.createGenericItem(ElementType.TRIANGLE)));
+
+    Diagram cloud = new GenericElement(this.toolpool,
+        new GenericShape(ElementType.CLOUD.getValue(), 10, GENERAL_GROUP + 1 * 40 + 10, 40, 40),
+          Theme.createDefaultBackgroundColor(),
+          Theme.createDefaultBorderColor(),
+          Theme.createDefaultTextColor(),
+          true,
+          DiagramItemDTO.createGenericItem(ElementType.CLOUD));
+    cloud.setDuplicateMultiplySize(3, 3);
+    result.add(cloud);
+
   }
 
 	private List<Diagram> createToolbarItems() {
