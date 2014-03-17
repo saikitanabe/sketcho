@@ -1,4 +1,3 @@
-
 package net.sevenscales.editor.uicomponents.uml;
 
 import java.util.List;
@@ -37,7 +36,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 public class GenericElement extends AbstractDiagramItem {
 	private static SLogger logger = SLogger.createLogger(GenericElement.class);
 
-	public static int FREEHAND_STROKE_WIDTH = 2;
+	public static double FREEHAND_STROKE_WIDTH = 2;
 	public static int ACTIVITY_START_RADIUS = 10;
 	public static int FREEHAND_TOUCH_WIDTH = 20;
 
@@ -59,7 +58,7 @@ public class GenericElement extends AbstractDiagramItem {
 
   private IPath.PathTransformer pathTransformer = new IPath.PathTransformer() {
   	public String getShapeStr(int dx, int dy) {
-  		return "";
+  		return null;
   	}
   };
   
@@ -116,7 +115,7 @@ public class GenericElement extends AbstractDiagramItem {
     if (proto.style != null) {
 	    path.setAttribute("style", proto.style);
     }
-    path.setAttribute("vector-effect", "non-scaling-stroke");
+    // path.setAttribute("vector-effect", "non-scaling-stroke");
   	path.setShape(proto.path);
   	return path;
 	}
@@ -288,8 +287,14 @@ public class GenericElement extends AbstractDiagramItem {
 
     background.setShape(left, top, width, height, 0);
 
-  	subgroup.setScale(width / theshape.width, height / theshape.height);
+		double factorX = (width / theshape.width)
+  	subgroup.setScale(factorX, height / theshape.height);
   	subgroup.setTransform(left, top);
+  	// no need to use, which doesn't work svg => pdf, scale down stroke width
+  	// vector-effect="non-scaling-stroke"
+  	for (IPath path : paths) {
+	  	path.setStrokeWidth(FREEHAND_STROKE_WIDTH / factorX);
+  	}
 
     connectionHelpers.setShape(left, top, width, height);
   }
@@ -312,6 +317,10 @@ public class GenericElement extends AbstractDiagramItem {
 	@Override
 	public IGroup getGroup() {
 		return group;
+	}
+
+	public IGroup getSubgroup() {
+		return subgroup;
 	}
 	
   @Override

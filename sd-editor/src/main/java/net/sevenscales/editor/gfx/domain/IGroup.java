@@ -12,6 +12,7 @@ public interface IGroup extends IContainer, IGraphics {
   public int getTransformY();
   void setScale(double xx, double yy);
   String getTransformMatrix();
+  String getTransformMatrix(int dx, int dy);
 
   public void setAttribute(String name, String value);
   public void moveToBack();

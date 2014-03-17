@@ -18,6 +18,9 @@ public class SvgPath extends SvgLine {
 //    List<Integer> points = poly.getShape();
 //    String pairs = convertPoints2Pairs(points);
     String d = path.getShapeStr(transformX, transformY);
+    if (d == null) {
+      d = path.getRawShape();
+    }
     // logger.debug("path: {}", d);
     params.put("%d%", d);
     params.put("%stroke-width", String.valueOf(path.getStrokeWidth()));

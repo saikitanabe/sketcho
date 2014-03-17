@@ -106,7 +106,7 @@ abstract class Shape extends Graphics implements IShape {
   }
   private native double _getStrokeWidth(JavaScriptObject rawNode)/*-{
   	if (rawNode.getStroke() != null) { 
-  		return parseInt(rawNode.getStroke().width);
+  		return rawNode.getStroke().width;
   	}
   	return 0;
   }-*/;

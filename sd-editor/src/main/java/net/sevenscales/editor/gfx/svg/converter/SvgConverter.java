@@ -10,6 +10,7 @@ import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.utils.SortHelpers;
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.uicomponents.uml.GenericElement;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
@@ -117,7 +118,11 @@ public class SvgConverter {
 
         // all shapes are under group
         IGroup group = d.getGroup();
-        items += groupStart(group);
+        IGroup subgroup = null;
+        if (d instanceof GenericElement) {
+          subgroup = ((GenericElement) d).getSubgroup();
+        }
+        items += groupStart(group, subgroup);
         items += toSvg(d, shapes, editorContext);
         // text helper elements are not included in getElements
         List<List<IShape>> textElements = d.getTextElements();
@@ -172,9 +177,12 @@ public class SvgConverter {
 	}
 
   // <g transform="matrix(1.00000000,0.00000000,0.00000000,1.00000000,0.00000000,0.00000000)" style="visibility: visible;"></g>
-  private String groupStart(IGroup group) {
+  private String groupStart(IGroup group, IGroup subgroup) {
     String result = "<g";
     String matrix = group.getTransformMatrix();
+    if (subgroup != null) {
+      matrix = subgroup.getTransformMatrix(group.getTransformX(), group.getTransformY());
+    }
     if (matrix != null) {
       result += " transform='" + matrix + "'";
     }
