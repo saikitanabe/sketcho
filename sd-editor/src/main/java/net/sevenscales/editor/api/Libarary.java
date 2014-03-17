@@ -339,6 +339,16 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     cloud.setDuplicateMultiplySize(3, 3);
     result.add(cloud);
 
+    Diagram firewall = new GenericElement(this.toolpool,
+        new GenericShape(ElementType.FIREWALL.getValue(), 10 + 1 * 40 + 10, GENERAL_GROUP + 1 * 40 + 10, 27, 50),
+          Theme.createDefaultBackgroundColor(),
+          Theme.createDefaultBorderColor(),
+          Theme.createDefaultTextColor(),
+          true,
+          DiagramItemDTO.createGenericItem(ElementType.FIREWALL));
+    firewall.setDuplicateMultiplySize(3, 3);
+    result.add(firewall);
+
   }
 
 	private List<Diagram> createToolbarItems() {
