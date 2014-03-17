@@ -15,17 +15,22 @@ import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
+import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 import net.sevenscales.editor.silver.SilverUtils;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
+import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
+import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.ElementType;
@@ -51,6 +56,7 @@ public class GenericElement extends AbstractDiagramItem {
   private int width;
   private int height;
   private Shapes.Group theshape;
+  private TextElementFormatUtil textUtil;
 
   private boolean tosvg;
   
@@ -62,7 +68,7 @@ public class GenericElement extends AbstractDiagramItem {
   	}
   };
   
-	public GenericElement(ISurfaceHandler surface, GenericShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+	public GenericElement(ISurfaceHandler surface, GenericShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
 		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		this.shape = newShape;
 		
@@ -89,15 +95,89 @@ public class GenericElement extends AbstractDiagramItem {
 		}
 
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
-
+    textUtil = new TextElementFormatUtil(this, hasTextElement, group, surface.getEditorContext());
 
     setReadOnly(!editable);
     setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
 
     setBorderColor(borderColor);
 
+    if (text != null && !"".equals(text)) {
+    	// do not set empty initial text, to keep shape dimensions as defined
+	    setText(text);
+    }
+
     super.constructorDone();
 	}
+
+  private HasTextElement hasTextElement = new AbstractHasTextElement() {
+    public void addShape(IShape shape) {
+      shapes.add(shape);    
+    }
+    public int getWidth() {
+      return GenericElement.this.getWidth();
+    }
+    public int getX() {
+      return background.getX();
+    }
+    public int getY() {
+      return background.getY();
+    }
+    public int getHeight() {
+    	return background.getHeight();
+    }
+    
+    public boolean verticalAlignMiddle() {
+    	return true;
+    }
+    
+  	@Override
+  	public boolean boldText() {
+  		return false;
+  	}
+
+    public void removeShape(IShape shape) {
+      group.remove(shape);
+      shapes.remove(shape);
+    }
+
+    public String getLink() {
+      return GenericElement.this.getLink();
+    }
+
+    public boolean isAutoResize() {
+      return GenericElement.this.isAutoResize();
+    }
+
+    public void resize(int x, int y, int width, int height) {
+      // Text Element doesn't support resize
+      GenericElement.this.resize(x, y, width, width);
+      fireSizeChanged();
+    }
+
+    public void setLink(String link) {
+      GenericElement.this.setLink(link);
+    }
+    public boolean supportsTitleCenter() {
+      return true;
+    }
+    public int getTextMargin(int defaultMargin) {
+    	return (int) (defaultMargin * 50f/30f);
+    }
+    public boolean forceAutoResize() {
+      return false;
+    }
+    
+    public GraphicsEventHandler getGraphicsMouseHandler() {
+      return GenericElement.this;
+    };
+    
+		@Override
+		public String getTextColorAsString() {
+			return "#" + textColor.toHexString();
+		};
+
+  };
 
 	private void createSubPaths(Shapes.Group groupData) {
 		for (Shapes.Proto p : groupData.protos) {
@@ -155,6 +235,14 @@ public class GenericElement extends AbstractDiagramItem {
 		return background.getHeight();
 	}
 
+	public String getText() {
+		return textUtil.getText();
+	}
+
+	public void doSetText(String newText) {
+    textUtil.setText(newText, editable);
+	}
+
 	public Point getDiffFromMouseDownLocation() {
 		return new Point(diffFromMouseDownX, diffFromMouseDownY);
 	}
@@ -183,7 +271,7 @@ public class GenericElement extends AbstractDiagramItem {
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth() * factorX, getHeight() * factorY);
-    Diagram result = new GenericElement(surface, newShape, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, DiagramItemDTO.createGenericItem(ElementType.getEnum(getDiagramItem().getType())));
+    Diagram result = new GenericElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, DiagramItemDTO.createGenericItem(ElementType.getEnum(getDiagramItem().getType())));
     return result;
   }
 	
@@ -287,16 +375,20 @@ public class GenericElement extends AbstractDiagramItem {
 
     background.setShape(left, top, width, height, 0);
 
-		double factorX = (width / theshape.width)
-  	subgroup.setScale(factorX, height / theshape.height);
+		double factorX = (width / theshape.width);
+		double factorY = (height / theshape.height);
+  	subgroup.setScale(factorX, factorY);
   	subgroup.setTransform(left, top);
   	// no need to use, which doesn't work svg => pdf, scale down stroke width
   	// vector-effect="non-scaling-stroke"
+  	// double minFactor = Math.max(factorX, factorY);
+  	double strokeWidth = FREEHAND_STROKE_WIDTH / factorX;
   	for (IPath path : paths) {
-	  	path.setStrokeWidth(FREEHAND_STROKE_WIDTH / factorX);
+	  	path.setStrokeWidth(strokeWidth);
   	}
 
     connectionHelpers.setShape(left, top, width, height);
+    textUtil.setTextShape();
   }
   
   public void setHighlightColor(String color) {
@@ -314,18 +406,29 @@ public class GenericElement extends AbstractDiagramItem {
   	}
   }
 
+  @Override
+	public void setTextColor(int red, int green, int blue) {
+  	super.setTextColor(red, green, blue);
+  	textUtil.applyTextColor();
+  }
+
 	@Override
 	public IGroup getGroup() {
 		return group;
+	}
+
+	@Override
+	protected TextElementFormatUtil getTextFormatter() {
+		return textUtil;
 	}
 
 	public IGroup getSubgroup() {
 		return subgroup;
 	}
 	
-  @Override
+	@Override
   public boolean supportsTextEditing() {
-  	return false;
+  	return true;
   }
   
   @Override

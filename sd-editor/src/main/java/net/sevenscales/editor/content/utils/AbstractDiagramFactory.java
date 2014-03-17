@@ -416,7 +416,7 @@ public interface AbstractDiagramFactory {
     public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
       return new GenericElement(surface,
           (GenericShape) shape,
-          // item.getText(), 
+          item.getText(), 
           DiagramItemFactory.parseBackgroundColor(item),
           DiagramItemFactory.parseBorderColor(item),
           DiagramItemFactory.parseTextColor(item),
