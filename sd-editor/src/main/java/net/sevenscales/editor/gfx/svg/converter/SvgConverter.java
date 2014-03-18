@@ -220,7 +220,7 @@ public class SvgConverter {
     	if (top < outertop) {
     		outertop = top;
     	}
-    	int bottom = d.getTop() + d.getHeight();
+    	int bottom = d.getTop() + d.getHeightWithText();
     	if (bottom > outerbottom) {
     		outerbottom = bottom;
     	}

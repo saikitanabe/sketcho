@@ -510,5 +510,16 @@ public class GenericElement extends AbstractDiagramItem {
   	}
   }
 
+  @Override
+  public int getHeightWithText() {
+  	switch (shape.getTextPosition()) {
+  		case BOTTOM: {
+  		  TextElementFormatUtil textFormatter = getTextFormatter();
+		    return getHeight() + textFormatter.getTextHeight();
+		  }
+  		default:
+  			return super.getHeightWithText();
+  	}
+  }
 
 }

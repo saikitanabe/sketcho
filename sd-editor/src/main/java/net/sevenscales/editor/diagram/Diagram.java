@@ -179,6 +179,7 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 	int getTop();
 	int getWidth();
 	int getHeight();
+  int getHeightWithText();
 	int getCenterX();
 	int getCenterY();
 	public void setHeight(int height);

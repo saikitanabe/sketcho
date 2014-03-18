@@ -1096,6 +1096,13 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	public int getHeight() {
 		return 0;
 	}
+  /**
+  * Default implementation is same as height. Most of the elements
+  * has text inside of it.
+  */
+  public int getHeightWithText() {
+    return getHeight();
+  }
 	
 	@Override
 	public int getCenterX() {
