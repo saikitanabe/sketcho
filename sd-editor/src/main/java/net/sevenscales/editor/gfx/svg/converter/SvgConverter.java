@@ -118,13 +118,13 @@ public class SvgConverter {
 
         // all shapes are under group
         IGroup group = d.getGroup();
-        items += groupStart(group, null);
+        items += groupStart(group);
 
         // check if subgroup is started
         IGroup subgroup = null;
         if (d instanceof GenericElement) {
           subgroup = ((GenericElement) d).getSubgroup();
-          items += groupStart(subgroup, null);
+          items += groupStart(subgroup);
         }
 
         items += toSvg(d, shapes, editorContext);
@@ -187,12 +187,9 @@ public class SvgConverter {
 	}
 
   // <g transform="matrix(1.00000000,0.00000000,0.00000000,1.00000000,0.00000000,0.00000000)" style="visibility: visible;"></g>
-  private String groupStart(IGroup group, IGroup subgroup) {
+  private String groupStart(IGroup group) {
     String result = "<g";
     String matrix = group.getTransformMatrix();
-    if (subgroup != null) {
-      matrix = subgroup.getTransformMatrix(group.getTransformX(), group.getTransformY());
-    }
     if (matrix != null) {
       result += " transform='" + matrix + "'";
     }
