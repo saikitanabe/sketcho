@@ -12,6 +12,7 @@ import net.sevenscales.editor.api.event.ThemeChangedEvent;
 import net.sevenscales.editor.api.event.ThemeChangedEventHandler;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.TextPosition;
 
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.TouchHelpers;
@@ -317,7 +318,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
           true,
           DiagramItemDTO.createGenericItem(ElementType.STAR5)));
     result.add(new GenericElement(this.toolpool, 
-        new GenericShape(ElementType.ENVELOPE.getValue(), 10 + 2*40 + 2*10, GENERAL_GROUP, 50, 35), 
+        new GenericShape(ElementType.ENVELOPE.getValue(), 10 + 2*40 + 2*10, GENERAL_GROUP, 50, 35, TextPosition.BOTTOM), 
           "",
           Theme.createDefaultBackgroundColor(), 
           Theme.createDefaultBorderColor(), 
@@ -325,7 +326,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
           true,
           DiagramItemDTO.createGenericItem(ElementType.ENVELOPE)));
     result.add(new GenericElement(this.toolpool,
-        new GenericShape(ElementType.TRIANGLE.getValue(), 10 + 2*40 + 50 + 3*10, GENERAL_GROUP, 40, 40),
+        new GenericShape(ElementType.TRIANGLE.getValue(), 10 + 2*40 + 50 + 3*10, GENERAL_GROUP, 40, 40, TextPosition.BOTTOM),
           "",
           Theme.createDefaultBackgroundColor(),
           Theme.createDefaultBorderColor(),
@@ -345,7 +346,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     result.add(cloud);
 
     Diagram firewall = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.FIREWALL.getValue(), 10 + 1 * 40 + 10, GENERAL_GROUP + 1 * 40 + 10, 27, 50),
+        new GenericShape(ElementType.FIREWALL.getValue(), 10 + 1 * 40 + 10, GENERAL_GROUP + 1 * 40 + 10, 27, 50, TextPosition.BOTTOM),
           "",
           Theme.createDefaultBackgroundColor(),
           Theme.createDefaultBorderColor(),

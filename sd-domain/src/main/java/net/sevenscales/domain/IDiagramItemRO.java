@@ -17,6 +17,7 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	String getBackgroundColor();
 	String getTextColor();
 	Integer getFontSize();
+	Integer getTextPosition();
 	int getVersion();
 	String getClientId();
 	/**

@@ -71,6 +71,10 @@ public class JsonExtraction {
     if (item.getFontSize() != null) {
         result.put("fsize", new JSONNumber(item.getFontSize()));
     }
+    if (item.getTextPosition() != null && item.getTextPosition() > 0) {
+      // 0 is default and is omitted
+      result.put("tpos", new JSONNumber(item.getTextPosition()));
+    }
     result.put("version", new JSONNumber(item.getVersion()));
     result.put("id", new JSONNumber(item.getId()));
     result.put("clientId", new JSONString(safeJsonString(item.getClientId())));

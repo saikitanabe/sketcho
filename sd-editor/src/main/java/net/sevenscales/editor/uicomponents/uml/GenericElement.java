@@ -36,6 +36,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.TextPosition;
 
 
 public class GenericElement extends AbstractDiagramItem {
@@ -71,6 +72,7 @@ public class GenericElement extends AbstractDiagramItem {
 	public GenericElement(ISurfaceHandler surface, GenericShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
 		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		this.shape = newShape;
+		getDiagramItem().setTextPosition(newShape.getTextPosition().getValue());
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     group.setAttribute("cursor", "default");
@@ -121,16 +123,35 @@ public class GenericElement extends AbstractDiagramItem {
       return background.getX();
     }
     public int getY() {
-      return background.getY();
+    	switch (shape.getTextPosition()) {
+    		case BOTTOM:
+		    	return background.getY() + background.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 5;
+    		default:
+    			return background.getY();
+    	}
     }
     public int getHeight() {
     	return background.getHeight();
     }
     
     public boolean verticalAlignMiddle() {
-    	return true;
+    	switch (shape.getTextPosition()) {
+  		case BOTTOM:
+  			return false;
+  		default:
+  			return true;
+  		}
     }
-    
+
+    public boolean supportElementResize() {
+    	switch (shape.getTextPosition()) {
+  		case BOTTOM:
+  			return false;
+  		default:
+  			return true;
+  		}
+    }
+
   	@Override
   	public boolean boldText() {
   		return false;
@@ -270,7 +291,7 @@ public class GenericElement extends AbstractDiagramItem {
 	
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-    GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth() * factorX, getHeight() * factorY);
+    GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth() * factorX, getHeight() * factorY, shape.getTextPosition());
     Diagram result = new GenericElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, DiagramItemDTO.createGenericItem(ElementType.getEnum(getDiagramItem().getType())));
     return result;
   }
@@ -290,40 +311,6 @@ public class GenericElement extends AbstractDiagramItem {
 
 	public void resizeEnd() {
 	}
-
-	/**
-	* Convert shape to normal shape to hide elements below it. Otherwise
-	* after transform path will be broken.
-	*/
-  // public void toSvgStart() {
-  // 	this.tosvg = true;
-  // 	doSetShape(this.shape.points);
-  // }
-
-  /**
-  * Restore shape back to as it is suppose to be. Not to hide elements.
-  */
-  // public void toSvgEnd() {
-  // 	this.tosvg = false;
-  // 	doSetShape(this.shape.points);
-  // }
-
-	/**
-	* Copy points since shape.points is the model of this runtime instance.
-	* Shape is copied e.g. to OT or to export svg.
-	*/
-	// public Info getInfo() {
-	// 	// copy points from model
-	// 	int[] points = new int[shape.points.length];
-	// 	for (int i = 0; i < shape.points.length; i += 2) {
-	// 		points[i] = shape.points[i] + getTransformX();
-	// 		points[i + 1] = shape.points[i + 1] + getTransformY();
-	// 	}
-	// 	// fill other stuff
-	// 	FreehandShape result = new FreehandShape(points);
- //    super.fillInfo(result);
-	// 	return result;
-	// }
 
   public Info getInfo() {
     super.fillInfo(shape);
@@ -408,8 +395,15 @@ public class GenericElement extends AbstractDiagramItem {
 
   @Override
 	public void setTextColor(int red, int green, int blue) {
-  	super.setTextColor(red, green, blue);
-  	textUtil.applyTextColor();
+  	switch (shape.getTextPosition()) {
+  		case BOTTOM:
+  		// keep the default text color
+  			break;
+  		default: {
+		  	super.setTextColor(red, green, blue);
+		  	break;
+  		}
+  	}
   }
 
 	@Override
@@ -433,7 +427,88 @@ public class GenericElement extends AbstractDiagramItem {
   
   @Override
   public int supportedMenuItems() {
-  	return ContextMenuItem.FREEHAND_MENU.getValue() | ContextMenuItem.COLOR_MENU.getValue();
+  	return ContextMenuItem.COLOR_MENU.getValue();
   }
+
+	@Override
+	public int getTextAreaLeft() {
+  	switch (shape.getTextPosition()) {
+  		case BOTTOM:
+				return getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2;
+  		default:
+  			return super.getTextAreaLeft();
+  	}
+	}
+
+	@Override
+	public int getTextAreaHeight() {
+  	switch (shape.getTextPosition()) {
+  		case BOTTOM:
+	    	return textUtil.getTextHeight();
+  		default:
+  			return super.getTextAreaHeight();
+  	}
+	}
+	
+	@Override
+	public int getTextAreaWidth() {
+  	switch (shape.getTextPosition()) {
+  		case BOTTOM:
+	    	return textUtil.getTextWidth();
+  		default:
+  			return super.getTextAreaWidth();
+  	}
+	}
+	
+	@Override
+	public int getTextAreaTop() {
+  	switch (shape.getTextPosition()) {
+  		case BOTTOM:
+				return getTop() + getHeight() - 1;
+  		default:
+  			return super.getTextAreaTop();
+  	}
+	}
+
+	@Override
+	public String getTextAreaAlign() {
+  	switch (shape.getTextPosition()) {
+  		case BOTTOM:
+				return "center";
+  		default:
+  			return super.getTextAreaAlign();
+  	}
+	}
+
+	@Override
+	public String getTextAreaBackgroundColor() {
+  	switch (shape.getTextPosition()) {
+  		case BOTTOM:
+				return "transparent";
+  		default:
+  			return super.getTextAreaBackgroundColor();
+  	}
+	}
+
+  @Override
+  public boolean isTextElementBackgroundTransparent() {
+  	switch (shape.getTextPosition()) {
+  		case BOTTOM:
+		    return true;
+  		default:
+  			return super.isTextElementBackgroundTransparent();
+  	}
+  }
+  
+  @Override
+  public boolean isTextColorAccordingToBackgroundColor() {
+  	switch (shape.getTextPosition()) {
+  		case BOTTOM:
+		    return true;
+  		default:
+  			return super.isTextColorAccordingToBackgroundColor();
+  	}
+  }
+
 
 }
