@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.TextPosition;
+import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -411,8 +411,7 @@ public interface AbstractDiagramFactory {
   public class GenericFactory implements AbstractDiagramFactory {
     public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
       String[] s = item.getShape().split(",");
-      TextPosition tpos = TextPosition.getEnum(item.getTextPosition());
-      return new GenericShape(item.getType(), s, tpos).move(moveX, moveY);
+      return new GenericShape(item.getType(), s, item.getShapeProperties()).move(moveX, moveY);
     }
 
     public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {

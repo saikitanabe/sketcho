@@ -28,7 +28,8 @@ public enum ElementType {
 	ENVELOPE("envelope"),
 	TRIANGLE("triangle"),
 	CLOUD("cloud"),
-	FIREWALL("firewall");
+	FIREWALL("firewall"),
+	BUBBLE("bubble-l");
 
 	private String value;
 

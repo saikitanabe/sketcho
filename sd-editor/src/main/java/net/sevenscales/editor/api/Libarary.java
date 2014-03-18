@@ -12,7 +12,7 @@ import net.sevenscales.editor.api.event.ThemeChangedEvent;
 import net.sevenscales.editor.api.event.ThemeChangedEventHandler;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
-import net.sevenscales.domain.TextPosition;
+import net.sevenscales.domain.ShapeProperty;
 
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.TouchHelpers;
@@ -318,7 +318,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
           true,
           DiagramItemDTO.createGenericItem(ElementType.STAR5)));
     result.add(new GenericElement(this.toolpool, 
-        new GenericShape(ElementType.ENVELOPE.getValue(), 10 + 2*40 + 2*10, GENERAL_GROUP, 50, 35, TextPosition.BOTTOM), 
+        new GenericShape(ElementType.ENVELOPE.getValue(), 10 + 2*40 + 2*10, GENERAL_GROUP, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()), 
           "",
           Theme.createDefaultBackgroundColor(), 
           Theme.createDefaultBorderColor(), 
@@ -326,7 +326,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
           true,
           DiagramItemDTO.createGenericItem(ElementType.ENVELOPE)));
     result.add(new GenericElement(this.toolpool,
-        new GenericShape(ElementType.TRIANGLE.getValue(), 10 + 2*40 + 50 + 3*10, GENERAL_GROUP, 40, 40, TextPosition.BOTTOM),
+        new GenericShape(ElementType.TRIANGLE.getValue(), 10 + 2*40 + 50 + 3*10, GENERAL_GROUP, 40, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
           "",
           Theme.createDefaultBackgroundColor(),
           Theme.createDefaultBorderColor(),
@@ -346,7 +346,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     result.add(cloud);
 
     Diagram firewall = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.FIREWALL.getValue(), 10 + 1 * 40 + 10, GENERAL_GROUP + 1 * 40 + 10, 27, 50, TextPosition.BOTTOM),
+        new GenericShape(ElementType.FIREWALL.getValue(), 10 + 1 * 40 + 10, GENERAL_GROUP + 1 * 40 + 10, 27, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
           "",
           Theme.createDefaultBackgroundColor(),
           Theme.createDefaultBorderColor(),
@@ -356,6 +356,16 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     firewall.setDuplicateMultiplySize(3, 3);
     result.add(firewall);
 
+    Diagram bubble = new GenericElement(this.toolpool,
+        new GenericShape(ElementType.BUBBLE.getValue(), 10 + 2 * 40 + 2 * 10, GENERAL_GROUP + 1 * 40 + 10, 50, 35),
+          "",
+          Theme.createDefaultBackgroundColor(),
+          Theme.createDefaultBorderColor(),
+          Theme.createDefaultTextColor(),
+          true,
+          DiagramItemDTO.createGenericItem(ElementType.BUBBLE));
+    bubble.setDuplicateMultiplySize(3, 3);
+    result.add(bubble);
   }
 
 	private List<Diagram> createToolbarItems() {

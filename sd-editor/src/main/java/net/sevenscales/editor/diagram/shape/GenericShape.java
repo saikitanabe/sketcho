@@ -1,31 +1,30 @@
 package net.sevenscales.editor.diagram.shape;
 
 import net.sevenscales.editor.content.utils.DiagramHelpers;
-import net.sevenscales.domain.TextPosition;
 
 
 public class GenericShape extends HasRectShape {
   private String elementType;
-  private TextPosition textPosition;
+  private int shapeProperties;
 
   public GenericShape(String elementType, String[] shape) {
-    this(elementType, shape, TextPosition.CENTER);
+    this(elementType, shape, 0);
   }
 
-  public GenericShape(String elementType, String[] shape, TextPosition textPosition) {
+  public GenericShape(String elementType, String[] shape, int shapeProperties) {
     super(shape);
     this.elementType = elementType;
-    this.textPosition = textPosition;
+    this.shapeProperties = shapeProperties;
   }
 
   public GenericShape(String elementType, int left, int top, int width, int height) {
-    this(elementType, left, top, width, height, TextPosition.CENTER);
+    this(elementType, left, top, width, height, 0);
   }
 
-  public GenericShape(String elementType, int left, int top, int width, int height, TextPosition textPosition) {
+  public GenericShape(String elementType, int left, int top, int width, int height, int shapeProperties) {
     super(left, top, width, height);
     this.elementType = elementType;
-    this.textPosition = textPosition;
+    this.shapeProperties = shapeProperties;
   }
 
   public String getElementType() {
@@ -36,12 +35,12 @@ public class GenericShape extends HasRectShape {
     this.elementType = elementType;
   }
 
-  public void setTextPosition(TextPosition textPosition) {
-    this.textPosition = textPosition;
+  public void setint(int shapeProperties) {
+    this.shapeProperties = shapeProperties;
   }
 
-  public TextPosition getTextPosition() {
-    return textPosition;
+  public int getShapeProperties() {
+    return shapeProperties;
   }
   
 }

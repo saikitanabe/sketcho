@@ -36,7 +36,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
-import net.sevenscales.domain.TextPosition;
+import net.sevenscales.domain.ShapeProperty;
 
 
 public class GenericElement extends AbstractDiagramItem {
@@ -72,7 +72,7 @@ public class GenericElement extends AbstractDiagramItem {
 	public GenericElement(ISurfaceHandler surface, GenericShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
 		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		this.shape = newShape;
-		getDiagramItem().setTextPosition(newShape.getTextPosition().getValue());
+		getDiagramItem().setShapeProperties(newShape.getShapeProperties());
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     group.setAttribute("cursor", "default");
@@ -123,11 +123,10 @@ public class GenericElement extends AbstractDiagramItem {
       return background.getX();
     }
     public int getY() {
-    	switch (shape.getTextPosition()) {
-    		case BOTTOM:
-		    	return background.getY() + background.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 5;
-    		default:
-    			return background.getY();
+    	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+				return background.getY() + background.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 5;
+    	} else {
+    		return background.getY();
     	}
     }
     public int getHeight() {
@@ -135,21 +134,19 @@ public class GenericElement extends AbstractDiagramItem {
     }
     
     public boolean verticalAlignMiddle() {
-    	switch (shape.getTextPosition()) {
-  		case BOTTOM:
+    	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
   			return false;
-  		default:
+  		} else {
   			return true;
   		}
     }
 
     public boolean supportElementResize() {
-    	switch (shape.getTextPosition()) {
-  		case BOTTOM:
+    	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
   			return false;
-  		default:
+	  	} else {
   			return true;
-  		}
+	  	}
     }
 
   	@Override
@@ -291,7 +288,7 @@ public class GenericElement extends AbstractDiagramItem {
 	
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-    GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth() * factorX, getHeight() * factorY, shape.getTextPosition());
+    GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth() * factorX, getHeight() * factorY, shape.getShapeProperties());
     Diagram result = new GenericElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, DiagramItemDTO.createGenericItem(ElementType.getEnum(getDiagramItem().getType())));
     return result;
   }
@@ -395,14 +392,10 @@ public class GenericElement extends AbstractDiagramItem {
 
   @Override
 	public void setTextColor(int red, int green, int blue) {
-  	switch (shape.getTextPosition()) {
-  		case BOTTOM:
+  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
   		// keep the default text color
-  			break;
-  		default: {
-		  	super.setTextColor(red, green, blue);
-		  	break;
-  		}
+  	} else {
+		  super.setTextColor(red, green, blue);
   	}
   }
 
@@ -432,93 +425,83 @@ public class GenericElement extends AbstractDiagramItem {
 
 	@Override
 	public int getTextAreaLeft() {
-  	switch (shape.getTextPosition()) {
-  		case BOTTOM:
-				return getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2;
-  		default:
-  			return super.getTextAreaLeft();
-  	}
+  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+			return getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2;
+		} else {
+			return super.getTextAreaLeft();
+		}
 	}
 
 	@Override
 	public int getTextAreaHeight() {
-  	switch (shape.getTextPosition()) {
-  		case BOTTOM:
-	    	return textUtil.getTextHeight();
-  		default:
-  			return super.getTextAreaHeight();
+		if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+    	return textUtil.getTextHeight();
+    } else {
+			return super.getTextAreaHeight();
   	}
 	}
 	
 	@Override
 	public int getTextAreaWidth() {
-  	switch (shape.getTextPosition()) {
-  		case BOTTOM:
-	    	return textUtil.getTextWidth();
-  		default:
-  			return super.getTextAreaWidth();
+  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+    	return textUtil.getTextWidth();
+    } else {
+			return super.getTextAreaWidth();
   	}
 	}
 	
 	@Override
 	public int getTextAreaTop() {
-  	switch (shape.getTextPosition()) {
-  		case BOTTOM:
-				return getTop() + getHeight() - 1;
-  		default:
-  			return super.getTextAreaTop();
+  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+			return getTop() + getHeight() - 1;
+		} else {
+			return super.getTextAreaTop();
   	}
 	}
 
 	@Override
 	public String getTextAreaAlign() {
-  	switch (shape.getTextPosition()) {
-  		case BOTTOM:
-				return "center";
-  		default:
-  			return super.getTextAreaAlign();
-  	}
+		if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+			return "center";
+		} else {
+			return super.getTextAreaAlign();
+		}
 	}
 
 	@Override
 	public String getTextAreaBackgroundColor() {
-  	switch (shape.getTextPosition()) {
-  		case BOTTOM:
-				return "transparent";
-  		default:
-  			return super.getTextAreaBackgroundColor();
+  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+			return "transparent";
+		} else {
+			return super.getTextAreaBackgroundColor();
   	}
 	}
 
   @Override
   public boolean isTextElementBackgroundTransparent() {
-  	switch (shape.getTextPosition()) {
-  		case BOTTOM:
-		    return true;
-  		default:
-  			return super.isTextElementBackgroundTransparent();
-  	}
+  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+	    return true;
+	  } else {
+			return super.isTextElementBackgroundTransparent();
+		}
   }
   
   @Override
   public boolean isTextColorAccordingToBackgroundColor() {
-  	switch (shape.getTextPosition()) {
-  		case BOTTOM:
-		    return true;
-  		default:
-  			return super.isTextColorAccordingToBackgroundColor();
+  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+	    return true;
+	  } else {
+			return super.isTextColorAccordingToBackgroundColor();
   	}
   }
 
   @Override
   public int getHeightWithText() {
-  	switch (shape.getTextPosition()) {
-  		case BOTTOM: {
-  		  TextElementFormatUtil textFormatter = getTextFormatter();
-		    return getHeight() + textFormatter.getTextHeight();
-		  }
-  		default:
-  			return super.getHeightWithText();
+  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+	  TextElementFormatUtil textFormatter = getTextFormatter();
+    return getHeight() + textFormatter.getTextHeight();
+	  } else {
+			return super.getHeightWithText();
   	}
   }
 
