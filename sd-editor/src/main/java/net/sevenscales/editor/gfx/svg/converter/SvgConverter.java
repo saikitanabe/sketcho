@@ -118,12 +118,22 @@ public class SvgConverter {
 
         // all shapes are under group
         IGroup group = d.getGroup();
+        items += groupStart(group, null);
+
+        // check if subgroup is started
         IGroup subgroup = null;
         if (d instanceof GenericElement) {
           subgroup = ((GenericElement) d).getSubgroup();
+          items += groupStart(subgroup, null);
         }
-        items += groupStart(group, subgroup);
+
         items += toSvg(d, shapes, editorContext);
+
+        if (subgroup != null) {
+          // close subgroup
+          items += groupEnd();  
+        }
+
         // text helper elements are not included in getElements
         List<List<IShape>> textElements = d.getTextElements();
         if (textElements != null) {
