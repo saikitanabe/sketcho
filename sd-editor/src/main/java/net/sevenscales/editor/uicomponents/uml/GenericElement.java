@@ -289,8 +289,8 @@ public class GenericElement extends AbstractDiagramItem {
 	  	path.setStrokeWidth(strokeWidth);
   	}
 
-    connectionHelpers.setShape(left, top, width, height);
     textUtil.setTextShape();
+		super.applyHelpersShape();
   }
 
   public void setHighlightColor(String color) {
