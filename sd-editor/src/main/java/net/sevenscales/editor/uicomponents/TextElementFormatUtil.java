@@ -112,9 +112,6 @@ public class TextElementFormatUtil {
     int getX();
     int getWidth();
     int getHeight();
-
-    void removeShape(IShape shape);
-
     void addShape(IShape shape);
     boolean isAutoResize();
     void resize(int x, int y, int width, int height);
@@ -414,7 +411,7 @@ public class TextElementFormatUtil {
 	        }
 	        int y = 0;
 	        if (!hasTextElement.verticalAlignMiddle()) {
-	        	y = hasTextElement.getY() + getMarginTop() + (row * fontProperty.rowHeight);
+            y = getTextTop(row);
 	        } else {
 	        	// find middle and then find start y based on all lines
 	        	y = hasTextElement.getY() + hasTextElement.getHeight() / 2 - (lines.size() * fontProperty.rowHeight / 2) + (row * fontProperty.rowHeight);
@@ -450,9 +447,17 @@ public class TextElementFormatUtil {
 //      t.setFill("#E18400");
 //    }
  }
+
+  protected int getTextTop(int row) {
+    return hasTextElement.getY() + getMarginTop() + (row * fontProperty.rowHeight);
+  }
   
   public String getText() {
     return text;
+  }
+
+  public void setStoreText(String text) {
+    setText(text);
   }
   
   protected void setText(String text) {

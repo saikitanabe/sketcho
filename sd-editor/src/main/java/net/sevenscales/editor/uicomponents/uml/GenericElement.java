@@ -29,6 +29,7 @@ import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.Point;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
+import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
@@ -58,6 +59,7 @@ public class GenericElement extends AbstractDiagramItem {
   private int height;
   private Shapes.Group theshape;
   private TextElementFormatUtil textUtil;
+  private HasTextElement hasTextElement;
 
   private boolean tosvg;
   
@@ -68,9 +70,10 @@ public class GenericElement extends AbstractDiagramItem {
   		return null;
   	}
   };
-  
+
 	public GenericElement(ISurfaceHandler surface, GenericShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
 		super(editable, surface, backgroundColor, borderColor, textColor, item);
+
 		this.shape = newShape;
 		getDiagramItem().setShapeProperties(newShape.getShapeProperties());
 		
@@ -87,6 +90,7 @@ public class GenericElement extends AbstractDiagramItem {
 
     background = IShapeFactory.Util.factory(editable).createRectangle(group);
     background.setFill(0, 0 , 0, 0); // transparent
+    background.setStroke("#000000");
 
 		addEvents(background);
 		
@@ -97,105 +101,28 @@ public class GenericElement extends AbstractDiagramItem {
 		}
 
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
-    textUtil = new TextElementFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+    hasTextElement = new GenericHasTextElement(this, shape);
+    if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
+	    textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+	    textUtil.setMarginTop(0);
+    } else {
+	    textUtil = new TextElementFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+    }
 
     setReadOnly(!editable);
     setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
 
     setBorderColor(borderColor);
 
-    if (text != null && !"".equals(text)) {
+    if (!"".equals(text)) {
     	// do not set empty initial text, to keep shape dimensions as defined
 	    setText(text);
+    } else {
+    	textUtil.setStoreText("");
     }
 
     super.constructorDone();
 	}
-
-  private HasTextElement hasTextElement = new AbstractHasTextElement() {
-    public void addShape(IShape shape) {
-      shapes.add(shape);    
-    }
-    public int getWidth() {
-      return GenericElement.this.getWidth();
-    }
-    public int getX() {
-      return background.getX();
-    }
-    public int getY() {
-    	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-				return background.getY() + background.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 5;
-    	} else {
-    		return background.getY();
-    	}
-    }
-    public int getHeight() {
-    	return background.getHeight();
-    }
-    
-    public boolean verticalAlignMiddle() {
-    	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-  			return false;
-  		} else {
-  			return true;
-  		}
-    }
-
-    public boolean supportElementResize() {
-    	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-  			return false;
-	  	} else {
-  			return true;
-	  	}
-    }
-
-  	@Override
-  	public boolean boldText() {
-  		return false;
-  	}
-
-    public void removeShape(IShape shape) {
-      group.remove(shape);
-      shapes.remove(shape);
-    }
-
-    public String getLink() {
-      return GenericElement.this.getLink();
-    }
-
-    public boolean isAutoResize() {
-      return GenericElement.this.isAutoResize();
-    }
-
-    public void resize(int x, int y, int width, int height) {
-      // Text Element doesn't support resize
-      GenericElement.this.resize(x, y, width, width);
-      fireSizeChanged();
-    }
-
-    public void setLink(String link) {
-      GenericElement.this.setLink(link);
-    }
-    public boolean supportsTitleCenter() {
-      return true;
-    }
-    public int getTextMargin(int defaultMargin) {
-    	return (int) (defaultMargin * 50f/30f);
-    }
-    public boolean forceAutoResize() {
-      return false;
-    }
-    
-    public GraphicsEventHandler getGraphicsMouseHandler() {
-      return GenericElement.this;
-    };
-    
-		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
-		};
-
-  };
 
 	private void createSubPaths(Shapes.Group groupData) {
 		for (Shapes.Proto p : groupData.protos) {
@@ -219,12 +146,12 @@ public class GenericElement extends AbstractDiagramItem {
 	}
 	
 	// @Override
-	// protected int doGetLeft() {
+	// public int getRelativeLeft() {
 	// 	return left;
 	// }
 	// @Override
 
-	// protected int doGetTop() {
+	// public int getRelativeTop() {
 	// 	return top;
 	// }
 	// @Override
@@ -237,11 +164,11 @@ public class GenericElement extends AbstractDiagramItem {
 	// }
 
 	@Override
-	protected int doGetLeft() {
+	public int getRelativeLeft() {
 		return left;
 	}
 	@Override
-	protected int doGetTop() {
+	public int getRelativeTop() {
 		return top;
 	}
 	@Override
@@ -297,16 +224,25 @@ public class GenericElement extends AbstractDiagramItem {
 	}
 
   public boolean resize(Point diff) {
-    return resize(doGetLeft(), doGetTop(), getWidth() + diff.x, getHeight() + diff.y);
+    return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);
   }
 
   protected boolean resize(int left, int top, int width, int height) {
-    setShape(left, top, width, height);
+    setShape(getRelativeLeft(), getRelativeTop(), width, height);
     dispatchAndRecalculateAnchorPositions();
     return true;
   }
 
+	@Override	
+	public void setHeight(int height) {
+		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height);
+		// dispatchAndRecalculateAnchorPositions();
+	}
+
 	public void resizeEnd() {
+		if (textUtil instanceof TextElementVerticalFormatUtil) {
+			((TextElementVerticalFormatUtil)textUtil).setText(getText(), editable, true);
+		}
 	}
 
   public Info getInfo() {
@@ -365,8 +301,8 @@ public class GenericElement extends AbstractDiagramItem {
   	subgroup.setTransform(left, top);
   	// no need to use, which doesn't work svg => pdf, scale down stroke width
   	// vector-effect="non-scaling-stroke"
-  	// double minFactor = Math.max(factorX, factorY);
-  	double strokeWidth = FREEHAND_STROKE_WIDTH / factorX;
+  	double factor = Math.max(factorX, factorY);
+  	double strokeWidth = FREEHAND_STROKE_WIDTH / factor;
   	for (IPath path : paths) {
 	  	path.setStrokeWidth(strokeWidth);
   	}
@@ -374,7 +310,7 @@ public class GenericElement extends AbstractDiagramItem {
     connectionHelpers.setShape(left, top, width, height);
     textUtil.setTextShape();
   }
-  
+
   public void setHighlightColor(String color) {
   	for (IPath path : paths) {
 			path.setStroke(color);
@@ -407,6 +343,14 @@ public class GenericElement extends AbstractDiagramItem {
 	@Override
 	protected TextElementFormatUtil getTextFormatter() {
 		return textUtil;
+	}
+
+	@Override
+	public boolean supportsOnlyTextareaDynamicHeight() {
+		if (textUtil instanceof TextElementVerticalFormatUtil) {
+			return true;
+		}
+		return false;
 	}
 
 	public IGroup getSubgroup() {
