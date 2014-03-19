@@ -45,8 +45,10 @@ class GenericHasTextElement extends AbstractHasTextElement {
   public int getY() {
   	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
 			return parent.getRelativeTop() + parent.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 5;
-  	} else {
+  	} else if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
   		return parent.getRelativeTop() + parent.getHeight() / 2 - ((int) parent.getTextHeight() / 2 + TextElementVerticalFormatUtil.DEFAULT_TOP_MARGIN / 2);
+  	} else {
+  		return parent.getRelativeTop();
   	}
   }
 

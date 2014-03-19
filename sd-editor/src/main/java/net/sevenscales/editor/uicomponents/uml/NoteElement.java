@@ -209,20 +209,21 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 		return result;
 	}
 
-	
-  // nice way to clearly separate interface methods :)
+
+	private final int MARGIN_TOP = 5;
+	private final int MARGIN_LEFT = 13;
   private HasTextElement hasTextElement = new AbstractHasTextElement() {
     public int getWidth() {
-    	return boundary.getWidth();
+    	return boundary.getWidth() - MARGIN_LEFT * 2;
     }
     public int getX() {
-    	return boundary.getX();
+    	return boundary.getX() + MARGIN_LEFT;
     }
     public int getY() {
-    	return boundary.getY();
+    	return boundary.getY() + MARGIN_TOP;
     }
     public int getHeight() {
-    	return boundary.getHeight();
+    	return boundary.getHeight() - MARGIN_TOP;
     }
     public void removeShape(IShape shape) {
       group.remove(shape);
@@ -261,7 +262,18 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 		@Override
 		public String getTextColorAsString() {
 			return "#" + textColor.toHexString();
-		};
+		}
+
+    public int getMarginLeft() {
+      return MARGIN_LEFT;
+    }
+    public int getMarginTop() {
+      return MARGIN_TOP;
+    }
+
+    public int getMarginBottom() {
+      return MARGIN_TOP;
+    }
 
   };
 

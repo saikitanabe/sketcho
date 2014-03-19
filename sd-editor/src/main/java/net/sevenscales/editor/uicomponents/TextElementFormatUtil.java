@@ -114,6 +114,7 @@ public class TextElementFormatUtil {
     int getHeight();
     int getMarginLeft();
     int getMarginTop();
+    int getMarginBottom();
     boolean isAutoResize();
     void resize(int x, int y, int width, int height);
     void setLink(String lik);
@@ -152,6 +153,9 @@ public class TextElementFormatUtil {
       return 0;
     }
     public int getMarginTop() {
+      return 0;
+    }
+    public int getMarginBottom() {
       return 0;
     }
   }

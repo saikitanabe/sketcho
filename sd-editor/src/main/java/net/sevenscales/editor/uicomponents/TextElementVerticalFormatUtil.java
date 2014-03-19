@@ -70,7 +70,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   //   hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + DEFAULT_VERTICAL_TEXT_MARGIN);
     double textHeight = getTextHeight();
     if (textHeight > 0) {
-      parent.setHeight(((int) textHeight) + DEFAULT_TOP_MARGIN + hasTextElement.getMarginTop());
+      parent.setHeight(((int) textHeight) + DEFAULT_TOP_MARGIN + hasTextElement.getMarginTop() + hasTextElement.getMarginBottom());
     }
     // MeasurementHelpers.setMeasurementPanelTextAndResizeDiagram(parent, getText());
   }
