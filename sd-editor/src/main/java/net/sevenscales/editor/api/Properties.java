@@ -300,11 +300,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private void hide() {
 		popup.hide();
 	}
-	
-	private void setSelectedDiagramHeight() {
-		selectedDiagram.setHeight(MeasurementPanel.getMeasurementPanel().getOffsetHeight() + TextElementVerticalFormatUtil.DEFAULT_VERTICAL_TEXT_MARGIN);
-	}
-	
+		
 	public void addSurface(ISurfaceHandler surfaceHandler, boolean modifiable) {
 	  surfaces.put(surfaceHandler, modifiable);
 	  surfaceHandler.addSelectionListener(this);
@@ -470,7 +466,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 				@Override
 				public void execute() {
-//					selectedDiagram.startTextEdit(point.getX(), point.getY());
 					setTextCoordinatesAndShowEditor(point.getScreenX(), point.getScreenY(), point.getX(), point.getY());
 				}
 			});
@@ -484,6 +479,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 
 	private void showEditor(Diagram diagram, String text, final int left, final int top, boolean justCreated) {
+		if (popup.isShowing()) {
+			return;
+		}
 		logger.info("SHOW EDITOR...");
 		if (!selectedDiagram.supportsTextEditing() || !AuthHelpers.allowedToEdit(diagram)) {
 			// if diagram text editing is not supported => return
@@ -563,9 +561,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		
 		textArea.setText(text);
 		
-		if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
+		// if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
 			setMeasurementPanelText(text);
-		}
+		// }
 	}
 
 	private void setMeasurementPanelText(String text) {
@@ -573,11 +571,31 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			return;
 		}
 
-		MeasurementPanel.setText(text, selectedDiagram.getMeasurementAreaWidth());
+		MeasurementPanel.setPlainTextAsHtml(text, selectedDiagram.getMeasurementAreaWidth());
 		MeasurementPanel.setPosition(selectedDiagram.getLeft() + selectedDiagram.getWidth() + 20, selectedDiagram.getTop());
-		// textArea.getElement().getStyle().setHeight(MeasurementPanel.getOffsetHeight(), Unit.PX);
-		setTextAreaHeight(MeasurementPanel.getOffsetHeight());
-		setSelectedDiagramHeight();
+
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+			@Override
+			public void execute() {
+				textArea.getElement().getStyle().setHeight(MeasurementPanel.getOffsetHeight(), Unit.PX);
+			}
+		});
+
+		// int height = MeasurementHelpers.setMeasurementPanelTextAndResizeDiagram(selectedDiagram, text);
+		// setTextAreaHeight(height);
+		// setSelectedDiagramHeight();
+	}
+
+	private void setTextAreaHeight(int height) {
+		// String[] rows = textArea.getText().split("\n");
+		int rows = rows(textArea.getText());
+		logger.debug("rows.length: {}", rows);
+		// this is some magical approximation of the textarea height
+		// it is at least the size of measurement panel, but extra
+		// line breaks in editor might not increase measurment panel height
+		// therefore need to add something based on line breaks...
+		int textAreaHeight = height + rows / 4 * TextElementFormatUtil.ROW_HEIGHT;
+		textArea.getElement().getStyle().setHeight(textAreaHeight, Unit.PX);
 	}
 
 	private void _setTextAreaSize(Diagram diagram) {
@@ -623,18 +641,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			}
 		}
 		return result;
-	}
-
-	private void setTextAreaHeight(int height) {
-		// String[] rows = textArea.getText().split("\n");
-		int rows = rows(textArea.getText());
-		logger.debug("rows.length: {}", rows);
-		// this is some magical approximation of the textarea height
-		// it is at least the size of measurement panel, but extra
-		// line breaks in editor might not increase measurment panel height
-		// therefore need to add something based on line breaks...
-		int textAreaHeight = height + rows / 4 * TextElementFormatUtil.ROW_HEIGHT;
-		textArea.getElement().getStyle().setHeight(textAreaHeight, Unit.PX);
 	}
 
 	public void showEditor(final KeyDownEvent event) {

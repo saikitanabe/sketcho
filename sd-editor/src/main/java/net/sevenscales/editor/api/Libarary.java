@@ -357,7 +357,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     result.add(firewall);
 
     Diagram bubble = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.BUBBLE.getValue(), 10 + 2 * 40 + 2 * 10, GENERAL_GROUP + 1 * 40 + 10, 50, 35),
+        new GenericShape(ElementType.BUBBLE.getValue(), 10 + 2 * 40 + 2 * 10, GENERAL_GROUP + 1 * 40 + 10, 50, 35, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue()),
           "",
           Theme.createDefaultBackgroundColor(),
           Theme.createDefaultBorderColor(),

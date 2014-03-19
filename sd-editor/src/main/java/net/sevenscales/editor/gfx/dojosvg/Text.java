@@ -189,9 +189,13 @@ class Text extends Shape implements IText {
 	}-*/;
 	
 	public double getTextHeight() {
-		return 0;
-//	  return getTextHeight(rawNode);
+		// return 0;
+	  return getTextHeight(rawNode);
 	}
+
+	private native double getTextHeight(JavaScriptObject rawNode)/*-{
+		return rawNode.rawNode.getBBox().height;
+	}-*/;
 	  
   @Override
   public void applyTransformToShape(int dx, int dy) {

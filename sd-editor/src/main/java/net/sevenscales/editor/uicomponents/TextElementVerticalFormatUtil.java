@@ -27,6 +27,8 @@ import net.sevenscales.editor.gfx.domain.IText;
 public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   private JavaScriptObject tokens;
   public static int DEFAULT_VERTICAL_TEXT_MARGIN = 0;
+  // 11 is just the begging
+  public static int DEFAULT_TOP_MARGIN = 11 + 10;
 
 	public TextElementVerticalFormatUtil(Diagram parent, HasTextElement hasTextElement, IGroup group, EditorContext editorContext) {
   	super(parent, hasTextElement, group, editorContext);
@@ -35,14 +37,15 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   public void setText(String newText, boolean editable) {
   	setText(newText, editable, false);
   }
-  
+
   @Override
   public void show() {
   	calculateLines2();
   	setTextShape();
   	super.show();
+    calculateAndNotifyHeight(parent.getMeasurementAreaWidth());
   }
-  
+
   private void calculateLines2() {
     this.tokens = TokenParser.parse2(getText());
     // token to be reused in html formatting
@@ -56,10 +59,23 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
     text.addText(tokens, hasTextElement.getX() + 9 + getMarginLeft(), parent.getMeasurementAreaWidth());
   }
 
+  @Override
+  protected int getTextTop(int row) {
+    return hasTextElement.getY() + DEFAULT_TOP_MARGIN;
+  }
+
 	private void calculateAndNotifyHeight(int width) {
-		MeasurementPanel.setTokens(tokens, width - getMarginLeft());
-		MeasurementPanel.setPosition(hasTextElement.getX() + parent.getWidth() + 20, hasTextElement.getY());
-    hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + DEFAULT_VERTICAL_TEXT_MARGIN);
+		// MeasurementPanel.setTokens(tokens, width - getMarginLeft());
+		// MeasurementPanel.setPosition(hasTextElement.getX() + parent.getWidth() + 20, hasTextElement.getY());
+  //   hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + DEFAULT_VERTICAL_TEXT_MARGIN);
+    if (lines.size() == 1 && lines.get(0).size() == 1) {
+      IShape s = lines.get(0).get(0);
+      if (s instanceof IText) {
+        double height = ((IText)s).getTextHeight();
+        parent.setHeight(((int) height) + DEFAULT_TOP_MARGIN);
+      }
+    }
+    // MeasurementHelpers.setMeasurementPanelTextAndResizeDiagram(parent, getText());
   }
   
   public void setText(String newText, boolean editable, boolean force) {

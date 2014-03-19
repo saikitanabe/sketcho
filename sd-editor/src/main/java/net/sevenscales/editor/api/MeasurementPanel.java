@@ -48,14 +48,24 @@ public class MeasurementPanel {
     setTokens(tokens, width);
 	}
 
+	public static void setPlainTextAsHtml(String plainText, int width) {
+		setWidth(width);
+		String tmphtml = SafeHtmlUtils.htmlEscape(plainText).replaceAll("\\n", "<br>&nbsp;");
+		MeasurementPanel.getMeasurementPanel().getElement().setInnerHTML(tmphtml);
+	}
+
 	public static void setTokens(JavaScriptObject tokens, int width) {
 		_setText(TokenParser.formatHtml(tokens), width);
 	}
 
-	private static void _setText(String html, int width) {
+	private static void setWidth(int width) {
 		if (width > 0) {
 			MeasurementPanel.getMeasurementPanel().setWidth(width + "px");
 		}
+	}
+
+	private static void _setText(String html, int width) {
+		setWidth(width);
 		
 		// add also html space entity to increase measurement panel height
 		// it will lead for one extra space in measuremnt div but it doesn't
