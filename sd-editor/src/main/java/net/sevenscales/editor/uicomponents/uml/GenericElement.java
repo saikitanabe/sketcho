@@ -387,10 +387,10 @@ public class GenericElement extends AbstractDiagramItem {
 
 	@Override
 	public String getTextAreaAlign() {
-		if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-			return "center";
-		} else {
+		if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
 			return super.getTextAreaAlign();
+		} else {
+			return "center";
 		}
 	}
 
