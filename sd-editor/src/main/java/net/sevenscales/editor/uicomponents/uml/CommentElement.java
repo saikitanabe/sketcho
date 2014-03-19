@@ -154,10 +154,10 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     title = new TextElementVerticalFormatUtil(this, hasTitleTextElement, group, surface.getEditorContext());
     textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
 
-		title.setMarginTop(0);
-		title.setMarginLeft(6);
-    textUtil.setMarginTop(20);
-    textUtil.setMarginLeft(6);
+		// title.setMarginTop(0);
+		// title.setMarginLeft(6);
+  //   textUtil.setMarginTop(20);
+  //   textUtil.setMarginLeft(6);
 
     setReadOnly(!editable);
     setShape(shape.rectShape.left, shape.rectShape.top, 
@@ -255,12 +255,14 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		return result;
 	}
 
+	private final int MARGIN_LEFT = 16;
+	private final int MARGIN_TOP = 20;
   private HasTextElement hasTitleTextElement = new AbstractHasTextElement() {
     public int getWidth() {
-    	return boundary.getWidth();
+    	return boundary.getWidth() - MARGIN_LEFT;
     }
     public int getX() {
-    	return boundary.getX();
+    	return boundary.getX() + MARGIN_LEFT;
     }
     public int getY() {
     	return boundary.getY();
@@ -309,13 +311,13 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   // nice way to clearly separate interface methods :)
   private HasTextElement hasTextElement = new AbstractHasTextElement() {
     public int getWidth() {
-    	return boundary.getWidth();
+    	return boundary.getWidth() - MARGIN_LEFT;
     }
     public int getX() {
-    	return boundary.getX();
+    	return boundary.getX() + MARGIN_LEFT;
     }
     public int getY() {
-    	return boundary.getY();
+    	return boundary.getY() + MARGIN_TOP;
     }
     public int getHeight() {
     	return boundary.getHeight();
@@ -405,7 +407,8 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	
 	public void setHeight(int height) {
 		int prevHeight = getHeight();
-		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height);
+		// 3 some magic margin
+		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height + (int) title.getTextHeight() + 3);
 		dispatchAndRecalculateAnchorPositions();
     parentThread.childResized(this, height - prevHeight);
 	}

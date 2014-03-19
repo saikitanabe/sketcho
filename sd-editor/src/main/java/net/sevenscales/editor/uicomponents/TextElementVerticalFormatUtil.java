@@ -56,7 +56,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
     
     IText text = createText(true);
     currentline.add(text);
-    text.addText(tokens, hasTextElement.getX() + getMarginLeft(), hasTextElement.getWidth());
+    text.addText(tokens, hasTextElement.getX(), hasTextElement.getWidth());
   }
 
   @Override
