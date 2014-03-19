@@ -27,9 +27,6 @@ class GenericHasTextElement extends AbstractHasTextElement {
 			}
 		}
 	}
-  public void addShape(IShape shape) {
-    // shapes.add(shape);    
-  }
   public int getWidth() {
     return parent.getWidth();
   }
@@ -38,9 +35,9 @@ class GenericHasTextElement extends AbstractHasTextElement {
   }
   public int getY() {
   	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-			return parent.getRelativeLeft() + parent.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 5;
+			return parent.getRelativeTop() + parent.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 5;
   	} else {
-  		return parent.getRelativeLeft();
+  		return parent.getRelativeTop();
   	}
   }
   public int getHeight() {

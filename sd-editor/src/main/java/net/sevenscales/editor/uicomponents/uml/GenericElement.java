@@ -145,31 +145,13 @@ public class GenericElement extends AbstractDiagramItem {
   	return path;
 	}
 	
-	// @Override
-	// public int getRelativeLeft() {
-	// 	return left;
-	// }
-	// @Override
-
-	// public int getRelativeTop() {
-	// 	return top;
-	// }
-	// @Override
-	// public int getWidth() {
-	// 	return width;
-	// }
-	// @Override
-	// public int getHeight() {
-	// 	return height;
-	// }
-
 	@Override
 	public int getRelativeLeft() {
-		return left;
+		return background.getX();
 	}
 	@Override
 	public int getRelativeTop() {
-		return top;
+		return background.getY();
 	}
 	@Override
 	public int getWidth() {
