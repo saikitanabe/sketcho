@@ -379,7 +379,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     result.add(bubbleR);
 
     Diagram circle = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.CIRCLE.getValue(), 10, GENERAL_GROUP + 2 * 40 + 10, 40, 40),
+        new GenericShape(ElementType.CIRCLE.getValue(), 10, GENERAL_GROUP + 2 * 40 + 2 * 10, 40, 40),
           "",
           Theme.createDefaultBackgroundColor(),
           Theme.createDefaultBorderColor(),
