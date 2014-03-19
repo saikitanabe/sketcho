@@ -130,9 +130,6 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 	}
 	
   private HasTextElement hasTextElement = new AbstractHasTextElement() {
-    public void addShape(IShape shape) {
-      shapes.add(shape);    
-    }
     public int getWidth() {
     	return Actor.this.getWidth();
     }

@@ -146,9 +146,6 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
 	}
 	
   private HasTextElement hasTextElement = new AbstractHasTextElement() {
-    public void addShape(IShape shape) {
-      shapes.add(shape);    
-    }
     public int getWidth() {
     	return EllipseElement.this.getWidth();
     }

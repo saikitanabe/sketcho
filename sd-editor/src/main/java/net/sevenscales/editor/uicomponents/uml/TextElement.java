@@ -77,10 +77,6 @@ public class TextElement extends AbstractDiagramItem implements
 
 	// nice way to clearly separate interface methods :)
 	private HasTextElement hasTextElement = new AbstractHasTextElement() {
-		public void addShape(IShape shape) {
-			shapes.add(shape);
-		}
-
 		public int getWidth() {
 			return attachBoundary.getWidth();
 		}

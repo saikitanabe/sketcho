@@ -246,9 +246,6 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	
   // nice way to clearly separate interface methods :)
   private HasTextElement hasTextElement = new AbstractHasTextElement() {
-    public void addShape(IShape shape) {
-      shapes.add(shape);    
-    }
     public int getWidth() {
     	return boundary.getWidth();
     }

@@ -127,9 +127,6 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 	
   // nice way to clearly separate interface methods :)
   private HasTextElement hasTextElement = new AbstractHasTextElement() {
-    public void addShape(IShape shape) {
-      shapes.add(shape);    
-    }
     public int getWidth() {
       return ActivityChoiceElement.this.getWidth();
     }

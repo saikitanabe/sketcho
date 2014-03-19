@@ -112,7 +112,6 @@ public class TextElementFormatUtil {
     int getX();
     int getWidth();
     int getHeight();
-    void addShape(IShape shape);
     boolean isAutoResize();
     void resize(int x, int y, int width, int height);
     void setLink(String lik);
