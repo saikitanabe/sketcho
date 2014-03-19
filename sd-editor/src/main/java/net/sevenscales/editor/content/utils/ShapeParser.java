@@ -55,7 +55,8 @@ class ShapeParser {
 		new ParserMap(ElementType.CLOUD, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.FIREWALL, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.BUBBLE, new AbstractDiagramFactory.GenericFactory()),
-		new ParserMap(ElementType.BUBBLE_R, new AbstractDiagramFactory.GenericFactory())
+		new ParserMap(ElementType.BUBBLE_R, new AbstractDiagramFactory.GenericFactory()),
+		new ParserMap(ElementType.CIRCLE, new AbstractDiagramFactory.GenericFactory())
 	};
 
 	static AbstractDiagramFactory factory(IDiagramItemRO diro) {

@@ -30,7 +30,8 @@ public enum ElementType {
 	CLOUD("cloud"),
 	FIREWALL("firewall"),
 	BUBBLE("bubble-l"),
-	BUBBLE_R("bubble-r");
+	BUBBLE_R("bubble-r"),
+	CIRCLE("circle");
 
 	private String value;
 
