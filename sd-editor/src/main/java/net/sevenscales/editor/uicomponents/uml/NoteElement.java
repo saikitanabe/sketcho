@@ -61,7 +61,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 
   private IPath.PathTransformer pathTransformer = new IPath.PathTransformer() {
   	public String getShapeStr(int dx, int dy) {
-  		return calcShape(doGetLeft() + dx, doGetTop() + dy, getWidth(), getTop());
+  		return calcShape(getRelativeLeft() + dx, getRelativeTop() + dy, getWidth(), getTop());
   	}
   };
 
@@ -282,12 +282,12 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	}
 
 	@Override
-	protected int doGetLeft() {
+	public int getRelativeLeft() {
 		return boundary.getX();
 	}
 	
 	@Override
-	protected int doGetTop() {
+	public int getRelativeTop() {
 		return boundary.getY();
 	}
 	
@@ -302,9 +302,10 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 //    return boundary.getArrayValue(9) - boundary.getArrayValue(1);
 		return boundary.getHeight();
 	}
-	
+
+	@Override	
 	public void setHeight(int height) {
-		setShape(doGetLeft(), doGetTop(), getWidth(), height);
+		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height);
 		dispatchAndRecalculateAnchorPositions();
 	}
 	
@@ -360,7 +361,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	}
 
 	public boolean resize(Point diff) {
-		return resize(doGetLeft(), doGetTop(), getWidth() + diff.x, getHeight() + diff.y);
+		return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);
 	}
 
 	protected boolean resize(int left, int top, int width, int height) {
