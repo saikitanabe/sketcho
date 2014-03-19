@@ -481,7 +481,7 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
 	
 	@Override
 	public int getTextAreaHeight() {
-		return textUtil.getTextHeight();
+		return (int) textUtil.getTextHeight();
 	}
 	
 	@Override
@@ -527,7 +527,7 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
   @Override
   public int getHeightWithText() {
     TextElementFormatUtil textFormatter = getTextFormatter();
-    return getHeight() + textFormatter.getTextHeight();
+    return getHeight() + (int) textFormatter.getTextHeight();
   }
 
 }

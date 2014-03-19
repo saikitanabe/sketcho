@@ -112,6 +112,8 @@ public class TextElementFormatUtil {
     int getX();
     int getWidth();
     int getHeight();
+    int getMarginLeft();
+    int getMarginTop();
     boolean isAutoResize();
     void resize(int x, int y, int width, int height);
     void setLink(String lik);
@@ -146,7 +148,12 @@ public class TextElementFormatUtil {
     public boolean supportElementResize() {
       return true;
     }
-
+    public int getMarginLeft() {
+      return 0;
+    }
+    public int getMarginTop() {
+      return 0;
+    }
   }
 
   protected HasTextElement hasTextElement;
@@ -500,7 +507,7 @@ public class TextElementFormatUtil {
 		return (int) widestWidth + getMargin(); // +margin
 	}
 	
-	public int getTextHeight() {
+	public double getTextHeight() {
 		return (lines.size() + 1) * fontProperty.rowHeight;
 	}
 

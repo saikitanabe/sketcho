@@ -90,7 +90,7 @@ public class GenericElement extends AbstractDiagramItem {
 
     background = IShapeFactory.Util.factory(editable).createRectangle(group);
     background.setFill(0, 0 , 0, 0); // transparent
-    background.setStroke("#000000");
+    // background.setStroke("#000000");
 
 		addEvents(background);
 		
@@ -361,7 +361,7 @@ public class GenericElement extends AbstractDiagramItem {
 	@Override
 	public int getTextAreaHeight() {
 		if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-    	return textUtil.getTextHeight();
+    	return (int) textUtil.getTextHeight();
     } else {
 			return super.getTextAreaHeight();
   	}
@@ -425,10 +425,14 @@ public class GenericElement extends AbstractDiagramItem {
   public int getHeightWithText() {
   	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
 	  TextElementFormatUtil textFormatter = getTextFormatter();
-    return getHeight() + textFormatter.getTextHeight();
+    return getHeight() + (int) textFormatter.getTextHeight();
 	  } else {
 			return super.getHeightWithText();
   	}
+  }
+
+  public double getTextHeight() {
+  	return textUtil.getTextHeight();
   }
 
 }

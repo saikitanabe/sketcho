@@ -43,7 +43,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   	calculateLines2();
   	setTextShape();
   	super.show();
-    calculateAndNotifyHeight(parent.getMeasurementAreaWidth());
+    calculateAndNotifyHeight(hasTextElement.getWidth());
   }
 
   private void calculateLines2() {
@@ -56,7 +56,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
     
     IText text = createText(true);
     currentline.add(text);
-    text.addText(tokens, hasTextElement.getX() + 9 + getMarginLeft(), parent.getMeasurementAreaWidth());
+    text.addText(tokens, hasTextElement.getX() + getMarginLeft(), hasTextElement.getWidth());
   }
 
   @Override
@@ -68,16 +68,13 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
 		// MeasurementPanel.setTokens(tokens, width - getMarginLeft());
 		// MeasurementPanel.setPosition(hasTextElement.getX() + parent.getWidth() + 20, hasTextElement.getY());
   //   hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + DEFAULT_VERTICAL_TEXT_MARGIN);
-    if (lines.size() == 1 && lines.get(0).size() == 1) {
-      IShape s = lines.get(0).get(0);
-      if (s instanceof IText) {
-        double height = ((IText)s).getTextHeight();
-        parent.setHeight(((int) height) + DEFAULT_TOP_MARGIN);
-      }
+    double textHeight = getTextHeight();
+    if (textHeight > 0) {
+      parent.setHeight(((int) textHeight) + DEFAULT_TOP_MARGIN + hasTextElement.getMarginTop());
     }
     // MeasurementHelpers.setMeasurementPanelTextAndResizeDiagram(parent, getText());
   }
-  
+
   public void setText(String newText, boolean editable, boolean force) {
   	// convert json text line (\\n) breaks to line breaks
 //  	newText = newText.replaceAll("\\\\n", "\n");
@@ -92,7 +89,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
         // during OT operation element is NOT resized and everything is 
         // copied as is, element size and text
         // though in vertical case text needs to be recalculated based on element size
-        calculateAndNotifyHeight(parent.getMeasurementAreaWidth());
+        calculateAndNotifyHeight(hasTextElement.getWidth());
       }
       this.tokens = null; // cleanup some memory
   	 setTextShape();
@@ -144,5 +141,18 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
 
 		return text;
 	}
+
+  @Override
+  public double getTextHeight() {
+    double result = 0;
+    if (lines.size() == 1 && lines.get(0).size() == 1) {
+      IShape s = lines.get(0).get(0);
+      if (s instanceof IText) {
+        result = ((IText)s).getTextHeight();
+      }
+    }
+    return result;
+  }
+
 
 }

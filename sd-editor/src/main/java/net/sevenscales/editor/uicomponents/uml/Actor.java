@@ -519,7 +519,7 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 	@Override
 	public int getTextAreaHeight() {
 //		return textareaHeight == 0 ? textUtil.getTextHeight() : textareaHeight;
-		return textUtil.getTextHeight();
+		return (int) textUtil.getTextHeight();
 	}
 
 	@Override
@@ -559,7 +559,7 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
   @Override
   public int getHeightWithText() {
 	  TextElementFormatUtil textFormatter = getTextFormatter();
-    return getHeight() + textFormatter.getTextHeight();
+    return getHeight() + ((int)textFormatter.getTextHeight());
   }
 
 
