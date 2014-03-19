@@ -1219,12 +1219,12 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	}
 	
   @Override
-  protected int doGetLeft() {
+  public int getRelativeLeft() {
   	return Math.min(points.get(0), points.get(points.size()-2));
   }
   
   @Override
-  protected int doGetTop() {
+  public int getRelativeTop() {
   	int result = Integer.MAX_VALUE;
   	for (int i = 1; i < points.size(); i += 2) {
   		result = Math.min(result, points.get(i));

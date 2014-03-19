@@ -137,10 +137,10 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
     	return Actor.this.getWidth();
     }
     public int getX() {
-    	return Actor.this.doGetLeft();
+    	return Actor.this.getRelativeLeft();
     }
     public int getY() {
-    	return doGetTop() + getHeight() - TextElementFormatUtil.ROW_HEIGHT + 5;
+    	return getRelativeTop() + getHeight() - TextElementFormatUtil.ROW_HEIGHT + 5;
     }
     public int getHeight() {
     	return Actor.this.getHeight();
@@ -244,11 +244,11 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 	}
 	
 	@Override
-	protected int doGetLeft() {
+	public int getRelativeLeft() {
 		return background.getX();
 	}
 	@Override
-	protected int doGetTop() {
+	public int getRelativeTop() {
 		return background.getY();
 	}
 	@Override

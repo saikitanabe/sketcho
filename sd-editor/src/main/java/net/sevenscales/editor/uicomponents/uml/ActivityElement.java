@@ -255,12 +255,12 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
   }
   
   @Override
-  protected int doGetLeft() {
+  public int getRelativeLeft() {
   	return boundary.getX();
   }
   
   @Override
-  protected int doGetTop() {
+  public int getRelativeTop() {
   	return boundary.getY();
   }
   

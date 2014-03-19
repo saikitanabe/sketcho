@@ -175,6 +175,14 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 	// each element needs to calculate own values based on these
 	void setShape(int[] shape);
 	int[] getShape();
+  /**
+  * Left without transformation.
+  */
+  int getRelativeLeft();
+  /**
+  * Top without transformation.
+  */
+  int getRelativeTop();
 	int getLeft();
 	int getTop();
 	int getWidth();

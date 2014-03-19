@@ -335,12 +335,12 @@ public class UMLPackageElement extends AbstractDiagramItem implements SupportsRe
   }
   
   @Override
-  protected int doGetLeft() {
+  public int getRelativeLeft() {
   	return rectSurface.getX();
   }
   
   @Override
-  protected int doGetTop() {
+  public int getRelativeTop() {
   	return rectSurface.getY();
   }
   

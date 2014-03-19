@@ -147,7 +147,7 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
   public class HalfEllipseTransformer implements IPath.PathTransformer {
 		@Override
 		public String getShapeStr(int dx, int dy) {
-			return calcBottomEllipse(doGetLeft() + dx, doGetTop() + dy, getWidth(), getHeight());
+			return calcBottomEllipse(getRelativeLeft() + dx, getRelativeTop() + dy, getWidth(), getHeight());
 		}
   };
 	
@@ -316,12 +316,12 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
   }
     
   @Override
-	protected int doGetLeft() {
+	public int getRelativeLeft() {
   	return background.getX();
   }
   
   @Override
-	protected int doGetTop() {
+	public int getRelativeTop() {
   	return background.getY();
   }
   

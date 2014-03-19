@@ -1082,13 +1082,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
 	
 	public final int getLeft() {
-		return doGetLeft() + getTransformX();
+		return getRelativeLeft() + getTransformX();
 	}
 	public final int getTop() {
-		return doGetTop() + getTransformY();
+		return getRelativeTop() + getTransformY();
 	}
-  protected abstract int doGetLeft();
-  protected abstract int doGetTop();
 
 	public int getWidth() {
 		return 0;
@@ -1299,7 +1297,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	public void setSizeChangedHandlerByText(SizeChangedHandler handler) {
 		this.sizeChangedHandler = handler;
 	}
-	protected void fireSizeChanged() {
+	public void fireSizeChanged() {
 		if (sizeChangedHandler != null) {
 			sizeChangedHandler.onSizeChanged(this, getWidth(), getHeight());
 		}

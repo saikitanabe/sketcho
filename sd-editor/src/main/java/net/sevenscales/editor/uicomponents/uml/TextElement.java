@@ -182,7 +182,7 @@ public class TextElement extends AbstractDiagramItem implements
 	}
 
 	public boolean resize(Point diff) {
-		return resize(doGetLeft(), doGetTop(), getWidth() + diff.x, getHeight()	+ diff.y);
+		return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight()	+ diff.y);
 	}
 
 	protected boolean resize(int left, int top, int width, int height) {
@@ -250,12 +250,12 @@ public class TextElement extends AbstractDiagramItem implements
 	}
 
 	@Override
-	protected int doGetLeft() {
+	public int getRelativeLeft() {
 		return attachBoundary.getX();
 	}
 
 	@Override
-	protected int doGetTop() {
+	public int getRelativeTop() {
 		return attachBoundary.getY();
 	}
 
@@ -270,7 +270,7 @@ public class TextElement extends AbstractDiagramItem implements
 	}
 	
 	public void setHeight(int height) {
-		setShape(doGetLeft(), doGetTop(), getWidth(), height);
+		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height);
 	}
 
 	public void setShape(int left, int top, int width, int height) {

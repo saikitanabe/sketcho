@@ -78,7 +78,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 
   private IPath.PathTransformer pathTransformer = new IPath.PathTransformer() {
   	public String getShapeStr(int dx, int dy) {
-  		return calcShape(doGetLeft() + dx, doGetTop() + dy, getWidth(), getTop());
+  		return calcShape(getRelativeLeft() + dx, getRelativeTop() + dy, getWidth(), getTop());
   	}
   };
 
@@ -181,10 +181,10 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	private boolean checkIfChanged(int left, int top, int width, int height) {
-		if (doGetLeft() != left) {
+		if (getRelativeLeft() != left) {
 			return true;
 		}
-		if (doGetTop() != top) {
+		if (getRelativeTop() != top) {
 			return true;
 		}
 		if (getWidth() != width) {
@@ -388,12 +388,12 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 	
 	@Override
-	protected int doGetLeft() {
+	public int getRelativeLeft() {
 		return boundary.getX();
 	}
 	
 	@Override
-	protected int doGetTop() {
+	public int getRelativeTop() {
 		return boundary.getY();
 	}
 	
@@ -411,13 +411,13 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	
 	public void setHeight(int height) {
 		int prevHeight = getHeight();
-		setShape(doGetLeft(), doGetTop(), getWidth(), height);
+		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height);
 		dispatchAndRecalculateAnchorPositions();
     parentThread.childResized(this, height - prevHeight);
 	}
 
 	public void setTopDiff(int diff) {
-		setShape(doGetLeft(), doGetTop() + diff, getWidth(), getHeight());
+		setShape(getRelativeLeft(), getRelativeTop() + diff, getWidth(), getHeight());
 	}
 	
   @Override
@@ -447,7 +447,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //////////////////////////////////////////////////////////////////////
 	
 	public boolean resize(Point diff) {
-		return resize(doGetLeft(), doGetTop(), getWidth() + diff.x, getHeight() + diff.y);
+		return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);
 	}
 
 	protected boolean resize(int left, int top, int width, int height) {

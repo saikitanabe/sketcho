@@ -302,12 +302,12 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
   }
   
   @Override
-  protected int doGetLeft() {
+  public int getRelativeLeft() {
   	return rectSurface.getX();
   }
   
   @Override
-  protected int doGetTop() {
+  public int getRelativeTop() {
   	return rectSurface.getY();
   }
   

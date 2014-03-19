@@ -193,7 +193,7 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
   }
 
   public boolean resize(Point diff) {
-    return resize(doGetLeft(), doGetTop(), getWidth() + diff.x, getHeight() + diff.y);
+    return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);
   }
 
   protected boolean resize(int left, int top, int width, int height) {
@@ -259,11 +259,11 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
   }
   
 	@Override
-	protected int doGetLeft() {
+	public int getRelativeLeft() {
 		return rectSurface.getX();
 	}
 	@Override
-	protected int doGetTop() {
+	public int getRelativeTop() {
 		return rectSurface.getY();
 	}
 	@Override

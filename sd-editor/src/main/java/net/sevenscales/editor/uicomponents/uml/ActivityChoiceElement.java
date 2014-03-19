@@ -205,12 +205,12 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 	}
 
 	@Override
-	protected int doGetLeft() {
+	public int getRelativeLeft() {
 		return boundary.getX();
 	}
 	
 	@Override
-	protected int doGetTop() {
+	public int getRelativeTop() {
 		return boundary.getY();
 	}
 	
@@ -273,7 +273,7 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 	}
 
 	public boolean resize(Point diff) {
-		return resize(doGetLeft(), doGetTop(), getWidth() + diff.x, getHeight() + diff.y);
+		return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);
 	}
 
 	protected boolean resize(int left, int top, int width, int height) {

@@ -155,11 +155,11 @@ public class CircleElement extends AbstractDiagramItem {
   }
   
   @Override
-  protected int doGetLeft() {
+  public int getRelativeLeft() {
   	return circle.getX();
   }
   @Override
-  protected int doGetTop() {
+  public int getRelativeTop() {
   	return circle.getY();
   }
 

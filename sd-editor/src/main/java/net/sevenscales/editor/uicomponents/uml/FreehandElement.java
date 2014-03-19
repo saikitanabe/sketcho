@@ -87,12 +87,11 @@ public class FreehandElement extends AbstractDiagramItem {
 	}
 	
 	@Override
-	protected int doGetLeft() {
+	public int getRelativeLeft() {
 		return left;
 	}
 	@Override
-
-	protected int doGetTop() {
+	public int getRelativeTop() {
 		return top;
 	}
 	@Override

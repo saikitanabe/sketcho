@@ -75,11 +75,11 @@ public class ForkElement extends AbstractDiagramItem implements SupportsRectangl
 	}
 	
 	@Override
-	protected int doGetLeft() {
+	public int getRelativeLeft() {
 		return visible.getX();
 	}
 	@Override
-	protected int doGetTop() {
+	public int getRelativeTop() {
 		return visible.getY();
 	}
 	@Override

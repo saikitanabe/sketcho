@@ -153,10 +153,10 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
     	return EllipseElement.this.getWidth();
     }
     public int getX() {
-    	return doGetLeft();
+    	return getRelativeLeft();
     }
     public int getY() {
-    	return doGetTop();
+    	return getRelativeTop();
     }
     public int getHeight() {
     	return EllipseElement.this.getHeight();
@@ -480,11 +480,11 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
 //	}
   
   @Override
-	protected int doGetLeft() {
+	public int getRelativeLeft() {
 		return ellipse.getCx() - ellipse.getRx();
 	}
 	@Override
-	protected int doGetTop() {
+	public int getRelativeTop() {
 		return ellipse.getCy() - ellipse.getRy();
 	}
 	@Override

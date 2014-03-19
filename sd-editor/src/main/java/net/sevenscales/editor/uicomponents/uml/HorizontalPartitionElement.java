@@ -289,12 +289,12 @@ public class HorizontalPartitionElement extends AbstractDiagramItem implements S
   }
   
   @Override
-  protected int doGetLeft() {
+  public int getRelativeLeft() {
   	return rectSurface.getX();
   }
   
   @Override
-  protected int doGetTop() {
+  public int getRelativeTop() {
   	return rectSurface.getY();
   }
   

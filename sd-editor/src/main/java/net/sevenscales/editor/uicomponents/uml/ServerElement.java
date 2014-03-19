@@ -437,11 +437,11 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
   }
   
 	@Override
-  protected int doGetLeft() {
+  public int getRelativeLeft() {
 		return boundary.getX();
 	}
 	@Override
-  protected int doGetTop() {
+  public int getRelativeTop() {
 		return boundary.getY();
 	}
 	@Override

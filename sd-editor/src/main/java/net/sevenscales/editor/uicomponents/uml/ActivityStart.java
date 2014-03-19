@@ -89,11 +89,11 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
 	}
 	
 	@Override
-	protected int doGetLeft() {
+	public int getRelativeLeft() {
 		return visible.getX() - shape.radius;
 	}
 	@Override
-	protected int doGetTop() {
+	public int getRelativeTop() {
 		return visible.getY() - shape.radius;
 	}
 	@Override

@@ -90,7 +90,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
   private IPath.PathTransformer pathTransformer = new IPath.PathTransformer() {
   	public String getShapeStr(int dx, int dy) {
-  		return calcShape(doGetLeft() + dx, doGetTop() + dy, getWidth(), getTop());
+  		return calcShape(getRelativeLeft() + dx, getRelativeTop() + dy, getWidth(), getTop());
   	}
   };
 
@@ -334,7 +334,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			removeFromParent();
 		} else {
 			// resizeWithKnownChildren();
-			setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() - child.getHeight());
+			setShape(getRelativeLeft(), getRelativeTop(), getWidth(), getHeight() - child.getHeight());
 	    _sort(false);
 		}
     // surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
@@ -357,12 +357,12 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 	
 	@Override
-	protected int doGetLeft() {
+	public int getRelativeLeft() {
 		return boundary.getX();
 	}
 	
 	@Override
-	protected int doGetTop() {
+	public int getRelativeTop() {
 		return boundary.getY();
 	}
 	
@@ -379,7 +379,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 	
 	public void setHeight(int height) {
-		setShape(doGetLeft(), doGetTop(), getWidth(), height);
+		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height);
 		dispatchAndRecalculateAnchorPositions();
 	}
 	
@@ -416,7 +416,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 
 	public boolean resize(Point diff) {
-		return resize(doGetLeft(), doGetTop(), getWidth() + diff.x, getHeight() + diff.y);
+		return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);
 	}
 
 	protected boolean resize(int left, int top, int width, int height) {
@@ -593,7 +593,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 		CommentDTO jsComment = new CommentDTO(this.getDiagramItem().getClientId(), surface.getEditorContext().getCurrentUser(), surface.getEditorContext().getCurrentUserDisplayName());
 		CommentElement commentElement = new CommentElement(surface,
-        new CommentShape(doGetLeft(), doGetTop() + getHeight(), getWidth(), 1),
+        new CommentShape(getRelativeLeft(), getRelativeTop() + getHeight(), getWidth(), 1),
         text,
         commentColor.getBackgroundColor().create(), 
         commentColor.getBorderColor().create(), 
@@ -667,8 +667,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 
 	private void _sort(boolean resizeChild) {
-		int left = doGetLeft();
-		int top = doGetTop();
+		int left = getRelativeLeft();
+		int top = getRelativeTop();
 		int currentHeight = 18;
 		int width = getWidth();
 
@@ -679,7 +679,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			CommentElement ce = comments.get(i);
 
 			int commentHeight = ce.getHeight();
-			// if ( ce.doGetTop() != (top + height) ) {
+			// if ( ce.getRelativeTop() != (top + height) ) {
 				ce.setShape(left, top + height, width, commentHeight);
 			if (resizeChild) {
 				ce.resizeText();
@@ -722,7 +722,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
   	if (!surface.getEditorContext().isTrue(EditorProperty.ON_SURFACE_LOAD)) {
   		repositionCommentsAfter(comment, diff);
   		if (diff != 0) {
-				setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() + diff);
+				setShape(getRelativeLeft(), getRelativeTop(), getWidth(), getHeight() + diff);
 				surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
   		}
   	}
@@ -749,7 +749,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	}
 
 	public void setIncrementHeight(int value) {
-		setShape(doGetLeft(), doGetTop(), getWidth(), getHeight() + value);
+		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), getHeight() + value);
 	}
 
 	@Override
