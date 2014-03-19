@@ -23,7 +23,8 @@ class GenericHasTextElement extends AbstractHasTextElement {
 		// possible to customize for each element type
 		ElementType elementType = ElementType.getEnum(shape.getElementType());
 		switch (elementType) {
-			case BUBBLE: {
+			case BUBBLE:
+			case BUBBLE_R: {
 				this.marginLeftFactor = 0.09f;
 				this.marginTopFactor = 0.09f;
 				break;
