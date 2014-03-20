@@ -117,6 +117,7 @@ public class TextElementFormatUtil {
     int getMarginBottom();
     boolean isAutoResize();
     void resize(int x, int y, int width, int height);
+    void resizeHeight(int height);
     void setLink(String lik);
     String getLink();
     boolean supportsTitleCenter();
@@ -157,6 +158,8 @@ public class TextElementFormatUtil {
     }
     public int getMarginBottom() {
       return 0;
+    }
+    public void resizeHeight(int height) {
     }
   }
 

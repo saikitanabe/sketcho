@@ -243,6 +243,10 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
       fireSizeChanged();
     }
 
+    public void resizeHeight(int height) {
+      NoteElement.this.setHeight(height);
+		}    
+
     public void setLink(String link) {
       NoteElement.this.setLink(link);      
     }

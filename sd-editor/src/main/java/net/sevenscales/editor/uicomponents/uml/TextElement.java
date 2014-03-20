@@ -110,6 +110,10 @@ public class TextElement extends AbstractDiagramItem implements
 			fireSizeChanged();
 		}
 
+    public void resizeHeight(int height) {
+      TextElement.this.setHeight(height);
+		}    
+
 		public void setLink(String link) {
 			TextElement.this.setLink(link);
 		}
