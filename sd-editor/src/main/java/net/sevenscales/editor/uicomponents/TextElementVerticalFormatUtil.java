@@ -23,8 +23,12 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
+import net.sevenscales.domain.utils.SLogger;
+
 
 public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
+  private static final SLogger logger = SLogger.createLogger(TextElementVerticalFormatUtil.class);
+
   private JavaScriptObject tokens;
   public static int DEFAULT_VERTICAL_TEXT_MARGIN = 0;
   // 11 is just the begging
@@ -49,16 +53,20 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   }
 
   private void calculateLines2() {
-    this.tokens = TokenParser.parse2(getText());
-    // token to be reused in html formatting
-    
-    clearLines();
-    List<IShape> currentline = new ArrayList<IShape>();
-    lines.add(currentline);
-    
-    IText text = createText(true);
-    currentline.add(text);
-    text.addText(tokens, hasTextElement.getX(), hasTextElement.getWidth());
+    try {
+      this.tokens = TokenParser.parse2(getText());
+      // token to be reused in html formatting
+      
+      clearLines();
+      List<IShape> currentline = new ArrayList<IShape>();
+      lines.add(currentline);
+      
+      IText text = createText(true);
+      currentline.add(text);
+      text.addText(tokens, hasTextElement.getX(), hasTextElement.getWidth());
+    } catch (Exception e) {
+      logger.error("tokens: " + tokens, e);
+    }
   }
 
   @Override
