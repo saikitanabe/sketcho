@@ -611,7 +611,6 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	public void accept(CommentElement comment) {
 		comments.add(comment);
-	}
 		// queueSorting();
 	}
 
