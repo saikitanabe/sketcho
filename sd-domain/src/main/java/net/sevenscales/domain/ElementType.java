@@ -36,7 +36,9 @@ public enum ElementType {
 	POLYGON4("polygon4"),
 	POLYGON8("polygon8"),
 	ARROW_UP("arrow-up"),
-	ARROW_RIGHT("arrow-right");
+	ARROW_RIGHT("arrow-right"),
+	IPHONE("iphone"),
+	WEB_BROWSER("w-browser");
 
 	private String value;
 
