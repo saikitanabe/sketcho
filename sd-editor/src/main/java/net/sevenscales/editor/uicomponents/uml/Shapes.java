@@ -109,6 +109,10 @@ public class Shapes {
 			new Proto("m 43.577982,31.376100 c -3.394495,0.917500 -4.036697,-2.201700 -4.036697,-2.201700 ", "")
 		}, 50, 50));
 
+		shapes.put(ElementType.POLYGON4, new Group(new Proto[]{
+			new Proto("m 40.132126,49.643455 -30.283670,-0.010736 -9.348456,-30.283675 24.506007,-18.705604 24.494001,18.722977 z", "")
+		}, 50, 50));
+
 		// shapes.put(ElementType.ENVELOPE, new Group(new Proto[]{
 		// 	new Proto("m 1,1 0,48 98,0 0,-47.875 -48.375000,25.281250 z"),
 		// 	new Proto("m 1.345292,1.121100 97.464868,0")
