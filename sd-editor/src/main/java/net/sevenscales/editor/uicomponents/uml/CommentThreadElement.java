@@ -434,7 +434,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 		showChildren();
 		resizeWithKnownChildren();
-		surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(new ArrayList(comments)));
+		// surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(new ArrayList(comments)));
 	}
 
 	private void hideChildren() {
