@@ -381,7 +381,10 @@ class SurfaceHandler extends SimplePanel implements
 //		for (Diagram d : diagrams) {
 		for (int i = diagrams.size() - 1; i >= 0; --i) {
 			Diagram d = diagrams.get(i);
-			if (Tools.filterDiagramByCurrentTool(d)) {
+			if (Tools.filterDiagramByCurrentTool(d) && d.isVisible()) {
+	      // if element is not visible do not show anchor point
+  	    // e.g. comment thread is only hidden if resolved.
+
 	//			if (result == null) {
 				AnchorElement candidate = d.onAttachArea(anchor, x, y);
 				if (candidate != null && result == null) {
