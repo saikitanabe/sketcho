@@ -66,6 +66,12 @@ public class CommentFactory {
   	return result;
   }
 
+  public void resizeCommentThreads() {
+  	for (CommentThreadElement ct : commentThreadMapping.values()) {
+  		ct.sort();
+  	}
+  }
+
 	private Diagram createComment(IDiagramItemRO diro, DiagramSearch diagramSearch) {
 		CommentElement result = null;
 		if (diro.isComment()) {
@@ -74,6 +80,7 @@ public class CommentFactory {
 			if (parent != null) {
 				CommentThreadElement thread = (CommentThreadElement) parent;
 				result = _createComment(commentData, thread);
+				thread.sort();
 			}
 		}
 		return result;

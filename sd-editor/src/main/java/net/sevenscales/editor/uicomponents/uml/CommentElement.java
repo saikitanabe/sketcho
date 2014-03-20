@@ -341,10 +341,11 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     }
 
     public void resizeHeight(int height) {
-			setOverallHeight(height);
+    	setHeight(height);
+			// setOverallHeight(height);
 
       // CommentElement.this.resize(getRelativeLeft(), getRelativeTop(), CommentElement.this.getWidth(), height);
-      fireSizeChanged();
+      // fireSizeChanged();
     }
 
     public void setLink(String link) {
@@ -411,16 +412,20 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 //    return boundary.getArrayValue(9) - boundary.getArrayValue(1);
 		return boundary.getHeight();
 	}
-	
+
 	public void setHeight(int height) {
-		int prevHeight = getHeight();
-		// 3 some magic margin
-		setOverallHeight(height);
+		setHeightAddTitleHeight(height);
 		dispatchAndRecalculateAnchorPositions();
-    parentThread.childResized(this, height - prevHeight);
+    parentThread.childResized(this);
 	}
 
-	private void setOverallHeight(int height) {
+	public void editingEnded() {
+		super.editingEnded();
+		parentThread.sort();
+	}
+
+	private void setHeightAddTitleHeight(int height) {
+		// 3 some magic margin
 		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height + (int) title.getTextHeight() + 3);
 	}
 

@@ -1113,6 +1113,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	public void setHeight(int height) {
 	}
 
+  // public void setHeightAccordingToText() {
+  // }
+
   @Override
   public void copyFrom(IDiagramItemRO diagramItem) {
     IDiagramItemRO current = getDiagramItem();
@@ -1318,6 +1321,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 			textFormatter.show();
 		}
 	}
+
+  @Override
+  public void editingEnded() {
+    showText();
+  }
 
 	public String getTextAreaBackgroundColor() {
 		if (backgroundColor.opacity == 0) {

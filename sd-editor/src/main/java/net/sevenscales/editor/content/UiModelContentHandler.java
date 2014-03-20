@@ -187,6 +187,8 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 				_addDiagram(diagram, surface, reattachHelpers, commentFactory, asSelected);
     	}
     });
+
+    commentFactory.resizeCommentThreads();
     
     reattachHelpers.reattachRelationships();
 

@@ -30,6 +30,8 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   // 11 is just the begging
   public static int DEFAULT_TOP_MARGIN = 11 + 10;
 
+  private double prevTextHeight = 0;
+
 	public TextElementVerticalFormatUtil(Diagram parent, HasTextElement hasTextElement, IGroup group, EditorContext editorContext) {
   	super(parent, hasTextElement, group, editorContext);
   }
@@ -43,7 +45,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   	calculateLines2();
   	setTextShape();
   	super.show();
-    calculateAndNotifyHeight(hasTextElement.getWidth());
+    // calculateAndNotifyHeight(hasTextElement.getWidth());
   }
 
   private void calculateLines2() {
@@ -69,11 +71,12 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
 		// MeasurementPanel.setPosition(hasTextElement.getX() + parent.getWidth() + 20, hasTextElement.getY());
   //   hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + DEFAULT_VERTICAL_TEXT_MARGIN);
     double textHeight = getTextHeight();
-    if (textHeight > 0) {
+    if (textHeight != prevTextHeight && textHeight > 0) {
       int height = ((int) textHeight) + DEFAULT_TOP_MARGIN + hasTextElement.getMarginTop() + hasTextElement.getMarginBottom();
       // parent.setHeight();
       hasTextElement.resizeHeight(height);
     }
+    prevTextHeight = textHeight;
     // MeasurementHelpers.setMeasurementPanelTextAndResizeDiagram(parent, getText());
   }
 
@@ -85,7 +88,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
     // if (changed || force) {
     setText(newText);
   
-    if (force || editorContext.isTrue(EditorProperty.ON_SURFACE_LOAD) || editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
+    // if (force || editorContext.isTrue(EditorProperty.ON_SURFACE_LOAD) || editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
   	 calculateLines2();
       if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
         // during OT operation element is NOT resized and everything is 
@@ -95,7 +98,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
       }
       this.tokens = null; // cleanup some memory
   	 setTextShape();
-    }
+    // }
     // }
 
 //    if ((hasTextElement.forceAutoResize()) && 

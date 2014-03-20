@@ -373,7 +373,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		}
 		
 		if (editorIsOpen && selectedDiagram != null) {
-			selectedDiagram.showText();
+			selectedDiagram.editingEnded();			
 		}
 	}
 	
@@ -402,14 +402,14 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			// do not allow sending same content again
 			return;
 		}
-		
-		if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
+		setMeasurementPanelText(text);
+		// if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
 	    // DIV tryouts,
-			setMeasurementPanelText(text);
+			// setMeasurementPanelText(text);
 			
 			// TODO is this still needed?
 //			selectedDiagram.setVisible(false);
-		}
+		// }
 
     selectedDiagram.setText(textArea.getText(), textEditX, textEditY);
 //    fireChanged(selectedDiagram);
@@ -494,7 +494,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		}
 		
 		selectedDiagram.hideConnectionHelpers();
-		
+		diagram.hideText();
+
 		diagram.setSizeChangedHandlerByText(this);
 		// diagram might be under popup and doesn't receive mouse up and drag will continue 
 		// without this.
@@ -583,8 +584,14 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 		// int height = MeasurementHelpers.setMeasurementPanelTextAndResizeDiagram(selectedDiagram, text);
 		// setTextAreaHeight(height);
+		// selectedDiagram.setHeightAccordingToText();
 		// setSelectedDiagramHeight();
 	}
+
+	// private void setSelectedDiagramHeight() {
+	// 	selectedDiagram.setHeightAccordingToText();
+ //    // selectedDiagram.setHeight(MeasurementPanel.getMeasurementPanel().getOffsetHeight() + TextElementVerticalFormatUtil.DEFAULT_VERTICAL_TEXT_MARGIN);
+ //  }
 
 	private void setTextAreaHeight(int height) {
 		// String[] rows = textArea.getText().split("\n");
@@ -600,7 +607,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 	private void _setTextAreaSize(Diagram diagram) {
 		// no need to hide text any longer since markdown editor hides the text with background color.
-		diagram.hideText();
+		// diagram.hideText();
 		
 		MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
 		int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();

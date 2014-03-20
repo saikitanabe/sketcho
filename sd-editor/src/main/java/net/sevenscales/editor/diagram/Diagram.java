@@ -190,7 +190,8 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
   int getHeightWithText();
 	int getCenterX();
 	int getCenterY();
-	public void setHeight(int height);
+	void setHeight(int height);
+  // void setHeightAccordingToText();
 	// special cases for highlight, in case some diagram items don't support
 	// simple border color changes
 	void setHighlightColor(String color);
@@ -240,6 +241,11 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
   void snapshotTransformations();
   int getSnaphsotTransformX();
   int getSnaphsotTransformY();
+
+  /**
+  * Support for diagram text editing, and understanding edit states.
+  */
+  void editingEnded();
 
   /**
   * Meant for composite elements like comment thread with comment elements.

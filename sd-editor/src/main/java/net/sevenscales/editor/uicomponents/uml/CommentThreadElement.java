@@ -60,6 +60,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	private IRectangle boundary;
 	public static int MINIMUM_WIDTH = 250;
 	public static int MINIMUM_HEIGHT = 40;
+	public static int MARGIN_TOP = 18;
+	public static int MARGIN_BOTTOM = 16;
 
 	private CommentThreadShape shape;
 	private Point coords = new Point();
@@ -375,10 +377,10 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		return boundary.getHeight();
 	}
 	
-	public void setHeight(int height) {
-		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height);
-		dispatchAndRecalculateAnchorPositions();
-	}
+	// public void setHeight(int height) {
+	// 	setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height);
+	// 	dispatchAndRecalculateAnchorPositions();
+	// }
 	
   @Override
 	public boolean onArea(int left, int top, int right, int bottom) {
@@ -451,7 +453,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
     resizeChildren();
     // start async from SORT state
     sortState = SortState.SORT;
-		queueSorting();
+		// queueSorting();
 	}
 
 	public void restoreSize() {
@@ -609,18 +611,12 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	public void accept(CommentElement comment) {
 		comments.add(comment);
-		queueSorting();
-	}
-
 	private void queueSorting() {
 		queueSorting(false);
 	}
 	private void queueSorting(final boolean outside) {
-		if (!sorting) {
 			// queue sorting outside this loop
-			sorting = true;
 			Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-				@Override
 				public void execute() {
 					// free lock
 					sorting = false;
@@ -628,18 +624,43 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 					switch (sortState) {
 						case RESIZE_CHILDREN: {
-							resizeChildrenState();
 							break;
 						}
-						case SORT: {
 							sortState(outside);
-							break;
-						}
-					}
 				}
-			});
-		}
+		// queueSorting();
 	}
+
+	public void sort() {
+		_sort(false);
+	}
+
+	// private void queueSorting() {
+	// 	queueSorting(false);
+	// }
+	// private void queueSorting(final boolean outside) {
+	// 	_sort(false);
+
+	// 	// if (!sorting) {
+	// 	// 	// queue sorting outside this loop
+	// 	// 	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+	// 	// 		@Override
+	// 	// 		public void execute() {
+	// 	// 			// free lock
+	// 	// 			sorting = false;
+	// 	// 			_sort(false);
+
+	// 	// 				case RESIZE_CHILDREN: {
+	// 	// 				}
+	// 	// 				case SORT: {
+	// 	// 					sortState(outside);
+	// 	// 					break;
+	// 	// 				}
+	// 	// 			}
+	// 	// 		}
+	// 	// 	});
+	// 	// }
+	// }
 
 	private void resizeChildrenState() {
 		resizeChildren();
@@ -647,7 +668,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		// now children has correct position and size 
 		// recursively sort again to position comments and thread correctly
 		// according to comments real size (need to redraw => async)
-		queueSorting();
+		// queueSorting();
 	}
 
 	private void sortState(boolean outside) {
@@ -666,7 +687,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	private void _sort(boolean resizeChild) {
 		int left = getRelativeLeft();
 		int top = getRelativeTop();
-		int currentHeight = 18;
+		int currentHeight = MARGIN_TOP;
 		int width = getWidth();
 
 		int height = currentHeight;
@@ -676,16 +697,15 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 			CommentElement ce = comments.get(i);
 
 			int commentHeight = ce.getHeight();
-			// if ( ce.getRelativeTop() != (top + height) ) {
-				ce.setShape(left, top + height, width, commentHeight);
+			ce.setShape(left, top + height, width, commentHeight);
 			if (resizeChild) {
 				ce.resizeText();
+				commentHeight = ce.getHeight();
 			} else {
 				if (ce.isVisible() != isVisible()) {
 					ce.setVisible(isVisible());
 				}
 			}
-			// }
 			height += commentHeight + 1;
 			last = ce;
 		}
@@ -697,9 +717,20 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 		// if (height != currentHeight) {
 		// 	logger.debug("CommentThreadElement height changed current {} new {}...", currentHeight, height);
-		setShape(left, top, width, height + 16);
-		dispatchAndRecalculateAnchorPositions();
+		setThreadHeight(height + MARGIN_BOTTOM);
 		// }
+	}
+
+	private int calculateHeight() {
+		int result = MARGIN_TOP;
+		for (CommentElement ce : comments) {
+			result += ce.getHeight() + 1;
+		}
+	}
+
+	private void setThreadHeight(int height) {
+		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height);
+		dispatchAndRecalculateAnchorPositions();
 	}
 
  	public List<? extends Diagram> getChildElements() {
@@ -715,28 +746,15 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
     }
   }
 
-  public void childResized(CommentElement comment, int diff) {
+  public void childResized(CommentElement comment) {
+  	setThreadHeight(calculateHeight());
   	if (!surface.getEditorContext().isTrue(EditorProperty.ON_SURFACE_LOAD)) {
-  		repositionCommentsAfter(comment, diff);
-  		if (diff != 0) {
-				setShape(getRelativeLeft(), getRelativeTop(), getWidth(), getHeight() + diff);
-				surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
   		}
-  	}
   }
-
   private void repositionCommentsAfter(CommentElement comment, int diff) {
   	boolean reposition = false;
-  	for (int i = 0; i < comments.size(); ++i) {
-  		CommentElement ce = comments.get(i);
   		if (reposition) {
-  			ce.setTopDiff(diff);
-  		}
-
-  		if (ce == comment) {
-  			reposition = true;
-  		}
-
+			surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
   	}
   }
 
@@ -752,7 +770,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	@Override
 	public void copyFrom(IDiagramItemRO diagramItem) {
 		super.copyFrom(diagramItem);
-		queueSorting(true);
+		_sort(true);
+		// queueSorting(true);
 	}
 
 	public void markDone() {
