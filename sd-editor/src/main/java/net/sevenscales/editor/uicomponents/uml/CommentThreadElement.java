@@ -611,23 +611,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	public void accept(CommentElement comment) {
 		comments.add(comment);
-	private void queueSorting() {
-		queueSorting(false);
 	}
-	private void queueSorting(final boolean outside) {
-			// queue sorting outside this loop
-			Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-				public void execute() {
-					// free lock
-					sorting = false;
-					_sort(false);
-
-					switch (sortState) {
-						case RESIZE_CHILDREN: {
-							break;
-						}
-							sortState(outside);
-				}
 		// queueSorting();
 	}
 
@@ -643,6 +627,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	// 	// if (!sorting) {
 	// 	// 	// queue sorting outside this loop
+	// 	// 	sorting = true;
 	// 	// 	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 	// 	// 		@Override
 	// 	// 		public void execute() {
@@ -650,7 +635,10 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	// 	// 			sorting = false;
 	// 	// 			_sort(false);
 
+	// 	// 			switch (sortState) {
 	// 	// 				case RESIZE_CHILDREN: {
+	// 	// 					resizeChildrenState();
+	// 	// 					break;
 	// 	// 				}
 	// 	// 				case SORT: {
 	// 	// 					sortState(outside);
@@ -726,6 +714,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		for (CommentElement ce : comments) {
 			result += ce.getHeight() + 1;
 		}
+		return result + MARGIN_BOTTOM;
 	}
 
 	private void setThreadHeight(int height) {
@@ -749,11 +738,6 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
   public void childResized(CommentElement comment) {
   	setThreadHeight(calculateHeight());
   	if (!surface.getEditorContext().isTrue(EditorProperty.ON_SURFACE_LOAD)) {
-  		}
-  }
-  private void repositionCommentsAfter(CommentElement comment, int diff) {
-  	boolean reposition = false;
-  		if (reposition) {
 			surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
   	}
   }
