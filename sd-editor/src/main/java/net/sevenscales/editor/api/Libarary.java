@@ -410,6 +410,17 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
           DiagramItemDTO.createGenericItem(ElementType.POLYGON4));
     polygon4.setDuplicateMultiplySize(3, 3);
     result.add(polygon4);
+
+    Diagram polygon8 = new GenericElement(this.toolpool,
+        new GenericShape(ElementType.POLYGON8.getValue(), 10 + 3 * 40 + 3 * 10, GENERAL_GROUP + 2 * 40 + 2 * 10, 40, 40),
+          "",
+          Theme.createDefaultBackgroundColor(),
+          Theme.createDefaultBorderColor(),
+          Theme.createDefaultTextColor(),
+          true,
+          DiagramItemDTO.createGenericItem(ElementType.POLYGON8));
+    polygon8.setDuplicateMultiplySize(3, 3);
+    result.add(polygon8);
   }
 
 	private List<Diagram> createToolbarItems() {

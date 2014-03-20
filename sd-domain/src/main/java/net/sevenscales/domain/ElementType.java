@@ -33,7 +33,8 @@ public enum ElementType {
 	BUBBLE_R("bubble-r"),
 	CIRCLE("circle"),
 	SMILEY("smiley"),
-	POLYGON4("polygon4");
+	POLYGON4("polygon4"),
+	POLYGON8("polygon8");
 
 	private String value;
 
