@@ -434,6 +434,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 		showChildren();
 		resizeWithKnownChildren();
+		surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(new ArrayList(comments)));
 	}
 
 	private void hideChildren() {
@@ -607,6 +608,14 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 
 		surface.addAsSelected(commentElement, true);
+
+		// need to sort deferred to attach newly created comment
+		// before it's size can be calculated.
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+			public void execute() {
+				sort();
+			}
+		});
 	}
 
 	public void accept(CommentElement comment) {
@@ -667,7 +676,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		}
 	}
 
-	private void resizeChildren() {
+	public void resizeChildren() {
 		_sort(true);
 	}
 
