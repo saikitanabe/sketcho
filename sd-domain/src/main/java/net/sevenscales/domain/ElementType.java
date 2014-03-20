@@ -34,7 +34,9 @@ public enum ElementType {
 	CIRCLE("circle"),
 	SMILEY("smiley"),
 	POLYGON4("polygon4"),
-	POLYGON8("polygon8");
+	POLYGON8("polygon8"),
+	ARROW_UP("arrow-up"),
+	ARROW_RIGHT("arrow-right");
 
 	private String value;
 

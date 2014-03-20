@@ -58,7 +58,10 @@ class ShapeParser {
 		new ParserMap(ElementType.BUBBLE_R, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.CIRCLE, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.SMILEY, new AbstractDiagramFactory.GenericFactory()),
-		new ParserMap(ElementType.POLYGON4, new AbstractDiagramFactory.GenericFactory())
+		new ParserMap(ElementType.POLYGON4, new AbstractDiagramFactory.GenericFactory()),
+		new ParserMap(ElementType.POLYGON8, new AbstractDiagramFactory.GenericFactory()),
+		new ParserMap(ElementType.ARROW_UP, new AbstractDiagramFactory.GenericFactory()),
+		new ParserMap(ElementType.ARROW_RIGHT, new AbstractDiagramFactory.GenericFactory())
 	};
 
 	static AbstractDiagramFactory factory(IDiagramItemRO diro) {
