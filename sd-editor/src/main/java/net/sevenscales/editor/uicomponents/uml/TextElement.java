@@ -63,7 +63,7 @@ public class TextElement extends AbstractDiagramItem implements
 
 		addMouseDiagramHandler(this);
 
-		shapes.add(attachBoundary);
+		// shapes.add(attachBoundary);
 		
 		textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group,
 				surface.getEditorContext());
