@@ -63,7 +63,8 @@ class ShapeParser {
 		new ParserMap(ElementType.ARROW_UP, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.ARROW_RIGHT, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.IPHONE, new AbstractDiagramFactory.GenericFactory()),
-		new ParserMap(ElementType.WEB_BROWSER, new AbstractDiagramFactory.GenericFactory())
+		new ParserMap(ElementType.WEB_BROWSER, new AbstractDiagramFactory.GenericFactory()),
+		new ParserMap(ElementType.RECT, new AbstractDiagramFactory.GenericFactory())
 	};
 
 	static AbstractDiagramFactory factory(IDiagramItemRO diro) {

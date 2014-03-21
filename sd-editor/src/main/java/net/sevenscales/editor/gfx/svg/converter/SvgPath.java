@@ -23,8 +23,9 @@ public class SvgPath extends SvgLine {
     }
     // logger.debug("path: {}", d);
     params.put("%d%", d);
-    params.put("%stroke-width", String.valueOf(path.getStrokeWidth()));
+    params.put("%stroke-width%", String.valueOf(path.getStrokeWidth()));
     params.put("%stroke%", rgb(String.valueOf(path.getStrokeColor().toRgb())));
+    // params.put("%style%", path.getStyle());
     
     String fill = "none";
     Color color = path.getFillColor();
@@ -33,13 +34,22 @@ public class SvgPath extends SvgLine {
       fill = rgb(color.toRgb());
     	params.put("%fill-opacity", "fill-opacity:"+Double.toString(color.opacity));
     }
-
     params.put("%fill%", fill);
 
-    String template = "<path d='%d%' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width;'/>";
-//    String template = "<polyline points='%points' style='%fill;stroke:rgb(%stroke%);stroke-width:%stroke-width;%fill-opacity;'/>";
+    // styles can override other settings
+    String[] pairs = path.getStyle().split(";");
+    for (String pairstr : pairs) {
+      String[] pair = pairstr.split(":");
+      if (pair.length == 2) {
+        params.put("%" + pair[0] + "%", pair[1]);
+      }
+    }
+
+
+    String template = "<path d='%d%' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width%;vector-effect:non-scaling-stroke' />";
+//    String template = "<polyline points='%points' style='%fill;stroke:rgb(%stroke%);stroke-width:%stroke-width%;%fill-opacity;'/>";
 //    if (poly.getStyle() != null) {
-//      template = "<polyline points='%points' style='%fill;stroke:rgb(%stroke%);stroke-width:%stroke-width;stroke-dasharray:%style;%fill-opacity;'/>";
+//      template = "<polyline points='%points' style='%fill;stroke:rgb(%stroke%);stroke-width:%stroke-width%;stroke-dasharray:%style;%fill-opacity;'/>";
 //      params.put("%style", String.valueOf(map.get(poly.getStyle())));
 //    }
 

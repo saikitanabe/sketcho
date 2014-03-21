@@ -145,6 +145,11 @@ public class Shapes {
 			new Proto("m 8.886836,2.802148 -0.487970,-0.254333 0.464244,-0.295428 z", "")
 		}, 50, 50));
 
+		shapes.put(ElementType.RECT, new Group(new Proto[]{
+			new Proto("m 0.25,0.25 49.5,0 0,34.5 -49.5,0 z", "vector-effect: non-scaling-stroke;")
+		}, 50, 35));
+
+
 		// shapes.put(ElementType.ENVELOPE, new Group(new Proto[]{
 		// 	new Proto("m 1,1 0,48 98,0 0,-47.875 -48.375000,25.281250 z"),
 		// 	new Proto("m 1.345292,1.121100 97.464868,0")

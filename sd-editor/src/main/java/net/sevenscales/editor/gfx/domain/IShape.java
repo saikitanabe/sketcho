@@ -46,8 +46,11 @@ public interface IShape extends IGraphics {
 	void setSvgFixY(int dy);
 	int getSvgFixY();
 	
-  void setStyle(String style);
+  void setStrokeStyle(String style);
+  String getStrokeStyle();
+
   String getStyle();
+  void setStyle(String style);
 
   /**
   * Possibility to define constant colors for shape inside a element.

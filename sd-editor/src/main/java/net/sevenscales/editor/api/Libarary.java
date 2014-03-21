@@ -465,6 +465,17 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
           DiagramItemDTO.createGenericItem(ElementType.WEB_BROWSER));
     wbrowser.setDuplicateMultiplySize(12, 12);
     result.add(wbrowser);
+
+    Diagram rect = new GenericElement(this.toolpool,
+        new GenericShape(ElementType.RECT.getValue(), 10 + 2 * 40 + 2 * 10, GENERAL_GROUP + 4 * 40 + 4 * 10, 50, 35),
+          "",
+          Theme.createDefaultBackgroundColor(),
+          Theme.createDefaultBorderColor(),
+          Theme.createDefaultTextColor(),
+          true,
+          DiagramItemDTO.createGenericItem(ElementType.RECT));
+    rect.setDuplicateMultiplySize(2, 2);
+    result.add(rect);
   }
 
 	private List<Diagram> createToolbarItems() {

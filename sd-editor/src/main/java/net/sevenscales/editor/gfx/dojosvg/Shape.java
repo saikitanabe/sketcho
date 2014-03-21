@@ -458,21 +458,35 @@ abstract class Shape extends Graphics implements IShape {
   	return svgdy;
   }
   
-	public void setStyle(String style) {
-		_setStyle(rawNode, style);
+	public void setStrokeStyle(String style) {
+		_setStrokeStyle(rawNode, style);
 	}
-	private native void _setStyle(JavaScriptObject rawNode, String style)/*-{
+	private native void _setStrokeStyle(JavaScriptObject rawNode, String style)/*-{
 		rawNode.getStroke().style = style;
 	}-*/;
 	
-	public String getStyle() {
-	  return _getStyle(rawNode);
+	public String getStrokeStyle() {
+	  return _getStrokeStyle(rawNode);
 	}
-  private native String _getStyle(JavaScriptObject rawNode)/*-{
+  private native String _getStrokeStyle(JavaScriptObject rawNode)/*-{
     if (rawNode.getStroke()) {
       return rawNode.getStroke().style;
     }
     return "";
+  }-*/;
+
+  public String getStyle() {
+  	return _getStyle(rawNode);
+  }
+  private native String _getStyle(JavaScriptObject rawNode)/*-{
+  	return rawNode.rawNode.style;
+  }-*/;
+
+  public void setStyle(String style) {
+  	_setStyle(rawNode, style);
+  }
+  private native void _setStyle(JavaScriptObject rawNode, String style)/*-{
+  	rawNode.rawNode.style = style;
   }-*/;
 
   public boolean isThemeSupported() {

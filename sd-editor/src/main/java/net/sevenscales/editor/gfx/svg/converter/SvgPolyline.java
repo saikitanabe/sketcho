@@ -32,9 +32,9 @@ public class SvgPolyline extends SvgLine {
     params.put("%fill%", fill);
 
     String template = "<polyline points='%points' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width;%fill-opacity;'/>";
-    if (poly.getStyle() != null && poly.getStyle().equals(ILine.DASH)) {
+    if (poly.getStrokeStyle() != null && poly.getStrokeStyle().equals(ILine.DASH)) {
       template = "<polyline points='%points' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width;stroke-dasharray:%style;%fill-opacity;'/>";
-//      System.out.println("STYLE: " + String.valueOf(poly.getStyle()));
+//      System.out.println("STYLE: " + String.valueOf(poly.getStrokeStyle()));
       params.put("%style", "4,3");
     }
 

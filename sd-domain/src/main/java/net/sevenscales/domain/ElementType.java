@@ -38,7 +38,8 @@ public enum ElementType {
 	ARROW_UP("arrow-up"),
 	ARROW_RIGHT("arrow-right"),
 	IPHONE("iphone"),
-	WEB_BROWSER("w-browser");
+	WEB_BROWSER("w-browser"),
+	RECT("rect");
 
 	private String value;
 

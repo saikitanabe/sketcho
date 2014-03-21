@@ -182,8 +182,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       return lineBackground;
     }
     
-    public void setStyle(String style) {
-      polyline.setStyle(style);
+    public void setStrokeStyle(String style) {
+      polyline.setStrokeStyle(style);
     }
 
     public void setShape(List<Integer> points) {
@@ -845,9 +845,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     
 //    for (int i = 0; i < lines.size(); ++i) {
     if (rs.isDependancy()) {
-      relLine.setStyle(ILine.DASH);
+      relLine.setStrokeStyle(ILine.DASH);
     } else {
-      relLine.setStyle(ILine.SOLID);
+      relLine.setStrokeStyle(ILine.SOLID);
     }
 //    }
 

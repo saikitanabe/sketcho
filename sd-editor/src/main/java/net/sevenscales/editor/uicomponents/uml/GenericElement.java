@@ -140,7 +140,7 @@ public class GenericElement extends AbstractDiagramItem {
     if (proto.style != null) {
 	    path.setAttribute("style", proto.style);
     }
-    // path.setAttribute("vector-effect", "non-scaling-stroke");
+    path.setAttribute("vector-effect", "non-scaling-stroke");
   	path.setShape(proto.path);
   	return path;
 	}
@@ -270,27 +270,29 @@ public class GenericElement extends AbstractDiagramItem {
   }
 
   public void setShape(int left, int top, int width, int height) {
-  	this.left = left;
-  	this.top = top;
-  	this.width = width;
-  	this.height = height;
+  	if (width > 1 && height > 1) {
+	  	this.left = left;
+	  	this.top = top;
+	  	this.width = width;
+	  	this.height = height;
 
-    background.setShape(left, top, width, height, 0);
+	    background.setShape(left, top, width, height, 0);
 
-		double factorX = (width / theshape.width);
-		double factorY = (height / theshape.height);
-  	subgroup.setScale(factorX, factorY);
-  	subgroup.setTransform(left, top);
-  	// no need to use, which doesn't work svg => pdf, scale down stroke width
-  	// vector-effect="non-scaling-stroke"
-  	double factor = Math.max(factorX, factorY);
-  	double strokeWidth = FREEHAND_STROKE_WIDTH / factor;
-  	for (IPath path : paths) {
-	  	path.setStrokeWidth(strokeWidth);
+			double factorX = (width / theshape.width);
+			double factorY = (height / theshape.height);
+	  	subgroup.setScale(factorX, factorY);
+	  	subgroup.setTransform(left, top);
+	  	// no need to use, which doesn't work svg => pdf, scale down stroke width
+	  	// vector-effect="non-scaling-stroke"
+	  	// double factor = Math.max(factorX, factorY);
+	  	// double strokeWidth = FREEHAND_STROKE_WIDTH / factor;
+	  	// for (IPath path : paths) {
+		  // 	path.setStrokeWidth(strokeWidth);
+	  	// }
+
+	    textUtil.setTextShape();
+			super.applyHelpersShape();
   	}
-
-    textUtil.setTextShape();
-		super.applyHelpersShape();
   }
 
   public void setHighlightColor(String color) {
