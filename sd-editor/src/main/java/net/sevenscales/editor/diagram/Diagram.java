@@ -159,7 +159,8 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 	public boolean onArea(int left, int top, int right, int bottom);
 	// to check it point hovers this element; element can have magnetic area
 	public boolean onArea(int x, int y);
-	public void moveToBack();
+	void moveToBack();
+  void moveToFront();
 
   /**
   * Copies all fields to be shown in this diagram element.

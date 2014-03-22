@@ -35,6 +35,7 @@ import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.utils.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
+import net.sevenscales.editor.uicomponents.Point;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
@@ -83,14 +84,29 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement addlink;
 	@UiField AnchorElement openlink;
 	@UiField AnchorElement textSize;
+	@UiField AnchorElement moveFront;
+	@UiField AnchorElement moveBack;
 
 	private PopupPanel editLinkPopup;
 	private PopupPanel colorpopup;
 	private TextSizePopup fontSizePopup;
+	private Point popupPosition;
 
 	private Color color = new Color("444444", 0x44, 0x44, 0x44, "6699ff", 0x66, 0x99, 0xff, "FFFFFF", 255, 255, 255, AbstractDiagramItem.DEFAULT_FILL_OPACITY);
 	private ColorSelections colorSelections;
 	private EditLinkForm editLinkForm;
+
+	private class MainContextMenuPosition implements PopupPanel.PositionCallback {
+		int left;
+		int top;
+		@Override
+		public void setPosition(int offsetWidth, int offsetHeight) {
+			fixPosition(left, top, offsetWidth, offsetHeight);
+			popup.setPopupPosition(popupPosition.x, popupPosition.y);
+		}
+	}
+
+	private MainContextMenuPosition mainContextPosition = new MainContextMenuPosition();
 
 	public UiContextMenu(ISurfaceHandler surface, EditorContext editorContext, SelectionHandler selectionHandler) {
 		this.surface = surface;
@@ -98,6 +114,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		this.selectionHandler = selectionHandler;
 		
 		initWidget(uiBinder.createAndBindUi(this));
+
+		popupPosition = new Point();
 		
 		popup = new PopupPanel();
 		popup.setStyleName("UiContextMenu");
@@ -300,8 +318,9 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					boolean allMenusHidden = setMenuItemVisibility(d, selected);
 					
 					if (!allMenusHidden) {
-						popup.setPopupPosition(left, top);
-						popup.show();
+						mainContextPosition.left = left;
+						mainContextPosition.top = top;
+						popup.setPopupPositionAndShow(mainContextPosition);
 						EffectHelpers.tooltipper();
 					}
 				}
@@ -395,6 +414,21 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			}
 		});
 
+		new FastElementButton(moveFront).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				stopEvent(event);
+				moveToFront();
+			}
+		});
+
+		new FastElementButton(moveBack).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				stopEvent(event);
+				moveToBack();
+			}
+		});
 
 		// do not handle undo/redo if property editor is open
 		Event.addNativePreviewHandler(new NativePreviewHandler() {
@@ -411,6 +445,27 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		});
 		
 		closeOnSave();
+	}
+
+	private Point fixPosition(int left, int top, int offsetWidth, int offsetHeight) {
+		popupPosition.x = left;
+		popupPosition.y = top;
+		if (left <= Window.getScrollLeft()) {
+			// use mouse left
+			popupPosition.x = surface.getCurrentClientX();
+			// use mouse top
+			popupPosition.y = surface.getCurrentClientY();
+		} else if (top <= Window.getScrollTop()) {
+			// use mouse left
+			popupPosition.x = surface.getCurrentClientX();
+			// use mouse top
+			popupPosition.y = surface.getCurrentClientY();
+		}
+
+		if ((popupPosition.x + offsetWidth) >= Window.getClientWidth()) {
+			popupPosition.x = Window.getClientWidth() - offsetWidth;
+		}
+		return popupPosition;
 	}
 
 	private int adjustByDiagramType(Diagram diagram) {
@@ -502,6 +557,18 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		fontSizePopup.show(textSize.getAbsoluteLeft(), textSize.getAbsoluteTop() + 30);
 	}
 
+	private void moveToFront() {
+		for (Diagram d : selectionHandler.getSelectedItems()) {
+			d.moveToFront();
+		}
+	}
+
+	private void moveToBack() {
+		for (Diagram d : selectionHandler.getSelectedItems()) {
+			d.moveToBack();
+		}
+	}
+
 	/**
 	* 0 means that there are multiple sizes.
 	*/
@@ -571,7 +638,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					top = UiContextMenu.this.getAbsoluteTop() - offsetHeight;
 				}
 				if (selected.length == 1 && selectedLeft + offsetWidth >= Window.getClientWidth()) {
-					left = Window.getClientWidth() - offsetWidth; 
+					left = Window.getClientWidth() - offsetWidth;
 				}
 				colorSelections.setCurrentDiagramColor(selected[0].getTextColor(), selected[0].getBackgroundColor());
 				colorpopup.setPopupPosition(left, top);

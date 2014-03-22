@@ -292,12 +292,7 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
     rectSurface.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 0);
     headerBackground.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }
-    
-  @Override
-  public void moveToBack() {
-  	group.moveToBack();
-  }
-  
+      
   @Override
   public int getRelativeLeft() {
   	return rectSurface.getX();

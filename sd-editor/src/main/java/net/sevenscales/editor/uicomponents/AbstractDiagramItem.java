@@ -1077,8 +1077,18 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   
   @Override
   public void moveToBack() {
+    IGroup group = getGroup();
+    if (group != null) {
+      group.moveToBack();
+    }
   }
+
+  @Override
 	public void moveToFront() {
+    IGroup group = getGroup();
+    if (group != null) {
+      group.moveToFront();
+    }
 	}
 	
 	public final int getLeft() {
