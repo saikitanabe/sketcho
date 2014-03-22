@@ -119,9 +119,11 @@ public interface ISurfaceHandler {
 	void setVisible(boolean visible);
 
 	DiagramSearch createDiagramSearch();
+	void moveToBack();
+	void moveSelectedToBack();
+	void moveSelectedToFront();
 
 	// can be removed candidates...
-	void moveToBack();
 
 	void fireMouseDown(MouseDownEvent event);
 	void fireMouseOnEnter(MouseMoveEvent event);

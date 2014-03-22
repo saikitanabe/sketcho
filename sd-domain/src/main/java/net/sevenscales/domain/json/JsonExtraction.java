@@ -75,8 +75,9 @@ public class JsonExtraction {
       // 0 is default and is omitted
       result.put("props", new JSONNumber(item.getShapeProperties()));
     }
-    if (item.getDisplayOrder() != null && item.getDisplayOrder() > 0) {
-      // 0 is default and is omitted
+    if (item.getDisplayOrder() != null && item.getDisplayOrder() != 0) {
+      // 0 is the default display order and null means the same
+      // value can be - as well to be on bottom
       result.put("dord", new JSONNumber(item.getDisplayOrder()));
     }
     result.put("version", new JSONNumber(item.getVersion()));

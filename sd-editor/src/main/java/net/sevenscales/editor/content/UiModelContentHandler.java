@@ -1,5 +1,7 @@
 package net.sevenscales.editor.content;
 
+import java.util.Arrays;
+
 import net.sevenscales.domain.api.IContent;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
@@ -15,8 +17,10 @@ import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 import net.sevenscales.editor.api.event.DiagramsLoadedEvent;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ThemeName;
+import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
+import net.sevenscales.editor.content.utils.DiagramDisplaySorter;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers;
@@ -138,23 +142,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     dContent.getDiagramItems().toArray(items);
     
     // TODO this is deprecated, now using layers; elements use those by default
-//    Arrays.sort(items, new Comparator<IDiagramItem>() {
-//			@Override
-//			public int compare(IDiagramItem arg0, IDiagramItem arg1) {
-//				if (arg0.getType().equals("package")) {
-//					return -2;
-//		    } else if (arg0.getType().equals("relationship")) {
-//					return -1;
-//		    }
-//
-//				if (arg1.getType().equals("package")) {
-//					return 2;
-//		    } else if (arg1.getType().equals("relationship")) {
-//					return 1;
-//		    }
-//				return 0;
-//			}
-//    });
+   Arrays.sort(items, DiagramDisplaySorter.createDiagramItemComparator());
     
     int i = 0;
     boolean atLeastOneAnnotation = false;

@@ -31,7 +31,7 @@ public class BoardDocumentHelpers {
 	
 	public static final DiagramItemIdComparator DIAGRAM_ITEM_IDENTIFIER_COMPARATOR = new DiagramItemIdComparator();
 
-	private static class DiagramItemIdComparator implements Comparator<IDiagramItemRO> {
+	public static class DiagramItemIdComparator implements Comparator<IDiagramItemRO> {
 		@Override
 		public int compare(IDiagramItemRO diagram, IDiagramItemRO theother) {
 			return compareClientId(diagram, theother);

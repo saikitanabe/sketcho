@@ -2,6 +2,7 @@ package net.sevenscales.editor.api.dojo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 import net.sevenscales.appFrame.impl.EventRegistry;
 import net.sevenscales.domain.utils.Debug;
@@ -13,10 +14,13 @@ import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.SurfaceLoadedEventListener;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
+import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.impl.SurfaceDiagramSearch;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
+import net.sevenscales.editor.content.utils.DiagramHelpers;
+import net.sevenscales.editor.content.utils.DiagramDisplaySorter;
 import net.sevenscales.editor.diagram.ClickDiagramHandler;
 import net.sevenscales.editor.diagram.ClickDiagramHandlerCollection;
 import net.sevenscales.editor.diagram.Diagram;
@@ -786,7 +790,57 @@ class SurfaceHandler extends SimplePanel implements
 	}
 
 	public void moveToBack() {
-		surface.moveToBack();
+		surface.moveToBack();	
+	}
+
+	public void moveSelectedToBack() {
+		int size = diagrams.size();
+		int dorder = 0;
+		if (size > 0) {
+			Diagram top = diagrams.get(0);
+			Integer topDisplayOrder = top.getDiagramItem().getDisplayOrder();
+			dorder = (topDisplayOrder != null ? topDisplayOrder : 0) - 1;
+		}
+
+		List<Diagram> selectedInOrder = DiagramHelpers.diagramsInOrder(getSelectionHandler().getSelectedItems());
+		for (Diagram d : selectedInOrder) {
+			d.moveToBack();
+			d.getDiagramItem().setDisplayOrder(dorder);
+		}
+
+		sort();
+		notifySelectedChanged();
+	}
+
+	private void sort() {
+		Collections.sort(diagrams, DiagramDisplaySorter.createDiagramComparator());
+	}
+
+	public void moveSelectedToFront() {
+		int size = diagrams.size();
+		int dorder = 0;
+		if (size > 0) {
+			Diagram top = diagrams.get(size - 1);
+			Integer topDisplayOrder = top.getDiagramItem().getDisplayOrder();
+			dorder = (topDisplayOrder != null ? topDisplayOrder : 0) + 1;
+		}
+
+		List<Diagram> selectedInOrder = DiagramHelpers.diagramsInOrder(getSelectionHandler().getSelectedItems());
+		for (Diagram d : selectedInOrder) {
+			d.moveToFront();
+			d.getDiagramItem().setDisplayOrder(dorder);
+		}
+
+		sort();
+		notifySelectedChanged();
+	}
+
+	private void notifySelectedChanged() {
+		boolean atLeastOneChanged = getSelectionHandler().getSelectedItems().size() > 0;
+		if (atLeastOneChanged) {
+			// notify and save changes
+			getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(getSelectionHandler().getSelectedItems()));
+		}
 	}
 
 	public boolean isEmpty() {

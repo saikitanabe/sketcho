@@ -558,15 +558,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}
 
 	private void moveToFront() {
-		for (Diagram d : selectionHandler.getSelectedItems()) {
-			d.moveToFront();
-		}
+		surface.moveSelectedToFront();
 	}
 
 	private void moveToBack() {
-		for (Diagram d : selectionHandler.getSelectedItems()) {
-			d.moveToBack();
-		}
+		surface.moveSelectedToBack();
 	}
 
 	/**

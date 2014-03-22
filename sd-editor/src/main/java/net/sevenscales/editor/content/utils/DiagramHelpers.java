@@ -73,6 +73,14 @@ public class DiagramHelpers {
 		}
 		return result;
 	}
+
+	public static List<Diagram> diagramsInOrder(Set<Diagram> diagrams) {
+		List<Diagram> result = new DiagramList();
+		for (Diagram d : diagrams) {
+			result.add(d);
+		}
+		return result;
+	}
 	
 	public static Diagram[] filterOwnerDiagrams(Set<Diagram> diagrams) {
 		Diagram[] result = new Diagram[1];
