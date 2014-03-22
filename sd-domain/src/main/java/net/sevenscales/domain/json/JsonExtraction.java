@@ -75,6 +75,10 @@ public class JsonExtraction {
       // 0 is default and is omitted
       result.put("props", new JSONNumber(item.getShapeProperties()));
     }
+    if (item.getDisplayOrder() != null && item.getDisplayOrder() > 0) {
+      // 0 is default and is omitted
+      result.put("dord", new JSONNumber(item.getDisplayOrder()));
+    }
     result.put("version", new JSONNumber(item.getVersion()));
     result.put("id", new JSONNumber(item.getId()));
     result.put("clientId", new JSONString(safeJsonString(item.getClientId())));
