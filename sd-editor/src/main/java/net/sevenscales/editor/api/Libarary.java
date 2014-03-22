@@ -434,7 +434,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     result.add(arrowUp);
 
     Diagram arrowRight = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.ARROW_RIGHT.getValue(), 10 + 1 * 40 + 1 * 10, GENERAL_GROUP + 3 * 40 + 3 * 10, 40, 20, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
+        new GenericShape(ElementType.ARROW_RIGHT.getValue(), 10 + 1 * 40 + 1 * 10, GENERAL_GROUP + 3 * 40 + 3 * 10, 40, 20, ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue()),
           "",
           Theme.createDefaultBackgroundColor(),
           Theme.createDefaultBorderColor(),

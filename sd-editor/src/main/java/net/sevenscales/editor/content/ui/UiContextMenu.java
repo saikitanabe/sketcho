@@ -454,12 +454,12 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			// use mouse left
 			popupPosition.x = surface.getCurrentClientX();
 			// use mouse top
-			popupPosition.y = surface.getCurrentClientY();
+			popupPosition.y = surface.getCurrentClientY() - offsetHeight;
 		} else if (top <= Window.getScrollTop()) {
 			// use mouse left
 			popupPosition.x = surface.getCurrentClientX();
 			// use mouse top
-			popupPosition.y = surface.getCurrentClientY();
+			popupPosition.y = surface.getCurrentClientY() - offsetHeight;
 		}
 
 		if ((popupPosition.x + offsetWidth) >= Window.getClientWidth()) {

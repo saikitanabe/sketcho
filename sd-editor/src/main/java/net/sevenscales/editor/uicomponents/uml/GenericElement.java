@@ -348,7 +348,7 @@ public class GenericElement extends AbstractDiagramItem {
   
   @Override
   public int supportedMenuItems() {
-  	return ContextMenuItem.COLOR_MENU.getValue();
+  	return ContextMenuItem.COLOR_MENU.getValue() | ContextMenuItem.FONT_SIZE.getValue();
   }
 
 	@Override

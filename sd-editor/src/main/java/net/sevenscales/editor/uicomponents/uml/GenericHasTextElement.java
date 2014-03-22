@@ -72,6 +72,8 @@ class GenericHasTextElement extends AbstractHasTextElement {
   public boolean supportElementResize() {
   	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
 			return false;
+  	} else if (ShapeProperty.isShapeAutoResizeFalse(shape.getShapeProperties())) {
+  		return false;
   	} else {
 			return true;
   	}
