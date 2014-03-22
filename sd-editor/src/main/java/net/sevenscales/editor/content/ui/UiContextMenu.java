@@ -543,10 +543,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		Diagram selected = selectionHandler.getOnlyOneSelected();
 		if (selected != null && !selected.hasLink()) {
 			left = addlink.getAbsoluteLeft() + 0;
-			top = addlink.getAbsoluteTop() + 30;
+			top = addlink.getAbsoluteTop() + popup.getOffsetHeight();
 		} else {
 			left = openlink.getAbsoluteLeft() + 0;
-			top = openlink.getAbsoluteTop() + 30;
+			top = openlink.getAbsoluteTop() + popup.getOffsetHeight();
 		}
 		editLinkPopup.setPopupPosition(left, top);
 	}
@@ -628,19 +628,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		colorpopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
 			@Override
 			public void setPosition(int offsetWidth, int offsetHeight) {
+				// Diagram[] selected = new Diagram[]{};
+				// selected = UiContextMenu.this.selectionHandler.getSelectedItems().toArray(selected);
+
 				int left = colorize.getAbsoluteLeft() + 0;
-				int top = colorize.getAbsoluteTop() + 30;
-				Diagram[] selected = new Diagram[]{};
-				selected = UiContextMenu.this.selectionHandler.getSelectedItems().toArray(selected);
-				int selectedTop = ScaleHelpers.scaleAndTranslateY(selected[0].getTop(), UiContextMenu.this.surface);
-				int selectedLeft = ScaleHelpers.scaleAndTranslateX(selected[0].getLeft() + selected[0].getWidth(), UiContextMenu.this.surface);
-				if (selected.length == 1 && selectedTop - offsetHeight - 30 >= 0) {
-					top = UiContextMenu.this.getAbsoluteTop() - offsetHeight;
-				}
-				if (selected.length == 1 && selectedLeft + offsetWidth >= Window.getClientWidth()) {
-					left = Window.getClientWidth() - offsetWidth;
-				}
-				colorSelections.setCurrentDiagramColor(selected[0].getTextColor(), selected[0].getBackgroundColor());
+				int top = colorize.getAbsoluteTop() + popup.getOffsetHeight();
 				colorpopup.setPopupPosition(left, top);
 			}
 		});
