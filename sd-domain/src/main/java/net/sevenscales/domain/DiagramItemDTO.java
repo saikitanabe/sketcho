@@ -48,6 +48,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 				+ ", backgroundColor=" + backgroundColor
 				+ ", textColor=" + textColor
 				+ ", fontSize=" + fontSize
+				+ ", shapeProperties=" + shapeProperties
 				+ ", version=" + version + ", clientId=" + clientId + ", customData=" + customData + ", crc32=" + crc32
 				+ ", annotation=" + annotation 
 				+ ", resolved=" + resolved
@@ -342,6 +343,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		backgroundColor = dit.backgroundColor;
 		textColor = dit.textColor;
 		fontSize = dit.fontSize;
+		shapeProperties = dit.shapeProperties;
 		version = dit.version;
 		clientId = dit.clientId;
 		customData = dit.customData;
