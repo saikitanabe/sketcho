@@ -246,5 +246,15 @@ class Group extends Graphics implements IContainer, IGroup {
 //		}
 		rawNode.rawNode.style.visibility = visibility; 
 	}-*/;
+
+  public void insertBefore(IGroup group2) {
+    insertBefore(this.group, group2.getContainer());
+  }
+
+  private native void insertBefore(JavaScriptObject group1, JavaScriptObject group2)/*-{
+    // this.rawNode.parentNode.insertBefore(this.rawNode, this.rawNode.parentNode.firstChild);
+    group1.rawNode.parentNode.insertBefore(group1.rawNode, group2.rawNode);
+  }-*/;
+
 	
 }

@@ -1226,7 +1226,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       setVisible(!newResolved);
     }
 
-    // just all fields
+    Integer newDord = diagramItem.getDisplayOrder();
+    if (newDord != null && !newDord.equals(current.getDisplayOrder())) {
+      setDisplayOrder(newDord.intValue());
+    }
+
+    // just copy all fields
     getDiagramItem().copyFrom(diagramItem);
 
     setFontSize(getDiagramItem().getFontSize());
@@ -1242,6 +1247,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   	surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 		// }
 	}
+
+  private void setDisplayOrder(int displayOrder) {
+    surface.applyDisplayOrder(this, displayOrder);
+  }
 
 	public final void setShape(int[] shape) {
     doSetShape(shape);

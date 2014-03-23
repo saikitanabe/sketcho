@@ -14,9 +14,10 @@ public interface IGroup extends IContainer, IGraphics {
   String getTransformMatrix();
   String getTransformMatrix(int dx, int dy);
 
-  public void setAttribute(String name, String value);
+  void setAttribute(String name, String value);
   void moveToBack();
 	void moveToFront();
+  void insertBefore(IGroup group2);
   void rotate(int degrees, int x, int y);
   void unrotate(int degree, int x, int y);
   void resetAllTransforms();

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Collections;
 
 import net.sevenscales.appFrame.impl.EventRegistry;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -17,6 +18,7 @@ import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.impl.SurfaceDiagramSearch;
 import net.sevenscales.editor.api.Tools;
+import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
@@ -789,10 +791,12 @@ class SurfaceHandler extends SimplePanel implements
 		
 	}
 
+	@Override
 	public void moveToBack() {
 		surface.moveToBack();	
 	}
 
+	@Override
 	public void moveSelectedToBack() {
 		int size = diagrams.size();
 		int dorder = 0;
@@ -816,6 +820,7 @@ class SurfaceHandler extends SimplePanel implements
 		Collections.sort(diagrams, DiagramDisplaySorter.createDiagramComparator());
 	}
 
+	@Override
 	public void moveSelectedToFront() {
 		int size = diagrams.size();
 		int dorder = 0;
@@ -833,6 +838,43 @@ class SurfaceHandler extends SimplePanel implements
 
 		sort();
 		notifySelectedChanged();
+	}
+
+	@Override
+	public void applyDisplayOrder(Diagram diagram, int displayOrder) {
+		int pos = findDisplayPosition(diagram, displayOrder);
+		// -1 to top
+		if (pos == -1) {
+			sort();
+			diagram.moveToFront();
+		} else if (pos >= 0 && pos < diagrams.size()) {
+			sort();
+			insertBefore(diagram, diagrams.get(pos));
+		}
+	}
+
+	/**
+	* return index where to insert or -1 to add as last
+	*/
+	private int findDisplayPosition(Diagram diagram, int displayOrder) {
+		int result = -1;
+		int i = 0;
+		for (Diagram d : diagrams) {
+			IDiagramItemRO ro = d.getDiagramItem();
+			Integer dord = ro.getDisplayOrder();
+			int drodint = dord != null ? dord.intValue() : 0;
+			if (displayOrder < drodint || displayOrder == drodint && 
+					BoardDocumentHelpers.DIAGRAM_ITEM_IDENTIFIER_COMPARATOR.compare(diagram.getDiagramItem(), ro) < 0) {
+				result = i;
+				break;
+			}
+			++i;
+		}
+		return result;
+	}
+
+	private void insertBefore(Diagram diagram1, Diagram diagram2) {
+		diagram1.getGroup().insertBefore(diagram2.getGroup());
 	}
 
 	private void notifySelectedChanged() {
