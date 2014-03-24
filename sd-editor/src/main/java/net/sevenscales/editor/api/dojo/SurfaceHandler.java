@@ -900,56 +900,9 @@ class SurfaceHandler extends SimplePanel implements
 		}
 	}
 
-	// @Override
-	// public void applyDisplayOrder(Diagram diagram, int displayOrder) {
-	// 	int pos = findDisplayPosition(diagram, displayOrder);
-	// 	// -1 to top
-	// 	if (pos == -1) {
-	// 		sort();
-	// 		diagram.moveToFront();
-	// 	} else if (pos >= 0 && pos < diagrams.size()) {
-	// 		insertBefore(diagram, diagrams.get(pos));
-	// 		// sort after or a wrong element is picked by pos
-	// 		sort();
-	// 	}
-	// }
-
 	@Override
 	public void applyDisplayOrders(List<? extends IDiagramItemRO> items) {
 		applyDisplayOrderForSelection();
-	}
-
-	/**
-	* return index where to insert or -1 to add as last
-	*/
-	private int findDisplayPosition(Diagram diagram, int displayOrder) {
-		int result = -1;
-		int i = 0;
-		for (Diagram d : diagrams) {
-			if (isDisplayOrderSmaller(diagram, d, displayOrder)) {
-				result = i;
-				break;
-			}
-			++i;
-		}
-		return result;
-	}
-
-	private boolean isDisplayOrderSmaller(Diagram diagram, Diagram d, int displayOrder) {
-		if (d instanceof CircleElement || !onSameLayer(diagram, d) || diagram.getDiagramItem().getClientId().equals(d.getDiagramItem().getClientId())) {
-			// utility elements are not used
-			// needs to be on a same layer
-			// cannot compare to itself
-			return false;
-		}
-		IDiagramItemRO ro = d.getDiagramItem();
-		Integer dord = ro.getDisplayOrder();
-		int drodint = dord != null ? dord.intValue() : 0;
-		if (displayOrder < drodint || displayOrder == drodint && 
-			BoardDocumentHelpers.DIAGRAM_ITEM_IDENTIFIER_COMPARATOR.compare(diagram.getDiagramItem(), ro) < 0) {
-			return true;
-		}
-		return false;
 	}
 
 	private boolean onSameLayer(Diagram d1, Diagram d2) {
