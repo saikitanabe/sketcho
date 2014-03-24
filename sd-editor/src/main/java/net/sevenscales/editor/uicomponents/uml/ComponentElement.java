@@ -387,7 +387,8 @@ public class ComponentElement extends AbstractDiagramItem implements SupportsRec
 
   @Override
   public int supportedMenuItems() {
-    return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue();
+    return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue() |
+           ContextMenuItem.LAYERS.getValue();
   }
 
 }

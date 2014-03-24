@@ -3,6 +3,7 @@ package net.sevenscales.editor.uicomponents.uml;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.BoardOTHelpers;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
@@ -377,5 +378,11 @@ public class TextElement extends AbstractDiagramItem implements
 		super.setVisible(visible);
 		textUtil.setVisible(visible);
 	}
+
+  @Override
+  public int supportedMenuItems() {
+  	return super.supportedMenuItems() |
+           ContextMenuItem.LAYERS.getValue();
+  }
 
 }

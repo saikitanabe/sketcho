@@ -263,5 +263,4 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 
   // menu support
   void setDuplicateMultiplySize(int factorX, int factorY);
-
 }

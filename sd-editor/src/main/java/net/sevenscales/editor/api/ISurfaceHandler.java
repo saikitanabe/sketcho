@@ -122,6 +122,8 @@ public interface ISurfaceHandler {
 	void moveToBack();
 	void moveSelectedToBack();
 	void moveSelectedToFront();
+	void moveSelectedToBackward();
+	void moveSelectedToForward();
 	void applyDisplayOrder(Diagram diagram, int displayOrder);
 
 	// can be removed candidates...

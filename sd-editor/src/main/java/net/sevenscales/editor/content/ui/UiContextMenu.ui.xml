@@ -23,10 +23,7 @@
 			<a ui:field="colorize" title="Change Color" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-colorize2"></i>
 			</a>
-			<a ui:field="moveFront" title="Move to front" class="btn btn-custom btn-context-menu tooltipper">
-				<i class="context-icon-move-front"></i>
-			</a>
-			<a ui:field="moveBack" title="Move to back" class="btn btn-custom btn-context-menu tooltipper">
+			<a ui:field="layersMenuButton" title="Move element to top or background" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-move-back"></i>
 			</a>
 			<a ui:field="textSize" title="Change Font Size" class="btn btn-custom btn-context-menu tooltipper">

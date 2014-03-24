@@ -23,4 +23,8 @@ public interface IGroup extends IContainer, IGraphics {
   void resetAllTransforms();
   void setVisible(boolean visible);
 	void remove();
+  /**
+  * Returns null if on root layer.
+  */
+  IGroup getLayer();
 }

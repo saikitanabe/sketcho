@@ -6,6 +6,7 @@ import java.util.HashSet;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.content.ui.textsize.TextSizePopup;
 import net.sevenscales.editor.content.ui.textsize.TextSizeHandler;
+import net.sevenscales.editor.content.ui.layers.LayersPopup;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -84,11 +85,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement addlink;
 	@UiField AnchorElement openlink;
 	@UiField AnchorElement textSize;
-	@UiField AnchorElement moveFront;
-	@UiField AnchorElement moveBack;
+	@UiField AnchorElement layersMenuButton;
 
 	private PopupPanel editLinkPopup;
 	private PopupPanel colorpopup;
+	private LayersPopup layersPopup;
 	private TextSizePopup fontSizePopup;
 	private Point popupPosition;
 
@@ -140,6 +141,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		colorpopup.addAutoHidePartner(colorize);
 
 		fontSizePopup = new TextSizePopup(this);
+		layersPopup = new LayersPopup(surface);
 
 		surface.addDomHandler(new TouchStartHandler() {
 			@Override
@@ -169,6 +171,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				Display addLinkMenuVisibility = Display.NONE;
 				Display openEditLinkMenuVisibility = Display.NONE;
 				Display changeFontSizeVisibility = Display.NONE;
+				Display layersMenuVisibility = Display.NONE;
 
 				if ((diagram.supportedMenuItems() & ContextMenuItem.FREEHAND_MENU.getValue()) == ContextMenuItem.FREEHAND_MENU.getValue()) {
 					freehandMenu = Display.INLINE_BLOCK;
@@ -182,6 +185,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 				if (allSupportsFontSizeChange(selected)) {
 					changeFontSizeVisibility = Display.INLINE_BLOCK;
+				}
+
+				if (allSupportsLayers(selected)) {
+					layersMenuVisibility = Display.INLINE_BLOCK;
 				}
 
 				if (anySupportsColorMenu(selected)) {
@@ -221,6 +228,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				addlink.getStyle().setDisplay(addLinkMenuVisibility);
 				openlink.getStyle().setDisplay(openEditLinkMenuVisibility);
 				textSize.getStyle().setDisplay(changeFontSizeVisibility);
+				layersMenuButton.getStyle().setDisplay(layersMenuVisibility);
 
 				if (freehandMenu == Display.NONE && 
 						reverseMenu == Display.NONE &&
@@ -289,6 +297,17 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				for (Diagram d : selected) {
 					result = true;
 					if (!ContextMenuItem.supported(d.supportedMenuItems(), ContextMenuItem.FONT_SIZE)) {
+						return false;
+					}
+				}
+				return result;
+			}
+
+			private boolean allSupportsLayers(Diagram[] selected) {
+				boolean result = false;
+				for (Diagram d : selected) {
+					result = true;
+					if (!ContextMenuItem.supported(d.supportedMenuItems(), ContextMenuItem.LAYERS)) {
 						return false;
 					}
 				}
@@ -414,19 +433,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			}
 		});
 
-		new FastElementButton(moveFront).addClickHandler(new ClickHandler() {
+		new FastElementButton(layersMenuButton).addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				stopEvent(event);
-				moveToFront();
-			}
-		});
-
-		new FastElementButton(moveBack).addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				stopEvent(event);
-				moveToBack();
+				showLayersMenu();
 			}
 		});
 
@@ -557,12 +568,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		fontSizePopup.show(textSize.getAbsoluteLeft(), textSize.getAbsoluteTop() + 30);
 	}
 
-	private void moveToFront() {
-		surface.moveSelectedToFront();
-	}
-
-	private void moveToBack() {
-		surface.moveSelectedToBack();
+	private void showLayersMenu() {
+		layersPopup.show(layersMenuButton.getAbsoluteLeft(), layersMenuButton.getAbsoluteTop() + popup.getOffsetHeight());
 	}
 
 	/**

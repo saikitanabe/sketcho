@@ -11,10 +11,14 @@ class Group extends Graphics implements IContainer, IGroup {
 	private static final SLogger logger = SLogger.createLogger(Group.class);
 	
   private JavaScriptObject group;
+  private IGroup layer;
 	private boolean visible = true;
 
   Group(IContainer container) {
     group = nativeCreateGroup(container.getContainer());
+    if (container instanceof IGroup) {
+      layer = (IGroup)container;
+    }
   }
 
   Group(Surface surface) {
@@ -248,13 +252,20 @@ class Group extends Graphics implements IContainer, IGroup {
 	}-*/;
 
   public void insertBefore(IGroup group2) {
-    insertBefore(this.group, group2.getContainer());
+    if (getLayer() == group2.getLayer()) {
+      // can only move within the layer
+      insertBefore(this.group, group2.getContainer());
+    }
   }
 
   private native void insertBefore(JavaScriptObject group1, JavaScriptObject group2)/*-{
     // this.rawNode.parentNode.insertBefore(this.rawNode, this.rawNode.parentNode.firstChild);
     group1.rawNode.parentNode.insertBefore(group1.rawNode, group2.rawNode);
   }-*/;
+
+  public IGroup getLayer() {
+    return layer;
+  }
 
 	
 }

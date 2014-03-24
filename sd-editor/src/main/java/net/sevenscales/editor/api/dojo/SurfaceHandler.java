@@ -841,6 +841,34 @@ class SurfaceHandler extends SimplePanel implements
 	}
 
 	@Override
+	public void moveSelectedToBackward() {
+		List<Diagram> selectedInOrder = DiagramHelpers.diagramsInOrder(getSelectionHandler().getSelectedItems());
+		for (Diagram d : selectedInOrder) {
+			Integer cord = d.getDiagramItem().getDisplayOrder();
+			int dord = cord != null ? cord.intValue() - 1 : -1;
+			applyDisplayOrder(d, dord);
+			d.getDiagramItem().setDisplayOrder(dord);
+		}
+
+		sort();
+		notifySelectedChanged();
+	}
+
+	@Override
+	public void moveSelectedToForward() {
+		List<Diagram> selectedInOrder = DiagramHelpers.diagramsInOrder(getSelectionHandler().getSelectedItems());
+		for (Diagram d : selectedInOrder) {
+			Integer cord = d.getDiagramItem().getDisplayOrder();
+			int dord = cord != null ? cord.intValue() + 1 : 1;
+			applyDisplayOrder(d, dord);
+			d.getDiagramItem().setDisplayOrder(dord);
+		}
+
+		sort();
+		notifySelectedChanged();
+	}
+
+	@Override
 	public void applyDisplayOrder(Diagram diagram, int displayOrder) {
 		int pos = findDisplayPosition(diagram, displayOrder);
 		// -1 to top
@@ -860,17 +888,38 @@ class SurfaceHandler extends SimplePanel implements
 		int result = -1;
 		int i = 0;
 		for (Diagram d : diagrams) {
-			IDiagramItemRO ro = d.getDiagramItem();
-			Integer dord = ro.getDisplayOrder();
-			int drodint = dord != null ? dord.intValue() : 0;
-			if (displayOrder < drodint || displayOrder == drodint && 
-					BoardDocumentHelpers.DIAGRAM_ITEM_IDENTIFIER_COMPARATOR.compare(diagram.getDiagramItem(), ro) < 0) {
+			if (isDisplayOrderSmaller(diagram, d, displayOrder)) {
 				result = i;
 				break;
 			}
 			++i;
 		}
 		return result;
+	}
+
+	private boolean isDisplayOrderSmaller(Diagram diagram, Diagram d, int displayOrder) {
+		if (d instanceof CircleElement || !onSameLayer(diagram, d)) {
+			return false;
+		}
+		IDiagramItemRO ro = d.getDiagramItem();
+		Integer dord = ro.getDisplayOrder();
+		int drodint = dord != null ? dord.intValue() : 0;
+		if (displayOrder < drodint || displayOrder == drodint && 
+			BoardDocumentHelpers.DIAGRAM_ITEM_IDENTIFIER_COMPARATOR.compare(diagram.getDiagramItem(), ro) < 0) {
+			// <= if comparing to myself
+			return true;
+		}
+		return false;
+	}
+
+	private boolean onSameLayer(Diagram d1, Diagram d2) {
+		IGroup g1 = d1.getGroup();
+		IGroup g2 = d2.getGroup();
+		if (g1 != null && g2 != null && g1.getLayer() != null && g1.getLayer() == g2.getLayer()) {
+			// comparing layer reference addresses
+			return true;
+		}
+		return false;
 	}
 
 	private void insertBefore(Diagram diagram1, Diagram diagram2) {

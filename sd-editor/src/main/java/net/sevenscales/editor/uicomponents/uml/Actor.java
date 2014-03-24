@@ -553,7 +553,8 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 
   @Override
   public int supportedMenuItems() {
-  	return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue();
+  	return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue() |
+           ContextMenuItem.LAYERS.getValue();
   }
 
   @Override
@@ -561,6 +562,5 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 	  TextElementFormatUtil textFormatter = getTextFormatter();
     return getHeight() + ((int)textFormatter.getTextHeight());
   }
-
 
 }

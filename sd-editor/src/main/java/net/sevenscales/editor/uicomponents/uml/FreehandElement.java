@@ -333,7 +333,8 @@ public class FreehandElement extends AbstractDiagramItem {
   
   @Override
   public int supportedMenuItems() {
-  	return ContextMenuItem.FREEHAND_MENU.getValue() | ContextMenuItem.COLOR_MENU.getValue();
+  	return ContextMenuItem.FREEHAND_MENU.getValue() | ContextMenuItem.COLOR_MENU.getValue() |
+           ContextMenuItem.LAYERS.getValue();
   }
 
 }

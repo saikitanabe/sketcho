@@ -7,6 +7,7 @@ import java.util.List;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
@@ -507,5 +508,11 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	public int getTextAreaLeft() {
 		return getLeft() + 7;
 	}
+
+  @Override
+  public int supportedMenuItems() {
+  	return super.supportedMenuItems() |
+           ContextMenuItem.LAYERS.getValue();
+  }
 
 }

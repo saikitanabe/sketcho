@@ -521,13 +521,14 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
 
   @Override
   public int supportedMenuItems() {
-    return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue();
+    return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue() |
+           ContextMenuItem.LAYERS.getValue();
   }
 
   @Override
   public int getHeightWithText() {
     TextElementFormatUtil textFormatter = getTextFormatter();
     return getHeight() + (int) textFormatter.getTextHeight();
-  }
+  }  
 
 }

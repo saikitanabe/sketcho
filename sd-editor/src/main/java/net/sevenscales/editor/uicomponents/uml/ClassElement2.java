@@ -299,7 +299,8 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
 
   @Override
   public int supportedMenuItems() {
-    return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue();
+    return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue() |
+           ContextMenuItem.LAYERS.getValue();
   }
 
 }
