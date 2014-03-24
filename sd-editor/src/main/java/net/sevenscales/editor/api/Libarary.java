@@ -317,140 +317,44 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
       this.duplicateFactoryY = duplicateFactoryY;
     }
 
-    LibraryShape(ElementType elementType, int shapeProperties) {
-      this(elementType, 0, 0, shapeProperties, 1, 1);
+    LibraryShape(ElementType elementType, int width, int height) {
+      this(elementType, width, height, 0, 1, 1);
     }
 
-    LibraryShape(ElementType elementType) {
-      this(elementType, 0, 0, 0, 1, 1);
+    LibraryShape(ElementType elementType, int width, int height, int shapeProperties) {
+      this(elementType, width, height, shapeProperties, 1, 1);
     }
+
+    // LibraryShape(ElementType elementType, int shapeProperties) {
+    //   this(elementType, 0, 0, shapeProperties, 1, 1);
+    // }
+
+    // LibraryShape(ElementType elementType) {
+    //   this(elementType, 0, 0, 0, 1, 1);
+    // }
 
   }
 
   private void general(List<Diagram> result) {
-    result.add(new GenericElement(this.toolpool,
-        new GenericShape(ElementType.STAR4.getValue(), 10, GENERAL_GROUP, 40, 40),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.STAR4)));
-    result.add(new GenericElement(this.toolpool, 
-        new GenericShape(ElementType.STAR5.getValue(), 10 + 1*40 + 1*10, GENERAL_GROUP, 40, 40), 
-          "",
-          Theme.createDefaultBackgroundColor(), 
-          Theme.createDefaultBorderColor(), 
-          Theme.createDefaultTextColor(), 
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.STAR5)));
-    result.add(new GenericElement(this.toolpool, 
-        new GenericShape(ElementType.ENVELOPE.getValue(), 10 + 2*40 + 2*10, GENERAL_GROUP, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()), 
-          "",
-          Theme.createDefaultBackgroundColor(), 
-          Theme.createDefaultBorderColor(), 
-          Theme.createDefaultTextColor(), 
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.ENVELOPE)));
-    result.add(new GenericElement(this.toolpool,
-        new GenericShape(ElementType.TRIANGLE.getValue(), 10 + 2*40 + 50 + 3*10, GENERAL_GROUP, 40, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.TRIANGLE)));
-
-    Diagram cloud = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.CLOUD.getValue(), 10, GENERAL_GROUP + 1 * 40 + 10, 40, 40),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.CLOUD));
-    cloud.setDuplicateMultiplySize(3, 3);
-    result.add(cloud);
-
-    Diagram firewall = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.FIREWALL.getValue(), 10 + 1 * 40 + 10, GENERAL_GROUP + 1 * 40 + 10, 27, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.FIREWALL));
-    firewall.setDuplicateMultiplySize(3, 3);
-    result.add(firewall);
-
-    Diagram bubble = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.BUBBLE.getValue(), 10 + 2 * 40 + 2 * 10, GENERAL_GROUP + 1 * 40 + 10, 50, 35, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue()),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.BUBBLE));
-    bubble.setDuplicateMultiplySize(3, 3);
-    result.add(bubble);
-
-    Diagram bubbleR = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.BUBBLE_R.getValue(), 10 + 2 * 40 + 50 + 3 * 10, GENERAL_GROUP + 1 * 40 + 10, 50, 35, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue()),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.BUBBLE_R));
-    bubbleR.setDuplicateMultiplySize(3, 3);
-    result.add(bubbleR);
-
-    Diagram circle = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.CIRCLE.getValue(), 10, GENERAL_GROUP + 2 * 40 + 2 * 10, 40, 40),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.CIRCLE));
-    circle.setDuplicateMultiplySize(3, 3);
-    result.add(circle);
-
-    Diagram smiley = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.SMILEY.getValue(), 10 + 1 * 40 + 10, GENERAL_GROUP + 2 * 40 + 2 * 10, 40, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.SMILEY));
-    smiley.setDuplicateMultiplySize(3, 3);
-    result.add(smiley);
-
-    Diagram polygon4 = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.POLYGON4.getValue(), 10 + 2 * 40 + 2 * 10, GENERAL_GROUP + 2 * 40 + 2 * 10, 40, 40),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.POLYGON4));
-    polygon4.setDuplicateMultiplySize(3, 3);
-    result.add(polygon4);
-
-    Diagram polygon8 = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.POLYGON8.getValue(), 10 + 3 * 40 + 3 * 10, GENERAL_GROUP + 2 * 40 + 2 * 10, 40, 40),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.POLYGON8));
-    polygon8.setDuplicateMultiplySize(3, 3);
-    result.add(polygon8);
-
-
     LibraryShape[][] shapes = new LibraryShape[][]{
+      {
+        new LibraryShape(ElementType.STAR4, 40, 40),
+        new LibraryShape(ElementType.STAR5, 40, 40), 
+        new LibraryShape(ElementType.ENVELOPE, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
+        new LibraryShape(ElementType.TRIANGLE, 40, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue())
+      },
+      {
+        new LibraryShape(ElementType.CLOUD, 40, 40, 0, 3, 3),
+        new LibraryShape(ElementType.FIREWALL, 27, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3),
+        new LibraryShape(ElementType.BUBBLE, 50, 35, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3),
+        new LibraryShape(ElementType.BUBBLE_R, 50, 35, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3)
+      },
+      {
+        new LibraryShape(ElementType.CIRCLE, 40, 40, 0, 3, 3),
+        new LibraryShape(ElementType.SMILEY, 40, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3),
+        new LibraryShape(ElementType.POLYGON4, 40, 40, 0, 3, 3), 
+        new LibraryShape(ElementType.POLYGON8, 40, 40, 0, 3, 3)
+      },
       {
         new LibraryShape(ElementType.ARROW_UP, 20, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3),
         new LibraryShape(ElementType.ARROW_DOWN, 20, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3),
@@ -458,7 +362,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         new LibraryShape(ElementType.ARROW_LEFT, 40, 20, ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue(), 3, 3)
       },
       {
-        new LibraryShape(ElementType.IPHONE, 24, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3),
+        new LibraryShape(ElementType.IPHONE, 24, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12),
         new LibraryShape(ElementType.WEB_BROWSER, 50, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12),
         new LibraryShape(ElementType.RECT, 50, 35, 0, 2, 2)
       }
@@ -467,7 +371,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     final int COL_SIZE = 40;
     final int ROW_SIZE = 40;
     final int MARGIN = 10;
-    int row = 3;
+    int row = 0;
     for (LibraryShape[] rowShapes : shapes) {
       int col = 0;
       int colpos = MARGIN;
