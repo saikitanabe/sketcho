@@ -23,7 +23,16 @@ public class SvgPath extends SvgLine {
     }
     // logger.debug("path: {}", d);
     params.put("%d%", d);
-    params.put("%stroke-width%", String.valueOf(path.getStrokeWidth()));
+
+    /* 
+    TODO IE hack for vector-effect:nonscaling-stroke!!!
+    - can be enabled on IE11
+    - hack needs to be changed if there are different stroke widths
+    */
+    // params.put("%stroke-width%", String.valueOf(path.getStrokeWidth()));
+    params.put("%stroke-width%", "2");
+    /* TODO IE hack ENDS */
+
     params.put("%stroke%", rgb(String.valueOf(path.getStrokeColor().toRgb())));
     // params.put("%style%", path.getStyle());
     

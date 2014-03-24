@@ -14,6 +14,7 @@ import net.sevenscales.editor.content.utils.IntegerHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.shape.Info;
+import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IGroup;
@@ -282,13 +283,16 @@ public class GenericElement extends AbstractDiagramItem {
 			double factorY = (height / theshape.height);
 	  	subgroup.setScale(factorX, factorY);
 	  	subgroup.setTransform(left, top);
-	  	// no need to use, which doesn't work svg => pdf, scale down stroke width
-	  	// vector-effect="non-scaling-stroke"
-	  	// double factor = Math.max(factorX, factorY);
-	  	// double strokeWidth = FREEHAND_STROKE_WIDTH / factor;
-	  	// for (IPath path : paths) {
-		  // 	path.setStrokeWidth(strokeWidth);
-	  	// }
+	  	if (UiUtils.isIE()) {
+			  // no need to use, which doesn't work svg => pdf, scale down stroke width
+			  // vector-effect="non-scaling-stroke"
+	  		// ie8 - ie10 doesn't support vector-effect
+		  	double factor = Math.max(factorX, factorY);
+		  	double strokeWidth = FREEHAND_STROKE_WIDTH / factor;
+		  	for (IPath path : paths) {
+			  	path.setStrokeWidth(strokeWidth);
+		  	}
+	  	}
 
 	    textUtil.setTextShape();
 			super.applyHelpersShape();
