@@ -36,7 +36,9 @@ public enum ElementType {
 	POLYGON4("polygon4"),
 	POLYGON8("polygon8"),
 	ARROW_UP("arrow-up"),
-	ARROW_RIGHT("arrow-right"),
+	ARROW_DOWN("arrow-d"),
+	ARROW_RIGHT("arrow-r"),
+	ARROW_LEFT("arrow-l"),
 	IPHONE("iphone"),
 	WEB_BROWSER("w-browser"),
 	RECT("rect");

@@ -433,8 +433,19 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     arrowUp.setDuplicateMultiplySize(3, 3);
     result.add(arrowUp);
 
+    Diagram arrowDown = new GenericElement(this.toolpool,
+        new GenericShape(ElementType.ARROW_DOWN.getValue(), 10 + 1 * 40 + 1 * 10, GENERAL_GROUP + 3 * 40 + 3 * 10, 20, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
+          "",
+          Theme.createDefaultBackgroundColor(),
+          Theme.createDefaultBorderColor(),
+          Theme.createDefaultTextColor(),
+          true,
+          DiagramItemDTO.createGenericItem(ElementType.ARROW_DOWN));
+    arrowDown.setDuplicateMultiplySize(3, 3);
+    result.add(arrowDown);
+
     Diagram arrowRight = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.ARROW_RIGHT.getValue(), 10 + 1 * 40 + 1 * 10, GENERAL_GROUP + 3 * 40 + 3 * 10, 40, 20, ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue()),
+        new GenericShape(ElementType.ARROW_RIGHT.getValue(), 10 + 2 * 40 + 2 * 10, GENERAL_GROUP + 3 * 40 + 3 * 10, 40, 20, ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue()),
           "",
           Theme.createDefaultBackgroundColor(),
           Theme.createDefaultBorderColor(),
@@ -443,6 +454,17 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
           DiagramItemDTO.createGenericItem(ElementType.ARROW_RIGHT));
     arrowRight.setDuplicateMultiplySize(3, 3);
     result.add(arrowRight);
+
+    Diagram arrowLeft = new GenericElement(this.toolpool,
+        new GenericShape(ElementType.ARROW_LEFT.getValue(), 10 + 3 * 40 + 3 * 10, GENERAL_GROUP + 3 * 40 + 3 * 10, 40, 20, ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue()),
+          "",
+          Theme.createDefaultBackgroundColor(),
+          Theme.createDefaultBorderColor(),
+          Theme.createDefaultTextColor(),
+          true,
+          DiagramItemDTO.createGenericItem(ElementType.ARROW_LEFT));
+    arrowLeft.setDuplicateMultiplySize(3, 3);
+    result.add(arrowLeft);
 
     Diagram iphone = new GenericElement(this.toolpool,
         new GenericShape(ElementType.IPHONE.getValue(), 10 + 0 * 40 + 0 * 10, GENERAL_GROUP + 4 * 40 + 4 * 10, 24, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),

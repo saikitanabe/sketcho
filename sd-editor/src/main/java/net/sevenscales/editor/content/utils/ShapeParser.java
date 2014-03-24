@@ -61,7 +61,9 @@ class ShapeParser {
 		new ParserMap(ElementType.POLYGON4, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.POLYGON8, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.ARROW_UP, new AbstractDiagramFactory.GenericFactory()),
+		new ParserMap(ElementType.ARROW_DOWN, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.ARROW_RIGHT, new AbstractDiagramFactory.GenericFactory()),
+		new ParserMap(ElementType.ARROW_LEFT, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.IPHONE, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.WEB_BROWSER, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.RECT, new AbstractDiagramFactory.GenericFactory())
