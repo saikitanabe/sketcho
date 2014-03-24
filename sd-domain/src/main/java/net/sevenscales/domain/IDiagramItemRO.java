@@ -2,6 +2,7 @@ package net.sevenscales.domain;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.JsonFormat;
@@ -38,5 +39,5 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	void copyFrom(IDiagramItemRO item);
 
 	boolean isComment();
-
+	boolean compare(IDiagramItemRO diro, Map<String, Boolean> dirtyFields);
 }

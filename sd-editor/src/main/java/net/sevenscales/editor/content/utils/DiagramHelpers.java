@@ -8,6 +8,7 @@ import java.util.Set;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.utils.DiagramList;
+import net.sevenscales.editor.diagram.utils.DiagramDisplayOrderList;
 import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.gfx.domain.IPath.PathTransformer;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
@@ -74,8 +75,8 @@ public class DiagramHelpers {
 		return result;
 	}
 
-	public static List<Diagram> diagramsInOrder(Set<Diagram> diagrams) {
-		List<Diagram> result = new DiagramList();
+	public static List<Diagram> diagramsInDisplayOrder(Set<Diagram> diagrams) {
+		List<Diagram> result = new DiagramDisplayOrderList();
 		for (Diagram d : diagrams) {
 			result.add(d);
 		}

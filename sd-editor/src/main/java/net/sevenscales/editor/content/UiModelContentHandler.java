@@ -141,8 +141,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     IDiagramItem[] items = new IDiagramItem[dContent.getDiagramItems().size()];
     dContent.getDiagramItems().toArray(items);
     
-    // TODO this is deprecated, now using layers; elements use those by default
-   Arrays.sort(items, DiagramDisplaySorter.createDiagramItemComparator());
+   	Arrays.sort(items, DiagramDisplaySorter.createDiagramItemComparator());
     
     int i = 0;
     boolean atLeastOneAnnotation = false;

@@ -3,11 +3,14 @@ package net.sevenscales.editor.api.ot;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
 
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.DiagramItemField;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
@@ -226,10 +229,12 @@ public class BoardOTHelpers {
 		Set<Diagram> diagrams = new HashSet<Diagram>();
     ReattachHelpers reattachHelpers = new ReattachHelpers(diagramSearch);
 
+    Map<String,Boolean> dirtyFields = new HashMap<String,Boolean>();
 		for (IDiagramItemRO diro : items) {
 			logger.debug2("modifyOT {}", diro);
 			Diagram diagram = findDiagramById(diro);
 			if (diagram != null) {
+				diro.compare(diagram.getDiagramItem(), dirtyFields);
 				diagram.copyFrom(diro);
 				reattachHelpers.processDiagram(diagram);
 				
@@ -239,6 +244,11 @@ public class BoardOTHelpers {
 			}
 		}
 		
+		
+		if (dirtyFields.get(DiagramItemField.DISPLAY_ORDER.getValue()) != null) {
+			surface.applyDisplayOrders(items);
+		}
+
 		reattachHelpers.reattachRelationships();
 
 		if (diagrams.size() != items.size()) {

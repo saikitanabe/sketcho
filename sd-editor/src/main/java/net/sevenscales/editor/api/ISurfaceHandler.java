@@ -35,6 +35,7 @@ import net.sevenscales.editor.gfx.domain.ISurface;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.content.ui.IModeManager;
+import net.sevenscales.domain.IDiagramItemRO;
 
 
 public interface ISurfaceHandler {
@@ -124,7 +125,8 @@ public interface ISurfaceHandler {
 	void moveSelectedToFront();
 	void moveSelectedToBackward();
 	void moveSelectedToForward();
-	void applyDisplayOrder(Diagram diagram, int displayOrder);
+	// void applyDisplayOrder(Diagram diagram, int displayOrder);
+	void applyDisplayOrders(List<? extends IDiagramItemRO> items);
 
 	// can be removed candidates...
 

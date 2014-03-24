@@ -36,7 +36,7 @@ import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.diagram.MouseDiagramHandlerManager;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.SourcesClickDiagramEvents;
-import net.sevenscales.editor.diagram.utils.DiagramList;
+import net.sevenscales.editor.diagram.utils.DiagramDisplayOrderList;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.base.GraphicsMouseDownHandler;
 import net.sevenscales.editor.gfx.base.GraphicsMouseEnterHandler;
@@ -92,7 +92,7 @@ class SurfaceHandler extends SimplePanel implements
 	private static final SLogger logger = SLogger.createLogger(SurfaceHandler.class);
 		
 	private ISurface surface;
-	private List<Diagram> diagrams;
+	private DiagramDisplayOrderList diagrams;
 	protected MouseDiagramHandlerManager mouseDiagramManager;
 	private KeyEventHandler keyEventHandler;
 	private LoadEventListenerCollection loadEventListenerCollection;
@@ -143,7 +143,7 @@ class SurfaceHandler extends SimplePanel implements
 //    panel.setPixelSize(width, height);
 		setPixelSize(width, height);
 
-		diagrams = new DiagramList();
+		diagrams = new DiagramDisplayOrderList();
 
 		loadEventListenerCollection = new LoadEventListenerCollection();
 
@@ -798,15 +798,14 @@ class SurfaceHandler extends SimplePanel implements
 
 	@Override
 	public void moveSelectedToBack() {
-		int size = diagrams.size();
 		int dorder = 0;
-		if (size > 0) {
-			Diagram top = diagrams.get(0);
+		Diagram top = firstOnElementsLayer();
+		if (top != null) {
 			Integer topDisplayOrder = top.getDiagramItem().getDisplayOrder();
 			dorder = (topDisplayOrder != null ? topDisplayOrder : 0) - 1;
 		}
 
-		List<Diagram> selectedInOrder = DiagramHelpers.diagramsInOrder(getSelectionHandler().getSelectedItems());
+		List<Diagram> selectedInOrder = DiagramHelpers.diagramsInDisplayOrder(getSelectionHandler().getSelectedItems());
 		for (Diagram d : selectedInOrder) {
 			d.moveToBack();
 			d.getDiagramItem().setDisplayOrder(dorder);
@@ -816,21 +815,40 @@ class SurfaceHandler extends SimplePanel implements
 		notifySelectedChanged();
 	}
 
+	private Diagram firstOnElementsLayer() {
+		for (Diagram d : diagrams) {
+			if (d.getGroup().getLayer() == getElementLayer()) {
+				return d;
+			}
+		}
+		return null;
+	}
+
+	private Diagram lastOnElementsLayer() {
+		int i = diagrams.size();
+		while (--i >= 0) {
+			Diagram d = diagrams.get(i);
+			if (d.getGroup().getLayer() == getElementLayer()) {
+				return d;
+			}
+		}
+		return null;
+	}
+
 	private void sort() {
 		Collections.sort(diagrams, DiagramDisplaySorter.createDiagramComparator());
 	}
 
 	@Override
 	public void moveSelectedToFront() {
-		int size = diagrams.size();
 		int dorder = 0;
-		if (size > 0) {
-			Diagram top = diagrams.get(size - 1);
-			Integer topDisplayOrder = top.getDiagramItem().getDisplayOrder();
+		Diagram last = lastOnElementsLayer();
+		if (last != null) {
+			Integer topDisplayOrder = last.getDiagramItem().getDisplayOrder();
 			dorder = (topDisplayOrder != null ? topDisplayOrder : 0) + 1;
 		}
 
-		List<Diagram> selectedInOrder = DiagramHelpers.diagramsInOrder(getSelectionHandler().getSelectedItems());
+		List<Diagram> selectedInOrder = DiagramHelpers.diagramsInDisplayOrder(getSelectionHandler().getSelectedItems());
 		for (Diagram d : selectedInOrder) {
 			d.moveToFront();
 			d.getDiagramItem().setDisplayOrder(dorder);
@@ -842,43 +860,63 @@ class SurfaceHandler extends SimplePanel implements
 
 	@Override
 	public void moveSelectedToBackward() {
-		List<Diagram> selectedInOrder = DiagramHelpers.diagramsInOrder(getSelectionHandler().getSelectedItems());
-		for (Diagram d : selectedInOrder) {
-			Integer cord = d.getDiagramItem().getDisplayOrder();
-			int dord = cord != null ? cord.intValue() - 1 : -1;
-			applyDisplayOrder(d, dord);
-			d.getDiagramItem().setDisplayOrder(dord);
-		}
-
-		sort();
+		sortSelectedWithDirection(-1);
+		applyDisplayOrderForSelection();
 		notifySelectedChanged();
 	}
 
 	@Override
 	public void moveSelectedToForward() {
-		List<Diagram> selectedInOrder = DiagramHelpers.diagramsInOrder(getSelectionHandler().getSelectedItems());
+		sortSelectedWithDirection(1);
+		applyDisplayOrderForSelection();
+		notifySelectedChanged();
+	}
+
+	private void sortSelectedWithDirection(int dir) {
+		List<Diagram> selectedInOrder = DiagramHelpers.diagramsInDisplayOrder(getSelectionHandler().getSelectedItems());
 		for (Diagram d : selectedInOrder) {
 			Integer cord = d.getDiagramItem().getDisplayOrder();
-			int dord = cord != null ? cord.intValue() + 1 : 1;
-			applyDisplayOrder(d, dord);
+			int dord = cord != null ? cord.intValue() + dir : dir;
+			// applyDisplayOrder(d, dord);
 			d.getDiagramItem().setDisplayOrder(dord);
 		}
 
 		sort();
-		notifySelectedChanged();
 	}
 
-	@Override
-	public void applyDisplayOrder(Diagram diagram, int displayOrder) {
-		int pos = findDisplayPosition(diagram, displayOrder);
-		// -1 to top
-		if (pos == -1) {
-			sort();
-			diagram.moveToFront();
-		} else if (pos >= 0 && pos < diagrams.size()) {
-			sort();
-			insertBefore(diagram, diagrams.get(pos));
+	private void applyDisplayOrderForSelection() {
+		List<Diagram> elementLayer = new DiagramDisplayOrderList();
+		for (Diagram d : diagrams) {
+			if (d.getGroup().getLayer() == getElementLayer()) {
+				elementLayer.add(d);
+			}
 		}
+		int i = elementLayer.size();
+		while (--i >= 0) {
+			if (i - 1 >= 0) {
+				Diagram d = elementLayer.get(i - 1);
+				d.getGroup().insertBefore(elementLayer.get(i).getGroup());
+			}
+		}
+	}
+
+	// @Override
+	// public void applyDisplayOrder(Diagram diagram, int displayOrder) {
+	// 	int pos = findDisplayPosition(diagram, displayOrder);
+	// 	// -1 to top
+	// 	if (pos == -1) {
+	// 		sort();
+	// 		diagram.moveToFront();
+	// 	} else if (pos >= 0 && pos < diagrams.size()) {
+	// 		insertBefore(diagram, diagrams.get(pos));
+	// 		// sort after or a wrong element is picked by pos
+	// 		sort();
+	// 	}
+	// }
+
+	@Override
+	public void applyDisplayOrders(List<? extends IDiagramItemRO> items) {
+		applyDisplayOrderForSelection();
 	}
 
 	/**
@@ -898,7 +936,10 @@ class SurfaceHandler extends SimplePanel implements
 	}
 
 	private boolean isDisplayOrderSmaller(Diagram diagram, Diagram d, int displayOrder) {
-		if (d instanceof CircleElement || !onSameLayer(diagram, d)) {
+		if (d instanceof CircleElement || !onSameLayer(diagram, d) || diagram.getDiagramItem().getClientId().equals(d.getDiagramItem().getClientId())) {
+			// utility elements are not used
+			// needs to be on a same layer
+			// cannot compare to itself
 			return false;
 		}
 		IDiagramItemRO ro = d.getDiagramItem();
@@ -906,7 +947,6 @@ class SurfaceHandler extends SimplePanel implements
 		int drodint = dord != null ? dord.intValue() : 0;
 		if (displayOrder < drodint || displayOrder == drodint && 
 			BoardDocumentHelpers.DIAGRAM_ITEM_IDENTIFIER_COMPARATOR.compare(diagram.getDiagramItem(), ro) < 0) {
-			// <= if comparing to myself
 			return true;
 		}
 		return false;

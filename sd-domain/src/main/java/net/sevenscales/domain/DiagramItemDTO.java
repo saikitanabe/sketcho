@@ -3,6 +3,7 @@ package net.sevenscales.domain;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
@@ -288,50 +289,10 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 
 	@Override
 	public boolean equals(Object obj) {
-		IDiagramItemRO item = (IDiagramItemRO) obj;
-
-		if (checkIfNotSame(id, item.getId())) {
-			return false;
+		if (obj instanceof IDiagramItemRO) {
+			return compare((IDiagramItemRO) obj, null);
 		}
-		if (checkIfNotSame(text, item.getText())) {
-			return false;
-		}
-		if (checkIfNotSame(type, item.getType())) {
-			return false;
-		}
-		if (checkIfNotSame(shape, item.getShape())) {
-			return false;
-		}
-		if (checkIfNotSame(backgroundColor, item.getBackgroundColor())) {
-			return false;
-		}
-		if (checkIfNotSame(textColor, item.getTextColor())) {
-			return false;
-		}
-		if (checkIfNotSame(version, item.getVersion())) {
-			return false;
-		}
-		if (checkIfNotSame(clientId, item.getClientId())) {
-			return false;
-		}
-		if (checkIfNotSame(customData, item.getCustomData())) {
-			return false;
-		}
-		if (crc32 != item.getCrc32()) {
-			return false;
-		}
-		if (annotation != item.getAnnotation()) {
-			return false;
-		}
-		if (resolved != item.getResolved()) {
-			return false;
-		}
-
-		if (links != item.getLinks() || (links != null && !links.equals(item.getLinks()))) {
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 	
 	private <T> boolean checkIfNotSame(T me, T other) {
@@ -377,6 +338,84 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 
 	public boolean isComment() {
 		return false;
+	}
+
+	private void updateDirtyFields(Map<String, Boolean> dirtyFields, DiagramItemField field) {
+		if (dirtyFields != null) {
+			dirtyFields.put(field.getValue(), true);
+		}
+	}
+
+	public boolean compare(IDiagramItemRO diro, Map<String, Boolean> dirtyFields) {
+		DiagramItemDTO item = (DiagramItemDTO) diro;
+		boolean result = true;
+
+		if (checkIfNotSame(id, item.getId())) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.ID);
+		}
+		if (checkIfNotSame(text, item.getText())) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.TEXT);
+		}
+		if (checkIfNotSame(type, item.getType())) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.TYPE);
+		}
+		if (checkIfNotSame(shape, item.getShape())) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.SHAPE);
+		}
+		if (checkIfNotSame(backgroundColor, item.getBackgroundColor())) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.BACKGROUND_COLOR);
+		}
+		if (checkIfNotSame(textColor, item.getTextColor())) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.TEXT_COLOR);
+		}
+		if (checkIfNotSame(fontSize, item.fontSize)) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.FONT_SIZE);
+		}
+		if (checkIfNotSame(shapeProperties, item.shapeProperties)) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.SHAPE_PROPERTIES);
+		}
+		if (checkIfNotSame(displayOrder, item.displayOrder)) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.DISPLAY_ORDER);
+		}
+		if (checkIfNotSame(version, item.getVersion())) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.VERSION);
+		}
+		if (checkIfNotSame(clientId, item.getClientId())) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.CLIENT_ID);
+		}
+		if (checkIfNotSame(customData, item.getCustomData())) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.CUSTOM_DATA);
+		}
+		if (crc32 != item.getCrc32()) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.CRC);
+		}
+		if (annotation != item.getAnnotation()) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.ANNOTATION);
+		}
+		if (resolved != item.getResolved()) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.RESOLVED);
+		}
+
+		if (links != item.getLinks() || (links != null && !links.equals(item.getLinks()))) {
+			return false;
+		}
+
+		return result;
 	}
 
 }
