@@ -300,6 +300,33 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         new DiagramItemDTO()));
   }
 
+  private static class LibraryShape {
+    ElementType elementType;
+    int shapeProperties;
+    int width;
+    int height;
+    int duplicateFactoryX;
+    int duplicateFactoryY;
+
+    LibraryShape(ElementType elementType, int width, int height, int shapeProperties, int duplicateFactoryX, int duplicateFactoryY) {
+      this.elementType = elementType;
+      this.width = width;
+      this.height = height;
+      this.shapeProperties = shapeProperties;
+      this.duplicateFactoryX = duplicateFactoryX;
+      this.duplicateFactoryY = duplicateFactoryY;
+    }
+
+    LibraryShape(ElementType elementType, int shapeProperties) {
+      this(elementType, 0, 0, shapeProperties, 1, 1);
+    }
+
+    LibraryShape(ElementType elementType) {
+      this(elementType, 0, 0, 0, 1, 1);
+    }
+
+  }
+
   private void general(List<Diagram> result) {
     result.add(new GenericElement(this.toolpool,
         new GenericShape(ElementType.STAR4.getValue(), 10, GENERAL_GROUP, 40, 40),
@@ -422,82 +449,83 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     polygon8.setDuplicateMultiplySize(3, 3);
     result.add(polygon8);
 
-    Diagram arrowUp = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.ARROW_UP.getValue(), 10 + 0 * 40 + 0 * 10, GENERAL_GROUP + 3 * 40 + 3 * 10, 20, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.ARROW_UP));
-    arrowUp.setDuplicateMultiplySize(3, 3);
-    result.add(arrowUp);
 
-    Diagram arrowDown = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.ARROW_DOWN.getValue(), 10 + 1 * 40 + 1 * 10, GENERAL_GROUP + 3 * 40 + 3 * 10, 20, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.ARROW_DOWN));
-    arrowDown.setDuplicateMultiplySize(3, 3);
-    result.add(arrowDown);
+    LibraryShape[][] shapes = new LibraryShape[][]{
+      {
+        new LibraryShape(ElementType.ARROW_UP, 20, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3),
+        new LibraryShape(ElementType.ARROW_DOWN, 20, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3),
+        new LibraryShape(ElementType.ARROW_RIGHT, 40, 20, ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue(), 3, 3),
+        new LibraryShape(ElementType.ARROW_LEFT, 40, 20, ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue(), 3, 3)
+      },
+      {
+        new LibraryShape(ElementType.IPHONE, 24, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3),
+        new LibraryShape(ElementType.WEB_BROWSER, 50, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12),
+        new LibraryShape(ElementType.RECT, 50, 35, 0, 2, 2)
+      }
+    };
 
-    Diagram arrowRight = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.ARROW_RIGHT.getValue(), 10 + 2 * 40 + 2 * 10, GENERAL_GROUP + 3 * 40 + 3 * 10, 40, 20, ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue()),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.ARROW_RIGHT));
-    arrowRight.setDuplicateMultiplySize(3, 3);
-    result.add(arrowRight);
+    final int COL_SIZE = 40;
+    final int ROW_SIZE = 40;
+    final int MARGIN = 10;
+    int row = 3;
+    for (LibraryShape[] rowShapes : shapes) {
+      int col = 0;
+      int colpos = MARGIN;
+      for (LibraryShape colShape : rowShapes) {
+        Diagram el = new GenericElement(this.toolpool,
+            new GenericShape(colShape.elementType.getValue(), 
+                             // MARGIN + col * COL_SIZE + col * MARGIN, 
+                             colpos + col * MARGIN,
+                             GENERAL_GROUP + row * ROW_SIZE + row * MARGIN, 
+                             colShape.width, 
+                             colShape.height, 
+                             colShape.shapeProperties),
+              "",
+              Theme.createDefaultBackgroundColor(),
+              Theme.createDefaultBorderColor(),
+              Theme.createDefaultTextColor(),
+              true,
+              DiagramItemDTO.createGenericItem(colShape.elementType));
+        el.setDuplicateMultiplySize(colShape.duplicateFactoryX, colShape.duplicateFactoryY);
+        result.add(el);
+        colpos += colShape.width;
+        col++;
+      }
+      row++;
+    }
 
-    Diagram arrowLeft = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.ARROW_LEFT.getValue(), 10 + 3 * 40 + 3 * 10, GENERAL_GROUP + 3 * 40 + 3 * 10, 40, 20, ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue()),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.ARROW_LEFT));
-    arrowLeft.setDuplicateMultiplySize(3, 3);
-    result.add(arrowLeft);
+    // Diagram iphone = new GenericElement(this.toolpool,
+    //     new GenericShape(ElementType.IPHONE.getValue(), 10 + 0 * 40 + 0 * 10, GENERAL_GROUP + 4 * 40 + 4 * 10, 24, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
+    //       "",
+    //       Theme.createDefaultBackgroundColor(),
+    //       Theme.createDefaultBorderColor(),
+    //       Theme.createDefaultTextColor(),
+    //       true,
+    //       DiagramItemDTO.createGenericItem(ElementType.IPHONE));
+    // iphone.setDuplicateMultiplySize(3, 3);
+    // result.add(iphone);
 
-    Diagram iphone = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.IPHONE.getValue(), 10 + 0 * 40 + 0 * 10, GENERAL_GROUP + 4 * 40 + 4 * 10, 24, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.IPHONE));
-    iphone.setDuplicateMultiplySize(3, 3);
-    result.add(iphone);
+    // Diagram wbrowser = new GenericElement(this.toolpool,
+    //     new GenericShape(ElementType.WEB_BROWSER.getValue(), 10 + 1 * 40 + 1 * 10, GENERAL_GROUP + 4 * 40 + 4 * 10, 50, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
+    //       "",
+    //       Theme.createDefaultBackgroundColor(),
+    //       Theme.createDefaultBorderColor(),
+    //       Theme.createDefaultTextColor(),
+    //       true,
+    //       DiagramItemDTO.createGenericItem(ElementType.WEB_BROWSER));
+    // wbrowser.setDuplicateMultiplySize(12, 12);
+    // result.add(wbrowser);
 
-    Diagram wbrowser = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.WEB_BROWSER.getValue(), 10 + 1 * 40 + 1 * 10, GENERAL_GROUP + 4 * 40 + 4 * 10, 50, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.WEB_BROWSER));
-    wbrowser.setDuplicateMultiplySize(12, 12);
-    result.add(wbrowser);
-
-    Diagram rect = new GenericElement(this.toolpool,
-        new GenericShape(ElementType.RECT.getValue(), 10 + 2 * 40 + 2 * 10, GENERAL_GROUP + 4 * 40 + 4 * 10, 50, 35),
-          "",
-          Theme.createDefaultBackgroundColor(),
-          Theme.createDefaultBorderColor(),
-          Theme.createDefaultTextColor(),
-          true,
-          DiagramItemDTO.createGenericItem(ElementType.RECT));
-    rect.setDuplicateMultiplySize(2, 2);
-    result.add(rect);
+    // Diagram rect = new GenericElement(this.toolpool,
+    //     new GenericShape(ElementType.RECT.getValue(), 10 + 2 * 40 + 2 * 10, GENERAL_GROUP + 4 * 40 + 4 * 10, 50, 35),
+    //       "",
+    //       Theme.createDefaultBackgroundColor(),
+    //       Theme.createDefaultBorderColor(),
+    //       Theme.createDefaultTextColor(),
+    //       true,
+    //       DiagramItemDTO.createGenericItem(ElementType.RECT));
+    // rect.setDuplicateMultiplySize(2, 2);
+    // result.add(rect);
   }
 
 	private List<Diagram> createToolbarItems() {
