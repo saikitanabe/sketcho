@@ -154,7 +154,7 @@ public class Shapes {
 		}, 50, 50));
 
 		shapes.put(ElementType.RECT, new Group(new Proto[]{
-			new Proto("m 0.25,0.25 49.5,0 0,34.5 -49.5,0 z", "vector-effect: non-scaling-stroke;")
+			new Proto("m 0.25,0.25 49.5,0 0,34.5 -49.5,0 z", "")
 		}, 50, 35));
 
 

@@ -479,7 +479,11 @@ abstract class Shape extends Graphics implements IShape {
   	return _getStyle(rawNode);
   }
   private native String _getStyle(JavaScriptObject rawNode)/*-{
-  	return rawNode.rawNode.style;
+  	var style = rawNode.rawNode.style
+  	if (style) {
+	  	return rawNode.rawNode.style.cssText
+  	}
+  	return ""
   }-*/;
 
   public void setStyle(String style) {
