@@ -5,17 +5,27 @@ import net.sevenscales.editor.api.LibrarySelections.Library;
 import net.sevenscales.editor.api.event.CreateElementEvent;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.impl.FastButton;
+import net.sevenscales.domain.utils.SLogger;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.event.shared.HandlerRegistration;
+
 
 public class UMLDiagramSelections extends Composite {
+	private static final SLogger logger = SLogger.createLogger(UMLDiagramSelections.class);
+	static {
+		logger.addFilter(UMLDiagramSelections.class);
+	}
 
 	private static UMLDiagramSelectionsUiBinder uiBinder = GWT
 			.create(UMLDiagramSelectionsUiBinder.class);
@@ -86,6 +96,7 @@ public class UMLDiagramSelections extends Composite {
 	@UiField HorizontalPanel diagramGroups;
 	@UiField FastButton comments;
 	@UiField FastButton _comments;
+	@UiField FocusPanel contextMenuArea;
 //	@UiField ButtonElement freehandBtn;
 
 	public UMLDiagramSelections(EditorContext editorContext) {
@@ -113,7 +124,16 @@ public class UMLDiagramSelections extends Composite {
 //		});
 		
 		filterByGroup(Library.SOFTWARE);
+		// addMouseWheelHandler(new MouseWheelHandler() {
+		// 	public void onMouseWheel(MouseWheelEvent event) {
+
+		// 	}
+		// });
 	}
+
+  // public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
+  //   return contextMenuArea.addDomHandler(handler, MouseWheelEvent.getType());
+  // }
 
 	public void setSelectionHandler(SelectionHandler selectionHandler) {
 		this.selectionHandler = selectionHandler;
@@ -219,6 +239,11 @@ public class UMLDiagramSelections extends Composite {
 	@UiHandler("_mindnote")
 	public void onmindnote(ClickEvent event) {
 		fire(UMLDiagramType.NOTE);
+	}
+
+	@UiHandler("contextMenuArea")
+	public void onContextMenuArea(MouseWheelEvent event) {
+		logger.debug("onContextMenuArea...");
 	}
 
 	private boolean notConfluence() {

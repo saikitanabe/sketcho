@@ -13,6 +13,8 @@
 		
 	</ui:style>
 
+	<g:FocusPanel ui:field="contextMenuArea">
+	<g:HTMLPanel>
 	<g:VerticalPanel>
 		<g:HorizontalPanel ui:field="diagramGroups">
 			<g:VerticalPanel styleName="uml-selection-table class-diagram">
@@ -168,4 +170,9 @@
 		</g:HorizontalPanel>
 	</g:VerticalPanel>
 
+	<g:HTML styleName="context-page-panel">
+		<div class="context-page">kuka</div>
+	</g:HTML>
+	</g:HTMLPanel>
+	</g:FocusPanel>
 </ui:UiBinder> 
