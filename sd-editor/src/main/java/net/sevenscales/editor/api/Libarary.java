@@ -369,8 +369,8 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     };
 
     final int COL_SIZE = 40;
-    final int ROW_SIZE = 40;
-    final int MARGIN = 10;
+    final int ROW_SIZE = 50;
+    final int MARGIN = 15;
     int row = 0;
     for (LibraryShape[] rowShapes : shapes) {
       int col = 0;
