@@ -456,7 +456,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         new DiagramItemDTO()));
     
     result.add(new NoteElement(this.toolpool,
-        new NoteShape(30, SOFTWARE_SKETCHING_GROUP + GROUP_HEADING_SPACE, 170, 30),
+        new NoteShape(30, SOFTWARE_SKETCHING_GROUP + GROUP_HEADING_SPACE, 170, 45),
         "*Note* this!", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
         new DiagramItemDTO()));
 
@@ -606,7 +606,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), "Subtopic", true, new DiagramItemDTO()));
 
     result.add(new NoteElement(this.toolpool,
-        new NoteShape(30, MINDMAP_GROUP + 205, 170, 30),
+        new NoteShape(30, MINDMAP_GROUP + 205, 170, 45),
         "*Notes!*", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, new DiagramItemDTO()));
     
 //    result.add(new NoteElement(this.toolpool,
