@@ -461,7 +461,7 @@ public class RelationshipDragEndHandler implements
 
 	@Override
 	public void onSelection(LibrarySelectionEvent event) {
-		diagramSelections.filterByGroup(event.getLibrary());
+		diagramSelections.sortByGroup(event.getLibrary());
 	}
 
 	@Override

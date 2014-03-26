@@ -237,7 +237,7 @@
 				</c:FastButton>
 			</g:HorizontalPanel>
 
-			<g:HorizontalPanel styleName="uml-selection-table">
+			<g:HorizontalPanel styleName="uml-selection-table mindmap-diagram">
 				<c:FastButton ui:field="umliconcircle" styleName="{style.focuspanel}">
 					<c:child>
 						<g:HTML>
@@ -268,7 +268,7 @@
 				</c:FastButton>
 			</g:HorizontalPanel>
 
-			<g:HorizontalPanel styleName="uml-selection-table">
+			<g:HorizontalPanel styleName="uml-selection-table mindmap-diagram">
 				<c:FastButton ui:field="umlicontriangle" styleName="{style.focuspanel}">
 					<c:child>
 						<g:HTML>
@@ -292,7 +292,7 @@
 				</c:FastButton>
 			</g:HorizontalPanel>
 
-			<g:HorizontalPanel styleName="uml-selection-table">
+			<g:HorizontalPanel styleName="uml-selection-table mindmap-diagram">
 				<c:FastButton ui:field="umliconstar5" styleName="{style.focuspanel}">
 					<c:child>
 						<g:HTML>
@@ -315,7 +315,8 @@
 					</c:child>
 				</c:FastButton>
 			</g:HorizontalPanel>
-			<g:HorizontalPanel styleName="uml-selection-table">
+
+			<g:HorizontalPanel styleName="uml-selection-table mindmap-diagram">
 				<c:FastButton ui:field="umliconarrowd" styleName="{style.focuspanel}">
 					<c:child>
 						<g:HTML>
@@ -346,7 +347,7 @@
 				</c:FastButton>
 			</g:HorizontalPanel>
 
-			<g:HorizontalPanel styleName="uml-selection-table">
+			<g:HorizontalPanel styleName="uml-selection-table mindmap-diagram">
 				<c:FastButton ui:field="umliconbubblel" styleName="{style.focuspanel}">
 					<c:child>
 						<g:HTML>

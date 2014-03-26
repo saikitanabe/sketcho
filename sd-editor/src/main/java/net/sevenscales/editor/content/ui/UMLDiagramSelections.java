@@ -1,5 +1,8 @@
 package net.sevenscales.editor.content.ui;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.LibrarySelections.Library;
 import net.sevenscales.editor.api.event.CreateElementEvent;
@@ -38,19 +41,24 @@ public class UMLDiagramSelections extends Composite {
 			.create(UMLDiagramSelectionsUiBinder.class);
 	
 	public enum UMLDiagramGroup {
-		CLASS_DIAGRAM("class-diagram"),
-		USE_CASE_DIAGRAM("use-case-diagram"),
-		ACTIVITY_DIAGRAM("activity-diagram"),
-		SEQUENCE_DIAGRAM("sequence-diagram"),
-		MINDMAP("mindmap-diagram"),
-		NONE("");
+		CLASS_DIAGRAM("class-diagram", Library.SOFTWARE),
+		USE_CASE_DIAGRAM("use-case-diagram", Library.SOFTWARE),
+		ACTIVITY_DIAGRAM("activity-diagram", Library.SOFTWARE),
+		SEQUENCE_DIAGRAM("sequence-diagram", Library.SOFTWARE),
+		MINDMAP("mindmap-diagram", Library.MINDMAP),
+		NONE("", Library.SOFTWARE);
 		
 		private String value;
+		private Library library;
 		
-		private UMLDiagramGroup(String value) {
+		private UMLDiagramGroup(String value, Library library) {
 			this.value = value;
+			this.library = library;
 		}
 		public String getValue() {return value;}
+		public Library getLibrary() {
+			return library;
+		}
 	}
 	
 	public enum UMLDiagramType {
@@ -433,6 +441,25 @@ public class UMLDiagramSelections extends Composite {
 			}
 		}
 		return UMLDiagramGroup.NONE;
+	}
+
+	public void sortByGroup(Library library) {
+		int count = diagramGroups.getWidgetCount();
+		List<Widget> asfirst = new ArrayList<Widget>();
+		for (int i = 0; i < count; ++i) {
+			Widget group = diagramGroups.getWidget(i);
+			String classNames = group.getElement().getClassName();
+			UMLDiagramGroup g = diagramGroup(classNames);
+			if (library.equals(g.getLibrary())) {
+				// reverse order, can be switched just by looping
+				// asfirst.add(0, i);
+				asfirst.add(0, group);
+			}
+		}
+
+		for (Widget group : asfirst) {
+			diagramGroups.insert(group, 0);
+		}
 	}
 
 	public void filterByGroup(Library library) {
