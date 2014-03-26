@@ -16,6 +16,7 @@ import net.sevenscales.editor.api.event.SurfaceMouseUpNoHandlingYetEvent;
 import net.sevenscales.editor.api.event.SurfaceMouseUpNoHandlingYetEventHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.Tools;
+import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.SelectionHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
@@ -38,6 +39,7 @@ import net.sevenscales.editor.diagram.shape.TextShape;
 import net.sevenscales.editor.diagram.shape.UMLPackageShape;
 import net.sevenscales.editor.diagram.shape.ComponentShape;
 import net.sevenscales.editor.diagram.shape.ServerShape;
+import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.utils.DiagramAnchorUtils;
 import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
 import net.sevenscales.editor.gfx.domain.Color;
@@ -63,6 +65,7 @@ import net.sevenscales.editor.uicomponents.uml.TextElement;
 import net.sevenscales.editor.uicomponents.uml.UMLPackageElement;
 import net.sevenscales.editor.uicomponents.uml.ComponentElement;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
+import net.sevenscales.editor.uicomponents.uml.GenericElement;
 
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
@@ -390,6 +393,34 @@ public class RelationshipDragEndHandler implements
 	        new ServerShape(x, y, 60, 80),
 	        type.getValue(),
 	        background, borderColor, color, true, new DiagramItemDTO());
+			result = element;
+			break;
+		}
+		case SMILEY:
+		case FIREWALL:
+		case POLYGON4:
+		case POLYGON8:
+		case RECT:
+		case TRIANGLE:
+		case CIRCLE:
+		case CLOUD:
+		case WBROWSER:
+		case IPHONE:
+		case STAR5:
+		case STAR4:
+		case ARROW_DOWN:
+		case ARROW_RIGHT:
+		case ARROW_UP:
+		case ARROW_LEFT:
+		case BUBBLE_LEFT:
+		case BUBBLE_RIGHT:
+		case ENVELOPE	: {
+			LibraryShapes.LibraryShape ls = LibraryShapes.get(type.getElementType());
+			// could multiply width and height
+			GenericElement element = new GenericElement(surface,
+	        new GenericShape(ls.elementType.getValue(), x, y, ls.width, ls.height, ls.shapeProperties),
+	        type.getValue(),
+	        background, borderColor, color, true, DiagramItemDTO.createGenericItem(ls.elementType));
 			result = element;
 			break;
 		}

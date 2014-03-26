@@ -7,6 +7,7 @@ import net.sevenscales.editor.api.dojo.FactoryDoJo;
 
 import net.sevenscales.editor.api.LibrarySelections.Library;
 import net.sevenscales.editor.api.LibrarySelections.LibrarySelectedHandler;
+import net.sevenscales.editor.api.LibraryShapes.LibraryShape;
 import net.sevenscales.editor.api.event.LibrarySelectionEvent;
 import net.sevenscales.editor.api.event.ThemeChangedEvent;
 import net.sevenscales.editor.api.event.ThemeChangedEventHandler;
@@ -300,71 +301,36 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         new DiagramItemDTO()));
   }
 
-  private static class LibraryShape {
-    ElementType elementType;
-    int shapeProperties;
-    int width;
-    int height;
-    int duplicateFactoryX;
-    int duplicateFactoryY;
-
-    LibraryShape(ElementType elementType, int width, int height, int shapeProperties, int duplicateFactoryX, int duplicateFactoryY) {
-      this.elementType = elementType;
-      this.width = width;
-      this.height = height;
-      this.shapeProperties = shapeProperties;
-      this.duplicateFactoryX = duplicateFactoryX;
-      this.duplicateFactoryY = duplicateFactoryY;
-    }
-
-    LibraryShape(ElementType elementType, int width, int height) {
-      this(elementType, width, height, 0, 1, 1);
-    }
-
-    LibraryShape(ElementType elementType, int width, int height, int shapeProperties) {
-      this(elementType, width, height, shapeProperties, 1, 1);
-    }
-
-    // LibraryShape(ElementType elementType, int shapeProperties) {
-    //   this(elementType, 0, 0, shapeProperties, 1, 1);
-    // }
-
-    // LibraryShape(ElementType elementType) {
-    //   this(elementType, 0, 0, 0, 1, 1);
-    // }
-
-  }
-
   private void general(List<Diagram> result) {
     LibraryShape[][] shapes = new LibraryShape[][]{
       {
-        new LibraryShape(ElementType.STAR4, 40, 40),
-        new LibraryShape(ElementType.STAR5, 40, 40), 
-        new LibraryShape(ElementType.ENVELOPE, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue()),
-        new LibraryShape(ElementType.TRIANGLE, 40, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue())
+        LibraryShapes.get(ElementType.STAR4),
+        LibraryShapes.get(ElementType.STAR5),
+        LibraryShapes.get(ElementType.ENVELOPE),
+        LibraryShapes.get(ElementType.TRIANGLE)
       },
       {
-        new LibraryShape(ElementType.CLOUD, 40, 40, 0, 3, 3),
-        new LibraryShape(ElementType.FIREWALL, 27, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3),
-        new LibraryShape(ElementType.BUBBLE, 50, 35, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3),
-        new LibraryShape(ElementType.BUBBLE_R, 50, 35, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3)
+        LibraryShapes.get(ElementType.CLOUD),
+        LibraryShapes.get(ElementType.FIREWALL),
+        LibraryShapes.get(ElementType.BUBBLE),
+        LibraryShapes.get(ElementType.BUBBLE_R)
       },
       {
-        new LibraryShape(ElementType.CIRCLE, 40, 40, 0, 3, 3),
-        new LibraryShape(ElementType.SMILEY, 40, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3),
-        new LibraryShape(ElementType.POLYGON4, 40, 40, 0, 3, 3), 
-        new LibraryShape(ElementType.POLYGON8, 40, 40, 0, 3, 3)
+        LibraryShapes.get(ElementType.CIRCLE),
+        LibraryShapes.get(ElementType.SMILEY),
+        LibraryShapes.get(ElementType.POLYGON4),
+        LibraryShapes.get(ElementType.POLYGON8)
       },
       {
-        new LibraryShape(ElementType.ARROW_UP, 20, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3),
-        new LibraryShape(ElementType.ARROW_DOWN, 20, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3),
-        new LibraryShape(ElementType.ARROW_RIGHT, 40, 20, ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue(), 3, 3),
-        new LibraryShape(ElementType.ARROW_LEFT, 40, 20, ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue(), 3, 3)
+        LibraryShapes.get(ElementType.ARROW_UP),
+        LibraryShapes.get(ElementType.ARROW_DOWN),
+        LibraryShapes.get(ElementType.ARROW_RIGHT),
+        LibraryShapes.get(ElementType.ARROW_LEFT)
       },
       {
-        new LibraryShape(ElementType.IPHONE, 24, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12),
-        new LibraryShape(ElementType.WEB_BROWSER, 50, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12),
-        new LibraryShape(ElementType.RECT, 50, 35, 0, 2, 2)
+        LibraryShapes.get(ElementType.IPHONE),
+        LibraryShapes.get(ElementType.WEB_BROWSER),
+        LibraryShapes.get(ElementType.RECT)
       }
     };
 
