@@ -204,7 +204,7 @@ public class RelationshipDragEndHandler implements
 			diagram = createDiagram(type, x, y);
 			surface.addAsSelected(diagram, true);
 		}
-		
+
 		// fire event show property text editor
 		surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(diagram).setJustCreated(true));
 		currentRel = null;

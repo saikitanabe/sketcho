@@ -41,7 +41,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ShapeProperty;
 
 
-public class GenericElement extends AbstractDiagramItem {
+public class GenericElement extends AbstractDiagramItem implements SupportsRectangleShape {
 	private static SLogger logger = SLogger.createLogger(GenericElement.class);
 
 	public static double FREEHAND_STROKE_WIDTH = 2;
@@ -270,6 +270,7 @@ public class GenericElement extends AbstractDiagramItem {
     setShape(shape[0], shape[1], shape[2], shape[3]);
   }
 
+  @Override
   public void setShape(int left, int top, int width, int height) {
   	if (width > 1 && height > 1) {
 	  	this.left = left;
