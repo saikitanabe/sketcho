@@ -5,8 +5,14 @@ import net.sevenscales.editor.api.LibrarySelections.Library;
 import net.sevenscales.editor.api.event.CreateElementEvent;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.impl.FastButton;
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.content.utils.EffectHelpers;
+import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
+import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
+import net.sevenscales.editor.api.event.StartSelectToolEvent;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -120,7 +126,7 @@ public class UMLDiagramSelections extends Composite {
 	}
 
 	private SelectionHandler selectionHandler;
-	private EditorContext editorContext;
+	private ISurfaceHandler surface;
 	
 	@UiField VerticalPanel diagramGroups;
 	@UiField FastButton comments;
@@ -128,8 +134,10 @@ public class UMLDiagramSelections extends Composite {
 	@UiField HTMLPanel contextMenuArea;
 //	@UiField ButtonElement freehandBtn;
 
-	public UMLDiagramSelections(EditorContext editorContext) {
-		this.editorContext = editorContext;
+	public UMLDiagramSelections(ISurfaceHandler surface, SelectionHandler selectionHandler) {
+		this.surface = surface;
+		this.selectionHandler = selectionHandler;
+
 		initWidget(uiBinder.createAndBindUi(this));
 
 		if (!notConfluence()) {
@@ -138,6 +146,7 @@ public class UMLDiagramSelections extends Composite {
 			// _comments.setVisible(false);
 		}
 		
+		EffectHelpers.tooltipper();
 //		editorContext.getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
 //			@Override
 //			public void on(FreehandModeChangedEvent event) {
@@ -160,16 +169,38 @@ public class UMLDiagramSelections extends Composite {
 		// });
 	}
 
+	@UiHandler("freehand")
+	public void onFreeHand(ClickEvent event) {
+		stopEvent(event);
+		surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE)));
+		selectionHandler.hidePopup();
+	}
+
+	@UiHandler("select")
+	public void onSelect(ClickEvent event) {
+		stopEvent(event);
+		surface.getEditorContext().getEventBus().fireEvent(new StartSelectToolEvent());
+		selectionHandler.hidePopup();
+	}
+
+	@UiHandler("commentMode")
+	public void onCommentMode(ClickEvent event) {
+		stopEvent(event);
+		Tools.toggleCommentMode();
+		selectionHandler.hidePopup();
+	}
+
+	private void stopEvent(ClickEvent event) {
+		event.stopPropagation();
+		event.preventDefault();
+	}
+
   // public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
   //   return contextMenuArea.addDomHandler(handler, MouseWheelEvent.getType());
   // }
 
-	public void setSelectionHandler(SelectionHandler selectionHandler) {
-		this.selectionHandler = selectionHandler;
-	}
-	
 	private void fire(UMLDiagramType elementType) {
-		editorContext.getEventBus().fireEvent(new CreateElementEvent(elementType, 0, 0));
+		surface.getEditorContext().getEventBus().fireEvent(new CreateElementEvent(elementType, 0, 0));
 	}
 	
 	@UiHandler("classf")
@@ -361,7 +392,7 @@ public class UMLDiagramSelections extends Composite {
 	// }
 
 	private boolean notConfluence() {
-		return !editorContext.isTrue(EditorProperty.CONFLUENCE_MODE);
+		return !surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE);
 	}	
 	
 //	@UiHandler("freehand")

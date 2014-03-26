@@ -131,7 +131,8 @@ public class UiClickContextMenu extends Composite {
 		surface.getEditorContext().getEventBus().addHandler(BoardEmptyAreaClickedEvent.TYPE, new BoardEmptyAreaClickEventHandler() {
 			@Override
 			public void on(BoardEmptyAreaClickedEvent event) {
-				openClickMenu(event);
+				showAddElementMenu(event.getX(), event.getY());
+				// openClickMenu(event);
 			}
 		});
 
@@ -224,8 +225,12 @@ public class UiClickContextMenu extends Composite {
 	@UiHandler("addElement")
 	public void onAddElement(ClickEvent event) {
 		stopEvent(event);
-		surface.getEditorContext().getEventBus().fireEvent(new SurfaceMouseUpNoHandlingYetEvent(event.getClientX(), event.getClientY()));
+		showAddElementMenu(event.getClientX(), event.getClientY());
 		hide();
+	}
+
+	private void showAddElementMenu(int x, int y) {
+		surface.getEditorContext().getEventBus().fireEvent(new SurfaceMouseUpNoHandlingYetEvent(x, y));
 	}
 
 	@UiHandler("freehand")

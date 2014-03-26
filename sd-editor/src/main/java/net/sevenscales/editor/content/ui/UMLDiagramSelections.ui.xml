@@ -3,6 +3,10 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:net.sevenscales.editor.api.impl">
 	<ui:style>		
 				
+		.simple {
+			display: inline;
+		}
+
 		.focuspanel {
 			
 		}
@@ -15,6 +19,34 @@
 
 	<g:HTMLPanel ui:field="contextMenuArea">
 	<!-- <g:VerticalPanel> -->
+		<c:FastButton ui:field="freehand" addStyleNames="{style.simple}">
+			<c:child>
+				<g:HTML>
+					<a title="Freehand" class="btn btn-custom download-btn tooltipper">
+						<i class="context-icon-pen-white"></i>
+					</a>
+				</g:HTML>
+			</c:child>
+		</c:FastButton>
+		<c:FastButton ui:field="select" addStyleNames="{style.simple}">
+			<c:child>
+				<g:HTML>
+					<a title="Lasso Select (by dragging)" class="btn btn-custom download-btn tooltipper">
+						<i class="context-icon-select"></i>
+					</a>
+				</g:HTML>
+			</c:child>
+		</c:FastButton>
+		<c:FastButton ui:field="commentMode" addStyleNames="{style.simple}">
+			<c:child>
+				<g:HTML>
+					<a title="Show/Hide Comments" class="btn btn-custom download-btn tooltipper">
+						<i class="">C</i>
+					</a>
+				</g:HTML>
+			</c:child>
+		</c:FastButton>
+
 		<g:VerticalPanel ui:field="diagramGroups" styleName="shape-context-panel">
 
 			<g:HorizontalPanel>

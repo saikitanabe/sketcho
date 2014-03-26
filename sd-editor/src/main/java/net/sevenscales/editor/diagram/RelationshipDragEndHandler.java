@@ -88,8 +88,7 @@ public class RelationshipDragEndHandler implements
 		this.surface = surface;
 		popup = new PopupPanel();
 		popup.setStyleName("RelationshipDragEndHandler");
-		diagramSelections = new UMLDiagramSelections(surface.getEditorContext());
-		diagramSelections.setSelectionHandler(this);
+		diagramSelections = new UMLDiagramSelections(surface, this);
 		popup.setWidget(diagramSelections);
 		popup.setAutoHideEnabled(true);
 		popup.setAnimationEnabled(true);
