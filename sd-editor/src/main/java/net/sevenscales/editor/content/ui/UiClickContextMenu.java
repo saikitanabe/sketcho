@@ -130,26 +130,8 @@ public class UiClickContextMenu extends Composite {
 
 		surface.getEditorContext().getEventBus().addHandler(BoardEmptyAreaClickedEvent.TYPE, new BoardEmptyAreaClickEventHandler() {
 			@Override
-			public void on(final BoardEmptyAreaClickedEvent event) {
-				if (UiClickContextMenu.this.surface.getSelectionHandler().getSelectedItems().size() == 0 &&
-					 !UiClickContextMenu.this.surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE)) {
-//					clearTimeout(cancelTimer);
-					popup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
-						@Override
-						public void setPosition(int offsetWidth, int offsetHeight) {
-							int x = event.getX();
-							int y = event.getY();
-		//						MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, UiClickContextMenu.this.surface.getScaleFactor());
-		//						setCurrentPosition(
-		//								point.getX() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformX(), surface.getScaleFactor()), 
-		//								point.getY() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor()));
-							popup.setPopupPosition(x + UiClickContextMenu.this.surface.getAbsoluteLeft() - offsetWidth / 2, 
-											y + UiClickContextMenu.this.surface.getAbsoluteTop() - offsetHeight / 2 - 20);
-							EffectHelpers.tooltipper();
-						}
-					});
-//					cancelTimer = setTimeout(5000);
-				}
+			public void on(BoardEmptyAreaClickedEvent event) {
+				openClickMenu(event);
 			}
 		});
 
@@ -185,6 +167,22 @@ public class UiClickContextMenu extends Composite {
 		// 		});
 
 		closeOnSave();
+	}
+
+	private void openClickMenu(final BoardEmptyAreaClickedEvent event) {
+		if (UiClickContextMenu.this.surface.getSelectionHandler().getSelectedItems().size() == 0 &&
+			 !UiClickContextMenu.this.surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE)) {
+			popup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+				@Override
+				public void setPosition(int offsetWidth, int offsetHeight) {
+					int x = event.getX();
+					int y = event.getY();
+					popup.setPopupPosition(x + UiClickContextMenu.this.surface.getAbsoluteLeft() - offsetWidth / 2, 
+									y + UiClickContextMenu.this.surface.getAbsoluteTop() - offsetHeight / 2 - 20);
+					EffectHelpers.tooltipper();
+				}
+			});
+		}
 	}
 
 	private boolean notConfluence() {
