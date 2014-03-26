@@ -36,6 +36,8 @@ import net.sevenscales.editor.diagram.shape.RectShape;
 import net.sevenscales.editor.diagram.shape.SequenceShape;
 import net.sevenscales.editor.diagram.shape.TextShape;
 import net.sevenscales.editor.diagram.shape.UMLPackageShape;
+import net.sevenscales.editor.diagram.shape.ComponentShape;
+import net.sevenscales.editor.diagram.shape.ServerShape;
 import net.sevenscales.editor.diagram.utils.DiagramAnchorUtils;
 import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
 import net.sevenscales.editor.gfx.domain.Color;
@@ -59,6 +61,8 @@ import net.sevenscales.editor.uicomponents.uml.SequenceElement;
 import net.sevenscales.editor.uicomponents.uml.StorageElement;
 import net.sevenscales.editor.uicomponents.uml.TextElement;
 import net.sevenscales.editor.uicomponents.uml.UMLPackageElement;
+import net.sevenscales.editor.uicomponents.uml.ComponentElement;
+import net.sevenscales.editor.uicomponents.uml.ServerElement;
 
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
@@ -271,7 +275,7 @@ public class RelationshipDragEndHandler implements
 		case NOTE: {
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 			NoteElement ne = new NoteElement(surface,
-	        new NoteShape(x, y, 150, 1),
+	        new NoteShape(x, y, 150, 45),
 	        type.getValue(),
 	        background, borderColor, color,
 	        true, 
@@ -373,6 +377,22 @@ public class RelationshipDragEndHandler implements
 			result = ae;
 			break;
 			}
+		case COMPONENT: {
+			ComponentElement element = new ComponentElement(surface,
+	        new ComponentShape(x, y, 1, 1),
+	        type.getValue(),
+	        background, borderColor, color, true, new DiagramItemDTO());
+			result = element;
+			break;
+		}
+		case SERVER: {
+			ServerElement element = new ServerElement(surface,
+	        new ServerShape(x, y, 60, 80),
+	        type.getValue(),
+	        background, borderColor, color, true, new DiagramItemDTO());
+			result = element;
+			break;
+		}
 		}
 		return result;
 	}

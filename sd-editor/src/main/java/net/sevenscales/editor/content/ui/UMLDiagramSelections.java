@@ -9,15 +9,15 @@ import net.sevenscales.domain.utils.SLogger;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.MouseWheelEvent;
-import com.google.gwt.event.dom.client.MouseWheelHandler;
+// import com.google.gwt.event.dom.client.MouseWheelEvent;
+// import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 
@@ -67,7 +67,28 @@ public class UMLDiagramSelections extends Composite {
 		FREE_HAND("", UMLDiagramGroup.MINDMAP),
 		COMMENT_THREAD("", UMLDiagramGroup.CLASS_DIAGRAM),
 		COMMENT("", UMLDiagramGroup.CLASS_DIAGRAM),
-		NONE("", UMLDiagramGroup.NONE);
+		NONE("", UMLDiagramGroup.NONE),
+		COMPONENT("", UMLDiagramGroup.CLASS_DIAGRAM),
+		SERVER("", UMLDiagramGroup.CLASS_DIAGRAM),
+		SMILEY("", UMLDiagramGroup.CLASS_DIAGRAM),
+		FIREWALL("", UMLDiagramGroup.CLASS_DIAGRAM),
+		POLYGON5("", UMLDiagramGroup.CLASS_DIAGRAM),
+		POLYGON8("", UMLDiagramGroup.CLASS_DIAGRAM),
+		RECT("", UMLDiagramGroup.CLASS_DIAGRAM),
+		TRIANGLE("", UMLDiagramGroup.CLASS_DIAGRAM),
+		CIRCLE("", UMLDiagramGroup.CLASS_DIAGRAM),
+		CLOUD("", UMLDiagramGroup.CLASS_DIAGRAM),
+		WBROWSER("", UMLDiagramGroup.CLASS_DIAGRAM),
+		IPHONE("", UMLDiagramGroup.CLASS_DIAGRAM),
+		STAR5("", UMLDiagramGroup.CLASS_DIAGRAM),
+		STAR4("", UMLDiagramGroup.CLASS_DIAGRAM),
+		ARROW_DOWN("", UMLDiagramGroup.CLASS_DIAGRAM),
+		ARROW_RIGHT("", UMLDiagramGroup.CLASS_DIAGRAM),
+		ARROW_UP("", UMLDiagramGroup.CLASS_DIAGRAM),
+		ARROW_LEFT("", UMLDiagramGroup.CLASS_DIAGRAM),
+		BUBBLE_LEFT("", UMLDiagramGroup.CLASS_DIAGRAM),
+		BUBBLE_RIGHT("", UMLDiagramGroup.CLASS_DIAGRAM),
+		LETTER("", UMLDiagramGroup.CLASS_DIAGRAM);
 		
 		private String value;
 		private UMLDiagramGroup group;
@@ -93,10 +114,10 @@ public class UMLDiagramSelections extends Composite {
 	private SelectionHandler selectionHandler;
 	private EditorContext editorContext;
 	
-	@UiField HorizontalPanel diagramGroups;
+	@UiField VerticalPanel diagramGroups;
 	@UiField FastButton comments;
-	@UiField FastButton _comments;
-	@UiField FocusPanel contextMenuArea;
+	// @UiField FastButton _comments;
+	@UiField HTMLPanel contextMenuArea;
 //	@UiField ButtonElement freehandBtn;
 
 	public UMLDiagramSelections(EditorContext editorContext) {
@@ -106,7 +127,7 @@ public class UMLDiagramSelections extends Composite {
 		if (!notConfluence()) {
 			// hide comments on confluence
 			comments.setVisible(false);
-			_comments.setVisible(false);
+			// _comments.setVisible(false);
 		}
 		
 //		editorContext.getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
@@ -123,7 +144,7 @@ public class UMLDiagramSelections extends Composite {
 //			}
 //		});
 		
-		filterByGroup(Library.SOFTWARE);
+		// filterByGroup(Library.SOFTWARE);
 		// addMouseWheelHandler(new MouseWheelHandler() {
 		// 	public void onMouseWheel(MouseWheelEvent event) {
 
@@ -168,10 +189,10 @@ public class UMLDiagramSelections extends Composite {
 	public void oncomments(ClickEvent event) {
 		fireCommentThread();
 	}
-	@UiHandler("_comments")
-	public void oncommentsMind(ClickEvent event) {
-		fireCommentThread();
-	}
+	// @UiHandler("_comments")
+	// public void oncommentsMind(ClickEvent event) {
+	// 	fireCommentThread();
+	// }
 	
 	private void fireCommentThread() {
 		if (notConfluence()) {
@@ -241,10 +262,95 @@ public class UMLDiagramSelections extends Composite {
 		fire(UMLDiagramType.NOTE);
 	}
 
-	@UiHandler("contextMenuArea")
-	public void onContextMenuArea(MouseWheelEvent event) {
-		logger.debug("onContextMenuArea...");
+	@UiHandler("umliconcomp")
+	public void onumliconcomp(ClickEvent event) {
+		fire(UMLDiagramType.COMPONENT);
 	}
+	@UiHandler("umliconserver")
+	public void onumliconserver(ClickEvent event) {
+		fire(UMLDiagramType.SERVER);
+	}
+	@UiHandler("umliconsmiley")
+	public void onumliconsmiley(ClickEvent event) {
+		fire(UMLDiagramType.SMILEY);
+	}
+	@UiHandler("umliconfirewall")
+	public void onumliconfirewall(ClickEvent event) {
+		fire(UMLDiagramType.FIREWALL);
+	}
+	@UiHandler("umliconpolygon5")
+	public void onumliconpolygon5(ClickEvent event) {
+		fire(UMLDiagramType.POLYGON5);
+	}
+	@UiHandler("umliconpolygon8")
+	public void onumliconpolygon8(ClickEvent event) {
+		fire(UMLDiagramType.POLYGON8);
+	}
+	@UiHandler("umliconrect")
+	public void onumliconrect(ClickEvent event) {
+		fire(UMLDiagramType.RECT);
+	}
+	@UiHandler("umlicontriangle")
+	public void onumlicontriangle(ClickEvent event) {
+		fire(UMLDiagramType.TRIANGLE);
+	}
+	@UiHandler("umliconcircle")
+	public void onumliconcircle(ClickEvent event) {
+		fire(UMLDiagramType.CIRCLE);
+	}
+	@UiHandler("umliconcloud")
+	public void onumliconcloud(ClickEvent event) {
+		fire(UMLDiagramType.CLOUD);
+	}
+	@UiHandler("umliconwbrowser")
+	public void onumliconwbrowser(ClickEvent event) {
+		fire(UMLDiagramType.WBROWSER);
+	}
+	@UiHandler("umliconiphone")
+	public void onumliconiphone(ClickEvent event) {
+		fire(UMLDiagramType.IPHONE);
+	}
+	@UiHandler("umliconstar5")
+	public void onumliconstar5(ClickEvent event) {
+		fire(UMLDiagramType.STAR5);
+	}
+	@UiHandler("umliconstar4")
+	public void onumliconstar4(ClickEvent event) {
+		fire(UMLDiagramType.STAR4);
+	}
+	@UiHandler("umliconarrowd")
+	public void onumliconarrowd(ClickEvent event) {
+		fire(UMLDiagramType.ARROW_DOWN);
+	}
+	@UiHandler("umliconarrowr")
+	public void onumliconarrowr(ClickEvent event) {
+		fire(UMLDiagramType.ARROW_RIGHT);
+	}
+	@UiHandler("umliconarrowu")
+	public void onumliconarrowu(ClickEvent event) {
+		fire(UMLDiagramType.ARROW_UP);
+	}
+	@UiHandler("umliconarrowl")
+	public void onumliconarrowl(ClickEvent event) {
+		fire(UMLDiagramType.ARROW_LEFT);
+	}
+	@UiHandler("umliconbubblel")
+	public void onumliconbubblel(ClickEvent event) {
+		fire(UMLDiagramType.BUBBLE_LEFT);
+	}
+	@UiHandler("umliconbubbler")
+	public void onumliconbubbler(ClickEvent event) {
+		fire(UMLDiagramType.BUBBLE_RIGHT);
+	}
+	@UiHandler("umliconletter")
+	public void onumliconletter(ClickEvent event) {
+		fire(UMLDiagramType.LETTER);
+	}
+
+	// @UiHandler("contextMenuArea")
+	// public void onContextMenuArea(MouseWheelEvent event) {
+	// 	logger.debug("onContextMenuArea...");
+	// }
 
 	private boolean notConfluence() {
 		return !editorContext.isTrue(EditorProperty.CONFLUENCE_MODE);
@@ -257,15 +363,15 @@ public class UMLDiagramSelections extends Composite {
 //	}
 
 	public void setGroup(UMLDiagramGroup group) {
-		int index = findGroup(group);
-		// swap group as second (2 due to centering selection => mouse is closer to correct element)
-//		if (index > 0) { // do not swap if already first
-			Widget groupWidget = diagramGroups.getWidget(index);
-			diagramGroups.remove(index);
-			if (diagramGroups.getWidgetCount() > 0) {
-				diagramGroups.insert(groupWidget, 1);
-			}
-//		}
+		// NOTE: for now group focus is not supported
+		// - becomes too complex, and maybe difficult to use
+		
+		// int index = findGroup(group);
+		// Widget groupWidget = diagramGroups.getWidget(index);
+		// diagramGroups.remove(index);
+		// if (diagramGroups.getWidgetCount() > 0) {
+		// 	diagramGroups.insert(groupWidget, 1);
+		// }
 	}
 
 	private int findGroup(UMLDiagramGroup group) {
