@@ -13,6 +13,7 @@ import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IGroup;
+import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.api.impl.Theme;
@@ -118,6 +119,10 @@ public class SvgConverter {
 
         // all shapes are under group
         IGroup group = d.getGroup();
+        if (d instanceof IChildElement) {
+          // should move with parent element; only parent group has been moved
+          group = ((IChildElement) d).getParent().getGroup();
+        }
         items += groupStart(group);
 
         // check if subgroup is started

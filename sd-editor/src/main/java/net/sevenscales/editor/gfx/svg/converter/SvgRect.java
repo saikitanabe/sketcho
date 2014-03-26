@@ -26,7 +26,7 @@ public class SvgRect extends SvgBase {
     params.put("%stroke-width%", String.valueOf(rect.getStrokeWidth()));
     Color strokeColor = rect.getStrokeColor();
     if (strokeColor != null) {
-      params.put("%stroke-opacity%", "stroke-opacity:" + String.valueOf(rect.getStrokeColor().getOpacity()) + ";");
+      params.put("%stroke-opacity%", "stroke-opacity:" + String.valueOf(strokeColor.getOpacity()) + ";");
     }
     
     // own map for those or use same map, it doesn't really matter
@@ -41,7 +41,7 @@ public class SvgRect extends SvgBase {
       transform = parse(rect, transtemplate, params, diagram);
     }
     params.put("%transform%", transform);
-    if (rect.getStrokeColor() != null) {
+    if (strokeColor != null && strokeColor.getOpacity() > 0 && rect.getStrokeColor() != null) {
     	params.put("%stroke%", rgb(rect.getStrokeColor().toRgb()));
     }
 

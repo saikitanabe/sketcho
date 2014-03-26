@@ -590,7 +590,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	public void createComment(String text) {
 		Theme.ElementColorScheme commentColor = Theme.getCommentColorScheme();
 
-		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
+		// surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 		CommentDTO jsComment = new CommentDTO(this.getDiagramItem().getClientId(), surface.getEditorContext().getCurrentUser(), surface.getEditorContext().getCurrentUserDisplayName());
 		CommentElement commentElement = new CommentElement(surface,
         new CommentShape(getRelativeLeft(), getRelativeTop() + getHeight(), getWidth(), 1),
@@ -605,7 +605,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 		// get current user to show quickly
     // commentElement.setUser(surface.getEditorContext().getCurrentUser());
-		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
+		// surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 
 		surface.addAsSelected(commentElement, true);
 

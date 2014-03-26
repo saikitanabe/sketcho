@@ -27,6 +27,7 @@ import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
+import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.Point;
@@ -46,7 +47,7 @@ import net.sevenscales.domain.ElementType;
 
 import com.google.gwt.core.client.GWT;
 
-public class CommentElement extends AbstractDiagramItem implements SupportsRectangleShape {
+public class CommentElement extends AbstractDiagramItem implements SupportsRectangleShape, IChildElement {
 	private static final SLogger logger = SLogger.createLogger(CommentElement.class);
 	public static String TYPE = ElementType.COMMENT.getValue();
 
@@ -634,6 +635,11 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	public CommentThreadElement getParentThread() {
+		return parentThread;
+	}
+
+	@Override
+	public Diagram getParent() {
 		return parentThread;
 	}
 
