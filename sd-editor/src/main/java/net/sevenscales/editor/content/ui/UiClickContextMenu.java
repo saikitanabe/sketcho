@@ -230,7 +230,9 @@ public class UiClickContextMenu extends Composite {
 	}
 
 	private void showAddElementMenu(int x, int y) {
-		surface.getEditorContext().getEventBus().fireEvent(new SurfaceMouseUpNoHandlingYetEvent(x, y));
+		if (!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE)) {
+			surface.getEditorContext().getEventBus().fireEvent(new SurfaceMouseUpNoHandlingYetEvent(x, y));
+		}
 	}
 
 	@UiHandler("freehand")
