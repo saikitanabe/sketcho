@@ -47,7 +47,8 @@
 			</c:child>
 		</c:FastButton>
 
-		<g:VerticalPanel ui:field="diagramGroups" styleName="shape-context-panel">
+		<g:HTMLPanel styleName="shape-context-panel">
+		<g:VerticalPanel ui:field="diagramGroups">
 
 			<g:HorizontalPanel>
 				<g:VerticalPanel styleName="uml-selection-table class-diagram">
@@ -372,6 +373,7 @@
 			</g:HorizontalPanel>
 
 		</g:VerticalPanel>
+	</g:HTMLPanel>
 	<!-- </g:VerticalPanel> -->
 
 <!-- 	<g:HTML styleName="context-page-panel">
