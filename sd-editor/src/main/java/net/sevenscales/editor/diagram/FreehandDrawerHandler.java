@@ -29,12 +29,19 @@ import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JsArrayInteger;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 
 
 public class FreehandDrawerHandler implements MouseDiagramHandler {
   private static SLogger logger = SLogger.createLogger(FreehandDrawerHandler.class);
+
+  static {
+    logger.addFilter(FreehandDrawerHandler.class);
+  }
 
   private GridUtils gridUtils;
   private int downX;
@@ -46,9 +53,10 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 	private boolean freehandKeyDown;
   private List<FreehandPath> freehandPahts = new ArrayList<FreehandPath>();
   private FreehandPath currentFreehandPath;
+  private boolean staticMovement = false;
 
-  private static class FreehandPath {
-    private static SLogger logger = SLogger.createLogger(FreehandPath.class);
+  private class FreehandPath {
+    // private static SLogger logger = SLogger.createLogger(FreehandPath.class);
     IGroup group;
     IPolyline polyline;
     List<Integer> points = new ArrayList<Integer>();
@@ -68,7 +76,12 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     FreehandElement plot() {
       if (polyline != null && points.size() > 2) {
         // logger.debug("PLOTTING...");
-        List<Integer> filteredPoints = filterPoints();
+        List<Integer> filteredPoints = null;
+        if (staticMovement) {
+          filteredPoints = allPoints();
+        } else {
+          filteredPoints = filterPoints();
+        }
         
         FreehandElement diagram = new FreehandElement(surface, new FreehandShape(IntegerHelpers.toIntArray(filteredPoints)),
             Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(),
@@ -87,18 +100,28 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       return null;
     }
 
+    private List<Integer> allPoints() {
+      List<Integer> result = new ArrayList<Integer>();
+      for (int i = 0; i < points.size(); i += 2) {
+        addTranslatedPoint(points.get(i), points.get(i + 1), result);
+      }
+      return result;
+    }
+
     private List<Integer> filterPoints() {
       int modeType = surface.getEditorContext().<FreehandModeType>getAs(EditorProperty.FREEHAND_MODE_TYPE).value();
       logger.debug("filterPoints modeType {}", modeType);
       List<Integer> result = new ArrayList<Integer>();
       for (int i = 0; i < points.size(); i += 2) {
-        if (i % modeType == 0) {
-          addTranslatedPoint(points.get(i), points.get(i + 1), result);
-        }
+        // if (i % modeType == 0) {
+        addTranslatedPoint(points.get(i), points.get(i + 1), result);
+        // }
       }
       
       // add last point just in case if it has been filtered out above
       addTranslatedPoint(points.get(points.size()-2), points.get(points.size()-1), result);
+
+      fit(result);
 
       return result;
     }
@@ -109,6 +132,93 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       points.add(point.getY() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor()));
     }
 
+    private void fit(List<Integer> points) {
+      JsArrayInteger dest = JsArrayInteger.createArray().cast();
+      for (Integer i : points) {
+        dest.push(i.intValue());
+      }
+      JsArray<PaperSegment> segments = fit(dest);
+      for (int i = 0; i < segments.length(); ++i) {
+        PaperPoint point = segments.get(i).getPoint();
+        logger.debug("seg {}, {}", point.getX(), point.getY());
+      }
+    }
+
+    private native JsArray<PaperSegment> fit(JsArrayInteger points)/*-{
+      var segs = []
+      for (var i = 0; i < points.length; i += 2) {
+        segs.push(new $wnd.paper.Segment(points[i], points[i + 1]))
+      }
+      // var myPath = {_segments: [new $wnd.paper.Segment(1,2), new $wnd.paper.Segment(3,4), new $wnd.paper.Segment(5,6)]};
+      var myPath = {_segments: segs}
+      // console.log(myPath)
+      var fitter = new $wnd.paper.PathFitter(myPath, 2.5);
+
+      var getPathData = function(_segments, precision) {
+        var segments = _segments,
+          f = $wnd.paper.Formatter.instance,
+          parts = [];
+
+        // TODO: Add support for H/V and/or relative commands, where appropriate
+        // and resulting in shorter strings
+        function addCurve(seg1, seg2, skipLine) {
+          var point1 = seg1._point,
+            point2 = seg2._point,
+            handle1 = seg1._handleOut,
+            handle2 = seg2._handleIn;
+          if (handle1.isZero() && handle2.isZero()) {
+            if (!skipLine) {
+              // L = absolute lineto: moving to a point with drawing
+              parts.push('L' + f.point(point2, precision));
+            }
+          } else {
+            // c = relative curveto: handle1, handle2 + end - start,
+            // end - start
+            var end = point2.subtract(point1);
+            parts.push('c' + f.point(handle1, precision)
+                + ' ' + f.point(end.add(handle2), precision)
+                + ' ' + f.point(end, precision));
+          }
+        }
+
+        if (segments.length === 0)
+          return '';
+        parts.push('M' + f.point(segments[0]._point));
+        for (var i = 0, l = segments.length  - 1; i < l; i++)
+          addCurve(segments[i], segments[i + 1], false);
+        if (this._closed) {
+          addCurve(segments[segments.length - 1], segments[0], true);
+          parts.push('z');
+        }
+        return parts.join('');
+      }
+
+      console.log("FIT SVG PATH:")
+      console.log(getPathData(fitter.fit()));
+      return fitter.fit();
+    }-*/;
+
+  }
+
+  private static class PaperPoint extends JavaScriptObject {
+    protected PaperPoint() {
+    }
+
+    public final native int getX()/*-{
+      return this.x;
+    }-*/;
+    public final native int getY()/*-{
+      return this.y;
+    }-*/;
+  }
+
+  private static class PaperSegment extends JavaScriptObject {
+    protected PaperSegment() {
+    }
+
+    public final native PaperPoint getPoint()/*-{
+      return this.point;
+    }-*/;
   }
 
 //  private Map<String,String> params = new HashMap<String, String>();
@@ -135,8 +245,17 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
           }
         }
 
+        if (event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.justShift(ne) && FreehandDrawerHandler.this.surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE)) {
+          staticMovement = true;
+        } else if (staticMovement && event.getTypeInt() == Event.ONKEYUP) {
+          disableStaticMovement(ne);
+        }
       }
     });
+  }
+
+  private void disableStaticMovement(NativeEvent ne) {
+    staticMovement = false;
   }
   
   private void fireToggleFreehandMode() {
@@ -203,8 +322,16 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   	int x = point.getScreenX();
   	int y = point.getScreenY();
   	
-  	currentFreehandPath.points.add(x);
-  	currentFreehandPath.points.add(y);
+    int size = currentFreehandPath.points.size();
+    if (staticMovement && size > 2) {
+      int posx = size - 2;
+      int posy = size - 1;
+      currentFreehandPath.points.set(posx, x);
+      currentFreehandPath.points.set(posy, y);
+    } else {
+      currentFreehandPath.points.add(x);
+      currentFreehandPath.points.add(y);
+    }
   	
   	currentFreehandPath.polyline.setShape(currentFreehandPath.points);
 	}
