@@ -193,7 +193,6 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
         return parts.join('');
       }
 
-      console.log("FIT SVG PATH:")
       console.log(getPathData(fitter.fit()));
       return fitter.fit();
     }-*/;

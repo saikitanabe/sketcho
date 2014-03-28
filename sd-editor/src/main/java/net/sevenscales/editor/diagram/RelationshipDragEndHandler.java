@@ -417,7 +417,7 @@ public class RelationshipDragEndHandler implements
 			LibraryShapes.LibraryShape ls = LibraryShapes.get(type.getElementType());
 			// could multiply width and height
 			GenericElement element = new GenericElement(surface,
-	        new GenericShape(ls.elementType.getValue(), x, y, ls.width, ls.height, ls.shapeProperties),
+	        new GenericShape(ls.elementType.getValue(), x, y, ls.width, ls.height, ls.shapeProperties, null),
 	        type.getValue(),
 	        background, borderColor, color, true, DiagramItemDTO.createGenericItem(ls.elementType));
 			result = element;

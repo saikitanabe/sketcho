@@ -6,6 +6,7 @@ import net.sevenscales.editor.content.utils.DiagramHelpers;
 public class GenericShape extends HasRectShape {
   private String elementType;
   private int shapeProperties;
+  private String svg;
 
   public GenericShape(String elementType, String[] shape) {
     this(elementType, shape, 0);
@@ -15,16 +16,18 @@ public class GenericShape extends HasRectShape {
     super(shape);
     this.elementType = elementType;
     this.shapeProperties = shapeProperties;
+    this.svg = null;
   }
 
   public GenericShape(String elementType, int left, int top, int width, int height) {
-    this(elementType, left, top, width, height, 0);
+    this(elementType, left, top, width, height, 0, null);
   }
 
-  public GenericShape(String elementType, int left, int top, int width, int height, int shapeProperties) {
+  public GenericShape(String elementType, int left, int top, int width, int height, int shapeProperties, String svg) {
     super(left, top, width, height);
     this.elementType = elementType;
     this.shapeProperties = shapeProperties;
+    this.svg = svg;
   }
 
   public String getElementType() {
@@ -41,6 +44,13 @@ public class GenericShape extends HasRectShape {
 
   public int getShapeProperties() {
     return shapeProperties;
+  }
+
+  public void setSvg(String svg) {
+    this.svg = svg;
+  }
+  public String getSvg() {
+    return svg;
   }
   
 }

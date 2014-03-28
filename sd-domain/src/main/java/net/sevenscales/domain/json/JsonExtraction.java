@@ -10,6 +10,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.utils.JsonFormat;
+import net.sevenscales.domain.DiagramItemField;
 
 
 public class JsonExtraction {
@@ -66,6 +67,9 @@ public class JsonExtraction {
     result.put("text", new JSONString(text));
     result.put("elementType", new JSONString(safeJsonString(item.getType())));
     result.put("shape", new JSONString(safeJsonString(item.getShape())));
+    if (item.getSvg() != null) {
+      result.put(DiagramItemField.SVG.getValue(), new JSONString(item.getSvg()));
+    }
     result.put("backgroundColor", new JSONString(safeJsonString(item.getBackgroundColor())));
     result.put("textColor", new JSONString(safeJsonString(item.getTextColor())));
     if (item.getFontSize() != null) {

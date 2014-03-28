@@ -5,6 +5,7 @@ public enum DiagramItemField {
 	TEXT("text"),
 	TYPE("elementType"),
 	SHAPE("shape"),
+	SVG("svg"),
 	BACKGROUND_COLOR("backgroundColor"),
 	TEXT_COLOR("textColor"),
 	FONT_SIZE("fsize"),
