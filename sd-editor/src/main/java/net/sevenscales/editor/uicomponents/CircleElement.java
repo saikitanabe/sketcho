@@ -17,6 +17,7 @@ import net.sevenscales.editor.gfx.domain.ICircle;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.silver.SilverUtils;
 import net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers;

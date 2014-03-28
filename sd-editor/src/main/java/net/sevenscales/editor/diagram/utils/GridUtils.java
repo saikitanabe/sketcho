@@ -1,7 +1,7 @@
 package net.sevenscales.editor.diagram.utils;
 
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
-import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.gfx.domain.Point;
 
 public class GridUtils {
   public static final int GRID_SIZE = 1;

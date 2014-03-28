@@ -54,6 +54,7 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.uicomponents.AnchorUtils.AnchorProperties;
 import net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers;

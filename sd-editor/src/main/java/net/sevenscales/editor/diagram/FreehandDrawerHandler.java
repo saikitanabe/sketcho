@@ -11,6 +11,7 @@ import net.sevenscales.editor.api.event.OperationQueueRequestEvent;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.utils.IntegerHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
+import net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoint;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.diagram.shape.FreehandShape;
 import net.sevenscales.editor.diagram.shape.GenericShape;
@@ -19,6 +20,7 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IPolyline;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
 import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 import net.sevenscales.editor.content.ui.UIKeyHelpers;
@@ -86,20 +88,21 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
         // } else {
         //   filteredPoints = fitPointsToSvg();
         // }
-        int left = DiagramHelpers.getLeftCoordinate(points);
-        int top = DiagramHelpers.getTopCoordinate(points);
+        int absleft = DiagramHelpers.getLeftCoordinate(points);
+        int abstop = DiagramHelpers.getTopCoordinate(points);
         int width = DiagramHelpers.getWidth(points);
         int height = DiagramHelpers.getHeight(points);
 
-        String svg = fitPointsToSvg(left, top);
-        
-        // FreehandElement diagram = new FreehandElement(surface, new FreehandShape(IntegerHelpers.toIntArray(filteredPoints)),
-        //     Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(),
-        //     surface.getEditorContext().isEditable(), new DiagramItemDTO());
-
+        // use absolute values to calculate relative points
+        String svg = fitPointsToSvg(absleft, abstop);
+        ScaledAndTranslatedPoint pos = ScaleHelpers.scaleAndTranslateScreenpoint(absleft, abstop, surface);
+        // need to scale width and height to correspond screen coordinates
+        // doe not translate, wince only left, top is scaled and translated!
+        int scaledWidth = ScaleHelpers.scaleValue(width, surface.getScaleFactor());
+        int scaledHeight = ScaleHelpers.scaleValue(height, surface.getScaleFactor());
         GenericElement diagram = new GenericElement(surface, 
           new GenericShape(ElementType.FREEHAND2.getValue(), 
-                           left, top, width, height, 0, svg),
+                           pos.scaledAndTranslatedPoint.x, pos.scaledAndTranslatedPoint.y, scaledWidth, scaledHeight, 0, svg),
           "", 
           Theme.createDefaultBackgroundColor(), 
           Theme.createDefaultBorderColor(), 
@@ -120,14 +123,17 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       return null;
     }
 
-    private String fitPointsToSvg(int x, int y) {
+    private String fitPointsToSvg(int absx, int absy) {
       int modeType = surface.getEditorContext().<FreehandModeType>getAs(EditorProperty.FREEHAND_MODE_TYPE).value();
       logger.debug("fitPointsToSvg modeType {}", modeType);
       List<Integer> result = new ArrayList<Integer>();
       for (int i = 0; i < points.size(); i += 2) {
-        // addTranslatedPoint(points.get(i), points.get(i + 1), result);
-        result.add(points.get(i) - x);
-        result.add(points.get(i + 1) - y);
+        // - calculation from absolute values to relative (use unscaled and translated values)
+        // - since this is now relative
+        // - do not take into account root layer tranlation and only scale point
+        // - left, top will take into account root layer scaling and translation
+        result.add(ScaleHelpers.scaleValue(points.get(i) - absx, surface.getScaleFactor()));
+        result.add(ScaleHelpers.scaleValue(points.get(i + 1) - absy, surface.getScaleFactor()));
       }
       return fit(result);
     }
@@ -176,7 +182,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
           if (handle1.isZero() && handle2.isZero()) {
             if (!skipLine) {
               // L = absolute lineto: moving to a point with drawing
-              parts.push('L' + f.point(point2, precision));
+              parts.push('l' + f.point(point2, precision));
             }
           } else {
             // c = relative curveto: handle1, handle2 + end - start,

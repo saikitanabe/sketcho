@@ -30,7 +30,7 @@ import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
-import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;

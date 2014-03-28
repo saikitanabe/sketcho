@@ -3,7 +3,7 @@ package net.sevenscales.editor.content.utils;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UiContextMenu;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
-import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.gfx.domain.Point;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -40,18 +40,18 @@ public class ScaleHelpers {
 	}-*/;
 	
 	public static class ScaledAndTranslatedPoint {
-		public Point scaledAndTranslated;
+		public Point scaledAndTranslatedPoint;
 		public MatrixPointJS scaledPoint;
 	}
 	public static ScaledAndTranslatedPoint scaleAndTranslateScreenpoint(int screenX, int screenY, ISurfaceHandler surface) {
 		ScaledAndTranslatedPoint result = new ScaledAndTranslatedPoint();
 		// scale point
-		result.scaledAndTranslated = new Point();
+		result.scaledAndTranslatedPoint = new Point();
 		result.scaledPoint = MatrixPointJS.createScaledPoint(screenX, screenY, surface.getScaleFactor());
 		
 		// translate by root layer location
-		result.scaledAndTranslated.x = result.scaledPoint.getX() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformX(), surface.getScaleFactor()); 
-		result.scaledAndTranslated.y = result.scaledPoint.getY() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor());
+		result.scaledAndTranslatedPoint.x = result.scaledPoint.getX() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformX(), surface.getScaleFactor()); 
+		result.scaledAndTranslatedPoint.y = result.scaledPoint.getY() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor());
 		return result;
 	}
 	

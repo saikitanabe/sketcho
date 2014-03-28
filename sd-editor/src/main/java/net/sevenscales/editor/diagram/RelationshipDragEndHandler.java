@@ -46,7 +46,7 @@ import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.diagram.drag.Anchor;
-import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.uml.ActivityChoiceElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityEnd;
@@ -118,8 +118,8 @@ public class RelationshipDragEndHandler implements
 				} else {
 					ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint
 							(event.getX(), event.getY(), RelationshipDragEndHandler.this.surface);
-					x = stp.scaledAndTranslated.x;
-					y = stp.scaledAndTranslated.y;
+					x = stp.scaledAndTranslatedPoint.x;
+					y = stp.scaledAndTranslatedPoint.y;
 				}
 				itemSelected(event.getElementType(), x, y);
 			}
@@ -450,7 +450,7 @@ public class RelationshipDragEndHandler implements
 			@Override
 			public void setPosition(int offsetWidth, int offsetHeight) {
 				ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint(event.getX(), event.getY(), surface);
-				setCurrentPosition(stp.scaledAndTranslated.x, stp.scaledAndTranslated.y);
+				setCurrentPosition(stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y);
 				popup.setPopupPosition(event.getX() + surface.getAbsoluteLeft() - offsetWidth / 2, 
 								event.getY() + surface.getAbsoluteTop() - offsetHeight / 2);
 				// face mouse down to release anything running on background

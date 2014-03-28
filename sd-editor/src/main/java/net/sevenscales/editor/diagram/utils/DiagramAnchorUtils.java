@@ -1,6 +1,6 @@
 package net.sevenscales.editor.diagram.utils;
 
-import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.gfx.domain.Point;
 
 
 

@@ -2,7 +2,7 @@ package net.sevenscales.editor.diagram.drag;
 
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
-import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.gfx.domain.Point;
 
 public class Anchor implements AnchorMoveHandler {
 	private Diagram diagram;

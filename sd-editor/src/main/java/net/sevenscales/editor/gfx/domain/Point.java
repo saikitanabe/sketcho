@@ -6,10 +6,16 @@ public class Point {
 	public int x;
 	public int y;
 
-	public native JavaScriptObject getNativePoint()/*-{
-		return {};
-//		return {this.@net.st.shareddesign.editor.dojo.Point::x, 
-//		        this.@net.st.shareddesign.editor.dojo.Point::y};
-	}-*/;
+	public Point() {
+	}
 
+	public Point(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	public native JavaScriptObject getNativePoint()/*-{
+		return {x: this.@net.sevenscales.editor.gfx.domain.Point::x, 
+		        y: this.@net.sevenscales.editor.gfx.domain.Point::y};
+	}-*/;
 }

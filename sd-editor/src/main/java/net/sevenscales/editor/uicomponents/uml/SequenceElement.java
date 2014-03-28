@@ -25,7 +25,7 @@ import net.sevenscales.editor.silver.SilverUtils;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.AnchorUtils;
-import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers.IExtraConnectionHandler;
 import net.sevenscales.editor.uicomponents.helpers.ILifeLineEditor;
 import net.sevenscales.editor.uicomponents.helpers.LifeLineEditorHelper;

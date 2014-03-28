@@ -31,7 +31,7 @@ import net.sevenscales.editor.diagram.drag.AnchorMoveHandler;
 import net.sevenscales.editor.diagram.drag.ConnectionMoveHandler;
 import net.sevenscales.editor.uicomponents.AngleUtil2;
 import net.sevenscales.editor.uicomponents.CircleElement;
-import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.RelationshipText2;
 import net.sevenscales.editor.uicomponents.RelationshipText2.ClickTextPosition;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;

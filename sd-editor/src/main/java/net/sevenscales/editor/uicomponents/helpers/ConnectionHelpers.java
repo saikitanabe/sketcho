@@ -32,7 +32,7 @@ import net.sevenscales.editor.gfx.domain.ICircle;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
-import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.gfx.domain.Point;
 
 public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseMoveHandler, 
 																					GraphicsTouchMoveHandler, GraphicsTouchEndHandler, 

@@ -36,7 +36,7 @@ import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.utils.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
-import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.gfx.domain.Point;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;

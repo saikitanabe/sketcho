@@ -28,7 +28,7 @@ import net.sevenscales.editor.silver.SilverUtils;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
-import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
@@ -284,7 +284,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 
   @Override
   public void setShape(int left, int top, int width, int height) {
-  	if (width > 1 && height > 1) {
+  	if (width >= 0 && height >= 0) {
 	  	this.left = left;
 	  	this.top = top;
 	  	this.width = width;

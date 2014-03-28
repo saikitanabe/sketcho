@@ -23,7 +23,7 @@ import net.sevenscales.editor.silver.SilverUtils;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
-import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;

@@ -11,7 +11,7 @@ import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
-import net.sevenscales.editor.uicomponents.Point;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
 
 public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiagramDoubleClickHandler, MouseLongPressHandler {
