@@ -94,7 +94,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 
     background = IShapeFactory.Util.factory(editable).createRectangle(group);
     background.setFill(0, 0 , 0, 0); // transparent
-    // background.setStroke("#000000");
+    // background.setStroke("#363636");
 
 		addEvents(background);
 		
@@ -284,16 +284,27 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 
   @Override
   public void setShape(int left, int top, int width, int height) {
+  	// if ((width > 1 && height >= 0) || (height > 1 && width >= 0)) {
   	if (width >= 0 && height >= 0) {
 	  	this.left = left;
 	  	this.top = top;
 	  	this.width = width;
 	  	this.height = height;
 
-	    background.setShape(left, top, width, height, 0);
+	  	// setting some minimum width and height in case those are zero
+	    background.setShape(left, top, width == 0 ? 4 : width, height == 0 ? 4 : height, 0);
 
-			double factorX = (width / shapeWidth());
-			double factorY = (height / shapeHeight());
+			// cannot divide with zero!!
+			double factorX = 1;
+			if (width > 0) {
+				factorX = (width / shapeWidth());
+			}
+
+			double factorY = 1; 
+			if (height > 0) {
+				factorY = (height / shapeHeight());
+			}
+
 	  	subgroup.setScale(factorX, factorY);
 	  	subgroup.setTransform(left, top);
 	  	if (UiUtils.isIE()) {
