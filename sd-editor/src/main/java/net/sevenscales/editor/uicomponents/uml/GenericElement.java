@@ -305,6 +305,15 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 				factorY = (height / shapeHeight());
 			}
 
+	  	if (shape.getSvgData() != null && shape.getSvgData().getWidth() == 0) {
+	  		// cannot scale width or svg line will disappear
+	  		factorX = 1;
+	  	}
+	  	if (shape.getSvgData() != null && shape.getSvgData().getHeight() == 0) {
+	  		// cannot scale height or svg line will disappear
+	  		factorY = 1;
+	  	}
+
 	  	subgroup.setScale(factorX, factorY);
 	  	subgroup.setTransform(left, top);
 	  	if (UiUtils.isIE()) {
