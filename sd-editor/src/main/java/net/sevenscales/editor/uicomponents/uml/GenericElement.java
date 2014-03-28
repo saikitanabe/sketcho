@@ -85,8 +85,8 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
     // subgroup.setAttribute("cursor", "default");
 
   	paths = new ArrayList<IPath>(); // theshape.protos.length
-  	if (shape.getSvg() != null) {
-  		createCustomPath(shape.getSvg());
+  	if (shape.getSvgData() != null) {
+  		createCustomPath(shape.getSvgData().getSvg());
   	} else {
 	  	theshape = Shapes.get(getDiagramItem().getType());
 	    createSubPaths(theshape);
@@ -210,7 +210,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-    GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth() * factorX, getHeight() * factorY, shape.getShapeProperties(), shape.getSvg());
+    GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth() * factorX, getHeight() * factorY, shape.getShapeProperties(), shape.getSvgData());
     Diagram result = new GenericElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, DiagramItemDTO.createGenericItem(ElementType.getEnum(getDiagramItem().getType())));
     return result;
   }
@@ -313,10 +313,10 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   }
 
   private double shapeWidth() {
-  	return theshape != null ? theshape.width : shape.rectShape.width;
+  	return theshape != null ? theshape.width : shape.getSvgData().getWidth();
   }
   private double shapeHeight() {
-  	return theshape != null ? theshape.height : shape.rectShape.height;
+  	return theshape != null ? theshape.height : shape.getSvgData().getHeight();
   }
 
   public void setHighlightColor(String color) {

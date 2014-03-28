@@ -69,4 +69,15 @@ public class JSONParserHelpers {
 		return result;
 	}
 
+	public static ISvgDataRO getSvgData(JSONValue value) {
+		ISvgDataRO result = null;
+		if (value != null && value.isObject() != null) {
+			JSONObject object = value.isObject();
+			result = new SvgDataDTO(getString(object.get(DiagramItemField.SVG.getValue())), 
+													 		getDouble(object.get(DiagramItemField.SVG_WIDTH.getValue())),
+													 		getDouble(object.get(DiagramItemField.SVG_HEIGHT.getValue())));
+		}
+		return result;
+	}
+
 }

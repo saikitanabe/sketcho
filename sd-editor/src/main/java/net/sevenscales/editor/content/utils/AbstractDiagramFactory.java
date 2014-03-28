@@ -411,7 +411,7 @@ public interface AbstractDiagramFactory {
   public class GenericFactory implements AbstractDiagramFactory {
     public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
       String[] s = item.getShape().split(",");
-      return new GenericShape(item.getType(), s, item.getShapeProperties(), item.getSvg()).move(moveX, moveY);
+      return new GenericShape(item.getType(), s, item.getShapeProperties(), item.getSvgData()).move(moveX, moveY);
     }
 
     public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {

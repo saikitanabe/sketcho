@@ -27,6 +27,7 @@ import net.sevenscales.editor.content.ui.UIKeyHelpers;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.SvgDataDTO;
 
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Event;
@@ -102,7 +103,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
         int scaledHeight = ScaleHelpers.scaleValue(height, surface.getScaleFactor());
         GenericElement diagram = new GenericElement(surface, 
           new GenericShape(ElementType.FREEHAND2.getValue(), 
-                           pos.scaledAndTranslatedPoint.x, pos.scaledAndTranslatedPoint.y, scaledWidth, scaledHeight, 0, svg),
+                           pos.scaledAndTranslatedPoint.x, pos.scaledAndTranslatedPoint.y, scaledWidth, scaledHeight, 0, new SvgDataDTO(svg, scaledWidth, scaledHeight)),
           "", 
           Theme.createDefaultBackgroundColor(), 
           Theme.createDefaultBorderColor(), 

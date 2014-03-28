@@ -1,33 +1,34 @@
 package net.sevenscales.editor.diagram.shape;
 
 import net.sevenscales.editor.content.utils.DiagramHelpers;
+import net.sevenscales.domain.ISvgDataRO;
 
 
 public class GenericShape extends HasRectShape {
   private String elementType;
   private int shapeProperties;
-  private String svg;
+  private ISvgDataRO svgdata;
 
-  public GenericShape(String elementType, String[] shape, String svg) {
-    this(elementType, shape, 0, svg);
+  public GenericShape(String elementType, String[] shape, ISvgDataRO svgdata) {
+    this(elementType, shape, 0, svgdata);
   }
 
-  public GenericShape(String elementType, String[] shape, int shapeProperties, String svg) {
+  public GenericShape(String elementType, String[] shape, int shapeProperties, ISvgDataRO svgdata) {
     super(shape);
     this.elementType = elementType;
     this.shapeProperties = shapeProperties;
-    this.svg = svg;
+    this.svgdata = svgdata;
   }
 
   public GenericShape(String elementType, int left, int top, int width, int height) {
     this(elementType, left, top, width, height, 0, null);
   }
 
-  public GenericShape(String elementType, int left, int top, int width, int height, int shapeProperties, String svg) {
+  public GenericShape(String elementType, int left, int top, int width, int height, int shapeProperties, ISvgDataRO svgdata) {
     super(left, top, width, height);
     this.elementType = elementType;
     this.shapeProperties = shapeProperties;
-    this.svg = svg;
+    this.svgdata = svgdata;
   }
 
   public String getElementType() {
@@ -46,11 +47,11 @@ public class GenericShape extends HasRectShape {
     return shapeProperties;
   }
 
-  public void setSvg(String svg) {
-    this.svg = svg;
+  public void setSvgData(ISvgDataRO svgdata) {
+    this.svgdata = svgdata;
   }
-  public String getSvg() {
-    return svg;
+  public ISvgDataRO getSvgData() {
+    return svgdata;
   }
   
 }

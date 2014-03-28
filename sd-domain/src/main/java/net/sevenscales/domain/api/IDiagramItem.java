@@ -1,13 +1,14 @@
 package net.sevenscales.domain.api;
 
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.ISvgDataRO;
 
 
 public interface IDiagramItem extends IDiagramItemRO {
   void setText(String text);
 	void setType(String type);
 	void setShape(String shape);
-  void setSvg(String svg);
+  void setSvgData(ISvgDataRO svgdata);
 	void setBackgroundColor(String backgroundColor);
 	void setTextColor(String textColor);
   void setFontSize(Integer fontSize);

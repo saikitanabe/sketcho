@@ -67,8 +67,13 @@ public class JsonExtraction {
     result.put("text", new JSONString(text));
     result.put("elementType", new JSONString(safeJsonString(item.getType())));
     result.put("shape", new JSONString(safeJsonString(item.getShape())));
-    if (item.getSvg() != null) {
-      result.put(DiagramItemField.SVG.getValue(), new JSONString(item.getSvg()));
+    if (item.getSvgData() != null) {
+      JSONObject svgdata = new JSONObject();
+      svgdata.put(DiagramItemField.SVG.getValue(), new JSONString(item.getSvgData().getSvg()));
+      svgdata.put(DiagramItemField.SVG_WIDTH.getValue(), new JSONNumber(item.getSvgData().getWidth()));
+      svgdata.put(DiagramItemField.SVG_HEIGHT.getValue(), new JSONNumber(item.getSvgData().getHeight()));
+
+      result.put(DiagramItemField.SVG_DATA.getValue(), svgdata);
     }
     result.put("backgroundColor", new JSONString(safeJsonString(item.getBackgroundColor())));
     result.put("textColor", new JSONString(safeJsonString(item.getTextColor())));
