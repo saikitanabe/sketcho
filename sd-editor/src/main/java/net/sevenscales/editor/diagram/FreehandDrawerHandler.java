@@ -11,15 +11,19 @@ import net.sevenscales.editor.api.event.OperationQueueRequestEvent;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.utils.IntegerHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
+import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.diagram.shape.FreehandShape;
+import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IPolyline;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.uicomponents.uml.GenericElement;
 import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 import net.sevenscales.editor.content.ui.UIKeyHelpers;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.utils.SLogger;
 
 import com.google.gwt.dom.client.NativeEvent;
@@ -73,19 +77,35 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       polyline.setStrokeWidth(FreehandElement.FREEHAND_STROKE_WIDTH);
     }
 
-    FreehandElement plot() {
+    GenericElement plot() {
       if (polyline != null && points.size() > 2) {
         // logger.debug("PLOTTING...");
-        List<Integer> filteredPoints = null;
-        if (staticMovement) {
-          filteredPoints = allPoints();
-        } else {
-          filteredPoints = filterPoints();
-        }
+
+        // if (staticMovement) {
+        //   filteredPoints = allPoints();
+        // } else {
+        //   filteredPoints = fitPointsToSvg();
+        // }
+        int left = DiagramHelpers.getLeftCoordinate(points);
+        int top = DiagramHelpers.getTopCoordinate(points);
+        int width = DiagramHelpers.getWidth(points);
+        int height = DiagramHelpers.getHeight(points);
+
+        String svg = fitPointsToSvg(left, top);
         
-        FreehandElement diagram = new FreehandElement(surface, new FreehandShape(IntegerHelpers.toIntArray(filteredPoints)),
-            Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(),
-            surface.getEditorContext().isEditable(), new DiagramItemDTO());
+        // FreehandElement diagram = new FreehandElement(surface, new FreehandShape(IntegerHelpers.toIntArray(filteredPoints)),
+        //     Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(),
+        //     surface.getEditorContext().isEditable(), new DiagramItemDTO());
+
+        GenericElement diagram = new GenericElement(surface, 
+          new GenericShape(ElementType.FREEHAND2.getValue(), 
+                           left, top, width, height, 0, svg),
+          "", 
+          Theme.createDefaultBackgroundColor(), 
+          Theme.createDefaultBorderColor(), 
+          Theme.createDefaultTextColor(),
+          surface.getEditorContext().isEditable(), 
+          DiagramItemDTO.createGenericItem(ElementType.FREEHAND2));
         // surface.add(diagram, true);
         polyline.setVisibility(false);
         points.clear();
@@ -100,30 +120,16 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       return null;
     }
 
-    private List<Integer> allPoints() {
-      List<Integer> result = new ArrayList<Integer>();
-      for (int i = 0; i < points.size(); i += 2) {
-        addTranslatedPoint(points.get(i), points.get(i + 1), result);
-      }
-      return result;
-    }
-
-    private List<Integer> filterPoints() {
+    private String fitPointsToSvg(int x, int y) {
       int modeType = surface.getEditorContext().<FreehandModeType>getAs(EditorProperty.FREEHAND_MODE_TYPE).value();
-      logger.debug("filterPoints modeType {}", modeType);
+      logger.debug("fitPointsToSvg modeType {}", modeType);
       List<Integer> result = new ArrayList<Integer>();
       for (int i = 0; i < points.size(); i += 2) {
-        // if (i % modeType == 0) {
-        addTranslatedPoint(points.get(i), points.get(i + 1), result);
-        // }
+        // addTranslatedPoint(points.get(i), points.get(i + 1), result);
+        result.add(points.get(i) - x);
+        result.add(points.get(i + 1) - y);
       }
-      
-      // add last point just in case if it has been filtered out above
-      addTranslatedPoint(points.get(points.size()-2), points.get(points.size()-1), result);
-
-      fit(result);
-
-      return result;
+      return fit(result);
     }
   
     private void addTranslatedPoint(int x, int y, List<Integer> points) {
@@ -132,19 +138,20 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       points.add(point.getY() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor()));
     }
 
-    private void fit(List<Integer> points) {
+    private String fit(List<Integer> points) {
       JsArrayInteger dest = JsArrayInteger.createArray().cast();
       for (Integer i : points) {
         dest.push(i.intValue());
       }
-      JsArray<PaperSegment> segments = fit(dest);
-      for (int i = 0; i < segments.length(); ++i) {
-        PaperPoint point = segments.get(i).getPoint();
-        logger.debug("seg {}, {}", point.getX(), point.getY());
-      }
+      // JsArray<PaperSegment> segments = fit(dest);
+      // for (int i = 0; i < segments.length(); ++i) {
+      //   PaperPoint point = segments.get(i).getPoint();
+      //   logger.debug("seg {}, {}", point.getX(), point.getY());
+      // }
+      return fit(dest);
     }
 
-    private native JsArray<PaperSegment> fit(JsArrayInteger points)/*-{
+    private native String /*JsArray<PaperSegment>*/ fit(JsArrayInteger points)/*-{
       var segs = []
       for (var i = 0; i < points.length; i += 2) {
         segs.push(new $wnd.paper.Segment(points[i], points[i + 1]))
@@ -183,7 +190,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 
         if (segments.length === 0)
           return '';
-        parts.push('M' + f.point(segments[0]._point));
+        parts.push('m' + f.point(segments[0]._point));
         for (var i = 0, l = segments.length  - 1; i < l; i++)
           addCurve(segments[i], segments[i + 1], false);
         if (this._closed) {
@@ -194,7 +201,8 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       }
 
       console.log(getPathData(fitter.fit()));
-      return fitter.fit();
+      // return fitter.fit();
+      return getPathData(fitter.fit());
     }-*/;
 
   }
@@ -395,7 +403,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     // logger.debug("PLOTTING size {}...", freehandPahts.size());
     List<Diagram> drawing = new ArrayList<Diagram>();
     for (FreehandPath fp : freehandPahts) {
-      FreehandElement fe = fp.plot();
+      GenericElement fe = fp.plot();
       if (fe != null) {
         drawing.add(fe);
       }

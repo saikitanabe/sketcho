@@ -8,15 +8,15 @@ public class GenericShape extends HasRectShape {
   private int shapeProperties;
   private String svg;
 
-  public GenericShape(String elementType, String[] shape) {
-    this(elementType, shape, 0);
+  public GenericShape(String elementType, String[] shape, String svg) {
+    this(elementType, shape, 0, svg);
   }
 
-  public GenericShape(String elementType, String[] shape, int shapeProperties) {
+  public GenericShape(String elementType, String[] shape, int shapeProperties, String svg) {
     super(shape);
     this.elementType = elementType;
     this.shapeProperties = shapeProperties;
-    this.svg = null;
+    this.svg = svg;
   }
 
   public GenericShape(String elementType, int left, int top, int width, int height) {

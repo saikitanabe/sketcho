@@ -311,6 +311,7 @@ public class DiagramItemFactory {
     } else if (shape instanceof GenericShape) {
       GenericShape s = (GenericShape) shape;
       result = getItem(diagram);
+      result.setSvg(s.getSvg());
       shapetext += rect2ShapeText(s.rectShape, moveX, moveY);
       // makes sure that type is not manipulated
       type = ElementType.getEnum(result.getType()).getValue();

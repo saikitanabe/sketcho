@@ -17,7 +17,7 @@ public enum ElementType {
 	TEXT_ITEM("textitem"),
 	ACTOR("actoritem"),
 	RELATIONSHIP("relationship"),
-	FREEHAND("freehand"),
+	FREEHAND("freehand"), /* deprecated legary freehand */
 	PACKAGE("package"),
 	VERTICAL_PARTITION("rectcont"),
 	COMMENT_THREAD("comments"),
@@ -41,7 +41,8 @@ public enum ElementType {
 	ARROW_LEFT("arrow-l"),
 	IPHONE("iphone"),
 	WEB_BROWSER("w-browser"),
-	RECT("rect");
+	RECT("rect"),
+	FREEHAND2("freehand2");
 
 	private String value;
 

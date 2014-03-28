@@ -84,10 +84,13 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
     // subgroup.setAttribute("cursor", "default");
 
-  	theshape = Shapes.get(getDiagramItem().getType());
-
-  	paths = new ArrayList<IPath>(theshape.protos.length);
-    createSubPaths(theshape);
+  	paths = new ArrayList<IPath>(); // theshape.protos.length
+  	if (shape.getSvg() != null) {
+  		createCustomPath(shape.getSvg());
+  	} else {
+	  	theshape = Shapes.get(getDiagramItem().getType());
+	    createSubPaths(theshape);
+  	}
 
     background = IShapeFactory.Util.factory(editable).createRectangle(group);
     background.setFill(0, 0 , 0, 0); // transparent
@@ -133,17 +136,26 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	private IPath createSubPath(Shapes.Proto proto) {
-    IPath path = IShapeFactory.Util.factory(editable).createPath(subgroup, pathTransformer);
-    path.setStroke(borderWebColor);
-    path.setStrokeWidth(FREEHAND_STROKE_WIDTH);
-    path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+		return createSubPath(proto.path, proto.style);
+	}
+
+	private IPath createSubPath(String path, String style) {
+    IPath result = IShapeFactory.Util.factory(editable).createPath(subgroup, pathTransformer);
+    result.setStroke(borderWebColor);
+    result.setStrokeWidth(FREEHAND_STROKE_WIDTH);
+    result.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     // path.setStrokeCap("round");
-    if (proto.style != null) {
-	    path.setAttribute("style", proto.style);
+    if (style != null) {
+	    result.setAttribute("style", style);
     }
-    path.setAttribute("vector-effect", "non-scaling-stroke");
-  	path.setShape(proto.path);
-  	return path;
+    result.setAttribute("vector-effect", "non-scaling-stroke");
+  	result.setShape(path);
+  	return result;
+	}
+
+	private void createCustomPath(String svg) {
+		IPath path = createSubPath(svg, null);
+		paths.add(path);
 	}
 	
 	@Override
@@ -280,8 +292,8 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 
 	    background.setShape(left, top, width, height, 0);
 
-			double factorX = (width / theshape.width);
-			double factorY = (height / theshape.height);
+			double factorX = (width / shapeWidth());
+			double factorY = (height / shapeHeight());
 	  	subgroup.setScale(factorX, factorY);
 	  	subgroup.setTransform(left, top);
 	  	if (UiUtils.isIE()) {
@@ -298,6 +310,13 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	    textUtil.setTextShape();
 			super.applyHelpersShape();
   	}
+  }
+
+  private double shapeWidth() {
+  	return theshape != null ? theshape.width : shape.rectShape.width;
+  }
+  private double shapeHeight() {
+  	return theshape != null ? theshape.height : shape.rectShape.height;
   }
 
   public void setHighlightColor(String color) {
