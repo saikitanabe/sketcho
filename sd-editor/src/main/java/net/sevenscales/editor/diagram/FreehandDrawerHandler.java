@@ -23,6 +23,7 @@ import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
 import net.sevenscales.editor.uicomponents.uml.FreehandElement;
+import net.sevenscales.editor.uicomponents.AngleUtil2;
 import net.sevenscales.editor.content.ui.UIKeyHelpers;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
@@ -139,12 +140,6 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       return fit(result);
     }
   
-    private void addTranslatedPoint(int x, int y, List<Integer> points) {
-      MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
-      points.add(point.getX() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformX(), surface.getScaleFactor()));
-      points.add(point.getY() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor()));
-    }
-
     private String fit(List<Integer> points) {
       JsArrayInteger dest = JsArrayInteger.createArray().cast();
       for (Integer i : points) {
@@ -337,11 +332,16 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   	int y = point.getScreenY();
   	
     int size = currentFreehandPath.points.size();
-    if (staticMovement && size > 2) {
+    if (staticMovement && size >= 4) {
       int posx = size - 2;
       int posy = size - 1;
-      currentFreehandPath.points.set(posx, x);
-      currentFreehandPath.points.set(posy, y);
+      int prevxpos = size - 4;
+      int prevypos = size - 3;
+      int x1 = currentFreehandPath.points.get(prevxpos);
+      int y1 = currentFreehandPath.points.get(prevypos);
+      Point ep = endPoint(x1, y1, x, y);
+      currentFreehandPath.points.set(posx, ep.x);
+      currentFreehandPath.points.set(posy, ep.y);
     } else {
       currentFreehandPath.points.add(x);
       currentFreehandPath.points.add(y);
@@ -349,6 +349,39 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   	
   	currentFreehandPath.polyline.setShape(currentFreehandPath.points);
 	}
+
+  private Point endPoint(int x1, int y1, int x2, int y2) {
+    final double angle0 = 0;
+    final double angle45 = Math.PI / 4;
+    final double angle90 = Math.PI / 2;
+    final double angle135 = 3 * Math.PI / 4;
+    final double angle180 = Math.PI;
+    final double angle225 = 5 * Math.PI / 4 - 2 * Math.PI;
+    final double angle270 = 3 * Math.PI / 2 - 2 * Math.PI;
+    final double angle315 = 7 * Math.PI / 4 - 2 * Math.PI;
+    final double[] angles = new double[]{angle0, angle45, angle90, angle135, angle180, angle225, angle270, angle315};
+
+    int dy = y2 - y1;
+    int dx = x2 - x1;
+    double theta = Math.atan2(dy, dx);
+
+    double smallest = Double.MAX_VALUE;
+    double theangle = angle0;
+    for (double a : angles) {
+      double diff = Math.abs(theta - a);
+      if (diff < smallest) {
+        theangle = a;
+        smallest = diff;
+      }
+    }
+
+    double length = Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2));
+
+    // (x2,y2)=(x1+l⋅cos(a),y1+l⋅sin(a))
+    double rx2 = x1 + length * Math.cos(theangle);
+    double ry2 = y1 + length * Math.sin(theangle);
+    return new Point((int)rx2, (int)ry2);
+  }
 
   private class PlotTimer extends Timer {
     public PlotTimer() {
