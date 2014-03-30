@@ -7,6 +7,7 @@ import java.util.Map;
 
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.domain.api.IExtension;
 import net.sevenscales.domain.utils.JsonFormat;
 import net.sf.hibernate4gwt.pojo.java5.LazyPojo;
 
@@ -19,7 +20,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	private String text;
 	private String type;
 	private String shape;
-	private ISvgDataRO svgdata;
+	private IExtension extension;
   private IDiagramContent diagramContent;
 	private String backgroundColor;
 	private String textColor;
@@ -60,8 +61,8 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 				+ "]";
 	}
   
-	public DiagramItemDTO(String text, String type, String shape, ISvgDataRO svgdata, String backgroundColor, String textColor, Integer fontSize, Integer shapeProperties, Integer displayOrder, int version, Long id, String clientId, String customData, List<UrlLinkDTO> links) {
-    this(text, type, shape, svgdata, backgroundColor, textColor, fontSize, shapeProperties, displayOrder, version, id, clientId, customData, 0, 0, 0, links);
+	public DiagramItemDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer fontSize, Integer shapeProperties, Integer displayOrder, int version, Long id, String clientId, String customData, List<UrlLinkDTO> links) {
+    this(text, type, shape, extension, backgroundColor, textColor, fontSize, shapeProperties, displayOrder, version, id, clientId, customData, 0, 0, 0, links);
   }
 
 //	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
@@ -69,13 +70,13 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 //		this(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, crc32, 0, 0, null);
 //	}
 
-	public DiagramItemDTO(String text, String type, String shape, ISvgDataRO svgdata, String backgroundColor, String textColor, Integer fontSize, Integer shapeProperties, Integer displayOrder, Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, List<UrlLinkDTO> links
+	public DiagramItemDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer fontSize, Integer shapeProperties, Integer displayOrder, Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, List<UrlLinkDTO> links
 			) {
 		super();
 		this.text = text;
 		this.type = type;
 		this.shape = shape;
-		this.svgdata = svgdata;
+		this.extension = extension;
 		this.backgroundColor = backgroundColor;
 		this.textColor = textColor;
 		this.fontSize = fontSize;
@@ -92,7 +93,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 	
 	public DiagramItemDTO(String clientId) {
-		this("", "", "", /* svg */ null, "", "", null, /* shapeProperties */null, /* displayOrder */ null, 0, 0L, clientId, "", 0, 0, 0, null);
+		this("", "", "", /* extension */ null, "", "", null, /* shapeProperties */null, /* displayOrder */ null, 0, 0L, clientId, "", 0, 0, 0, null);
 	}
 
 	public DiagramItemDTO(IDiagramItemRO di) {
@@ -129,11 +130,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	  this.shape = shape;
 	}
 
-	public ISvgDataRO getSvgData() {
-		return svgdata;
+	public IExtension getExtension() {
+		return extension;
 	}
-	public void setSvgData(ISvgDataRO svgdata) {
-		this.svgdata = svgdata;
+	public void setExtension(IExtension extension) {
+		this.extension = extension;
 	}
 	
 	public IDiagramContent getDiagramContent() {
@@ -343,6 +344,22 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 				links.add(new UrlLinkDTO(link.getUrl()));
 			}
 		}
+
+		if (dit.extension != null) {
+			copyExtensions(dit.extension);
+		}
+	}
+
+	private void copyExtensions(IExtension ext) {
+		if (ext.getSvgData() != null) {
+			List<PathDTO> paths = new ArrayList<PathDTO>();
+			ISvgDataRO svgdata = ext.getSvgData();
+			for (IPathRO p : svgdata.getPaths()) {
+				paths.add(p.copy());
+			}
+			SvgDataDTO copysvgdata = new SvgDataDTO(paths, svgdata.getWidth(), svgdata.getHeight());
+			extension = new ExtensionDTO(copysvgdata);
+		}
 	}
 
 	public boolean isComment() {
@@ -422,6 +439,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 
 		if (links != item.getLinks() || (links != null && !links.equals(item.getLinks()))) {
 			return false;
+		}
+
+		if (checkIfNotSame(extension, item.getExtension())) {
+			updateDirtyFields(dirtyFields, DiagramItemField.EXTENSION);
+			result = false;
 		}
 
 		return result;

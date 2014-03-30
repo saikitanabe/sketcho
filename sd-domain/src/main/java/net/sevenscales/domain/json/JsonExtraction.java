@@ -11,6 +11,8 @@ import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.utils.JsonFormat;
 import net.sevenscales.domain.DiagramItemField;
+import net.sevenscales.domain.ISvgDataRO;
+import net.sevenscales.domain.IPathRO;
 
 
 public class JsonExtraction {
@@ -67,13 +69,9 @@ public class JsonExtraction {
     result.put("text", new JSONString(text));
     result.put("elementType", new JSONString(safeJsonString(item.getType())));
     result.put("shape", new JSONString(safeJsonString(item.getShape())));
-    if (item.getSvgData() != null) {
-      JSONObject svgdata = new JSONObject();
-      svgdata.put(DiagramItemField.SVG.getValue(), new JSONString(item.getSvgData().getSvg()));
-      svgdata.put(DiagramItemField.SVG_WIDTH.getValue(), new JSONNumber(item.getSvgData().getWidth()));
-      svgdata.put(DiagramItemField.SVG_HEIGHT.getValue(), new JSONNumber(item.getSvgData().getHeight()));
-
-      result.put(DiagramItemField.SVG_DATA.getValue(), svgdata);
+    if (item.getExtension() != null) {
+      JSONObject ext = decomposeExtension(item);
+      result.put(DiagramItemField.EXTENSION.getValue(), ext);
     }
     result.put("backgroundColor", new JSONString(safeJsonString(item.getBackgroundColor())));
     result.put("textColor", new JSONString(safeJsonString(item.getTextColor())));
@@ -118,6 +116,36 @@ public class JsonExtraction {
     return result;
 	}
 
+  /**
+  * Handle each extension value in here.
+  */
+  private static JSONObject decomposeExtension(DiagramItemDTO item) {
+    JSONObject result = new JSONObject();
+    if (item.getExtension().getSvgData() != null) {
+      JSONObject jsvgdata = new JSONObject();
+      ISvgDataRO svgdataro = item.getExtension().getSvgData();
+      JSONArray paths = getJsonPaths(svgdataro);
+      jsvgdata.put(DiagramItemField.PATHS.getValue(), paths);
+      jsvgdata.put(DiagramItemField.SVG_WIDTH.getValue(), new JSONNumber(svgdataro.getWidth()));
+      jsvgdata.put(DiagramItemField.SVG_HEIGHT.getValue(), new JSONNumber(svgdataro.getHeight()));
+      result.put(DiagramItemField.SVG_DATA.getValue(), jsvgdata);
+    }
+    return result;
+  }
+
+  private static JSONArray getJsonPaths(ISvgDataRO svgdataro) {
+    JSONArray result = new JSONArray();
+    for (int i = 0; i < svgdataro.getPaths().size(); ++i) {
+      IPathRO path = svgdataro.getPaths().get(i);
+      JSONObject jpath = new JSONObject();
+      jpath.put(DiagramItemField.PATH.getValue(), new JSONString(path.getPath()));
+      if (path.getStyle() != null && !"".equals(path.getStyle())) {
+        jpath.put(DiagramItemField.STYLE.getValue(), new JSONString(path.getStyle()));
+      }
+      result.set(i, jpath);
+    }
+    return result;
+  }
 
 	public static  JSONValue toJson(IDiagramContent content, JsonFormat jsonFormat) {
 		return decompose(content, jsonFormat);

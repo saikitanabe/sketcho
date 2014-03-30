@@ -8,6 +8,8 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONObject;
 
+import net.sevenscales.domain.api.IExtension;
+
 public class JSONParserHelpers {
 	public static int getInt(JSONValue value) {
 		return value != null && value.isNumber() != null ? (int) value.isNumber().doubleValue() : 0;
@@ -69,13 +71,37 @@ public class JSONParserHelpers {
 		return result;
 	}
 
+	public static IExtension getExtension(JSONValue value) {
+		IExtension result = null;
+		if (value != null && value.isObject() != null) {
+			JSONObject extension = value.isObject();
+			result = new ExtensionDTO(getSvgData(extension.get(DiagramItemField.SVG_DATA.getValue())));
+		}
+		return result;
+	}
+
 	public static ISvgDataRO getSvgData(JSONValue value) {
 		ISvgDataRO result = null;
 		if (value != null && value.isObject() != null) {
-			JSONObject object = value.isObject();
-			result = new SvgDataDTO(getString(object.get(DiagramItemField.SVG.getValue())), 
-													 		getDouble(object.get(DiagramItemField.SVG_WIDTH.getValue())),
-													 		getDouble(object.get(DiagramItemField.SVG_HEIGHT.getValue())));
+			JSONObject svgdata = value.isObject();
+			JSONValue pathsvalue = svgdata.get(DiagramItemField.PATHS.getValue());
+			if (pathsvalue != null && pathsvalue.isArray() != null) {
+				JSONArray jpaths = pathsvalue.isArray();
+				int size = jpaths.size();
+				List<PathDTO> pathsdto = new ArrayList<PathDTO>();
+				for (int i = 0; i < size; ++i) {
+					JSONValue jpath = jpaths.get(i);
+					if (jpath != null && jpath.isObject() != null) {
+						JSONObject path = jpath.isObject();
+						String svgpath = getString(path.get(DiagramItemField.PATH.getValue()));
+						String svgstyle = getString(path.get(DiagramItemField.STYLE.getValue()));
+						pathsdto.add(new PathDTO(svgpath, svgstyle));
+					}
+				}
+				result = new SvgDataDTO(pathsdto, 
+														 		getDouble(svgdata.get(DiagramItemField.SVG_WIDTH.getValue())),
+														 		getDouble(svgdata.get(DiagramItemField.SVG_HEIGHT.getValue())));
+			}
 		}
 		return result;
 	}

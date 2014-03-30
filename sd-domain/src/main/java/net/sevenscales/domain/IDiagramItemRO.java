@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.domain.api.IExtension;
 import net.sevenscales.domain.utils.JsonFormat;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -15,7 +16,7 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	String getText();
 	String getType();
 	String getShape();
-	ISvgDataRO getSvgData();
+	IExtension getExtension();
 	String getBackgroundColor();
 	String getTextColor();
 	Integer getFontSize();

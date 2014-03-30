@@ -11,6 +11,7 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.ExtensionDTO;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
@@ -311,7 +312,10 @@ public class DiagramItemFactory {
     } else if (shape instanceof GenericShape) {
       GenericShape s = (GenericShape) shape;
       result = getItem(diagram);
-      result.setSvgData(s.getSvgData());
+      if (s.getSvgData() != null) {
+        ExtensionDTO ext = new ExtensionDTO(s.getSvgData());
+        result.setExtension(ext);
+      }
       shapetext += rect2ShapeText(s.rectShape, moveX, moveY);
       // makes sure that type is not manipulated
       type = ElementType.getEnum(result.getType()).getValue();

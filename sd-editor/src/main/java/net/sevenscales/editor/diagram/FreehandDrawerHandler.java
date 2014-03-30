@@ -29,6 +29,8 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.SvgDataDTO;
+import net.sevenscales.domain.IPathRO;
+import net.sevenscales.domain.PathDTO;
 
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Event;
@@ -69,6 +71,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     IPolyline polyline;
     List<Integer> points = new ArrayList<Integer>();
     ISurfaceHandler surface;
+    boolean curve = true;
 
     FreehandPath(ISurfaceHandler surface) {
       this.surface = surface;
@@ -85,26 +88,31 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       if (polyline != null && points.size() > 2) {
         // logger.debug("PLOTTING...");
 
-        // if (staticMovement) {
-        //   filteredPoints = allPoints();
-        // } else {
-        //   filteredPoints = fitPointsToSvg();
-        // }
         int absleft = DiagramHelpers.getLeftCoordinate(points);
         int abstop = DiagramHelpers.getTopCoordinate(points);
         int width = DiagramHelpers.getWidth(points);
         int height = DiagramHelpers.getHeight(points);
 
+        String svg = null;
+        if (curve) {
+          svg = fitPointsToSvg(absleft, abstop);
+        } else {
+          // if staticMovement, do not simplify path! Format path with lines
+          svg = formatAllPointsAsLines(absleft, abstop);
+        }
+
         // use absolute values to calculate relative points
-        String svg = fitPointsToSvg(absleft, abstop);
         ScaledAndTranslatedPoint pos = ScaleHelpers.scaleAndTranslateScreenpoint(absleft, abstop, surface);
         // need to scale width and height to correspond screen coordinates
         // doe not translate, wince only left, top is scaled and translated!
         int scaledWidth = ScaleHelpers.scaleValue(width, surface.getScaleFactor());
         int scaledHeight = ScaleHelpers.scaleValue(height, surface.getScaleFactor());
+        List<PathDTO> paths = new ArrayList<PathDTO>();
+        paths.add(new PathDTO(svg, ""));
+        SvgDataDTO svgdata = new SvgDataDTO(paths, scaledWidth, scaledHeight);
         GenericElement diagram = new GenericElement(surface, 
           new GenericShape(ElementType.FREEHAND2.getValue(), 
-                           pos.scaledAndTranslatedPoint.x, pos.scaledAndTranslatedPoint.y, scaledWidth, scaledHeight, 0, new SvgDataDTO(svg, scaledWidth, scaledHeight)),
+                           pos.scaledAndTranslatedPoint.x, pos.scaledAndTranslatedPoint.y, scaledWidth, scaledHeight, 0, svgdata),
           "", 
           Theme.createDefaultBackgroundColor(), 
           Theme.createDefaultBorderColor(), 
@@ -125,19 +133,55 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       return null;
     }
 
+    private String formatAllPointsAsLines(int absx, int absy) {
+      String result = "";
+      List<Integer> relative = relativePoints(absx, absy);
+      for (int i = 0; i < relative.size(); i += 2) {
+        if (i == 0) {
+          result += "m";
+        } else {
+          result += " ";
+        }
+        result += relative.get(i) + "," + relative.get(i + 1);
+      }
+      return result;
+    }
+
     private String fitPointsToSvg(int absx, int absy) {
       int modeType = surface.getEditorContext().<FreehandModeType>getAs(EditorProperty.FREEHAND_MODE_TYPE).value();
       logger.debug("fitPointsToSvg modeType {}", modeType);
+      List<Integer> relative = relativePoints(absx, absy);
+      return fit(relative);
+    }
+
+    private List<Integer> relativePoints(int absx, int absy) {
       List<Integer> result = new ArrayList<Integer>();
+      int prevx = absx;
+      int prevy = absy;
+
       for (int i = 0; i < points.size(); i += 2) {
         // - calculation from absolute values to relative (use unscaled and translated values)
         // - since this is now relative
         // - do not take into account root layer tranlation and only scale point
         // - left, top will take into account root layer scaling and translation
-        result.add(ScaleHelpers.scaleValue(points.get(i) - absx, surface.getScaleFactor()));
-        result.add(ScaleHelpers.scaleValue(points.get(i + 1) - absy, surface.getScaleFactor()));
+        int ax = points.get(i);
+        int ay = points.get(i + 1); 
+        int x = 0;
+        int y = 0;
+
+        if (curve) {
+          x = ax - absx;
+          y = ay - absy;
+        } else {
+          x = ax - prevx;
+          y = ay - prevy;
+        }
+        result.add(ScaleHelpers.scaleValue(x, surface.getScaleFactor()));
+        result.add(ScaleHelpers.scaleValue(y, surface.getScaleFactor()));
+        prevx = ax;
+        prevy = ay;
       }
-      return fit(result);
+      return result;
     }
   
     private String fit(List<Integer> points) {
@@ -265,6 +309,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 
   private void disableStaticMovement(NativeEvent ne) {
     staticMovement = false;
+    endDrawing();
   }
   
   private void fireToggleFreehandMode() {
@@ -278,22 +323,45 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     currentFreehandPath = new FreehandPath(surface);
     freehandPahts.add(currentFreehandPath);
   }
-    
+
   public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
   	if (!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE) || !surface.getName().equals(ISurfaceHandler.DRAWING_AREA)) {
       return false;
     }
-  	
-    createNewPath();
 
-    this.currentSender = sender;
-    setMouseDown();
-    downX = point.getScreenX();
-    downY = point.getScreenY();
-    currentFreehandPath.points.add(downX);
-    currentFreehandPath.points.add(downY);
-    gridUtils.init(point.getX(), point.getY(), surface.getScaleFactor());
+    startOrContinueExistingPath(sender, point);
 		return false;
+  }
+
+  public void onMouseUp(Diagram sender, MatrixPointJS point) {
+    if (!staticMovement) {
+      endDrawing();
+    }
+  }
+
+  private void startOrContinueExistingPath(Diagram sender, MatrixPointJS point) {
+    if (staticMovement && currentFreehandPath != null && currentFreehandPath.points.size() > 0) {
+      // continue existing freehand path
+      currentFreehandPath.points.add(downX);
+      currentFreehandPath.points.add(downY);
+    } else {
+      // start new freehand drawing
+      createNewPath();
+      this.currentSender = sender;
+      setMouseDown();
+      downX = point.getScreenX();
+      downY = point.getScreenY();
+      currentFreehandPath.points.add(downX);
+      currentFreehandPath.points.add(downY);
+      gridUtils.init(point.getX(), point.getY(), surface.getScaleFactor());
+    }
+  }  
+
+  private void endDrawing() {
+    plotLater();
+    currentSender = null;
+    backgroundMouseDown = true;
+    setMouseUp();
   }
 
   private void setMouseDown() {
@@ -303,6 +371,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 
   private void setMouseUp() {
     mouseDown = false;
+    currentFreehandPath = null;
     surface.getEditorContext().set(EditorProperty.FREEHAND_MOUSE_DOWN, mouseDown);
   }
 
@@ -342,6 +411,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       Point ep = endPoint(x1, y1, x, y);
       currentFreehandPath.points.set(posx, ep.x);
       currentFreehandPath.points.set(posy, ep.y);
+      currentFreehandPath.curve = false;
     } else {
       currentFreehandPath.points.add(x);
       currentFreehandPath.points.add(y);
@@ -456,13 +526,6 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     }
     freehandPahts.clear();
     // logger.debug("PLOTTING... done");
-  }
-
-	public void onMouseUp(Diagram sender, MatrixPointJS point) {
-    plotLater();
-    currentSender = null;
-    backgroundMouseDown = true;
-    setMouseUp();
   }
 	
 	@Override

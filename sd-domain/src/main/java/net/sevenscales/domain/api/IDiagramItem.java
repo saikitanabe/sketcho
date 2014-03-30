@@ -8,7 +8,7 @@ public interface IDiagramItem extends IDiagramItemRO {
   void setText(String text);
 	void setType(String type);
 	void setShape(String shape);
-  void setSvgData(ISvgDataRO svgdata);
+  void setExtension(IExtension extension);
 	void setBackgroundColor(String backgroundColor);
 	void setTextColor(String textColor);
   void setFontSize(Integer fontSize);

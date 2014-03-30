@@ -39,6 +39,8 @@ import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.IPathRO;
+import net.sevenscales.domain.ExtensionDTO;
 
 
 public class GenericElement extends AbstractDiagramItem implements SupportsRectangleShape {
@@ -77,7 +79,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 
 		this.shape = newShape;
 		getDiagramItem().setShapeProperties(newShape.getShapeProperties());
-		
+
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     group.setAttribute("cursor", "default");
 
@@ -86,7 +88,9 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 
   	paths = new ArrayList<IPath>(); // theshape.protos.length
   	if (shape.getSvgData() != null) {
-  		createCustomPath(shape.getSvgData().getSvg());
+  		createCustomPaths(shape.getSvgData().getPaths());
+  		// diagram item needs to have extionsion data as well for undo/redo calculation
+			getDiagramItem().setExtension(new ExtensionDTO(shape.getSvgData().copy()));
   	} else {
 	  	theshape = Shapes.get(getDiagramItem().getType());
 	    createSubPaths(theshape);
@@ -145,7 +149,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
     result.setStrokeWidth(FREEHAND_STROKE_WIDTH);
     result.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     // path.setStrokeCap("round");
-    if (style != null) {
+    if (style != null && !"".equals(style)) {
 	    result.setAttribute("style", style);
     }
     result.setAttribute("vector-effect", "non-scaling-stroke");
@@ -153,9 +157,11 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   	return result;
 	}
 
-	private void createCustomPath(String svg) {
-		IPath path = createSubPath(svg, null);
-		paths.add(path);
+	private void createCustomPaths(List<? extends IPathRO> pathros) {
+		for (IPathRO p : pathros) {
+			IPath path = createSubPath(p.getPath(), p.getStyle());
+			paths.add(path);
+		}
 	}
 	
 	@Override
