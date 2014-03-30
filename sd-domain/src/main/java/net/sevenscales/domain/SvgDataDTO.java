@@ -54,7 +54,7 @@ public class SvgDataDTO implements ISvgData {
 		if (obj == this) {
 			return true;
 		}
-		if (item != null && width == item.width && item.height == height && paths.equals(item.paths)) {
+		if (item != null && width == item.width && height == item.height && paths.equals(item.paths)) {
 			return true;
 		}
 		return false;
