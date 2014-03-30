@@ -57,7 +57,6 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   private int downX;
   private int downY;
   private boolean backgroundMouseDown = true;
-  private Diagram currentSender;
   private boolean mouseDown = false;
   private ISurfaceHandler surface;
 	private boolean freehandKeyDown;
@@ -170,6 +169,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
         int y = 0;
 
         if (curve) {
+          // for some reason need minux first abs from all coordinates...
           x = ax - absx;
           y = ay - absy;
         } else {
@@ -303,8 +303,20 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
         } else if (staticMovement && event.getTypeInt() == Event.ONKEYUP) {
           disableStaticMovement(ne);
         }
+
+        if (event.getTypeInt() == Event.ONMOUSEDOWN) {
+          handleMouseDown(event.getNativeEvent());
+        }
       }
     });
+  }
+
+  private void handleMouseDown(NativeEvent ne) {
+    int x = ne.getClientX();
+    int y = ne.getClientY();
+
+    MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
+    startOrContinueExistingPath(point);
   }
 
   private void disableStaticMovement(NativeEvent ne) {
@@ -325,12 +337,8 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   }
 
   public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
-  	if (!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE) || !surface.getName().equals(ISurfaceHandler.DRAWING_AREA)) {
-      return false;
-    }
-
-    startOrContinueExistingPath(sender, point);
-		return false;
+    // return startOrContinueExistingPath(point);
+    return false;
   }
 
   public void onMouseUp(Diagram sender, MatrixPointJS point) {
@@ -339,7 +347,11 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     }
   }
 
-  private void startOrContinueExistingPath(Diagram sender, MatrixPointJS point) {
+  private boolean startOrContinueExistingPath(MatrixPointJS point) {
+    if (!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE) || !surface.getName().equals(ISurfaceHandler.DRAWING_AREA)) {
+      return false;
+    }
+
     if (staticMovement && currentFreehandPath != null && currentFreehandPath.points.size() > 0) {
       // continue existing freehand path
       currentFreehandPath.points.add(downX);
@@ -347,7 +359,6 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     } else {
       // start new freehand drawing
       createNewPath();
-      this.currentSender = sender;
       setMouseDown();
       downX = point.getScreenX();
       downY = point.getScreenY();
@@ -355,11 +366,11 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       currentFreehandPath.points.add(downY);
       gridUtils.init(point.getX(), point.getY(), surface.getScaleFactor());
     }
+    return true;
   }  
 
   private void endDrawing() {
     plotLater();
-    currentSender = null;
     backgroundMouseDown = true;
     setMouseUp();
   }
@@ -387,7 +398,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       return;
     }
     
-    if (currentSender == null && mouseDown && backgroundMouseDown && freehandIsOn()) {
+    if (mouseDown && backgroundMouseDown && freehandIsOn()) {
       drawFreehand(point);
     }
   }
