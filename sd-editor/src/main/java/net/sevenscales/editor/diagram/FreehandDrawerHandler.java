@@ -63,6 +63,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   private List<FreehandPath> freehandPahts = new ArrayList<FreehandPath>();
   private FreehandPath currentFreehandPath;
   private boolean staticMovement = false;
+  private boolean closePath = false;
 
   private class FreehandPath {
     // private static SLogger logger = SLogger.createLogger(FreehandPath.class);
@@ -143,6 +144,9 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
         }
         result += relative.get(i) + "," + relative.get(i + 1);
       }
+      if (closePath) {
+        result += "z";
+      }
       return result;
     }
 
@@ -181,7 +185,18 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
         prevx = ax;
         prevy = ay;
       }
+
+      trimLastExtreaZeroMove(result);
       return result;
+    }
+
+    private void trimLastExtreaZeroMove(List<Integer> relativePoints) {
+      int size = relativePoints.size();
+      if (size > 2 && relativePoints.get(size - 2) == 0 && relativePoints.get(size - 1) == 0) {
+        // remove last zero move x, y
+        relativePoints.remove(relativePoints.size() - 1);
+        relativePoints.remove(relativePoints.size() - 1);
+      }
     }
   
     private String fit(List<Integer> points) {
@@ -306,6 +321,8 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 
         if (event.getTypeInt() == Event.ONMOUSEDOWN) {
           handleMouseDown(event.getNativeEvent());
+        } else if (event.getTypeInt() == Event.ONDBLCLICK) {
+          handleDoubleClick(event.getNativeEvent());
         }
       }
     });
@@ -317,6 +334,32 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 
     MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
     startOrContinueExistingPath(point);
+  }
+
+  private void handleDoubleClick(NativeEvent ne) {
+    removeDoubleClickMouseDownAdditions();
+    markClosePath();
+    endDrawing();
+    markUnclosePath();
+  }
+
+  private void removeDoubleClickMouseDownAdditions() {
+    int size = currentFreehandPath.points.size();
+    if (size > 4) {
+      // two mouse down double clicks
+      currentFreehandPath.points.remove(size - 1);
+      currentFreehandPath.points.remove(size - 2);
+      currentFreehandPath.points.remove(size - 3);
+      currentFreehandPath.points.remove(size - 4);
+    }
+  }
+
+  private void markClosePath() {
+    closePath = true;
+  }
+
+  private void markUnclosePath() {
+    closePath = false;
   }
 
   private void disableStaticMovement(NativeEvent ne) {
@@ -354,8 +397,10 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 
     if (staticMovement && currentFreehandPath != null && currentFreehandPath.points.size() > 0) {
       // continue existing freehand path
-      currentFreehandPath.points.add(downX);
-      currentFreehandPath.points.add(downY);
+      int size = currentFreehandPath.points.size();
+      drawStatic(point.getScreenX(), point.getScreenY(), size);
+      currentFreehandPath.points.add(currentFreehandPath.points.get(size - 2));
+      currentFreehandPath.points.add(currentFreehandPath.points.get(size - 1));
     } else {
       // start new freehand drawing
       createNewPath();
@@ -413,16 +458,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   	
     int size = currentFreehandPath.points.size();
     if (staticMovement && size >= 4) {
-      int posx = size - 2;
-      int posy = size - 1;
-      int prevxpos = size - 4;
-      int prevypos = size - 3;
-      int x1 = currentFreehandPath.points.get(prevxpos);
-      int y1 = currentFreehandPath.points.get(prevypos);
-      Point ep = endPoint(x1, y1, x, y);
-      currentFreehandPath.points.set(posx, ep.x);
-      currentFreehandPath.points.set(posy, ep.y);
-      currentFreehandPath.curve = false;
+      drawStatic(x, y, size);
     } else {
       currentFreehandPath.points.add(x);
       currentFreehandPath.points.add(y);
@@ -430,6 +466,19 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   	
   	currentFreehandPath.polyline.setShape(currentFreehandPath.points);
 	}
+
+  private void drawStatic(int x, int y, int size) {
+    int posx = size - 2;
+    int posy = size - 1;
+    int prevxpos = size - 4;
+    int prevypos = size - 3;
+    int x1 = currentFreehandPath.points.get(prevxpos);
+    int y1 = currentFreehandPath.points.get(prevypos);
+    Point ep = endPoint(x1, y1, x, y);
+    currentFreehandPath.points.set(posx, ep.x);
+    currentFreehandPath.points.set(posy, ep.y);
+    currentFreehandPath.curve = false;
+  }
 
   private Point endPoint(int x1, int y1, int x2, int y2) {
     final double angle0 = 0;
