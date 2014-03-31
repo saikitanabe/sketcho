@@ -11,7 +11,6 @@ import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.utils.IntegerHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
-import net.sevenscales.editor.diagram.shape.FreehandShape;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IPolyline;
@@ -32,10 +31,12 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
+import com.google.gwt.dom.client.Touch;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 
@@ -110,7 +111,11 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
         }
 
         if (event.getTypeInt() == Event.ONMOUSEDOWN) {
-          handleMouseDown(event.getNativeEvent());
+          handleMouseDown(ne.getClientX(), ne.getClientY());
+        } else if (event.getTypeInt() == Event.ONTOUCHSTART) {
+          Touch touch = getTouches(ne).get(0);
+          handleMouseDown(touch.getClientX(), touch.getClientY());
+
         } else if (event.getTypeInt() == Event.ONDBLCLICK) {
           handleDoubleClick(event.getNativeEvent());
         }
@@ -118,18 +123,22 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     });
   }
 
-  private void handleMouseDown(NativeEvent ne) {
-    int x = ne.getClientX();
-    int y = ne.getClientY();
+  private JsArray<Touch> getTouches(NativeEvent ne) {
+    return ne.getTouches();
+  }
 
+
+  private void handleMouseDown(int x, int y) {
     MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
     startOrContinueExistingPath(point);
   }
 
   private void handleDoubleClick(NativeEvent ne) {
-    removeDoubleClickMouseDownAdditions();
-    markClosePath();
-    endDrawing();
+    if (currentFreehandPath != null) {
+      removeDoubleClickMouseDownAdditions();
+      markClosePath();
+      endDrawing();
+    }
   }
 
   private void removeDoubleClickMouseDownAdditions() {

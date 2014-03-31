@@ -10,6 +10,7 @@ import net.sevenscales.domain.SvgDataDTO;
 import net.sevenscales.domain.PathDTO;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
 import net.sevenscales.editor.gfx.domain.IGroup;
@@ -73,7 +74,9 @@ class FreehandPath {
       SvgDataDTO svgdata = new SvgDataDTO(paths, scaledWidth, scaledHeight);
       GenericElement diagram = new GenericElement(surface, 
         new GenericShape(ElementType.FREEHAND2.getValue(), 
-                         pos.scaledAndTranslatedPoint.x, pos.scaledAndTranslatedPoint.y, scaledWidth, scaledHeight, 0, svgdata),
+                         pos.scaledAndTranslatedPoint.x, pos.scaledAndTranslatedPoint.y, scaledWidth, scaledHeight, 
+                         ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue(), 
+                         svgdata),
         "", 
         Theme.createDefaultBackgroundColor(), 
         Theme.createDefaultBorderColor(), 
