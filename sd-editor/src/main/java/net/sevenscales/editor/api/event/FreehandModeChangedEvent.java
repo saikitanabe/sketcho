@@ -5,29 +5,11 @@ import com.google.gwt.event.shared.GwtEvent;
 public class FreehandModeChangedEvent extends GwtEvent<FreehandModeChangedEventHandler> {
   public static Type<FreehandModeChangedEventHandler> TYPE = new Type<FreehandModeChangedEventHandler>();
 	private boolean enabled;
-	private FreehandModeType modeType = FreehandModeType.FREEHAND_SMOOTH;
+	private FreehandModeType modeType = FreehandModeType.FREEHAND_FREE;
 	private boolean modeTypeChanged = false;
 
 	public enum FreehandModeType {
-		FREEHAND_MORE(2, "More"), FREEHAND_SMOOTH(4, "Smooth"), FREEHAND_LESS(6, "Less");
-
-		private int value;
-		private String modeName;
-		
-		private FreehandModeType(int value, String modeName) {
-			this.value = value;
-			this.modeName = modeName;
-		}
-
-		public int value() {
-			return value;
-		}
-
-		@Override
-		public String toString() {
-			return modeName;
-		}
-
+		FREEHAND_FREE, FREEHAND_LINES;
 	}
   
   public FreehandModeChangedEvent(boolean enabled) {
@@ -36,6 +18,12 @@ public class FreehandModeChangedEvent extends GwtEvent<FreehandModeChangedEventH
 
 	public FreehandModeChangedEvent(boolean enabled, FreehandModeType modeType) {
 		this.enabled = enabled;
+		this.modeType = modeType;
+		this.modeTypeChanged = true;
+	}
+
+	public FreehandModeChangedEvent(FreehandModeType modeType) {
+		this.enabled = true;
 		this.modeType = modeType;
 		this.modeTypeChanged = true;
 	}

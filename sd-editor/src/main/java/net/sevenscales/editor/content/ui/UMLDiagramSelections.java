@@ -184,6 +184,18 @@ public class UMLDiagramSelections extends Composite {
 		selectionHandler.hidePopup();
 	}
 
+	// @UiHandler("freehandLines")
+	// public void onFreeHandLines(ClickEvent event) {
+	// 	stopEvent(event);
+	// 	if (!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE)) {
+	// 		surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE), FreehandModeChangedEvent.FreehandModeType.FREEHAND_LINES));
+	// 	} else {
+	// 		surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(FreehandModeChangedEvent.FreehandModeType.FREEHAND_LINES));
+	// 	}
+
+	// 	selectionHandler.hidePopup();
+	// }
+	
 	@UiHandler("select")
 	public void onSelect(ClickEvent event) {
 		stopEvent(event);

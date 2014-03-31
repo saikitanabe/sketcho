@@ -115,7 +115,6 @@ class FreehandPath {
   }
 
   private String fitPointsToSvg(int absx, int absy) {
-    int modeType = surface.getEditorContext().<FreehandModeType>getAs(EditorProperty.FREEHAND_MODE_TYPE).value();
     List<Integer> relative = relativePoints(absx, absy);
     return fit(relative);
   }

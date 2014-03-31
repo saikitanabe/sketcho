@@ -114,20 +114,6 @@ public class UiClickContextMenu extends Composite {
 			}
 		}, MouseMoveEvent.getType());
 
-//		popup.addDomHandler(new MouseOverHandler() {
-//			@Override
-//			public void onMouseOver(MouseOverEvent event) {
-//				clearTimeout(cancelTimer);
-//			}
-//		}, MouseOverEvent.getType());
-		
-//		popup.addDomHandler(new MouseOutHandler() {
-//			@Override
-//			public void onMouseOut(MouseOutEvent event) {
-//				cancelTimer = setTimeout(5000);
-//			}
-//		}, MouseOutEvent.getType());
-
 		surface.getEditorContext().getEventBus().addHandler(BoardEmptyAreaClickedEvent.TYPE, new BoardEmptyAreaClickEventHandler() {
 			@Override
 			public void on(BoardEmptyAreaClickedEvent event) {
@@ -246,24 +232,6 @@ public class UiClickContextMenu extends Composite {
 	public void onCommentMode(ClickEvent event) {
 		stopEvent(event);
 		Tools.toggleCommentMode();
-		hide();
-	}
-
-	public void freehandMore() {
-		// stopEvent(event);
-		surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(true, FreehandModeType.FREEHAND_MORE));
-		hide();
-	}
-
-	public void freehandSmooth() {
-		// stopEvent(event);
-		surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(true, FreehandModeType.FREEHAND_SMOOTH));
-		hide();
-	}
-
-	public void freehandLess() {
-		// stopEvent(event);
-		surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(true, FreehandModeType.FREEHAND_LESS));
 		hide();
 	}
 

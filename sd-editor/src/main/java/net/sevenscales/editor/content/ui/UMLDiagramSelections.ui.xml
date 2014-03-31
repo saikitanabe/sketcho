@@ -28,7 +28,16 @@
 				</g:HTML>
 			</c:child>
 		</c:FastButton>
-		<c:FastButton ui:field="select" addStyleNames="{style.simple}">
+<!-- 		<c:FastButton ui:field="freehandLines" addStyleNames="{style.simple}">
+			<c:child>
+				<g:HTML>
+					<a title="Draw freehand lines | F + shift down" class="btn btn-custom download-btn tooltipper">
+						<i class="context-icon-pen-white-lines"></i>
+					</a>
+				</g:HTML>
+			</c:child>
+		</c:FastButton>
+ -->		<c:FastButton ui:field="select" addStyleNames="{style.simple}">
 			<c:child>
 				<g:HTML>
 					<a title="Lasso Select (by dragging)" class="btn btn-custom download-btn tooltipper">

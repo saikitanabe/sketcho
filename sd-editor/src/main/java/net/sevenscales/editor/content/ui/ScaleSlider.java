@@ -184,7 +184,8 @@ public class ScaleSlider {
 		surface.addTouchStartHandler(new TouchStartHandler() {
 			@Override
 			public void onTouchStart(TouchStartEvent event) {
-				if (event.getTouches().length() != 2) {
+				if (freehandMode() || 
+						event.getTouches().length() != 2) {
 					// handle only pinch
 					return;
 				}
@@ -195,7 +196,8 @@ public class ScaleSlider {
 		surface .addTouchMoveHandler(new TouchMoveHandler() {
 			@Override
 			public void onTouchMove(TouchMoveEvent event) {
-				if (event.getTouches().length() != 2) {
+				if (freehandMode() || 
+						event.getTouches().length() != 2) {
 					// handle only pinch
 					return;
 				}
@@ -213,6 +215,10 @@ public class ScaleSlider {
 		
 //		new ShowHideHelpers(scaleSlider, innerScaleSlider, 6000);
 		new BirdsEye();
+	}
+
+	private boolean freehandMode() {
+		return surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE);		
 	}
 	
   public void scaleToIndex(int index) {

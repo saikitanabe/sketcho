@@ -7,6 +7,7 @@ import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.OperationQueueRequestEvent;
+import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.utils.IntegerHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
@@ -89,7 +90,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     
     Event.addNativePreviewHandler(new NativePreviewHandler() {
       @Override
-      public void onPreviewNativeEvent(NativePreviewEvent event) {
+      public void onPreviewNativeEvent(NativePreviewEvent event) {        
         NativeEvent ne = event.getNativeEvent();
         if (!freehandKeyDown && event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.noMetaKeys(ne) && UIKeyHelpers.isEditorClosed(FreehandDrawerHandler.this.surface.getEditorContext())) {
           if (ne.getKeyCode() == 'F' && UIKeyHelpers.allMenusAreClosed()) {
@@ -104,23 +105,63 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
           }
         }
 
-        if (event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.justShift(ne) && FreehandDrawerHandler.this.surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE)) {
-          staticMovement = true;
-        } else if (staticMovement && event.getTypeInt() == Event.ONKEYUP) {
-          disableStaticMovement(ne);
+        if (!freehandMode()) {
+          return;
         }
 
-        if (event.getTypeInt() == Event.ONMOUSEDOWN) {
-          handleMouseDown(ne.getClientX(), ne.getClientY());
-        } else if (event.getTypeInt() == Event.ONTOUCHSTART) {
-          Touch touch = getTouches(ne).get(0);
-          handleMouseDown(touch.getClientX(), touch.getClientY());
-
-        } else if (event.getTypeInt() == Event.ONDBLCLICK) {
-          handleDoubleClick(event.getNativeEvent());
-        }
+        // freehand mode handling
+        evenDuringFreehandMode(event);
       }
     });
+
+    surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
+      @Override
+      public void on(FreehandModeChangedEvent event) {
+        switch (event.getModeType()) {
+          case FREEHAND_FREE: {
+            staticMovement = false;
+            break;
+          }
+          case FREEHAND_LINES: {
+            staticMovement = true;
+            break;
+          }
+        }
+        
+      }
+    });
+  }
+
+  private void evenDuringFreehandMode(NativePreviewEvent event) {
+    NativeEvent ne = event.getNativeEvent();
+    if (event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.justShift(ne)) {
+      staticMovement = true;
+    } else if (staticMovement && event.getTypeInt() == Event.ONKEYUP) {
+      disableStaticMovement(ne);
+    }
+
+    if (event.getTypeInt() == Event.ONMOUSEDOWN) {
+      handleMouseDown(ne.getClientX(), ne.getClientY());
+    } else if (event.getTypeInt() == Event.ONTOUCHSTART) {
+      Touch touch = getTouches(ne).get(0);
+      handleMouseDown(touch.getClientX(), touch.getClientY());
+    } /*else if (event.getTypeInt() == Event.ONTOUCHMOVE) {
+      // potential idea to start 
+      // JsArray<Touch> touches = getTouches(ne);
+      // if (touches.length() == 2) {
+      //   staticMovement = true;
+      // }
+
+      // Touch touch = touches.get(1);
+      // MatrixPointJS point = MatrixPointJS.createScaledPoint(touch.getClientX(), touch.getClientY(), surface.getScaleFactor());
+      // drawFreehand(point);
+    } */ else if (event.getTypeInt() == Event.ONDBLCLICK) {
+      handleDoubleClick(event.getNativeEvent());
+    }    
+  }
+
+  private boolean freehandMode() {
+    return FreehandDrawerHandler.this.surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE);
   }
 
   private JsArray<Touch> getTouches(NativeEvent ne) {
@@ -174,7 +215,9 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   }
 
   public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
-    // return startOrContinueExistingPath(point);
+    // not handled through here!!! handling custom mouse down preview event
+    // since when drawing on top of existing element coordinates are wrong
+    // and free hand needs to have surface coordinates
     return false;
   }
 
@@ -191,8 +234,8 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 
     if (staticMovement && currentFreehandPath != null && currentFreehandPath.points.size() > 0) {
       // continue existing freehand path
+      drawStatic(point.getScreenX(), point.getScreenY());
       int size = currentFreehandPath.points.size();
-      drawStatic(point.getScreenX(), point.getScreenY(), size);
       currentFreehandPath.points.add(currentFreehandPath.points.get(size - 2));
       currentFreehandPath.points.add(currentFreehandPath.points.get(size - 1));
     } else {
@@ -258,7 +301,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   	
     int size = currentFreehandPath.points.size();
     if (staticMovement && size >= 4) {
-      drawStatic(x, y, size);
+      drawStatic(x, y);
     } else {
       currentFreehandPath.points.add(x);
       currentFreehandPath.points.add(y);
@@ -267,17 +310,20 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   	currentFreehandPath.polyline.setShape(currentFreehandPath.points);
 	}
 
-  private void drawStatic(int x, int y, int size) {
-    int posx = size - 2;
-    int posy = size - 1;
-    int prevxpos = size - 4;
-    int prevypos = size - 3;
-    int x1 = currentFreehandPath.points.get(prevxpos);
-    int y1 = currentFreehandPath.points.get(prevypos);
-    Point ep = endPoint(x1, y1, x, y);
-    currentFreehandPath.points.set(posx, ep.x);
-    currentFreehandPath.points.set(posy, ep.y);
-    currentFreehandPath.curve = false;
+  private void drawStatic(int x, int y) {
+    int size = currentFreehandPath.points.size();
+    if (size >= 4) {
+      int posx = size - 2;
+      int posy = size - 1;
+      int prevxpos = size - 4;
+      int prevypos = size - 3;
+      int x1 = currentFreehandPath.points.get(prevxpos);
+      int y1 = currentFreehandPath.points.get(prevypos);
+      Point ep = endPoint(x1, y1, x, y);
+      currentFreehandPath.points.set(posx, ep.x);
+      currentFreehandPath.points.set(posy, ep.y);
+      currentFreehandPath.curve = false;
+    }
   }
 
   private Point endPoint(int x1, int y1, int x2, int y2) {
