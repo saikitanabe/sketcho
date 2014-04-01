@@ -46,55 +46,81 @@ class FreehandPath {
     polyline.setStrokeWidth(FreehandElement.FREEHAND_STROKE_WIDTH);
   }
 
-  GenericElement plot() {
+  Diagram plot() {
     if (polyline != null && points.size() > 2) {
-      // logger.debug("PLOTTING...");
-
-      int absleft = DiagramHelpers.getLeftCoordinate(points);
-      int abstop = DiagramHelpers.getTopCoordinate(points);
-      int width = DiagramHelpers.getWidth(points);
-      int height = DiagramHelpers.getHeight(points);
-
-      String svg = null;
-      if (curve) {
-        svg = fitPointsToSvg(absleft, abstop);
-      } else {
-        // if staticMovement, do not simplify path! Format path with lines
-        svg = formatAllPointsAsLines(absleft, abstop);
-      }
-
-      // use absolute values to calculate relative points
-      ScaledAndTranslatedPoint pos = ScaleHelpers.scaleAndTranslateScreenpoint(absleft, abstop, surface);
-      // need to scale width and height to correspond screen coordinates
-      // doe not translate, wince only left, top is scaled and translated!
-      int scaledWidth = ScaleHelpers.scaleValue(width, surface.getScaleFactor());
-      int scaledHeight = ScaleHelpers.scaleValue(height, surface.getScaleFactor());
-      List<PathDTO> paths = new ArrayList<PathDTO>();
-      paths.add(new PathDTO(svg, ""));
-      SvgDataDTO svgdata = new SvgDataDTO(paths, scaledWidth, scaledHeight);
-      GenericElement diagram = new GenericElement(surface, 
-        new GenericShape(ElementType.FREEHAND2.getValue(), 
-                         pos.scaledAndTranslatedPoint.x, pos.scaledAndTranslatedPoint.y, scaledWidth, scaledHeight, 
-                         ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue(), 
-                         svgdata),
-        "", 
-        Theme.createDefaultBackgroundColor(), 
-        Theme.createDefaultBorderColor(), 
-        Theme.createDefaultTextColor(),
-        surface.getEditorContext().isEditable(), 
-        DiagramItemDTO.createGenericItem(ElementType.FREEHAND2));
-      // surface.add(diagram, true);
-      polyline.setVisibility(false);
-      points.clear();
-      polyline.setShape(points);
-      polyline.moveToBack();
-
-      // logger.debug("PLOTTING... done");
-      return diagram;
-      // disturbs usabilility if context menu is shown right after drawing is ended
-//      surface.getEditorContext().getEventBus().fireEvent(new SelectionMouseUpEvent(diagram));
+      // generic drawing 
+      // - deprecated for now since generates bigger shape than own custom simplify algoritm
+      return plotOld();
+      // return plotGeneric();
     }
     return null;
+  }
+
+  private Diagram plotOld() {
+
+  }
+
+  private List<Integer> filterPoints() {
+     int modeType = surface.getEditorContext().<FreehandModeType>getAs(EditorProperty.FREEHAND_MODE_TYPE).value();
+     logger.debug("filterPoints modeType {}", modeType);
+     List<Integer> result = new ArrayList<Integer>();
+     for (int i = 0; i < points.size(); i += 2) {
+      if (i % modeType == 0) {
+        addTranslatedPoint(points.get(i), points.get(i + 1), result);
+      }
+      // if (i % modeType == 0) {
+      addTranslatedPoint(points.get(i), points.get(i + 1), result);
+      // }
+     }
+     
+     // add last point just in case if it has been filtered out above
+     addTranslatedPoint(points.get(points.size()-2), points.get(points.size()-1), result);
+
+     return result;
+   }
+
+  private Diagram plotGeneric() {
+    int absleft = DiagramHelpers.getLeftCoordinate(points);
+    int abstop = DiagramHelpers.getTopCoordinate(points);
+    int width = DiagramHelpers.getWidth(points);
+    int height = DiagramHelpers.getHeight(points);
+
+    String svg = null;
+    if (curve) {
+      svg = fitPointsToSvg(absleft, abstop);
+    } else {
+      // if staticMovement, do not simplify path! Format path with lines
+      svg = formatAllPointsAsLines(absleft, abstop);
+    }
+
+    // use absolute values to calculate relative points
+    ScaledAndTranslatedPoint pos = ScaleHelpers.scaleAndTranslateScreenpoint(absleft, abstop, surface);
+    // need to scale width and height to correspond screen coordinates
+    // doe not translate, wince only left, top is scaled and translated!
+    int scaledWidth = ScaleHelpers.scaleValue(width, surface.getScaleFactor());
+    int scaledHeight = ScaleHelpers.scaleValue(height, surface.getScaleFactor());
+    List<PathDTO> paths = new ArrayList<PathDTO>();
+    paths.add(new PathDTO(svg, ""));
+    SvgDataDTO svgdata = new SvgDataDTO(paths, scaledWidth, scaledHeight);
+    GenericElement diagram = new GenericElement(surface, 
+      new GenericShape(ElementType.FREEHAND2.getValue(), 
+                       pos.scaledAndTranslatedPoint.x, pos.scaledAndTranslatedPoint.y, scaledWidth, scaledHeight, 
+                       ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue(), 
+                       svgdata),
+      "", 
+      Theme.createDefaultBackgroundColor(), 
+      Theme.createDefaultBorderColor(), 
+      Theme.createDefaultTextColor(),
+      surface.getEditorContext().isEditable(), 
+      DiagramItemDTO.createGenericItem(ElementType.FREEHAND2));
+    // surface.add(diagram, true);
+    polyline.setVisibility(false);
+    points.clear();
+    polyline.setShape(points);
+    polyline.moveToBack();
+
+    // logger.debug("PLOTTING... done");
+    return diagram;
   }
 
   private String formatAllPointsAsLines(int absx, int absy) {

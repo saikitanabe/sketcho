@@ -419,7 +419,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     // logger.debug("PLOTTING size {}...", freehandPahts.size());
     List<Diagram> drawing = new ArrayList<Diagram>();
     for (FreehandPath fp : freehandPahts) {
-      GenericElement fe = fp.plot();
+      Diagram fe = fp.plot();
       if (fe != null) {
         drawing.add(fe);
       }
