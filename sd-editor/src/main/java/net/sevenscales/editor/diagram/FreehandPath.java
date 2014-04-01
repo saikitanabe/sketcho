@@ -19,11 +19,14 @@ import net.sevenscales.editor.gfx.domain.IPolyline;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
 import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 import net.sevenscales.editor.diagram.shape.GenericShape;
+import net.sevenscales.editor.diagram.shape.FreehandShape;
+import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoint;
+import net.sevenscales.editor.content.utils.IntegerHelpers;
 
 
 class FreehandPath {
@@ -50,34 +53,51 @@ class FreehandPath {
     if (polyline != null && points.size() > 2) {
       // generic drawing 
       // - deprecated for now since generates bigger shape than own custom simplify algoritm
-      return plotOld();
-      // return plotGeneric();
+      // return plotOld();
+      // - paperjs fit is more consistent, points will not become huge ever
+      // - but if drawn fast, then shape could 1/3 bigger than old algorithm
+      // - let's go with consisten size
+      return plotGeneric();
     }
     return null;
   }
 
   private Diagram plotOld() {
+    List<Integer> filteredPoints = filterPoints();
+    
+    FreehandElement diagram = new FreehandElement(surface, new FreehandShape(IntegerHelpers.toIntArray(filteredPoints)),
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(),
+        surface.getEditorContext().isEditable(), new DiagramItemDTO());
+    // surface.add(diagram, true);
+    polyline.setVisibility(false);
+    points.clear();
+    polyline.setShape(points);
+    polyline.moveToBack();
 
+    return diagram;
   }
 
   private List<Integer> filterPoints() {
-     int modeType = surface.getEditorContext().<FreehandModeType>getAs(EditorProperty.FREEHAND_MODE_TYPE).value();
-     logger.debug("filterPoints modeType {}", modeType);
-     List<Integer> result = new ArrayList<Integer>();
-     for (int i = 0; i < points.size(); i += 2) {
+    // legacy modes, how many points to filter out
+    int modeType = 4; //surface.getEditorContext().<FreehandModeType>getAs(EditorProperty.FREEHAND_MODE_TYPE).value();
+    List<Integer> result = new ArrayList<Integer>();
+    for (int i = 0; i < points.size(); i += 2) {
       if (i % modeType == 0) {
         addTranslatedPoint(points.get(i), points.get(i + 1), result);
       }
-      // if (i % modeType == 0) {
-      addTranslatedPoint(points.get(i), points.get(i + 1), result);
-      // }
-     }
-     
-     // add last point just in case if it has been filtered out above
-     addTranslatedPoint(points.get(points.size()-2), points.get(points.size()-1), result);
+    }
+    
+    // add last point just in case if it has been filtered out above
+    addTranslatedPoint(points.get(points.size()-2), points.get(points.size()-1), result);
 
-     return result;
-   }
+    return result;
+  }
+
+  private void addTranslatedPoint(int x, int y, List<Integer> points) {
+    MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
+    points.add(point.getX() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformX(), surface.getScaleFactor()));
+    points.add(point.getY() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor()));
+  }
 
   private Diagram plotGeneric() {
     int absleft = DiagramHelpers.getLeftCoordinate(points);
