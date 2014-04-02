@@ -131,7 +131,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 	
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-    ImageShape newShape = new ImageShape(x, y, getWidth() * factorX, getHeight() * factorY, shape.getUrl());
+    ImageShape newShape = new ImageShape(x, y, getWidth() * factorX, getHeight() * factorY, shape.getUrl(), shape.getFilename());
     Diagram result = new ImageElement(surface, newShape, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
     return result;
   }
@@ -209,6 +209,16 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   public int supportedMenuItems() {
   	return ContextMenuItem.COLOR_MENU.getValue() | 
   				 ContextMenuItem.LAYERS.getValue();
+  }
+
+  @Override
+  public String getCustomData() {
+  	if (shape.getFilename() != null && !"".equals(shape.getFilename())) {
+  		// do not store/send to server AWS signed url; it is temporary
+	  	return "*" + "," + shape.getFilename();
+  	} else {
+  		return shape.getUrl();
+  	}
   }
 
 }

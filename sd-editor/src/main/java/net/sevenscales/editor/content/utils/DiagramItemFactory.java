@@ -324,7 +324,6 @@ public class DiagramItemFactory {
       ImageShape s = (ImageShape) shape;
       result = getItem(diagram);
       shapetext += rect2ShapeText(s.rectShape, moveX, moveY);
-      shapetext += "," +s.getUrl();
       type = s.getElementType();
     } 
     

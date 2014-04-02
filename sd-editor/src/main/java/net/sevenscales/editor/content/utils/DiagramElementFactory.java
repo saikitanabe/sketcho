@@ -9,8 +9,8 @@ import net.sevenscales.editor.api.impl.Theme;
 
 
 public class DiagramElementFactory {
-	public static Diagram createImageElement(ISurfaceHandler surface, String url, int x, int y, int width, int height) {
-		ImageShape shape = new ImageShape(x, y, width, height, url);
+	public static Diagram createImageElement(ISurfaceHandler surface, String filename, String url, int x, int y, int width, int height) {
+		ImageShape shape = new ImageShape(x, y, width, height, url, filename);
 		return new ImageElement(surface, 
 														shape, 
 														Theme.createDefaultBackgroundColor(), 

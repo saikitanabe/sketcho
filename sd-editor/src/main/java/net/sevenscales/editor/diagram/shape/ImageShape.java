@@ -5,10 +5,12 @@ import net.sevenscales.domain.ElementType;
 
 public class ImageShape extends HasRectShape {
   private String url;
+  private String filename;
 
-  public ImageShape(int left, int top, int width, int height, String url) {
+  public ImageShape(int left, int top, int width, int height, String url, String filename) {
     super(left, top, width, height);
     this.url = url;
+    this.filename = filename;
   }
 
   public String getElementType() {
@@ -20,5 +22,12 @@ public class ImageShape extends HasRectShape {
   }
   public void setUrl(String url) {
     this.url = url;
+  }
+
+  public String getFilename() {
+    return filename;
+  }
+  public void setFilename(String filename) {
+    this.filename = filename;
   }
 }

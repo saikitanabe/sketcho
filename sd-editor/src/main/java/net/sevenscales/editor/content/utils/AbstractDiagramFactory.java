@@ -438,8 +438,23 @@ public interface AbstractDiagramFactory {
       int y = Integer.valueOf(s[1]);
       int width = Integer.valueOf(s[2]);
       int height = Integer.valueOf(s[3]);
-      String url = s[4];
-      return new ImageShape(x, y, width, height, url).move(moveX, moveY);
+
+      // vai pitäiskö pistää custom dataan molemmat!!!
+      // url,filename
+      // vois olla oikea paikka tälle ja shape ois vaan left, top, width, height
+      String url = "";
+      String filename = "";
+      if (item.getCustomData() != null) {
+        String[] cd = item.getCustomData().split(",");
+        if (cd.length >= 1) {
+          url = cd[0];
+        }
+        if (cd.length >= 2) {
+          // filename is optional
+          filename = cd[1];
+        }
+      }
+      return new ImageShape(x, y, width, height, url, filename).move(moveX, moveY);
     }
 
     public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
