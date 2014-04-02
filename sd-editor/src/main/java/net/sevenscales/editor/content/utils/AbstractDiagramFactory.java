@@ -431,6 +431,27 @@ public interface AbstractDiagramFactory {
     }
   }
 
+  public class ImageFactory implements AbstractDiagramFactory {
+    public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
+      String[] s = item.getShape().split(",");
+      int x = Integer.valueOf(s[0]);
+      int y = Integer.valueOf(s[1]);
+      int width = Integer.valueOf(s[2]);
+      int height = Integer.valueOf(s[3]);
+      String url = s[4];
+      return new ImageShape(x, y, width, height, url).move(moveX, moveY);
+    }
+
+    public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+      return new ImageElement(surface,
+              (ImageShape)shape,
+              DiagramItemFactory.parseBackgroundColor(item),
+              DiagramItemFactory.parseBorderColor(item),
+              DiagramItemFactory.parseTextColor(item),
+              editable,
+              item);      
+    }
+  }
 
 	public class PackageFactory implements AbstractDiagramFactory {
 		public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {

@@ -41,6 +41,7 @@ import net.sevenscales.editor.diagram.shape.SequenceShape;
 import net.sevenscales.editor.diagram.shape.ServerShape;
 import net.sevenscales.editor.diagram.shape.TextShape;
 import net.sevenscales.editor.diagram.shape.UMLPackageShape;
+import net.sevenscales.editor.diagram.shape.ImageShape;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityChoiceElement;
@@ -319,7 +320,13 @@ public class DiagramItemFactory {
       shapetext += rect2ShapeText(s.rectShape, moveX, moveY);
       // makes sure that type is not manipulated
       type = ElementType.getEnum(result.getType()).getValue();
-    }
+    } else if (shape instanceof ImageShape) {
+      ImageShape s = (ImageShape) shape;
+      result = getItem(diagram);
+      shapetext += rect2ShapeText(s.rectShape, moveX, moveY);
+      shapetext += "," +s.getUrl();
+      type = s.getElementType();
+    } 
     
     if (result != null) {
       // focus circle is not any supported type even though it is in surface
