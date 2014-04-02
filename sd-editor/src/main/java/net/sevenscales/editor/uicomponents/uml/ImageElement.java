@@ -176,13 +176,8 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 
   @Override
   public void setShape(int left, int top, int width, int height) {
-  	// if ((width > 1 && height >= 0) || (height > 1 && width >= 0)) {
   	if (width >= 10 && height >= 10) {
-	  	// TODO subgroup is needed for scaling
-	  	// keep original widht, height + then left, top, widht, height scales
-	  	// subgroup.setScale(factorX, factorY);
-	  	// subgroup.setTransform(left, top);
-
+  		image.setShape(left, top, width, height);
 			super.applyHelpersShape();
   	}
   }
