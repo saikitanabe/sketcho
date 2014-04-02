@@ -191,10 +191,6 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 		return group;
 	}
 
-	// public IGroup getSubgroup() {
-	// 	return subgroup;
-	// }
-	
 	@Override
   public boolean supportsTextEditing() {
   	return false;
