@@ -21,7 +21,10 @@ public class SvgImage extends SvgBase {
     params.put("%height%", String.valueOf(image.getHeight()));
 
     String url = "";
-    if (diagram instanceof ImageElement) {
+    if (editorContext.isTrue(EditorProperty.PRINTING)) {
+      // just use browser cached images
+      url = image.getSrc();
+    } else if (diagram instanceof ImageElement) {
       url = ((ImageElement) diagram).getImageUrl();
     } else {
       // some url hacking to get confluence and Sketchboard.Me working
