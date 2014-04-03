@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.uicomponents.uml.ImageElement;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.gfx.domain.IImage;
@@ -19,13 +20,15 @@ public class SvgImage extends SvgBase {
     params.put("%width%", String.valueOf(image.getWidth()));
     params.put("%height%", String.valueOf(image.getHeight()));
 
-//    Debug.log("image.getSrc(): " + image.getSrc());
-
-    // some url hacking to get confluence and Sketchboard.Me working
-    String url = image.getSrc().replaceFirst(editorContext.get(EditorProperty.RESOURCES_PATH).toString(), "");
-    
-    params.put("%src%", GWT.getModuleBaseURL().replace("/" + GWT.getModuleName(), "/..") + url);
-//    Debug.log("%src%: " + params.get("%src%"));
+    String url = "";
+    if (diagram instanceof ImageElement) {
+      url = ((ImageElement) diagram).getImageUrl();
+    } else {
+      // some url hacking to get confluence and Sketchboard.Me working
+      url = image.getSrc().replaceFirst(editorContext.get(EditorProperty.RESOURCES_PATH).toString(), "");
+      url = GWT.getModuleBaseURL().replace("/" + GWT.getModuleName(), "/..") + url;
+    }
+    params.put("%src%", url);
     
     String template = "<image x='%x%' y='%y%' width='%width%' height='%height%' " +
     		               "xlink:href='%src%' />";

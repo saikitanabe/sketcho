@@ -212,4 +212,14 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   	}
   }
 
+  /**
+  * Returns either absolute url or relative file name for aws images.
+  */
+  public String getImageUrl() {
+  	if (shape.getFilename() != null && !"".equals(shape.getFilename())) {
+  		return shape.getFilename();
+  	}
+  	return shape.getUrl();
+  }
+
 }
