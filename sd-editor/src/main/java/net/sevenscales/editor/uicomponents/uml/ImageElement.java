@@ -198,8 +198,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   
   @Override
   public int supportedMenuItems() {
-  	return ContextMenuItem.COLOR_MENU.getValue() | 
-  				 ContextMenuItem.LAYERS.getValue();
+  	return ContextMenuItem.LAYERS.getValue();
   }
 
   @Override
