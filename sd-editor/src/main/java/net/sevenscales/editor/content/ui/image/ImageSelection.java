@@ -132,33 +132,8 @@ public class ImageSelection extends Composite {
   }-*/;
 
   private void gwtReceiveFileInfo(ImageInfo imageInfo) {
-  	Diagram d = DiagramElementFactory.createImageElement(surface, imageInfo.getFilename(), imageInfo.getUrl(), 0, 0, 200, 200);
+  	Diagram d = DiagramElementFactory.createImageElement(surface, imageInfo.getFilename(), imageInfo.getUrl(), 0, 0, imageInfo.getWidth(), imageInfo.getHeight());
 		surface.addAsSelected(d, true);
   }
-
-	// private void moveToFront() {
-	// 	surface.moveSelectedToFront();
-	// 	parent.hidePopup();
-	// }
-
-	// private void moveToBack() {
-	// 	surface.moveSelectedToBack();
-	// 	parent.hidePopup();
-	// }
-
-	// private void moveToBackward() {
-	// 	surface.moveSelectedToBackward();
-	// 	// let's not hide menu if user wants to click more than once
-	// }
-
-	// private void moveToForward() {
-	// 	surface.moveSelectedToForward();
-	// 	// let's not hide menu if user wants to click more than once
-	// }
-
-	// private void stopEvent(ClickEvent event) {
-	// 	event.stopPropagation();
-	// 	event.preventDefault();
-	// }
 
 }
