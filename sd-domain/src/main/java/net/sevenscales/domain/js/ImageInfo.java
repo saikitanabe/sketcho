@@ -6,6 +6,10 @@ public class ImageInfo extends JavaScriptObject {
   protected ImageInfo() {
   }
 
+  public final native String getHash()/*-{
+    return this.hash;
+  }-*/;
+
   public final native String getFilename()/*-{
   	return this.filename;
   }-*/;
