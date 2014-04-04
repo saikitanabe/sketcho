@@ -19,4 +19,10 @@ public class ImageInfo extends JavaScriptObject {
   public final native String getThumbnailUrl()/*-{
     return this.thumbUrl;
   }-*/;
+  public final native int getWidth()/*-{
+    return this.width;    
+  }-*/;
+  public final native int getHeight()/*-{
+    return this.height;
+  }-*/;
 }
