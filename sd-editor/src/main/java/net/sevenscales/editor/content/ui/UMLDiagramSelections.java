@@ -105,7 +105,8 @@ public class UMLDiagramSelections extends Composite {
 		ARROW_LEFT("", ElementType.ARROW_LEFT, UMLDiagramGroup.CLASS_DIAGRAM),
 		BUBBLE_LEFT("", ElementType.BUBBLE, UMLDiagramGroup.CLASS_DIAGRAM),
 		BUBBLE_RIGHT("", ElementType.BUBBLE_R, UMLDiagramGroup.CLASS_DIAGRAM),
-		ENVELOPE("", ElementType.ENVELOPE, UMLDiagramGroup.CLASS_DIAGRAM);
+		ENVELOPE("", ElementType.ENVELOPE, UMLDiagramGroup.CLASS_DIAGRAM),
+		IMAGE("", ElementType.IMAGE, UMLDiagramGroup.CLASS_DIAGRAM);
 		
 		private String value;
 		private ElementType elementType;
@@ -260,7 +261,7 @@ public class UMLDiagramSelections extends Composite {
   // }
 
 	private void fire(UMLDiagramType elementType) {
-		surface.getEditorContext().getEventBus().fireEvent(new CreateElementEvent(elementType, 0, 0));
+		surface.getEditorContext().getEventBus().fireEvent(new CreateElementEvent(elementType, null, 0, 0));
 	}
 	
 	@UiHandler("classf")

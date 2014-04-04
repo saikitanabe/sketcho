@@ -2,6 +2,7 @@ package net.sevenscales.editor.diagram;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.js.ImageInfo;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.CreateElementEvent;
@@ -22,6 +23,7 @@ import net.sevenscales.editor.content.ui.DiagramSelectionHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoint;
+import net.sevenscales.editor.content.utils.DiagramElementFactory;
 import net.sevenscales.editor.diagram.shape.ActivityChoiceShape;
 import net.sevenscales.editor.diagram.shape.ActivityEndShape;
 import net.sevenscales.editor.diagram.shape.ActivityShape;
@@ -121,7 +123,7 @@ public class RelationshipDragEndHandler implements
 					x = stp.scaledAndTranslatedPoint.x;
 					y = stp.scaledAndTranslatedPoint.y;
 				}
-				itemSelected(event.getElementType(), x, y);
+				itemSelected(event.getElementType(), event.getImageInfo(), x, y);
 			}
 		});
 	}
@@ -187,12 +189,12 @@ public class RelationshipDragEndHandler implements
 		currentY = y;
 	}
 
-	public void itemSelected(UMLDiagramType type, int x, int y) {
+	public void itemSelected(UMLDiagramType type, ImageInfo imageInfo, int x, int y) {
 		logger.debug("itemSelected {}", type);
 		hide();
 		Diagram diagram = null;
 		if (currentRel != null) {
-			diagram = createDiagramFromRelationShip(type, x, y);
+			diagram = createDiagramFromRelationShip(type, imageInfo, x, y);
 			surface.addAsSelected(diagram, true);
 			// this is connect drop element
 			currentRel.anchorEnd(true);
@@ -200,7 +202,7 @@ public class RelationshipDragEndHandler implements
 			surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(currentRel));
 		} else {
 			// surface empty case
-			diagram = createDiagram(type, x, y);
+			diagram = createDiagram(type, imageInfo, x, y);
 			surface.addAsSelected(diagram, true);
 		}
 
@@ -213,8 +215,8 @@ public class RelationshipDragEndHandler implements
 		popup.hide();
 	}
 
-	private Diagram createDiagramFromRelationShip(UMLDiagramType type, int x, int y) {
-		Diagram diagram = createDiagram(type, x, y);
+	private Diagram createDiagramFromRelationShip(UMLDiagramType type, ImageInfo imageInfo, int x, int y) {
+		Diagram diagram = createDiagram(type, imageInfo, x, y);
 		Point p = DiagramAnchorUtils.startCoordinate(
 				currentRel.getStartX(),
 				currentRel.getStartY(),
@@ -230,7 +232,7 @@ public class RelationshipDragEndHandler implements
 		return diagram;
 	}
 
-	private Diagram createDiagram(UMLDiagramType type, int x, int y) {
+	private Diagram createDiagram(UMLDiagramType type, ImageInfo imageInfo, int x, int y) {
 		Diagram result = null;
 		net.sevenscales.editor.diagram.utils.Color current = selectColor();
 		Color background = new Color(current.getRr(), current.getGg(), current.getBb(), current.getOpacity());
@@ -238,6 +240,10 @@ public class RelationshipDragEndHandler implements
 		Color color = new Color(current.getR(), current.getG(), current.getB(), 1);
 		
 		switch (type) {
+		case IMAGE: {
+			result = DiagramElementFactory.createImageElement(surface, imageInfo.getFilename(), imageInfo.getUrl(), x, y, imageInfo.getWidth(), imageInfo.getHeight());
+			break;
+		}
 		case CLASS: {
 			ClassElement2 ce = new ClassElement2(surface, new RectShape(x,
 					y, 1, // auto resizes

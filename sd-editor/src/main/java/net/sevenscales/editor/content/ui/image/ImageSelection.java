@@ -22,8 +22,10 @@ import net.sevenscales.editor.content.utils.DiagramElementFactory;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.api.event.ImageAddedEvent;
 import net.sevenscales.editor.api.event.ImageAddedEventHandler;
+import net.sevenscales.editor.api.event.CreateElementEvent;
 import net.sevenscales.domain.js.ImageInfo;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 
 
 public class ImageSelection extends Composite {
@@ -132,8 +134,7 @@ public class ImageSelection extends Composite {
   }-*/;
 
   private void gwtReceiveFileInfo(ImageInfo imageInfo) {
-  	Diagram d = DiagramElementFactory.createImageElement(surface, imageInfo.getFilename(), imageInfo.getUrl(), 0, 0, imageInfo.getWidth(), imageInfo.getHeight());
-		surface.addAsSelected(d, true);
+		surface.getEditorContext().getEventBus().fireEvent(new CreateElementEvent(UMLDiagramType.IMAGE, imageInfo, 0, 0));
   }
 
 }

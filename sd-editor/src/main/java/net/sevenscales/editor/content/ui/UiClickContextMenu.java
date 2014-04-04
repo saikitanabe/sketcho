@@ -204,7 +204,7 @@ public class UiClickContextMenu extends Composite {
 	}
 	
 	private void newNote(final int x, final int y) {
-		surface.getEditorContext().getEventBus().fireEvent(new CreateElementEvent(UMLDiagramType.NOTE, x, y));
+		surface.getEditorContext().getEventBus().fireEvent(new CreateElementEvent(UMLDiagramType.NOTE, null, x, y));
 		hide();
 	}
 	
