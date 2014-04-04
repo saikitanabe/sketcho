@@ -16,6 +16,7 @@ import net.sevenscales.editor.content.utils.EffectHelpers;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
 import net.sevenscales.editor.api.event.StartSelectToolEvent;
+import net.sevenscales.editor.content.ui.image.ImageSelection;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -28,6 +29,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 
@@ -126,23 +128,25 @@ public class UMLDiagramSelections extends Composite {
 		}
 	}
 	
-	public interface SelectionHandler {
-		void hidePopup();
-	}
-
 	interface UMLDiagramSelectionsUiBinder extends UiBinder<Widget, UMLDiagramSelections> {
 	}
 
-	private SelectionHandler selectionHandler;
+	private DiagramSelectionHandler selectionHandler;
 	private ISurfaceHandler surface;
 	
 	@UiField VerticalPanel diagramGroups;
 	@UiField FastButton comments;
 	// @UiField FastButton _comments;
 	@UiField HTMLPanel contextMenuArea;
+	@UiField FastButton showDiagrams;
+	@UiField FastButton myimages;
+	@UiField SimplePanel imagesArea;
+
+	private ImageSelection imageSelection;
+	
 //	@UiField ButtonElement freehandBtn;
 
-	public UMLDiagramSelections(ISurfaceHandler surface, SelectionHandler selectionHandler) {
+	public UMLDiagramSelections(ISurfaceHandler surface, DiagramSelectionHandler selectionHandler) {
 		this.surface = surface;
 		this.selectionHandler = selectionHandler;
 
@@ -154,6 +158,8 @@ public class UMLDiagramSelections extends Composite {
 			// _comments.setVisible(false);
 		}
 		
+		imagesArea.setVisible(false);
+		showDiagrams.setVisible(false);
 		EffectHelpers.tooltipper();
 //		editorContext.getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
 //			@Override
@@ -208,6 +214,40 @@ public class UMLDiagramSelections extends Composite {
 		stopEvent(event);
 		Tools.toggleCommentMode();
 		selectionHandler.hidePopup();
+	}
+
+	@UiHandler("myimages")
+	public void onMyImages(ClickEvent event) {
+		stopEvent(event);
+		showMyImages();
+	}
+
+	@UiHandler("showDiagrams")
+	public void onShowDiagrams(ClickEvent event) {
+		stopEvent(event);
+		showDiagrams();
+	}
+
+	private void showDiagrams() {
+		diagramGroups.setVisible(true);
+		showDiagrams.setVisible(false);
+		myimages.setVisible(true);
+		imagesArea.setVisible(false);
+	}
+
+	private void showMyImages() {
+		diagramGroups.setVisible(false);
+		showDiagrams.setVisible(true);
+		myimages.setVisible(false);
+		loadAndShowImages();
+	}
+
+	private void loadAndShowImages() {
+		if (imageSelection == null) {
+			imageSelection = new ImageSelection(surface, selectionHandler);
+			imagesArea.setWidget(imageSelection);
+		}
+		imagesArea.setVisible(true);
 	}
 
 	private void stopEvent(ClickEvent event) {

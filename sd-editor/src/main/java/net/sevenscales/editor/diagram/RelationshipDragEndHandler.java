@@ -18,7 +18,7 @@ import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.SelectionHandler;
+import net.sevenscales.editor.content.ui.DiagramSelectionHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoint;
@@ -72,7 +72,7 @@ import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 public class RelationshipDragEndHandler implements
-		RelationshipNotAttachedEventHandler, SelectionHandler, SurfaceMouseUpNoHandlingYetEventHandler, LibrarySelectionEventHandler {
+		RelationshipNotAttachedEventHandler, DiagramSelectionHandler, SurfaceMouseUpNoHandlingYetEventHandler, LibrarySelectionEventHandler {
   private static SLogger logger = SLogger.createLogger(RelationshipDragEndHandler.class);
   
 	private PopupPanel popup;

@@ -56,7 +56,28 @@
 			</c:child>
 		</c:FastButton>
 
+		<c:FastButton ui:field="showDiagrams" addStyleNames="{style.simple}">
+			<c:child>
+				<g:HTML>
+					<a title="Select a diagram element" class="btn btn-custom download-btn tooltipper">
+						<i class="context-icon-add-diagram"></i>
+					</a>
+				</g:HTML>
+			</c:child>
+		</c:FastButton>
+
+		<c:FastButton ui:field="myimages" addStyleNames="{style.simple}">
+			<c:child>
+				<g:HTML>
+					<a title="Select from my uploaded images" class="btn btn-custom download-btn tooltipper">
+						<i class="context-icon-my-images"></i>
+					</a>
+				</g:HTML>
+			</c:child>
+		</c:FastButton>
+
 		<g:HTMLPanel styleName="shape-context-panel">
+		<g:SimplePanel ui:field="imagesArea"></g:SimplePanel>
 		<g:VerticalPanel ui:field="diagramGroups">
 
 			<g:HorizontalPanel>
