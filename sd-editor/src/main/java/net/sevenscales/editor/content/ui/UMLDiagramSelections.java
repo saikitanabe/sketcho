@@ -140,6 +140,7 @@ public class UMLDiagramSelections extends Composite {
 	// @UiField FastButton _comments;
 	@UiField HTMLPanel contextMenuArea;
 	@UiField FastButton showDiagrams;
+	@UiField FastButton modifyImages;
 	@UiField FastButton myimages;
 	@UiField SimplePanel imagesArea;
 
@@ -160,6 +161,7 @@ public class UMLDiagramSelections extends Composite {
 		}
 		
 		imagesArea.setVisible(false);
+		modifyImages.setVisible(false);
 		showDiagrams.setVisible(false);
 		EffectHelpers.tooltipper();
 //		editorContext.getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
@@ -234,12 +236,14 @@ public class UMLDiagramSelections extends Composite {
 		showDiagrams.setVisible(false);
 		myimages.setVisible(true);
 		imagesArea.setVisible(false);
+		modifyImages.setVisible(false);
 	}
 
 	private void showMyImages() {
 		diagramGroups.setVisible(false);
 		showDiagrams.setVisible(true);
 		myimages.setVisible(false);
+		modifyImages.setVisible(true);
 		loadAndShowImages();
 	}
 

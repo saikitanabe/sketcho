@@ -71,6 +71,16 @@
 				<g:HTML>
 					<a title="Select from my uploaded images" class="btn btn-custom download-btn tooltipper">
 						<i class="context-icon-my-images"></i>
+					</a>-
+				</g:HTML>
+			</c:child>
+		</c:FastButton>
+
+		<c:FastButton ui:field="modifyImages" addStyleNames="{style.simple}">
+			<c:child>
+				<g:HTML>
+					<a href="#/modifyimages" title="Remove library images" class="tooltipper white-text context-text-btn">
+						Modify library
 					</a>
 				</g:HTML>
 			</c:child>

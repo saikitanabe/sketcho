@@ -126,11 +126,11 @@ public class ImageSelection extends Composite {
 
   private void addImage(ImageInfo imageInfo) {
   	logger.debug("addImage... {}", imageInfo.getHash());
-  	getSignedUrl(imageInfo.getHash());
+  	copyLibraryFileToBoard(imageInfo.getHash());
   }
 
-  private native void getSignedUrl(String hash)/*-{
-  	$wnd.ngGetFileInfo(hash);
+  private native void copyLibraryFileToBoard(String hash)/*-{
+  	$wnd.ngCopyLibraryFileToBoard(hash);
   }-*/;
 
   private void gwtReceiveFileInfo(ImageInfo imageInfo) {
