@@ -93,10 +93,16 @@ public class ImageSelection extends Composite {
 
   private void gwtLoadedImages(JsArray<ImageInfo> images) {
   	logger.debug("images json");
+  	clear();
   	for (int i = 0; i < images.length(); ++i) {
   		ImageInfo img = images.get(i);
   		addThumbnail(img);
   	}
+  }
+
+  private void clear() {
+  	imageCount = 0;
+  	images.clear();
   }
 
   private void addThumbnail(final ImageInfo imageInfo) {
