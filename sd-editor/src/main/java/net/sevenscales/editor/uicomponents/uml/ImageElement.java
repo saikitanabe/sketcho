@@ -221,4 +221,11 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   	return shape.getUrl();
   }
 
+  /**
+  * Returns runtime image url.
+  */
+  public String getUrl() {
+    return shape.getUrl();
+  }
+
 }

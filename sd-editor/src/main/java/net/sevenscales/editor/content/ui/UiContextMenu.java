@@ -33,6 +33,7 @@ import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
+import net.sevenscales.editor.uicomponents.uml.ImageElement;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.utils.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
@@ -86,6 +87,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement openlink;
 	@UiField AnchorElement textSize;
 	@UiField AnchorElement layersMenuButton;
+	@UiField AnchorElement fileLink;
 
 	private PopupPanel editLinkPopup;
 	private PopupPanel colorpopup;
@@ -199,6 +201,15 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					openEditLinkMenuVisibility = Display.INLINE_BLOCK;
 				} else if (selected.length == 1) {
 					addLinkMenuVisibility = Display.INLINE_BLOCK;
+				}
+
+				if (selected.length == 1 && selected[0] instanceof ImageElement) {
+					ImageElement img = (ImageElement) selected[0];
+					fileLink.setHref(img.getUrl());
+					fileLink.getStyle().setDisplay(Display.INLINE_BLOCK);
+				} else {
+					fileLink.setHref("");
+					fileLink.getStyle().setDisplay(Display.NONE);
 				}
 
 				boolean onlyComms = onlyComments(selected);

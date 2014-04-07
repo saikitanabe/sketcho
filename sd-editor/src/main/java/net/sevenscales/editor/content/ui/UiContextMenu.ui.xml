@@ -45,6 +45,9 @@
  			<a ui:field="openlink" title="Open/Edit Link" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-link2"></i>
 			</a>
+			<a ui:field="fileLink" title="Download file" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-download"></i>
+			</a>
 			<a ui:field="delete" title="Delete" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-trash2"></i>
 			</a>
