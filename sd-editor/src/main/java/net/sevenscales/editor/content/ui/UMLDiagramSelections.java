@@ -12,7 +12,6 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.content.utils.EffectHelpers;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
 import net.sevenscales.editor.api.event.StartSelectToolEvent;
@@ -163,7 +162,6 @@ public class UMLDiagramSelections extends Composite {
 		imagesArea.setVisible(false);
 		modifyImages.setVisible(false);
 		showDiagrams.setVisible(false);
-		EffectHelpers.tooltipper();
 //		editorContext.getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
 //			@Override
 //			public void on(FreehandModeChangedEvent event) {
