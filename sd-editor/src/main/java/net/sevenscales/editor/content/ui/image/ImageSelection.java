@@ -30,7 +30,7 @@ import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 
 public class ImageSelection extends Composite {
 	private static final SLogger logger = SLogger.createLogger(ImageSelection.class);
-	private static final int IMAGES_PER_ROW = 5;
+	private static final int IMAGES_PER_ROW = 6;
 
 	static {
 		logger.addFilter(ImageSelection.class);
