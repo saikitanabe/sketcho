@@ -142,6 +142,7 @@ public class UMLDiagramSelections extends Composite {
 	@UiField FastButton modifyImages;
 	@UiField FastButton myimages;
 	@UiField SimplePanel imagesArea;
+	@UiField FastButton uploadFile;
 
 	private ImageSelection imageSelection;
 	
@@ -228,6 +229,16 @@ public class UMLDiagramSelections extends Composite {
 		stopEvent(event);
 		showDiagrams();
 	}
+
+	@UiHandler("uploadFile")
+	public void onUploadFile(ClickEvent event) {
+		stopEvent(event);
+		startUploadFile(event.getClientX(), event.getClientY());
+	}
+
+	private native void startUploadFile(int x, int y)/*-{
+		$wnd.ngStartUploadFile(x, y);
+	}-*/;
 
 	private void showDiagrams() {
 		diagramGroups.setVisible(true);

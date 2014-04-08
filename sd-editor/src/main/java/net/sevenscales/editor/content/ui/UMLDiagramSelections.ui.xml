@@ -76,6 +76,16 @@
 			</c:child>
 		</c:FastButton>
 
+		<c:FastButton ui:field="uploadFile" addStyleNames="{style.simple}">
+			<c:child>
+				<g:HTML styleName="inline-block">
+					<a title="Upload image" class="btn btn-custom download-btn tooltipper">
+						<i class="context-icon-upload"></i>
+					</a>-
+				</g:HTML>
+			</c:child>
+		</c:FastButton>
+
 		<c:FastButton ui:field="modifyImages" addStyleNames="{style.simple}">
 			<c:child>
 				<g:HTML>
