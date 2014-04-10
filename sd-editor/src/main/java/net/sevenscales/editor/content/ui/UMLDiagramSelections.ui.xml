@@ -96,7 +96,8 @@
 			</c:child>
 		</c:FastButton>
 
-		<g:HTMLPanel styleName="shape-context-panel">
+		<g:ScrollPanel ui:field="scrollPanel" styleName="shape-context-panel">
+		<g:HTMLPanel>
 		<g:SimplePanel ui:field="imagesArea"></g:SimplePanel>
 		<g:VerticalPanel ui:field="diagramGroups">
 
@@ -424,6 +425,7 @@
 
 		</g:VerticalPanel>
 	</g:HTMLPanel>
+	</g:ScrollPanel>
 	<!-- </g:VerticalPanel> -->
 
 <!-- 	<g:HTML styleName="context-page-panel">

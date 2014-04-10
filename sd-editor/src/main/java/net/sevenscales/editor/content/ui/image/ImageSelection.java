@@ -4,12 +4,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ScrollHandler;
+import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.core.client.JsArray;
@@ -46,6 +49,8 @@ public class ImageSelection extends Composite {
 	private DiagramSelectionHandler parent;
 	private HorizontalPanel currentRow;
 	private int imageCount;
+	private double offset = 0;
+	private double max = 20;
 
 	public ImageSelection(ISurfaceHandler surface, DiagramSelectionHandler parent) {
 		this.surface = surface;
@@ -59,6 +64,13 @@ public class ImageSelection extends Composite {
   		public void on(ImageAddedEvent event) {
   			addThumbnail(event.getImageInfo());
   		}
+  	});
+
+  	parent.addScrollHandler(new DiagramSelectionHandler.WhenScrolledHandler() {
+			public void whenScrolled() {
+				offset += max;
+				loadThumbnails();
+			}
   	});
 
 		// new FastElementButton(moveForward).addClickHandler(new ClickHandler() {
@@ -76,6 +88,10 @@ public class ImageSelection extends Composite {
 			imageSelection.@net.sevenscales.editor.content.ui.image.ImageSelection::gwtLoadedImages(Lcom/google/gwt/core/client/JsArray;)(images);
 		}
 
+		$wnd.gwtLoadedImagesReset = function(images) {
+			imageSelection.@net.sevenscales.editor.content.ui.image.ImageSelection::gwtLoadedImagesReset(Lcom/google/gwt/core/client/JsArray;)(images);
+		}
+
 		$wnd.gwtReceiveFileInfo = function(fileinfo) {
 			imageSelection.@net.sevenscales.editor.content.ui.image.ImageSelection::gwtReceiveFileInfo(Lnet/sevenscales/domain/js/ImageInfo;)(fileinfo);
 		}
@@ -83,17 +99,22 @@ public class ImageSelection extends Composite {
 	}-*/;
 
 	private void loadThumbnails() {
-		_ngLoadThumbnails();
+		_ngLoadThumbnails(offset, max);
 	}
-	private native void _ngLoadThumbnails()/*-{
+	private native void _ngLoadThumbnails(double offset, double max)/*-{
 		// images are loaded through angular app code
 		// that loads images from server
-		$wnd.ngLoadThumbnails();
+		$wnd.ngLoadThumbnails(offset, max);
 	}-*/;
 
+  private void gwtLoadedImagesReset(JsArray<ImageInfo> images) {
+  	clear();
+  	gwtLoadedImages(images);
+  	// add images to offset, so loading next time from this position
+  	offset = images.length();
+	}
   private void gwtLoadedImages(JsArray<ImageInfo> images) {
   	logger.debug("images json");
-  	clear();
   	for (int i = 0; i < images.length(); ++i) {
   		ImageInfo img = images.get(i);
   		addThumbnail(img);
@@ -101,6 +122,7 @@ public class ImageSelection extends Composite {
   }
 
   private void clear() {
+  	offset = 0;
   	imageCount = 0;
   	images.clear();
   }
@@ -132,6 +154,7 @@ public class ImageSelection extends Composite {
 
   private void addImage(ImageInfo imageInfo) {
   	logger.debug("addImage... {}", imageInfo.getHash());
+  	parent.hidePopup();
   	copyLibraryFileToBoard(imageInfo.getHash());
   }
 

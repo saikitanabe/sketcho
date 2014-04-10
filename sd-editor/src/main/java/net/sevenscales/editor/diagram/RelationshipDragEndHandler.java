@@ -71,6 +71,7 @@ import net.sevenscales.editor.uicomponents.uml.GenericElement;
 
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
+import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 public class RelationshipDragEndHandler implements
@@ -473,6 +474,11 @@ public class RelationshipDragEndHandler implements
 	@Override
 	public void hidePopup() {
 		hide();
+	}
+
+	@Override
+	public void addScrollHandler(WhenScrolledHandler scrollHandler) {
+		diagramSelections.addScrollHandler(scrollHandler);
 	}
 
 }

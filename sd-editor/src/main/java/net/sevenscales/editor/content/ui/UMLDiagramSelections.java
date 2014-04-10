@@ -2,6 +2,8 @@ package net.sevenscales.editor.content.ui;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.LibrarySelections.Library;
@@ -19,6 +21,8 @@ import net.sevenscales.editor.content.ui.image.ImageSelection;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ScrollHandler;
+import com.google.gwt.event.dom.client.ScrollEvent;
 // import com.google.gwt.event.dom.client.MouseWheelEvent;
 // import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -29,6 +33,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 
@@ -143,8 +148,10 @@ public class UMLDiagramSelections extends Composite {
 	@UiField FastButton myimages;
 	@UiField SimplePanel imagesArea;
 	@UiField FastButton uploadFile;
+	@UiField ScrollPanel scrollPanel;
 
 	private ImageSelection imageSelection;
+	private Set<DiagramSelectionHandler.WhenScrolledHandler> scrollHandlers = new HashSet<DiagramSelectionHandler.WhenScrolledHandler>();
 	
 //	@UiField ButtonElement freehandBtn;
 
@@ -163,6 +170,16 @@ public class UMLDiagramSelections extends Composite {
 		imagesArea.setVisible(false);
 		modifyImages.setVisible(false);
 		showDiagrams.setVisible(false);
+
+		scrollPanel.addScrollHandler(new ScrollHandler() {
+			public void onScroll(ScrollEvent event) {
+				if (scrollPanel.getScrollPosition() + scrollPanel.getOffsetHeight() >= scrollPanel.getElement().getScrollHeight()) {
+					for (DiagramSelectionHandler.WhenScrolledHandler w : scrollHandlers) {
+						w.whenScrolled();
+					}
+				}
+			}
+		});
 //		editorContext.getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
 //			@Override
 //			public void on(FreehandModeChangedEvent event) {
@@ -550,6 +567,10 @@ public class UMLDiagramSelections extends Composite {
 				break;
 			}
 		}
+	}
+
+	public void addScrollHandler(DiagramSelectionHandler.WhenScrolledHandler scrollHandler) {
+		scrollHandlers.add(scrollHandler);
 	}
 
 }
