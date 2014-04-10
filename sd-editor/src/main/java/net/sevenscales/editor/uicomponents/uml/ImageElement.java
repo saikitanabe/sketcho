@@ -61,6 +61,8 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 
 		this.shape = newShape;
 
+    // fetchSignedUrlIfMissing();
+
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     group.setAttribute("cursor", "default");
 
@@ -91,6 +93,25 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 
     super.constructorDone();
 	}
+
+  // private void fetchSignedUrlIfMissing() {
+  //   if (isAwsUrl()) {
+  //     fetchSignedUrl(shape.getFilename());
+  //   }
+  // }
+
+  // private native void fetchSignedUrl(ImageElement me, String filename)/*-{
+  //   // need to fetch directly and not through angular, since hander
+  //   // needs to be this instance; this certainly will not work
+  //   // on Confluence! :)
+  //   $wnd.backendProfileService.getSignedUrl(filename).then(function(data) {
+      
+  //   })
+  // }-*/;
+
+  public boolean isAwsUrl() {
+    return "*".equals(shape.getUrl());
+  }
 
 	@Override
 	public int getRelativeLeft() {
