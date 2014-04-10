@@ -103,6 +103,7 @@ public class ImageSelection extends Composite {
 	}-*/;
 
 	public void loadImages() {
+		offset = imageCount;
 		loadThumbnails();
 	}
 
