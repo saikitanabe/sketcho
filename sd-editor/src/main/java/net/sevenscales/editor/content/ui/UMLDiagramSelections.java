@@ -277,6 +277,8 @@ public class UMLDiagramSelections extends Composite {
 		if (imageSelection == null) {
 			imageSelection = new ImageSelection(surface, selectionHandler);
 			imagesArea.setWidget(imageSelection);
+		} else {
+			imageSelection.loadImages();
 		}
 		imagesArea.setVisible(true);
 	}

@@ -44,6 +44,7 @@ public class ImageSelection extends Composite {
 	private static ImageSelectionUiBinder uiBinder = GWT.create(ImageSelectionUiBinder.class);
 
 	@UiField VerticalPanel images;
+	@UiField Widget emptyMessage;
 
 	private ISurfaceHandler surface;
 	private DiagramSelectionHandler parent;
@@ -60,9 +61,12 @@ public class ImageSelection extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 		loadThumbnails();
 
+		emptyMessage.setVisible(false);
+
   	surface.getEditorContext().getEventBus().addHandler(ImageAddedEvent.TYPE, new ImageAddedEventHandler() {
   		public void on(ImageAddedEvent event) {
   			addThumbnail(event.getImageInfo());
+		  	showOrHideEmptyMessage();
   		}
   	});
 
@@ -98,6 +102,10 @@ public class ImageSelection extends Composite {
 
 	}-*/;
 
+	public void loadImages() {
+		loadThumbnails();
+	}
+
 	private void loadThumbnails() {
 		_ngLoadThumbnails(offset, max);
 	}
@@ -118,6 +126,16 @@ public class ImageSelection extends Composite {
   	for (int i = 0; i < images.length(); ++i) {
   		ImageInfo img = images.get(i);
   		addThumbnail(img);
+  	}
+
+  	showOrHideEmptyMessage();
+  }
+
+  private void showOrHideEmptyMessage() {
+  	if (imageCount == 0) {
+			emptyMessage.setVisible(true);
+  	} else {
+  		emptyMessage.setVisible(false);
   	}
   }
 

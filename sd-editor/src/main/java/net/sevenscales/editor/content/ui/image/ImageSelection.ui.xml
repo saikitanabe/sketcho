@@ -5,6 +5,7 @@
 	</ui:style>
 	
 	<g:HTMLPanel styleName="image-selection">
+		<g:HTML styleName="empty-message" ui:field="emptyMessage">You don't have any library images, yet. Drag and drop images to your board.</g:HTML>
 		<g:VerticalPanel ui:field="images"></g:VerticalPanel>
 	</g:HTMLPanel>
 </ui:UiBinder>
