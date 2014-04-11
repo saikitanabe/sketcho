@@ -52,7 +52,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 
 	private ImageShape shape;
 	private Point coords = new Point();
-  // private IRectangle background;
+  private IRectangle background;
   private IGroup group;
   private IImage image;
 
@@ -74,11 +74,11 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
     	shape.getUrl());
 
 
-    // background = IShapeFactory.Util.factory(editable).createRectangle(group);
-    // background.setFill(0, 0 , 0, 0); // transparent
+    background = IShapeFactory.Util.factory(editable).createRectangle(group);
+    background.setFill(0, 0 , 0, 0); // transparent
     // background.setStroke("#363636");
 
-		addEvents(image);
+		addEvents(background);
 		
 		addMouseDiagramHandler(this);
 
@@ -105,7 +105,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   //   // needs to be this instance; this certainly will not work
   //   // on Confluence! :)
   //   $wnd.backendProfileService.getSignedUrl(filename).then(function(data) {
-      
+
   //   })
   // }-*/;
 
@@ -199,12 +199,13 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   public void setShape(int left, int top, int width, int height) {
   	if (width >= 10 && height >= 10) {
   		image.setShape(left, top, width, height);
+      background.setShape(left, top, width, height, 0);
 			super.applyHelpersShape();
   	}
   }
 
   public void setHighlightColor(String color) {
-		image.setStroke(color);
+		background.setStroke(color);
   }
   
 	@Override

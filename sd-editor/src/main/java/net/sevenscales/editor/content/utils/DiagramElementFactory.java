@@ -6,6 +6,7 @@ import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.uml.ImageElement;
 import net.sevenscales.editor.diagram.shape.ImageShape;
 import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.gfx.domain.Color;
 
 
 public class DiagramElementFactory {
@@ -14,7 +15,7 @@ public class DiagramElementFactory {
 		return new ImageElement(surface, 
 														shape, 
 														Theme.createDefaultBackgroundColor(), 
-														Theme.createDefaultBorderColor(), 
+														new Color(0, 0, 0, 0), // Theme.createDefaultBorderColor(), 
 														Theme.createDefaultTextColor(),
 														true,
 														new DiagramItemDTO());

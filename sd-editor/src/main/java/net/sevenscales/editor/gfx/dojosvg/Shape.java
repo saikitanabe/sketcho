@@ -34,7 +34,7 @@ abstract class Shape extends Graphics implements IShape {
 	
 	final public void setStroke(int red, int green, int blue, double opacity) {
 //		nativeSetStroke(rawNode, red, green, blue, opacity);
-		nativeSetStroke(rawNode, red, green, blue, opacity, 3);
+		nativeSetStroke(rawNode, red, green, blue, opacity, opacity);
 	}
 	
 	final public void setStroke(int red, int green, int blue, double opacity, double width) {

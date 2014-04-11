@@ -1308,7 +1308,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   @Override
   public void setBorderColor(Color color) {
     borderColor.copy(color);
-    this.borderWebColor = color.toHexString();
+    if (color.opacity == 0) {
+      this.borderWebColor = "transparent";
+    } else {
+      this.borderWebColor = color.toHexString();
+    }
     setHighlightColor(borderWebColor);
     applyAnnotationColors();
   }
