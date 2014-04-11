@@ -21,10 +21,12 @@ public class SvgImage extends SvgBase {
     params.put("%height%", String.valueOf(image.getHeight()));
 
     String url = "";
-    if (editorContext.isTrue(EditorProperty.PRINTING)) {
+    // printing flag didn't work, and after expired, images are no longer visible on print page
+    // if (editorContext.isTrue(EditorProperty.PRINTING)) {
       // just use browser cached images
-      url = image.getSrc();
-    } else if (diagram instanceof ImageElement) {
+      // url = image.getSrc();
+    // } else
+    if (diagram instanceof ImageElement) {
       url = ((ImageElement) diagram).getImageUrl();
     } else {
       // some url hacking to get confluence and Sketchboard.Me working
