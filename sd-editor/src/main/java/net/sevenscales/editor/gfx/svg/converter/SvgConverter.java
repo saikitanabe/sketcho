@@ -24,6 +24,10 @@ public class SvgConverter {
 	private static final SLogger logger = SLogger.createLogger(SvgConverter.class);
 	private static final int MARGIN_WIDTH = 30;
 	private static final int MARGIN_HEIGHT = 40;
+
+  static {
+    logger.addFilter(SvgConverter.class);
+  }
 	
 	public enum ScaleSize {
 		A4_PORTRATE(210, 297), A4_LANDSCAPE(297, 210), A3_PORTRATE(297, 420), A3_LANDSCAPE(420, 297), ORICINAL_SIZE(0, 0);
@@ -77,17 +81,24 @@ public class SvgConverter {
 
   /**
   * If true converts only selected elements; if false converts always all.
+  * Highest precedence.
   */
   private boolean onlySelected;
+  /**
+  * Converts only items in filter of all if null;
+  * Lower precedence after onlySelected.
+  */
+  private List<String> filter;
   
   public SvgConverter(boolean onlySelected) {
     this.onlySelected = onlySelected;
   	scaleSize = ScaleSize.ORICINAL_SIZE;
 	}
   
-  public SvgConverter(ScaleSize scaleSize, boolean onlySelected) {
+  public SvgConverter(ScaleSize scaleSize, boolean onlySelected, List<String> filter) {
   	this.scaleSize = scaleSize;
     this.onlySelected = onlySelected;
+    this.filter = filter;
   }
 
   /**
@@ -99,7 +110,13 @@ public class SvgConverter {
       return SortHelpers.sortDiagramItems(SortHelpers.toArray(selected));
     }
 
-    return SortHelpers.sortDiagramItems(SortHelpers.toArray(surfaceHandler.getDiagrams()));
+    Diagram[] result = null;
+    if (filter != null && filter.size() > 0) {
+      result = SortHelpers.sortDiagramItems(SortHelpers.toArray(surfaceHandler.getDiagrams(), filter));
+    } else {
+      result = SortHelpers.sortDiagramItems(SortHelpers.toArray(surfaceHandler.getDiagrams()));
+    }
+    return result;
   }
 
   public SvgData convertToSvg(IDiagramContent content, ISurfaceHandler surfaceHandler) {
