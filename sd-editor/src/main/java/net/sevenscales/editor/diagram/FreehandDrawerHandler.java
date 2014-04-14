@@ -427,11 +427,15 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     if (drawing.size() > 0) {
       surface.add(drawing, true, false);
       // start blocking and also timer to free sending
-      blockSending();
-      freeLater();
+      // blockAndStartFreeTimer();
     }
     freehandPahts.clear();
     // logger.debug("PLOTTING... done");
+  }
+
+  private void blockAndStartFreeTimer() {
+    blockSending();
+    freeLater();
   }
 	
 	@Override
