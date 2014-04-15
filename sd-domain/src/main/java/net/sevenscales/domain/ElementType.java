@@ -24,6 +24,7 @@ public enum ElementType {
 	HORIZONTAL_PARTITION("hpart"),
 	FORK("fork"),
 	IMAGE("img"),
+	// NOTE url image needs to be a new type!!! G_IMAGE("gimg") Makes aws url and name parsing more robust.
 	STAR4("star4"),
 	STAR5("star5"),
 	ENVELOPE("envelope"),

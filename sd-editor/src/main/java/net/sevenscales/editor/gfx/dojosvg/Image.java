@@ -13,7 +13,12 @@ public class Image extends Shape implements IImage {
 	}
 	
 	private native JavaScriptObject createImage(JavaScriptObject surface, int x, int y, int width, int height, String src)/*-{
-		var result = surface.createImage({x: x, y: y, width: width, height: height, src: src});
+		var result = null
+		if (src != "*") {
+			result = surface.createImage({x: x, y: y, width: width, height: height, src: src});
+		} else {
+			result = surface.createImage({x: x, y: y, width: width, height: height});
+		}
 //		var m = $wnd.dojox.gfx.matrix;
 		
 //		result.setTransform([m.rotateg(45), m.skewXg(30)]);
@@ -112,7 +117,8 @@ public class Image extends Shape implements IImage {
 		_setSrc(rawNode, src);
 	}
 	private native void _setSrc(JavaScriptObject rawNode, String src)/*-{
-		rawNode.getShape().src = src;
+		var shape = rawNode.getShape()
+		rawNode.setShape({x: shape.x, y: shape.y, width: shape.width, height: shape.height, src:src});
 	}-*/;
 
 	@Override
