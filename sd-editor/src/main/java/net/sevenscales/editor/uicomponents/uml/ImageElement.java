@@ -41,6 +41,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.domain.IPathRO;
 import net.sevenscales.domain.ExtensionDTO;
+import net.sevenscales.domain.js.ImageInfo;
 
 
 public class ImageElement extends AbstractDiagramItem implements SupportsRectangleShape {
@@ -61,7 +62,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 
 		this.shape = newShape;
 
-    // fetchSignedUrlIfMissing();
+    fetchSignedUrlIfMissing();
 
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     group.setAttribute("cursor", "default");
@@ -94,22 +95,28 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
     super.constructorDone();
 	}
 
-  // private void fetchSignedUrlIfMissing() {
-  //   if (isAwsUrl()) {
-  //     fetchSignedUrl(shape.getFilename());
-  //   }
-  // }
+  private void fetchSignedUrlIfMissing() {
+    if (isNotFetchedAwsUrl()) {
+      fetchSignedUrl(this, shape.getFilename());
+    }
+  }
 
-  // private native void fetchSignedUrl(ImageElement me, String filename)/*-{
-  //   // need to fetch directly and not through angular, since hander
-  //   // needs to be this instance; this certainly will not work
-  //   // on Confluence! :)
-  //   $wnd.backendProfileService.getSignedUrl(filename).then(function(data) {
+  private void updateImageInfo(String signedUrl) {
+    image.setSrc(signedUrl);
+  }
 
-  //   })
-  // }-*/;
+  private native void fetchSignedUrl(ImageElement me, String filename)/*-{
+    // need to fetch directly and not through angular, since hander
+    // needs to be this instance; this certainly will not work
+    // on Confluence! :)
+    $wnd.backendProfileService.getSignedUrl(filename).then(function(signedUrl) {
+      if (signedUrl) {
+        me.@net.sevenscales.editor.uicomponents.uml.ImageElement::updateImageInfo(Ljava/lang/String;)(signedUrl);
+      }
+    })
+  }-*/;
 
-  public boolean isAwsUrl() {
+  public boolean isNotFetchedAwsUrl() {
     return "*".equals(shape.getUrl());
   }
 
