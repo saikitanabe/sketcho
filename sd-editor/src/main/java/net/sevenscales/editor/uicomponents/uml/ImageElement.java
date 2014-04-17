@@ -100,8 +100,13 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 
   private void createImage() {
     image = IShapeFactory.Util.factory(true).createImage(group, 
-      shape.rectShape.left + shape.rectShape.width / 2 - 10, 
-      shape.rectShape.top + shape.rectShape.height / 2 - 10,
+      shape.rectShape.left, 
+      shape.rectShape.top,
+      // cannot center loader icon since it might not be visible for the user
+      // when loading a big image which doesn't fit the screen
+      // left, top should be always visible for the user
+      // shape.rectShape.left + shape.rectShape.width / 2 - 10, 
+      // shape.rectShape.top + shape.rectShape.height / 2 - 10,
       20,
       20,
       "/static/images/ajax-loader.gif");
