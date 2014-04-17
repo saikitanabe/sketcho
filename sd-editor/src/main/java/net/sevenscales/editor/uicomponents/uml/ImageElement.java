@@ -3,6 +3,12 @@ package net.sevenscales.editor.uicomponents.uml;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.safehtml.shared.UriUtils;
+
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
@@ -56,6 +62,8 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   private IRectangle background;
   private IGroup group;
   private IImage image;
+  private Image imageLoader;
+  private boolean loaded;
 
 	public ImageElement(ISurfaceHandler surface, ImageShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
 		super(editable, surface, backgroundColor, borderColor, textColor, item);
@@ -67,13 +75,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     group.setAttribute("cursor", "default");
 
-    image = IShapeFactory.Util.factory(true).createImage(group, 
-    	shape.rectShape.left, 
-    	shape.rectShape.top,
-    	shape.rectShape.width,
-    	shape.rectShape.height, 
-    	shape.getUrl());
-
+    createImage();
 
     background = IShapeFactory.Util.factory(editable).createRectangle(group);
     background.setFill(0, 0 , 0, 0); // transparent
@@ -88,12 +90,49 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
 
     setReadOnly(!editable);
+
     setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
 
     setBorderColor(borderColor);
 
     super.constructorDone();
 	}
+
+  private void createImage() {
+    image = IShapeFactory.Util.factory(true).createImage(group, 
+      shape.rectShape.left + shape.rectShape.width / 2 - 10, 
+      shape.rectShape.top + shape.rectShape.height / 2 - 10,
+      20,
+      20,
+      "/static/images/ajax-loader.gif");
+
+    startLoader(shape.getUrl());
+  }
+
+  private void startLoader(final String url) {
+    if (imageLoader == null && !"*".equals(url)) {
+      // loader is not started for empty image, then this is already handled through
+      // fetch
+      imageLoader = new Image(UriUtils.fromString(url));
+      RootPanel.get().add(imageLoader);
+      // imageLoader.hide();
+      imageLoader.addLoadHandler(new LoadHandler() {
+        public void onLoad(LoadEvent event) {
+          applyImageShape(url);
+          imageLoader.removeFromParent();
+        }
+      });
+    }
+  }
+
+  private void applyImageShape(String url) {
+    image.setShape(shape.rectShape.left, 
+                   shape.rectShape.top, 
+                   getWidth(), 
+                   getHeight(),
+                   url);
+    loaded = true;
+  }
 
   private void fetchSignedUrlIfMissing() {
     if (isNotFetchedAwsUrl()) {
@@ -102,7 +141,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   }
 
   private void updateImageInfo(String signedUrl) {
-    image.setSrc(signedUrl);
+    startLoader(signedUrl);
   }
 
   private native void fetchSignedUrl(ImageElement me, String filename)/*-{
@@ -122,19 +161,19 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 
 	@Override
 	public int getRelativeLeft() {
-		return image.getX();
+		return background.getX();
 	}
 	@Override
 	public int getRelativeTop() {
-		return image.getY();
+		return background.getY();
 	}
 	@Override
 	public int getWidth() {
-		return image.getWidth();
+		return background.getWidth();
 	}
 	@Override
 	public int getHeight() {
-		return image.getHeight();
+		return background.getHeight();
 	}
 
 	public Point getDiffFromMouseDownLocation() {
@@ -205,7 +244,11 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   @Override
   public void setShape(int left, int top, int width, int height) {
   	if (width >= 10 && height >= 10) {
-  		image.setShape(left, top, width, height);
+      if (loaded) {
+        // cannot set real size until image is fully loaded
+        // place holder is smaller
+        image.setShape(left, top, width, height);
+      }
       background.setShape(left, top, width, height, 0);
 			super.applyHelpersShape();
   	}
