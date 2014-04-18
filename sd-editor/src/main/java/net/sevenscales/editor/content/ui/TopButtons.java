@@ -34,7 +34,7 @@ public class TopButtons extends Composite {
 	private EditorContext editorContext;
 	
 	@UiField ButtonElement freehandOn;
-	@UiField ButtonElement commentModeOn;
+	// @UiField ButtonElement commentModeOn;
 
 	public TopButtons(EditorContext editorContext) {
 		this.editorContext = editorContext;
@@ -73,20 +73,20 @@ public class TopButtons extends Composite {
 					}
 				});
 
-		DOM.sinkEvents((com.google.gwt.user.client.Element) commentModeOn.cast(),
-				Event.ONCLICK);
-		DOM.setEventListener(
-				(com.google.gwt.user.client.Element) commentModeOn.cast(),
-				new EventListener() {
-					@Override
-					public void onBrowserEvent(Event event) {
-						switch (DOM.eventGetType(event)) {
-						case Event.ONCLICK:
-							hideCommentMode();
-							break;
-						}
-					}
-				});
+		// DOM.sinkEvents((com.google.gwt.user.client.Element) commentModeOn.cast(),
+		// 		Event.ONCLICK);
+		// DOM.setEventListener(
+		// 		(com.google.gwt.user.client.Element) commentModeOn.cast(),
+		// 		new EventListener() {
+		// 			@Override
+		// 			public void onBrowserEvent(Event event) {
+		// 				switch (DOM.eventGetType(event)) {
+		// 				case Event.ONCLICK:
+		// 					hideCommentMode();
+		// 					break;
+		// 				}
+		// 			}
+		// 		});
 	}
 
 	public void setVisible(FreehandModeChangedEvent event) {
@@ -113,13 +113,13 @@ public class TopButtons extends Composite {
 	private void showHideCommentMode(boolean show) {
 		Tools.setCommentTool(show);
 
-		if (Tools.isCommentMode()) {
-			super.setVisible(true);
-			commentModeOn.getStyle().setDisplay(Display.INLINE);
-		} else {
-			super.setVisible(editorContext.isTrue(EditorProperty.FREEHAND_MODE));
-			commentModeOn.getStyle().setDisplay(Display.NONE);
-		}
+		// if (Tools.isCommentMode()) {
+		// 	super.setVisible(true);
+		// 	commentModeOn.getStyle().setDisplay(Display.INLINE);
+		// } else {
+		// 	super.setVisible(editorContext.isTrue(EditorProperty.FREEHAND_MODE));
+		// 	commentModeOn.getStyle().setDisplay(Display.NONE);
+		// }
 	}
 	
 }
