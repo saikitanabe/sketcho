@@ -7,6 +7,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.content.ui.textsize.TextSizePopup;
 import net.sevenscales.editor.content.ui.textsize.TextSizeHandler;
 import net.sevenscales.editor.content.ui.layers.LayersPopup;
+import net.sevenscales.editor.content.ui.link.EditLinkForm;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;

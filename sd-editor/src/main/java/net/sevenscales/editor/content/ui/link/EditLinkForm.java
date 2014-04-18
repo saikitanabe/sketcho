@@ -1,4 +1,4 @@
-package net.sevenscales.editor.content.ui;
+package net.sevenscales.editor.content.ui.link;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Composite;

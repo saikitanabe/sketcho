@@ -64,6 +64,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		}
 		surfaceClickHandler = new SurfaceClickHandler(surface);
 		sketchDiagramAreaHandler = new SketchDiagramAreaHandler(surface, modeManager);
+		new LinkHandler(surface);
 		
 		// addMouseDiagramHandler(sketchDiagramAreaHandler);
 	}
