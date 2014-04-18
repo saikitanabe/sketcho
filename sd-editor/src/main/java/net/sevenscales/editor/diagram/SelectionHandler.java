@@ -27,10 +27,16 @@ import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.content.ui.UIKeyHelpers;
 
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.KeyboardListener;
@@ -87,7 +93,24 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
       }
     });
 
+    Event.addNativePreviewHandler(new NativePreviewHandler() {
+      @Override
+      public void onPreviewNativeEvent(NativePreviewEvent event) {
+        handleBackspaceDelete(event);
+      }
+    });
+
 	}
+
+  private void handleBackspaceDelete(NativePreviewEvent event) {
+    NativeEvent ne = event.getNativeEvent();
+    if (event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.noMetaKeys(ne) && !surface.getEditorContext().isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
+      if (ne.getKeyCode() == KeyCodes.KEY_BACKSPACE && UIKeyHelpers.allMenusAreClosed()) {
+        event.getNativeEvent().preventDefault();
+        removeSelected();
+      }
+    }
+  }
 		
 ////////////////////////////////////
 	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
