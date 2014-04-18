@@ -47,7 +47,7 @@ class LinkHandler {
 		Diagram selected = surface.getSelectionHandler().getOnlyOneSelected();
 		if (selected != null && selected.getLink() != null) {
 			logger.debug("openLink");
-			Window.open(selected.getLink(), "_blank", "enabled");
+			Window.open(selected.getLink(), "_blank", "");
 		}
 	}
 }
