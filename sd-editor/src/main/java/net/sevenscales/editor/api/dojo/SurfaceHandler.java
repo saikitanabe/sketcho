@@ -1072,6 +1072,10 @@ class SurfaceHandler extends SimplePanel implements
 	public String getName() {
 		return name;
 	}
+
+	public boolean isLibrary() {
+		return !ISurfaceHandler.DRAWING_AREA.equals(getName());
+	}
 	
 	/**
 	 * Creates a snapshot diagram search. Do not keep the instance, caches items to memory.

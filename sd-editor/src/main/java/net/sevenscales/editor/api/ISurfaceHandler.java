@@ -45,6 +45,8 @@ public interface ISurfaceHandler {
 	void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
 			EditorContext editorContext);
 
+	boolean isLibrary();
+
 	ISurface getSurface();
 	List<Diagram> getDiagrams();
 	List<Diagram> getVisualItems();

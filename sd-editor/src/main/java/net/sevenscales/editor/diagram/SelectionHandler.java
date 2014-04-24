@@ -199,6 +199,11 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   * work in correct order.
   */
 	public void removeSelected() {
+    if (surface.isLibrary()) {
+      // HACK: not allowed to remove anything from library
+      return;
+    }
+
     Diagram[] items = new Diagram[]{};
     items = diagrams.toArray(items);
     // clear to be removed so hooks are valid in this cycle
