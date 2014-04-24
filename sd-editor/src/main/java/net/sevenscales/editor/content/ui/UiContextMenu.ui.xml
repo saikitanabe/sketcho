@@ -29,13 +29,13 @@
 			<a ui:field="textSize" title="Change Font Size" class="btn btn-custom btn-context-menu tooltipper">
 				&#187;T&#171;
 			</a>
-			<a ui:field="annotate" title="Annotation" class="btn btn-custom btn-context-menu tooltipper">
+<!-- 			<a ui:field="annotate" title="Annotation" class="btn btn-custom btn-context-menu tooltipper">
 				A
 			</a>
 			<a ui:field="unannotate" title="Unmark annotation" class="btn btn-custom btn-context-menu tooltipper">
 				A
 			</a>
-<!-- 			<a ui:field="openLink" title="Open Link" class="btn btn-custom btn-context-menu tooltipper">
+ --><!-- 			<a ui:field="openLink" title="Open Link" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-open-link"></i>
 			</a>
  -->			

@@ -82,8 +82,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement reverseConnection;
 	@UiField AnchorElement colorize;
 	@UiField AnchorElement delete;
-	@UiField AnchorElement annotate;
-	@UiField AnchorElement unannotate;
+	// @UiField AnchorElement annotate;
+	// @UiField AnchorElement unannotate;
 	@UiField AnchorElement addlink;
 	@UiField AnchorElement openlink;
 	@UiField AnchorElement textSize;
@@ -235,8 +235,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				colorize.getStyle().setDisplay(colorMenu);
 				delete.getStyle().setDisplay(deleteMenuVisibility);
 				duplicate.getStyle().setDisplay(duplicateMenuVisibility);
-				annotate.getStyle().setDisplay(annotateVisibility);
-				unannotate.getStyle().setDisplay(unannotateVisibility);
+				// annotate.getStyle().setDisplay(annotateVisibility);
+				// unannotate.getStyle().setDisplay(unannotateVisibility);
 				addlink.getStyle().setDisplay(addLinkMenuVisibility);
 				openlink.getStyle().setDisplay(openEditLinkMenuVisibility);
 				textSize.getStyle().setDisplay(changeFontSizeVisibility);
@@ -405,21 +405,21 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			}
 		});
 
-		new FastElementButton(annotate).addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				stopEvent(event);
-				annotate();
-			}
-		});
+		// new FastElementButton(annotate).addClickHandler(new ClickHandler() {
+		// 	@Override
+		// 	public void onClick(ClickEvent event) {
+		// 		stopEvent(event);
+		// 		annotate();
+		// 	}
+		// });
 
-		new FastElementButton(unannotate).addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				stopEvent(event);
-				unannotate();
-			}
-		});
+		// new FastElementButton(unannotate).addClickHandler(new ClickHandler() {
+		// 	@Override
+		// 	public void onClick(ClickEvent event) {
+		// 		stopEvent(event);
+		// 		unannotate();
+		// 	}
+		// });
 
 		new FastElementButton(addlink).addClickHandler(new ClickHandler() {
 			@Override
