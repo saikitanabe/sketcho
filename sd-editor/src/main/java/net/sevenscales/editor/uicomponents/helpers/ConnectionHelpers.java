@@ -272,7 +272,8 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 				setConnectionHandleVisibility(connectionHandles.get(BOTTOM_INDEX), false);
 			}
 		} else {
-		  hideExtraConnectionHandles();
+			removeExtraConnectionHandles();
+		  // hideExtraConnectionHandles();
 		}
 	}
 	
