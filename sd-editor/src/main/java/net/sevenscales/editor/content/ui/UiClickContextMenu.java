@@ -85,16 +85,7 @@ public class UiClickContextMenu extends Composite {
 		popup.setStyleName("UiContextMenu");
 		popup.setAutoHideEnabled(true);
 		popup.setWidget(this);
-		
-		RootPanel.get().addDomHandler(new KeyDownHandler() {
-			@Override
-			public void onKeyDown(KeyDownEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
-					hide();
-				}
-			}
-		}, KeyDownEvent.getType());
-		
+				
 		surface.addDomHandler(new TouchStartHandler() {
 			@Override
 			public void onTouchStart(TouchStartEvent event) {

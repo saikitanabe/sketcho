@@ -475,7 +475,18 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		  }
 		});
 		
+		handleCancel(this);
 		closeOnSave();
+	}
+
+	private native void handleCancel(UiContextMenu me)/*-{
+		$wnd.cancelStream.onValue(function() {
+			me.@net.sevenscales.editor.content.ui.UiContextMenu::cancel()();
+		})
+	}-*/;
+
+	private void cancel() {
+		hide();
 	}
 
 	private Point fixPosition(int left, int top, int offsetWidth, int offsetHeight) {

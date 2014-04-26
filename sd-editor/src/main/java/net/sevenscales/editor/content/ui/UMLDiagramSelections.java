@@ -180,6 +180,8 @@ public class UMLDiagramSelections extends Composite {
 				}
 			}
 		});
+
+		handleCancel(this);
 //		editorContext.getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
 //			@Override
 //			public void on(FreehandModeChangedEvent event) {
@@ -200,6 +202,16 @@ public class UMLDiagramSelections extends Composite {
 
 		// 	}
 		// });
+	}
+
+	private native void handleCancel(UMLDiagramSelections me)/*-{
+		$wnd.cancelStream.onValue(function() {
+			me.@net.sevenscales.editor.content.ui.UMLDiagramSelections::cancel()();
+		})
+	}-*/;
+
+	private void cancel() {
+		selectionHandler.hidePopup();
 	}
 
 	@UiHandler("freehand")

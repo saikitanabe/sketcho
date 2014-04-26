@@ -100,7 +100,18 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
       }
     });
 
+    handleEscKey(this);
 	}
+
+  private native void handleEscKey(SelectionHandler me)/*-{
+    $wnd.cancelStream.onValue(function(v) {
+      me.@net.sevenscales.editor.diagram.SelectionHandler::onEsc()();
+    })
+  }-*/;
+
+  private void onEsc() {
+    unselectAll();
+  }
 
   private void handleBackspaceDelete(NativePreviewEvent event) {
     NativeEvent ne = event.getNativeEvent();
