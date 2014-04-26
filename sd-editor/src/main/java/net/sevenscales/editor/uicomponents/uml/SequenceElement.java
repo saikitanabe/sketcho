@@ -507,11 +507,18 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
   	lifeLineEditor.forceHide();
   	connectionHelpers.removeExtraConnectionHandles();
   }
+
+  @Override
+  public void setTransform(int dx, int dy) {
+    super.setTransform(dx, dy);
+    lifeLineEditor.hide(this);
+  }
     
   @Override
   public void saveLastTransform(int dx, int dy) {
   	super.saveLastTransform(dx, dy);
   	lifeLineEditor.saveLastTransform(dx, dy);
+    lifeLineEditor.show(this);
   	addRemoveVisibleConnectionHelpers();
   	makeFixedAnchorPoints();
   }
