@@ -77,6 +77,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 	private List<Diagram> items;
   private ProxyDragHandler proxyDragHandler;
 	private EditorContext editorContext;
+  private FlowPanel panel;
 
 	private static final int GROUP_SPACE = 25;
 	private static final int GROUP_HEADING_SPACE = 45;
@@ -111,13 +112,16 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 			case SOFTWARE:
 				break;
 			case MINDMAP:
-				toolpool.getRootLayer().applyTransform(0, -MINDMAP_GROUP + 25);
+				toolpool.getRootLayer().applyTransform(0, -MINDMAP_GROUP + 20);
+        // getWidget().getElement().setScrollTop(MINDMAP_GROUP - 220);
 				break;
 			case ROADMAP:
-        toolpool.getRootLayer().applyTransform(0, -ROADMAP_GROUP + 25);
+        // getWidget().getElement().setScrollTop(ROADMAP_GROUP - 220);
+        toolpool.getRootLayer().applyTransform(0, -ROADMAP_GROUP + 23);
 				break;
       case GENERAL:
-        toolpool.getRootLayer().applyTransform(0, -GENERAL_GROUP + 25);
+        // getWidget().getElement().setScrollTop(GENERAL_GROUP - 220);
+        toolpool.getRootLayer().applyTransform(0, -GENERAL_GROUP + 23);
         break;
 			}
 
@@ -157,7 +161,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 //    panel.getElement().getStyle().setOverflowX(Overflow.HIDDEN);
 //		panel.setSpacing(0);
     
-    final FlowPanel panel = new FlowPanel();
+    panel = new FlowPanel();
     panel.setHeight(Window.getClientHeight() + "px");
     panel.setStyleName("library");
 		panel.add(toolpool.getWidget());
