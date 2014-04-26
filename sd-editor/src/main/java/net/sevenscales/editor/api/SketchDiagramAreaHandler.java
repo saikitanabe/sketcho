@@ -35,6 +35,7 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
   private boolean noSelectedItems;
   private GridUtils gridUtils = new GridUtils();
   private Relationship2 createdRelationship;
+  private Relationship2 tobeadded;
   private AnchorElement currentAnchorElement;
   private CircleElement currentHandle;
   private IModeManager modeManager;
@@ -177,7 +178,14 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
           createdRelationship.getStartPosY(), 
           createdRelationship.getStartAnchor(), true);
       logger.debug("createdRelationship getStartClientId() {}...", createdRelationship.getStartClientId());
+
+      // do not send insert event to server
+      // connection insert + move => insert only
+      surface.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, false);
       surface.add(createdRelationship, true);
+      tobeadded = createdRelationship;
+      surface.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, true);
+
       createdRelationship.calculateHandles();
       currentAnchorElement.dispatch(0);
       
@@ -217,6 +225,10 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       // this was a just select for item not creating a relationship
       removeAutoRelation();
     }
+
+    // set this relationship to be added on drag end
+    // - now addition will be only a one single insert, which can be undo as well
+    surface.getMouseDiagramManager().getDragHandler().insertMoveElement(tobeadded);
     surface.getMouseDiagramManager().getDragHandler().releaseForce(currentHandle);
 
     if (!modeManual) {

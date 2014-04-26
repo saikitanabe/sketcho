@@ -88,6 +88,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	private HashMap<Integer, List<Diagram>> highlightCentersY;
 	private List<Diagram> prevXHigilights;
 	private List<Diagram> prevYHighlights;
+	private Relationship2 insertMoveToSingle;
 	private static final String LINE_HELPER_COLOR = "#dddddd"; 
 	
 	public MouseDiagramDragHandler(ISurfaceHandler surface, MouseDiagramHandlerManager parent,
@@ -563,6 +564,10 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		dragHandlers.clear();
 	}
 
+	public void insertMoveElement(Relationship2 relationship) {
+		this.insertMoveToSingle = relationship;
+	}
+
 	public void releaseForce(CircleElement currentHandle) {
 		forceOn = false;
 	}
@@ -623,7 +628,12 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		boolean reanchorMovedRelationships = true;
 		reattachHelpers.reattachRelationships(reanchorMovedRelationships);
 
-		MouseDiagramEventHelpers.fireDiagramsChangedEvenet(selectedItems, surface, ActionType.DRAGGING);
+		if (insertMoveToSingle != null) {
+			MouseDiagramEventHelpers.fireDiagramAddedEvent(insertMoveToSingle, surface, ActionType.DRAGGING);
+			insertMoveToSingle = null;
+		} else {
+			MouseDiagramEventHelpers.fireDiagramsChangedEvenet(selectedItems, surface, ActionType.DRAGGING);
+		}
 	}
 		
 // 	public void attach(Relationship2 relationship, AnchorElement anchorElement) {

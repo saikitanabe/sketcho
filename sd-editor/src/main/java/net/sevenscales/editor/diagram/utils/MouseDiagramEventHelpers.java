@@ -10,8 +10,19 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
+import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
+
 
 public class MouseDiagramEventHelpers {
+  public static void fireDiagramAddedEvent(Diagram item, ISurfaceHandler surface, ActionType actionType) {
+    if (surface.getEditorContext().isTrue(EditorProperty.ON_CHANGE_ENABLED)) {
+      // get all follow up connections
+      // Set<Diagram> diagrams = followers(selectedItems);
+      // diagrams.addAll(DiagramHelpers.filterOwnerDiagramsAsList(selectedItems, actionType));
+      surface.getEditorContext().getEventBus().fireEvent(new DiagramElementAddedEvent(item, false));
+    }
+  }
+
   public static void fireDiagramsChangedEvenet(Set<Diagram> selectedItems, ISurfaceHandler surface, ActionType actionType) {
     if (surface.getEditorContext().isTrue(EditorProperty.ON_CHANGE_ENABLED)) {
       // get all follow up connections
