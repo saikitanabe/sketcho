@@ -10,6 +10,8 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.dom.client.Style.Display;
+
 
 public class LibrarySelections extends Composite {
 
@@ -21,7 +23,7 @@ public class LibrarySelections extends Composite {
 	}
 
 	public enum Library {
-		SOFTWARE, MINDMAP, ROADMAP, GENERAL
+		SOFTWARE, MINDMAP, ROADMAP, GENERAL, IMAGES
 	}
 
 	public interface LibrarySelectedHandler {
@@ -34,10 +36,14 @@ public class LibrarySelections extends Composite {
 	@UiField AnchorElement mindmap;
 	@UiField AnchorElement roadmap;
 	@UiField AnchorElement general;
+	@UiField AnchorElement images;
 	@UiField DivElement btnGroup;
 //	@UiField AnchorElement roadmap;
 
+	private EditorContext editorContext;
+
 	public LibrarySelections(LibrarySelectedHandler handler, EditorContext editorContext) {
+		this.editorContext = editorContext;
 		this.librarySelectedHandler = handler;
 		initWidget(uiBinder.createAndBindUi(this));
 		
@@ -100,8 +106,25 @@ public class LibrarySelections extends Composite {
 						}
 					}
 				});
-		
 
+
+
+		DOM.sinkEvents((com.google.gwt.user.client.Element) images.cast(),
+				Event.ONCLICK);
+		DOM.setEventListener(
+				(com.google.gwt.user.client.Element) images.cast(),
+				new EventListener() {
+					@Override
+					public void onBrowserEvent(Event event) {
+						switch (DOM.eventGetType(event)) {
+						case Event.ONCLICK:
+							LibrarySelections.this.librarySelectedHandler.onSelected(Library.IMAGES);
+							break;
+						}
+					}
+				});
+		
+		showOrHideImages();
 //		DOM.sinkEvents((com.google.gwt.user.client.Element) roadmap.cast(),
 //				Event.ONCLICK);
 //		DOM.setEventListener(
@@ -117,5 +140,15 @@ public class LibrarySelections extends Composite {
 //					}
 //				});
 	}
+
+	private void showOrHideImages() {
+		if (notConfluence()) {
+			images.getStyle().setDisplay(Display.NONE);
+		}
+	}
+
+	private boolean notConfluence() {
+		return editorContext.isTrue(EditorProperty.CONFLUENCE_MODE);
+	}	
 
 }

@@ -107,6 +107,8 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		public void onSelected(Library library) {
 			toolpool.getRootLayer().resetTransform();
       getWidget().getElement().setScrollTop(0);
+      toolpool.setVisible(true);
+      ngHideImageLibrary();
 			
 			switch (library) {
 			case SOFTWARE:
@@ -122,6 +124,12 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
       case GENERAL:
         // getWidget().getElement().setScrollTop(GENERAL_GROUP - 220);
         toolpool.getRootLayer().applyTransform(0, -GENERAL_GROUP + 23);
+        break;
+      case IMAGES:
+        // getWidget().getElement().setScrollTop(GENERAL_GROUP - 220);
+        // toolpool.getRootLayer().applyTransform(0, -GENERAL_GROUP + 23);
+        ngShowImageLibrary();
+        toolpool.setVisible(false);
         break;
 			}
 
@@ -179,6 +187,14 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		setWidget(panel);
     proxyDragHandler = new ProxyDragHandler(toolpool, surface);
 	}
+
+  private native void ngShowImageLibrary()/*-{
+    $wnd.ngShowImageLibrary();
+  }-*/;
+
+  private native void ngHideImageLibrary()/*-{
+    $wnd.ngHideImageLibrary();
+  }-*/;
 
 	private void setStyle() {
     toolpool.setStyleName("toolbar " + Theme.themeCssClass());
