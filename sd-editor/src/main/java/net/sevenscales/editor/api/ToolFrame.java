@@ -46,7 +46,7 @@ public class ToolFrame extends SimplePanel {
 		
 		if (editorContext.isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {
 			// currently enabled only on Sketchboard.Me
-			showHideHelpers = new ShowHideHelpers(justBacgkround, panel, editorContext.isEditable());
+			showHideHelpers = new ShowHideHelpers(justBacgkround, panel, editorContext.isEditable(), editorContext);
 		}
 
 		if (editorContext.isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {

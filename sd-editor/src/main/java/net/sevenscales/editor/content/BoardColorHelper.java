@@ -34,9 +34,14 @@ public class BoardColorHelper {
       applyBackgroundColor(surface, boardDocument, colorName);
       applyBackgroundColor(toolbar, toolbarDocument, colorName);
       Theme.setColorScheme(colorName);
+      trigger(colorName);
       evenBus.fireEvent(new ThemeChangedEvent());
     }
   }
+
+  private native void trigger(String colorName)/*-{
+    $wnd.$($doc).trigger('theme-changed', colorName)
+  }-*/;
 
   public void setSurface(ISurfaceHandler surface, ISurfaceHandler toolbar, BoardDocument boardDocument) {
     this.surface = surface;

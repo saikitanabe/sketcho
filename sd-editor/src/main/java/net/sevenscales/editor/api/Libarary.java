@@ -70,6 +70,8 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.dom.client.Style;
+
 
 public class Libarary extends SimplePanel implements SurfaceLoadedEventListener, ClickDiagramHandler, IToolSelection {
 	private ISurfaceHandler surface;
@@ -107,7 +109,8 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		public void onSelected(Library library) {
 			toolpool.getRootLayer().resetTransform();
       getWidget().getElement().setScrollTop(0);
-      toolpool.setVisible(true);
+      toolpool.show();
+      panel.getElement().getStyle().setOverflowY(Style.Overflow.SCROLL);
       ngHideImageLibrary();
 			
 			switch (library) {
@@ -129,7 +132,8 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         // getWidget().getElement().setScrollTop(GENERAL_GROUP - 220);
         // toolpool.getRootLayer().applyTransform(0, -GENERAL_GROUP + 23);
         ngShowImageLibrary();
-        toolpool.setVisible(false);
+        panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+        toolpool.hide();
         break;
 			}
 

@@ -260,6 +260,14 @@ class SurfaceHandler extends SimplePanel implements
 	  }
 	}
 
+	public void hide() {
+		getRootLayer().setVisible(false);
+	}
+
+	public void show() {
+		getRootLayer().setVisible(true);
+	}
+
 	public void makeDraggable(Diagram diagram) {
 	  if (dragEnabled) {
 	    mouseDiagramManager.makeDraggable(diagram);

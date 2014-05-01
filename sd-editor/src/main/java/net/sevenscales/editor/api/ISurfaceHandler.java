@@ -46,7 +46,8 @@ public interface ISurfaceHandler {
 			EditorContext editorContext);
 
 	boolean isLibrary();
-
+	void show();
+	void hide();
 	ISurface getSurface();
 	List<Diagram> getDiagrams();
 	List<Diagram> getVisualItems();
