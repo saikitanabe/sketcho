@@ -6,6 +6,8 @@ import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.dom.client.Touch;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.EditorContext;
@@ -104,6 +106,14 @@ class BirdsEye {
 		  public void onPreviewNativeEvent(final NativePreviewEvent event) {
 		    final int eventType = event.getTypeInt();
 		    switch (eventType) {
+		    	case Event.ONTOUCHMOVE: {
+		    		JsArray<Touch> touches = event.getNativeEvent().getTouches();
+		    		if (touches != null && touches.length() > 0) {
+			        mousePosX = touches.get(0).getClientX();
+			        mousePosY = touches.get(0).getClientY();
+		    		}
+		    		break;
+		    	}
 		      case Event.ONMOUSEMOVE:
 		        mousePosX = event.getNativeEvent().getClientX();
 		        mousePosY = event.getNativeEvent().getClientY();
