@@ -474,7 +474,7 @@ public class SketchoEditor extends Composite implements Spinner {
   private void configureContext(EditorContext editorContext) {
   	editorContext.setEditable(true);
   	editorContext.set(EditorProperty.CONFLUENCE_MODE, true);
-    editorContext.set(EditorProperty.FREEHAND_MODE_TYPE, FreehandModeType.FREEHAND_SMOOTH);
+    editorContext.set(EditorProperty.FREEHAND_MODE_TYPE, FreehandModeType.FREEHAND_FREE);
   	editorContext.set(EditorProperty.RESOURCES_PATH, Sketcho_confluence_app.resourcesPath);
 	}
 

@@ -140,6 +140,8 @@ body {
 .library {
     overflow-y: scroll;
     z-index: 1010;
+		box-shadow: -2px -10px 4px rgba(0, 0, 0, 0.3);
+		border-top-left-radius: 4px;    
 }
 
 .library-selection {
@@ -647,159 +649,6 @@ color: #ffffff !important;
 	color: #eee !important;
 }
 
-.icon-reverse-connection {
-background-image: url("images/icons-menu2.png");
-display: inline-block;
-width: 15px;
-height: 15px;
-line-height: 15px;
-vertical-align: middle;
-background-position: -45px 0px;
-background-repeat: no-repeat;
-margin-bottom: 2px;
-}
-
-.icon-colorize {
-background-image: url("images/icons-menu2.png");
-display: inline-block;
-width: 15px;
-height: 15px;
-line-height: 15px;
-vertical-align: middle;
-background-position: -30px 0px;
-background-repeat: no-repeat;
-margin-bottom: 2px;
-}
-
-.icon-note {
-background-image: url("images/icons-menu2.png");
-display: inline-block;
-width: 15px;
-height: 15px;
-line-height: 15px;
-vertical-align: middle;
-background-position: -15px 0px;
-background-repeat: no-repeat;
-margin-bottom: 2px;
-}
-
-.icon-add-diagram {
-background-image: url("images/icons-menu2.png");
-display: inline-block;
-width: 15px;
-height: 15px;
-line-height: 15px;
-vertical-align: middle;
-background-position: -60px 0px;
-background-repeat: no-repeat;
-margin-bottom: 2px;
-}
-
-.icon-select {
-background-image: url("images/icons-menu2.png");
-display: inline-block;
-width: 15px;
-height: 15px;
-line-height: 15px;
-vertical-align: middle;
-background-position: -75px 0px;
-background-repeat: no-repeat;
-margin-bottom: 2px;
-}
-
-.icon-duplicate {
-background-image: url("images/icons-menu2.png");
-display: inline-block;
-width: 15px;
-height: 15px;
-line-height: 15px;
-vertical-align: middle;
-background-position: 0px 0px;
-background-repeat: no-repeat;
-margin-bottom: 2px;
-}
-
-.icon-trash {
-background-image: url("images/icons-menu2.png");
-display: inline-block;
-width: 15px;
-height: 15px;
-line-height: 15px;
-vertical-align: middle;
-background-position: -105px 0px;
-background-repeat: no-repeat;
-margin-bottom: 2px;
-}
-
-.icon-pen {
-background-image: url("images/icons-menu2.png");
-display: inline-block;
-background-position: -120px 0px;
-background-repeat: no-repeat;
-width: 15px;
-height: 15px;
-line-height: 15px;
-vertical-align: middle;
-}
-
-.icon-pen-white {
-background-image: url("images/icons-menu2.png");
-display: inline-block;
-background-position: -90px 0px;
-background-repeat: no-repeat;
-width: 15px;
-height: 15px;
-line-height: 15px;
-vertical-align: middle;
-margin-bottom: 2px;
-}
-
-.icon-open-link {
-background-image: url("images/icons-menu2.png");
-display: inline-block;
-background-position: -135px 0px;
-background-repeat: no-repeat;
-width: 15px;
-height: 15px;
-line-height: 15px;
-padding-bottom: 2px;
-}
-
-.icon-link {
-background-image: url("images/icons-menu2.png");
-display: inline-block;
-background-position: -150px 0px;
-background-repeat: no-repeat;
-width: 15px;
-height: 13px;
-line-height: 15px;
-}
-
-.icon-undo {
-background-image: url("images/icon-undo.png");
-display: inline-block;
-width: 20px;
-height: 14px;
-line-height: 14px;
-vertical-align: middle;
-background-position: 0px 0px;
-background-repeat: no-repeat;
-*margin-right: .3em;
-margin-bottom: 3px;
-}
-
-.icon-redo {
-background-image: url("images/icon-redo.png");
-display: inline-block;
-width: 20px;
-height: 14px;
-line-height: 14px;
-vertical-align: middle;
-background-position: 0px 0px;
-background-repeat: no-repeat;
-*margin-right: .3em;
-margin-bottom: 3px;
-}
 
 table.selectConnection {
 	border-color: #eee;
@@ -829,81 +678,263 @@ td.colorSelection {
   vertical-align: middle;
 }
 
-[class ^="icon-conn-"],[class *=" icon-conn"] {
+[class^="context-icon-"],
+[class*=" context-icon-"] {
 	display: inline-block;
-	width: 45px;
-	height: 18px; 
-	*margin-right: 0;
-	line-height: 18px;
-	vertical-align: text-top;
-	background-image: url("images/connections-sprite-white2.png");
-	background-position: 0 0;
-	background-repeat: no-repeat;
+	background-image: url(images/appicons-sprite4.svg);
+	width: 15px;
+	height: 15px;
+  background-size: cover;
+  vertical-align: middle;
+}
+.context-icon-pen-white2 {
+	background-position: 0 75px;
+}
+.context-icon-duplicate2 {
+  background-position: 0 165px;
+}
+.context-icon-reverse-connection2 {
+	background-position: 0 120px;
+}
+.context-icon-colorize2 {
+	background-position: 0 135px;
+}
+.context-icon-link2 {
+	background-position: 0 15px;
+}
+.context-icon-trash2 {
+	background-position: 0 60px;
+}
+.context-icon-note {
+	background-position: 0 150px;
+}
+.context-icon-add-diagram {
+	background-position: 0 105px;
+}
+.context-icon-pen-white {
+	background-position: 0 75px;
+}
+.context-icon-select {
+	background-position: 0 90px;
+}
+.context-icon-pen {
+	background-position: 0 45px;
+}
+.context-icon-move-back {
+	background-position: 0 195px;
+}
+.context-icon-move-front {
+	background-position: 0 210px;
+}
+.context-icon-move-forward {
+	background-position: 0 225px;
+}
+.context-icon-move-backward {
+	background-position: 0 240px;
+}
+.context-icon-pen-white-lines {
+	background-position: 0 255px;
+}
+.context-icon-my-images {
+	background-position: 0 270px;
+}
+.context-icon-selected {
+	background-position: 0 285px;
+}
+.context-icon-download {
+	background-position: 0 300px;
+}
+.context-icon-upload {
+	background-position: 0 315px;
 }
 
+
+[class ^="icon-conn-"],[class *=" icon-conn"] {
+  display: inline-block;
+  background-image: url(/static/images/relations.svg);
+  width: 43px;
+  height: 18px;
+  background-size: cover;
+  vertical-align: middle;
+}
 .icon-conn-directed {
-	background-position: 0 2px;
+	background-position: 0 0;
 }
-
 .icon-conn-directed-both {
-	background-position: 0 -56px;
+	background-position: 0 -18px;
 }
-
 .icon-conn-inheritance {
-	background-position: 0 -16px;
+	background-position: 0 -36px;
 }
-
 .icon-conn-line {
-	background-position: 0 -37px;
+	background-position: 0 -72px;
 }
-
 .icon-conn-dependency {
-	background-position: 0 -74px;
+	background-position: 0 -54px;
 }
-
 .icon-conn-dependency-both {
-	background-position: 0 -94px;
-}
-
-.icon-conn-dashedline {
-	background-position: 0 -169px;
-}
-
-.icon-conn-aggregation {
-	background-position: 0 -112px;
-}
-
-.icon-conn-aggregation-filled {
-	background-position: 0 -148px;
-}
-
-/*.icon-dependancy-both {
 	background-position: 0 -90px;
 }
-*/
+.icon-conn-dashedline {
+	background-position: 0 -144px;
+}
+.icon-conn-aggregation {
+	background-position: 0 -126px;
+}
+.icon-conn-aggregation-filled {
+	background-position: 0 -108px;
+}
 .icon-conn-aggregationboth {
-	background-position: 0 -188px;
+	background-position: 0 -162px;
 }
-
 .icon-conn-aggregationboth-filled {
-	background-position: 0 -206px;
+	background-position: 0 -180px;
 }
-
 .icon-conn-synch {
-	background-position: 0 -130px;
+	background-position: 0 -198px;
 }
 
-[class ^="icon-cust-"],[class *=" icon-cust"] {
-	display: inline-block;
-	width: 18px;
-	height: 18px;
-	*margin-right: 0;
-	line-height: 18px;
-	vertical-align: text-top;
-	background-image: url("images/drop-sprite-white.png");
-	background-position: 18px 18px;
-	background-repeat: no-repeat;
+[class ^="uml-icon-"],
+[class *=" uml-icon-"] {
+  display: inline-block;
+  background-image: url(images/elements2.svg);
+  width: 70px;
+  height: 28px;
+  background-size: cover;
+  vertical-align: middle;
 }
+
+.uml-icon-note {
+	background-position: 0 420px;
+}
+
+.uml-icon-class {
+	background-position: 0 476px;
+}
+
+.uml-icon-package {
+	background-position: 0 225px;
+}
+
+.uml-icon-actor {
+	background-position: 0 448px;
+}
+
+.uml-icon-usecase {
+	background-position: 0 504px;
+}
+
+.uml-icon-elcomments {
+	background-position: 0 280px;
+}
+
+.uml-icon-start {
+	background-position: 0 131px;  /* -9 */ 
+	max-height: 10px;
+}
+
+.uml-icon-activity {
+	background-position: 0 246px; /* -6 */
+	max-height: 16px;
+}
+.uml-icon-choice {
+	background-position: 0 358px;
+	max-height: 16px;
+}
+.uml-icon-hfork {
+	background-position: 0 19px;
+	max-height: 10px;
+}
+.uml-icon-vfork {
+	background-position: 0 50px;
+	max-height: 16px;
+}
+.uml-icon-end {
+	background-position: 0 104px;
+	max-height: 10px;
+}
+.uml-icon-sequence {
+	background-position: 0 532px;
+}
+.uml-icon-text {
+	background-position: 0 84px;
+}
+.uml-icon-storage {
+	background-position: 0 308px;
+}
+.uml-icon-centtopic {
+	background-position: 0 392px;
+}
+.uml-icon-maintopic {
+	background-position: 0 336px;
+}
+.uml-icon-subtopic {
+	background-position: 0 168px;
+}
+.uml-icon-comp {
+	background-position: 0 560px;	
+}
+.uml-icon-server {
+	background-position: 0 588px;
+}
+.uml-icon-smiley {
+	background-position: 0 616px;
+}
+.uml-icon-firewall {
+	background-position: 0 644px;
+}
+.uml-icon-polygon5 {
+	background-position: 0 672px;
+}
+.uml-icon-polygon8 {
+	background-position: 0 700px;
+}
+.uml-icon-rect {
+	background-position: 0 728px;
+}
+.uml-icon-triangle {
+	background-position: 0 756px;
+}
+.uml-icon-circle {
+	background-position: 0 784px;
+}
+.uml-icon-cloud {
+	background-position: 0 812px;
+}
+.uml-icon-wbrowser {
+	background-position: 0 840px;
+}
+.uml-icon-iphone {
+	background-position: 0 868px;
+}
+.uml-icon-star5 {
+	background-position: 0 896px;
+}
+.uml-icon-star4 {
+	background-position: 0 924px;
+}
+.uml-icon-arrow-d {
+	background-position: 0 952px;
+}
+.uml-icon-arrow-r {
+	background-position: 0 980px;
+}
+.uml-icon-arrow-u {
+	background-position: 0 1008px;
+}
+.uml-icon-arrow-l {
+	background-position: 0 1036px;
+}
+.uml-icon-bubble-l {
+	background-position: 0 1064px;
+}
+.uml-icon-bubble-r {
+	background-position: 0 1092px;
+}
+.uml-icon-letter {
+	background-position: 0 1120px;
+}
+
 
 .icon-cust-drop-down {
 	background-position: 0 0;
@@ -1087,5 +1118,16 @@ a.white-text {
 	padding-left: 15px;
 	min-height: 24px;
 	border-bottom: 1px #eee solid;
+}
+
+.shape-context-panel {
+	display: block;
+	height: 120px;
+	max-height: 120px;
+	min-width: 320px;
+	max-width: 320px;
+	width: 320px;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 /* font size END */

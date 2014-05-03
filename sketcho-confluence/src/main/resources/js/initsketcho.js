@@ -1,5 +1,65 @@
 var jq172 = jQuery.noConflict(true);
 
+var cancelStream = jq172(window).asEventStream('keydown').filter(function(e) {
+		return e.keyCode == 27 && 
+					 e.ctrlKey != 1 && e.metaKey != 1 && e.shiftKey != 1 && e.altKey != 1
+	})
+
+	var newLibraryImageStream = Bacon.fromBinder(function(sink) {
+    function push(event, data) {
+      sink(data)
+    }
+
+    jq172(document).on('add-img-lib', push)
+
+    return function() {
+      jq172(document).off('add-img-lib', push)
+    }
+  })
+
+  var deleteLibraryImageStream = Bacon.fromBinder(function(sink) {
+  	function push(event, data) {
+  		sink(data.deleted)
+  	}
+
+  	jq172(document).on('del-img-lib', push)
+
+  	return function() {
+  		jq172(document).off('del-img-lib', push)
+  	}
+  })
+
+  var themeChangedStream = Bacon.fromBinder(function(sink) {
+  	function push(event, themeName) {
+  		sink(themeName)
+  	}
+
+  	jq172(document).on('theme-changed', push)
+
+  	return function() {
+  		jq172(document).off('theme-changed', push)
+  	}
+  })
+
+  var mapViewStream = Bacon.fromBinder(function(sink) {
+  	function push(event, data) {
+  		sink(data)
+  	}
+
+  	jq172(document).on('map-view', push)
+
+  	return function() {
+  		jq172(document).off('map-view', push)
+  	}
+  }).map(function(v) {
+  	if (v == 'start') {
+  		return true
+  	} else {
+  		return false
+  	}
+  })
+
+
 AJS.toInit(function () {
 	AJS.log("Configuring Sketchboard.Me...");
 

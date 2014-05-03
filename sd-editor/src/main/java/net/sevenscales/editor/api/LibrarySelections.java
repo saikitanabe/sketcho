@@ -142,12 +142,12 @@ public class LibrarySelections extends Composite {
 	}
 
 	private void showOrHideImages() {
-		if (notConfluence()) {
+		if (isConfluence()) {
 			images.getStyle().setDisplay(Display.NONE);
 		}
 	}
 
-	private boolean notConfluence() {
+	private boolean isConfluence() {
 		return editorContext.isTrue(EditorProperty.CONFLUENCE_MODE);
 	}	
 

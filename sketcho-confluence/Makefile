@@ -12,6 +12,16 @@ help: tags
 	@echo 3. make build
 	@echo '4. Test on Confluence 4.0 and Confluence 5.x (newest)'
 	@echo 5. Release
+	@echo DEV
+	@echo ---
+	@echo atlas-clean
+	@echo atlas-run
+	@echo http://localhost:1990/confluence
+	@echo Get Plugin Timebomb License
+	@echo https://developer.atlassian.com/display/MARKET/Timebomb+Licenses+for+Testing
+	@echo Update plugin
+	@echo atlas-cli
+	@echo atlas-pi
 
 tag:
 	git tag -a $(VERSION) -m"$(TAG)"
@@ -22,3 +32,6 @@ build:
 	make -C ../sketcho-confluence-editor prod
 	make -C ../../marked-token prod
 	atlas-mvn clean package
+
+run:
+	atlas-run

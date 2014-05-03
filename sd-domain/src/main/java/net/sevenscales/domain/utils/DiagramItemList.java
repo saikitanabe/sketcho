@@ -1,14 +1,15 @@
-package net.sevenscales.editor.diagram.utils;
+package net.sevenscales.domain.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.utils.DiagramItemIdComparator;
 
-public class DiagramItemList extends ArrayList<IDiagramItemRO> {
+public class DiagramItemList extends ArrayList<IDiagramItemRO> {	
+  private static final DiagramItemIdComparator DIAGRAM_ITEM_IDENTIFIER_COMPARATOR = new DiagramItemIdComparator();
   public boolean add(IDiagramItemRO item) {
     int index = binarySearch(item);
     if (index < 0) {
@@ -20,7 +21,7 @@ public class DiagramItemList extends ArrayList<IDiagramItemRO> {
   }
 
   public int binarySearch(IDiagramItemRO item) {
-    return Collections.binarySearch(this, item, BoardDocumentHelpers.DIAGRAM_ITEM_IDENTIFIER_COMPARATOR);
+    return Collections.binarySearch(this, item, DIAGRAM_ITEM_IDENTIFIER_COMPARATOR);
   }
 
 }

@@ -1,14 +1,11 @@
 package net.sevenscales.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sevenscales.domain.api.IContent;
 import net.sevenscales.domain.api.IDiagramContent;
-import net.sevenscales.domain.api.IDiagramItem;
-import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.dto.ContentDTO;
-import net.sevenscales.editor.diagram.utils.DiagramItemList;
+import net.sevenscales.domain.utils.DiagramItemList;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 

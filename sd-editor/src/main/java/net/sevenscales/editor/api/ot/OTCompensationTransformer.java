@@ -10,7 +10,7 @@ import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ot.ApplyHelpers.DiagramApplyOperation;
-import net.sevenscales.editor.diagram.utils.DiagramItemList;
+import net.sevenscales.domain.utils.DiagramItemList;
 
 import com.google.gwt.logging.client.LogConfiguration;
 

@@ -79,8 +79,7 @@
 		class="net.sevenscales.confluence.plugins.SketchoMacroV4"
 		icon="/download/resources/net.sevenscales.confluence.plugins.sketcho-confluence:sketcho-macro/images/sketcho-confluence-icon.png">
 		<category name="development" />
-		<description>Sketcho UML modeling macro used with Confluence 4.
-		</description>
+		<description>Sketcho UML modeling macro</description>
 		<device-type>mobile</device-type>
 		<resource name="js/" type="download" location="js/" />
 		<resource name="images/" type="download" location="images/" />
@@ -140,12 +139,18 @@
 			location="assets/jqueryui/jquery-ui-1.10.3.custom.min.js">
 			<param name="batch" value="false" />
 		</resource>
+		<resource type="download" name="bacon.min.js" location="js/bacon.min.js">
+			<param name="batch" value="false" />
+		</resource>
 		<resource type="download"
 			name="js/sketcho_confluence_app/sketcho_confluence_app.nocache.js"
 			location="js/sketcho_confluence_app/sketcho_confluence_app.nocache.js">
 			<param name="batch" value="false" />
 		</resource>
 		<resource type="download" name="marked-svg.min.js" location="js/marked-svg.min.js">
+			<param name="batch" value="true" />
+		</resource>
+		<resource type="download" name="paper.min.js" location="js/paper.min.js">
 			<param name="batch" value="true" />
 		</resource>
 		<resource type="download" name="initsketcho.js" location="js/initsketcho.js">

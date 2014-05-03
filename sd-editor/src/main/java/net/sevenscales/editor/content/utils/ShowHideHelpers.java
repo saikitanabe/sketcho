@@ -92,7 +92,7 @@ public class ShowHideHelpers {
 	private void show() {
 		// logger.debug("show...");
 		Object value = editorContext.get(EditorProperty.CURRENT_LIBRARY);
-		if (value != null && value instanceof LibrarySelections.Library && value == LibrarySelections.Library.IMAGES) {
+		if (value != null && value instanceof LibrarySelections.Library && value == LibrarySelections.Library.IMAGES && notConfluence()) {
 			trigger("library-show");
 		}
 
@@ -106,8 +106,14 @@ public class ShowHideHelpers {
 	
 	private void hide() {
 		// logger.debug("hide...");
-		trigger("library-hide");
+		if (notConfluence()) {
+			trigger("library-hide");
+		}
 		EffectHelpers.fadeOut(inner.getElement());
+	}
+
+	private boolean notConfluence() {
+		return !editorContext.isTrue(EditorProperty.CONFLUENCE_MODE);
 	}
 
 	private native void trigger(String event)/*-{

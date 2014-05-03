@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IPath;
+import net.sevenscales.editor.uicomponents.uml.GenericElement;
 import net.sevenscales.domain.utils.SLogger;
 
 public class SvgPath extends SvgLine {
@@ -30,7 +33,7 @@ public class SvgPath extends SvgLine {
     - hack needs to be changed if there are different stroke widths
     */
     // params.put("%stroke-width%", String.valueOf(path.getStrokeWidth()));
-    params.put("%stroke-width%", "2");
+    params.put("%stroke-width%", strokeWidth(diagram));
     /* TODO IE hack ENDS */
 
     params.put("%stroke%", rgb(String.valueOf(path.getStrokeColor().toRgb())));
@@ -64,6 +67,19 @@ public class SvgPath extends SvgLine {
 
     return parse(path, template, params, diagram);
   }
+
+  private static String strokeWidth(Diagram diagram) {
+    if (isConfluence(diagram.getSurfaceHandler()) && (diagram instanceof GenericElement)) {
+      GenericElement ge = (GenericElement) diagram;
+      return String.valueOf(ge.scaledStrokeWidth(ge.getFactorX(), ge.getFactorY()));
+    } else {
+      return "2";
+    }
+  }
+
+  private static boolean isConfluence(ISurfaceHandler surface) {
+    return surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE);
+  }  
 
   public static String convertPoints2Pairs(int[] points) {
     String result = "";

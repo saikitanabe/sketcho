@@ -301,24 +301,8 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	    background.setShape(left, top, width == 0 ? 4 : width, height == 0 ? 4 : height, 0);
 
 			// cannot divide with zero!!
-			double factorX = 1;
-			if (width > 0) {
-				factorX = (width / shapeWidth());
-			}
-
-			double factorY = 1; 
-			if (height > 0) {
-				factorY = (height / shapeHeight());
-			}
-
-	  	if (shape.getSvgData() != null && shape.getSvgData().getWidth() == 0) {
-	  		// cannot scale width or svg line will disappear
-	  		factorX = 1;
-	  	}
-	  	if (shape.getSvgData() != null && shape.getSvgData().getHeight() == 0) {
-	  		// cannot scale height or svg line will disappear
-	  		factorY = 1;
-	  	}
+			double factorX = getFactorX();
+			double factorY = getFactorY();
 
 	  	subgroup.setScale(factorX, factorY);
 	  	subgroup.setTransform(left, top);
@@ -326,8 +310,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 			  // no need to use, which doesn't work svg => pdf, scale down stroke width
 			  // vector-effect="non-scaling-stroke"
 	  		// ie8 - ie10 doesn't support vector-effect
-		  	double factor = Math.max(factorX, factorY);
-		  	double strokeWidth = FREEHAND_STROKE_WIDTH / factor;
+	  		double strokeWidth = scaledStrokeWidth(factorX, factorY);
 		  	for (IPath path : paths) {
 			  	path.setStrokeWidth(strokeWidth);
 		  	}
@@ -338,10 +321,43 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   	}
   }
 
-  private double shapeWidth() {
+  public double scaledStrokeWidth(double factorX, double factorY) {
+  	double factor = Math.max(factorX, factorY);
+  	double strokeWidth = FREEHAND_STROKE_WIDTH / factor;
+  	return strokeWidth;
+  }
+
+  public double getFactorX() {
+		double factorX = 1;
+		if (width > 0) {
+			factorX = (width / shapeWidth());
+		}
+  	if (shape.getSvgData() != null && shape.getSvgData().getWidth() == 0) {
+  		// cannot scale width or svg line will disappear
+  		factorX = 1;
+  	}
+
+		return factorX;
+	}
+
+	public double getFactorY() {
+		double factorY = 1; 
+		if (height > 0) {
+			factorY = (height / shapeHeight());
+		}
+
+  	if (shape.getSvgData() != null && shape.getSvgData().getHeight() == 0) {
+  		// cannot scale height or svg line will disappear
+  		factorY = 1;
+  	}
+
+		return factorY;
+	}
+
+  public double shapeWidth() {
   	return theshape != null ? theshape.width : shape.getSvgData().getWidth();
   }
-  private double shapeHeight() {
+  public double shapeHeight() {
   	return theshape != null ? theshape.height : shape.getSvgData().getHeight();
   }
 

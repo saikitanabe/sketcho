@@ -6,6 +6,9 @@ import net.sevenscales.domain.ISvgDataRO;
 public class ExtensionDTO implements IExtension {
 	private ISvgDataRO svgdata;
 
+	public ExtensionDTO() {
+	}
+
 	public ExtensionDTO(ISvgDataRO svgdata) {
 		this.svgdata = svgdata;
 	}

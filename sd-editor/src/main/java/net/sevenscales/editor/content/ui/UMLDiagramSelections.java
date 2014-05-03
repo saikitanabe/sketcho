@@ -182,6 +182,7 @@ public class UMLDiagramSelections extends Composite {
 		});
 
 		handleCancel(this);
+		configureConfluence();
 //		editorContext.getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
 //			@Override
 //			public void on(FreehandModeChangedEvent event) {
@@ -202,6 +203,13 @@ public class UMLDiagramSelections extends Composite {
 
 		// 	}
 		// });
+	}
+
+	private void configureConfluence() {
+		if (surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE)) {
+			myimages.setVisible(false);
+			uploadFile.setVisible(false);
+		}
 	}
 
 	private native void handleCancel(UMLDiagramSelections me)/*-{

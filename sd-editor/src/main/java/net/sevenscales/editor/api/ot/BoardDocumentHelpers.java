@@ -8,6 +8,7 @@ import java.util.List;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.domain.utils.DiagramItemIdComparator;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.diagram.Diagram;
@@ -19,32 +20,16 @@ import com.google.gwt.core.client.JsonUtils;
 
 public class BoardDocumentHelpers {
 	private static final SLogger logger = SLogger.createLogger(BoardDocumentHelpers.class);
-	
+
+	public static final DiagramItemIdComparator DIAGRAM_ITEM_IDENTIFIER_COMPARATOR = new DiagramItemIdComparator();
 	public static final ClientIdComparator DIAGRAM_IDENTIFIER_COMPARATOR = new ClientIdComparator();
 
 	private static class ClientIdComparator implements Comparator<Diagram> {
 		@Override
 		public int compare(Diagram diagram, Diagram theother) {
-			return compareClientId(diagram.getDiagramItem(), theother.getDiagramItem());
+			return DiagramItemIdComparator.compareClientId(diagram.getDiagramItem(), theother.getDiagramItem());
 		}
 	}
-	
-	public static final DiagramItemIdComparator DIAGRAM_ITEM_IDENTIFIER_COMPARATOR = new DiagramItemIdComparator();
-
-	public static class DiagramItemIdComparator implements Comparator<IDiagramItemRO> {
-		@Override
-		public int compare(IDiagramItemRO diagram, IDiagramItemRO theother) {
-			return compareClientId(diagram, theother);
-		}
-	}
-	
-	private static int compareClientId(IDiagramItemRO item, IDiagramItemRO theother) {
-		String clientId = item.getClientId();
-		String theOtherClientId = theother.getClientId();
-		int result = clientId.compareTo(theOtherClientId);
-		return result;
-	}
-
 
 	public BoardDocumentHelpers() {
 	}
@@ -86,11 +71,11 @@ public class BoardDocumentHelpers {
 //	}
 	
 	public static int binarySearch(List<IDiagramItemRO> items, IDiagramItemRO di) {
-		return Collections.binarySearch(items, di, BoardDocumentHelpers.DIAGRAM_ITEM_IDENTIFIER_COMPARATOR);
+		return Collections.binarySearch(items, di, DIAGRAM_ITEM_IDENTIFIER_COMPARATOR);
 	}
 	
 	public static int binarySearch(List<Diagram> items, Diagram di) {
-		return Collections.binarySearch(items, di, BoardDocumentHelpers.DIAGRAM_IDENTIFIER_COMPARATOR);
+		return Collections.binarySearch(items, di, DIAGRAM_IDENTIFIER_COMPARATOR);
 	}
 	
 	public static void insertInOrder(IDiagramItemRO di, List<IDiagramItemRO> list) {

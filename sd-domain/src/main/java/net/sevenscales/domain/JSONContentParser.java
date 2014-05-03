@@ -2,10 +2,13 @@ package net.sevenscales.domain;
 
 import java.util.List;
 
-import com.google.gwt.json.client.*;
-
-import net.sevenscales.editor.diagram.utils.DiagramItemList;
+import net.sevenscales.domain.utils.DiagramItemList;
 import net.sevenscales.domain.utils.SLogger;
+
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
 
 
 public class JSONContentParser {

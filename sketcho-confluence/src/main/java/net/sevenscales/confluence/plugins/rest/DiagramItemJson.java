@@ -9,9 +9,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.ExtensionDTO;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.IExtensionRO;
+import net.sevenscales.domain.IPathRO;
 import net.sevenscales.domain.IUrlLinkRO;
 import net.sevenscales.domain.UrlLinkDTO;
-import net.sevenscales.domain.IDiagramItemRO;
 
 
 @XmlRootElement(name = "diagramitem")
@@ -29,6 +32,10 @@ public class DiagramItemJson {
 	private String textColor;
   @XmlElement(required = false, name = "fsize")
 	private Integer fontSize;
+  @XmlElement(required = false, name = "props")
+  private Integer props;
+  @XmlElement(required = false, name = "dord")
+  private Integer dord;
   @XmlElement(name = "version")
 	private Integer version;
   @XmlElement(name = "id")
@@ -47,7 +54,8 @@ public class DiagramItemJson {
   private Long uat;
   @XmlElement(required = false, name = "links")
   private List<UrlLinkJson> links;
-  
+  @XmlElement(required = false, name = "ext")
+  private ExtensionJson ext;
   
 	
 	public String getText() {
@@ -89,6 +97,19 @@ public class DiagramItemJson {
 	}
 	public Integer getFontSize() {
 		return fontSize;
+	}
+	
+	public void setProps(Integer props) {
+		this.props = props;
+	}
+	public Integer getProps() {
+		return props;
+	}
+	public void setDord(Integer dord) {
+		this.dord = dord;
+	}
+	public Integer getDord() {
+		return dord;
 	}
 	
 	public void setVersion(Integer version) {
@@ -146,6 +167,13 @@ public class DiagramItemJson {
     this.links = links;
   }
   
+  public ExtensionJson getExt() {
+	return ext;
+  }
+  public void setExt(ExtensionJson ext) {
+	this.ext = ext;
+  }
+  
   public final DiagramItemDTO asDTO() {
     List<UrlLinkJson> jlinks = getLinks();
     List<UrlLinkDTO> links = null;
@@ -155,12 +183,17 @@ public class DiagramItemJson {
         links.add(link.asDTO());
       }
     }
+
+    ExtensionDTO e = getExt() != null ? getExt().asDTO() : null;
   	return new DiagramItemDTO(getText(), 
   							  getElementType(),
   							  getShape(),
+  							  e,
   							  getBackgroundColor(),
   							  getTextColor(),
   							  getFontSize(),
+  							  getProps(),
+  							  getDord(),
   							  getVersion(), 
   							  new Long(getId()), 
   							  getClientId(), 
@@ -173,6 +206,7 @@ public class DiagramItemJson {
 		result.setText(from.getText());
 		result.setElementType(from.getType());
 		result.setShape(from.getShape());
+		result.setExt(fromDTO(from.getExtension()));
 		result.setBackgroundColor(from.getBackgroundColor());
 		result.setTextColor(from.getTextColor());
 		result.setFontSize(from.getFontSize());
@@ -188,6 +222,23 @@ public class DiagramItemJson {
 				jlinks.add(new UrlLinkJson(link.getUrl(), link.getName()));
 			}
 			result.setLinks(jlinks);
+		}
+		return result;
+	}
+	
+	private static ExtensionJson fromDTO(IExtensionRO from) {
+		ExtensionJson result = null;
+		if (from != null && from.getSvgData() != null) {
+			result = new ExtensionJson();
+			SvgDataJson svg = new SvgDataJson();
+			List<PathJson> paths = new ArrayList<PathJson>();
+			for (IPathRO p : from.getSvgData().getPaths()) {
+				paths.add(new PathJson(p.getPath(), p.getStyle()));
+			}
+			svg.setPaths(paths);
+			svg.setWidth(from.getSvgData().getWidth());
+			svg.setHeight(from.getSvgData().getHeight());
+			result.setSvg(svg);
 		}
 		return result;
 	}

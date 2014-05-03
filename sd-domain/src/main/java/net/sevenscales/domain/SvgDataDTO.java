@@ -12,6 +12,9 @@ public class SvgDataDTO implements ISvgData {
 	private double width;
 	private double height;
 
+	public SvgDataDTO() {
+	}
+
 	public SvgDataDTO(List<? extends IPathRO> paths, double width, double height) {
 		this.paths = paths;
 		this.width = width;
