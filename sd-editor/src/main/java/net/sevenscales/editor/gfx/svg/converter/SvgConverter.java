@@ -107,14 +107,14 @@ public class SvgConverter {
   private Diagram[] getDiagrams(ISurfaceHandler surfaceHandler) {
     Set<Diagram> selected = surfaceHandler.getSelectionHandler().getSelectedItems();
     if (onlySelected && selected.size() > 0) {
-      return SortHelpers.sortDiagramItems(SortHelpers.toArray(selected));
+      return SortHelpers.toArray(selected);
     }
 
     Diagram[] result = null;
     if (filter != null && filter.size() > 0) {
-      result = SortHelpers.sortDiagramItems(SortHelpers.toArray(surfaceHandler.getDiagrams(), filter));
+      result = SortHelpers.toArray(surfaceHandler.getDiagrams(), filter);
     } else {
-      result = SortHelpers.sortDiagramItems(SortHelpers.toArray(surfaceHandler.getDiagrams()));
+      result = SortHelpers.toArray(surfaceHandler.getDiagrams());
     }
     return result;
   }

@@ -210,6 +210,8 @@ public class DiagramItemJson {
 		result.setBackgroundColor(from.getBackgroundColor());
 		result.setTextColor(from.getTextColor());
 		result.setFontSize(from.getFontSize());
+		result.setProps(from.getShapeProperties());
+		result.setDord(from.getDisplayOrder());
 		result.setVersion(from.getVersion());
 		result.setId(from.getId());
 		result.setClientId(from.getClientId());

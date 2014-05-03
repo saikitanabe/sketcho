@@ -9,6 +9,10 @@ import net.sevenscales.editor.diagram.Diagram;
 
 public class DiagramDisplaySorter {
 	public static int compare(IDiagramItem item1, IDiagramItem item2) {
+		if (item1 == null || item2 == null) {
+			// circle elements doen't have diagram items
+			return 0;
+		}
 		Integer o1 = item1.getDisplayOrder();
 		o1 = o1 == null ? 0 : o1;
 		Integer o2 = item2.getDisplayOrder();
