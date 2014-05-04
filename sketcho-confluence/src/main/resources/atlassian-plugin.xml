@@ -13,6 +13,7 @@
 		<param name="configure.url">/plugins/servlet/net.sevenscales.confluence.plugins.sketcho-confluence/license
 		</param>
 	</plugin-info>
+
 	<web-item name="add-sketcho-action-web-ui" key="add-sketcho-action-web-ui"
 		section="system.content.add/space" weight="400">
 		<description key="item.add-draft-label-action-web-ui.link.desc">Adds Sketcho action into the Add menu.
@@ -26,6 +27,18 @@
 		</icon>
 		<condition class="net.sevenscales.confluence.plugins.SpaceEditCondition" />
 	</web-item>
+
+	 <web-resource key="editorWebResource" name="Editor Web Resource">
+      <context>editor</context>
+      <dependency>com.atlassian.confluence.tinymceplugin:editor-resources</dependency>
+      <resource type="download" name="editor.css" location="style/editor.css"/>
+   </web-resource>
+
+	<web-item key="add-sketcho-action-web-ui-editor" name="add-sketcho-action-web-ui-editor" section="system.editor.featured.macros.default" weight="11">
+    <label key="i18n.property.key.for.the.text.describing.your.icon"/>
+    <link linkId="sketcho"/>
+	</web-item>
+
 	<xwork name="add-sketcho-action-xwork" key="add-sketcho-action-xwork">
 		<description key="item.add-sketcho-action-xwork.link.desc" />
 		<package name="add-sketcho" extends="default" namespace="/plugins/add-sketcho">
