@@ -314,6 +314,7 @@ public class SketchoEditor extends Composite implements Spinner {
 	
   private void confluenceCustomModificationsOnOpen() {
     Window.enableScrolling(false);
+    editorContext.set(EditorProperty.SKETCHBOARD_OPEN, true);
     
     // Confluence 3.5 has bug having z-index: 0 that breaks layering system.
     Element splitterContent = Document.get().getElementById("splitter-content");
@@ -342,7 +343,7 @@ public class SketchoEditor extends Composite implements Spinner {
 	
 	private void closeEditor(String url) {
 	  boardHandler.closeGlobalElements();
-		
+		editorContext.set(EditorProperty.SKETCHBOARD_OPEN, false);
     removeStyleName("SketchoBoard");
     confluenceCustomModificationsOnClose();
     

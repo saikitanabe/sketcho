@@ -146,6 +146,7 @@ public class UMLDiagramSelections extends Composite {
 	@UiField FastButton showDiagrams;
 	@UiField FastButton modifyImages;
 	@UiField FastButton myimages;
+	@UiField FastButton commentMode;
 	@UiField SimplePanel imagesArea;
 	@UiField FastButton uploadFile;
 	@UiField ScrollPanel scrollPanel;
@@ -209,6 +210,7 @@ public class UMLDiagramSelections extends Composite {
 		if (surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE)) {
 			myimages.setVisible(false);
 			uploadFile.setVisible(false);
+			commentMode.setVisible(false);
 		}
 	}
 

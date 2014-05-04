@@ -9,6 +9,7 @@ import java.util.Set;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
 import net.sevenscales.editor.api.event.DeleteSelectedEvent;
 import net.sevenscales.editor.api.event.DeleteSelectedEventHandler;
@@ -116,11 +117,20 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   private void handleBackspaceDelete(NativePreviewEvent event) {
     NativeEvent ne = event.getNativeEvent();
     if (event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.noMetaKeys(ne) && !surface.getEditorContext().isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
-      if (ne.getKeyCode() == KeyCodes.KEY_BACKSPACE && UIKeyHelpers.allMenusAreClosed()) {
+      if (ne.getKeyCode() == KeyCodes.KEY_BACKSPACE && UIKeyHelpers.allMenusAreClosed() && confluenceCheck()) {
         event.getNativeEvent().preventDefault();
         removeSelected();
       }
     }
+  }
+
+  private boolean confluenceCheck() {
+    EditorContext editorContext = surface.getEditorContext();
+    if (editorContext.isTrue(EditorProperty.CONFLUENCE_MODE) && !editorContext.isTrue(EditorProperty.SKETCHBOARD_OPEN)) {
+      // backspace cannot be prevented when confluence sketchboard is closed
+      return false;
+    }
+    return true;
   }
 		
 ////////////////////////////////////

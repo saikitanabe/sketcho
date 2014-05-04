@@ -193,11 +193,15 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 	}
 
   private native void ngShowImageLibrary()/*-{
-    $wnd.ngShowImageLibrary();
+    if (typeof $wnd.ngShowImageLibrary != 'undefined') {
+      $wnd.ngShowImageLibrary();
+    }
   }-*/;
 
   private native void ngHideImageLibrary()/*-{
-    $wnd.ngHideImageLibrary();
+    if (typeof $wnd.ngHideImageLibrary != 'undefined') {
+      $wnd.ngHideImageLibrary();
+    }
   }-*/;
 
 	private void setStyle() {
