@@ -9,7 +9,7 @@
       <a ui:field="mindmap" class="btn btn-mini" style="color: #333333; text-decoration: none;">Mind Map</a>
       <a ui:field="roadmap" class="btn btn-mini" style="color: #333333; text-decoration: none;">Roadmap</a>
       <a ui:field="general" class="btn btn-mini" style="color: #333333; text-decoration: none;">General</a>
-      <a ui:field="images" class="btn btn-mini" style="color: #333333; text-decoration: none;">Images</a>
+      <a ui:field="images" class="btn btn-mini" style="color: #333333; text-decoration: none;">My Images</a>
 		
 <!-- 		  <a ui:field="software" class="btn btn-mini"><i class="icon-user icon"></i> Software</a> -->
 <!--       <a ui:field="mindmap" class="btn btn-mini"><i class="icon-user icon"></i> Mindmap</a> -->
