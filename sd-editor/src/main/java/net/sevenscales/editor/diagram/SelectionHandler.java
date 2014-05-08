@@ -220,8 +220,9 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   * work in correct order.
   */
 	public void removeSelected() {
-    if (surface.isLibrary()) {
+    if (surface.isLibrary() || !surface.getEditorContext().isEditable()) {
       // HACK: not allowed to remove anything from library
+      // not allowed to remove anything from read only board
       return;
     }
 
