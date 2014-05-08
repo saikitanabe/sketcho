@@ -76,6 +76,8 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
     if (!surface.getEditorContext().isEditable()) {
       // if not editable, background should be still movable
   		backgroundMoveHandler.onMouseDown(sender, point, keys);
+  	// 	selectionHandler.onMouseDown(sender, point, keys);
+			// lassoSelectionHandler.onMouseDown(sender, point, keys);
       return false;
     }
     
@@ -179,6 +181,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	public void onMouseMove(Diagram sender, MatrixPointJS point) {
     if (!surface.getEditorContext().isEditable()) {
   		backgroundMoveHandler.onMouseMove(sender, point);
+			// lassoSelectionHandler.onMouseMove(sender, point);
       return;
     }
     
@@ -214,6 +217,8 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 //		startedConnection = false;
     if (!surface.getEditorContext().isEditable()) {
   		backgroundMoveHandler.onMouseUp(sender, point);
+			// lassoSelectionHandler.onMouseUp(sender, point);
+			// selectionHandler.onMouseUp(sender, point);
       return;
     }
     
