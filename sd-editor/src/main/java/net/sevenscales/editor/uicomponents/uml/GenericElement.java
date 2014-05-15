@@ -186,7 +186,11 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	public void doSetText(String newText) {
-    textUtil.setText(newText, editable);
+		if (textUtil instanceof TextElementVerticalFormatUtil) {
+			((TextElementVerticalFormatUtil) textUtil).setText(newText, editable, true);
+		} else {
+	    textUtil.setText(newText, editable);
+		}
 	}
 
 	public Point getDiffFromMouseDownLocation() {

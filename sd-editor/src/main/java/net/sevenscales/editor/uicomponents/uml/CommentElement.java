@@ -420,6 +420,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     parentThread.childResized(this);
 	}
 
+	@Override
 	public void editingEnded() {
 		super.editingEnded();
 		parentThread.sort();
@@ -448,7 +449,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	public void doSetText(String newText) {
-    textUtil.setText(newText, editable);
+    textUtil.setText(newText, editable, true);
 	}
 	
   protected CommentElement createDiagram(ISurfaceHandler surface, CommentShape newShape,
@@ -609,7 +610,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   public boolean supportsTextEditing() {
   	return true;
   }
-  
+
   @Override
   public int getTextAreaWidth() {
   	return getWidth() - 21;
