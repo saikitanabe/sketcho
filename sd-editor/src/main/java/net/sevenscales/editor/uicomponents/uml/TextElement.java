@@ -2,6 +2,7 @@ package net.sevenscales.editor.uicomponents.uml;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.BoardOTHelpers;
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.utils.AreaUtils;
@@ -9,6 +10,7 @@ import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.TextShape;
 import net.sevenscales.editor.diagram.utils.GridUtils;
+import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IContainer;
@@ -27,6 +29,9 @@ import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
+
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 
 
 public class TextElement extends AbstractDiagramItem implements
@@ -362,7 +367,22 @@ public class TextElement extends AbstractDiagramItem implements
   public boolean supportsTextEditing() {
   	return true;
   }
-  
+
+  @Override
+  public void editingEnded() {
+  	super.editingEnded();
+  	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+ 			public void execute() {
+ 				applyText();
+ 			}
+ 		});
+  }
+
+  private void applyText() {
+  	textUtil.setText(textUtil.getText(), true, true);
+  	MouseDiagramEventHelpers.fireChangedWithRelatedRelationships(surface, this, ActionType.TEXT_CHANGED);
+  }
+
   @Override
   public boolean isTextElementBackgroundTransparent() {
     return true;
