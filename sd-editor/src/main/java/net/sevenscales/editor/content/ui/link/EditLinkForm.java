@@ -1,6 +1,7 @@
 package net.sevenscales.editor.content.ui.link;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -93,6 +94,14 @@ public class EditLinkForm extends Composite {
 
 	public void setLink(String link) {
 		urlField.setValue("");
+
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+    	public void execute() {
+				urlField.select();
+			}
+		});
+
+
 		if (link != null && !"".equals(link)) {
 			urlField.setValue(link);
 			SafeHtml name = null;
