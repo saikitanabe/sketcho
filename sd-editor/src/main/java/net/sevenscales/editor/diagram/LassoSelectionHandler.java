@@ -206,10 +206,12 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 				if (!d.isSelected() && Tools.filterDiagramByCurrentTool(d)) {
 					// guarantee to keep last selected item as correct
 					surface.getSelectionHandler().selectInMultimode(d);
+				} else {
+					d.unselect();
 				}
 			} else {
 //				d.unselect();
-			  if (!(d instanceof CircleElement) && d.isSelected()) {
+			  if ((d instanceof CircleElement) /*&& d.isSelected()*/) {
 			    // do not select circle elements that are just handles
 			    surface.getSelectionHandler().unselect(d);
 			  }
