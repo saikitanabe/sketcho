@@ -13,7 +13,7 @@ import net.sevenscales.editor.diagram.drag.MouseDiagramDragHandler;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 
-public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDiagramHandler {
+public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDiagramHandler, MouseState {
 	private static final SLogger logger = SLogger.createLogger(MouseDiagramHandlerManager.class);
 
 	private boolean resize = false;
@@ -54,7 +54,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
       	selectionHandler.unselectAll();
       }
     });
-		selectionHandler = new SelectionHandler(surface, diagrams, dragHandler.getDragHandlers());
+		selectionHandler = new SelectionHandler(surface, diagrams, dragHandler.getDragHandlers(), this);
 		resizeHandler = new MouseDiagramResizeHandler(this, surface, modeManager);
 		backgroundMoveHandler = new BackgroundMoveHandler(diagrams, surface);
 		lassoSelectionHandler = new LassoSelectionHandler(surface);
@@ -350,13 +350,15 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		resizeHandler.onDoubleClick(sender, point);
 		surfaceClickHandler.onDoubleClick(sender, point);
 	}
-	
-	public BackgroundMoveHandler getBackgroundMoveHandler() {
-		return backgroundMoveHandler;
+
+	@Override	
+	public boolean isMovingBackground() {
+		return backgroundMoveHandler.backgroundMoveIsOn();
 	}
-	
-	public LassoSelectionHandler getLassoSelectionHandler() {
-		return lassoSelectionHandler;
+
+	@Override	
+	public boolean isLassoing() {
+		return lassoSelectionHandler.isLassoing();
 	}
 
 	/**

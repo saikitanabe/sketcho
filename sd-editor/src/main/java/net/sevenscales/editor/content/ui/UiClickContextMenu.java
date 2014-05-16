@@ -98,8 +98,8 @@ public class UiClickContextMenu extends Composite {
 		surface.addDomHandler(new MouseMoveHandler() {
 			@Override
 			public void onMouseMove(MouseMoveEvent event) {
-				if (UiClickContextMenu.this.surface.getMouseDiagramManager().getBackgroundMoveHandler().backgroundMoveIsOn() ||
-						UiClickContextMenu.this.surface.getMouseDiagramManager().getLassoSelectionHandler().isLassoing()) {
+				if (UiClickContextMenu.this.surface.getMouseDiagramManager().isMovingBackground() ||
+						UiClickContextMenu.this.surface.getMouseDiagramManager().isLassoing()) {
 					hide();
 				}
 			}

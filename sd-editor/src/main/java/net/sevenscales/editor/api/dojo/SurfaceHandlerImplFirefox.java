@@ -112,7 +112,7 @@ class SurfaceHandlerImplFirefox extends SurfaceHandler {
     }
     
     // hack to prevent showing surface context menu => fire click will reset this
-		cancelSurfaceClickEvent = mouseDiagramManager.getBackgroundMoveHandler().backgroundMoveIsOn();
+		cancelSurfaceClickEvent = mouseDiagramManager.isMovingBackground();
     mouseDiagramManager.onMouseMove(null, MatrixPointJS.createScaledPoint(x, y, getScaleFactor()));
   }
   
@@ -123,7 +123,7 @@ class SurfaceHandlerImplFirefox extends SurfaceHandler {
     int y = event.getNativeEvent().getClientY();
   
 	  // hack to prevent showing surface context menu => fire click will reset this
-		cancelSurfaceClickEvent = mouseDiagramManager.getBackgroundMoveHandler().backgroundMoveIsOn();
+		cancelSurfaceClickEvent = mouseDiagramManager.isMovingBackground();
 	  mouseDiagramManager.onMouseUp(null, MatrixPointJS.createScaledPoint(x, y, getScaleFactor()));
   }
 

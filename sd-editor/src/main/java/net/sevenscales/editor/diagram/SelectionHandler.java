@@ -58,11 +58,14 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 	private Diagram lastMultimodeSelectedDiagram;
   private boolean freehandModeOn;
   private Set<Diagram> tobeRemovedInCycle;
+  private boolean potentialClearSelection;
+  private MouseState mouseState;
 	
-	public SelectionHandler(ISurfaceHandler surface, List<Diagram> diagrams, Set<DiagramDragHandler> dragHandlers) {
+	public SelectionHandler(ISurfaceHandler surface, List<Diagram> diagrams, Set<DiagramDragHandler> dragHandlers, MouseState mouseState) {
 		this.surface = surface;
 		this.diagrams = diagrams;
 		this.dragHandlers = dragHandlers;
+    this.mouseState = mouseState;
 		this.selectionHandlers = new SelectionHandlerCollection();
 		tmpSelectedItems = new HashSet<Diagram>();
     tobeRemovedInCycle = new HashSet<Diagram>();
@@ -136,11 +139,13 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 ////////////////////////////////////
 	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
 		// logger.debug("onMouseDown sender={}, currentHandler={}...", sender, currentHandler);
+    potentialClearSelection = false;
 		if (sender == null && currentHandler == null) {
 			// if null it is canvas mouse down event
 			// but prevent handling bubbled event which is already sent by 
 			// real target object
-			handleCanvasMouseDown();
+			// handleCanvasMouseDown();
+      potentialClearSelection = true;
 			return true;
 //			System.out.println("canvas selected:" + sender+" x:"+x+" y:"+y);
 		} else if (sender != null) {
@@ -168,6 +173,10 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 	}
 
 	public void onMouseUp(Diagram sender, MatrixPointJS point) {
+    if (potentialClearSelection && !mouseState.isMovingBackground()) {
+      // plain canvas click
+      handleCanvasMouseDown();
+    }
 		// logger.debug("onMouseUp sender={}...", sender);
 		if (sender != null && 
 				getSelectedItems().size() > 0 && 
