@@ -474,7 +474,11 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     }
   }
 
-  sender.select();
+  if (selected && shiftOn) {
+    sender.unselect();
+  } else {
+    sender.select();
+  }
 
   // logger.debugTime();
   // logger.start("SelectionHandler.select 4");
