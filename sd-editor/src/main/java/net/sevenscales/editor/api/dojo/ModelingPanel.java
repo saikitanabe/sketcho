@@ -270,6 +270,18 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 			new UiContextMenu(surface, editorContext, surface.getSelectionHandler());
 			new UiClickContextMenu(surface);
 		}
+
+		init(this);
+	}
+
+	private native void init(ModelingPanel me)/*-{
+		$wnd.isEditorOpen = function() {
+			return me.@net.sevenscales.editor.api.dojo.ModelingPanel::isEditorOpen()();
+		}
+	}-*/;
+
+	private boolean isEditorOpen() {
+		return surface.getEditorContext().isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN);
 	}
 	
 	public ISurfaceHandler getSurface() {
