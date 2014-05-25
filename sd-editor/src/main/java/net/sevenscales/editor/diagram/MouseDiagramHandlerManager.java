@@ -351,6 +351,11 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		surfaceClickHandler.onDoubleClick(sender, point);
 	}
 
+	@Override
+	public boolean isDragging() {
+		return dragHandler.isDragging();
+	}
+
 	@Override	
 	public boolean isMovingBackground() {
 		return backgroundMoveHandler.backgroundMoveIsOn();

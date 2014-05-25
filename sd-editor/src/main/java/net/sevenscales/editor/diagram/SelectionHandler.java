@@ -173,7 +173,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 	}
 
 	public void onMouseUp(Diagram sender, MatrixPointJS point) {
-    if (potentialClearSelection && !mouseState.isMovingBackground() && !mouseState.isLassoing()) {
+    if (potentialClearSelection && !mouseState.isMovingBackground() && !mouseState.isLassoing() && !mouseState.isDragging()) {
       // plain canvas click
       handleCanvasMouseDown();
     }
