@@ -45,6 +45,7 @@ import net.sevenscales.editor.gfx.domain.Point;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -66,6 +67,10 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 public class UiContextMenu extends Composite implements net.sevenscales.editor.content.ui.ColorSelections.SelectionHandler, TextSizeHandler {
 	private static final SLogger logger = SLogger.createLogger(UiContextMenu.class);
+
+	static {
+		SLogger.addFilter(UiContextMenu.class);
+	}
 	
 	private static UiContextMenuUiBinder uiBinder = GWT
 			.create(UiContextMenuUiBinder.class);
@@ -475,13 +480,16 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		  }
 		});
 		
-		handleCancel(this);
+		handleStreams(this);
 		closeOnSave();
 	}
 
-	private native void handleCancel(UiContextMenu me)/*-{
+	private native void handleStreams(UiContextMenu me)/*-{
 		$wnd.cancelStream.onValue(function() {
 			me.@net.sevenscales.editor.content.ui.UiContextMenu::cancel()();
+		})
+		$wnd.changeFreehandColorStream.onValue(function(e) {
+			me.@net.sevenscales.editor.content.ui.UiContextMenu::colorMenu(Lcom/google/gwt/dom/client/Element;)(e);
 		})
 	}-*/;
 
@@ -551,6 +559,18 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			setColorPopupRelativePosition();
 		}
 		EffectHelpers.tooltipperHide();
+	}
+
+	private void colorMenu(final Element e) {
+		colorpopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+			@Override
+			public void setPosition(int offsetWidth, int offsetHeight) {
+				int left = e.getAbsoluteLeft();
+				int top = e.getAbsoluteTop() + e.getOffsetHeight();
+				colorpopup.setPopupPosition(left, top);
+				colorSelections.hideHeader();
+			}
+		});
 	}
 
 	private void applyLink(String url) {
@@ -668,6 +688,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				int left = colorize.getAbsoluteLeft() + 0;
 				int top = colorize.getAbsoluteTop() + popup.getOffsetHeight();
 				colorpopup.setPopupPosition(left, top);
+				colorSelections.showHeader();
 			}
 		});
 	}

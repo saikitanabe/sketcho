@@ -62,6 +62,13 @@ class FreehandPath {
     return null;
   }
 
+  void changeColor(String color) {
+    if (color == null) {
+      color = Theme.getCurrentColorScheme().getBorderColor().toHexString();
+    }
+    polyline.setStroke(color);
+  }
+
   private Diagram plotOld() {
     List<Integer> filteredPoints = filterPoints();
     
@@ -129,7 +136,7 @@ class FreehandPath {
                        svgdata),
       "", 
       Theme.createDefaultBackgroundColor(), 
-      Theme.createDefaultBorderColor(), 
+      polyline.getStrokeColor(), 
       Theme.createDefaultTextColor(),
       surface.getEditorContext().isEditable(), 
       DiagramItemDTO.createGenericItem(ElementType.FREEHAND2));

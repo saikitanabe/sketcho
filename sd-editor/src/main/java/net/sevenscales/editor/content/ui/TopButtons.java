@@ -9,10 +9,12 @@ import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
 import net.sevenscales.editor.api.event.CommentModeEvent;
 import net.sevenscales.editor.api.event.CommentModeEventHandler;
 import net.sevenscales.editor.api.event.RelationshipTypeSelectedEvent;
+import net.sevenscales.editor.content.utils.EffectHelpers;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ButtonElement;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -34,6 +36,7 @@ public class TopButtons extends Composite {
 	private EditorContext editorContext;
 	
 	@UiField ButtonElement freehandOn;
+	@UiField Element colorize;
 	// @UiField ButtonElement commentModeOn;
 
 	public TopButtons(EditorContext editorContext) {
@@ -73,6 +76,9 @@ public class TopButtons extends Composite {
 					}
 				});
 
+		tapColor(colorize);
+		EffectHelpers.tooltipper();
+
 		// DOM.sinkEvents((com.google.gwt.user.client.Element) commentModeOn.cast(),
 		// 		Event.ONCLICK);
 		// DOM.setEventListener(
@@ -88,6 +94,13 @@ public class TopButtons extends Composite {
 		// 			}
 		// 		});
 	}
+
+	private native void tapColor(Element e)/*-{
+		$wnd.Hammer(e).on('tap', function() {
+			$wnd.$('.tooltip').hide()
+			$wnd.$($doc).trigger('showFreehandColorMenu', e)
+		})
+	}-*/;
 
 	public void setVisible(FreehandModeChangedEvent event) {
 		super.setVisible(Tools.isCommentMode());

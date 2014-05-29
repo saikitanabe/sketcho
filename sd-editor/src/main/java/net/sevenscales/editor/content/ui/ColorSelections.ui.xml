@@ -44,7 +44,7 @@
 		}
 	</ui:style>
 	<g:HTMLPanel styleName="color-tabs">
-		<ul class="nav nav-tabs">
+		<ul ui:field="header" class="nav nav-tabs">
 			<li class="active">
 				<a ui:field="background" data-toggle="tab">Background</a>
 			</li>

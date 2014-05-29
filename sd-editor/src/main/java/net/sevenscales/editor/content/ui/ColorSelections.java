@@ -49,14 +49,12 @@ public class ColorSelections extends Composite {
 		void itemSelected(Color currentColor, ColorTarget colorTarget);
 	}
 
-	@UiField
-	Style style;
-	@UiField
-	FlexTable colortable;
+	@UiField Style style;
+	@UiField FlexTable colortable;
 	// @UiField
 	// SimplePanel sampleColor;
-	@UiField
-	TextBox colorValue;
+	@UiField TextBox colorValue;
+	@UiField Element header;
 	
 	public static native String rgb2hex(int r, int g, int b)/*-{
 		function hex(x) {
@@ -154,6 +152,7 @@ public class ColorSelections extends Composite {
 			Color color = (Color) editorContext.get(EditorProperty.CURRENT_COLOR);
 			switch (colorTarget) {
 			case BORDER:
+				color.setOpacity(1);
 				color.setBorderColor(currentColor.getBackgroundColor());
 				color.setBorR(currentColor.getRr());
 				color.setBorG(currentColor.getGg());
@@ -274,6 +273,13 @@ public class ColorSelections extends Composite {
 //						}
 //					}
 //				});
+	}
+
+	public void hideHeader() {
+		header.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
+	}
+	public void showHeader() {
+		header.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE);
 	}
 		
 	private void colorBox(int baserow, int basecol, int basecolor) {

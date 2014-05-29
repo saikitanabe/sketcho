@@ -8,6 +8,8 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.OperationQueueRequestEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
+import net.sevenscales.editor.api.event.ColorSelectedEventHandler;
+import net.sevenscales.editor.api.event.ColorSelectedEvent;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.utils.IntegerHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
@@ -29,6 +31,7 @@ import net.sevenscales.domain.IPathRO;
 import net.sevenscales.domain.PathDTO;
 
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
@@ -58,6 +61,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 	private boolean freehandKeyDown;
   private List<FreehandPath> freehandPahts = new ArrayList<FreehandPath>();
   private FreehandPath currentFreehandPath;
+  private String currentColor;
   private boolean staticMovement = false;
 
   private static class PaperPoint extends JavaScriptObject {
@@ -90,7 +94,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     
     Event.addNativePreviewHandler(new NativePreviewHandler() {
       @Override
-      public void onPreviewNativeEvent(NativePreviewEvent event) {        
+      public void onPreviewNativeEvent(NativePreviewEvent event) {
         NativeEvent ne = event.getNativeEvent();
         if (!freehandKeyDown && event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.noMetaKeys(ne) && UIKeyHelpers.isEditorClosed(FreehandDrawerHandler.this.surface.getEditorContext())) {
           if (ne.getKeyCode() == 'F' && UIKeyHelpers.allMenusAreClosed()) {
@@ -130,6 +134,13 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
         
       }
     });
+
+    surface.getEditorContext().getEventBus().addHandler(ColorSelectedEvent.TYPE, new ColorSelectedEventHandler() {
+      @Override
+      public void onSelection(ColorSelectedEvent event) {
+        currentColor = event.getColor().getBackgroundColor();
+      }
+    });
   }
 
   private void evenDuringFreehandMode(NativePreviewEvent event) {
@@ -141,10 +152,19 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     }
 
     if (event.getTypeInt() == Event.ONMOUSEDOWN) {
-      handleMouseDown(ne.getClientX(), ne.getClientY());
+      if (Element.is(ne.getEventTarget())) {
+        // check is mouse down for surface or it could be some button
+        if (surface.getElement().isOrHasChild(Element.as(ne.getEventTarget()))) {
+          handleMouseDown(ne.getClientX(), ne.getClientY());
+        }
+      }
     } else if (event.getTypeInt() == Event.ONTOUCHSTART) {
       Touch touch = getTouches(ne).get(0);
-      handleMouseDown(touch.getClientX(), touch.getClientY());
+      if (Element.is(ne.getEventTarget())) {
+        if (surface.getElement().isOrHasChild(Element.as(ne.getEventTarget()))) {
+          handleMouseDown(touch.getClientX(), touch.getClientY());
+        }
+      }
     } /*else if (event.getTypeInt() == Event.ONTOUCHMOVE) {
       // potential idea to start 
       // JsArray<Touch> touches = getTouches(ne);
@@ -159,6 +179,13 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       handleDoubleClick(event.getNativeEvent());
     }    
   }
+
+  private native boolean isClassString(Element e)/*-{
+    if (e.className instanceof String) {
+      return true;
+    }
+    return false;
+  }-*/;
 
   private boolean freehandMode() {
     return FreehandDrawerHandler.this.surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE);
@@ -211,6 +238,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 
   private void createNewPath() {
     currentFreehandPath = new FreehandPath(surface);
+    currentFreehandPath.changeColor(currentColor);
     freehandPahts.add(currentFreehandPath);
   }
 

@@ -6,7 +6,10 @@
 	</ui:style>
 	<g:HTMLPanel styleName="topButtons">
 		<div>
-			<button ui:field="freehandOn" class="btn btn-success" style="display: none;" title="Exit Freehand mode | Toggle freehand mode, press F key">Freehand</button>
+			<button ui:field="freehandOn" class="btn btn-success tooltipper" style="display: none;" title="Exit Freehand mode | Toggle freehand mode, press F key" data-placement="bottom">Freehand</button>
+			<a ui:field="colorize" title="Change freehand drawing color" class="btn tooltipper" data-placement="bottom">
+				<i class="context-icon-colorize2-black"></i>
+			</a>
 			<button ui:field="commentModeOn" class="btn btn-danger" style="display: none;" title="Hide Commments | Toggle comments, press C key">Comments</button>
 		</div>
 	</g:HTMLPanel>
