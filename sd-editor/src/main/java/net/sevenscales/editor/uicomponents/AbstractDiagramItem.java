@@ -1502,7 +1502,17 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   @Override
   public boolean equals(Object obj) {
-  	return obj == this;
+  	if (obj == this) return true;
+    if (obj instanceof AbstractDiagramItem) {
+      AbstractDiagramItem a = (AbstractDiagramItem) obj;
+      IDiagramItem di = a.getDiagramItem();
+      IDiagramItem medi = getDiagramItem();
+      if (di != null && medi != null && 
+          di.getClientId() != null && di.getClientId().equals(medi.getClientId())) {
+        return true;
+      }
+    }
+    return false;
   }
 
 	public void fillInfo(Info info) {
