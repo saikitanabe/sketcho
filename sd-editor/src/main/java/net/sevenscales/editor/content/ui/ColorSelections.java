@@ -257,8 +257,7 @@ public class ColorSelections extends Composite {
 		new FastElementButton(background).addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				colorTarget = ColorTarget.BACKGROUND;
-				JQuery.tab(background, "show");
+				backgroundMode();
 			}
 		});
 
@@ -293,12 +292,19 @@ public class ColorSelections extends Composite {
 		})
 	}-*/;
 
+	private void backgroundMode() {
+		colorTarget = ColorTarget.BACKGROUND;
+		JQuery.tab(background, "show");
+	}
+
 	public void hideHeader() {
+		backgroundMode();
 		colorValue.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
 		transparent.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
 		header.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
 	}
 	public void showHeader() {
+		// backgroundMode();
 		colorValue.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE);
 		transparent.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
 		header.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE);

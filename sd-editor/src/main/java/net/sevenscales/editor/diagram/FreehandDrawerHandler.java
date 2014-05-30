@@ -138,7 +138,9 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     surface.getEditorContext().getEventBus().addHandler(ColorSelectedEvent.TYPE, new ColorSelectedEventHandler() {
       @Override
       public void onSelection(ColorSelectedEvent event) {
-        currentColor = event.getColor().getBackgroundColor();
+        if (freehandMode()) {
+          currentColor = event.getColor().getBackgroundColor();
+        }
       }
     });
   }
