@@ -21,13 +21,7 @@
 		.focuspanel:focus {
 			outline: none;
 		}
-		
-		.colorfield {
-			text-align: center;
-			font-size: 18px;
-			margin: 0;
-		}
-		
+				
 		.transparent {
 			color: #444444;
 			width: 100%;
@@ -40,7 +34,7 @@
 		.tableStyle {
 			padding: 0;
 			margin: 0;
-			background-color: #95918E;
+			background-color: transparent;
 		}
 	</ui:style>
 	<g:HTMLPanel styleName="color-tabs">
@@ -57,12 +51,12 @@
 				<g:VerticalPanel styleName="{style.tableStyle}">
 					<!-- <g:HorizontalPanel styleName="{style.wrapper}"> -->
 					<!-- <g:SimplePanel ui:field="sampleColor" width="40px" height="20px"></g:SimplePanel> -->
-					<g:TextBox ui:field="colorValue" width="211px"
-						styleName="{style.colorfield}"></g:TextBox>
+					<g:TextBox ui:field="colorValue" width="211px" styleName="color-colorfield"></g:TextBox>
 					<!-- </g:HorizontalPanel> -->
-					<g:FocusPanel ui:field="transparent" styleName="{style.transparent}">
-						<g:HTML>transparent</g:HTML>
-					</g:FocusPanel>
+					<g:HTMLPanel styleName="color-default-color">
+						<a ui:field="defaultColor" class="btn btn-mini">Restore Defaults</a>
+						<a ui:field="transparent" class="btn btn-mini">Transparent</a>
+					</g:HTMLPanel>
 					<g:FlexTable ui:field="colortable" styleName="{style.colortable}"
 						cellPadding="0" cellSpacing="0"></g:FlexTable>
 				</g:VerticalPanel>

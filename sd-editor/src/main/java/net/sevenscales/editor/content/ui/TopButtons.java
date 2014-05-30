@@ -77,7 +77,6 @@ public class TopButtons extends Composite {
 				});
 
 		tapColor(colorize);
-		EffectHelpers.tooltipper();
 
 		// DOM.sinkEvents((com.google.gwt.user.client.Element) commentModeOn.cast(),
 		// 		Event.ONCLICK);
@@ -94,6 +93,12 @@ public class TopButtons extends Composite {
 		// 			}
 		// 		});
 	}
+
+	@Override
+  protected void onAttach() {
+  	super.onAttach();
+  	EffectHelpers.tooltipper();
+  }
 
 	private native void tapColor(Element e)/*-{
 		$wnd.Hammer(e).on('tap', function() {

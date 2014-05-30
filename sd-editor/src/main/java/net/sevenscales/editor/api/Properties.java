@@ -294,6 +294,15 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 				d.setBorderColor(borcolor);
 			}
 			break;
+		case ALL:
+      d.setTextColor(color.getR(), color.getG(), color.getB());
+	  	Color newbg = new Color(color.getRr(), color.getGg(), color.getBb(), color.getOpacity());
+      d.setBackgroundColor(newbg);
+			if (d.canSetBackgroundColor()) {
+				Color borcolor = new Color(color.getBorR(), color.getBorG(), color.getBorB(), 1);
+				d.setBorderColor(borcolor);
+			}
+			break;
 		}
 	}
 	

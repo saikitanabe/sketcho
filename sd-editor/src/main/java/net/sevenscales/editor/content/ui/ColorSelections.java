@@ -7,6 +7,7 @@ import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
 import net.sevenscales.editor.api.impl.FastButton;
 import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.api.impl.TouchHelpers;
+import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.utils.ColorHelpers;
 import net.sevenscales.editor.content.utils.JQuery;
 import net.sevenscales.editor.content.utils.Rgb;
@@ -55,6 +56,8 @@ public class ColorSelections extends Composite {
 	// SimplePanel sampleColor;
 	@UiField TextBox colorValue;
 	@UiField Element header;
+	@UiField Element defaultColor;
+	@UiField Element transparent;
 	
 	public static native String rgb2hex(int r, int g, int b)/*-{
 		function hex(x) {
@@ -258,6 +261,9 @@ public class ColorSelections extends Composite {
 				JQuery.tab(background, "show");
 			}
 		});
+
+		tapDefaultColor(defaultColor, this);
+		tapTransparent(transparent, this);
 		
 //		DOM.sinkEvents((com.google.gwt.user.client.Element) background.cast(),
 //				Event.ONCLICK);
@@ -275,10 +281,26 @@ public class ColorSelections extends Composite {
 //				});
 	}
 
+	private native void tapDefaultColor(Element e, ColorSelections me)/*-{
+		$wnd.Hammer(e).on('tap', function() {
+			me.@net.sevenscales.editor.content.ui.ColorSelections::onRestoreDefaults()();
+		})
+	}-*/;
+
+	private native void tapTransparent(Element e, ColorSelections me)/*-{
+		$wnd.Hammer(e).on('tap', function() {
+			me.@net.sevenscales.editor.content.ui.ColorSelections::onTransparent()();
+		})
+	}-*/;
+
 	public void hideHeader() {
+		colorValue.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
+		transparent.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
 		header.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
 	}
 	public void showHeader() {
+		colorValue.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE);
+		transparent.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
 		header.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE);
 	}
 		
@@ -334,16 +356,34 @@ public class ColorSelections extends Composite {
 		}
 		return 255;
 	}
+
+	private void onRestoreDefaults() {
+		currentColor.setBackgroundColor(Theme.getCurrentColorScheme().getBackgroundColor().toHexString());
+		currentColor.setRr(Theme.getCurrentColorScheme().getBackgroundColor().red);
+		currentColor.setGg(Theme.getCurrentColorScheme().getBackgroundColor().green);
+		currentColor.setBb(Theme.getCurrentColorScheme().getBackgroundColor().blue);
+		currentColor.setOpacity(Theme.getCurrentColorScheme().getBackgroundColor().getOpacity());
+		
+		currentColor.setTextColor(Theme.getCurrentColorScheme().getTextColor().toHexString());
+		currentColor.setR(Theme.getCurrentColorScheme().getTextColor().red);
+		currentColor.setG(Theme.getCurrentColorScheme().getTextColor().green);
+		currentColor.setB(Theme.getCurrentColorScheme().getTextColor().blue);
+
+		currentColor.setBorR(Theme.getCurrentColorScheme().getBorderColor().red);
+		currentColor.setBorG(Theme.getCurrentColorScheme().getBorderColor().green);
+		currentColor.setBorB(Theme.getCurrentColorScheme().getBorderColor().blue);
+
+		selectionHandler.itemSelected(currentColor, ColorTarget.ALL);
+	}
 	
-	@UiHandler("transparent")
-	public void onTransparent(ClickEvent event) {
+	public void onTransparent() {
 		currentColor.setBackgroundColor("transparent");
 		currentColor.setOpacity(0);
 		
-		currentColor.setTextColor("444444");
-		currentColor.setR(0x44);
-		currentColor.setG(0x44);
-		currentColor.setB(0x44);
+		currentColor.setTextColor(Theme.getCurrentColorScheme().getTextColor().toHexString());
+		// currentColor.setR(0x44);
+		// currentColor.setG(0x44);
+		// currentColor.setB(0x44);
 		
 		Color color = (Color) editorContext.get(EditorProperty.CURRENT_COLOR);
 		applyCommonBackgroundColor(color);

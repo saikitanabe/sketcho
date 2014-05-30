@@ -6,7 +6,7 @@ import com.google.gwt.event.shared.GwtEvent;
 
 public class ColorSelectedEvent extends GwtEvent<ColorSelectedEventHandler> {
 	public enum ColorTarget {
-		BORDER, BACKGROUND, TEXT
+		BORDER, BACKGROUND, TEXT, ALL
 	}
 
   public static Type<ColorSelectedEventHandler> TYPE = new Type<ColorSelectedEventHandler>();
