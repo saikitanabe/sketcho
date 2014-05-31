@@ -38,9 +38,9 @@ import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.ImageElement;
 import net.sevenscales.editor.diagram.SelectionHandler;
-import net.sevenscales.editor.diagram.utils.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.gfx.domain.Point;
+import net.sevenscales.editor.gfx.domain.ElementColor;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
@@ -103,7 +103,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	private TextSizePopup fontSizePopup;
 	private Point popupPosition;
 
-	private Color color = new Color("444444", 0x44, 0x44, 0x44, "6699ff", 0x66, 0x99, 0xff, "FFFFFF", 255, 255, 255, AbstractDiagramItem.DEFAULT_FILL_OPACITY);
+	private ElementColor color = new ElementColor();
 	private ColorSelections colorSelections;
 	private EditLinkForm editLinkForm;
 
@@ -715,7 +715,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}
 	
 	@Override
-	public void itemSelected(Color color, ColorTarget colorTarget) {
+	public void itemSelected(ElementColor color, ColorTarget colorTarget) {
 		logger.debug2("itemSelected color {}, colorTarget {}...", color, colorTarget);
 		colorpopup.hide();
 		this.color = color;

@@ -1,8 +1,7 @@
 package net.sevenscales.editor.api.event;
 
-import net.sevenscales.editor.diagram.utils.Color;
-
 import com.google.gwt.event.shared.GwtEvent;
+import net.sevenscales.editor.gfx.domain.ElementColor;
 
 public class ColorSelectedEvent extends GwtEvent<ColorSelectedEventHandler> {
 	public enum ColorTarget {
@@ -10,11 +9,11 @@ public class ColorSelectedEvent extends GwtEvent<ColorSelectedEventHandler> {
 	}
 
   public static Type<ColorSelectedEventHandler> TYPE = new Type<ColorSelectedEventHandler>();
-	private Color color;
+	private ElementColor elementColor;
 	private ColorTarget colorTarget;
 
-	public ColorSelectedEvent(Color color, ColorTarget colorTarget) {
-		this.color = color;
+	public ColorSelectedEvent(ElementColor elementColor, ColorTarget colorTarget) {
+		this.elementColor = elementColor;
 		this.colorTarget = colorTarget;
 	}
 
@@ -28,8 +27,8 @@ public class ColorSelectedEvent extends GwtEvent<ColorSelectedEventHandler> {
 		return TYPE;
 	}
 	
-	public Color getColor() {
-		return color;
+	public ElementColor getElementColor() {
+		return elementColor;
 	}
 	
 	public ColorTarget getColorTarget() {

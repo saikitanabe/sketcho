@@ -11,8 +11,9 @@ import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.utils.ColorHelpers;
 import net.sevenscales.editor.content.utils.JQuery;
 import net.sevenscales.editor.content.utils.Rgb;
-import net.sevenscales.editor.diagram.utils.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
+import net.sevenscales.editor.gfx.domain.ElementColor;
+import net.sevenscales.editor.gfx.domain.Color;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
@@ -47,7 +48,7 @@ public class ColorSelections extends Composite {
 	}
 	
 	public interface SelectionHandler {
-		void itemSelected(Color currentColor, ColorTarget colorTarget);
+		void itemSelected(ElementColor currentColor, ColorTarget colorTarget);
 	}
 
 	@UiField Style style;
@@ -106,79 +107,88 @@ public class ColorSelections extends Composite {
 	private <H extends EventHandler> void selectCurrentColor(GwtEvent<H> event) {
 		Widget widget = (Widget) event.getSource();
 		
-		String backgroundRgb = widget.getElement().getStyle().getBackgroundColor();
-		if (backgroundRgb.startsWith("#")) {
+		String selectedRgb = widget.getElement().getStyle().getBackgroundColor();
+		if (selectedRgb.startsWith("#")) {
 			// in hex format IE8 at least
-			String hexnumber = backgroundRgb.substring(1, backgroundRgb.length());
+			String hexnumber = selectedRgb.substring(1, selectedRgb.length());
 			assert(hexnumber.length() == 6);
 			int rc = Integer.valueOf(hexnumber.substring(0, 2), 16);
 			int gc = Integer.valueOf(hexnumber.substring(2, 4), 16);
 			int bc = Integer.valueOf(hexnumber.substring(4, 6), 16);
-			backgroundRgb = "rgb(" + rc + "," + gc + "," + bc + ")";
+			selectedRgb = "rgb(" + rc + "," + gc + "," + bc + ")";
 		}
-		String color = rgb2hex(backgroundRgb).toUpperCase();
-		
-		currentColor.setBackgroundColor(color);
-		currentColor.setRr(red(backgroundRgb));
-		currentColor.setGg(green(backgroundRgb));
-		currentColor.setBb(blue(backgroundRgb));
-		currentColor.setOpacity(0.85);
+		String color = rgb2hex(selectedRgb).toUpperCase();
+		int r = red(selectedRgb);
+		int g = green(selectedRgb);
+		int b = blue(selectedRgb);
+
+		switch (colorTarget) {
+			case BACKGROUND:
+				selectedBackgroundColor(color, selectedRgb, r, g, b);
+				break;
+			case BORDER:
+				selectedBorderColor(color, r, g, b);
+				break;
+			case TEXT:
+				selectedTextColor(color, r, g, b);
+				break;
+		}
 
 		colorValue.setText(color);
-		// colorValue.selectAll();
-		// colorValue.setFocus(true);
-
 		colorValue.getElement().getStyle().setBackgroundColor("#" + color);
+		colorValue.getElement().getStyle().setColor(currentColor.getTextColor().toHexStringWithHash());
+	}
+
+	private void selectedBackgroundColor(String color, String selectedRgb, int r, int g, int b) {
+		currentColor.setBackgroundColor(new Color(r, g, b, 0.85));
 		String textcolor = "ffffff";
-		if (ColorHelpers.isRgbBlack(widget.getElement().getStyle().getBackgroundColor())) {
+		if (ColorHelpers.isRgbBlack(selectedRgb)) {
 			textcolor = "444444";
 		}
-		
 		int tr = Integer.valueOf(textcolor.substring(0, 2), 16);
 		int tg = Integer.valueOf(textcolor.substring(2, 4), 16);
 		int tb = Integer.valueOf(textcolor.substring(4, 6), 16);
 
-		currentColor.setTextColor(textcolor);
-		currentColor.setR(tr);
-		currentColor.setG(tg);
-		currentColor.setB(tb);
-		
-		colorValue.getElement().getStyle().setColor(currentColor.getTextColor4Web());
+		currentColor.setTextColor(new Color(tr, tg, tb, 1));
 	}
 
+	private void selectedBorderColor(String color, int r, int g, int b) {
+		currentColor.setBorderColor(new Color(r, g, b, 1));
+	}
+
+	private void selectedTextColor(String color, int r, int g, int b) {
+		currentColor.setTextColor(new Color(r, g, b, 1));
+	}
 	
 	private ClickHandler clickHandler = new ClickHandler() {
 		@Override
 		public void onClick(ClickEvent event) {
 			selectCurrentColor(event);
 			logger.debug2("onClick currentColor: {}", currentColor);
-			Color color = (Color) editorContext.get(EditorProperty.CURRENT_COLOR);
+			ElementColor color = (ElementColor) editorContext.get(EditorProperty.CURRENT_COLOR);
 			switch (colorTarget) {
 			case BORDER:
-				color.setOpacity(1);
-				color.setBorderColor(currentColor.getBackgroundColor());
-				color.setBorR(currentColor.getRr());
-				color.setBorG(currentColor.getGg());
-				color.setBorB(currentColor.getBb());
+				color.setBorderColor(currentColor.getBorderColor().create());
 				break;
 			case BACKGROUND:
-				applyCommonBackgroundColor(color);
-				
+				color.setBackgroundColor(currentColor.getBackgroundColor().create());
+				color.setTextColor(currentColor.getTextColor().create());
 				// set border color based on background
 				String borderHex = ColorHelpers.createBorderColor(currentColor.getBackgroundColor());
-				color.setBorderColor(borderHex);
 				Rgb borderRgb = ColorHelpers.toRgb(borderHex);
-				color.setBorR(borderRgb.red);
-				color.setBorG(borderRgb.green);
-				color.setBorB(borderRgb.blue);
-				color.setBorderColor(borderHex);
+				color.setBorderColor(new Color(borderRgb.red, borderRgb.green, borderRgb.blue, 1));
+				break;
+			case TEXT:
+				color.setTextColor(currentColor.getTextColor().create());
 				break;
 			}
 			selectionHandler.itemSelected(color, colorTarget);
 		}
 	};
 	
-	private Color currentColor = new Color("444444", 0x44, 0x44, 0x44, "ffffff", 0xff, 0xff, 0xff, "333333", 0x33, 0x33, 0x33, AbstractDiagramItem.DEFAULT_FILL_OPACITY); 
+	private ElementColor currentColor = new ElementColor(Theme.getCurrentColorScheme().getTextColor().create(), 
+																											 Theme.getCurrentColorScheme().getBorderColor().create(),
+																										   Theme.getCurrentColorScheme().getBackgroundColor().create());
 
 //	private String currentBackgroundColor = "#3366FF";
 //	private String currentTextColor = "#FFFFFF";
@@ -187,6 +197,7 @@ public class ColorSelections extends Composite {
 	
 	@UiField AnchorElement border;
 	@UiField AnchorElement background;
+	@UiField AnchorElement textColor;
 	private EditorContext editorContext;
 	
 
@@ -194,8 +205,8 @@ public class ColorSelections extends Composite {
 		this.editorContext = editorContext;
 		initWidget(uiBinder.createAndBindUi(this));
 		
-		colorValue.getElement().getStyle().setBackgroundColor(currentColor.getBackgroundColor4Web());
-		colorValue.getElement().getStyle().setColor(currentColor.getTextColor4Web());
+		colorValue.getElement().getStyle().setBackgroundColor(currentColor.getBackgroundColor().toHexStringWithHash());
+		colorValue.getElement().getStyle().setColor(currentColor.getTextColor().toHexStringWithHash());
 
 		colortable.setWidget(0, 0, createColorButton("#000000"));
 		colortable.setWidget(1, 0, createColorButton("#333333"));
@@ -261,23 +272,15 @@ public class ColorSelections extends Composite {
 			}
 		});
 
+		new FastElementButton(textColor).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				textMode();
+			}
+		});
+
 		tapDefaultColor(defaultColor, this);
 		tapTransparent(transparent, this);
-		
-//		DOM.sinkEvents((com.google.gwt.user.client.Element) background.cast(),
-//				Event.ONCLICK);
-//		DOM.setEventListener(
-//				(com.google.gwt.user.client.Element) background.cast(),
-//				new EventListener() {
-//					@Override
-//					public void onBrowserEvent(Event event) {
-//						switch (DOM.eventGetType(event)) {
-//						case Event.ONCLICK:
-//							colorTarget = ColorTarget.BACKGROUND;
-//							break;
-//						}
-//					}
-//				});
 	}
 
 	private native void tapDefaultColor(Element e, ColorSelections me)/*-{
@@ -295,6 +298,11 @@ public class ColorSelections extends Composite {
 	private void backgroundMode() {
 		colorTarget = ColorTarget.BACKGROUND;
 		JQuery.tab(background, "show");
+	}
+
+	private void textMode() {
+		colorTarget = ColorTarget.TEXT;
+		JQuery.tab(textColor, "show");
 	}
 
 	public void hideHeader() {
@@ -364,51 +372,29 @@ public class ColorSelections extends Composite {
 	}
 
 	private void onRestoreDefaults() {
-		currentColor.setBackgroundColor(Theme.getCurrentColorScheme().getBackgroundColor().toHexString());
-		currentColor.setRr(Theme.getCurrentColorScheme().getBackgroundColor().red);
-		currentColor.setGg(Theme.getCurrentColorScheme().getBackgroundColor().green);
-		currentColor.setBb(Theme.getCurrentColorScheme().getBackgroundColor().blue);
-		currentColor.setOpacity(Theme.getCurrentColorScheme().getBackgroundColor().getOpacity());
-		
-		currentColor.setTextColor(Theme.getCurrentColorScheme().getTextColor().toHexString());
-		currentColor.setR(Theme.getCurrentColorScheme().getTextColor().red);
-		currentColor.setG(Theme.getCurrentColorScheme().getTextColor().green);
-		currentColor.setB(Theme.getCurrentColorScheme().getTextColor().blue);
-
-		currentColor.setBorR(Theme.getCurrentColorScheme().getBorderColor().red);
-		currentColor.setBorG(Theme.getCurrentColorScheme().getBorderColor().green);
-		currentColor.setBorB(Theme.getCurrentColorScheme().getBorderColor().blue);
+		currentColor.setBackgroundColor(Theme.getCurrentColorScheme().getBackgroundColor().create());
+		currentColor.setTextColor(Theme.getCurrentColorScheme().getTextColor().create());
+		currentColor.setBorderColor(Theme.getCurrentColorScheme().getBorderColor().create());
 
 		selectionHandler.itemSelected(currentColor, ColorTarget.ALL);
 	}
 	
 	public void onTransparent() {
-		currentColor.setBackgroundColor("transparent");
-		currentColor.setOpacity(0);
+		switch (colorTarget) {
+			case TEXT:
+				currentColor.setTextColor(Theme.getCurrentColorScheme().getTextColor().create());
+				break;
+			case BORDER:
+				currentColor.getBorderColor().opacity = 0;
+				break;
+			case BACKGROUND:
+				currentColor.getBackgroundColor().opacity = 0;
+				break;
+		}
 		
-		currentColor.setTextColor(Theme.getCurrentColorScheme().getTextColor().toHexString());
-		// currentColor.setR(0x44);
-		// currentColor.setG(0x44);
-		// currentColor.setB(0x44);
-		
-		Color color = (Color) editorContext.get(EditorProperty.CURRENT_COLOR);
-		applyCommonBackgroundColor(color);
 		selectionHandler.itemSelected(currentColor, colorTarget);
 	}
 	
-	private void applyCommonBackgroundColor(Color color) {
-		color.setBackgroundColor(currentColor.getBackgroundColor());
-		color.setRr(currentColor.getRr());
-		color.setGg(currentColor.getGg());
-		color.setBb(currentColor.getBb());
-		color.setOpacity(currentColor.getOpacity());
-		
-		color.setTextColor(currentColor.getTextColor());
-		color.setR(currentColor.getR());
-		color.setG(currentColor.getG());
-		color.setB(currentColor.getB());
-	}
-
 	public void setCurrentDiagramColor(String textColor, String backgroundColor) {
 		System.out.println("setCurrentDiagramColor: " + textColor + " " + backgroundColor);
 		colorValue.setText(backgroundColor.toUpperCase());

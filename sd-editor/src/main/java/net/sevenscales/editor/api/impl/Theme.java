@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.ElementColor;
 
 public class Theme {
   private static final String THEME_PREFIX = "theme-";
@@ -180,22 +181,18 @@ public class Theme {
     // return new Color(0xF0, 0x60, 0x4C, 1.0);
   }
 	
-	public static net.sevenscales.editor.diagram.utils.Color defaultColor() {
+	public static ElementColor defaultColor() {
 		Color background = createDefaultBackgroundColor();
 		Color border = createDefaultBorderColor();
 		Color text = createDefaultTextColor();
-		return new net.sevenscales.editor.diagram.utils.Color(text.toHexString(), text.red, text.green, text.blue,
-				background.toHexString(), background.red, background.green, background.blue,
-				border.toHexString(), border.red, border.green, border.blue, 0);
+		return new ElementColor(text, border, background);
 	}
 
-  public static net.sevenscales.editor.diagram.utils.Color defaultCommentColor() {
+  public static ElementColor defaultCommentColor() {
     Color background = createDefaultCommentBackgroundColor();
     Color border = createDefaultCommentBorderColor();
     Color text = createDefaultCommentTextColor();
-    return new net.sevenscales.editor.diagram.utils.Color(text.toHexString(), text.red, text.green, text.blue,
-        background.toHexString(), background.red, background.green, background.blue,
-        border.toHexString(), border.red, border.green, border.blue, 0);
+    return new ElementColor(text, border, background);
   }
 
 	public static void setColorScheme(String colorName) {

@@ -45,6 +45,7 @@ import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.utils.DiagramAnchorUtils;
 import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
 import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.ElementColor;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.diagram.drag.Anchor;
@@ -235,10 +236,10 @@ public class RelationshipDragEndHandler implements
 
 	private Diagram createDiagram(UMLDiagramType type, ImageInfo imageInfo, int x, int y) {
 		Diagram result = null;
-		net.sevenscales.editor.diagram.utils.Color current = selectColor();
-		Color background = new Color(current.getRr(), current.getGg(), current.getBb(), current.getOpacity());
-		Color borderColor = new Color(current.getBorR(), current.getBorG(), current.getBorB(), 1);
-		Color color = new Color(current.getR(), current.getG(), current.getB(), 1);
+		ElementColor current = selectColor();
+		Color background = current.getBackgroundColor().create();
+		Color borderColor = current.getBorderColor().create();
+		Color color = current.getTextColor().create();
 		
 		switch (type) {
 		case IMAGE: {
@@ -434,9 +435,9 @@ public class RelationshipDragEndHandler implements
 		return result;
 	}
 
-	private net.sevenscales.editor.diagram.utils.Color selectColor() {
+	private ElementColor selectColor() {
 		// TODO enable global color when there is a generic color selection available
-//		net.sevenscales.editor.diagram.utils.Color current = (net.sevenscales.editor.diagram.utils.Color) 
+//		ElementColor current = (ElementColor) 
 //				surface.getEditorContext().get(EditorProperty.CURRENT_COLOR);
 
 		return Theme.defaultColor(); 

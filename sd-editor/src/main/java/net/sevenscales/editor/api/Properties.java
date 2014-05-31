@@ -32,6 +32,7 @@ import net.sevenscales.editor.diagram.Diagram.SizeChangedHandler;
 import net.sevenscales.editor.diagram.DiagramSelectionHandler;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.ElementColor;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
@@ -186,7 +187,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 				Set<Diagram> modified = new HashSet<Diagram>();
 				for (Diagram d : Properties.this.selectionHandler.getSelectedItems()) {
 					if (AuthHelpers.allowedToEdit(d) && AuthHelpers.allowColorChange(d)) {
-						setColors(d, event.getColorTarget(), event.getColor());
+						setColors(d, event.getColorTarget(), event.getElementColor());
 						modified.add(d);
 					}
 				}
@@ -266,13 +267,14 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		MouseDiagramEventHelpers.fireDiagramsChangedEvenet(modified, surface, ActionType.FONT_CHANGE);
 	}
 
-	private void setColors(Diagram d, ColorTarget colorTarget, net.sevenscales.editor.diagram.utils.Color color) {
+	private void setColors(Diagram d, ColorTarget colorTarget, ElementColor color) {
 		switch (colorTarget) {
 		case BACKGROUND:
 			logger.debug("onSelection background {}...", d);
 			if (d.canSetBackgroundColor()) {
-		  	Color newbg = new Color(color.getRr(), color.getGg(), color.getBb(), color.getOpacity());
-				d.setBackgroundColor(newbg);
+		  	// Color newbg = new Color(color.getRr(), color.getGg(), color.getBb(), color.getOpacity());
+		  	Color newbg = color.getBackgroundColor();
+				d.setBackgroundColor(color.getBackgroundColor());
 	    	String borderWebColor = ColorHelpers.borderColorByBackground(newbg.red, newbg.green, newbg.blue);
 	    	net.sevenscales.editor.content.utils.Rgb rgb = ColorHelpers.toRgb(borderWebColor);
 	    	rgb.a = 1;
@@ -284,23 +286,23 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		  	// can set text color only if element has some color as text background
 		  	// this is due to theme switching, e.g. actor text element is on always on top of 
 		  	// board background color
-				d.setTextColor(color.getR(), color.getG(), color.getB());
+				d.setTextColor(color.getTextColor());
 			}
 			logger.debug("onSelection background... done");
 			break;
 		case BORDER:
 			if (d.canSetBackgroundColor()) {
-				Color borcolor = new Color(color.getBorR(), color.getBorG(), color.getBorB(), color.getOpacity());
-				d.setBorderColor(borcolor);
+				d.setBorderColor(color.getBorderColor());
 			}
 			break;
+		case TEXT:
+      d.setTextColor(color.getTextColor());
+			break;
 		case ALL:
-      d.setTextColor(color.getR(), color.getG(), color.getB());
-	  	Color newbg = new Color(color.getRr(), color.getGg(), color.getBb(), color.getOpacity());
-      d.setBackgroundColor(newbg);
+      d.setTextColor(color.getTextColor());
+      d.setBackgroundColor(color.getBackgroundColor());
 			if (d.canSetBackgroundColor()) {
-				Color borcolor = new Color(color.getBorR(), color.getBorG(), color.getBorB(), 1);
-				d.setBorderColor(borcolor);
+				d.setBorderColor(color.getBorderColor());
 			}
 			break;
 		}

@@ -45,6 +45,9 @@
       <li>
         <a ui:field="border" data-toggle="tab">Border</a>
       </li>
+      <li>
+        <a ui:field="textColor" data-toggle="tab">Text</a>
+      </li>
 		</ul>
 		<div id="myTabContent" class="tab-content">
 			<div>

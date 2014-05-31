@@ -20,6 +20,7 @@ import net.sevenscales.editor.gfx.domain.IPolyline;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Point;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
 import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 import net.sevenscales.editor.uicomponents.AngleUtil2;
@@ -61,7 +62,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 	private boolean freehandKeyDown;
   private List<FreehandPath> freehandPahts = new ArrayList<FreehandPath>();
   private FreehandPath currentFreehandPath;
-  private String currentColor;
+  private Color currentColor;
   private boolean staticMovement = false;
 
   private static class PaperPoint extends JavaScriptObject {
@@ -139,7 +140,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       @Override
       public void onSelection(ColorSelectedEvent event) {
         if (freehandMode()) {
-          currentColor = event.getColor().getBackgroundColor();
+          currentColor = event.getElementColor().getBackgroundColor();
         }
       }
     });
@@ -240,7 +241,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 
   private void createNewPath() {
     currentFreehandPath = new FreehandPath(surface);
-    currentFreehandPath.changeColor(currentColor);
+    currentFreehandPath.changeColor(currentColor.toHexStringWithHash());
     freehandPahts.add(currentFreehandPath);
   }
 

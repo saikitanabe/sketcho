@@ -66,6 +66,10 @@ public class Color {
 		return pad(red) + pad(green) + pad(blue);
 	}
 
+	public String toHexStringWithHash() {
+		return "#" + toHexString();
+	}
+
 	private String pad(String hex) {
 		String result = "0" + hex;
 		return result.substring(result.length() - 2, result.length());
