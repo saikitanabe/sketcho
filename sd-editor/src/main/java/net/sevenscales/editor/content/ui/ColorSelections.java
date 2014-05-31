@@ -382,7 +382,8 @@ public class ColorSelections extends Composite {
 	public void onTransparent() {
 		switch (colorTarget) {
 			case TEXT:
-				currentColor.setTextColor(Theme.getCurrentColorScheme().getTextColor().create());
+				// not possible to set text as transparent
+				// currentColor.setTextColor(Theme.getCurrentColorScheme().getTextColor().create());
 				break;
 			case BORDER:
 				currentColor.getBorderColor().opacity = 0;
