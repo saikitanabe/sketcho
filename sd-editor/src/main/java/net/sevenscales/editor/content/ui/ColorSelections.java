@@ -244,8 +244,7 @@ public class ColorSelections extends Composite {
 		new FastElementButton(border).addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				colorTarget = ColorTarget.BORDER;
-				JQuery.tab(border, "show");
+				borderMode();
 			}
 		});
 		
@@ -295,18 +294,23 @@ public class ColorSelections extends Composite {
 		})
 	}-*/;
 
-	private void backgroundMode() {
+	public void backgroundMode() {
 		colorTarget = ColorTarget.BACKGROUND;
 		JQuery.tab(background, "show");
 	}
 
-	private void textMode() {
+	public void borderMode() {
+		colorTarget = ColorTarget.BORDER;
+		JQuery.tab(border, "show");
+	}
+
+	public void textMode() {
 		colorTarget = ColorTarget.TEXT;
 		JQuery.tab(textColor, "show");
 	}
 
 	public void hideHeader() {
-		backgroundMode();
+		borderMode();
 		colorValue.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
 		transparent.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
 		header.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);

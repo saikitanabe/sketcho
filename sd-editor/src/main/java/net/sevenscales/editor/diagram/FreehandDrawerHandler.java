@@ -140,7 +140,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       @Override
       public void onSelection(ColorSelectedEvent event) {
         if (freehandMode()) {
-          currentColor = event.getElementColor().getBackgroundColor();
+          currentColor = event.getElementColor().getBorderColor();
         }
       }
     });
