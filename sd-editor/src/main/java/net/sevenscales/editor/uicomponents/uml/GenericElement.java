@@ -382,11 +382,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 
   @Override
 	public void setTextColor(int red, int green, int blue) {
-  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-  		// keep the default text color
-  	} else {
-		  super.setTextColor(red, green, blue);
-  	}
+	  super.setTextColor(red, green, blue);
   }
 
 	@Override
