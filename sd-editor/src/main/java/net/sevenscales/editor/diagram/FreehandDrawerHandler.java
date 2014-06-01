@@ -92,6 +92,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     this.surface = surface;
     
     gridUtils = new GridUtils(1);
+    currentColor = Theme.getCurrentColorScheme().getBorderColor();
     
     Event.addNativePreviewHandler(new NativePreviewHandler() {
       @Override
