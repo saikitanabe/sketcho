@@ -258,15 +258,20 @@ public class BoardOTHelpers {
 	}
 
 	private void applyThemeColors(Diagram diagram) {
-    if (diagram.usesSchemeDefaultColors(Theme.getColorScheme(ThemeName.PAPER))) {
+    if (diagram.usesSchemeDefaultTextColor(Theme.getColorScheme(ThemeName.PAPER))) {
       // stored with paper colors
       // apply theme colors
-      diagram.setBackgroundColor(diagram.getDefaultBackgroundColor(Theme.getCurrentColorScheme()));
-      diagram.setBorderColor(diagram.getDefaultBorderColor(Theme.getCurrentColorScheme()));
-      diagram.setTextColor(diagram.getDefaultTextColor(Theme.getCurrentColorScheme()));
-    } else if (diagram.isTextColorAccordingToBackgroundColor()) {
       diagram.setTextColor(diagram.getDefaultTextColor(Theme.getCurrentColorScheme()));
     }
+    if (diagram.usesSchemeDefaultBorderColor(Theme.getColorScheme(ThemeName.PAPER))) {
+      diagram.setBorderColor(diagram.getDefaultBorderColor(Theme.getCurrentColorScheme()));
+    }
+    if (diagram.usesSchemeDefaultBackgroundColor(Theme.getColorScheme(ThemeName.PAPER))) {
+      diagram.setBackgroundColor(diagram.getDefaultBackgroundColor(Theme.getCurrentColorScheme()));
+    }
+    // else if (diagram.isTextColorAccordingToBackgroundColor()) {
+    //   diagram.setTextColor(diagram.getDefaultTextColor(Theme.getCurrentColorScheme()));
+    // }
   }
 
   private static class OTHighlight implements RepeatingCommand {

@@ -991,16 +991,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     return backgroundColor;
   }
 
-  protected Color getBackgroundDrawingColor() {
-    if (ThemeName.BLACK.equals(Theme.getCurrentThemeName()) && !usesSchemeDefaultColors(Theme.getCurrentColorScheme())) {
-      borderColorSwitch.copy(borderColor);
-      borderColorSwitch.opacity = backgroundColor.opacity;
-      return borderColorSwitch;
-    }
-    return backgroundColor;
-  }
-
-  
   @Override
   public void setTextColor(int red, int green, int blue) {
   	textColor.red = red;
@@ -1442,19 +1432,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	  return borderColor;
 	}
 	
-	/**
-	 * Switches drawing color to look better on black.
-	 * @return
-	 */
-	protected Color getBorderDrawingColor() {
-   if (ThemeName.BLACK.equals(Theme.getCurrentThemeName()) && !usesSchemeDefaultColors(Theme.getCurrentColorScheme())) {
-     borderColorSwitch.copy(backgroundColor);
-     borderColorSwitch.opacity = borderColor.opacity;
-     return borderColorSwitch;
-   }
-   return borderColor;
-	}
-	
   public void setHighlight(boolean highlight) {
   	this.highlightOn = highlight;
     String color = borderWebColor;
@@ -1524,20 +1501,45 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	  // check if all colors equals with current scheme colors
 	  // if they do then save color information based on white paper theme
     ElementColorScheme paper = getRefrenceColorScheme();
-	  if (usesSchemeDefaultColors(getCurrentColorScheme())) {
-      setColorInfo(info, getDefaultBackgroundColor(paper), getDefaultBorderColor(paper), getDefaultTextColor(paper));
-	  } else {
-	    Color textColor = this.textColor; 
-	    if (isTextColorAccordingToBackgroundColor()) {
-	      // if text color is according to background color
-	      // convert text color for saving/sending to paper color
-	      // e.g. actor and server elements behave like this, but text element could change
-	      // text color
-	      textColor = getDefaultTextColor(paper);
-	    }
-	    setColorInfo(info, backgroundColor, borderColor, textColor);
-	  }
+	  // if (usesSchemeDefaultColors(getCurrentColorScheme())) {
+   //    setColorInfo(info, getDefaultBackgroundColor(paper), getDefaultBorderColor(paper), getDefaultTextColor(paper));
+	  // } else {
+	  //   Color textColor = this.textColor; 
+	  //   if (isTextColorAccordingToBackgroundColor()) {
+	  //     // if text color is according to background color
+	  //     // convert text color for saving/sending to paper color
+	  //     // e.g. actor and server elements behave like this, but text element could change
+	  //     // text color
+	  //     // textColor = getDefaultTextColor(paper);
+	  //   }
+	  //   setColorInfo(info, backgroundColor, borderColor, textColor);
+	  // }
+
+    ElementColorScheme current = getCurrentColorScheme();
+    setColorInfo(info, 
+                 getBackgroundOrDefaultColor(current, paper),
+                 getBorderOrDefaultColor(current, paper), 
+                 getTextOrDefaultColor(current, paper));
 	}
+
+  private Color getTextOrDefaultColor(ElementColorScheme currentScheme, ElementColorScheme referenceScheme) {
+    if (usesSchemeDefaultTextColor(currentScheme)) {
+      return getDefaultTextColor(referenceScheme);
+    }
+    return textColor;
+  }
+  private Color getBorderOrDefaultColor(ElementColorScheme currentScheme, ElementColorScheme referenceScheme) {
+    if (usesSchemeDefaultBorderColor(currentScheme)) {
+      return getDefaultBorderColor(referenceScheme);
+    }
+    return borderColor;
+  }
+  private Color getBackgroundOrDefaultColor(ElementColorScheme currentScheme, ElementColorScheme referenceScheme) {
+    if (usesSchemeDefaultBackgroundColor(currentScheme)) {
+      return getDefaultBackgroundColor(referenceScheme);
+    }
+    return backgroundColor;
+  }
 
   protected ElementColorScheme getRefrenceColorScheme() {
     return Theme.getColorScheme(ThemeName.PAPER);
@@ -1560,6 +1562,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
    * Each diagram element type can specify it's own default colors.
    * @param colorScheme 
    */
+  @Override
   public boolean usesSchemeDefaultColors(ElementColorScheme colorScheme) {
     if (!this.getDefaultTextColor(colorScheme).equals(this.getTextColorAsColor())) {
       return false;
@@ -1572,6 +1575,28 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       return false;
     }
     return true;
+  }
+
+  @Override
+  public boolean usesSchemeDefaultTextColor(ElementColorScheme colorScheme) {
+    if (this.getDefaultTextColor(colorScheme).equals(this.getTextColorAsColor())) {
+      return true;
+    }
+    return false; 
+  }
+  @Override
+  public boolean usesSchemeDefaultBorderColor(ElementColorScheme colorScheme) {
+    if (this.getDefaultBorderColor(colorScheme).equals(this.getBorderColorAsColor())) {
+      return true;
+    }
+    return false;
+  }
+  @Override
+  public boolean usesSchemeDefaultBackgroundColor(ElementColorScheme colorScheme) {
+    if (this.getDefaultBackgroundColor(colorScheme).equals(this.getBackgroundColorAsColor())) {
+      return true;
+    }
+    return false;  
   }
 
 
@@ -1612,7 +1637,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
 	@Override
 	public Color getDefaultTextColor(ElementColorScheme colorScheme) {
-    return colorScheme.getTextColor();
+    // if (backgroundColor.opacity == 0) {
+      return colorScheme.getTextColor();
+    // }
+    // return textColor;
 	}
 	
 	@Override

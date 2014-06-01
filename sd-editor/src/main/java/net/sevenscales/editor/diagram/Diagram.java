@@ -228,6 +228,9 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 	Color getDefaultBorderColor(ElementColorScheme colorScheme);
 	Color getDefaultTextColor(ElementColorScheme colorScheme);
 	boolean usesSchemeDefaultColors(ElementColorScheme colorScheme);
+  boolean usesSchemeDefaultTextColor(ElementColorScheme colorScheme);
+  boolean usesSchemeDefaultBorderColor(ElementColorScheme colorScheme);
+  boolean usesSchemeDefaultBackgroundColor(ElementColorScheme colorScheme);
 	/**
 	 * To support theme switching so that text element is visible against background.
 	 * @return

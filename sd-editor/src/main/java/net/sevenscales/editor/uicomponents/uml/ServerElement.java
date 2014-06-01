@@ -77,31 +77,31 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
     group.setAttribute("cursor", "default");
 
     roof = IShapeFactory.Util.factory(editable).createPolyline(group);
-    roof.setStroke(getBorderDrawingColor().red, getBorderDrawingColor().green, getBorderDrawingColor().blue, getBorderDrawingColor().opacity);
-    roof.setFill(getBackgroundDrawingColor().red, getBackgroundDrawingColor().green, getBackgroundDrawingColor().blue, getBackgroundDrawingColor().opacity);
+    roof.setStroke(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);
+    roof.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     roof.setStrokeWidth(2.0);
     
     front = IShapeFactory.Util.factory(editable).createPolyline(group);
-    front.setStroke(getBorderDrawingColor().red, getBorderDrawingColor().green, getBorderDrawingColor().blue, getBorderDrawingColor().opacity);
-    front.setFill(getBackgroundDrawingColor().red, getBackgroundDrawingColor().green, getBackgroundDrawingColor().blue, getBackgroundDrawingColor().opacity);
+    front.setStroke(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);
+    front.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     front.setStrokeWidth(2.0);
     
     frontPanel1 = IShapeFactory.Util.factory(editable).createLine(group);
     frontPanel1.setStrokeWidth(1);
-    frontPanel1.setStroke(getBorderDrawingColor().red, getBorderDrawingColor().green, getBorderDrawingColor().blue, getBorderDrawingColor().opacity);
+    frontPanel1.setStroke(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);
     
     frontPanel2 = IShapeFactory.Util.factory(editable).createLine(group);
     frontPanel2.setStrokeWidth(1);
-    frontPanel2.setStroke(getBorderDrawingColor().red, getBorderDrawingColor().green, getBorderDrawingColor().blue, getBorderDrawingColor().opacity);
+    frontPanel2.setStroke(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);
 
     frontPanel3 = IShapeFactory.Util.factory(editable).createLine(group);
     frontPanel3.setStrokeWidth(1);
-    frontPanel3.setStroke(getBorderDrawingColor().red, getBorderDrawingColor().green, getBorderDrawingColor().blue, getBorderDrawingColor().opacity);
+    frontPanel3.setStroke(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);
 
     boundary = (IRectangle) createElement(group);
     boundary.setStrokeWidth(0);
     boundary.setStroke(0, 0, 0, 0);
-    boundary.setFill(getBackgroundDrawingColor().red, getBackgroundDrawingColor().green, getBackgroundDrawingColor().blue, 0);
+    boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 0);
 
 //    
 //    front = IShapeFactory.Util.factory(editable).createRectangle(group);
@@ -429,8 +429,8 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
   @Override
 	public void setBackgroundColor(int red, int green, int blue, double opacity) {
   	super.setBackgroundColor(red, green, blue, opacity);
-    front.setFill(getBackgroundDrawingColor().red, getBackgroundDrawingColor().green, getBackgroundDrawingColor().blue, getBackgroundDrawingColor().opacity);
-    roof.setFill(getBackgroundDrawingColor().red, getBackgroundDrawingColor().green, getBackgroundDrawingColor().blue, getBackgroundDrawingColor().opacity);
+    front.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+    roof.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }
   
 	@Override

@@ -83,14 +83,21 @@ public class BoardColorHelper {
     }
 
     boolean notCircleElement = !(d instanceof CircleElement);
-    if (notCircleElement && d.usesSchemeDefaultColors(currentColorScheme)) {
-      d.setBackgroundColor(d.getDefaultBackgroundColor(newColorScheme));
-      d.setBorderColor(d.getDefaultBorderColor(newColorScheme));
-      d.setTextColor(d.getDefaultTextColor(newColorScheme));
-    } else if (notCircleElement && d.isTextElementBackgroundTransparent()) {
-      // need to switch text color since it might not be visible, e.g. white on white, see actor
-      d.setTextColor(d.getDefaultTextColor(newColorScheme));
-    }
+    if (notCircleElement) {
+      if (d.usesSchemeDefaultTextColor(currentColorScheme)) {
+        d.setTextColor(d.getDefaultTextColor(newColorScheme));
+      }
+      if (d.usesSchemeDefaultBorderColor(currentColorScheme)) {
+        d.setBorderColor(d.getDefaultBorderColor(newColorScheme));
+      }
+      if (d.usesSchemeDefaultBackgroundColor(currentColorScheme)) {
+        d.setBackgroundColor(d.getDefaultBackgroundColor(newColorScheme));
+      }
+    } 
+    // else if (notCircleElement && d.isTextElementBackgroundTransparent()) {
+    //   // need to switch text color since it might not be visible, e.g. white on white, see actor
+    //   d.setTextColor(d.getDefaultTextColor(newColorScheme));
+    // }
 
     // checks if diagram is annotation or not and applies colors accordingly
     d.applyAnnotationColors();
