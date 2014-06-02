@@ -13,6 +13,9 @@ import com.google.gwt.core.client.JsonUtils;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.logging.client.LogConfiguration;
+import java.util.logging.Level;
 
 
 public class OperationQueue {
@@ -70,7 +73,25 @@ public class OperationQueue {
 
 	public void push(SendOperation item) {
 		// need to add in reverse order to have items applied in correct order on server
-		queuedOperations.addLast(item);
+		if (item.operationJson != null && !contains(item)) {
+			queuedOperations.addLast(item);
+		} else if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
+			Window.alert("push failed");
+			debugger();
+		}
+	}
+
+	private native void debugger()/*-{
+		debugger;
+	}-*/;
+
+	private boolean contains(SendOperation item) {
+		for (SendOperation o : queuedOperations) {
+			if (o.operation.equals(item.operation) && o.operationJson.equals(item.operationJson)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean containsInsertOperation() {
