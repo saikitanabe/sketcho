@@ -25,7 +25,7 @@ class SvgBase {
 		return false;
 	}
 
-	private static void applyDefaultFillColors(Map<String, String> params) {
+	private static void applyDefaultBackgroundColors(Map<String, String> params) {
 		String fill = params.get(FILL_TEMPLATE);
 		if (fill != null && fill.equals("#"+ Theme.getCurrentColorScheme().getBorderColor().toHexString())) {
 			// if fill is scheme border color then switch to paper
@@ -37,7 +37,7 @@ class SvgBase {
 		}
 	}
 
-	private static void applyDefaultColors(Map<String,String> params, Diagram diagram) {
+	private static void applyDefaultBorderColors(Map<String,String> params) {
     // params.put("%fill%", fill);
     // params.put("%fill-opacity%", String.valueOf(rect.getFillColor().getOpacity()));
     if (params.get(STROKE_TEMPLATE) != null) {
@@ -45,7 +45,6 @@ class SvgBase {
 	    // batik doesn't support functions in style
 	    params.put(STROKE_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toHexString());
     }
-    applyDefaultFillColors(params);
 	}
 
 	private static void checkToApplyColor(IShape shape, String template, Map<String,String> params, Diagram diagram) {
@@ -54,18 +53,19 @@ class SvgBase {
 			return;
 		}
 
-		boolean usersDefaultColors = diagram.usesSchemeDefaultColors(Theme.getCurrentColorScheme());
-		if (usersDefaultColors) {
-			applyDefaultColors(params, diagram);
-		} else {
-			// if using custom colors need to check if fill needs to be according to paper
-			applyDefaultFillColors(params);
- 		}
-
-    if (diagram.isTextElementBackgroundTransparent() || (usersDefaultColors && params.get(TEXT_COLOR_TEMPLATE) != null)) {
+		boolean usesSchemeDefaultTextColor = diagram.usesSchemeDefaultTextColor(Theme.getCurrentColorScheme());
+    if (usesSchemeDefaultTextColor && params.get(TEXT_COLOR_TEMPLATE)!= null) {
     	// if text background color is transparent then apply paper text color
     	params.put(TEXT_COLOR_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getTextColor().toHexString());
     }
+
+		if (diagram.usesSchemeDefaultBorderColor(Theme.getCurrentColorScheme())) {
+			applyDefaultBorderColors(params);	
+		}
+
+		if (diagram.usesSchemeDefaultBackgroundColor(Theme.getCurrentColorScheme())) {
+			applyDefaultBackgroundColors(params);
+		}
 	}
 
 	public static String parse(IShape shape, String template, Map<String,String> params, Diagram diagram) {

@@ -1579,7 +1579,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   @Override
   public boolean usesSchemeDefaultTextColor(ElementColorScheme colorScheme) {
-    if (this.getDefaultTextColor(colorScheme).equals(this.getTextColorAsColor())) {
+    // check text default color only background opacity is transparent
+    // othwerwise if there is a background fill, then text color is set based on background color
+    // or set as custom
+    if (backgroundColor.opacity == 0 && this.getDefaultTextColor(colorScheme).equals(this.getTextColorAsColor())) {
       return true;
     }
     return false; 
