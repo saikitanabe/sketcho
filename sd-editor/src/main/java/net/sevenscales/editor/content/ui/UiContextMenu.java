@@ -554,6 +554,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	
 	private void color() {
 		if (TouchHelpers.isSupportsTouch()) {
+			colorSelections.showHeader();
 			colorpopup.center();
 		} else {
 			setColorPopupRelativePosition();
