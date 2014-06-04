@@ -63,6 +63,10 @@ public class ShapeFactoryDojoSvg implements IShapeFactory {
     return new Polyline(container, points);
   }
 
+  public IPolyline createPolyline(IContainer container, double[] points) {
+    return new Polyline(container, points);
+  }
+
   public IPolyline createPolyline(IContainer container, List<Integer> points) {
     return new Polyline(container, points);
   }

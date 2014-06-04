@@ -23,8 +23,11 @@ class Polyline extends Shape implements IPolyline {
   }
 
   Polyline(IContainer container, int[] points) {
-    this.rawNode = createPolyline(
-    container.getContainer(), createNativePoints(points));
+    this.rawNode = createPolyline(container.getContainer(), createNativePoints(points));
+  }
+
+  Polyline(IContainer container, double[] points) {
+    this.rawNode = createPolyline(container.getContainer(), createNativePoints(points));
   }
 
   Polyline(IContainer container, List<Integer> points) {
@@ -35,6 +38,10 @@ class Polyline extends Shape implements IPolyline {
 	Polyline(Surface surface, int[] points) {
 		this.rawNode = createPolyline(
 		surface.getContainer(), createNativePoints(points));
+	}
+
+	Polyline(Surface surface, double[] points) {
+		this.rawNode = createPolyline(surface.getContainer(), createNativePoints(points));
 	}
 
 	Polyline(Surface surface, List<Integer> points) {
@@ -50,11 +57,19 @@ class Polyline extends Shape implements IPolyline {
 		
 		setShape(rawNode, array);
 	}
+
+	public void setShape(int[] points) {
+		JavaScriptObject array = JavaScriptObject.createArray();
+		for (int i = 0; i < points.length; i += 2) {
+			addPoint(points[i], points[i + 1], array);
+		}
+		setShape(rawNode, array);
+	}
 	
 	/* (non-Javadoc)
    * @see net.sevenscales.editor.gfx.dojo.IPolyline#setShape(int[])
    */
-	public void setShape(int[] points) {
+	public void setShape(double[] points) {
 		JavaScriptObject array = JavaScriptObject.createArray();
 		for (int i = 0; i < points.length; i += 2) {
 			addPoint(points[i], points[i + 1], array);
@@ -121,6 +136,14 @@ class Polyline extends Shape implements IPolyline {
 		return array;
 	}
 
+  private JavaScriptObject createNativePoints(double[] points) {
+		JavaScriptObject array = JavaScriptObject.createArray();
+		for (int i = 0; i < points.length; i += 2) {
+			addPoint(points[i], points[i + 1], array);
+		}
+		return array;
+	}
+
 	private JavaScriptObject createNativePoints(List<Integer> points) {
 		JavaScriptObject array = JavaScriptObject.createArray();
 		for (int i = 0; i < points.size(); i += 2) {
@@ -156,7 +179,7 @@ class Polyline extends Shape implements IPolyline {
 		array.push(point);
 	}-*/;
 
-	private native void addPoint(int x, int y, JavaScriptObject array)/*-{
+	private native void addPoint(double x, double y, JavaScriptObject array)/*-{
 		array.push( {x:x, y:y} );
 	}-*/;
 

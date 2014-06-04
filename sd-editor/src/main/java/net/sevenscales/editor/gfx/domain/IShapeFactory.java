@@ -51,6 +51,7 @@ public interface IShapeFactory {
   public IText createText(IContainer container);
   public IPolyline createPolyline(IContainer container);
   public IPolyline createPolyline(IContainer container, int[] points);
+  public IPolyline createPolyline(IContainer container, double[] points);
   public IPolyline createPolyline(IContainer container, List<Integer> points);
   public IPolyline createPolyline(ISurface surface, List<Integer> points);
   IPath createPath(IContainer surface, IPath.PathTransformer transformer);

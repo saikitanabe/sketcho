@@ -3,7 +3,7 @@ package net.sevenscales.editor.uicomponents;
 
 public class AngleUtil2 {
 
-  public static double beta(int x1, int y1, int x2, int y2) {
+  public static double beta(double x1, double y1, double x2, double y2) {
     boolean uptodown = y1 <= y2 ? true : false;
     boolean lefttoright = x1 <= x2 ? true : false;
     double vectory = y2 - y1;

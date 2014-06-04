@@ -34,6 +34,7 @@ import net.sevenscales.editor.uicomponents.AngleUtil2;
 import net.sevenscales.editor.uicomponents.CardinalDirection;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.gfx.domain.Point;
+import net.sevenscales.editor.gfx.domain.PointDouble;
 import net.sevenscales.editor.uicomponents.RelationshipText2;
 import net.sevenscales.editor.uicomponents.RelationshipText2.ClickTextPosition;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
@@ -61,15 +62,15 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //  private List<IShape> elements = new ArrayList<IShape>();
 
   // diamond information
-  private Point dright = new Point();
-  private Point dleft = new Point();
-  private Point dline = new Point();
-  private int dbx; // to position start text correctly
-  private int dby;
+  private PointDouble dright = new PointDouble();
+  private PointDouble dleft = new PointDouble();
+  private PointDouble dline = new PointDouble();
+  private double dbx; // to position start text correctly
+  private double dby;
 
   // arrow head information
-  private Point right = new Point();
-  private Point left = new Point();
+  private PointDouble right = new PointDouble();
+  private PointDouble left = new PointDouble();
   private static final int SELECTION_AREA_WIDTH;
   private static final int ARROW_WIDTH = 6;
   private double angle = 30;
@@ -80,9 +81,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //  private List<Integer> prevPoints = new ArrayList<Integer>();
   private String text;
   private RelationshipTextUtil2 textUtil;
-  private int[] inheritancePoints;
-  private int[] arrowPoints;
-  private int[] aggregatePoints;
+  private double[] inheritancePoints;
+  private double[] arrowPoints;
+  private double[] aggregatePoints;
   
   private RelationshipShape2 info;
   private RelLine relLine;
@@ -214,33 +215,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       String result = "";
       if (i + 3 < points.size()) {
         // C100,300 200,300
-        int nextx = points.get(i + 2);
-        int nexty = points.get(i + 3);
-        int mx = (prevx + nextx) / 2;
-        int my = (prevy + nexty) / 2;
-        CardinalDirection cardinal1 = getCardinal(getStartAnchor());
-        CardinalDirection cardinal2 = getCardinal(getEndAnchor());
-        if (cardinal1 != null && cardinal2 != null && 
-           (cardinal1.equals(CardinalDirection.EAST) || cardinal1.equals(CardinalDirection.WEST)) &&
-           (cardinal2.equals(CardinalDirection.EAST) || cardinal2.equals(CardinalDirection.WEST))) {
-          // c1x = mx;
-          // c1y = prevy;
-          // c2x = mx;
-          // c2y = nexty;
-          result = " C" + mx + "," + prevy + " " + mx + "," + nexty + " ";
-        } else {
-          result = " C" + prevx + "," + my + " " + nextx + "," + my + " ";
-        }
+        int endx = points.get(i + 2);
+        int endy = points.get(i + 3);
+
+        Curve c = createCurve(prevx, prevy, endx, endy);
+        result = " C" + c.c1x + "," + c.c1y + " " + c.c2x + "," + c.c2y + " ";
       }
       return result;
-    }
-
-    private CardinalDirection getCardinal(Anchor anchor) {
-      AnchorElement ae = anchor.getAnchorElement();
-      if (ae != null) {
-        return ae.getCardinalDirection();
-      }
-      return null;
     }
 
     public void setStroke(String color) {
@@ -251,6 +232,43 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 			lineBackground.moveToBack();
 		}
 
+  }
+
+  private static class Curve {
+    public double c1x;
+    public double c1y;
+    public double c2x;
+    public double c2y;
+  }
+
+  private Curve createCurve(double prevx, double prevy, double endx, double endy) {
+    Curve result = new Curve();
+    double mx = (prevx + endx) / 2;
+    double my = (prevy + endy) / 2;
+    CardinalDirection cardinal1 = getCardinal(getStartAnchor());
+    CardinalDirection cardinal2 = getCardinal(getEndAnchor());
+    if (cardinal1 != null && cardinal2 != null && 
+       (cardinal1.equals(CardinalDirection.EAST) || cardinal1.equals(CardinalDirection.WEST)) &&
+       (cardinal2.equals(CardinalDirection.EAST) || cardinal2.equals(CardinalDirection.WEST))) {
+      result.c1x = mx;
+      result.c1y = prevy;
+      result.c2x = mx;
+      result.c2y = endy;
+    } else {
+      result.c1x = prevx;
+      result.c1y = my;
+      result.c2x = endx;
+      result.c2y = my;
+    }
+    return result;
+  }
+
+  private CardinalDirection getCardinal(Anchor anchor) {
+    AnchorElement ae = anchor.getAnchorElement();
+    if (ae != null) {
+      return ae.getCardinalDirection();
+    }
+    return null;
   }
 
   public Relationship2(ISurfaceHandler surface, RelationshipShape2 points, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
@@ -281,14 +299,14 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     textUtil = new RelationshipTextUtil2();
     relationshipText = new RelationshipText2(group, surface, editable);
 
-    inheritancePoints = new int[8];
+    inheritancePoints = new double[8];
     inheritance = IShapeFactory.Util.factory(editable).createPolyline(group, inheritancePoints);
     // inheritance.setFill(255, 255, 255, 1);
     // inheritance.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
     
     int endx = this.points.get(this.points.size()-2);
     int endy = this.points.get(this.points.size()-1);
-    arrowPoints = new int[]{
+    arrowPoints = new double[]{
           right.x, right.y,
           endx, endy, 
           left.x, left.y
@@ -298,7 +316,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     arrowStartPolyline = new ArrowStartPolyline(this);
     
-    aggregatePoints = new int[10];
+    aggregatePoints = new double[10];
     aggregate = IShapeFactory.Util.factory(editable).createPolyline(group, aggregatePoints);
     aggregate.setFill(255, 255, 255, 1);
     
@@ -701,7 +719,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   private void calculateArrowHead(double angle, int width,
-      int x1, int y1, int x2, int y2) {
+      double x1, double y1, double x2, double y2) {
     angle = angle * Math.PI / 180;
     double beta = AngleUtil2.beta(x1, y1, x2, y2);
     double height = width / Math.tan(angle);
@@ -713,13 +731,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     // System.out.println("beta:" + Math.toDegrees(beta) + " betaadj:" + betaadj
     // + " betanext:" + betanext);
 
-    int bx = (int) (points.get(points.size()-2) + betanext);
-    int by = (int) (points.get(points.size()-1) + betaadj);
+    double bx = (points.get(points.size()-2) + betanext);
+    double by = (points.get(points.size()-1) + betaadj);
 
     double gamma = Math.PI - Math.PI / 2 - beta;
 
-    int ydiff = (int) (Math.sin(gamma) * width);
-    int xdiff = (int) (Math.cos(gamma) * width);
+    double ydiff = (Math.sin(gamma) * width);
+    double xdiff = (Math.cos(gamma) * width);
 
     // left side
     left.x = bx - xdiff;
@@ -731,7 +749,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   private void calculateDiamond(double angle, int width,
-      int x1, int y1, int x2, int y2) {
+      double x1, double y1, double x2, double y2) {
     angle = angle * Math.PI / 180;
     double beta = AngleUtil2.beta(x1, y1, x2, y2) + Math.PI;
     double height = width / Math.tan(angle);
@@ -740,19 +758,19 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     double betaadj = Math.sin(beta) * height;
     double betanext = Math.cos(beta) * height;
     
-    dbx = (int) (x1 + betanext);
-    dby = (int) (y1 + betaadj);
+    dbx = (x1 + betanext);
+    dby = (y1 + betaadj);
 
     double betaadj2 = Math.sin(beta) * height * 2;
     double betanext2 = Math.cos(beta) * height * 2;
 
     // x2, y2
-    dline.x = (int) (x1 + betanext2);
-    dline.y = (int) (y1 + betaadj2);
+    dline.x = (x1 + betanext2);
+    dline.y = (y1 + betaadj2);
 
     double gamma = Math.PI - Math.PI / 2 - beta;
-    int ydiff = (int) (Math.sin(gamma) * width);
-    int xdiff = (int) (Math.cos(gamma) * width);
+    double ydiff = (Math.sin(gamma) * width);
+    double xdiff = (Math.cos(gamma) * width);
 
     // left side
     dleft.x = dbx - xdiff;
@@ -956,32 +974,20 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       aggregate.setVisibility(false);
   		return;
   	}
-    
+
     int size = points.size();
-    int x1 = points.get(size-4);
-    int y1 = points.get(size-3);
-    int x2 = points.get(size-2);
-    int y2 = points.get(size-1);
+    double x1 = points.get(0);
+    double y1 = points.get(1);
+    double x2 = points.get(2);
+    double y2 = points.get(3);
     if (info.isCurved()) {
-      int startx = points.get(0);
-      int starty = points.get(1);
-      int endx = points.get(size - 2);
-      int endy = points.get(size - 1);
-      int mx = (startx + endx) / 2;
-      int my = (starty + endy) / 2;
-      int c1x = startx;
-      int c1y = my;
-      int c2x = endx;
-      int c2y = my;
-
-      // result = " C" + prevx + "," + my + " " + nextx + "," + my + " ";
-      x2 = (int) bezierInterpolation(0.05, startx, c1x, c2x, endx);
-      y2 = (int) bezierInterpolation(0.05, starty, c1y, c2y, endy);
+      Curve c = createCurve(x1, y1, x2, y2);
+      x2 = bezierInterpolation(0.18, x1, c.c1x, c.c2x, x2);
+      y2 = bezierInterpolation(0.18, y2, c.c1y, c.c2y, y2);
     }
-    calculateArrowHead(angle, ARROW_WIDTH, x1, y1, x2, y2);
 
-    calculateDiamond(angle, ARROW_WIDTH, points.get(0), points.get(1),
-         points.get(2), points.get(3));
+    calculateArrowHead(angle, ARROW_WIDTH, x1, y1, x2, y2);
+    calculateDiamond(angle, ARROW_WIDTH, x1, y1, x2, y2);
     
     relationshipText.setShape(points);
 
