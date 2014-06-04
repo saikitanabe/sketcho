@@ -92,6 +92,9 @@ class Path extends Shape implements IPath {
 
 	@Override
 	public String getShapeStr(int dx, int dy) {
+		if (transformer == null) {
+			return "";
+		}
 		return transformer.getShapeStr(dx, dy);
 	}
 }

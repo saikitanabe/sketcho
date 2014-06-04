@@ -17,6 +17,12 @@
 			</a>
 			<g:SimplePanel ui:field="changeConnection" styleName="inline-change-connection">
 			</g:SimplePanel>
+			<a ui:field="rectifiedArrow" title="Rectified arrow" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-rectified-arrow"></i>
+			</a>
+			<a ui:field="curvedArrow" title="Curved arrow" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-curved-arrow"></i>
+			</a>
 			<a ui:field="reverseConnection" title="Reverse Connection" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-reverse-connection2"></i>
 			</a>

@@ -11,6 +11,7 @@ public class RelationshipShape2 extends Info {
   public static final int AGGREGATE 			= 0x00000008;
   public static final int FILLED 					= 0x00000010;
   public static final int DIRECTED_START 	= 0x00000020;
+  public static final int CURVED          = 0x00000040;
 
   public List<Integer> points;
 	public int caps;
@@ -66,6 +67,13 @@ public class RelationshipShape2 extends Info {
     return (caps & RelationshipShape2.FILLED) == RelationshipShape2.FILLED;
   }
 
+  public boolean isCurved() {
+    return (caps & RelationshipShape2.CURVED) == RelationshipShape2.CURVED;
+  }
+
+  public void asCurve() {
+    caps |= RelationshipShape2.CURVED;
+  }
   
   @Override
   public int getLeft() {

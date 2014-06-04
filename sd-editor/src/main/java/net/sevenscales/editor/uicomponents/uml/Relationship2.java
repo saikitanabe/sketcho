@@ -21,6 +21,7 @@ import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IPolyline;
+import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.Color;
@@ -30,6 +31,7 @@ import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.drag.AnchorMoveHandler;
 import net.sevenscales.editor.diagram.drag.ConnectionMoveHandler;
 import net.sevenscales.editor.uicomponents.AngleUtil2;
+import net.sevenscales.editor.uicomponents.CardinalDirection;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.RelationshipText2;
@@ -157,19 +159,20 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	}
   
   class RelLine {
-    private IPolyline polyline;
-    private IPolyline lineBackground;
+    private IPath path;
+    private IPath lineBackground;
     private List<IShape> elements = new ArrayList<IShape>();
 
     public RelLine() {
-      polyline = IShapeFactory.Util.factory(editable).createPolyline(group, points);
-      polyline.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+      path = IShapeFactory.Util.factory(editable).createPath(group, null);
+      path.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
       // do not fill polyline, because it will be selectable area and hides everything under it!
 //      polyline.setFill(150, 150, 150, 0.5);
-      lineBackground = IShapeFactory.Util.factory(editable).createPolyline(group, points);
-      lineBackground.setFill(255, 255, 255, 0);
+      lineBackground = IShapeFactory.Util.factory(editable).createPath(group, null);
+      lineBackground.setStroke(51, 51, 51, 0);
+      lineBackground.setStrokeWidth(10);
       
-      elements.add(polyline);
+      elements.add(path);
       elements.add(lineBackground);
 //      setShape(points);
     }
@@ -178,71 +181,70 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       return elements;
     }
     
-    public IPolyline getSelectionArea() {
-      return lineBackground;
-    }
-    
     public void setStrokeStyle(String style) {
-      polyline.setStrokeStyle(style);
+      path.setStrokeStyle(style);
     }
 
     public void setShape(List<Integer> points) {
-      polyline.setShape(points);
-      List<Integer> selectionAreaPoints = new ArrayList<Integer>();
-      int firstX = 0;
-      int firstY = 0;
-      
-      int lineCount = points.size()/2-1;
-      // piirrä toinen reuna
-      for (int i = 0, line = 0; line < lineCount; i += 2, ++line) {
-        int x1 = points.get(i);
-        int y1 = points.get(i+1);
-        int x2 = points.get(i+2);
-        int y2 = points.get(i+3);
-        
-        double beta = AngleUtil2.beta(x1, y1, x2, y2);
-        double gamma = Math.PI - Math.PI / 2 - beta;
-  
-        int ydiff = (int) (Math.sin(gamma) * SELECTION_AREA_WIDTH);
-        int xdiff = (int) (Math.cos(gamma) * SELECTION_AREA_WIDTH);
-        
-//        selectionAreaPoints.add(x1 + xdiff); selectionAreaPoints.add(y1 - ydiff); 
-        selectionAreaPoints.add(x1 - xdiff); selectionAreaPoints.add(y1 + ydiff); 
-        selectionAreaPoints.add(x2 - xdiff); selectionAreaPoints.add(y2 + ydiff);
-        if (line == 0) {
-          firstX = x1 - xdiff;
-          firstY = y1 + ydiff;
-        }
-//        selectionAreaPoints.add(6, x2 + xdiff); selectionAreaPoints.add(7, y2 - ydiff);
-//        selectionAreaPoints.add(8, x1 + xdiff); selectionAreaPoints.add(9, y1 - ydiff); 
-      }
-      
-      // piirrä toisesta reunasta loppuun
-      for (int i = points.size()-1, line = lineCount; line > 0; i -= 2, --line) {
-        int y1 = points.get(i);
-        int x1 = points.get(i-1);
-        int y2 = points.get(i-2);
-        int x2 = points.get(i-3);
-        
-        double beta = AngleUtil2.beta(x1, y1, x2, y2);
-        double gamma = Math.PI - Math.PI / 2 - beta;
-  
-        int ydiff = (int) (Math.sin(gamma) * SELECTION_AREA_WIDTH);
-        int xdiff = (int) (Math.cos(gamma) * SELECTION_AREA_WIDTH);
-        
-//        selectionAreaPoints.add(x1 + xdiff); selectionAreaPoints.add(y1 - ydiff); 
-        selectionAreaPoints.add(x1 - xdiff); selectionAreaPoints.add(y1 + ydiff); 
-        selectionAreaPoints.add(x2 - xdiff); selectionAreaPoints.add(y2 + ydiff); 
-//        selectionAreaPoints.add(x2 + xdiff); selectionAreaPoints.add(y2 - ydiff);
-//        selectionAreaPoints.add(8, x1 + xdiff); selectionAreaPoints.add(9, y1 - ydiff); 
-      }
+      String shape = calcShape(points);
+      path.setShape(shape);
+      lineBackground.setShape(shape);
+    }
 
-      selectionAreaPoints.add(firstX); selectionAreaPoints.add(firstY);
-      lineBackground.setShape(selectionAreaPoints);
+    private String calcShape(List<Integer> points) {
+      String result = "M";
+      for (int i = 0; i < points.size(); i += 2) {
+        if (i > 0) {
+          result += " ";
+        }
+        int x = points.get(i);
+        int y = points.get(i + 1);
+        result += x + "," + y;
+
+        // M100,200 C100,300 200,300          200,400
+        if (info.isCurved()) {
+          result += calcCurve(points, i, x, y);
+        }
+      }
+      logger.debug("calcShape {}", result);
+      return result;
+    }
+
+    private String calcCurve(List<Integer> points, int i, int prevx, int prevy) {
+      String result = "";
+      if (i + 3 < points.size()) {
+        // C100,300 200,300
+        int nextx = points.get(i + 2);
+        int nexty = points.get(i + 3);
+        int mx = (prevx + nextx) / 2;
+        int my = (prevy + nexty) / 2;
+        CardinalDirection cardinal1 = getCardinal(getStartAnchor());
+        CardinalDirection cardinal2 = getCardinal(getEndAnchor());
+        if (cardinal1 != null && cardinal2 != null && 
+           (cardinal1.equals(CardinalDirection.EAST) || cardinal1.equals(CardinalDirection.WEST)) &&
+           (cardinal2.equals(CardinalDirection.EAST) || cardinal2.equals(CardinalDirection.WEST))) {
+          // c1x = mx;
+          // c1y = prevy;
+          // c2x = mx;
+          // c2y = nexty;
+          result = " C" + mx + "," + prevy + " " + mx + "," + nexty + " ";
+        } else {
+          result = " C" + prevx + "," + my + " " + nextx + "," + my + " ";
+        }
+      }
+      return result;
+    }
+
+    private CardinalDirection getCardinal(Anchor anchor) {
+      AnchorElement ae = anchor.getAnchorElement();
+      if (ae != null) {
+        return ae.getCardinalDirection();
+      }
+      return null;
     }
 
     public void setStroke(String color) {
-      polyline.setStroke(color);
+      path.setStroke(color);
     }
 
 		public void moveBackgroundToBack() {
@@ -924,7 +926,16 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     this.info = l;
     doSetShape();
   }
-  
+
+  private double bezierInterpolation(double t, double a, double b, double c, double d) {
+    double t2 = t * t;
+    double t3 = t2 * t;
+    return a + (-a * 3 + t * (3 * a - a * t)) * t
+    + (3 * b + t * (-6 * b + b * 3 * t)) * t
+    + (c * 3 - c * 3 * t) * t2
+    + d * t3;
+  }
+
   public void doSetShape() {
   	// TODO: optimization has been removed
   	// could compare text content to previous
@@ -947,8 +958,27 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   	}
     
     int size = points.size();
-    calculateArrowHead(angle, ARROW_WIDTH, points.get(size-4), points.get(size-3),
-           points.get(size-2), points.get(size-1));
+    int x1 = points.get(size-4);
+    int y1 = points.get(size-3);
+    int x2 = points.get(size-2);
+    int y2 = points.get(size-1);
+    if (info.isCurved()) {
+      int startx = points.get(0);
+      int starty = points.get(1);
+      int endx = points.get(size - 2);
+      int endy = points.get(size - 1);
+      int mx = (startx + endx) / 2;
+      int my = (starty + endy) / 2;
+      int c1x = startx;
+      int c1y = my;
+      int c2x = endx;
+      int c2y = my;
+
+      // result = " C" + prevx + "," + my + " " + nextx + "," + my + " ";
+      x2 = (int) bezierInterpolation(0.05, startx, c1x, c2x, endx);
+      y2 = (int) bezierInterpolation(0.05, starty, c1y, c2y, endy);
+    }
+    calculateArrowHead(angle, ARROW_WIDTH, x1, y1, x2, y2);
 
     calculateDiamond(angle, ARROW_WIDTH, points.get(0), points.get(1),
          points.get(2), points.get(3));
@@ -1128,6 +1158,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 		
 		logger.debug("reversing... done");
 	}
+
+  public void curve() {
+    info.asCurve();
+    doSetShape();
+  }
 	
 	private void swapStartAndEndAnchors(Anchor startAnchor, Anchor endAnchor) {
 		Anchor tmp = new Anchor(endAnchor);
