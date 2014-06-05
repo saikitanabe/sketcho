@@ -24,8 +24,11 @@ class Circle extends Shape implements ICircle {
 	public void setShape(int cx, int cy, int radius) {
 		nativeSetShape(rawNode, cx, cy, radius);
 	}
+	public void setShape(double cx, double cy, int radius) {
+		nativeSetShape(rawNode, cx, cy, radius);
+	}
 	
-	private native void nativeSetShape(JavaScriptObject circle, int cx, int cy, int r)/*-{
+	private native void nativeSetShape(JavaScriptObject circle, double cx, double cy, int r)/*-{
 		circle.setShape( {cx:cx, cy:cy, r:r} );
 	}-*/;
 	

@@ -559,8 +559,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     result.setRelativeX(tempAnchorProperties.relativeValueX);
     result.setRelativeY(tempAnchorProperties.relativeValueY);
     result.setFixedPoint(fixedOrRelative);
+    logger.debug("tempAnchorProperties.cardinalDirection {}", tempAnchorProperties.cardinalDirection);
     result.setCardinalDirection(tempAnchorProperties.cardinalDirection);
     result.attach();
+    anchor.applyAnchorElement(result);
     // anchor.getDiagram().attachedRelationship(result);
     // surface.getMouseDiagramManager().getDragHandler().attach(anchor.getRelationship(), result);
 

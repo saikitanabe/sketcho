@@ -129,7 +129,6 @@ public class ReattachHelpers {
 	public static void anchorPositionToDiagram(Relationship2 relationship, int x, int y, Anchor anchor, Diagram anchorTarget) {
 		if (anchorTarget != null) {
 		 	anchor.setDiagram(anchorTarget, false);
-		 	// anchor.setRelationship(relationship);
 		 	anchorTarget.anchorWith(anchor, x, y);
 		}
 	}

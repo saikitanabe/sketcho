@@ -54,6 +54,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
 
+  private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
 	private IPolyline inheritance;
   private IPolyline arrow;
   private IPolyline aggregate;
@@ -241,19 +242,72 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     public double c2y;
   }
 
+  private boolean isConnectedEdgesSideBySide(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2) {
+    boolean result = false;
+    if (cd1 != null && cd2 != null) {
+      Diagram d1 = a1.getDiagram();
+      Diagram d2 = a2.getDiagram();
+      if (cd1.equals(CardinalDirection.WEST) && cd2.equals(CardinalDirection.EAST)) {
+        int westPos = d1.getLeft();
+        int eastPos = d2.getLeft() + d2.getWidth();
+        result = eastPos < westPos;
+      } else if (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.WEST)) {
+        int eastPos = d1.getLeft() + d1.getWidth();
+        int westPos = d2.getLeft();
+        result = westPos > eastPos;
+      }
+    }
+    return result;
+  }
+
   private Curve createCurve(double prevx, double prevy, double endx, double endy) {
     Curve result = new Curve();
     double mx = (prevx + endx) / 2;
     double my = (prevy + endy) / 2;
     CardinalDirection cardinal1 = getCardinal(getStartAnchor());
     CardinalDirection cardinal2 = getCardinal(getEndAnchor());
+
+    boolean closestHorizontalEdgesConnected = isConnectedEdgesSideBySide(getStartAnchor(),
+                                                                         getEndAnchor(),
+                                                                         cardinal1,
+                                                                         cardinal2);
+
     if (cardinal1 != null && cardinal2 != null && 
-       (cardinal1.equals(CardinalDirection.EAST) || cardinal1.equals(CardinalDirection.WEST)) &&
-       (cardinal2.equals(CardinalDirection.EAST) || cardinal2.equals(CardinalDirection.WEST))) {
+        isConnectedEdgesSideBySide(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2)) {
       result.c1x = mx;
       result.c1y = prevy;
       result.c2x = mx;
       result.c2y = endy;
+    } else if (cardinal1 != null && cardinal2 != null && eastToWest(cardinal1, cardinal2)) {
+      result.c1x = prevx + 80;
+      result.c1y = my;
+      result.c2x = endx - 80;
+      result.c2y = my;
+    } else if (cardinal1 != null && cardinal2 != null && eastToEast(cardinal1, cardinal2)) {
+      result.c1x = prevx + 80;
+      result.c1y = prevy;
+      result.c2x = mx;
+      result.c2y = endy;
+    } else if (cardinal1 != null && cardinal2 != null && eastToTop(cardinal1, cardinal2)) {
+      result.c1x = prevx + 80;
+      result.c1y = prevy;
+      result.c2x = endx;
+      result.c2y = my;
+    } else if (cardinal1 != null && cardinal2 != null && bottomToSide(cardinal1, cardinal2)) {
+      result.c1x = prevx;
+      result.c1y = my;
+      result.c2x = mx;
+      result.c2y = endy;
+    } else if (cardinal1 != null && cardinal2 != null && sideToBottomOrTop(cardinal1, cardinal2)) {
+      result.c1x = mx;
+      result.c1y = prevy;
+      result.c2x = endx;
+      result.c2y = my;
+    } else if (cardinal1 != null && cardinal2 != null && bottomToBottom(cardinal1, cardinal2)) {
+      result.c1x = prevx;
+      result.c1y = my;
+      result.c2x = endx;
+      result.c2y = endy + 80;
     } else {
       result.c1x = prevx;
       result.c1y = my;
@@ -261,6 +315,41 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       result.c2y = my;
     }
     return result;
+  }
+
+  private boolean sideBySide(CardinalDirection cd1, CardinalDirection cd2) {
+    return (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.WEST)) ||
+           (cd2.equals(CardinalDirection.EAST) && cd1.equals(CardinalDirection.WEST));
+  }
+
+  private boolean eastToWest(CardinalDirection cd1, CardinalDirection cd2) {
+    return (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.WEST)) ||
+           (cd2.equals(CardinalDirection.EAST) && cd1.equals(CardinalDirection.WEST));
+  }
+
+  private boolean eastToEast(CardinalDirection cd1, CardinalDirection cd2) {
+    return cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.EAST);
+  }
+
+  private boolean eastToTop(CardinalDirection cd1, CardinalDirection cd2) {
+    return (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.NORTH)) ||
+           (cd2.equals(CardinalDirection.EAST) && cd1.equals(CardinalDirection.NORTH));
+  }
+
+  private boolean bottomToSide(CardinalDirection cd1, CardinalDirection cd2) {
+    return (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.SOUTH)) ||
+           (cd2.equals(CardinalDirection.EAST) && cd1.equals(CardinalDirection.SOUTH));
+  }
+
+  private boolean sideToBottomOrTop(CardinalDirection cd1, CardinalDirection cd2) {
+    return (cd1.equals(CardinalDirection.EAST) || cd1.equals(CardinalDirection.WEST)) &&
+           (cd2.equals(CardinalDirection.NORTH) || cd2.equals(CardinalDirection.SOUTH)) ||
+           (cd2.equals(CardinalDirection.EAST) || cd2.equals(CardinalDirection.WEST)) &&
+           (cd1.equals(CardinalDirection.NORTH) || cd1.equals(CardinalDirection.SOUTH));
+  }
+
+  private boolean bottomToBottom(CardinalDirection cd1, CardinalDirection cd2) {
+    return cd1.equals(CardinalDirection.SOUTH) && cd2.equals(CardinalDirection.SOUTH);
   }
 
   private CardinalDirection getCardinal(Anchor anchor) {
@@ -285,6 +374,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     handler = new ConnectionMoveHandler();
     
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getConnectionLayer());
+
+    tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
 
     startAnchor = new Anchor(this);
     endAnchor = new Anchor(this);
@@ -976,18 +1067,24 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   	}
 
     int size = points.size();
-    double x1 = points.get(0);
-    double y1 = points.get(1);
-    double x2 = points.get(2);
-    double y2 = points.get(3);
+    double x1 = points.get(size - 4);
+    double y1 = points.get(size - 3);
+    double x2 = points.get(size - 2);
+    double y2 = points.get(size - 1);
     if (info.isCurved()) {
       Curve c = createCurve(x1, y1, x2, y2);
-      x2 = bezierInterpolation(0.18, x1, c.c1x, c.c2x, x2);
-      y2 = bezierInterpolation(0.18, y2, c.c1y, c.c2y, y2);
-    }
+      double t = 0.05;
+      double bx = bezierInterpolation(t, x2, c.c2x, c.c1x, x1);
+      double by = bezierInterpolation(t, y2, c.c2y, c.c1y, y1);
 
-    calculateArrowHead(angle, ARROW_WIDTH, x1, y1, x2, y2);
-    calculateDiamond(angle, ARROW_WIDTH, x1, y1, x2, y2);
+      tempCircle.setShape(bx, by, 5);
+      tempCircle.setStroke(218, 57, 57, 1);
+      calculateArrowHead(angle, ARROW_WIDTH, bx, by, x2, y2);
+      calculateDiamond(angle, ARROW_WIDTH, bx, by, x2, y2);
+    } else {
+      calculateArrowHead(angle, ARROW_WIDTH, x1, y1, x2, y2);
+      calculateDiamond(angle, ARROW_WIDTH, x1, y1, x2, y2);
+    }
     
     relationshipText.setShape(points);
 
