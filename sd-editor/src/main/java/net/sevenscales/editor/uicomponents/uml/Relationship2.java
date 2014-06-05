@@ -255,6 +255,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     } else if (cardinal1 != null && cardinal2 != null && 
                isConnectSameSideEdges(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2,
                                       result, prevx, prevy, mx, my, endx, endy)) {
+    } else if (cardinal1 != null && cardinal2 != null && 
+               isConnectedToSameNorthOrSouthEdges(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2,
+                                                  result, prevx, prevy, mx, my, endx, endy)) {
     } else if (cardinal1 != null && cardinal2 != null && eastToTop(cardinal1, cardinal2)) {
       result.c1x = prevx + 80;
       result.c1y = prevy;
@@ -370,6 +373,30 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       curve.c1y = prevy;
       curve.c2x = endx - distance;
       curve.c2y = endy;
+      result = true;
+    }
+    return result;
+  }
+
+  private boolean isConnectedToSameNorthOrSouthEdges(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2,
+    Curve curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
+    boolean result = false;
+    // 80 could be distance related with some factor, the bigger distance => bigger curve
+    if (cd1.equals(CardinalDirection.NORTH) && cd2.equals(CardinalDirection.NORTH)) {
+      // int distance = distanceWithFactorial(a1.getDiagram(), a2.getDiagram());
+      int distance = 80;
+      curve.c1x = prevx;
+      curve.c1y = prevy - distance;
+      curve.c2x = endx;
+      curve.c2y = endy - distance;
+      result = true;
+    } else if (cd1.equals(CardinalDirection.SOUTH) && cd2.equals(CardinalDirection.SOUTH)) {
+      // int distance = distanceWithFactorial(a1.getDiagram(), a2.getDiagram());
+      int distance = 80;
+      curve.c1x = prevx;
+      curve.c1y = prevy + distance;
+      curve.c2x = endx;
+      curve.c2y = endy + distance;
       result = true;
     }
     return result;
