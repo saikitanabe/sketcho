@@ -465,7 +465,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       int distance = distanceWithFactorial(prevy - endy);
       int distancex = distanceWithFactorial(prevx - endx);
       curve.c1x = endLeftSide ? prevx + distancex : mx;
-      curve.c1y = endLeftSide ? prevy : prevy;
+      curve.c1y = prevy;
       curve.c2x = endx;
       curve.c2y = endy - distance;
       result = true;
