@@ -253,11 +253,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
         isConnectedDifferentSideEdges(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2,
                                       result, prevx, prevy, mx, my, endx, endy)) {
     } else if (cardinal1 != null && cardinal2 != null && 
-               isConnectSameSideEdges(cardinal1, cardinal2)) {
-      result.c1x = prevx + 80;
-      result.c1y = prevy;
-      result.c2x = mx;
-      result.c2y = endy;
+               isConnectSameSideEdges(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2,
+                                      result, prevx, prevy, mx, my, endx, endy)) {
     } else if (cardinal1 != null && cardinal2 != null && eastToTop(cardinal1, cardinal2)) {
       result.c1x = prevx + 80;
       result.c1y = prevy;
@@ -349,8 +346,33 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
            (cd2.equals(CardinalDirection.EAST) && cd1.equals(CardinalDirection.WEST));
   }
 
-  private boolean isConnectSameSideEdges(CardinalDirection cd1, CardinalDirection cd2) {
-    return cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.EAST);
+  private int distanceWithFactorial(Diagram d1, Diagram d2) {
+    final int defaultDistance = 70;
+    int d = Math.abs((d1.getLeft() + d1.getWidth()) - (d2.getLeft() + d2.getWidth()));
+    float distFactor = 0.3f;
+    return (int) defaultDistance + (int) (distFactor * d);
+  }
+
+  private boolean isConnectSameSideEdges(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2,
+    Curve curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
+    boolean result = false;
+    // 80 could be distance related with some factor, the bigger distance => bigger curve
+    if (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.EAST)) {
+      int distance = distanceWithFactorial(a1.getDiagram(), a2.getDiagram());
+      curve.c1x = prevx + distance;
+      curve.c1y = prevy;
+      curve.c2x = endx + distance;
+      curve.c2y = endy;
+      result = true;
+    } else if (cd1.equals(CardinalDirection.WEST) && cd2.equals(CardinalDirection.WEST)) {
+      int distance = distanceWithFactorial(a1.getDiagram(), a2.getDiagram());
+      curve.c1x = prevx - distance;
+      curve.c1y = prevy;
+      curve.c2x = endx - distance;
+      curve.c2y = endy;
+      result = true;
+    }
+    return result;
   }
 
   private boolean eastToTop(CardinalDirection cd1, CardinalDirection cd2) {
