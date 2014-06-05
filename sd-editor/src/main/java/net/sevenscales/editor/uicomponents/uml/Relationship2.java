@@ -443,9 +443,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       boolean endLeftSide = endx < prevx;
       boolean endAbove = endy < prevy;
       curve.c1x = prevx;
-      curve.c1y = my;
+      curve.c1y = endAbove ? my : prevy - 80;
       curve.c2x = endLeftSide ? mx : endx + 80;
-      curve.c2y = endLeftSide && endAbove ? endy : my;
+      curve.c2y = endLeftSide && endAbove ? endy : (endAbove ? my : endy);
       result = true;
     } else if (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.NORTH)) {
       curve.c1x = mx;
