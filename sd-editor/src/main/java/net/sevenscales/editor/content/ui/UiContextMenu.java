@@ -394,6 +394,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				duplicate();
 			}
 		});
+
+		duplicate.setTitle("Duplicate<br>Ctrl+C, Ctrl+V (copy-paste Win/Linux)<br>Cmd+C, Cmd+V (copy-paste Mac)");
 		
 		new FastElementButton(reverseConnection).addClickHandler(new ClickHandler() {
 			@Override
