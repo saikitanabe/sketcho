@@ -242,24 +242,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     public double c2y;
   }
 
-  private boolean isConnectedEdgesSideBySide(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2) {
-    boolean result = false;
-    if (cd1 != null && cd2 != null) {
-      Diagram d1 = a1.getDiagram();
-      Diagram d2 = a2.getDiagram();
-      if (cd1.equals(CardinalDirection.WEST) && cd2.equals(CardinalDirection.EAST)) {
-        int westPos = d1.getLeft();
-        int eastPos = d2.getLeft() + d2.getWidth();
-        result = eastPos < westPos;
-      } else if (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.WEST)) {
-        int eastPos = d1.getLeft() + d1.getWidth();
-        int westPos = d2.getLeft();
-        result = westPos > eastPos;
-      }
-    }
-    return result;
-  }
-
   private Curve createCurve(double prevx, double prevy, double endx, double endy) {
     Curve result = new Curve();
     double mx = (prevx + endx) / 2;
@@ -279,10 +261,17 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       result.c2x = mx;
       result.c2y = endy;
     } else if (cardinal1 != null && cardinal2 != null && eastToWest(cardinal1, cardinal2)) {
-      result.c1x = prevx + 80;
-      result.c1y = my;
-      result.c2x = endx - 80;
-      result.c2y = my;
+      if (isLeftToRight(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2)) {
+        result.c1x = prevx - 80;
+        result.c1y = my;
+        result.c2x = endx + 80;
+        result.c2y = my;
+      } else {
+        result.c1x = prevx + 80;
+        result.c1y = my;
+        result.c2x = endx - 80;
+        result.c2y = my;
+      }
     } else if (cardinal1 != null && cardinal2 != null && eastToEast(cardinal1, cardinal2)) {
       result.c1x = prevx + 80;
       result.c1y = prevy;
@@ -317,14 +306,39 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return result;
   }
 
-  private boolean sideBySide(CardinalDirection cd1, CardinalDirection cd2) {
-    return (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.WEST)) ||
-           (cd2.equals(CardinalDirection.EAST) && cd1.equals(CardinalDirection.WEST));
+  private boolean isConnectedEdgesSideBySide(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2) {
+    boolean result = false;
+    if (cd1 != null && cd2 != null) {
+      Diagram d1 = a1.getDiagram();
+      Diagram d2 = a2.getDiagram();
+      if (cd1.equals(CardinalDirection.WEST) && cd2.equals(CardinalDirection.EAST)) {
+        int westPos = d1.getLeft();
+        int eastPos = d2.getLeft() + d2.getWidth();
+        result = eastPos < westPos;
+      } else if (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.WEST)) {
+        int eastPos = d1.getLeft() + d1.getWidth();
+        int westPos = d2.getLeft();
+        result = westPos > eastPos;
+      }
+    }
+    return result;
   }
 
   private boolean eastToWest(CardinalDirection cd1, CardinalDirection cd2) {
     return (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.WEST)) ||
            (cd2.equals(CardinalDirection.EAST) && cd1.equals(CardinalDirection.WEST));
+  }
+
+  private boolean isLeftToRight(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2) {
+    Diagram d1 = a1. getDiagram();
+    Diagram d2 = a2.getDiagram();
+    boolean result = false;
+    if (cd1.equals(CardinalDirection.WEST) && cd2.equals(CardinalDirection.EAST)) {
+      int westPos = d1.getLeft();
+      int eastPos = d2.getLeft() + d2.getWidth();
+      result = westPos < eastPos;
+    }
+    return result;
   }
 
   private boolean eastToEast(CardinalDirection cd1, CardinalDirection cd2) {
