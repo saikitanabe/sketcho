@@ -447,17 +447,24 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       curve.c2x = endx;
       curve.c2y = my;
       result = true;
-    } else if (cd1.equals(CardinalDirection.NORTH) && cd2.equals(CardinalDirection.EAST)) {
+    } else if (endAbove && cd1.equals(CardinalDirection.NORTH) && cd2.equals(CardinalDirection.EAST)) {
       curve.c1x = prevx;
-      curve.c1y = endAbove ? my : prevy - 80;
+      curve.c1y = my;
       curve.c2x = endLeftSide ? mx : endx + 80;
-      curve.c2y = endLeftSide && endAbove ? endy : (endAbove ? my : endy);
+      curve.c2y = endLeftSide ? endy : my;
+      result = true;
+    } else if (cd1.equals(CardinalDirection.NORTH) && cd2.equals(CardinalDirection.EAST)) {
+      int distance = distanceWithFactorial(prevy - endy);
+      curve.c1x = prevx;
+      curve.c1y = prevy - distance;
+      curve.c2x = endLeftSide ? mx : endx + 80;
+      curve.c2y = endy;
       result = true;
     } else if (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.NORTH)) {
       curve.c1x = mx;
       curve.c1y = prevy;
       curve.c2x = endx;
-      curve.c2y = my;
+      curve.c2y = endy - 80;
       result = true;
     }
     return result;
@@ -1370,12 +1377,12 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 			reversedPoints.add(points.get(i));
 		}
 		points = reversedPoints;
+    swapStartAndEndAnchors(startAnchor, endAnchor);
 		doSetShape();
 		
 //		Diagram startDiagram = resetAndGetDiagram(startAnchor);
 //		Diagram endDiagram = resetAndGetDiagram(endAnchor);
 		
-		swapStartAndEndAnchors(startAnchor, endAnchor);
 		swapCustomData();
 		
 		ReattachHelpers rh = new ReattachHelpers();
