@@ -409,6 +409,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private boolean isNorthOrSouthEdgeConnectedToWestOrEast(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2,
     Curve curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
     boolean result = false;
+    boolean endLeftSide = endx < prevx;
+    boolean endAbove = endy < prevy;
+
     // 80 could be distance related with some factor, the bigger distance => bigger curve
     if (cd1.equals(CardinalDirection.SOUTH) && cd2.equals(CardinalDirection.WEST)) {
       curve.c1x = prevx;
@@ -424,14 +427,19 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       curve.c2x = endx;
       curve.c2y = endy + distance;
       result = true;
+    } else if (endLeftSide && cd1.equals(CardinalDirection.NORTH) && cd2.equals(CardinalDirection.WEST)) {
+      int distance = distanceWithFactorial(prevx - endx);
+      curve.c1x = prevx;
+      curve.c1y = endAbove ? my : prevy - 80;
+      curve.c2x = endx - distance;
+      curve.c2y = my;
+      result = true;
     } else if (cd1.equals(CardinalDirection.NORTH) && cd2.equals(CardinalDirection.WEST)) {
-      boolean endLeftSide = endx < prevx;
-      boolean endAbove = endy < prevy;
       int distance = distanceWithFactorial(prevx - endx);
       curve.c1x = prevx;
       curve.c1y = my;
-      curve.c2x = endLeftSide && endAbove ? endx - distance : mx;
-      curve.c2y = endAbove && endLeftSide ? my : endy;
+      curve.c2x = mx;
+      curve.c2y = endy;
       result = true;
     } else if (cd1.equals(CardinalDirection.WEST) && cd2.equals(CardinalDirection.NORTH)) {
       curve.c1x = mx;
@@ -440,8 +448,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       curve.c2y = my;
       result = true;
     } else if (cd1.equals(CardinalDirection.NORTH) && cd2.equals(CardinalDirection.EAST)) {
-      boolean endLeftSide = endx < prevx;
-      boolean endAbove = endy < prevy;
       curve.c1x = prevx;
       curve.c1y = endAbove ? my : prevy - 80;
       curve.c2x = endLeftSide ? mx : endx + 80;
