@@ -455,16 +455,25 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       result = true;
     } else if (cd1.equals(CardinalDirection.NORTH) && cd2.equals(CardinalDirection.EAST)) {
       int distance = distanceWithFactorial(prevy - endy);
+      int distancex = distanceWithFactorial(prevx - endx);
       curve.c1x = prevx;
       curve.c1y = prevy - distance;
-      curve.c2x = endLeftSide ? mx : endx + 80;
+      curve.c2x = endLeftSide ? mx : endx + distancex;
       curve.c2y = endy;
       result = true;
-    } else if (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.NORTH)) {
-      curve.c1x = mx;
-      curve.c1y = prevy;
+    } else if (endAbove && cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.NORTH)) {
+      int distance = distanceWithFactorial(prevy - endy);
+      int distancex = distanceWithFactorial(prevx - endx);
+      curve.c1x = endLeftSide ? prevx + distancex : mx;
+      curve.c1y = endLeftSide ? prevy : prevy;
       curve.c2x = endx;
-      curve.c2y = endy - 80;
+      curve.c2y = endy - distance;
+      result = true;
+    } else if (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.NORTH)) {
+      curve.c1x = endLeftSide ? prevx + 80 : mx;
+      curve.c1y = endLeftSide ? my : prevy;
+      curve.c2x = endx;
+      curve.c2y = my;
       result = true;
     }
     return result;
