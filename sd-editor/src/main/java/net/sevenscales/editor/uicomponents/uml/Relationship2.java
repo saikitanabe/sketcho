@@ -249,30 +249,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     CardinalDirection cardinal1 = getCardinal(getStartAnchor());
     CardinalDirection cardinal2 = getCardinal(getEndAnchor());
 
-    boolean closestHorizontalEdgesConnected = isConnectedEdgesSideBySide(getStartAnchor(),
-                                                                         getEndAnchor(),
-                                                                         cardinal1,
-                                                                         cardinal2);
-
     if (cardinal1 != null && cardinal2 != null && 
-        isConnectedEdgesSideBySide(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2)) {
-      result.c1x = mx;
-      result.c1y = prevy;
-      result.c2x = mx;
-      result.c2y = endy;
-    } else if (cardinal1 != null && cardinal2 != null && eastToWest(cardinal1, cardinal2)) {
-      if (isLeftToRight(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2)) {
-        result.c1x = prevx - 80;
-        result.c1y = my;
-        result.c2x = endx + 80;
-        result.c2y = my;
-      } else {
-        result.c1x = prevx + 80;
-        result.c1y = my;
-        result.c2x = endx - 80;
-        result.c2y = my;
-      }
-    } else if (cardinal1 != null && cardinal2 != null && eastToEast(cardinal1, cardinal2)) {
+        isConnectedDifferentSideEdges(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2,
+                                      result, prevx, prevy, mx, my, endx, endy)) {
+    } else if (cardinal1 != null && cardinal2 != null && 
+               isConnectSameSideEdges(cardinal1, cardinal2)) {
       result.c1x = prevx + 80;
       result.c1y = prevy;
       result.c2x = mx;
@@ -306,7 +287,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return result;
   }
 
-  private boolean isConnectedEdgesSideBySide(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2) {
+  private boolean eastToWestSideBySide(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2) {
     boolean result = false;
     if (cd1 != null && cd2 != null) {
       Diagram d1 = a1.getDiagram();
@@ -324,11 +305,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return result;
   }
 
-  private boolean eastToWest(CardinalDirection cd1, CardinalDirection cd2) {
-    return (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.WEST)) ||
-           (cd2.equals(CardinalDirection.EAST) && cd1.equals(CardinalDirection.WEST));
-  }
-
   private boolean isLeftToRight(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2) {
     Diagram d1 = a1. getDiagram();
     Diagram d2 = a2.getDiagram();
@@ -341,7 +317,39 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return result;
   }
 
-  private boolean eastToEast(CardinalDirection cd1, CardinalDirection cd2) {
+  private boolean isConnectedDifferentSideEdges(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2,
+    Curve curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
+    boolean result = false;
+    if (eastToWestSideBySide(a1, a2, cd1, cd2)) {
+      curve.c1x = mx;
+      curve.c1y = prevy;
+      curve.c2x = mx;
+      curve.c2y = endy;
+      result = true;
+    } else if (cd1 != null && cd2 != null && eastToWest(cd1, cd2)) {
+      if (isLeftToRight(getStartAnchor(), getEndAnchor(), cd1, cd2)) {
+        curve.c1x = prevx - 80;
+        curve.c1y = my;
+        curve.c2x = endx + 80;
+        curve.c2y = my;
+      } else {
+        curve.c1x = prevx + 80;
+        curve.c1y = my;
+        curve.c2x = endx - 80;
+        curve.c2y = my;
+      }
+      result = true;
+    }
+
+    return result;
+  }
+
+  private boolean eastToWest(CardinalDirection cd1, CardinalDirection cd2) {
+    return (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.WEST)) ||
+           (cd2.equals(CardinalDirection.EAST) && cd1.equals(CardinalDirection.WEST));
+  }
+
+  private boolean isConnectSameSideEdges(CardinalDirection cd1, CardinalDirection cd2) {
     return cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.EAST);
   }
 
