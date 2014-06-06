@@ -1406,6 +1406,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 		}
 		points = reversedPoints;
     swapStartAndEndAnchors(startAnchor, endAnchor);
+    swapCustomData();
 		doSetShape();
 		
 //		Diagram startDiagram = resetAndGetDiagram(startAnchor);
@@ -1435,6 +1436,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 	
 	private void swapStartAndEndAnchors(Anchor startAnchor, Anchor endAnchor) {
+    startAnchor.clear();
+    endAnchor.clear();
 		Anchor tmp = new Anchor(endAnchor);
 		endAnchor.copyFrom(startAnchor);
 		startAnchor.copyFrom(tmp);
