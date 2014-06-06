@@ -55,9 +55,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
 
   // Debug curve control point and arrow angle debugging
-  // private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
-  // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
-  // private net.sevenscales.editor.gfx.domain.ICircle tempC2;
+  private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  private net.sevenscales.editor.gfx.domain.ICircle tempC1;
+  private net.sevenscales.editor.gfx.domain.ICircle tempC2;
 
 	private IPolyline inheritance;
   private IPolyline arrow;
@@ -253,7 +253,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     CardinalDirection cardinal1 = getCardinal(getStartAnchor());
     CardinalDirection cardinal2 = getCardinal(getEndAnchor());
 
-    if (cardinal1 != null && cardinal2 != null && 
+    if (handleSequenceDiagram(getStartAnchor(), getEndAnchor(), result, prevx, prevy, mx, my, endx, endy)) {
+
+    } else if (cardinal1 != null && cardinal2 != null && 
         isConnectedDifferentSideEdges(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2,
                                       result, prevx, prevy, mx, my, endx, endy)) {
     } else if (cardinal1 != null && cardinal2 != null && 
@@ -265,26 +267,32 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     } else if (cardinal1 != null && cardinal2 != null && 
                isNorthOrSouthEdgeConnectedToWestOrEast(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2,
                                                   result, prevx, prevy, mx, my, endx, endy)) {
-    } else if (cardinal1 != null && cardinal2 != null && bottomToSide(cardinal1, cardinal2)) {
-      result.c1x = prevx;
-      result.c1y = my;
-      result.c2x = mx;
-      result.c2y = endy;
-    } else if (cardinal1 != null && cardinal2 != null && sideToBottomOrTop(cardinal1, cardinal2)) {
-      result.c1x = mx;
-      result.c1y = prevy;
-      result.c2x = endx;
-      result.c2y = my;
-    } else if (cardinal1 != null && cardinal2 != null && bottomToBottom(cardinal1, cardinal2)) {
-      result.c1x = prevx;
-      result.c1y = my;
-      result.c2x = endx;
-      result.c2y = endy + 80;
     } else {
       result.c1x = prevx;
       result.c1y = my;
       result.c2x = endx;
       result.c2y = my;
+    }
+    return result;
+  }
+
+  private boolean handleSequenceDiagram(Anchor a1, Anchor a2, Curve curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
+    boolean result = false;
+    Diagram d1 = a1.getDiagram();
+    Diagram d2 = a2.getDiagram();
+    if (d1 != null && d2 != null && d1 == d2 && d1.isSequenceElement()) {
+      // self reference
+      curve.c1x = prevx + 80;
+      curve.c1y = prevy;
+      curve.c2x = endx + 80;
+      curve.c2y = endy;
+      result = true;
+    } else if (d1 != null && d2 != null && d1.isSequenceElement() && d2.isSequenceElement()) {
+      curve.c1x = mx;
+      curve.c1y = prevy;
+      curve.c2x = mx;
+      curve.c2y = endy;
+      result = true;
     }
     return result;
   }
@@ -591,9 +599,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getConnectionLayer());
 
-    // tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
-    // tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
-    // tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
+    tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
+    tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
+    tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
 
     startAnchor = new Anchor(this);
     endAnchor = new Anchor(this);
@@ -1296,15 +1304,15 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       double by = bezierInterpolation(t, y2, c.c2y, c.c1y, y1);
 
       // Debug visualization START
-      // tempCircle.setShape(bx, by, 5);
-      // tempCircle.setStroke(218, 57, 57, 1);
+      tempCircle.setShape(bx, by, 5);
+      tempCircle.setStroke(218, 57, 57, 1);
 
-      // tempC1.setShape(c.c1x, c.c1y, 5);
-      // tempC1.setStroke(51, 57, 57, 1);
-      // tempC1.setFill(51, 57, 57, 1);
-      // tempC2.setShape(c.c2x, c.c2y, 5);
-      // tempC2.setStroke(150, 150, 150, 1);
-      // tempC2.setFill(150, 150, 150, 1);
+      tempC1.setShape(c.c1x, c.c1y, 5);
+      tempC1.setStroke(51, 57, 57, 1);
+      tempC1.setFill(51, 57, 57, 1);
+      tempC2.setShape(c.c2x, c.c2y, 5);
+      tempC2.setStroke(150, 150, 150, 1);
+      tempC2.setFill(150, 150, 150, 1);
       // Debug visualization END
 
       calculateArrowHead(angle, ARROW_WIDTH, bx, by, x2, y2);

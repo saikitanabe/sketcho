@@ -29,6 +29,7 @@ import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers.IExtraConnectionHandler;
 import net.sevenscales.editor.uicomponents.helpers.ILifeLineEditor;
 import net.sevenscales.editor.uicomponents.helpers.LifeLineEditorHelper;
+import net.sevenscales.editor.uicomponents.CardinalDirection;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
 
@@ -545,7 +546,12 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 	public String getColor() {
     return color;
   }
-  
+
+  @Override
+  public boolean isSequenceElement() {
+    return true;
+  }
+
 //  @Override
 //  public int getHeight() {
 //  	return line.getY2() - line.getY1() + super.getHeight();

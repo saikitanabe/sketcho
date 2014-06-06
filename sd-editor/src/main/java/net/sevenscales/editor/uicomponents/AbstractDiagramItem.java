@@ -568,7 +568,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
     return result;
   }
-  
+
   /**
    * To be overriden if relative anchor has some exotic calculation like ellipse.
    * @param x
@@ -1344,6 +1344,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   @Override
   public void editingEnded() {
     showText();
+  }
+
+  @Override
+  public boolean isSequenceElement() {
+    return false;
   }
 
 	public String getTextAreaBackgroundColor() {

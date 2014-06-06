@@ -252,6 +252,9 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
   */
   void editingEnded();
 
+  // curve arrow support
+  boolean isSequenceElement();
+
   /**
   * Meant for composite elements like comment thread with comment elements.
   * @return null if not a composite element
@@ -267,4 +270,5 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 
   // menu support
   void setDuplicateMultiplySize(int factorX, int factorY);
+
 }
