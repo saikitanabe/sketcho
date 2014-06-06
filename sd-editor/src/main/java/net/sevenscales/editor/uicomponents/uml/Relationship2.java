@@ -54,9 +54,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
 
-  private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
-  private net.sevenscales.editor.gfx.domain.ICircle tempC1;
-  private net.sevenscales.editor.gfx.domain.ICircle tempC2;
+  // Debug curve control point and arrow angle debugging
+  // private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
+  // private net.sevenscales.editor.gfx.domain.ICircle tempC2;
 
 	private IPolyline inheritance;
   private IPolyline arrow;
@@ -453,7 +454,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     // 80 could be distance related with some factor, the bigger distance => bigger curve
     if (cd1.equals(CardinalDirection.SOUTH) && cd2.equals(CardinalDirection.WEST)) {
-      curve.c1x = prevx;
+      curve.c1x = endLeftSide ? mx : prevx;
       curve.c1y = endAbove ? prevy + 80 :  my;
       curve.c2x = endLeftSide ? endx - 80 : mx;
       curve.c2y = endLeftSide ? my : endy;
@@ -590,9 +591,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getConnectionLayer());
 
-    tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
-    tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
-    tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
+    // tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
+    // tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
+    // tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
 
     startAnchor = new Anchor(this);
     endAnchor = new Anchor(this);
@@ -1294,15 +1295,17 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       double bx = bezierInterpolation(t, x2, c.c2x, c.c1x, x1);
       double by = bezierInterpolation(t, y2, c.c2y, c.c1y, y1);
 
-      tempCircle.setShape(bx, by, 5);
-      tempCircle.setStroke(218, 57, 57, 1);
+      // Debug visualization START
+      // tempCircle.setShape(bx, by, 5);
+      // tempCircle.setStroke(218, 57, 57, 1);
 
-      tempC1.setShape(c.c1x, c.c1y, 5);
-      tempC1.setStroke(51, 57, 57, 1);
-      tempC1.setFill(51, 57, 57, 1);
-      tempC2.setShape(c.c2x, c.c2y, 5);
-      tempC2.setStroke(150, 150, 150, 1);
-      tempC2.setFill(150, 150, 150, 1);
+      // tempC1.setShape(c.c1x, c.c1y, 5);
+      // tempC1.setStroke(51, 57, 57, 1);
+      // tempC1.setFill(51, 57, 57, 1);
+      // tempC2.setShape(c.c2x, c.c2y, 5);
+      // tempC2.setStroke(150, 150, 150, 1);
+      // tempC2.setFill(150, 150, 150, 1);
+      // Debug visualization END
 
       calculateArrowHead(angle, ARROW_WIDTH, bx, by, x2, y2);
       calculateDiamond(angle, ARROW_WIDTH, bx, by, x2, y2);
