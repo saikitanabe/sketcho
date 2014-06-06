@@ -55,6 +55,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
 
   private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  private net.sevenscales.editor.gfx.domain.ICircle tempC1;
+  private net.sevenscales.editor.gfx.domain.ICircle tempC2;
+
 	private IPolyline inheritance;
   private IPolyline arrow;
   private IPolyline aggregate;
@@ -432,20 +435,26 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       curve.c1x = prevx;
       curve.c1y = endAbove ? my : prevy - 80;
       curve.c2x = endx - distance;
-      curve.c2y = my;
+      curve.c2y = endy;
       result = true;
     } else if (cd1.equals(CardinalDirection.NORTH) && cd2.equals(CardinalDirection.WEST)) {
-      int distance = distanceWithFactorial(prevx - endx);
       curve.c1x = prevx;
-      curve.c1y = my;
+      curve.c1y = endAbove ? my : prevy - 80;
       curve.c2x = mx;
       curve.c2y = endy;
       result = true;
-    } else if (cd1.equals(CardinalDirection.WEST) && cd2.equals(CardinalDirection.NORTH)) {
+    } else if (endLeftSide && cd1.equals(CardinalDirection.WEST) && cd2.equals(CardinalDirection.NORTH)) {
       curve.c1x = mx;
       curve.c1y = prevy;
       curve.c2x = endx;
-      curve.c2y = my;
+      curve.c2y = endAbove ? endy - 80 : my;
+      result = true;
+    } else if (cd1.equals(CardinalDirection.WEST) && cd2.equals(CardinalDirection.NORTH)) {
+      int distance = distanceWithFactorial(prevx - endx);
+      curve.c1x = prevx - distance;
+      curve.c1y = prevy;
+      curve.c2x = endx;
+      curve.c2y = endAbove ? endy - 80 : my;
       result = true;
     } else if (endAbove && cd1.equals(CardinalDirection.NORTH) && cd2.equals(CardinalDirection.EAST)) {
       curve.c1x = prevx;
@@ -524,6 +533,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getConnectionLayer());
 
     tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
+    tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
+    tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
 
     startAnchor = new Anchor(this);
     endAnchor = new Anchor(this);
@@ -1227,6 +1238,14 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
       tempCircle.setShape(bx, by, 5);
       tempCircle.setStroke(218, 57, 57, 1);
+
+      tempC1.setShape(c.c1x, c.c1y, 5);
+      tempC1.setStroke(51, 57, 57, 1);
+      tempC1.setFill(51, 57, 57, 1);
+      tempC2.setShape(c.c2x, c.c2y, 5);
+      tempC2.setStroke(150, 150, 150, 1);
+      tempC2.setFill(150, 150, 150, 1);
+
       calculateArrowHead(angle, ARROW_WIDTH, bx, by, x2, y2);
       calculateDiamond(angle, ARROW_WIDTH, bx, by, x2, y2);
     } else {
