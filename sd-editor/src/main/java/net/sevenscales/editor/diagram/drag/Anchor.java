@@ -113,6 +113,12 @@ public class Anchor implements AnchorMoveHandler {
     clientId = null;
   }
 
+  public void clearParentAnchorMap() {
+  	if (diagram != null) {
+  		diagram.clearAnchorMap();
+  	}
+  }
+
   public void setDiff(int dx, int dy) {
     if (anchorElement != null) {
       anchorElement.setDiff(dx, dy);

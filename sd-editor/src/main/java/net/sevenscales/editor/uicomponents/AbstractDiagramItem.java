@@ -593,6 +593,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	public void removeAnchor(Anchor anchor) {
     anchorMap.remove(anchor);
   }
+  public void clearAnchorMap() {
+    anchorMap.clear();
+  }
   public Collection<AnchorElement> getAnchors() {
     return anchorMap.values();
   }

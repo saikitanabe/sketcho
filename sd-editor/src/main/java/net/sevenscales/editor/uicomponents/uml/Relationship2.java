@@ -1436,8 +1436,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 	
 	private void swapStartAndEndAnchors(Anchor startAnchor, Anchor endAnchor) {
-    startAnchor.clear();
-    endAnchor.clear();
+    // remove from diagram anchor map or old anchor => anchor element mapping
+    //  will hount and used
+    startAnchor.clearParentAnchorMap();
+    endAnchor.clearParentAnchorMap();
 		Anchor tmp = new Anchor(endAnchor);
 		endAnchor.copyFrom(startAnchor);
 		startAnchor.copyFrom(tmp);

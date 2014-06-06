@@ -139,6 +139,7 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 //  public void bendStart(int x, int y);
 //  public void bend(int dx, int dy);
   public void removeAnchor(Anchor anchor);
+  void clearAnchorMap();
   public Collection<AnchorElement> getAnchors();
   public ISurfaceHandler getSurfaceHandler();
   public String getDefaultRelationship();
