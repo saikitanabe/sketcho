@@ -3,6 +3,8 @@ package net.sevenscales.editor.diagram.utils;
 
 import java.util.Set;
 import java.util.HashSet;
+
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.EditorProperty;
@@ -52,7 +54,10 @@ public class MouseDiagramEventHelpers {
   private static void addRelatedConnections(Diagram diagram, Set<Diagram> diagrams) {
     for (AnchorElement ae : diagram.getAnchors()) {
       if (ae.getRelationship() != null) {
-        diagrams.add(ae.getRelationship());
+        IDiagramItemRO di = ae.getRelationship().getDiagramItem();
+        if (di.getClientId() != null) {
+          diagrams.add(ae.getRelationship());
+        }
       }
     }
   }
