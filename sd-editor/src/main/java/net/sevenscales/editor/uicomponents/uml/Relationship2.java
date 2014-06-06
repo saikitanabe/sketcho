@@ -460,8 +460,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       result = true;
     } else if (cd1.equals(CardinalDirection.WEST) && cd2.equals(CardinalDirection.SOUTH)) {
       curve.c1x = prevx - 80;
-      curve.c1y = my;
-      curve.c2x = endx;
+      curve.c1y = endAbove ? (endLeftSide ? prevy : my) : my;
+      curve.c2x = endAbove ? endx : mx;
       curve.c2y = endy + 80;
       result = true;
     } else if (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.SOUTH)) {
