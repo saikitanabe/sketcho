@@ -4,7 +4,7 @@ import net.sevenscales.editor.diagram.shape.Info;
 
 public interface RelationshipParser {	
 	String parseArrowLine();
-	Info parseShape();
+	Info parseShape(boolean curved);
 	String parseLeftText();
 	String parseRightText();
 	String parseLabel();

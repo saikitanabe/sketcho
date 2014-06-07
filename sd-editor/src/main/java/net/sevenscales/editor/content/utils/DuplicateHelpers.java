@@ -72,7 +72,7 @@ public class DuplicateHelpers {
 			replaceOldConnections(state.relationships, state.clientIdMapping);
 
 			boolean force = false;
-			state.reattachHelpers.reattachRelationships(force);
+			state.reattachHelpers.reattachRelationships(force, false);
 
 			surface.addAsSelected(state.newItems, true, true);
 		}

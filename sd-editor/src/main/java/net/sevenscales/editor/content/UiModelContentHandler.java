@@ -145,6 +145,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     
     int i = 0;
     boolean atLeastOneAnnotation = false;
+    editorContext.set(EditorProperty.HOLD_ARROW_DRAWING, true);
     for (IDiagramItem item : items) {
     	// client id cannot clash because single user environment and done only for 
     	// legacy Confluence boards that didn't use client id for diagram items.
@@ -177,7 +178,8 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 
     commentFactory.resizeCommentThreads();
     
-    reattachHelpers.reattachRelationships();
+    editorContext.set(EditorProperty.HOLD_ARROW_DRAWING, false);
+    reattachHelpers.reattachRelationshipsAndDraw();
 
    // small hack to send package elements to background on load
    // could be replaced with static layering values for container elements

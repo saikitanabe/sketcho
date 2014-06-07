@@ -18,5 +18,6 @@ public enum EditorProperty {
 	CONFLUENCE_MODE, 
 	SKETCHBOARD_OPEN, // especially for Confluence mode, but Sketchboar needs to set this enabled as well for backspace
 	START_SELECTION_TOOL,
-	PROPERTY_EDITOR_IS_OPEN;
+	PROPERTY_EDITOR_IS_OPEN,
+	HOLD_ARROW_DRAWING;
 }

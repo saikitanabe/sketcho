@@ -90,14 +90,17 @@ public class ReattachHelpers {
 	}
 
   public void reattachRelationships() {
-  	reattachRelationships(false);
+  	reattachRelationships(false, false);
   }
-  
+
+  public void reattachRelationshipsAndDraw() {
+  	reattachRelationships(false, true);
+	}  
   /**
    * 
    * @param force forces to runtime searching anchor elements
    */
-  public void reattachRelationships(boolean force) {
+  public void reattachRelationships(boolean force, boolean redraw) {
     for (Relationship2 r : relationships) {
       // reattach anchors if any
     	if (r.isLegacyAnchor() || force) {
@@ -110,6 +113,9 @@ public class ReattachHelpers {
    	 		// read again from data model to run time anchor
    	 		r.applyCustomData();
    	 		reattachRelationship(r, clientIdMapping);
+   	 		if (redraw) {
+   	 			r.redraw();
+   	 		}
    	 	}
     }
 	}

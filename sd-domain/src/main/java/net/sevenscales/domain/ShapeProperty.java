@@ -5,17 +5,18 @@ package net.sevenscales.domain;
 * Those cannot overlap, so properties can be combined!!
 */
 public enum ShapeProperty {
-	TEXT_POSITION_CENTER							(0x00001),
-	TEXT_POSITION_TOP 								(0x00002),
-	TEXT_POSITION_RIGHT 							(0x00004),
-	TEXT_POSITION_BOTTOM							(0x00008),
-	TEXT_POSITION_LEFT  							(0x00010),
-	TEXT_RESIZE_DIR_HORIZONTAL				(0x00100),
-	TEXT_RESIZE_DIR_VERTICAL					(0x00200),
-	DEGREES_0 												(0x01000),
-	DEGREES_90 												(0x02000),
-	SHAPE_AUTO_RESIZE_TRUE  					(0x10000),
-	SHAPE_AUTO_RESIZE_FALSE						(0x20000);
+	TEXT_POSITION_CENTER							(0x000001),
+	TEXT_POSITION_TOP 								(0x000002),
+	TEXT_POSITION_RIGHT 							(0x000004),
+	TEXT_POSITION_BOTTOM							(0x000008),
+	TEXT_POSITION_LEFT  							(0x000010),
+	TEXT_RESIZE_DIR_HORIZONTAL				(0x000100),
+	TEXT_RESIZE_DIR_VERTICAL					(0x000200),
+	DEGREES_0 												(0x001000),
+	DEGREES_90 												(0x002000),
+	SHAPE_AUTO_RESIZE_TRUE  					(0x010000),
+	SHAPE_AUTO_RESIZE_FALSE						(0x020000),
+	CURVED_ARROW										  (0x100000);
 
 	private int value;
 
@@ -74,6 +75,10 @@ public enum ShapeProperty {
 	}
 	public static boolean isShapeAutoResizeFalse(int value) {
 		return (value & SHAPE_AUTO_RESIZE_FALSE.getValue()) == SHAPE_AUTO_RESIZE_FALSE.getValue();
+	}
+
+	public static boolean isCurvedArrow(int value) {
+		return (value & CURVED_ARROW.getValue()) == CURVED_ARROW.getValue();
 	}
 
 }

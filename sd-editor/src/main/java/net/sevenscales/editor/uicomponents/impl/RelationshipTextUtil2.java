@@ -27,8 +27,8 @@ public class RelationshipTextUtil2 implements RelationshipParser {
 	public String parseArrowLine() {
 		return parser.parseArrowLine();
 	}
-	public Info parseShape() {
-		return parser.parseShape();
+	public Info parseShape(boolean curved) {
+		return parser.parseShape(curved);
 	}
 	public String parseLeftText() {
 		return parser.parseLeftText();
@@ -58,7 +58,7 @@ public class RelationshipTextUtil2 implements RelationshipParser {
 		public String parseArrowLine() {
 			return null;			
 		}
-		public Info parseShape() {
+		public Info parseShape(boolean curved) {
 			return null;
 		}
 		public String parseLeftText() {
@@ -92,7 +92,7 @@ public class RelationshipTextUtil2 implements RelationshipParser {
 			return text;
 		}
 		
-		public Info parseShape() {
+		public Info parseShape(boolean curved) {
 			int result = 0;
 			
 			String arrowLine = parseArrowLine(); 
@@ -166,6 +166,10 @@ public class RelationshipTextUtil2 implements RelationshipParser {
 			} else {
 				// fall back to plain line
 				relationshipShape.type = RelationShipType.LINE;
+			}
+
+			if (curved) {
+				result |= RelationshipShape2.CURVED;
 			}
 
 			relationshipShape.caps = result;

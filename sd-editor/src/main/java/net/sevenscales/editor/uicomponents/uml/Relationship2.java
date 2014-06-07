@@ -9,6 +9,7 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
+import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
@@ -44,6 +45,8 @@ import net.sevenscales.editor.uicomponents.helpers.RelationshipHandleHelpers;
 import net.sevenscales.editor.uicomponents.impl.RelationshipTextUtil2;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -1174,13 +1177,21 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   	}
   }
 
+  private boolean isCurved() {
+    Integer props = getDiagramItem().getShapeProperties();
+    if (props != null && ShapeProperty.isCurvedArrow(props)) {
+      return true;
+    }
+    return false;
+  }
+
   public void doSetText(String text) {
   	text = text.replaceAll("\\\\n", "\n");
   	text = text.replaceAll("\\\\r", ""); // windows line breaks removed
   	this.text = text;
   	
     textUtil.setText(this.text);
-    RelationshipShape2 rs = (RelationshipShape2) textUtil.parseShape();	
+    RelationshipShape2 rs = (RelationshipShape2) textUtil.parseShape(isCurved());
     
 //    for (int i = 0; i < lines.size(); ++i) {
     if (rs.isDependancy()) {
@@ -1219,7 +1230,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   public RelationshipShape2 getRelationshipShape() {
     textUtil.setText(text);
-    return (RelationshipShape2) textUtil.parseShape();
+    return (RelationshipShape2) textUtil.parseShape(isCurved());
   }
 
   public void resizeStart(Diagram sender) {
@@ -1273,7 +1284,15 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     + d * t3;
   }
 
+  public void redraw() {
+    doSetShape();
+  }
+
   public void doSetShape() {
+    if (surface.getEditorContext().isTrue(EditorProperty.HOLD_ARROW_DRAWING)) {
+      // optimization since (curve) arrow end elements are not calculated properly
+      return;
+    }
   	// TODO: optimization has been removed
   	// could compare text content to previous
   	// needs a new member variable prevText
@@ -1502,6 +1521,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   public void curve() {
     info.asCurve();
+    getDiagramItem().setShapeProperties(ShapeProperty.CURVED_ARROW.getValue());
+    surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
     doSetShape();
   }
 	
