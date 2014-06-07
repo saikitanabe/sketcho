@@ -75,6 +75,16 @@ public class DiagramHelpers {
 		return result;
 	}
 
+	public static List<Diagram> filterOwnerDiagramsAsListKeepOrder(Iterable<Diagram> diagrams, ActionType actionType) {
+		List<Diagram> result = new ArrayList();
+		for (Diagram d : diagrams) {
+			d = d.getOwnerComponent(actionType);
+			// will not add duplicate items, checks if index already exists with a client id
+			result.add(d);
+		}
+		return result;
+	}
+
 	public static List<Diagram> diagramsInDisplayOrder(Set<Diagram> diagrams) {
 		List<Diagram> result = new DiagramDisplayOrderList();
 		for (Diagram d : diagrams) {

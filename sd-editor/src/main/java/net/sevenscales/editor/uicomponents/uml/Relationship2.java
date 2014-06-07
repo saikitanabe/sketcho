@@ -32,6 +32,7 @@ import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.drag.AnchorMoveHandler;
 import net.sevenscales.editor.diagram.drag.ConnectionMoveHandler;
 import net.sevenscales.editor.uicomponents.AngleUtil2;
+import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.uicomponents.CardinalDirection;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.gfx.domain.Point;
@@ -253,8 +254,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     Curve result = new Curve();
     double mx = (prevx + endx) / 2;
     double my = (prevy + endy) / 2;
-    CardinalDirection cardinal1 = getCardinal(getStartAnchor());
-    CardinalDirection cardinal2 = getCardinal(getEndAnchor());
+    CardinalDirection cardinal1 = getCardinal(getStartX(), getStartY(), getStartAnchor());
+    CardinalDirection cardinal2 = getCardinal(getEndX(), getEndY(), getEndAnchor());
 
     if (handleSequenceDiagram(getStartAnchor(), getEndAnchor(), result, prevx, prevy, mx, my, endx, endy)) {
 
@@ -579,9 +580,12 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return cd1.equals(CardinalDirection.SOUTH) && cd2.equals(CardinalDirection.SOUTH);
   }
 
-  private CardinalDirection getCardinal(Anchor anchor) {
+  private CardinalDirection getCardinal(int x, int y, Anchor anchor) {
     AnchorElement ae = anchor.getAnchorElement();
     if (ae != null) {
+      if (surface.getEditorContext().isTrue(EditorProperty.ON_OT_OPERATION)) {
+        updateCardinalDirection(x, y, ae);
+      }
       return ae.getCardinalDirection();
     }
     return null;
@@ -1846,5 +1850,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     redraw();
   }
 
+  public void updateCardinalDirection(int x, int y, AnchorElement ae) {
+    if (ae != null && ae.getSource() != null) {
+      Diagram d = ae.getSource();
+      ae.setCardinalDirection(AnchorUtils.findCardinalDirection(x, y, d.getLeft(), d.getTop(), d.getWidth(), d.getHeight()));
+    }
+  }
 
 }

@@ -250,8 +250,8 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
 //	}
 
 	protected List<? extends IDiagramItemRO> diagramsToItems(Iterable<Diagram> diagrams) {
-		List<Diagram> filteredDiagrams = DiagramHelpers.filterOwnerDiagramsAsList(diagrams, ActionType.NONE);
-		List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.getDiagramsAsDTO(filteredDiagrams, true);
+		List<Diagram> filteredDiagrams = DiagramHelpers.filterOwnerDiagramsAsListKeepOrder(diagrams, ActionType.NONE);
+		List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.getDiagramsAsDTOKeepOrder(filteredDiagrams, true);
 		return operationItems;
 	}
 

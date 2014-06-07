@@ -48,6 +48,20 @@ public class BoardDocumentHelpers {
 		}
 		return result;
 	}
+
+	public static List<IDiagramItem> getDiagramsAsDTOKeepOrder(List<Diagram> diagrams, boolean updateDiagramItem) {
+		List<IDiagramItem> result = new ArrayList<IDiagramItem>();
+		for (Diagram d : diagrams) {
+			if ( !(d instanceof CircleElement) ) {
+				IDiagramItem di = d.getDiagramItem().copy();
+				if (updateDiagramItem) {
+					di = DiagramItemFactory.createOrUpdate(d);
+				}
+				result.add(di);
+			}
+		}
+		return result;
+	}
 	
 	public static List<IDiagramItemRO> copyDiagramItems(List<? extends IDiagramItemRO> items) {
 		List<IDiagramItemRO> result = new ArrayList<IDiagramItemRO>();
