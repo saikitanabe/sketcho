@@ -79,8 +79,10 @@ public class DiagramHelpers {
 		List<Diagram> result = new ArrayList();
 		for (Diagram d : diagrams) {
 			d = d.getOwnerComponent(actionType);
-			// will not add duplicate items, checks if index already exists with a client id
-			result.add(d);
+			// do not add duplicate items, check contains element with client id
+			if (!result.contains(d)) {
+				result.add(d);
+			}
 		}
 		return result;
 	}
