@@ -59,7 +59,7 @@ public class MouseDiagramEventHelpers {
     for (AnchorElement ae : diagram.getAnchors()) {
       if (ae.getRelationship() != null) {
         IDiagramItemRO di = ae.getRelationship().getDiagramItem();
-        if (di.getClientId() != null) {
+        if (di.getClientId() != null && !diagrams.contains(ae.getRelationship())) {
           diagrams.add(ae.getRelationship());
         }
       }
