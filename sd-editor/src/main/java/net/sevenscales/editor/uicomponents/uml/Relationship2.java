@@ -1836,4 +1836,15 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return handler;
   }
 
+  @Override
+  protected void setShapeProperties(Integer shapeProperties) {
+    super.setShapeProperties(shapeProperties);
+
+    if (isCurved()) {
+      info.asCurve();
+    }
+    redraw();
+  }
+
+
 }
