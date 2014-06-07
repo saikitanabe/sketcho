@@ -24,6 +24,7 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
 
@@ -252,10 +253,11 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
       
 //      int index = (int)Math.random()*(angles.length);
 //      double alpha = angles[index];
-
+      tempAnchorProperties.cardinalDirection = AnchorUtils.findCardinalDirection(x, y, getLeft(), getTop(), getWidth(), getHeight());
       result.setAx(tempAnchorPoint.x);
       result.setAy(tempAnchorPoint.y);
       result.setRelativeX(alpha);
+      result.setCardinalDirection(tempAnchorProperties.cardinalDirection);
       
 //      result.setRelativeX(tempAnchorProperties.relativeValueX);
 //      result.setRelativeY(tempAnchorProperties.relativeValueY);
@@ -268,6 +270,7 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
   protected boolean setFixedOrRelativeAnchor(int x, int y) {
   	double alpha = calcAnchorPoint(x, y, tempAnchorPoint, angles);
   	tempAnchorProperties.relativeValueX = alpha;
+    tempAnchorProperties.cardinalDirection = AnchorUtils.findCardinalDirection(x, y, getLeft(), getTop(), getWidth(), getHeight());
     return false; // relative
   }
   
