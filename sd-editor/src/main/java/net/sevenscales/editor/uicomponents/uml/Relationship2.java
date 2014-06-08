@@ -261,23 +261,29 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
         this.cp = cp;
       }
     }
+
+    private int slidingValue(int left) {
+      int result = Integer.MAX_VALUE;
+      if (left / 8 >= 1) {
+        result = 8;
+      } else if (left / 6 >= 1) {
+        result = 6;
+      }
+      return result;
+    }
+
     private List<Seqment> createSegments(List<Integer> points) {
       List<Seqment> result = new ArrayList<Seqment>();
       int size = points.size();
-      int take = Integer.MAX_VALUE;
-      if (size / 8 >= 1) {
-        take = 8;
-      } else if (size / 6 >= 1) {
-        take = 6;
-      }
-
-      int cpxIndex = take == 6 ? 2 : 4;
-      int cpyIndex = take == 6 ? 3 : 5;
-      int seqLastXIndex = take == 6 ? 4 : 6;
-      int seqLastYIndex = take == 6 ? 5 : 7;
 
       int i = 0;
-      for (i = 0; (i + take - 1) < size; i += (take - 2)) {
+      int take = slidingValue(size);
+      while ((i + take - 1) < size) {
+        int cpxIndex = take == 6 ? 2 : 4;
+        int cpyIndex = take == 6 ? 3 : 5;
+        int seqLastXIndex = take == 6 ? 4 : 6;
+        int seqLastYIndex = take == 6 ? 5 : 7;
+
         ControlPoint cp = new ControlPoint(points.get(i + 2),
                                            points.get(i + 3), 
                                            points.get(i + cpxIndex), 
@@ -288,12 +294,19 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
                                   points.get(i + seqLastYIndex),
                                   cp);
         result.add(seq);
+        i += (take - 2);
+        take = slidingValue(size - (take - 2));
       }
 
-      int rest = size % take;
-      // for (; i < size; i += 2) {
-      //   ControlPoint cp = new ControlPoint()
-      // }
+      if ((i + 3) < size) {
+        double x1 = points.get(i + 0);
+        double y1 = points.get(i + 1);
+        double x2 = points.get(i + 2);
+        double y2 = points.get(i + 3);
+        ControlPoint cp = new ControlPoint(x1, y1, x2, y2);
+        Seqment seq = new Seqment(x1, y1, x2, y2, cp);
+        result.add(seq);
+      }
       return result;
     }
     private String calcMultiPointsLine(List<Integer> points) {
