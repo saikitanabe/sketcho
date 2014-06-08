@@ -271,29 +271,41 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
         take = 6;
       }
 
+      int cpxIndex = take == 6 ? 2 : 4;
+      int cpyIndex = take == 6 ? 3 : 5;
+      int seqLastXIndex = take == 6 ? 4 : 6;
+      int seqLastYIndex = take == 6 ? 5 : 7;
+
       int i = 0;
-      for (i = 0; (i + take - 1) < size; i += take) {
+      for (i = 0; (i + take - 1) < size; i += (take - 2)) {
         ControlPoint cp = new ControlPoint(points.get(i + 2),
                                            points.get(i + 3), 
-                                           points.get(take == 6 ? i + 2 : i + 4), 
-                                           points.get(take == 6 ? i + 3 : i + 5));
+                                           points.get(i + cpxIndex), 
+                                           points.get(i + cpyIndex));
         Seqment seq = new Seqment(points.get(i + 0),
                                   points.get(i + 1),
-                                  points.get(take == 6 ? i + 4 : i + 6),
-                                  points.get(take == 6 ? i + 5 : i + 7),
+                                  points.get(i + seqLastXIndex),
+                                  points.get(i + seqLastYIndex),
                                   cp);
         result.add(seq);
       }
 
       int rest = size % take;
-      // for (; i < size)
+      // for (; i < size; i += 2) {
+      //   ControlPoint cp = new ControlPoint()
+      // }
       return result;
     }
     private String calcMultiPointsLine(List<Integer> points) {
       // M460,258 C460,258 482,112  482,112 C482,112 595,148  595,148
       List<Seqment> seqments = createSegments(points);
       String result = "M";
+      boolean first = true;
       for (Seqment s : seqments) {
+        if (!first) {
+          result += " ";
+        }
+        first = false;
         result += s.x1 + "," + s.y1;
         result += "C" + s.cp.c1x + "," + s.cp.c1y + " " + s.cp.c2x + "," + s.cp.c2y;
         result += " " + s.x2 + "," + s.y2;
