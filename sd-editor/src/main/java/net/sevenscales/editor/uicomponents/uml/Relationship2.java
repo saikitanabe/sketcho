@@ -60,9 +60,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
 
   // Debug curve control point and arrow angle debugging
-  private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
-  private net.sevenscales.editor.gfx.domain.ICircle tempC1;
-  private net.sevenscales.editor.gfx.domain.ICircle tempC2;
+  // private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
+  // private net.sevenscales.editor.gfx.domain.ICircle tempC2;
 
 	private IPolyline inheritance;
   private IPolyline arrow;
@@ -205,12 +205,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     }
 
     private String calcShape(List<Integer> points) {
-      switch (points.size()) {
-        case 4:
-          return calcStraightLine(points);
-        default:
-          return calcMultiPointsLine(points);
+      String result = "";
+      if (points.size() == 4 || !info.isCurved()) {
+        result = calcStraightLine(points);
+      } else {
+        result = calcMultiPointsLine(points);
       }
+      return result;
     }
 
     private String calcStraightLine(List<Integer> points) {
@@ -295,7 +296,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
                                   cp);
         result.add(seq);
         i += (take - 2);
-        take = slidingValue(size - (take - 2));
+        take = slidingValue(size - i);
       }
 
       if ((i + 3) < size) {
@@ -324,21 +325,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
         result += " " + s.x2 + "," + s.y2;
       }
       return result;
-      // String result = "M";
-      // for (int i = 0; i < points.size(); i += 2) {
-      //   if (i > 0) {
-      //     result += " ";
-      //   }
-      //   int x = points.get(i);
-      //   int y = points.get(i + 1);
-      //   result += x + "," + y;
-
-      //   // M100,200 C100,300 200,300          200,400
-      //   if (info.isCurved()) {
-      //     result += calcMultiCurve(points, i, x, y);
-      //   }
-      // }
-      // return result;
     }
     private String calcMultiCurve(List<Integer> points, int i, int prevx, int prevy) {
       String result = "";
@@ -748,9 +734,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getConnectionLayer());
 
     // DEBUG curve visualization START
-    tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
-    tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
-    tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
+    // tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
+    // tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
+    // tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
     // DEBUG curve visualization END
 
     startAnchor = new Anchor(this);
@@ -1322,7 +1308,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   	}
   }
 
-  private boolean isCurved() {
+  public boolean isCurved() {
     Integer props = getDiagramItem().getShapeProperties();
     if (props != null && ShapeProperty.isCurvedArrow(props)) {
       return true;
@@ -1475,15 +1461,15 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       double by = bezierInterpolation(t, y2, c.c2y, c.c1y, y1);
 
       // Debug curve visualization START
-      tempCircle.setShape(bx, by, 5);
-      tempCircle.setStroke(218, 57, 57, 1);
+      // tempCircle.setShape(bx, by, 5);
+      // tempCircle.setStroke(218, 57, 57, 1);
 
-      tempC1.setShape(c.c1x, c.c1y, 5);
-      tempC1.setStroke(51, 57, 57, 1);
-      tempC1.setFill(51, 57, 57, 1);
-      tempC2.setShape(c.c2x, c.c2y, 5);
-      tempC2.setStroke(150, 150, 150, 1);
-      tempC2.setFill(150, 150, 150, 1);
+      // tempC1.setShape(c.c1x, c.c1y, 5);
+      // tempC1.setStroke(51, 57, 57, 1);
+      // tempC1.setFill(51, 57, 57, 1);
+      // tempC2.setShape(c.c2x, c.c2y, 5);
+      // tempC2.setStroke(150, 150, 150, 1);
+      // tempC2.setFill(150, 150, 150, 1);
       // Debug curve visualization END
 
       calculateArrowHead(angle, ARROW_WIDTH, bx, by, x2, y2);
