@@ -27,6 +27,7 @@ import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoint;
 import net.sevenscales.editor.content.utils.IntegerHelpers;
+import net.sevenscales.editor.diagram.utils.PathFitter;
 
 
 class FreehandPath {
@@ -169,7 +170,7 @@ class FreehandPath {
 
   private String fitPointsToSvg(int absx, int absy) {
     List<Integer> relative = relativePoints(absx, absy);
-    return fit(relative);
+    return PathFitter.fitRelative(relative);
   }
 
   private List<Integer> relativePoints(int absx, int absy) {
@@ -213,72 +214,5 @@ class FreehandPath {
       relativePoints.remove(relativePoints.size() - 1);
     }
   }
-
-  private String fit(List<Integer> points) {
-    JsArrayInteger dest = JsArrayInteger.createArray().cast();
-    for (Integer i : points) {
-      dest.push(i.intValue());
-    }
-    // JsArray<PaperSegment> segments = fit(dest);
-    // for (int i = 0; i < segments.length(); ++i) {
-    //   PaperPoint point = segments.get(i).getPoint();
-    //   logger.debug("seg {}, {}", point.getX(), point.getY());
-    // }
-    return fit(dest);
-  }
-
-  private native String /*JsArray<PaperSegment>*/ fit(JsArrayInteger points)/*-{
-    var segs = []
-    for (var i = 0; i < points.length; i += 2) {
-      segs.push(new $wnd.paper.Segment(points[i], points[i + 1]))
-    }
-    // var myPath = {_segments: [new $wnd.paper.Segment(1,2), new $wnd.paper.Segment(3,4), new $wnd.paper.Segment(5,6)]};
-    var myPath = {_segments: segs}
-    // console.log(myPath)
-    var fitter = new $wnd.paper.PathFitter(myPath, 2.5);
-
-    var getPathData = function(_segments, precision) {
-      var segments = _segments,
-        f = $wnd.paper.Formatter.instance,
-        parts = [];
-
-      // TODO: Add support for H/V and/or relative commands, where appropriate
-      // and resulting in shorter strings
-      function addCurve(seg1, seg2, skipLine) {
-        var point1 = seg1._point,
-          point2 = seg2._point,
-          handle1 = seg1._handleOut,
-          handle2 = seg2._handleIn;
-        if (handle1.isZero() && handle2.isZero()) {
-          if (!skipLine) {
-            // L = absolute lineto: moving to a point with drawing
-            parts.push('l' + f.point(point2, precision));
-          }
-        } else {
-          // c = relative curveto: handle1, handle2 + end - start,
-          // end - start
-          var end = point2.subtract(point1);
-          parts.push('c' + f.point(handle1, precision)
-              + ' ' + f.point(end.add(handle2), precision)
-              + ' ' + f.point(end, precision));
-        }
-      }
-
-      if (segments.length === 0)
-        return '';
-      parts.push('m' + f.point(segments[0]._point));
-      for (var i = 0, l = segments.length  - 1; i < l; i++)
-        addCurve(segments[i], segments[i + 1], false);
-      if (this._closed) {
-        addCurve(segments[segments.length - 1], segments[0], true);
-        parts.push('z');
-      }
-      return parts.join('');
-    }
-
-    console.log(getPathData(fitter.fit()));
-    // return fitter.fit();
-    return getPathData(fitter.fit());
-  }-*/;
 
 }
