@@ -35,6 +35,7 @@ public class ContainerAttachHelpers {
 	    result.setAy(tempAnchorProperties.y);
 	    result.setRelativeX(tempAnchorProperties.relativeValueX);
 	    result.setRelativeY(tempAnchorProperties.relativeValueY);
+	    result.setCardinalDirection(tempAnchorProperties.cardinalDirection);
 	    
 	    diagram.setAnchorPointShape(tempAnchorProperties.x, tempAnchorProperties.y);
 	
