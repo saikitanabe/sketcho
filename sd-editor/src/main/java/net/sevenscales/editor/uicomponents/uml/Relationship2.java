@@ -19,6 +19,7 @@ import net.sevenscales.editor.diagram.DiagramResizeHandler;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
+import net.sevenscales.editor.diagram.utils.PathFitter;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IPolyline;
@@ -59,9 +60,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
 
   // Debug curve control point and arrow angle debugging
-  // private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
-  // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
-  // private net.sevenscales.editor.gfx.domain.ICircle tempC2;
+  private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  private net.sevenscales.editor.gfx.domain.ICircle tempC1;
+  private net.sevenscales.editor.gfx.domain.ICircle tempC2;
 
 	private IPolyline inheritance;
   private IPolyline arrow;
@@ -197,11 +198,22 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     public void setShape(List<Integer> points) {
       String shape = calcShape(points);
+      logger.debug("RelLine.setShape {}", shape);
+
       path.setShape(shape);
       lineBackground.setShape(shape);
     }
 
     private String calcShape(List<Integer> points) {
+      switch (points.size()) {
+        case 4:
+          return calcStraightLine(points);
+        default:
+          return calcMultiPointsLine(points);
+      }
+    }
+
+    private String calcStraightLine(List<Integer> points) {
       String result = "M";
       for (int i = 0; i < points.size(); i += 2) {
         if (i > 0) {
@@ -216,10 +228,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
           result += calcCurve(points, i, x, y);
         }
       }
-      logger.debug("calcShape {}", result);
       return result;
     }
-
     private String calcCurve(List<Integer> points, int i, int prevx, int prevy) {
       String result = "";
       if (i + 3 < points.size()) {
@@ -227,8 +237,94 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
         int endx = points.get(i + 2);
         int endy = points.get(i + 3);
 
-        Curve c = createCurve(prevx, prevy, endx, endy);
+        ControlPoint c = createCurve(prevx, prevy, endx, endy);
         result = " C" + c.c1x + "," + c.c1y + " " + c.c2x + "," + c.c2y + " ";
+      }
+      return result;
+    }
+
+    private class Seqment {
+      public double x1;
+      public double y1;
+      public double x2;
+      public double y2;
+      public ControlPoint cp;
+
+      public Seqment() {
+
+      }
+      public Seqment(double x1, double y1, double x2, double y2, ControlPoint cp) {
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.cp = cp;
+      }
+    }
+    private List<Seqment> createSegments(List<Integer> points) {
+      List<Seqment> result = new ArrayList<Seqment>();
+      int size = points.size();
+      int take = Integer.MAX_VALUE;
+      if (size / 8 >= 1) {
+        take = 8;
+      } else if (size / 6 >= 1) {
+        take = 6;
+      }
+
+      int i = 0;
+      for (i = 0; (i + take - 1) < size; i += take) {
+        ControlPoint cp = new ControlPoint(points.get(i + 2),
+                                           points.get(i + 3), 
+                                           points.get(take == 6 ? i + 2 : i + 4), 
+                                           points.get(take == 6 ? i + 3 : i + 5));
+        Seqment seq = new Seqment(points.get(i + 0),
+                                  points.get(i + 1),
+                                  points.get(take == 6 ? i + 4 : i + 6),
+                                  points.get(take == 6 ? i + 5 : i + 7),
+                                  cp);
+        result.add(seq);
+      }
+
+      int rest = size % take;
+      // for (; i < size)
+      return result;
+    }
+    private String calcMultiPointsLine(List<Integer> points) {
+      // M460,258 C460,258 482,112  482,112 C482,112 595,148  595,148
+      List<Seqment> seqments = createSegments(points);
+      String result = "M";
+      for (Seqment s : seqments) {
+        result += s.x1 + "," + s.y1;
+        result += "C" + s.cp.c1x + "," + s.cp.c1y + " " + s.cp.c2x + "," + s.cp.c2y;
+        result += " " + s.x2 + "," + s.y2;
+      }
+      return result;
+      // String result = "M";
+      // for (int i = 0; i < points.size(); i += 2) {
+      //   if (i > 0) {
+      //     result += " ";
+      //   }
+      //   int x = points.get(i);
+      //   int y = points.get(i + 1);
+      //   result += x + "," + y;
+
+      //   // M100,200 C100,300 200,300          200,400
+      //   if (info.isCurved()) {
+      //     result += calcMultiCurve(points, i, x, y);
+      //   }
+      // }
+      // return result;
+    }
+    private String calcMultiCurve(List<Integer> points, int i, int prevx, int prevy) {
+      String result = "";
+      if (i + 3 < points.size()) {
+        // C100,300 200,300
+        int nextx = points.get(i + 2);
+        int nexty = points.get(i + 3);
+
+        // Curve c = createMultiPointCurve(prevx, prevy, nextx, nexty);
+        // result = " C" + c.c1x + "," + c.c1y + " " + c.c2x + "," + c.c2y + " ";
+        result = "Q" + prevx + "," + prevy;
       }
       return result;
     }
@@ -243,15 +339,35 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   }
 
-  private static class Curve {
+  private static class ControlPoint {
     public double c1x;
     public double c1y;
     public double c2x;
     public double c2y;
+
+    public ControlPoint() {
+
+    }
+
+    public ControlPoint(double c1x, double c1y, double c2x, double c2y) {
+      this.c1x = c1x;
+      this.c1y = c1y;
+      this.c2x = c2x;
+      this.c2y = c2y;
+    }
   }
 
-  private Curve createCurve(double prevx, double prevy, double endx, double endy) {
-    Curve result = new Curve();
+  private ControlPoint createMultiPointCurve(double prevx, double prevy, double nextx, double nexty) {
+    ControlPoint result = new ControlPoint();
+    result.c1x = prevx;
+    result.c1y = (prevy + nexty) / 2;
+    result.c2x = (prevx + nextx) / 2;
+    result.c2y = nexty;
+    return result;
+  }
+
+  private ControlPoint createCurve(double prevx, double prevy, double endx, double endy) {
+    ControlPoint result = new ControlPoint();
     double mx = (prevx + endx) / 2;
     double my = (prevy + endy) / 2;
     CardinalDirection cardinal1 = getCardinal(getStartX(), getStartY(), getStartAnchor());
@@ -280,7 +396,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return result;
   }
 
-  private boolean handleSequenceDiagram(Anchor a1, Anchor a2, Curve curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
+  private boolean handleSequenceDiagram(Anchor a1, Anchor a2, ControlPoint curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
     boolean result = false;
     Diagram d1 = a1.getDiagram();
     Diagram d2 = a2.getDiagram();
@@ -351,7 +467,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   private boolean isConnectedDifferentSideEdges(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2,
-    Curve curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
+    ControlPoint curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
     boolean result = false;
     if (isClosestSideEdgesConnected(a1, a2, cd1, cd2)) {
       curve.c1x = mx;
@@ -396,7 +512,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   private boolean isConnectSameSideEdges(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2,
-    Curve curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
+    ControlPoint curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
     boolean result = false;
     // 80 could be distance related with some factor, the bigger distance => bigger curve
     if (cd1.equals(CardinalDirection.EAST) && cd2.equals(CardinalDirection.EAST)) {
@@ -418,7 +534,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   private boolean isConnectedToSameNorthOrSouthEdges(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2,
-    Curve curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
+    ControlPoint curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
     boolean result = false;
     boolean endLeftSide = endx < prevx;
     boolean endAbove = endy < prevy;
@@ -459,7 +575,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   private boolean isNorthOrSouthEdgeConnectedToWestOrEast(Anchor a1, Anchor a2, CardinalDirection cd1, CardinalDirection cd2,
-    Curve curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
+    ControlPoint curve, double prevx, double prevy, double mx, double my, double endx, double endy) {
     boolean result = false;
     boolean endLeftSide = endx < prevx;
     boolean endAbove = endy < prevy;
@@ -607,9 +723,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getConnectionLayer());
 
     // DEBUG curve visualization START
-    // tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
-    // tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
-    // tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
+    tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
+    tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
+    tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
     // DEBUG curve visualization END
 
     startAnchor = new Anchor(this);
@@ -1323,21 +1439,26 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     double x2 = points.get(size - 2);
     double y2 = points.get(size - 1);
     if (info.isCurved()) {
-      Curve c = createCurve(x1, y1, x2, y2);
+      ControlPoint c = null;
+      if (size <= 4) {
+        c = createCurve(x1, y1, x2, y2);
+      } else {
+        c = createMultiPointCurve(x1, y1, x2, y2);
+      }
       double t = 0.05;
       double bx = bezierInterpolation(t, x2, c.c2x, c.c1x, x1);
       double by = bezierInterpolation(t, y2, c.c2y, c.c1y, y1);
 
       // Debug curve visualization START
-      // tempCircle.setShape(bx, by, 5);
-      // tempCircle.setStroke(218, 57, 57, 1);
+      tempCircle.setShape(bx, by, 5);
+      tempCircle.setStroke(218, 57, 57, 1);
 
-      // tempC1.setShape(c.c1x, c.c1y, 5);
-      // tempC1.setStroke(51, 57, 57, 1);
-      // tempC1.setFill(51, 57, 57, 1);
-      // tempC2.setShape(c.c2x, c.c2y, 5);
-      // tempC2.setStroke(150, 150, 150, 1);
-      // tempC2.setFill(150, 150, 150, 1);
+      tempC1.setShape(c.c1x, c.c1y, 5);
+      tempC1.setStroke(51, 57, 57, 1);
+      tempC1.setFill(51, 57, 57, 1);
+      tempC2.setShape(c.c2x, c.c2y, 5);
+      tempC2.setStroke(150, 150, 150, 1);
+      tempC2.setFill(150, 150, 150, 1);
       // Debug curve visualization END
 
       calculateArrowHead(angle, ARROW_WIDTH, bx, by, x2, y2);
