@@ -36,6 +36,15 @@ public class BezierHelpers {
 		return $wnd.sketchboard.toPoints(points)
 	}-*/;
 
+  public static double bezierInterpolation(double t, double a, double b, double c, double d) {
+    double t2 = t * t;
+    double t3 = t2 * t;
+    return a + (-a * 3 + t * (3 * a - a * t)) * t
+    + (3 * b + t * (-6 * b + b * 3 * t)) * t
+    + (c * 3 - c * 3 * t) * t2
+    + d * t3;
+  }
+
 	public static JsArray<Segment> segments(List<Integer> points) {
 		return segments(toPoints(points));
 	}

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.JsArray;
+
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -17,6 +19,7 @@ import net.sevenscales.editor.diagram.DiagramProxy;
 import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.diagram.shape.CircleShape;
 import net.sevenscales.editor.diagram.utils.GridUtils;
+import net.sevenscales.editor.diagram.utils.BezierHelpers;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
@@ -137,6 +140,14 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
       }
     }
     
+    if (parentRelationship.isCurved()) {
+      curvedBendPoints(parentRelHandlesCount, show);
+    } else {
+      straightBendPoints(parentRelHandlesCount, show);
+    }
+  }
+
+  private void straightBendPoints(int parentRelHandlesCount, boolean show) {
     for (int i = 0; i < bendHandles.size(); ++i) {
       CircleElement bh = bendHandles.get(i);
       if (i < parentRelHandlesCount - 1) {
@@ -150,11 +161,36 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     }
   }
 
-  private void setHandlePosition(CircleElement h, Integer x, Integer y) {
+  private void curvedBendPoints(int parentRelHandlesCount, boolean show) {
+    for (int i = 0; i < bendHandles.size(); ++i) {
+      CircleElement bh = bendHandles.get(i);
+      if (i < parentRelHandlesCount - 1) {
+        JsArray<BezierHelpers.Segment> segments = parentRelationship.getSegments();
+        if (i < segments.length()) {
+          double t = 0.5;
+          BezierHelpers.Segment seg = segments.get(i);
+          BezierHelpers.Point p2 = seg.getPoint2();
+          BezierHelpers.Point p1 = seg.getPoint1();
+          BezierHelpers.Point cp1 = seg.getControlPoint1();
+          BezierHelpers.Point cp2 = seg.getControlPoint2();
+          double x = BezierHelpers.bezierInterpolation(t, p2.getX(), cp2.getX(), cp1.getX(), p1.getX());
+          double y = BezierHelpers.bezierInterpolation(t, p2.getY(), cp2.getY(), cp1.getY(), p1.getY());
+          setHandlePosition(bh, x + parentRelationship.getTransformX(), 
+                                y + parentRelationship.getTransformY());
+          bh.setVisible(show);
+        }
+      } else {
+        // hide rest from the pool
+        bh.setVisible(false);
+      }
+    }
+  }
+
+  private void setHandlePosition(CircleElement h, double x, double y) {
     CircleShape cs = (CircleShape) h.getInfo();
-    cs.centerX = x;
-    cs.centerY = y;
-    h.setShape(cs);     
+    cs.centerX = (int) x;
+    cs.centerY = (int) y;
+    h.setShape(cs);
   }
 
   private int parentHandlesCount() {

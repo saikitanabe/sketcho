@@ -175,6 +175,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     private IPath path;
     private IPath lineBackground;
     private List<IShape> elements = new ArrayList<IShape>();
+    private JsArray<BezierHelpers.Segment> segments;
 
     public RelLine() {
       path = IShapeFactory.Util.factory(editable).createPath(group, null);
@@ -198,23 +199,24 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       path.setStrokeStyle(style);
     }
 
-    public BezierHelpers.Segment setShape(List<Integer> points) {
+    public void setShape(List<Integer> points) {
       BezierHelpers.Segment result = null;
       String shape = "";
       if (points.size() == 4 || !info.isCurved()) {
         shape = calcTwoPointsCurvePath(points);
       } else {
-        JsArray<BezierHelpers.Segment> segments = BezierHelpers.segments(points);
+        segments = BezierHelpers.segments(points);
         shape = BezierHelpers.smooth(segments);
-        result = BezierHelpers.lastSegment(segments);
       }
 
-      // String shape = calcShape(points);
       // logger.debug("RelLine.setShape {}", shape);
 
       path.setShape(shape);
       lineBackground.setShape(shape);
-      return result;
+    }
+
+    public BezierHelpers.Segment lastSegment() {
+      return BezierHelpers.lastSegment(segments);
     }
 
     private String calcTwoPointsCurvePath(List<Integer> points) {
@@ -1224,6 +1226,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return false;
   }
 
+  public JsArray<BezierHelpers.Segment> getSegments() {
+    return relLine.segments;
+  }
+
   public void doSetText(String text) {
   	text = text.replaceAll("\\\\n", "\n");
   	text = text.replaceAll("\\\\r", ""); // windows line breaks removed
@@ -1314,15 +1320,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     doSetShape();
   }
 
-  private double bezierInterpolation(double t, double a, double b, double c, double d) {
-    double t2 = t * t;
-    double t3 = t2 * t;
-    return a + (-a * 3 + t * (3 * a - a * t)) * t
-    + (3 * b + t * (-6 * b + b * 3 * t)) * t
-    + (c * 3 - c * 3 * t) * t2
-    + d * t3;
-  }
-
   public void redraw() {
     doSetShape();
   }
@@ -1342,7 +1339,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //    prevPoints.clear();
 //    prevPoints.addAll(points);
 //    System.out.println("doSetShape:"+points+" "+anchorMap);
-    BezierHelpers.Segment lastSegment = relLine.setShape(points);
+    relLine.setShape(points);
   	if (TouchHelpers.isSupportsTouch() && surface.getMouseDiagramManager().getDragHandler().isDragging()) {
   		// performance improvement needed on touch devices; there is not enough
   		// processing power to calculate arrow head shapes on every touch move.
@@ -1369,6 +1366,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       if (size <= 4) {
         cp = createCurve(x1, y1, x2, y2);
       } else {
+        BezierHelpers.Segment lastSegment = relLine.lastSegment();
         if (lastSegment != null) {
           nextx = lastSegment.getPoint2().getX();
           cp.c2x = lastSegment.getControlPoint2().getX();
@@ -1382,8 +1380,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
         }
       }
 
-      bx = bezierInterpolation(t, nextx, cp.c2x, cp.c1x, prevx);
-      by = bezierInterpolation(t, nexty, cp.c2y, cp.c1y, prevy);
+      bx = BezierHelpers.bezierInterpolation(t, nextx, cp.c2x, cp.c1x, prevx);
+      by = BezierHelpers.bezierInterpolation(t, nexty, cp.c2y, cp.c1y, prevy);
 
       // Debug curve visualization START
       // tempCircle.setShape(bx, by, 5);
