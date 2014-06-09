@@ -250,6 +250,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       public double x2;
       public double y2;
       public ControlPoint cp;
+      private net.sevenscales.editor.gfx.domain.ICircle tempC1;
+      private net.sevenscales.editor.gfx.domain.ICircle tempC2;
 
       public Seqment() {
 
@@ -260,6 +262,20 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
         this.x2 = x2;
         this.y2 = y2;
         this.cp = cp;
+        tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
+        tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
+      }
+
+      public void showControlPoints() {
+        tempC1.setShape(cp.c1x, cp.c1y, 5);
+        // green
+        tempC1.setStroke(0, 0x6F, 0x77, 1);
+        tempC1.setFill(0, 0x6F, 0x77, 1);
+
+        // red
+        tempC2.setShape(cp.c2x, cp.c2y, 5);
+        tempC2.setStroke(218, 59, 59, 1);
+        tempC2.setFill(218, 59, 59, 1);
       }
     }
 
@@ -300,12 +316,15 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       }
 
       if ((i + 3) < size) {
+        // if there was only one edge left without control points
+        // create a straight line for the last segment
         double x1 = points.get(i + 0);
         double y1 = points.get(i + 1);
         double x2 = points.get(i + 2);
         double y2 = points.get(i + 3);
-        ControlPoint cp = new ControlPoint(x1, y1, x2, y2);
+        ControlPoint cp = new ControlPoint(x1, (y1 + y2) / 2, x1, y1 + 80);
         Seqment seq = new Seqment(x1, y1, x2, y2, cp);
+        seq.showControlPoints();
         result.add(seq);
       }
       return result;
