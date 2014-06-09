@@ -51,7 +51,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 
-
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 
@@ -62,9 +62,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
 
   // Debug curve control point and arrow angle debugging
-  // private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
-  // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
-  // private net.sevenscales.editor.gfx.domain.ICircle tempC2;
+  private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  private net.sevenscales.editor.gfx.domain.ICircle tempC1;
+  private net.sevenscales.editor.gfx.domain.ICircle tempC2;
 
 	private IPolyline inheritance;
   private IPolyline arrow;
@@ -198,25 +198,26 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       path.setStrokeStyle(style);
     }
 
-    public void setShape(List<Integer> points) {
-      String shape = calcShape(points);
+    public BezierHelpers.Segment setShape(List<Integer> points) {
+      BezierHelpers.Segment result = null;
+      String shape = "";
+      if (points.size() == 4 || !info.isCurved()) {
+        shape = calcTwoPointsCurvePath(points);
+      } else {
+        JsArray<BezierHelpers.Segment> segments = BezierHelpers.segments(points);
+        shape = BezierHelpers.smooth(segments);
+        result = BezierHelpers.lastSegment(segments);
+      }
+
+      // String shape = calcShape(points);
       logger.debug("RelLine.setShape {}", shape);
 
       path.setShape(shape);
       lineBackground.setShape(shape);
-    }
-
-    private String calcShape(List<Integer> points) {
-      String result = "";
-      if (points.size() == 4 || !info.isCurved()) {
-        result = calcStraightLine(points);
-      } else {
-        result = calcMultiPointsLine2(points);
-      }
       return result;
     }
 
-    private String calcStraightLine(List<Integer> points) {
+    private String calcTwoPointsCurvePath(List<Integer> points) {
       String result = "M";
       for (int i = 0; i < points.size(); i += 2) {
         if (i > 0) {
@@ -246,123 +247,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       return result;
     }
 
-    private class Seqment {
-      public double x1;
-      public double y1;
-      public double x2;
-      public double y2;
-      public ControlPoint cp;
-      private net.sevenscales.editor.gfx.domain.ICircle tempC1;
-      private net.sevenscales.editor.gfx.domain.ICircle tempC2;
-
-      public Seqment() {
-
-      }
-      public Seqment(double x1, double y1, double x2, double y2, ControlPoint cp) {
-        this.x1 = x1;
-        this.y1 = y1;
-        this.x2 = x2;
-        this.y2 = y2;
-        this.cp = cp;
-        tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
-        tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
-      }
-
-      public void showControlPoints() {
-        tempC1.setShape(cp.c1x, cp.c1y, 5);
-        // green
-        tempC1.setStroke(0, 0x6F, 0x77, 1);
-        tempC1.setFill(0, 0x6F, 0x77, 1);
-
-        // red
-        tempC2.setShape(cp.c2x, cp.c2y, 5);
-        tempC2.setStroke(218, 59, 59, 1);
-        tempC2.setFill(218, 59, 59, 1);
-      }
-    }
-
-    private int slidingValue(int left) {
-      int result = Integer.MAX_VALUE;
-      if (left / 8 >= 1) {
-        result = 8;
-      } else if (left / 6 >= 1) {
-        result = 6;
-      }
-      return result;
-    }
-
-    private List<Seqment> createSegments(List<Integer> points) {
-      List<Seqment> result = new ArrayList<Seqment>();
-      int size = points.size();
-
-      int i = 0;
-      int take = slidingValue(size);
-      while ((i + take - 1) < size) {
-        int cpxIndex = take == 6 ? 2 : 4;
-        int cpyIndex = take == 6 ? 3 : 5;
-        int seqLastXIndex = take == 6 ? 4 : 6;
-        int seqLastYIndex = take == 6 ? 5 : 7;
-
-        ControlPoint cp = new ControlPoint(points.get(i + 2),
-                                           points.get(i + 3), 
-                                           points.get(i + cpxIndex), 
-                                           points.get(i + cpyIndex));
-        Seqment seq = new Seqment(points.get(i + 0),
-                                  points.get(i + 1),
-                                  points.get(i + seqLastXIndex),
-                                  points.get(i + seqLastYIndex),
-                                  cp);
-        result.add(seq);
-        i += (take - 2);
-        take = slidingValue(size - i);
-      }
-
-      if ((i + 3) < size) {
-        // if there was only one edge left without control points
-        // create a straight line for the last segment
-        double x1 = points.get(i + 0);
-        double y1 = points.get(i + 1);
-        double x2 = points.get(i + 2);
-        double y2 = points.get(i + 3);
-        ControlPoint cp = new ControlPoint(x1, (y1 + y2) / 2, x1, y1 + 80);
-        Seqment seq = new Seqment(x1, y1, x2, y2, cp);
-        seq.showControlPoints();
-        result.add(seq);
-      }
-      return result;
-    }
-
-    private String calcMultiPointsLine2(List<Integer> points) {
+    private String calcMultiPointsCurvePath(List<Integer> points) {
       return BezierHelpers.smooth(points);
-    }
-
-    private String calcMultiPointsLine(List<Integer> points) {
-      List<Seqment> seqments = createSegments(points);
-      String result = "M";
-      boolean first = true;
-      for (Seqment s : seqments) {
-        if (!first) {
-          result += " ";
-        }
-        first = false;
-        result += s.x1 + "," + s.y1;
-        result += "C" + s.cp.c1x + "," + s.cp.c1y + " " + s.cp.c2x + "," + s.cp.c2y;
-        result += " " + s.x2 + "," + s.y2;
-      }
-      return result;
-    }
-    private String calcMultiCurve(List<Integer> points, int i, int prevx, int prevy) {
-      String result = "";
-      if (i + 3 < points.size()) {
-        // C100,300 200,300
-        int nextx = points.get(i + 2);
-        int nexty = points.get(i + 3);
-
-        // Curve c = createMultiPointCurve(prevx, prevy, nextx, nexty);
-        // result = " C" + c.c1x + "," + c.c1y + " " + c.c2x + "," + c.c2y + " ";
-        result = "Q" + prevx + "," + prevy;
-      }
-      return result;
     }
 
     public void setStroke(String color) {
@@ -395,10 +281,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   private ControlPoint createMultiPointCurve(double prevx, double prevy, double nextx, double nexty) {
     ControlPoint result = new ControlPoint();
-    result.c1x = prevx;
-    result.c1y = (prevy + nexty) / 2;
-    result.c2x = (prevx + nextx) / 2;
-    result.c2y = nexty;
+
     return result;
   }
 
@@ -759,9 +642,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getConnectionLayer());
 
     // DEBUG curve visualization START
-    // tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
-    // tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
-    // tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
+    tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
+    tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
+    tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
     // DEBUG curve visualization END
 
     startAnchor = new Anchor(this);
@@ -1459,7 +1342,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //    prevPoints.clear();
 //    prevPoints.addAll(points);
 //    System.out.println("doSetShape:"+points+" "+anchorMap);
-    relLine.setShape(points);
+    BezierHelpers.Segment lastSegment = relLine.setShape(points);
   	if (TouchHelpers.isSupportsTouch() && surface.getMouseDiagramManager().getDragHandler().isDragging()) {
   		// performance improvement needed on touch devices; there is not enough
   		// processing power to calculate arrow head shapes on every touch move.
@@ -1475,26 +1358,43 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     double x2 = points.get(size - 2);
     double y2 = points.get(size - 1);
     if (info.isCurved()) {
-      ControlPoint c = null;
-      if (size <= 4) {
-        c = createCurve(x1, y1, x2, y2);
-      } else {
-        c = createMultiPointCurve(x1, y1, x2, y2);
-      }
       double t = 0.05;
-      double bx = bezierInterpolation(t, x2, c.c2x, c.c1x, x1);
-      double by = bezierInterpolation(t, y2, c.c2y, c.c1y, y1);
+      double nextx = 0;
+      double nexty = 0;
+      double bx = 0;
+      double by = 0;
+      double prevx = 0;
+      double prevy = 0;
+      ControlPoint cp = new ControlPoint();
+      if (size <= 4) {
+        cp = createCurve(x1, y1, x2, y2);
+      } else {
+        if (lastSegment != null) {
+          nextx = lastSegment.getPoint2().getX();
+          cp.c2x = lastSegment.getControlPoint2().getX();
+          cp.c1x = lastSegment.getControlPoint1().getX();
+          prevx = lastSegment.getPoint1().getX();
+
+          nexty = lastSegment.getPoint2().getY(); 
+          cp.c2y = lastSegment.getControlPoint2().getY();
+          cp.c1y = lastSegment.getControlPoint1().getY();
+          prevy = lastSegment.getPoint1().getY();
+        }
+      }
+
+      bx = bezierInterpolation(t, nextx, cp.c2x, cp.c1x, prevx);
+      by = bezierInterpolation(t, nexty, cp.c2y, cp.c1y, prevy);
 
       // Debug curve visualization START
-      // tempCircle.setShape(bx, by, 5);
-      // tempCircle.setStroke(218, 57, 57, 1);
+      tempCircle.setShape(bx, by, 5);
+      tempCircle.setStroke(218, 57, 57, 1);
 
-      // tempC1.setShape(c.c1x, c.c1y, 5);
-      // tempC1.setStroke(51, 57, 57, 1);
-      // tempC1.setFill(51, 57, 57, 1);
-      // tempC2.setShape(c.c2x, c.c2y, 5);
-      // tempC2.setStroke(150, 150, 150, 1);
-      // tempC2.setFill(150, 150, 150, 1);
+      tempC1.setShape(cp.c1x, cp.c1y, 5);
+      tempC1.setStroke(51, 57, 57, 1);
+      tempC1.setFill(51, 57, 57, 1);
+      tempC2.setShape(cp.c2x, cp.c2y, 5);
+      tempC2.setStroke(150, 150, 150, 1);
+      tempC2.setFill(150, 150, 150, 1);
       // Debug curve visualization END
 
       calculateArrowHead(angle, ARROW_WIDTH, bx, by, x2, y2);
