@@ -20,6 +20,7 @@ import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.diagram.utils.PathFitter;
+import net.sevenscales.editor.diagram.utils.BezierHelpers;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IPolyline;
@@ -49,6 +50,7 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
+
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -209,7 +211,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       if (points.size() == 4 || !info.isCurved()) {
         result = calcStraightLine(points);
       } else {
-        result = calcMultiPointsLine(points);
+        result = calcMultiPointsLine2(points);
       }
       return result;
     }
@@ -329,8 +331,12 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       }
       return result;
     }
+
+    private String calcMultiPointsLine2(List<Integer> points) {
+      return BezierHelpers.smooth(points);
+    }
+
     private String calcMultiPointsLine(List<Integer> points) {
-      // M460,258 C460,258 482,112  482,112 C482,112 595,148  595,148
       List<Seqment> seqments = createSegments(points);
       String result = "M";
       boolean first = true;
