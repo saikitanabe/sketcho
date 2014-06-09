@@ -210,7 +210,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       }
 
       // String shape = calcShape(points);
-      logger.debug("RelLine.setShape {}", shape);
+      // logger.debug("RelLine.setShape {}", shape);
 
       path.setShape(shape);
       lineBackground.setShape(shape);
