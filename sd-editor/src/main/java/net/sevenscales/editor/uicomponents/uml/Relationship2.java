@@ -62,9 +62,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
 
   // Debug curve control point and arrow angle debugging
-  private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
-  private net.sevenscales.editor.gfx.domain.ICircle tempC1;
-  private net.sevenscales.editor.gfx.domain.ICircle tempC2;
+  // private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
+  // private net.sevenscales.editor.gfx.domain.ICircle tempC2;
 
 	private IPolyline inheritance;
   private IPolyline arrow;
@@ -642,9 +642,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getConnectionLayer());
 
     // DEBUG curve visualization START
-    tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
-    tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
-    tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
+    // tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
+    // tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
+    // tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
     // DEBUG curve visualization END
 
     startAnchor = new Anchor(this);
@@ -1386,15 +1386,15 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       by = bezierInterpolation(t, nexty, cp.c2y, cp.c1y, prevy);
 
       // Debug curve visualization START
-      tempCircle.setShape(bx, by, 5);
-      tempCircle.setStroke(218, 57, 57, 1);
+      // tempCircle.setShape(bx, by, 5);
+      // tempCircle.setStroke(218, 57, 57, 1);
 
-      tempC1.setShape(cp.c1x, cp.c1y, 5);
-      tempC1.setStroke(51, 57, 57, 1);
-      tempC1.setFill(51, 57, 57, 1);
-      tempC2.setShape(cp.c2x, cp.c2y, 5);
-      tempC2.setStroke(150, 150, 150, 1);
-      tempC2.setFill(150, 150, 150, 1);
+      // tempC1.setShape(cp.c1x, cp.c1y, 5);
+      // tempC1.setStroke(51, 57, 57, 1);
+      // tempC1.setFill(51, 57, 57, 1);
+      // tempC2.setShape(cp.c2x, cp.c2y, 5);
+      // tempC2.setStroke(150, 150, 150, 1);
+      // tempC2.setFill(150, 150, 150, 1);
       // Debug curve visualization END
 
       calculateArrowHead(angle, ARROW_WIDTH, bx, by, x2, y2);
