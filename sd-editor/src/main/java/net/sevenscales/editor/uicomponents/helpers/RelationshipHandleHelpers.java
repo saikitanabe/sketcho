@@ -10,6 +10,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.RelationshipNotAttachedEvent;
 import net.sevenscales.editor.api.impl.TouchHelpers;
+import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramDragHandler;
 import net.sevenscales.editor.diagram.DiagramProxy;
@@ -17,6 +18,7 @@ import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.diagram.shape.CircleShape;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
@@ -121,6 +123,13 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
         x += parentRelationship.getTransformX();
         y += parentRelationship.getTransformY();
         setHandlePosition(h, x, y);
+        if (parentRelationship.isCurved() && !getStartHandle().equals(h) && !getEndHandle().equals(h)) {
+          Color c = Theme.getCurrentColorScheme().getBorderColor();
+          h.setFill(c.red, c.green, c.blue, c.opacity);
+        } else {
+          // transparent
+          h.setFill(0, 0, 0, 0);
+        }
         h.setVisible(show);
       } else {
         // hide rest from the pool

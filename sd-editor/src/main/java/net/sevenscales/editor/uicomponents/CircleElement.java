@@ -230,6 +230,10 @@ public class CircleElement extends AbstractDiagramItem {
 		return false;
 	}
 
+	public void setFill(int red, int green, int blue, double opacity) {
+		circle.setFill(red, green, blue, opacity);
+	}
+
 //	@Override
 //	public void applyTransform(MatrixPointJS point) {
 //		mygroup.applyTransform(point.getDX(), point.getDY());
