@@ -26,6 +26,23 @@ public class BezierHelpers {
 		public final native Point getPoint2() /*-{ return this.p2; }-*/;
 		public final native Point getControlPoint1() /*-{ return this.cp1; }-*/;
 		public final native Point getControlPoint2() /*-{ return this.cp2; }-*/;
+
+		public static native Segment create(double prevx, double prevy, double cp1x, double cp1y, double cp2x, double cp2y, double endx, double endy)/*-{
+			return {p1: 	{x: prevx, y: prevy},
+							p2: 	{x: endx, y: endy},
+							cp1: 	{x: cp1x, y: cp1y},
+							cp2: 	{x: cp2x, y: cp2y}};
+		}-*/;
+	}
+
+	public static Segment createSegment(double prevx, double prevy, double cp1x, double cp1y, double cp2x, double cp2y, double endx, double endy) {
+		return Segment.create(prevx, prevy, cp1x, cp1y, cp2x, cp2y, endx, endy);
+	}
+
+	public static JsArray<Segment> createSegments(Segment segment) {
+		JsArray<Segment> result = JsArray.createArray().cast();
+		result.push(segment);
+		return result;
 	}
 
 	public static JsArray<Point> toPoints(List<Integer> points) {

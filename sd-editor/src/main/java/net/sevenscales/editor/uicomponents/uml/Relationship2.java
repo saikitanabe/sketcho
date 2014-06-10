@@ -244,6 +244,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
         int endy = points.get(i + 3);
 
         ControlPoint c = createCurve(prevx, prevy, endx, endy);
+        BezierHelpers.Segment seg = BezierHelpers.createSegment(prevx, prevy, c.c1x, c.c1y, c.c2x, c.c2y, endx, endy);
+        segments = BezierHelpers.createSegments(seg);
         result = " C" + c.c1x + "," + c.c1y + " " + c.c2x + "," + c.c2y + " ";
       }
       return result;
@@ -279,12 +281,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       this.c2x = c2x;
       this.c2y = c2y;
     }
-  }
-
-  private ControlPoint createMultiPointCurve(double prevx, double prevy, double nextx, double nexty) {
-    ControlPoint result = new ControlPoint();
-
-    return result;
   }
 
   private ControlPoint createCurve(double prevx, double prevy, double endx, double endy) {
@@ -935,6 +931,15 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     // surface.getMouseDiagramManager().getDragHandler().detach(this);
   }
 
+  public void removePoint(int index) {
+    if (index > 0 && index < points.size() - 2 && (index * 2 + 1) < points.size()) {
+      // do not allow to remove first or last point
+      // NOTE order is important or would remove wrong y (actually x) if reversed
+      points.remove(index * 2 + 1);
+      points.remove(index * 2);
+    }
+  }
+
   private void detachAnchor(Anchor anchor) {
     if (anchor.getAnchorElement() != null) {
       anchor.getAnchorElement().detach();
@@ -1362,26 +1367,25 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       double by = 0;
       double prevx = 0;
       double prevy = 0;
-      ControlPoint cp = new ControlPoint();
-      if (size <= 4) {
-        cp = createCurve(x1, y1, x2, y2);
-      } else {
-        BezierHelpers.Segment lastSegment = relLine.lastSegment();
-        if (lastSegment != null) {
-          nextx = lastSegment.getPoint2().getX();
-          cp.c2x = lastSegment.getControlPoint2().getX();
-          cp.c1x = lastSegment.getControlPoint1().getX();
-          prevx = lastSegment.getPoint1().getX();
+      double cp1x = 0;
+      double cp1y = 0;
+      double cp2x = 0;
+      double cp2y = 0;
+      BezierHelpers.Segment lastSegment = relLine.lastSegment();
+      if (lastSegment != null) {
+        nextx = lastSegment.getPoint2().getX();
+        cp2x = lastSegment.getControlPoint2().getX();
+        cp1x = lastSegment.getControlPoint1().getX();
+        prevx = lastSegment.getPoint1().getX();
 
-          nexty = lastSegment.getPoint2().getY(); 
-          cp.c2y = lastSegment.getControlPoint2().getY();
-          cp.c1y = lastSegment.getControlPoint1().getY();
-          prevy = lastSegment.getPoint1().getY();
-        }
+        nexty = lastSegment.getPoint2().getY(); 
+        cp2y = lastSegment.getControlPoint2().getY();
+        cp1y = lastSegment.getControlPoint1().getY();
+        prevy = lastSegment.getPoint1().getY();
       }
 
-      bx = BezierHelpers.bezierInterpolation(t, nextx, cp.c2x, cp.c1x, prevx);
-      by = BezierHelpers.bezierInterpolation(t, nexty, cp.c2y, cp.c1y, prevy);
+      bx = BezierHelpers.bezierInterpolation(t, nextx, cp2x, cp1x, prevx);
+      by = BezierHelpers.bezierInterpolation(t, nexty, cp2y, cp1y, prevy);
 
       // Debug curve visualization START
       // tempCircle.setShape(bx, by, 5);

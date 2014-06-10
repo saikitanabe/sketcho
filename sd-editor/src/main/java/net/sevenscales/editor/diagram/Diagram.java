@@ -33,6 +33,11 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
   public void addDiagramSelectionHandler(DiagramSelectionHandler selectionHandler);
   void removeFromParent();
   boolean isRemoved();
+  /**
+  * Not deleting whole element, but part of it, so it is actually a modify.
+  * E.g. relationship point deletion is relationship modify not delete actual relationship.
+  */
+  boolean changeRemoveToModify();
   List<IShape> getElements();
   // text helper elements are not included in getElements
   List<List<IShape>> getTextElements();

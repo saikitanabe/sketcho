@@ -28,7 +28,8 @@ import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
-public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramProxy, DiagramDragHandler, IGlobalElement {
+public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramProxy, DiagramDragHandler, IGlobalElement, CircleElement.DeleteHandler
+ {
   private static final SLogger logger = SLogger.createLogger(RelationshipHandleHelpers.class);
   
   private static Map<ISurfaceHandler, RelationshipHandleHelpers> instances;
@@ -126,13 +127,6 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
         x += parentRelationship.getTransformX();
         y += parentRelationship.getTransformY();
         setHandlePosition(h, x, y);
-        if (parentRelationship.isCurved() && !getStartHandle().equals(h) && !getEndHandle().equals(h)) {
-          Color c = Theme.getCurrentColorScheme().getBorderColor();
-          h.setFill(c.red, c.green, c.blue, c.opacity);
-        } else {
-          // transparent
-          h.setFill(0, 0, 0, 0);
-        }
         h.setVisible(show);
       } else {
         // hide rest from the pool
@@ -252,6 +246,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     // pass events to parent relationship
     h.addMouseDiagramHandler(this);
     h.setVisible(false);
+    h.setDeleteHandler(this);
     return h;
   }
 
@@ -606,6 +601,16 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     
     parentRelationship = null;
     instances.clear();
+  }
+
+  @Override
+  public void remove(CircleElement ce) {
+    // handles.remove(ce);
+    // ce.removeFromParent();
+    int index = handles.indexOf(ce);
+    ce.setVisible(false);
+    parentRelationship.removePoint(index);
+    parentRelationship.doSetShape();
   }
 
 }

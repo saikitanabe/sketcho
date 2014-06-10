@@ -6,6 +6,7 @@ import java.util.List;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramProxy;
@@ -32,6 +33,11 @@ public class CircleElement extends AbstractDiagramItem {
 //  private CircleShape shape = new CircleShape();
 	private IGroup group;
 	private ICircle selectionArea;
+	private DeleteHandler deleteHandler;
+
+	public interface DeleteHandler {
+		void remove(CircleElement ce);
+	}
 
 	public CircleElement(IGroup layer, ISurfaceHandler surface, DiagramProxy parent, int circleX, int circleY, int radius, boolean editable, IDiagramItemRO item) {
 		this(layer, surface, parent, circleX, circleY, radius, 0, editable, item);
@@ -67,6 +73,10 @@ public class CircleElement extends AbstractDiagramItem {
 			listen(circle);
 			listen(selectionArea);
 		}
+	}
+
+	public void setDeleteHandler(DeleteHandler deleteHandler) {
+		this.deleteHandler = deleteHandler;
 	}
 	
 	private void listen(ICircle circle) {
@@ -146,6 +156,33 @@ public class CircleElement extends AbstractDiagramItem {
 	  	selectionArea.setShape(cx, cy, selectionArea.getRadius());
 	  }
 	}
+
+	@Override
+	public Diagram getOwnerComponent(ActionType actionType) {
+		if (ActionType.DELETE.equals(actionType)) {
+			return this;
+		}
+		return super.getOwnerComponent(actionType);
+	}
+
+	@Override
+  public void removeFromParent() {
+  	if (deleteHandler != null) {
+  		deleteHandler.remove(this);
+  	} else {
+  		// normal remove parent element
+  		super.getOwnerComponent().removeFromParent();
+  	}
+  }
+
+  @Override
+  public boolean changeRemoveToModify() {
+    if (deleteHandler !=null) {
+    	return true;
+    } else {
+    	return super.changeRemoveToModify();
+    }
+  }
 
   @Override
   public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {

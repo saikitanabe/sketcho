@@ -20,6 +20,7 @@ import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
 import net.sevenscales.editor.api.event.SelectionEvent;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.UnselectAllEvent;
+import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
@@ -28,6 +29,7 @@ import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.content.ui.UIKeyHelpers;
 
 import com.google.gwt.dom.client.NativeEvent;
@@ -219,7 +221,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     _remove(diagram, removed);
 
     handleAdditionalRemovals(removed);
-    surface.getEditorContext().getEventBus().fireEvent(new BoardRemoveDiagramsEvent(removed));
+    fireDeletedOrModifyEvent(removed);
   }
 
   /**
@@ -250,8 +252,27 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     logger.debug("removeSelected: removed {}", removed);
 
     handleAdditionalRemovals(removed);
-		surface.getEditorContext().getEventBus().fireEvent(new BoardRemoveDiagramsEvent(removed));
+    fireDeletedOrModifyEvent(removed);
 	}
+
+  private void fireDeletedOrModifyEvent(Set<Diagram> removed) {
+    Set<Diagram> confirmedRemove = new HashSet<Diagram>();
+    Set<Diagram> convertedToModify = new HashSet<Diagram>();
+    for (Diagram d : removed) {
+      if (d.changeRemoveToModify()) {
+        convertedToModify.add(d);
+      } else {
+        confirmedRemove.add(d);
+      }
+    }
+
+    if (confirmedRemove.size() > 0) {
+      surface.getEditorContext().getEventBus().fireEvent(new BoardRemoveDiagramsEvent(confirmedRemove));
+    }
+    if (convertedToModify.size() > 0) {
+      surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(convertedToModify));
+    }
+  }
 
   /**
   * This can be used to hook parent deletion after
@@ -284,14 +305,14 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     }
 
     handleAdditionalRemovals(removed);
-    surface.getEditorContext().getEventBus().fireEvent(new BoardRemoveDiagramsEvent(removed));
+    fireDeletedOrModifyEvent(removed);
   }
 
   private void _remove(Diagram diagram, Set<Diagram> removed) {
 
     // first remove children if any since e.g. comment thread
     // cannot be deleted straight, but through 0 child automatically.
-    Diagram removeItem = diagram.getOwnerComponent();
+    Diagram removeItem = diagram.getOwnerComponent(ActionType.DELETE);
     List<? extends Diagram> childElements = removeItem.getChildElements();
     if (childElements != null) {
       for (int i = childElements.size() - 1; i >= 0; --i) {

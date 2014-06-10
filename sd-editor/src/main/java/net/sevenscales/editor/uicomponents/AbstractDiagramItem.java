@@ -391,6 +391,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public boolean isRemoved() {
     return removed;
   }
+
+  public boolean changeRemoveToModify() {
+    return false;
+  }
   
   public void select() {
   	logger.debug("select {}", connectionHelpers.isShown());
