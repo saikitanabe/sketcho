@@ -1684,16 +1684,38 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	
   @Override
   public int getRelativeLeft() {
+    // TODO wrong calculation not necessarily end points!!
+    // need to loop all points and get smallest point
   	return Math.min(points.get(0), points.get(points.size()-2));
   }
   
   @Override
   public int getRelativeTop() {
-  	int result = Integer.MAX_VALUE;
-  	for (int i = 1; i < points.size(); i += 2) {
-  		result = Math.min(result, points.get(i));
-  	}
-  	return result;
+    if (isCurved()) {
+      return getRelativeTopCurvedLine();
+    } else {
+      return getRelativeTopStraightLine();
+    }
+  }
+
+  private int getRelativeTopCurvedLine() {
+    int result = Integer.MAX_VALUE;
+    for (int i = 0; i < relLine.segments.length(); ++i) {
+      BezierHelpers.Segment seg = relLine.segments.get(i);
+      result = Math.min(result, (int) seg.getPoint1().getY());
+      result = Math.min(result, (int) seg.getPoint2().getY());
+      result = Math.min(result, (int) seg.getControlPoint1().getY());
+      result = Math.min(result, (int) seg.getControlPoint2().getY());
+    }
+    return result;
+  }
+
+  private int getRelativeTopStraightLine() {
+    int result = Integer.MAX_VALUE;
+    for (int i = 1; i < points.size(); i += 2) {
+      result = Math.min(result, points.get(i));
+    }
+    return result;
   }
 
   @Override
