@@ -98,4 +98,12 @@ public class BezierHelpers {
 		return result;
 	}
 
+	public static Segment firstSegment(JsArray<Segment> segments) {
+		Segment result = null;
+		if (segments.length() > 0) {
+			result = segments.get(0);
+		}
+		return result;
+	}
+
 }

@@ -215,8 +215,12 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       lineBackground.setShape(shape);
     }
 
-    public BezierHelpers.Segment lastSegment() {
+    public BezierHelpers.Segment getLastSegment() {
       return BezierHelpers.lastSegment(segments);
+    }
+
+    public BezierHelpers.Segment getFirstSegment() {
+      return BezierHelpers.firstSegment(segments);
     }
 
     private String calcTwoPointsCurvePath(List<Integer> points) {
@@ -1371,7 +1375,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       double cp1y = 0;
       double cp2x = 0;
       double cp2y = 0;
-      BezierHelpers.Segment lastSegment = relLine.lastSegment();
+      BezierHelpers.Segment lastSegment = relLine.getLastSegment();
       if (lastSegment != null) {
         nextx = lastSegment.getPoint2().getX();
         cp2x = lastSegment.getControlPoint2().getX();
@@ -1400,12 +1404,12 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       // Debug curve visualization END
 
       calculateArrowHead(angle, ARROW_WIDTH, bx, by, x2, y2);
-      calculateDiamond(angle, ARROW_WIDTH, bx, by, x2, y2);
     } else {
       calculateArrowHead(angle, ARROW_WIDTH, x1, y1, x2, y2);
-      calculateDiamond(angle, ARROW_WIDTH, x1, y1, x2, y2);
     }
-    
+
+    conditionallyCalculateDiamond();
+
     relationshipText.setShape(points);
 
 //    String color = startSelection.getVisibility() ? "blue" : "black";
@@ -1450,6 +1454,37 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     arrowStartPolyline.setShape(startx, starty);
 
     relationshipHandleHelpers.doSetShape(currentDragged);
+  }
+
+  private void conditionallyCalculateDiamond() {
+    if (info.isAggregate() || info.isDirectedStart()) {
+      if (isCurved()) {
+        calculateCurvedDiamond();
+      } else {
+        calculateDiamond(angle, ARROW_WIDTH, points.get(0), points.get(1), points.get(2), points.get(3));
+      }
+    }
+  }
+
+  private void calculateCurvedDiamond() {
+    BezierHelpers.Segment segment = relLine.getFirstSegment();
+    if (segment != null) {
+      double nextx = segment.getPoint1().getX();
+      double cp2x = segment.getControlPoint1().getX();
+      double cp1x = segment.getControlPoint2().getX();
+      double prevx = segment.getPoint2().getX();
+
+      double nexty = segment.getPoint1().getY(); 
+      double cp2y = segment.getControlPoint1().getY();
+      double cp1y = segment.getControlPoint2().getY();
+      double prevy = segment.getPoint2().getY();
+
+      double t = 0.05;
+      double bx = BezierHelpers.bezierInterpolation(t, nextx, cp2x, cp1x, prevx);
+      double by = BezierHelpers.bezierInterpolation(t, nexty, cp2y, cp1y, prevy);
+
+      calculateDiamond(angle, ARROW_WIDTH, points.get(0), points.get(1), bx, by);
+    }
   }
 
   private void fillInheritance(String color) {
