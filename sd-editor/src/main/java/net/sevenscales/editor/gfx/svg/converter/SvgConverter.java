@@ -234,7 +234,7 @@ public class SvgConverter {
     	if (left < outerleft) {
     		outerleft = left;
     	}
-    	int right = d.getLeft() + d.getWidth();
+    	int right = left + d.getWidth();
     	if (right > outerright) {
     		outerright = right;
     	}
@@ -242,7 +242,7 @@ public class SvgConverter {
     	if (top < outertop) {
     		outertop = top;
     	}
-    	int bottom = d.getTop() + d.getHeightWithText();
+    	int bottom = top + d.getHeightWithText();
     	if (bottom > outerbottom) {
     		outerbottom = bottom;
     	}

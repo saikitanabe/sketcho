@@ -33,7 +33,7 @@ public class SvgPath extends SvgLine {
     - hack needs to be changed if there are different stroke widths
     */
     // params.put("%stroke-width%", String.valueOf(path.getStrokeWidth()));
-    params.put("%stroke-width%", strokeWidth(diagram));
+    params.put("%stroke-width%", strokeWidth(diagram, path));
     /* TODO IE hack ENDS */
 
     params.put("%stroke%", rgb(String.valueOf(path.getStrokeColor().toRgb())));
@@ -68,12 +68,12 @@ public class SvgPath extends SvgLine {
     return parse(path, template, params, diagram);
   }
 
-  private static String strokeWidth(Diagram diagram) {
+  private static String strokeWidth(Diagram diagram, IPath path) {
     if (isConfluence(diagram.getSurfaceHandler()) && (diagram instanceof GenericElement)) {
       GenericElement ge = (GenericElement) diagram;
       return String.valueOf(ge.scaledStrokeWidth(ge.getFactorX(), ge.getFactorY()));
     } else {
-      return "2";
+      return String.valueOf(path.getStrokeWidth());
     }
   }
 

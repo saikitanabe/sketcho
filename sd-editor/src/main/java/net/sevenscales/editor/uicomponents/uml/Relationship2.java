@@ -1585,8 +1585,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   public void curve() {
     info.asCurve();
     getDiagramItem().setShapeProperties(ShapeProperty.CURVED_ARROW.getValue());
-    surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
     doSetShape();
+    surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
   }
 	
 	private void swapStartAndEndAnchors(Anchor startAnchor, Anchor endAnchor) {
@@ -1684,11 +1684,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	
   @Override
   public int getRelativeLeft() {
-    // TODO wrong calculation not necessarily end points!!
-    // need to loop all points and get smallest point
-  	return Math.min(points.get(0), points.get(points.size()-2));
+    if (isCurved()) {
+      return getRelativeLeftCurvedLine();
+    } else {
+      return getRelativeLeftStraightLine();
+    }
   }
-  
+
   @Override
   public int getRelativeTop() {
     if (isCurved()) {
@@ -1696,6 +1698,18 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     } else {
       return getRelativeTopStraightLine();
     }
+  }
+
+  private int getRelativeLeftCurvedLine() {
+    int result = Integer.MAX_VALUE;
+    for (int i = 0; i < relLine.segments.length(); ++i) {
+      BezierHelpers.Segment seg = relLine.segments.get(i);
+      result = Math.min(result, (int) seg.getPoint1().getX());
+      result = Math.min(result, (int) seg.getPoint2().getX());
+      result = Math.min(result, (int) seg.getControlPoint1().getX());
+      result = Math.min(result, (int) seg.getControlPoint2().getX());
+    }
+    return result;
   }
 
   private int getRelativeTopCurvedLine() {
@@ -1710,6 +1724,14 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return result;
   }
 
+  private int getRelativeLeftStraightLine() {
+    int result = Integer.MAX_VALUE;
+    for (int i = 0; i < points.size(); i += 2) {
+      result = Math.min(result, points.get(i));
+    }
+    return result;
+  }
+
   private int getRelativeTopStraightLine() {
     int result = Integer.MAX_VALUE;
     for (int i = 1; i < points.size(); i += 2) {
@@ -1720,12 +1742,54 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   @Override
   public int getWidth() {
-    return DiagramHelpers.getWidth(points);
+    if (isCurved()) {
+      return getWidthCurved();
+    } else {
+      return DiagramHelpers.getWidth(points);
+    }
+  }
+
+  private int getWidthCurved() {
+    int result = Integer.MIN_VALUE;
+    int left = Integer.MAX_VALUE;
+    for (int i = 0; i < relLine.segments.length(); ++i) {
+      BezierHelpers.Segment seg = relLine.segments.get(i);
+      result = Math.max(result, (int) seg.getPoint1().getX());
+      result = Math.max(result, (int) seg.getPoint2().getX());
+      result = Math.max(result, (int) seg.getControlPoint1().getX());
+      result = Math.max(result, (int) seg.getControlPoint2().getX());
+      left = Math.min(left, (int) seg.getPoint1().getX());
+      left = Math.min(left, (int) seg.getPoint2().getX());
+      left = Math.min(left, (int) seg.getControlPoint1().getX());
+      left = Math.min(left, (int) seg.getControlPoint2().getX());
+    }
+    return result - left;
   }
 
   @Override
   public int getHeight() {
-    return DiagramHelpers.getHeight(points);
+    if (isCurved()) {
+      return getHeightCurved();
+    } else {
+      return DiagramHelpers.getHeight(points);
+    }
+  }
+
+  private int getHeightCurved() {
+    int result = Integer.MIN_VALUE;
+    int top = Integer.MAX_VALUE;
+    for (int i = 0; i < relLine.segments.length(); ++i) {
+      BezierHelpers.Segment seg = relLine.segments.get(i);
+      result = Math.max(result, (int) seg.getPoint1().getY());
+      result = Math.max(result, (int) seg.getPoint2().getY());
+      result = Math.max(result, (int) seg.getControlPoint1().getY());
+      result = Math.max(result, (int) seg.getControlPoint2().getY());
+      top = Math.min(top, (int) seg.getPoint1().getY());
+      top = Math.min(top, (int) seg.getPoint2().getY());
+      top = Math.min(top, (int) seg.getControlPoint1().getY());
+      top = Math.min(top, (int) seg.getControlPoint2().getY());
+    }
+    return result - top;
   }
   
 	@Override
