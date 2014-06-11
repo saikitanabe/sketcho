@@ -24,7 +24,7 @@ public class EffectHelpers {
 	
 	public static native void tooltipper()/*-{
 	  if (typeof $wnd.jq172 == "function") $wnd.jq172('.tooltipper').tooltip();
-	  else if (typeof $wnd.jQuery == "function") $wnd.jQuery('.tooltipper').tooltip();
+	  else if (typeof $wnd.jQuery == "function") $wnd.jQuery('.tooltipper').tooltip({container:'body'});
 	}-*/;
 
 	public static native void tooltipperHide()/*-{
