@@ -19,6 +19,7 @@ import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
 
 
@@ -122,7 +123,15 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       points.add(xx+1);
       points.add(yy+1);
       String defaultRelationship = RelationshipHelpers.relationship(sender, surface.getEditorContext());
-      this.createdRelationship = new Relationship2(surface, new RelationshipShape2(points), defaultRelationship, Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, new DiagramItemDTO());
+
+      // Default arrow type is curved
+      RelationshipShape2 rshape = new RelationshipShape2(points);
+      rshape.asCurve();
+      DiagramItemDTO di = new DiagramItemDTO();
+      di.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue());
+      // Default arrow type is curved ends configuration
+
+      this.createdRelationship = new Relationship2(surface, rshape, defaultRelationship, Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, di);
       logger.debug("createdRelationship {}...", createdRelationship);
       createdRelationship.setVisible(false);
       
