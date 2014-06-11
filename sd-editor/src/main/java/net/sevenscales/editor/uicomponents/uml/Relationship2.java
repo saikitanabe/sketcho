@@ -301,18 +301,20 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     CardinalDirection cardinal1 = getCardinal(getStartX(), getStartY(), getStartAnchor());
     CardinalDirection cardinal2 = getCardinal(getEndX(), getEndY(), getEndAnchor());
 
-    if (handleSequenceDiagram(getStartAnchor(), getEndAnchor(), result, prevx, prevy, mx, my, endx, endy)) {
+    Diagram d1 = getStartAnchor().getDiagram();
+    Diagram d2 = getEndAnchor().getDiagram();
+    if (d1 != null && d2 != null && handleSequenceDiagram(getStartAnchor(), getEndAnchor(), result, prevx, prevy, mx, my, endx, endy)) {
 
-    } else if (cardinal1 != null && cardinal2 != null && 
+    } else if (d1 != null && d2 != null && cardinal1 != null && cardinal2 != null && 
         isConnectedDifferentSideEdges(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2,
                                       result, prevx, prevy, mx, my, endx, endy)) {
-    } else if (cardinal1 != null && cardinal2 != null && 
+    } else if (d1 != null && d2 != null && cardinal1 != null && cardinal2 != null && 
                isConnectSameSideEdges(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2,
                                       result, prevx, prevy, mx, my, endx, endy)) {
-    } else if (cardinal1 != null && cardinal2 != null && 
+    } else if (d1 != null && d2 != null && cardinal1 != null && cardinal2 != null && 
                isConnectedToSameNorthOrSouthEdges(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2,
                                                   result, prevx, prevy, mx, my, endx, endy)) {
-    } else if (cardinal1 != null && cardinal2 != null && 
+    } else if (d1 != null && d2 != null && cardinal1 != null && cardinal2 != null && 
                isNorthOrSouthEdgeConnectedToWestOrEast(getStartAnchor(), getEndAnchor(), cardinal1, cardinal2,
                                                   result, prevx, prevy, mx, my, endx, endy)) {
     } else {
@@ -427,10 +429,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   private int distanceWithFactorial(Diagram d1, Diagram d2) {
-    final int defaultDistance = 70;
-    int d = Math.abs((d1.getLeft() + d1.getWidth()) - (d2.getLeft() + d2.getWidth()));
-    float distFactor = 0.3f;
-    return (int) defaultDistance + (int) (distFactor * d);
+    if (d1 != null && d2 != null) {
+      final int defaultDistance = 70;
+      int d = Math.abs((d1.getLeft() + d1.getWidth()) - (d2.getLeft() + d2.getWidth()));
+      float distFactor = 0.3f;
+      return (int) defaultDistance + (int) (distFactor * d);
+    }
+    return 0;
   }
 
   private int distanceWithFactorial(double distance) {
