@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.gwt.core.client.JsArrayInteger;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
+import net.sevenscales.editor.gfx.domain.PointDouble;
 
 
 public class BezierHelpers {
@@ -60,6 +61,22 @@ public class BezierHelpers {
     + (3 * b + t * (-6 * b + b * 3 * t)) * t
     + (c * 3 - c * 3 * t) * t2
     + d * t3;
+  }
+
+  public static PointDouble bezierMiddlePoint(int i, JsArray<Segment> segments) {
+  	PointDouble result = null;
+    if (segments != null && i < segments.length()) {
+      double t = 0.5;
+      BezierHelpers.Segment seg = segments.get(i);
+      BezierHelpers.Point p2 = seg.getPoint2();
+      BezierHelpers.Point p1 = seg.getPoint1();
+      BezierHelpers.Point cp1 = seg.getControlPoint1();
+      BezierHelpers.Point cp2 = seg.getControlPoint2();
+      double x = BezierHelpers.bezierInterpolation(t, p2.getX(), cp2.getX(), cp1.getX(), p1.getX());
+      double y = BezierHelpers.bezierInterpolation(t, p2.getY(), cp2.getY(), cp1.getY(), p1.getY());
+      result = new PointDouble(x, y);
+    }
+    return result;
   }
 
 	public static JsArray<Segment> segments(List<Integer> points) {

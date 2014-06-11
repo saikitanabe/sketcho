@@ -23,6 +23,7 @@ import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.diagram.utils.BezierHelpers;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.PointDouble;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
@@ -160,18 +161,10 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     for (int i = 0; i < bendHandles.size(); ++i) {
       CircleElement bh = bendHandles.get(i);
       if (i < parentRelHandlesCount - 1) {
-        JsArray<BezierHelpers.Segment> segments = parentRelationship.getSegments();
-        if (i < segments.length()) {
-          double t = 0.5;
-          BezierHelpers.Segment seg = segments.get(i);
-          BezierHelpers.Point p2 = seg.getPoint2();
-          BezierHelpers.Point p1 = seg.getPoint1();
-          BezierHelpers.Point cp1 = seg.getControlPoint1();
-          BezierHelpers.Point cp2 = seg.getControlPoint2();
-          double x = BezierHelpers.bezierInterpolation(t, p2.getX(), cp2.getX(), cp1.getX(), p1.getX());
-          double y = BezierHelpers.bezierInterpolation(t, p2.getY(), cp2.getY(), cp1.getY(), p1.getY());
-          setHandlePosition(bh, x + parentRelationship.getTransformX(), 
-                                y + parentRelationship.getTransformY());
+        PointDouble point = BezierHelpers.bezierMiddlePoint(i, parentRelationship.getSegments());
+        if (point != null) {
+          setHandlePosition(bh, point.x + parentRelationship.getTransformX(), 
+                                point.y + parentRelationship.getTransformY());
           bh.setVisible(show);
         }
       } else {

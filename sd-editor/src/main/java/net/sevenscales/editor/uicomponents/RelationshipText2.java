@@ -11,7 +11,10 @@ import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.PointDouble;
 import net.sevenscales.editor.uicomponents.impl.RelationshipTextUtil2;
+import net.sevenscales.editor.diagram.utils.BezierHelpers;
+
 
 public class RelationshipText2 {
 	private static final SLogger logger = SLogger.createLogger(RelationshipText2.class);
@@ -91,7 +94,7 @@ public class RelationshipText2 {
   	return ClickTextPosition.ALL;
   }
 
-  public void setText(RelationshipTextUtil2 textUtil, List<Integer> points) {
+  public void setText(RelationshipTextUtil2 textUtil, IRelationship parent) {
     start = textUtil.parseLeftText();
     end = textUtil.parseRightText();
     label = textUtil.parseLabel();
@@ -108,7 +111,7 @@ public class RelationshipText2 {
     endElement.setAlignment(IText.ALIGN_CENTER);
     endElement.setAttribute("dominant-baseline", "central");
     
-    setShape(points);
+    setShape(parent);
 
 //    textItems = textParser.parse(text);
 //    if (textItems.get(MULTIPLICITY_1) != null) {
@@ -149,19 +152,19 @@ public class RelationshipText2 {
 //    SilverUtils.resetRenderTransform(endElement);
   }
 
-  public void setShape(List<Integer> points) {
+  public void setShape(IRelationship parent) {
     int startLine = 0;
-    int endLine = points.size() - 4;
-    int lineCount = points.size()/2-1;
+    int endLine = parent.getPoints().size() - 4;
+    int lineCount = parent.getPoints().size()/2-1;
     int middleLine = lineCount/2*2;
     double actualHeight = 12;
     
     {
       // start
-    	int sx = points.get(startLine);
-    	int sy = points.get(startLine+1); 
-    	int ex = points.get(startLine+2);
-    	int ey = points.get(startLine+3);
+    	int sx = parent.getPoints().get(startLine);
+    	int sy = parent.getPoints().get(startLine+1); 
+    	int ex = parent.getPoints().get(startLine+2);
+    	int ey = parent.getPoints().get(startLine+3);
       int width = 14;
       int height = 15;
     	calculateLocation(width, height, sx, sy, ex, ey, sx, sy, Math.PI/2);
@@ -172,7 +175,7 @@ public class RelationshipText2 {
       // end
       int width = 15;
       int height = 16;
-    	calculateLocation(width, height, points.get(endLine), points.get(endLine+1), points.get(endLine+2), points.get(endLine+3), points.get(endLine+2), points.get(endLine+3), 0);
+    	calculateLocation(width, height, parent.getPoints().get(endLine), parent.getPoints().get(endLine+1), parent.getPoints().get(endLine+2), parent.getPoints().get(endLine+3), parent.getPoints().get(endLine+2), parent.getPoints().get(endLine+3), 0);
       endElement.setShape(posx, posy);
     }
 
@@ -182,14 +185,21 @@ public class RelationshipText2 {
 
     int x = 0;
     int y = 0;
-    if (lineCount % 2 == 0) {
-      x = points.get(middleLine);
-      y = points.get(middleLine+1) - (int) actualHeight;
+    if (parent.isCurved() && parent.getPoints().size() == 4) {
+      // applies only when only two points; otherwise can calculate normally
+      PointDouble point = BezierHelpers.bezierMiddlePoint(0, parent.getSegments());
+      if (point != null) {
+        x = (int) point.x - (int) (actualWidth / 2);
+        y = (int) point.y;
+      }
+    } else if (lineCount % 2 == 0) {
+      x = parent.getPoints().get(middleLine);
+      y = parent.getPoints().get(middleLine+1) - (int) actualHeight;
     } else {
-      x = (points.get(middleLine) + points.get(middleLine+2) - (int)actualWidth) / 2;
-      int align = points.get(middleLine+1) >= points.get(middleLine+3) ? - (int) actualHeight : 0;
-//      y = (points.get(middleLine+1) + points.get(middleLine+3)) / 2 + align;
-      y = (points.get(middleLine+1) + points.get(middleLine+3)) / 2 + align/2;
+      x = (parent.getPoints().get(middleLine) + parent.getPoints().get(middleLine+2) - (int)actualWidth) / 2;
+      int align = parent.getPoints().get(middleLine+1) >= parent.getPoints().get(middleLine+3) ? - (int) actualHeight : 0;
+//      y = (parent.getPoints().get(middleLine+1) + parent.getPoints().get(middleLine+3)) / 2 + align;
+      y = (parent.getPoints().get(middleLine+1) + parent.getPoints().get(middleLine+3)) / 2 + align/2;
     }
     
     labelElement.setShape(x, y);

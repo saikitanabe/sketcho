@@ -50,13 +50,15 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
+import net.sevenscales.editor.uicomponents.IRelationship;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 
 
-public class Relationship2 extends AbstractDiagramItem implements DiagramDragHandler, DiagramResizeHandler {
+public class Relationship2 extends AbstractDiagramItem implements DiagramDragHandler, DiagramResizeHandler,
+  IRelationship {
 	private static final SLogger logger = SLogger.createLogger(Relationship2.class);
 
   private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
@@ -1268,7 +1270,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //    }
 
     setShape(rs);
-    relationshipText.setText(textUtil, points);
+    relationshipText.setText(textUtil, this);
     relationshipText.applyTextColor(textColor);
     
     // notify property text area
@@ -1422,7 +1424,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     conditionallyCalculateDiamond();
 
-    relationshipText.setShape(points);
+    relationshipText.setShape(this);
 
 //    String color = startSelection.getVisibility() ? "blue" : "black";
 //  line.setShape(start.x, start.y, end.x, end.y);
