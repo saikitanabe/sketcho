@@ -180,6 +180,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			private boolean setMenuItemVisibility(Diagram diagram, Diagram[] selected) {
 				Display freehandMenu = Display.NONE;
 				Display reverseMenu = Display.NONE;
+				Display curvedArrowMenu = Display.NONE;
+				Display rectifiedArrowMenu = Display.NONE;
 				Display colorMenu = Display.NONE;
 				boolean changeConnectionMenu = false;
 				Display deleteMenuVisibility = Display.NONE;
@@ -244,9 +246,17 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					duplicateMenuVisibility = Display.INLINE_BLOCK;
 				}
 
-				changeConnection.setVisible(allConnections(selected));
+				boolean justConnections = allConnections(selected);
+				changeConnection.setVisible(justConnections);
+				if (justConnections) {
+					curvedArrowMenu = Display.INLINE_BLOCK;
+					rectifiedArrowMenu = Display.INLINE_BLOCK;
+				}
+
 				freehandOff.getStyle().setDisplay(freehandMenu);
 				reverseConnection.getStyle().setDisplay(reverseMenu);
+				rectifiedArrow.getStyle().setDisplay(rectifiedArrowMenu);
+				curvedArrow.getStyle().setDisplay(curvedArrowMenu);
 				colorize.getStyle().setDisplay(colorMenu);
 				delete.getStyle().setDisplay(deleteMenuVisibility);
 				duplicate.getStyle().setDisplay(duplicateMenuVisibility);
