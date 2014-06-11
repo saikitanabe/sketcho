@@ -148,7 +148,14 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       }
     }
 
+    void createIfNullAndDirectedStart() {
+      if (parent.info != null && parent.info.isDirectedStart()) {
+        createIfNull();
+      }
+    }
+
     void setStroke(String color) {
+      createIfNullAndDirectedStart();
       if (arrowStart != null) {
         arrowStart.setStroke(color);
       }
