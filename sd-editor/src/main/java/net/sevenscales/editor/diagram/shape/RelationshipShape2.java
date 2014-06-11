@@ -74,6 +74,10 @@ public class RelationshipShape2 extends Info {
   public void asCurve() {
     caps |= RelationshipShape2.CURVED;
   }
+
+  public void asStraight() {
+    caps &= 0xffffff & ~RelationshipShape2.CURVED;
+  }
   
   @Override
   public int getLeft() {

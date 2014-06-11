@@ -87,6 +87,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement duplicate;
 	@UiField SimplePanel changeConnection;
 	@UiField AnchorElement curvedArrow;
+	@UiField AnchorElement rectifiedArrow;
 	@UiField AnchorElement reverseConnection;
 	@UiField AnchorElement colorize;
 	@UiField AnchorElement delete;
@@ -486,6 +487,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		handleStreams(this);
 		closeOnSave();
 		tapCurvedArrow(curvedArrow, this);
+		tapRectifiedArrow(rectifiedArrow, this);
 	}
 
 	private native void handleStreams(UiContextMenu me)/*-{
@@ -505,12 +507,30 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		})
 	}-*/;
 
+	private native void tapRectifiedArrow(Element e, UiContextMenu me)/*-{
+		$wnd.Hammer(e).on('tap', function() {
+			$wnd.$('.tooltip').hide()
+			me.@net.sevenscales.editor.content.ui.UiContextMenu::rectifiedArrow()();
+			// $wnd.$($doc).trigger('showFreehandColorMenu', e)
+		})
+	}-*/;
+
 	private void curvedArrow() {
 		logger.debug("curvedArrow...");
 		Set<Diagram> selected = selectionHandler.getSelectedItems();
 		for (Diagram d : selected) {
 			if (d instanceof Relationship2) {
 				((Relationship2) d).curve();
+			}
+		}
+	}
+
+	private void rectifiedArrow() {
+		logger.debug("rectifiedArrow...");
+		Set<Diagram> selected = selectionHandler.getSelectedItems();
+		for (Diagram d : selected) {
+			if (d instanceof Relationship2) {
+				((Relationship2) d).straight();
 			}
 		}
 	}

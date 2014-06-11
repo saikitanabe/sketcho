@@ -1585,7 +1585,18 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   public void curve() {
     info.asCurve();
     getDiagramItem().setShapeProperties(ShapeProperty.CURVED_ARROW.getValue());
+    reset();
+  }
+
+  public void straight() {
+    info.asStraight();
+    getDiagramItem().setShapeProperties(0);
+    reset();
+  }
+
+  private void reset() {
     doSetShape();
+    relationshipHandleHelpers.showConditionally(this, true);
     surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
   }
 	
