@@ -187,7 +187,15 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 			// should not show context menu if this was a drag and select
 			Set<Diagram> selected = getSelectedItems();
 			Diagram[] diagrams = new Diagram[1];
-			surface.getEditorContext().getEventBus().fireEvent(new SelectionMouseUpEvent(selected.toArray(diagrams), sender));
+      Diagram lastSelected = sender;
+      if (!selected.contains(lastSelected)) {
+        // lastSelected is not one of those that was original clicked on mouse down
+        // so select random from selected, this should be case of only one selected...
+        // e.g. relationship is selected and after selection circle becomes visible and gets mouse up
+        // if cursor is on top of a circle
+        lastSelected = selected.iterator().next();
+      }
+			surface.getEditorContext().getEventBus().fireEvent(new SelectionMouseUpEvent(selected.toArray(diagrams), lastSelected));
 		}
 		currentHandler = null;
 	}
@@ -507,7 +515,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 //  selectedItems.add(sender);
   
   List<Diagram> notifyDiagrams = new ArrayList<Diagram>();
-  Diagram notifyDiagram = sender.getOwnerComponent();
+  Diagram notifyDiagram = sender.getOwnerComponent(ActionType.SELECT);
   notifyDiagrams.add(notifyDiagram);
   selectionHandlers.fireSelection(notifyDiagrams);
 

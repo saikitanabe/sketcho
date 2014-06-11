@@ -823,7 +823,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
   
   public String getLink() {
-    return data.getFirstLink();
+    if (data != null) {
+      return data.getFirstLink();
+    }
+    return null;
   }
 
   public boolean hasLink() {
@@ -1498,7 +1501,16 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   @Override
   public int supportedMenuItems() {
-  	return ContextMenuItem.NO_CUSTOM.getValue() | ContextMenuItem.COLOR_MENU.getValue();
+  	return ContextMenuItem.NO_MENU.getValue() | 
+           ContextMenuItem.DUPLICATE.getValue() |
+           ContextMenuItem.COLOR_MENU.getValue() |
+           ContextMenuItem.URL_LINK.getValue() | 
+           ContextMenuItem.DELETE.getValue();
+  }
+
+  @Override
+  public boolean supportsMenu(ContextMenuItem menuItem) {
+   return (supportedMenuItems() & menuItem.getValue()) == menuItem.getValue();
   }
 
   @Override

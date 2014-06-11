@@ -190,12 +190,12 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				Display changeFontSizeVisibility = Display.NONE;
 				Display layersMenuVisibility = Display.NONE;
 
-				if ((diagram.supportedMenuItems() & ContextMenuItem.FREEHAND_MENU.getValue()) == ContextMenuItem.FREEHAND_MENU.getValue()) {
+				if (diagram.supportsMenu(ContextMenuItem.FREEHAND_MENU)) {
 					freehandMenu = Display.INLINE_BLOCK;
 					freehandOnOff(UiContextMenu.this.editorContext.isTrue(EditorProperty.FREEHAND_MODE));
 				}
 
-				if (selected.length == 1 && (diagram.supportedMenuItems() & ContextMenuItem.REVERSE_CONNECTION_MENU.getValue()) == ContextMenuItem.REVERSE_CONNECTION_MENU.getValue()) {
+				if (selected.length == 1 && diagram.supportsMenu(ContextMenuItem.REVERSE_CONNECTION_MENU)) {
 					// cannot show reverse menu if multiple items, at least for now
 					reverseMenu = Display.INLINE_BLOCK;
 				}
@@ -214,7 +214,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 				if (selected.length == 1 && selected[0].hasLink()) {
 					openEditLinkMenuVisibility = Display.INLINE_BLOCK;
-				} else if (selected.length == 1) {
+				} else if (selected.length == 1 && diagram.supportsMenu(ContextMenuItem.URL_LINK)) {
 					addLinkMenuVisibility = Display.INLINE_BLOCK;
 				}
 
@@ -235,11 +235,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				}
 
 				boolean allowedToShowDeleteMenu = AuthHelpers.allowedToShowDelete(selected);
-				if (allowedToShowDeleteMenu) {
+				if (allowedToShowDeleteMenu && diagram.supportsMenu(ContextMenuItem.DELETE)) {
 					deleteMenuVisibility = Display.INLINE_BLOCK;
 				}
 
-				if (!ifEvenOneIsComment(selected)) {
+				if (!ifEvenOneIsComment(selected) && diagram.supportsMenu(ContextMenuItem.DUPLICATE)) {
 					duplicateMenuVisibility = Display.INLINE_BLOCK;
 				}
 

@@ -9,6 +9,7 @@ import com.google.gwt.core.client.JsArray;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.RelationshipNotAttachedEvent;
 import net.sevenscales.editor.api.impl.TouchHelpers;
@@ -221,24 +222,24 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
       return;
     }
     for (int i = 0; i < points.size(); i+=2) {
-      CircleElement h = createHandle(points.get(i), points.get(i+1), HANDLE_RADIUS, SELECTION_RADIUS);
+      CircleElement h = createHandle(points.get(i), points.get(i+1), HANDLE_RADIUS, SELECTION_RADIUS, true);
       handles.add(h);
       
       // add bend points
       if (i+3 < points.size()) {
         int x = (points.get(i) + points.get(i+2)) / 2;
         int y = (points.get(i+1) + points.get(i+3)) / 2;
-        CircleElement hm = createHandle(x, y, 5, SELECTION_RADIUS);
+        CircleElement hm = createHandle(x, y, 5, SELECTION_RADIUS, false);
         bendHandles.add(hm);
       }
     }
   }
   
-  private CircleElement createHandle(int x, int y, int radius, int selectionRadius) {
-    return createHandle(x, y, radius, selectionRadius, AbstractDiagramItem.DEFAULT_SELECTION_COLOR);
+  private CircleElement createHandle(int x, int y, int radius, int selectionRadius, boolean setDeleteHandler) {
+    return createHandle(x, y, radius, selectionRadius, AbstractDiagramItem.DEFAULT_SELECTION_COLOR, setDeleteHandler);
   }
 
-  private CircleElement createHandle(int x, int y, int radius, int selectionRadius, String color) {
+  private CircleElement createHandle(int x, int y, int radius, int selectionRadius, String color, boolean setDeleteHandler) {
     boolean editable = true;
     CircleElement h = new CircleElement(surface.getInteractionLayer(), surface, this, x, y, radius, selectionRadius, editable, new DiagramItemDTO());
     h.setStroke(color);
@@ -246,7 +247,9 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     // pass events to parent relationship
     h.addMouseDiagramHandler(this);
     h.setVisible(false);
-    h.setDeleteHandler(this);
+    if (setDeleteHandler) {
+      h.setDeleteHandler(this);
+    }
     return h;
   }
 
@@ -365,55 +368,8 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
 //    }
 
     logger.debug("RelationshipHandleHelpers.dragEnd...");
-
-    // drag source cannot be start or end when "eating" points!
-    // int sourceIndex = handles.indexOf(sender);
-    // boolean okToEatPoints = !(sourceIndex == 0 || sourceIndex == handles.size()-1); 
     
     int parentRelHandlesCount = parentHandlesCount();
-    // target drop might be removing points
-//     for (int i = handles.size()-1; okToEatPoints && i >= 0; --i) {
-//       CircleElement h = handles.get(i);
-//       if (i < parentRelHandlesCount && h == sender) {
-//         // get target drop if any
-//         CircleElement target = null;
-//         int targetIndex = -1;
-//         for (int x = handles.size()-1; x >= 0 ; --x) {
-//           CircleElement tmp = handles.get(x);
-//           int x0 = tmp.getLocationX();
-//           int y0 = tmp.getLocationY();
-//           double distance = Math.sqrt(Math.pow(h.getLocationX() - x0, 2) + Math.pow(h.getLocationY()-y0, 2));
-//           if (h != tmp && distance <= tmp.getRadius()) {
-//             target = tmp;
-//             targetIndex = x;
-//             break;
-//           }
-//         }
-        
-//         if (target != null) {
-//           // remove all points in between target and itself
-//           for (int z = targetIndex-1; z >= i && (z * 2 +1) < points.size(); --z) {
-//             // remove points and handles
-//             points.remove(z*2+1);
-//             points.remove(z*2);
-//             CircleElement remove = handles.get(z);
-//             handles.remove(remove);
-//             surface.remove(remove);
-            
-//             // remove bend handle also from middle
-// //            CircleElement bebefore = bendHandles.get(z-1);
-//             CircleElement beafter = bendHandles.get(z);
-//             bendHandles.remove(beafter);
-// //            bendHandles.remove(bebefore);
-//             surface.remove(beafter);
-// //            surface.remove(bebefore);
-//           }
-          
-//           // quit, nothing more to do
-//           break;
-//         }
-//       }
-//     }
     
     for (int i = 0; i < bendHandles.size(); ++i) {
       CircleElement h = bendHandles.get(i);
@@ -433,16 +389,17 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
         // this doesn't work for some reason
 //        h.setRadius(10);
         handles.add(index+1, h);
+        h.setDeleteHandler(this);
         
         // add new bend handles before and after
         int x = (points.get(i*2) + points.get(i*2+2)) / 2;
         int y = (points.get(i*2+1) + points.get(i*2+3)) / 2;
-        CircleElement hm = createHandle(x, y, 5, SELECTION_RADIUS);
+        CircleElement hm = createHandle(x, y, 5, SELECTION_RADIUS, false);
         bendHandles.add(index, hm);
 
         x = (points.get(i*2+2) + points.get(i*2+4)) / 2;
         y = (points.get(i*2+3) + points.get(i*2+5)) / 2;
-        hm = createHandle(x, y, 5, SELECTION_RADIUS);
+        hm = createHandle(x, y, 5, SELECTION_RADIUS, false);
         bendHandles.add(index+1, hm);
         break;
       }
@@ -612,5 +569,15 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     parentRelationship.removePoint(index);
     parentRelationship.doSetShape();
   }
+
+  @Override
+  public int supportedMenuItems(CircleElement ce) {
+    if (ce != null && !ce.equals(getStartHandle()) && !ce.equals(getEndHandle())) {
+      return ContextMenuItem.DELETE.getValue();
+    } else {
+      return ContextMenuItem.NO_MENU.getValue();
+    }
+  }
+
 
 }

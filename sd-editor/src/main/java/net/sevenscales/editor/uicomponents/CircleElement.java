@@ -37,6 +37,7 @@ public class CircleElement extends AbstractDiagramItem {
 
 	public interface DeleteHandler {
 		void remove(CircleElement ce);
+		int supportedMenuItems(CircleElement ce);
 	}
 
 	public CircleElement(IGroup layer, ISurfaceHandler surface, DiagramProxy parent, int circleX, int circleY, int radius, boolean editable, IDiagramItemRO item) {
@@ -159,8 +160,11 @@ public class CircleElement extends AbstractDiagramItem {
 
 	@Override
 	public Diagram getOwnerComponent(ActionType actionType) {
-		if (ActionType.DELETE.equals(actionType)) {
-			return this;
+		switch (actionType) {
+			case DELETE:
+				return this;
+			case SELECT:
+				return this;
 		}
 		return super.getOwnerComponent(actionType);
 	}
@@ -259,7 +263,10 @@ public class CircleElement extends AbstractDiagramItem {
 	
 	@Override
 	public int supportedMenuItems() {
-		return ContextMenuItem.NO_CUSTOM.getValue();
+		if (deleteHandler != null) {
+			return deleteHandler.supportedMenuItems(this);
+		}
+		return ContextMenuItem.NO_MENU.getValue();
 	}
 
 	@Override

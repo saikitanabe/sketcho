@@ -1,6 +1,7 @@
 package net.sevenscales.editor.api.event;
 
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.api.ActionType;
 
 import com.google.gwt.event.shared.GwtEvent;
 
@@ -18,7 +19,7 @@ public class SelectionMouseUpEvent extends GwtEvent<SelectionMouseUpEventHandler
   public SelectionMouseUpEvent(Diagram[] diagrams, Diagram lastSelected) {
   	this.diagrams = diagrams;
   	// assert(lastSelected != null);
-  	this.lastSelected = lastSelected.getOwnerComponent();
+  	this.lastSelected = lastSelected.getOwnerComponent(ActionType.SELECT);
   }
 
   @Override

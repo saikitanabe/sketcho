@@ -9,6 +9,7 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IGroup;
@@ -225,6 +226,7 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
 	boolean supportsTextEditing();
   boolean supportsAlignHighlight();
 	int supportedMenuItems();
+  boolean supportsMenu(ContextMenuItem menuItem);
 	int getMeasurementAreaWidth();
 	String getCustomData();
 	void parseCustomData(String customData);
