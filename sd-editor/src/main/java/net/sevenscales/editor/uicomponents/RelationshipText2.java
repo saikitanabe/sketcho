@@ -12,6 +12,7 @@ import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.PointDouble;
+import net.sevenscales.editor.gfx.domain.IRelationship;
 import net.sevenscales.editor.uicomponents.impl.RelationshipTextUtil2;
 import net.sevenscales.editor.diagram.utils.BezierHelpers;
 

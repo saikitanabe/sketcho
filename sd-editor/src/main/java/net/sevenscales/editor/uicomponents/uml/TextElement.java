@@ -82,70 +82,74 @@ public class TextElement extends AbstractDiagramItem implements
 	}
 
 	// nice way to clearly separate interface methods :)
-	private HasTextElement hasTextElement = new AbstractHasTextElement() {
-		public int getWidth() {
-			return attachBoundary.getWidth();
-		}
+	private HasTextElement hasTextElement = createHasTextElement();
 
-		public int getX() {
-			return attachBoundary.getX();
-		}
+	protected HasTextElement createHasTextElement() {
+		return new AbstractHasTextElement() {
+				public int getWidth() {
+					return attachBoundary.getWidth();
+				}
 
-		public int getY() {
-			return attachBoundary.getY();
-		}
-		public int getHeight() {
-			return attachBoundary.getHeight();
-		}
+				public int getX() {
+					return attachBoundary.getX();
+				}
 
-		public void removeShape(IShape shape) {
-			group.remove(shape);
-			shapes.remove(shape);
-		}
+				public int getY() {
+					return attachBoundary.getY();
+				}
+				public int getHeight() {
+					return attachBoundary.getHeight();
+				}
 
-		public String getLink() {
-			return TextElement.this.getLink();
-		}
+				public void removeShape(IShape shape) {
+					group.remove(shape);
+					shapes.remove(shape);
+				}
 
-		public boolean isAutoResize() {
-			return TextElement.this.isAutoResize();
-		}
+				public String getLink() {
+					return TextElement.this.getLink();
+				}
 
-		public void resize(int x, int y, int width, int height) {
-			TextElement.this.resize(x, y, width, height);
-			fireSizeChanged();
-		}
+				public boolean isAutoResize() {
+					return TextElement.this.isAutoResize();
+				}
 
-    public void resizeHeight(int height) {
-      TextElement.this.setHeight(height);
-		}    
+				public void resize(int x, int y, int width, int height) {
+					TextElement.this.resize(x, y, width, height);
+					fireSizeChanged();
+				}
 
-		public void setLink(String link) {
-			TextElement.this.setLink(link);
-		}
+		    public void resizeHeight(int height) {
+		      TextElement.this.setHeight(height);
+				}    
 
-		public boolean supportsTitleCenter() {
-			return false;
-		}
+				public void setLink(String link) {
+					TextElement.this.setLink(link);
+				}
 
-		// public int getTextMargin() {
-		// 	return 0;
-		// }
+				public boolean supportsTitleCenter() {
+					return false;
+				}
 
-		public boolean forceAutoResize() {
-			return true;
-		}
+				// public int getTextMargin() {
+				// 	return 0;
+				// }
 
-		public GraphicsEventHandler getGraphicsMouseHandler() {
-			return TextElement.this;
-		};
+				public boolean forceAutoResize() {
+					return true;
+				}
 
-		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
-		};
+				public GraphicsEventHandler getGraphicsMouseHandler() {
+					return TextElement.this;
+				}
 
-	};
+				@Override
+				public String getTextColorAsString() {
+					return "#" + textColor.toHexString();
+				}
+
+			};
+	}
 
 	protected IShape createElement(IContainer surface) {
 		return IShapeFactory.Util.factory(editable).createRectangle(surface);

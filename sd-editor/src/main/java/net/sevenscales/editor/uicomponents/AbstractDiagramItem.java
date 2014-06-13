@@ -633,6 +633,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public void setAutoResize(boolean autoresize) {
   }
   
+  public Diagram showEditorForDiagram(int screenX, int screenY) {
+    return this;
+  }
+
   public String getText() {
     return "";
   }

@@ -34,6 +34,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	private int annotation;
 	private int resolved;
 	private List<UrlLinkDTO> links;
+	private String parentId;
 
 	public static DiagramItemDTO createGenericItem(ElementType type) {
 		DiagramItemDTO result = new DiagramItemDTO();
@@ -58,11 +59,12 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 				+ ", annotation=" + annotation 
 				+ ", resolved=" + resolved
 				+ ", links=" + links
+				+ ", parentId=" + parentId
 				+ "]";
 	}
   
-	public DiagramItemDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer fontSize, Integer shapeProperties, Integer displayOrder, int version, Long id, String clientId, String customData, List<UrlLinkDTO> links) {
-    this(text, type, shape, extension, backgroundColor, textColor, fontSize, shapeProperties, displayOrder, version, id, clientId, customData, 0, 0, 0, links);
+	public DiagramItemDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer fontSize, Integer shapeProperties, Integer displayOrder, int version, Long id, String clientId, String customData, List<UrlLinkDTO> links, String parentId) {
+    this(text, type, shape, extension, backgroundColor, textColor, fontSize, shapeProperties, displayOrder, version, id, clientId, customData, 0, 0, 0, links, parentId);
   }
 
 //	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
@@ -70,7 +72,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 //		this(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, crc32, 0, 0, null);
 //	}
 
-	public DiagramItemDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer fontSize, Integer shapeProperties, Integer displayOrder, Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, List<UrlLinkDTO> links
+	public DiagramItemDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer fontSize, Integer shapeProperties, Integer displayOrder, Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, List<UrlLinkDTO> links, String parentId
 			) {
 		super();
 		this.text = text;
@@ -90,10 +92,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		this.annotation = annotation;
 		this.resolved = resolved;
 		this.links = links;
+		this.parentId = parentId;
 	}
 	
 	public DiagramItemDTO(String clientId) {
-		this("", "", "", /* extension */ null, "", "", null, /* shapeProperties */null, /* displayOrder */ null, 0, 0L, clientId, "", 0, 0, 0, null);
+		this("", "", "", /* extension */ null, "", "", null, /* shapeProperties */null, /* displayOrder */ null, 0, 0L, clientId, "", 0, 0, 0, null, /* parentId */ null);
 	}
 
 	public DiagramItemDTO(IDiagramItemRO di) {
@@ -219,6 +222,15 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 
 	@Override
+	public String getParentId() {
+		return parentId;
+	}
+	@Override
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+
+	@Override
 	public double getCrc32() {
 		return crc32;
 	}
@@ -335,6 +347,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		crc32 = dit.crc32;
 		annotation = dit.annotation;
 		resolved = dit.resolved;
+		parentId = dit.parentId;
 
 		List<? extends IUrlLinkRO> fromLinks = di.getLinks();
 		if (fromLinks != null) {

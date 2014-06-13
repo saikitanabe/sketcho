@@ -645,6 +645,16 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	@Override
+	public Diagram asDiagram() {
+		return this;
+	}
+
+	// @Override
+	// public void setTransform(int x, int y) {
+
+	// }
+
+	@Override
 	public int getTransformX() {
 		return parentThread.getGroup().getTransformX();
 	}

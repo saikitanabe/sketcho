@@ -54,7 +54,6 @@ public class JsonExtraction {
 		JSONValue result = decompose((DiagramItemDTO) comment, jsonFormat);
 		JSONObject obj = result.isObject();
 		if (obj != null) {
-    	obj.put("p", new JSONString(safeJsonString(comment.getParentThreadId())));
     	obj.put("cby", new JSONString(safeJsonString(comment.getUsername())));
     	obj.put("cbyd", new JSONString(safeJsonString(comment.getUserDisplayName())));
     	obj.put("cat", new JSONNumber(comment.getCreatedAt()));
@@ -111,6 +110,10 @@ public class JsonExtraction {
     		jlinks.set(i, jlink);
     	}
     	result.put("links", jlinks);
+    }
+
+    if (item.getParentId() != null && !"".equals(item.getParentId())) {
+      result.put("p", new JSONString(item.getParentId()));
     }
 
     return result;

@@ -9,7 +9,6 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.api.IExtension;
 
 public class CommentDTO extends DiagramItemDTO {
-	private String parentThreadId;
 	private String username;
 	private String userDisplayName;
 	private long createdAt;
@@ -17,8 +16,7 @@ public class CommentDTO extends DiagramItemDTO {
 
 	public CommentDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer tsize,
 			Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, List<UrlLinkDTO> links, String parentThreadId, String username, String userDisplayName, long createdAt, long updatedAt) {
-		super(text, type, shape, extension, backgroundColor, textColor, tsize, /* shapeProperties */null, /* displayOrder */ null, version, id, clientId, customData, crc32, annotation, resolved, links);
-		this.parentThreadId = parentThreadId;
+		super(text, type, shape, extension, backgroundColor, textColor, tsize, /* shapeProperties */null, /* displayOrder */ null, version, id, clientId, customData, crc32, annotation, resolved, links, parentThreadId);
 		this.username = username;
 		this.userDisplayName = userDisplayName;
 		this.createdAt = createdAt;
@@ -27,8 +25,7 @@ public class CommentDTO extends DiagramItemDTO {
 
 	@Override
 	public String toString() {
-		return "CommentDTO=" + "[" + super.toString() + "][parentThreadId=" + parentThreadId 
-				+ ", username=" + username 
+		return "CommentDTO=" + "[" + super.toString() + "][username=" + username 
 				+ ", userDisplayName=" + userDisplayName
 				+ ", createdAt=" + createdAt 
 				+ ", updatedAt=" + updatedAt
@@ -50,10 +47,6 @@ public class CommentDTO extends DiagramItemDTO {
 
 	public CommentDTO(IDiagramItemRO di) {
 		copyFrom(di);
-	}
-
-	public String getParentThreadId() {
-		return parentThreadId;
 	}
 
 	public String getUsername() {
@@ -95,7 +88,6 @@ public class CommentDTO extends DiagramItemDTO {
 		super.copyFrom(di);
 		if (di.isComment()) {
 			CommentDTO c = (CommentDTO) di;
-			parentThreadId = c.parentThreadId;
 			username = c.username;
 			userDisplayName = c.userDisplayName;
 			createdAt = c.createdAt;

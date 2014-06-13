@@ -18,6 +18,7 @@ import net.sevenscales.editor.diagram.DiagramDragHandler;
 import net.sevenscales.editor.diagram.DiagramResizeHandler;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
+import net.sevenscales.editor.diagram.shape.TextShape;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.diagram.utils.PathFitter;
 import net.sevenscales.editor.diagram.utils.BezierHelpers;
@@ -42,6 +43,7 @@ import net.sevenscales.editor.gfx.domain.PointDouble;
 import net.sevenscales.editor.uicomponents.RelationshipText2;
 import net.sevenscales.editor.uicomponents.RelationshipText2.ClickTextPosition;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
+import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.RelationshipHandleHelpers;
@@ -50,7 +52,9 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
-import net.sevenscales.editor.uicomponents.IRelationship;
+import net.sevenscales.editor.gfx.domain.IRelationship;
+import net.sevenscales.editor.gfx.domain.IParentElement;
+import net.sevenscales.editor.gfx.domain.IChildElement;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.Scheduler;
@@ -58,7 +62,7 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 
 
 public class Relationship2 extends AbstractDiagramItem implements DiagramDragHandler, DiagramResizeHandler,
-  IRelationship {
+  IRelationship, IParentElement {
 	private static final SLogger logger = SLogger.createLogger(Relationship2.class);
 
   private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
@@ -108,6 +112,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	private boolean legacyAnchor;
   private RelationshipHandleHelpers relationshipHandleHelpers;
   private AnchorMoveHandler handler;
+
+  private List<IChildElement> children;
 
   private static class ArrowStartPolyline {
     private IPolyline arrowStart;
@@ -654,7 +660,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
           item);
     this.points = points.points;
     handler = new ConnectionMoveHandler();
-    
+    children = new ArrayList<IChildElement>();
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getConnectionLayer());
 
     // DEBUG curve visualization START
@@ -731,7 +737,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     // applyAnnotationColors();
   }
-  
+
   @Override
   protected IConnectionHelpers createConnectionHelpers() {
   	return ConnectionHelpers.createEmptyConnectionHelpers();
@@ -785,7 +791,30 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	  startAnchor.setDiff(dx, dy);
 	  endAnchor.setDiff(dx, dy);
 	  
+    saveLastTransform();
   	doSetShape();
+  }
+
+  @Override
+  public void snapshotTransformations() {
+    super.snapshotTransformations();
+    for (IChildElement child : children) {
+      child.snapshotTransformations();
+    }
+  }
+
+  @Override
+  public void setTransform(int dx, int dy) {
+    super.setTransform(dx, dy);
+    setChildrenTransform(dx, dy);
+  }
+
+  private void setChildrenTransform(int dx, int dy) {
+    for (IChildElement child : children) {
+      // relationship resets group transformation, so need to get child own cumulative
+      // transformation
+      child.setTransform(dx + child.getSnaphsotTransformX(), dy + child.getSnaphsotTransformY());
+    }
   }
   
 //  public void saveLastTransform(int dx, int dy) {
@@ -1207,6 +1236,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return "".equals(getTextLabel()) && "".equals(getTextStart()) && "".equals(getTextEnd());
   }
 
+  public Diagram showEditorForDiagram(int screenX, int screenY) {
+    // creates always a new child text element
+    return createChildLabel(screenX, screenY);
+  }
+
   @Override
   public String getText(int x, int y) {
   	currentTextEditLocation = relationshipText.findClickPosition(x, y, points);
@@ -1217,6 +1251,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   		return textUtil.parseRightText();
   	case MIDDLE:
   		return textUtil.parseLabel();
+      // if (labelChildText != null) {
+      //   return labelChildText.getText();
+      // } else {
+      //   return "";
+      // }
   	}
   	return text;
   }
@@ -1233,12 +1272,31 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   		break;
   	case MIDDLE:
   		setText(text + "\n" + textUtil.parseArrowLine());
+      // setText(textUtil.parseArrowLine());
+      // createChildLabel(text);
   		break;
   	case ALL:
   		setText(text);
 //  		setText(textUtil.parseLabel() + "\n" + textUtil.parseLeftText() + text + textUtil.parseRightText());
   		break;
   	}
+  }
+
+  private ChildTextElement createChildLabel(int screenX, int screenY) {
+    TextShape ts = new TextShape(screenX, screenY, 100, 30);
+    DiagramItemDTO tdto = new DiagramItemDTO();
+    tdto.setParentId(getDiagramItem().getClientId());
+    ChildTextElement result = new ChildTextElement(surface, 
+                                          ts, 
+                                          Theme.getCurrentColorScheme().getBackgroundColor(), 
+                                          Theme.getCurrentColorScheme().getBorderColor(), 
+                                          Theme.getCurrentColorScheme().getTextColor(), 
+                                          "",
+                                          editable, 
+                                          tdto, 
+                                          this);
+    surface.addAsSelected(result, true);
+    return result;
   }
 
   public boolean isCurved() {
@@ -2060,6 +2118,23 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       Diagram d = ae.getSource();
       ae.setCardinalDirection(AnchorUtils.findCardinalDirection(x, y, d.getLeft(), d.getTop(), d.getWidth(), d.getHeight()));
     }
+  }
+
+  @Override
+  public void addChild(IChildElement child) {
+    if (!children.contains(child)) {
+      children.add(child);
+    }
+  }
+
+  @Override
+  public Diagram asDiagram() {
+    return this;
+  }
+
+  @Override
+  public List<IChildElement> getChildren() {
+    return children;
   }
 
 }

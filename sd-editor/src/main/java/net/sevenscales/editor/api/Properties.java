@@ -471,7 +471,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	@Override
 	public void onDoubleClick(Diagram sender, final MatrixPointJS point) {
 		if (sender != null) {
-			selectedDiagram = sender;
+			// parent element can create + switch to child element
+			// e.g. relationship creates child element and that should be edited after that
+			selectedDiagram = sender.showEditorForDiagram(point.getScreenX(), point.getScreenY());
 			
 			// hacking focus set on text area chrome
 			Scheduler.get().scheduleDeferred(new ScheduledCommand() {

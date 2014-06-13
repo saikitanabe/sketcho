@@ -7,6 +7,7 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.domain.ISvgDataRO;
 import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.diagram.Diagram;
@@ -19,7 +20,7 @@ import net.sevenscales.editor.api.impl.Theme.ThemeName;
 
 public interface AbstractDiagramFactory {
 	Info parseShape(IDiagramItemRO item, int moveX, int moveY);
-	Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item);
+	Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent);
 
 
 	public class EllipseFactory implements AbstractDiagramFactory {
@@ -27,7 +28,7 @@ public interface AbstractDiagramFactory {
       return new EllipseShape(item.getShape().split(",")).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new EllipseElement(surface,
               (EllipseShape) shape,
               item.getText(),
@@ -52,7 +53,7 @@ public interface AbstractDiagramFactory {
 			return new SequenceShape(x, y, width, height, lifeline).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new SequenceElement(surface,
               (SequenceShape) shape,
               item.getText(),
@@ -71,7 +72,7 @@ public interface AbstractDiagramFactory {
 			return new ComponentShape(s).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new ComponentElement(surface,
           (ComponentShape) shape, 
           item.getText(), 
@@ -90,7 +91,7 @@ public interface AbstractDiagramFactory {
 			return new ServerShape(s).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new ServerElement(surface,
           (ServerShape) shape,
           item.getText(), 
@@ -109,7 +110,7 @@ public interface AbstractDiagramFactory {
 			return new RectShape(s).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new ClassElement2(surface,
           (RectShape) shape, 
           item.getText(), 
@@ -135,7 +136,7 @@ public interface AbstractDiagramFactory {
               height).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new NoteElement(surface,
           		(NoteShape) shape,
               item.getText(),
@@ -161,7 +162,7 @@ public interface AbstractDiagramFactory {
               height).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new CommentThreadElement(surface,
           (CommentThreadShape) shape,
               item.getText(),
@@ -187,7 +188,7 @@ public interface AbstractDiagramFactory {
               height).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
 			return new ActivityChoiceElement(surface,
           		(ActivityChoiceShape) shape,
               item.getText(), 
@@ -209,7 +210,7 @@ public interface AbstractDiagramFactory {
       return new ActivityStartShape(cx, cy, r).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       if (item.getVersion() >= 3) {
         return new ActivityStart(surface,
             (ActivityStartShape) shape,
@@ -242,7 +243,7 @@ public interface AbstractDiagramFactory {
 			return new ActivityEndShape(cx, cy, r).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
 			return new ActivityEnd(surface,
           		(ActivityEndShape) shape,
               DiagramItemFactory.parseBackgroundColor(item),
@@ -263,7 +264,7 @@ public interface AbstractDiagramFactory {
       return new ActivityShape(x, y, width, height).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
 			return new ActivityElement(surface,
           		(ActivityShape)shape,
               item.getText(),
@@ -285,7 +286,7 @@ public interface AbstractDiagramFactory {
       return new MindCentralShape(x, y, width, height).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
 			return new MindCentralElement(surface,
           		(MindCentralShape) shape,
               item.getText(),
@@ -307,7 +308,7 @@ public interface AbstractDiagramFactory {
       return new DbShape(x, y, width, height).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
 			return new StorageElement(surface,
           		(DbShape)shape,
               item.getText(),
@@ -329,7 +330,7 @@ public interface AbstractDiagramFactory {
       return new TextShape(x, y, width, height).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new TextElement(surface,
 	          		(TextShape)shape,
 	              DiagramItemFactory.parseBackgroundColor(item),
@@ -341,6 +342,29 @@ public interface AbstractDiagramFactory {
 		}
 	}
 
+  public class ChildTextItemFactory implements AbstractDiagramFactory {
+    public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
+      String[] s = item.getShape().split(",");
+      int x = Integer.valueOf(s[0]);
+      int y = Integer.valueOf(s[1]);
+      int width = Integer.valueOf(s[2]);
+      int height = Integer.valueOf(s[3]);
+      return new TextShape(x, y, width, height).move(moveX, moveY);
+    }
+
+    public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
+      return new ChildTextElement(surface,
+                (TextShape)shape,
+                DiagramItemFactory.parseBackgroundColor(item),
+                DiagramItemFactory.parseBorderColor(item),
+                DiagramItemFactory.parseTextColor(item),
+                item.getText(),
+                editable,
+                item,
+                parent);
+    }
+  }
+
 	public class ActorFactory implements AbstractDiagramFactory {
 		public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
       String[] s = item.getShape().split(",");
@@ -351,7 +375,7 @@ public interface AbstractDiagramFactory {
       return new ActorShape(x, y, width, height).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
 			return new Actor(surface,
           		(ActorShape)shape,
               item.getText(),
@@ -373,7 +397,7 @@ public interface AbstractDiagramFactory {
       return new RelationshipShape2(points).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
 			return new Relationship2(surface, 
                                (RelationshipShape2)shape, 
                                item.getText(),
@@ -396,7 +420,7 @@ public interface AbstractDiagramFactory {
       return new FreehandShape(points).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new FreehandElement(
       		surface, 
       		(FreehandShape) shape,
@@ -419,7 +443,7 @@ public interface AbstractDiagramFactory {
       return new GenericShape(item.getType(), s, item.getShapeProperties(), svgdata).move(moveX, moveY);
     }
 
-    public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+    public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new GenericElement(surface,
           (GenericShape) shape,
           item.getText(), 
@@ -457,7 +481,7 @@ public interface AbstractDiagramFactory {
       return new ImageShape(x, y, width, height, url, filename).move(moveX, moveY);
     }
 
-    public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+    public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new ImageElement(surface,
               (ImageShape)shape,
               DiagramItemFactory.parseBackgroundColor(item),
@@ -473,7 +497,7 @@ public interface AbstractDiagramFactory {
       return new UMLPackageShape(item.getShape().split(",")).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new UMLPackageElement(surface,
           		(UMLPackageShape)shape,
               item.getText(),
@@ -490,7 +514,7 @@ public interface AbstractDiagramFactory {
       return new RectContainerShape(item.getShape().split(",")).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
 			return new RectBoundaryElement(surface,
           		(RectContainerShape) shape,
               item.getText(),
@@ -508,7 +532,7 @@ public interface AbstractDiagramFactory {
 			return new HorizontalPartitionShape(item.getShape().split(",")).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
 				return new HorizontalPartitionElement(surface,
           		(HorizontalPartitionShape)shape,
               item.getText(),
@@ -526,7 +550,7 @@ public interface AbstractDiagramFactory {
 			return new ForkShape(item.getShape().split(",")).move(moveX, moveY);
 		}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item) {
+		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
 			return new ForkElement(surface,
           		(ForkShape) shape,
               DiagramItemFactory.parseBackgroundColor(item),

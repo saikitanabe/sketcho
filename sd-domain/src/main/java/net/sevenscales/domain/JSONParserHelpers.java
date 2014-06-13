@@ -31,6 +31,10 @@ public class JSONParserHelpers {
 		return value != null && value.isString() != null ? value.isString().stringValue() : "";
 	}
 
+	public static String getStringOrNull(JSONValue value) {
+		return value != null && value.isString() != null ? value.isString().stringValue() : null;
+	}
+
 	public static List<String> getListString(JSONValue value) {
 		List<String> result = null;
 		if (value != null && value.isArray() != null && value.isArray().size() > 0) {

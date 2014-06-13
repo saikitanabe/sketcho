@@ -95,7 +95,7 @@ public class OTCompensationTransformer {
 		for (IDiagramItemRO item : items) {
 			if (item instanceof CommentDTO) {
 				CommentDTO comment = (CommentDTO) item;
-				List<IDiagramItemRO> children = findChildren(comment.getParentThreadId());
+				List<IDiagramItemRO> children = findChildren(comment.getParentId());
 				if (children.size() == 0) {
 					handleParentBefore(comment, items);
 				}
@@ -110,7 +110,7 @@ public class OTCompensationTransformer {
 		// 				redo: insert parent + insert comment
 		if (undoItems.size() == 1 && undoItems.get(0) instanceof CommentDTO) {
 			CommentDTO comment = (CommentDTO) undoItems.get(0);
-			List<IDiagramItemRO> children = findChildren(comment.getParentThreadId());
+			List<IDiagramItemRO> children = findChildren(comment.getParentId());
 			if (children.size() == 0) {
 				// first comment on this thread
 				handleParent(comment, undoItems);
@@ -119,7 +119,7 @@ public class OTCompensationTransformer {
 
 		if (redoItems.size() == 1 && redoItems.get(0) instanceof CommentDTO) {
 			CommentDTO comment = (CommentDTO) redoItems.get(0);
-			List<IDiagramItemRO> children = findChildren(comment.getParentThreadId());
+			List<IDiagramItemRO> children = findChildren(comment.getParentId());
 			if (children.size() == 0) {
 				// first comment on this thread
 				handleParentBefore(comment, redoItems);
@@ -131,7 +131,7 @@ public class OTCompensationTransformer {
 		List<IDiagramItemRO> result = new DiagramItemList();
 		for (IDiagramItemRO item : currentState) {
 			CommentDTO child = cast(item);
-			if (child != null && parentClientId.equals(child.getParentThreadId())) {
+			if (child != null && parentClientId.equals(child.getParentId())) {
 				result.add(item);
 			}
 		}
@@ -201,7 +201,7 @@ public class OTCompensationTransformer {
   		if (n instanceof CommentDTO) {
   			CommentDTO c = (CommentDTO) n;
   			// for comments parent needs to be found as well and handled
-  			result.add(new CommentDTO(c.getClientId(), c.getParentThreadId()));
+  			result.add(new CommentDTO(c.getClientId(), c.getParentId()));
   		} else {
 	  		// it is fine to use simple DiagramItemDTO, since delete is just about client id
 	  		result.add(new DiagramItemDTO(n.getClientId()));
@@ -220,14 +220,14 @@ public class OTCompensationTransformer {
 	}
 
 	private void handleParent(CommentDTO child, List<IDiagramItemRO> result) {
-		IDiagramItemRO parent = findItem(child.getParentThreadId());
+		IDiagramItemRO parent = findItem(child.getParentId());
 		if (parent != null) {
 			result.add(parent.copy());
 		}
 	}
 
 	private void handleParentBefore(CommentDTO child, List<IDiagramItemRO> result) {
-		IDiagramItemRO parent = findItem(child.getParentThreadId());
+		IDiagramItemRO parent = findItem(child.getParentId());
 		if (parent != null) {
 			result.add(0, parent.copy());
 		}

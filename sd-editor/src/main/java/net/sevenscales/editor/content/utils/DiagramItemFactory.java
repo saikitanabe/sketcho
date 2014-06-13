@@ -96,7 +96,7 @@ public class DiagramItemFactory {
   public static Diagram create(int moveX, int moveY, IDiagramItemRO item, ISurfaceHandler surface, boolean editable) {
     AbstractDiagramFactory factory = ShapeParser.factory(item);
     Info shape = factory.parseShape(item, moveX, moveY);
-    Diagram result = factory.parseDiagram(surface, shape, editable, item);
+    Diagram result = factory.parseDiagram(surface, shape, editable, item, /*parent*/null);
     return applyDiagramItem(result, item);
   }
 

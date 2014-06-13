@@ -10,14 +10,19 @@ import net.sevenscales.domain.IDiagramItemRO;
 
 import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSearch;
 import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEvent;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
+import net.sevenscales.editor.uicomponents.uml.ChildTextElement;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
+import net.sevenscales.editor.content.utils.AbstractDiagramFactory;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.diagram.shape.CommentShape;
+import net.sevenscales.editor.diagram.shape.Info;
+import net.sevenscales.editor.gfx.domain.IParentElement;
 
 
 public class CommentFactory {
@@ -26,7 +31,7 @@ public class CommentFactory {
 	}
 
 	private Set<IDiagramItemRO> comments = new HashSet<IDiagramItemRO>();
-	private Map<String, CommentThreadElement> commentThreadMapping = new HashMap<String, CommentThreadElement>();
+	private Map<String, IParentElement> commentThreadMapping = new HashMap<String, IParentElement>();
 	private ISurfaceHandler surface;
 	private boolean editable;
 
@@ -40,8 +45,8 @@ public class CommentFactory {
 	}
 	
 	public void process(Diagram diagram) {
-		if (diagram instanceof CommentThreadElement) {
-			commentThreadMapping.put(diagram.getDiagramItem().getClientId(), (CommentThreadElement) diagram);
+		if (diagram instanceof IParentElement) {
+			commentThreadMapping.put(diagram.getDiagramItem().getClientId(), (IParentElement) diagram);
 		}
 	}
 
@@ -50,8 +55,20 @@ public class CommentFactory {
 			CommentElement comment = createComment(item);
 			if (comment != null) {
 				factory.addDiagram(comment);
+			} else if (item.getParentId() != null && ElementType.TEXT_ITEM.getValue().equals(item.getType())) {
+				factory.addDiagram(createChildTextItem(item));
 			}
 		}
+	}
+
+	public Diagram createChildTextItem(IDiagramItemRO item) {
+		if (commentThreadMapping.containsKey(item.getParentId())) {
+			IParentElement p = commentThreadMapping.get(item.getParentId());
+			AbstractDiagramFactory factory = new AbstractDiagramFactory.ChildTextItemFactory();
+			Info shape = factory.parseShape(item, 0, 0);
+			return factory.parseDiagram(surface, shape, editable, item, p);
+		}
+		return null;
 	}
 
 	public Diagram createCommentInOT(IDiagramItemRO diro, DiagramSearch diagramSearch) {
@@ -67,8 +84,10 @@ public class CommentFactory {
   }
 
   public void resizeCommentThreads() {
-  	for (CommentThreadElement ct : commentThreadMapping.values()) {
-  		ct.sort();
+  	for (IParentElement ct : commentThreadMapping.values()) {
+  		if (ct instanceof CommentThreadElement) {
+	  		((CommentThreadElement)ct).sort();
+  		}
   	}
   }
 
@@ -76,7 +95,7 @@ public class CommentFactory {
 		CommentElement result = null;
 		if (diro.isComment()) {
 			CommentDTO commentData = (CommentDTO) diro;
-			Diagram parent = diagramSearch.findByClientId(commentData.getParentThreadId());
+			Diagram parent = diagramSearch.findByClientId(commentData.getParentId());
 			if (parent != null) {
 				CommentThreadElement thread = (CommentThreadElement) parent;
 				result = _createComment(commentData, thread);
@@ -90,9 +109,12 @@ public class CommentFactory {
 		CommentElement result = null;
 		if (item.isComment()) {
 			CommentDTO citem = (CommentDTO) item;
-			if (commentThreadMapping.containsKey(citem.getParentThreadId())) {
-				CommentThreadElement thread = commentThreadMapping.get(citem.getParentThreadId());
-				result = _createComment(citem, thread);
+			if (commentThreadMapping.containsKey(citem.getParentId())) {
+				IParentElement p = commentThreadMapping.get(citem.getParentId());
+				if (p instanceof CommentThreadElement) {
+					CommentThreadElement thread = (CommentThreadElement)p;
+					result = _createComment(citem, thread);
+				}
 			}
 		}
 		return result;

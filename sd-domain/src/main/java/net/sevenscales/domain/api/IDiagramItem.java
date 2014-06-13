@@ -16,6 +16,7 @@ public interface IDiagramItem extends IDiagramItemRO {
   void setDisplayOrder(Integer displayOrder);
 	void setVersion(int version);
   void setClientId(String clientId);
+  void setParentId(String parentClientId);
   void setId(long id);
   void setCustomData(String customData);
   void setCrc32(double crc32);

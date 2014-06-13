@@ -24,6 +24,7 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	Integer getDisplayOrder();
 	int getVersion();
 	String getClientId();
+	String getParentId();
 	/**
 	 * This data needs to be parsed separately by each diagram element, no
 	 * generic parsing.

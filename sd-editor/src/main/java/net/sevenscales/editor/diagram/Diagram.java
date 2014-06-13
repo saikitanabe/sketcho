@@ -70,6 +70,13 @@ public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramE
   public boolean isAutoResize();
   public void setAutoResize(boolean autoresize);
   
+  /**
+  * Called for element that should show text editor.
+  * Parent element can create + switch to child element.
+  * relationship creates child element and that should be edited after that
+  *
+  */
+  Diagram showEditorForDiagram(int screenX, int screenY);
   public String getText();
   // get text from certain area of diagram
   public String getText(int x, int y);

@@ -14,7 +14,9 @@ import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
-
+import net.sevenscales.editor.gfx.domain.IParentElement;
+import net.sevenscales.editor.gfx.domain.IRelationship;
+import net.sevenscales.editor.gfx.domain.IChildElement;
 
 public class MouseDiagramEventHelpers {
   public static void fireDiagramAddedEvent(Diagram item, ISurfaceHandler surface, ActionType actionType) {
@@ -51,8 +53,22 @@ public class MouseDiagramEventHelpers {
     List<Diagram> diagrams = new ArrayList<Diagram>();
     for (Diagram d : selectedItems) {
       addRelatedConnections(d, diagrams);
+      if (d instanceof IRelationship) {
+        // cannot use IParentElement since comment thread is handling sending differently
+        // when child is dragged parent is moved, all children are relative to parent
+        // in here parent is moved (relationship) and children should store their position as well
+        addChildren((IRelationship)d, diagrams);
+      }
     }
     return diagrams;
+  }
+
+  private static void addChildren(IParentElement parent, List<Diagram> diagrams) {
+    for (IChildElement child : parent.getChildren()) {
+      if (!diagrams.contains(child)) {
+        diagrams.add(child.asDiagram());
+      }
+    }
   }
 
   private static void addRelatedConnections(Diagram diagram, List<Diagram> diagrams) {
