@@ -247,7 +247,27 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   public void dragStart(Diagram sender) {
+    storeChildrenRelativeDistance(sender);
     splitRelationshipShapeIfBendPointDragged(sender);
+  }
+
+  private void storeChildrenRelativeDistance(Diagram sender) {
+    if (parentRelated(sender)) {
+      parentRelationship.storeChildrenRelativeDistance();
+    }
+  }
+
+  private void moveChildrenRelatively(Diagram sender) {
+    if (parentRelated(sender)) {
+      parentRelationship.moveChildrenRelatively();
+    }
+  }
+
+  private boolean parentRelated(Diagram sender) {
+    return parentRelationship != null && 
+          (sender == getEndHandle() || sender == getStartHandle() ||
+           sender == parentRelationship.getStartAnchor().getDiagram() ||
+           sender == parentRelationship.getEndAnchor().getDiagram());
   }
 
   private void splitRelationshipShapeIfBendPointDragged(Diagram sender) {
@@ -275,6 +295,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     moveHandlesIfParentIsDragged(sender, dx, dy);
     moveParentAccordingToHandle(sender, dx, dy);
     preHighlightTargetAnchor(sender);
+    moveChildrenRelatively(sender);
   }
 
   private void moveHandlesIfParentIsDragged(Diagram sender, int dx, int dy) {
@@ -424,6 +445,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     
     forceHide();
     parentRelationship.doSetShape();
+    // moveChildrenRelatively(sender);
   }
 
   public void doSetShape(Diagram currentDragged) {

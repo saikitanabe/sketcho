@@ -113,11 +113,38 @@ class Text extends Shape implements IText {
 	}-*/;
 	
 	public void setShape(int x, int y) {
-		setShape(rawNode, x, y);
+		// TODO if created as tspan child nodes => update x attribute to all that have x attribute!!
+		// if (justTextNoTspan(rawNode)) {
+			setShape(rawNode, x, y);
+		// } else {
+			updateTspanX(x);
+		// }
 	}
 	public native void setShape(JavaScriptObject rawNode, int x, int y)/*-{
 		rawNode.setShape( {x:x, y:y} );
 	}-*/;
+
+	private void updateTspanX(int x) {
+		Element raw = getRawNode(rawNode);
+		for (int count = 0; count < raw.getChildCount(); ++count) {
+			Node node = raw.getChild(count);
+			if (node.getNodeName().equals("tspan")) { //   tag.tagName
+				JsArray<Node> attributes = getAttributes(node);
+				if (attributes != null) {
+					String attrsStr = "";
+					for (int i = 0; i < attributes.length(); ++i) {
+						Node attr = attributes.get(i);
+						String attributeName = attr.getNodeName();
+						String attributeValue = attr.getNodeValue();
+
+						if ("x".equals(attributeName)) {
+							attr.setNodeValue(String.valueOf(x));
+						}
+					}
+				}
+			}
+		}
+	}
 	
 	private native JavaScriptObject createText(JavaScriptObject surface)/*-{
 		var text = surface.createText()
@@ -150,7 +177,9 @@ class Text extends Shape implements IText {
 	}
 	
 	private native boolean justTextNoTspan(JavaScriptObject rawNode)/*-{
-		return rawNode.getShape().text != null;
+		// var text = rawNode.getShape().text
+		return rawNode.rawNode.firstChild.nodeType == 3
+		// return text != null && text.firstChild == null;
 	}-*/;
 	
 	public double getLastSpanWidth() {

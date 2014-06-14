@@ -649,6 +649,21 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		return this;
 	}
 
+	@Override
+  public void saveRelativeDistance(double rleft, double rtop) {
+  }
+	@Override
+  public double getRelativeDistanceLeft() {
+  	return 0;
+  }
+	@Override
+  public double getRelativeDistanceTop() {
+  	return 0;
+  }
+	@Override
+  public void setPosition(double left, double top) {
+	}
+
 	// @Override
 	// public void setTransform(int x, int y) {
 

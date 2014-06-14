@@ -1483,6 +1483,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     conditionallyCalculateDiamond();
 
     relationshipText.setShape(this);
+    // moveChildrenRelatively();
 
 //    String color = startSelection.getVisibility() ? "blue" : "black";
 //  line.setShape(start.x, start.y, end.x, end.y);
@@ -2135,6 +2136,40 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   @Override
   public List<IChildElement> getChildren() {
     return children;
+  }
+
+  public void storeChildrenRelativeDistance() {
+    int left = getLeft();
+    int top = getTop();
+    int width = getWidth();
+    int height = getHeight();
+    for (IChildElement child : children) {
+      setChildRelativeDistance(child, left, top, width, height);
+    }
+  }
+
+  public void moveChildrenRelatively() {
+    int left2 = getLeft();
+    int top2 = getTop();
+    int width2 = getWidth();
+    int height2 = getHeight();
+    for (IChildElement child : children) {
+      double dleft2 = child.getRelativeDistanceLeft() * width2;
+      double dtop2 = child.getRelativeDistanceTop() * height2;
+      double childLeft2 = left2 - dleft2;
+      double childTop2 = top2 - dtop2;
+      child.setPosition(childLeft2, childTop2);
+      // setChildRelativeDistance(child, left2, top2, width2, height2);
+    }
+  }
+
+  private void setChildRelativeDistance(IChildElement child, int left, int top, int width, int height) {
+    double dleft = left - child.getLeft();
+    double dtop = top - child.getTop();
+    double rleft = dleft / width;
+    double rtop = dtop / height;
+    logger.debug("rleft " + rleft + " rtop " + rtop);
+    child.saveRelativeDistance(rleft, rtop);
   }
 
 }

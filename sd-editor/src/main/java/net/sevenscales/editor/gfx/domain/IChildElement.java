@@ -9,4 +9,10 @@ public interface IChildElement {
 	void snapshotTransformations();
   int getSnaphsotTransformX();
   int getSnaphsotTransformY();
+  int getLeft();
+  int getTop();
+  void saveRelativeDistance(double rleft, double rtop);
+  double getRelativeDistanceLeft();
+  double getRelativeDistanceTop();
+  void setPosition(double left, double top);
 }

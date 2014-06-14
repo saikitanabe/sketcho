@@ -16,27 +16,62 @@ import net.sevenscales.editor.gfx.domain.IChildElement;
 
 public class ChildTextElement extends TextElement implements IChildElement {
 	private IParentElement parent;
+	private double rleft;
+	private double rtop;
+  private net.sevenscales.editor.gfx.domain.ICircle tempC1;
+
 
 	public ChildTextElement(ISurfaceHandler surface, TextShape newShape,
 			Color backgroundColor, Color borderColor, Color textColor, String text, boolean editable, IDiagramItemRO item, IParentElement parent) {
 		super(surface, newShape, backgroundColor, borderColor, textColor, text, editable, item);
 		this.parent = parent;
 		parent.addChild(this);
+
+		tempC1 = net.sevenscales.editor.gfx.domain.IShapeFactory.Util.factory(editable).createCircle(getGroup());
+
     super.constructorDone();
 	}
 
+	@Override
 	public Info getInfo() {
 		// TODO add parent client id
 		return super.getInfo();
 	}
 
+	@Override
 	public Diagram getParent() {
 		return parent.asDiagram();
 	}
 
+	@Override
 	public Diagram asDiagram() {
 		return this;
 	}
+
+	@Override
+  public void saveRelativeDistance(double rleft, double rtop) {
+  	this.rleft = rleft;
+  	this.rtop = rtop;
+  	// cachedWidth = getWidth();
+  	// cachedHeight = getHei
+  }
+	@Override
+  public double getRelativeDistanceLeft() {
+  	return rleft;
+  }
+	@Override
+  public double getRelativeDistanceTop() {
+  	return rtop;
+  }
+	@Override
+  public void setPosition(double left, double top) {
+    tempC1.setShape(left, top, 5);
+    tempC1.setStroke(150, 150, 150, 1);
+    tempC1.setFill(150, 150, 150, 1);
+    setShape(new int[]{(int) left, (int) top, getWidth(), getHeight()});
+  	// // setShape((int) left, (int) top, getWidth(), getTop());
+  	// select();
+  }
 
 
 }
