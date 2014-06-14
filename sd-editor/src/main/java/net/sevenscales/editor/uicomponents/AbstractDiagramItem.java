@@ -1509,6 +1509,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
            ContextMenuItem.DUPLICATE.getValue() |
            ContextMenuItem.COLOR_MENU.getValue() |
            ContextMenuItem.URL_LINK.getValue() | 
+           ContextMenuItem.LAYERS.getValue() |
            ContextMenuItem.DELETE.getValue();
   }
 

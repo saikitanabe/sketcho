@@ -412,13 +412,6 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   	return true;
   }
   
-  @Override
-  public int supportedMenuItems() {
-  	return ContextMenuItem.COLOR_MENU.getValue() | 
-  				 ContextMenuItem.FONT_SIZE.getValue() |
-  				 ContextMenuItem.LAYERS.getValue();
-  }
-
 	@Override
 	public int getTextAreaLeft() {
   	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
