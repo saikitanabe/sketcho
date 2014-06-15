@@ -1483,6 +1483,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     conditionallyCalculateDiamond();
 
     relationshipText.setShape(this);
+    moveChildren();
     // moveChildrenRelatively();
 
 //    String color = startSelection.getVisibility() ? "blue" : "black";
@@ -2170,6 +2171,20 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     double rtop = dtop / height;
     logger.debug("rleft " + rleft + " rtop " + rtop);
     child.saveRelativeDistance(rleft, rtop);
+  }
+
+  private void moveChildren() {
+    if (children != null) {
+      int left = getLeft();
+      int top = getTop();
+      int width = getWidth();
+      int height = getHeight();
+      for (IChildElement child : children) {
+        double midx = left + width / 2.0;
+        double midy = top + height / 2.0;
+        child.setPosition(midx + child.getFixedLeft(), midy + child.getFixedTop());
+      }
+    }
   }
 
 }

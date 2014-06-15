@@ -1,5 +1,7 @@
 package net.sevenscales.editor.uicomponents.uml;
 
+import com.google.gwt.core.client.Scheduler;
+
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
@@ -18,6 +20,8 @@ public class ChildTextElement extends TextElement implements IChildElement {
 	private IParentElement parent;
 	private double rleft;
 	private double rtop;
+	private double fixedLeft;
+	private double fixedTop;
   private net.sevenscales.editor.gfx.domain.ICircle tempC1;
 
 
@@ -29,6 +33,11 @@ public class ChildTextElement extends TextElement implements IChildElement {
 
 		tempC1 = net.sevenscales.editor.gfx.domain.IShapeFactory.Util.factory(editable).createCircle(getGroup());
 
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
+				updateFixedDistance();
+			}
+		});
     super.constructorDone();
 	}
 
@@ -73,5 +82,27 @@ public class ChildTextElement extends TextElement implements IChildElement {
   	// select();
   }
 
+  @Override
+  public double getFixedLeft() {
+  	return fixedLeft;
+  }
+  @Override
+  public double getFixedTop() {
+  	return fixedTop;
+  }
+
+  @Override
+	public void saveLastTransform(int dx, int dy) {
+		super.saveLastTransform(dx, dy);
+		updateFixedDistance();
+	}
+
+  // @Override
+  public void updateFixedDistance() {
+  	double midx = parent.asDiagram().getLeft() + parent.asDiagram().getWidth() / 2.0;
+		fixedLeft = getLeft() - midx;
+		double midy = parent.asDiagram().getTop() + parent.asDiagram().getHeight() / 2.0;
+		fixedTop =  getTop() - midy;
+  }
 
 }
