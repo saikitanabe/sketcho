@@ -268,9 +268,23 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
 
   private boolean parentRelated(Diagram sender) {
     return parentRelationship != null && 
-          (sender == getEndHandle() || sender == getStartHandle() ||
+          (isHandle(sender) ||
            sender == parentRelationship.getStartAnchor().getDiagram() ||
            sender == parentRelationship.getEndAnchor().getDiagram());
+  }
+
+  private boolean isHandle(Diagram sender) {
+    for (CircleElement ce : handles) {
+      if (ce == sender) {
+        return true;
+      }
+    }
+    for (CircleElement h : bendHandles) {
+      if (h == sender) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private void splitRelationshipShapeIfBendPointDragged(Diagram sender) {
