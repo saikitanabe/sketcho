@@ -68,7 +68,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
 
   // Debug curve control point and arrow angle debugging
-  // private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
   // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
   // private net.sevenscales.editor.gfx.domain.ICircle tempC2;
 
@@ -664,7 +664,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getConnectionLayer());
 
     // DEBUG curve visualization START
-    // tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
+    tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
     // tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
     // tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
     // DEBUG curve visualization END
@@ -1483,7 +1483,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     conditionallyCalculateDiamond();
 
     relationshipText.setShape(this);
-    moveChildren();
     // moveChildrenRelatively();
 
 //    String color = startSelection.getVisibility() ? "blue" : "black";
@@ -2154,37 +2153,31 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     int top2 = getTop();
     int width2 = getWidth();
     int height2 = getHeight();
+    double midx = left2 + width2 / 2.0;
+    double midy = top2 + height2 / 2.0;
+
+    tempCircle.setShape(midx, midy, 5);
+    tempCircle.setStroke(218, 57, 57, 1);
+
     for (IChildElement child : children) {
       double dleft2 = child.getRelativeDistanceLeft() * width2;
       double dtop2 = child.getRelativeDistanceTop() * height2;
-      double childLeft2 = left2 - dleft2;
-      double childTop2 = top2 - dtop2;
+      double childLeft2 = midx - dleft2;
+      double childTop2 = midy - dtop2;
       child.setPosition(childLeft2, childTop2);
       // setChildRelativeDistance(child, left2, top2, width2, height2);
     }
   }
 
   private void setChildRelativeDistance(IChildElement child, int left, int top, int width, int height) {
-    double dleft = left - child.getLeft();
-    double dtop = top - child.getTop();
+    double dleft = left + width / 2.0 - child.getLeft();
+    double dtop = top + height / 2.0 - child.getTop();
     double rleft = dleft / width;
     double rtop = dtop / height;
+    rleft = rleft > 1 ? 1 : rleft;
+    rtop = rtop > 1 ? 1 : rtop;
     logger.debug("rleft " + rleft + " rtop " + rtop);
     child.saveRelativeDistance(rleft, rtop);
-  }
-
-  private void moveChildren() {
-    if (children != null) {
-      int left = getLeft();
-      int top = getTop();
-      int width = getWidth();
-      int height = getHeight();
-      for (IChildElement child : children) {
-        double midx = left + width / 2.0;
-        double midy = top + height / 2.0;
-        child.setPosition(midx + child.getFixedLeft(), midy + child.getFixedTop());
-      }
-    }
   }
 
 }

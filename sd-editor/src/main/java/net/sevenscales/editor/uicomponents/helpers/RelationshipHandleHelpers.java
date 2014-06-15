@@ -247,7 +247,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   public void dragStart(Diagram sender) {
-    // storeChildrenRelativeDistance(sender);
+    storeChildrenRelativeDistance(sender);
     splitRelationshipShapeIfBendPointDragged(sender);
   }
 

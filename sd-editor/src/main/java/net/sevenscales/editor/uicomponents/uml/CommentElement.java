@@ -663,14 +663,6 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	@Override
   public void setPosition(double left, double top) {
 	}
-	@Override
-  public double getFixedLeft() {
-  	return 0;
-  }
-  @Override
-  public double getFixedTop() {
-  	return 0;
-  }
 
 
 	// @Override
