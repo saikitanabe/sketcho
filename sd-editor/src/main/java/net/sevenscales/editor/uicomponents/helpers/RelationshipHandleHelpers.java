@@ -24,6 +24,9 @@ import net.sevenscales.editor.diagram.utils.BezierHelpers;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.PointDouble;
+import net.sevenscales.editor.gfx.domain.Point;
+import net.sevenscales.editor.gfx.domain.IParentElement;
+import net.sevenscales.editor.gfx.domain.SegmentPoint;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
@@ -252,14 +255,14 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   private void storeChildrenRelativeDistance(Diagram sender) {
-    if (parentRelated(sender)) {
-      parentRelationship.storeChildrenRelativeDistance();
-    }
+    // if (parentRelated(sender)) {
+    //   parentRelationship.storeChildrenRelativeDistance();
+    // }
   }
 
   private void moveChildrenRelatively(Diagram sender) {
     if (parentRelated(sender)) {
-      parentRelationship.moveChildrenRelatively();
+      parentRelationship.moveChildren();
     }
   }
 
@@ -594,5 +597,92 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     }
   }
 
+  private static boolean isClosest(int x, int y, double px, double py, Point diff) {
+    boolean result = false;
+    int dx = Math.abs(x - (int) px);
+    int dy = Math.abs(y - (int) py);
+    if ( (dx + dy) < (diff.x + diff.y) ) {
+      diff.x = dx;
+      diff.y = dy;
+      result = true;
+    }
+    return result;
+  }
+
+  public static SegmentPoint findClosestSegmentPointIndex(int x, int y, Relationship2 relationship) {
+    SegmentPoint result = new SegmentPoint();
+    Point diff = new Point(Integer.MAX_VALUE / 2, Integer.MAX_VALUE / 2);
+    for (int i = 0; i < relationship.getSegments().length(); ++i) {
+      BezierHelpers.Segment seg = relationship.getSegments().get(i);
+      if (isClosest(x, y, seg.getPoint1().getX(), seg.getPoint1().getY(), diff)) {
+        result.segmentIndex = i;
+        result.inSegmentIndex = 0;
+      } 
+
+      PointDouble point = BezierHelpers.bezierMiddlePoint(seg);
+      if (isClosest(x, y, point.x, point.y, diff)) {
+        result.segmentIndex = i;
+        result.inSegmentIndex = 1;
+      }
+
+      if (isClosest(x, y, seg.getPoint2().getX(), seg.getPoint2().getY(), diff)) {
+        result.segmentIndex = i;
+        result.inSegmentIndex = 2;
+      } 
+
+      // if (relationship.isCurved()) {
+      //   PointDouble point = bezierMiddlePoint(i, relationship);
+      //   int ddx = Math.abs(x - point.x);
+      //   int ddy = Math.abs(y - point.y);
+      //   if ( (dx + dy) < (ddx + ddy) ) {
+      //     dx = ddx;
+      //     dy = ddy;
+      //     result = index + 1;
+      //   }
+      // } else {
+      //   int x = middleX(points, parentRelationship); 
+      //   int y = middleY(points, parentRelationship);
+      //   int ddx = Math.abs(x - point.x);
+      //   int ddy = Math.abs(y - point.y);
+      //   if ( (dx + dy) < (ddx + ddy) ) {
+      //     dx = ddx;
+      //     dy = ddy;
+      //     result = index + 1;
+      //   }
+      // }
+    }
+    // int parentRelHandlesCount = parentHandlesCount();
+    // int handlesSize = handles.size();
+    // int result = -1;
+    // int index = 0;
+    // int dx = Integer.MAX_VALUE / 2;
+    // int dy = Integer.MAX_VALUE / 2;
+    // for (int i = 0; i < parentRelHandlesCount && i < handlesSize; ++i) {
+    //   CircleElement h = handles.get(i);
+    //   int ddx = Math.abs(x - h.getLeft());
+    //   int ddy = Math.abs(y - h.getTop());
+    //   if ( (ddx + ddy) < (dx + dy) ) {
+    //     dx = ddx;
+    //     dy = ddy;
+    //     result = index;
+    //   }
+    //   index += 2;
+    // }
+
+    // int bindex = 1;
+    // for (int i = 0; i < parentRelHandlesCount - 1 && i < bendHandles.size(); ++i) {
+    //   CircleElement h = bendHandles.get(i);
+    //   int ddx = Math.abs(x - h.getLeft());
+    //   int ddy = Math.abs(y - h.getTop());
+    //   if ( (ddx + ddy) < (dx + dy) ) {
+    //     dx = ddx;
+    //     dy = ddy;
+    //     result = bindex;
+    //   }
+    //   bindex += 2;
+    // }
+
+    return result;
+  }
 
 }

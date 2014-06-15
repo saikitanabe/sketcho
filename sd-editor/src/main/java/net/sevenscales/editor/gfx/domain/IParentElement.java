@@ -9,4 +9,6 @@ public interface IParentElement {
 	void addChild(IChildElement child);
 	Diagram asDiagram();
 	List<IChildElement> getChildren();
+	SegmentPoint findClosestSegmentPointIndex(int x, int y);
+	PointDouble getPoint(SegmentPoint segmentPoint);
 }

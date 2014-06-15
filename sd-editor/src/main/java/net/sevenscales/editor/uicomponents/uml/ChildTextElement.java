@@ -1,9 +1,13 @@
 package net.sevenscales.editor.uicomponents.uml;
 
+import com.google.gwt.core.client.Scheduler;
+
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.TextShape;
+import net.sevenscales.editor.diagram.drag.Anchor;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
@@ -12,12 +16,15 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.gfx.domain.IChildElement;
+import net.sevenscales.editor.gfx.domain.SegmentPoint;
+import net.sevenscales.editor.gfx.domain.PointDouble;
 
 
 public class ChildTextElement extends TextElement implements IChildElement {
 	private IParentElement parent;
 	private double rleft;
 	private double rtop;
+	private SegmentPoint fixedPointIndex;
 	private double fixedLeft;
 	private double fixedTop;
   private net.sevenscales.editor.gfx.domain.ICircle tempC1;
@@ -31,8 +38,22 @@ public class ChildTextElement extends TextElement implements IChildElement {
 
 		tempC1 = net.sevenscales.editor.gfx.domain.IShapeFactory.Util.factory(editable).createCircle(getGroup());
 
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			public void execute() {
+				updateFixedDistance();
+			}
+		});
+
     super.constructorDone();
 	}
+
+	@Override
+  public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
+  	if (anchor.getRelationship() == parent.asDiagram()) {
+  		return null;
+  	}
+    return super.onAttachArea(anchor, x, y);
+  }
 
 	@Override
 	public Info getInfo() {
@@ -73,6 +94,34 @@ public class ChildTextElement extends TextElement implements IChildElement {
     setShape(new int[]{(int) left, (int) top, getWidth(), getHeight()});
   	// // setShape((int) left, (int) top, getWidth(), getTop());
   	// select();
+  }
+
+	@Override
+  public double getFixedLeft() {
+  	return fixedLeft;
+  }
+  @Override
+  public double getFixedTop() {
+  	return fixedTop;
+  }
+
+  @Override
+	public void saveLastTransform(int dx, int dy) {
+		super.saveLastTransform(dx, dy);
+		updateFixedDistance();
+	}
+
+	@Override
+	public SegmentPoint fixedPointIndex() {
+		return fixedPointIndex;
+	}
+
+  // @Override
+  public void updateFixedDistance() {
+  	fixedPointIndex = parent.findClosestSegmentPointIndex(getLeft(), getTop());
+  	PointDouble anchorPoint = parent.getPoint(fixedPointIndex);
+		fixedLeft = getLeft() - anchorPoint.x;
+		fixedTop =  getTop() - anchorPoint.y;
   }
 
 }

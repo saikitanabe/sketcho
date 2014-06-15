@@ -28,6 +28,7 @@ import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.gfx.domain.IChildElement;
+import net.sevenscales.editor.gfx.domain.SegmentPoint;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.gfx.domain.Point;
@@ -664,6 +665,18 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   public void setPosition(double left, double top) {
 	}
 
+	@Override
+	public SegmentPoint fixedPointIndex() {
+		return null;
+	}
+	@Override
+  public double getFixedLeft() {
+  	return 0;
+  }
+  @Override
+  public double getFixedTop() {
+  	return 0;
+  }
 
 	// @Override
 	// public void setTransform(int x, int y) {

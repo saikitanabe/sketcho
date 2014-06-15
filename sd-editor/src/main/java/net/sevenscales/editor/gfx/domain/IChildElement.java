@@ -15,4 +15,7 @@ public interface IChildElement {
   double getRelativeDistanceLeft();
   double getRelativeDistanceTop();
   void setPosition(double left, double top);
+  SegmentPoint fixedPointIndex();
+	double getFixedLeft();
+  double getFixedTop();
 }

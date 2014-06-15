@@ -55,6 +55,7 @@ import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.gfx.domain.IRelationship;
 import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.gfx.domain.IChildElement;
+import net.sevenscales.editor.gfx.domain.SegmentPoint;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.Scheduler;
@@ -218,9 +219,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       BezierHelpers.Segment result = null;
       String shape = "";
       if (points.size() == 4 || !info.isCurved()) {
+        segments = BezierHelpers.segments(points);
         shape = calcTwoPointsCurvePath(points);
       } else {
-        segments = BezierHelpers.segments(points);
+        segments = BezierHelpers.smoothSegments(points);
         shape = BezierHelpers.smooth(segments);
       }
 
@@ -2138,46 +2140,42 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return children;
   }
 
-  public void storeChildrenRelativeDistance() {
-    int left = getLeft();
-    int top = getTop();
-    int width = getWidth();
-    int height = getHeight();
-    for (IChildElement child : children) {
-      setChildRelativeDistance(child, left, top, width, height);
+  @Override
+  public SegmentPoint findClosestSegmentPointIndex(int x, int y) {
+    return relationshipHandleHelpers.findClosestSegmentPointIndex(x, y, this);
+  }
+  @Override
+  public PointDouble getPoint(SegmentPoint segmentPoint) {
+    if (segmentPoint.segmentIndex < getSegments().length()) {
+      BezierHelpers.Segment seg = getSegments().get(segmentPoint.segmentIndex);
+      switch (segmentPoint.inSegmentIndex) {
+        case 0:
+          return new PointDouble(seg.getPoint1().getX(), seg.getPoint1().getY());
+        case 1:
+          return BezierHelpers.bezierMiddlePoint(seg);
+        case 2:
+          return new PointDouble(seg.getPoint2().getX(), seg.getPoint2().getY());
+      }
+    }
+    return new PointDouble(0, 0);
+  }
+
+  // should actually update children from relationship
+  // if child is not initialized, then initialize child
+  // scheduled code can be removed form child...
+  public void moveChildren() {
+    if (children != null) {
+      int left = getLeft();
+      int top = getTop();
+      int width = getWidth();
+      int height = getHeight();
+      for (IChildElement child : children) {
+        SegmentPoint segmentPoint = child.fixedPointIndex();
+        if (segmentPoint != null) {
+          PointDouble anchorPoint = getPoint(segmentPoint);
+          child.setPosition(anchorPoint.x + child.getFixedLeft(), anchorPoint.y + child.getFixedTop());
+        }
+      }
     }
   }
-
-  public void moveChildrenRelatively() {
-    int left2 = getLeft();
-    int top2 = getTop();
-    int width2 = getWidth();
-    int height2 = getHeight();
-    double midx = left2 + width2 / 2.0;
-    double midy = top2 + height2 / 2.0;
-
-    tempCircle.setShape(midx, midy, 5);
-    tempCircle.setStroke(218, 57, 57, 1);
-
-    for (IChildElement child : children) {
-      double dleft2 = child.getRelativeDistanceLeft() * width2;
-      double dtop2 = child.getRelativeDistanceTop() * height2;
-      double childLeft2 = midx - dleft2;
-      double childTop2 = midy - dtop2;
-      child.setPosition(childLeft2, childTop2);
-      // setChildRelativeDistance(child, left2, top2, width2, height2);
-    }
-  }
-
-  private void setChildRelativeDistance(IChildElement child, int left, int top, int width, int height) {
-    double dleft = left + width / 2.0 - child.getLeft();
-    double dtop = top + height / 2.0 - child.getTop();
-    double rleft = dleft / width;
-    double rtop = dtop / height;
-    rleft = rleft > 1 ? 1 : rleft;
-    rtop = rtop > 1 ? 1 : rtop;
-    logger.debug("rleft " + rleft + " rtop " + rtop);
-    child.saveRelativeDistance(rleft, rtop);
-  }
-
 }

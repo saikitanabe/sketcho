@@ -66,24 +66,41 @@ public class BezierHelpers {
   public static PointDouble bezierMiddlePoint(int i, JsArray<Segment> segments) {
   	PointDouble result = null;
     if (segments != null && i < segments.length()) {
-      double t = 0.5;
-      BezierHelpers.Segment seg = segments.get(i);
-      BezierHelpers.Point p2 = seg.getPoint2();
-      BezierHelpers.Point p1 = seg.getPoint1();
-      BezierHelpers.Point cp1 = seg.getControlPoint1();
-      BezierHelpers.Point cp2 = seg.getControlPoint2();
-      double x = BezierHelpers.bezierInterpolation(t, p2.getX(), cp2.getX(), cp1.getX(), p1.getX());
-      double y = BezierHelpers.bezierInterpolation(t, p2.getY(), cp2.getY(), cp1.getY(), p1.getY());
-      result = new PointDouble(x, y);
+      result = bezierMiddlePoint(segments.get(i));
     }
     return result;
+  }
+
+  public static PointDouble bezierMiddlePoint(Segment seg) {
+    double t = 0.5;
+    BezierHelpers.Point p2 = seg.getPoint2();
+    BezierHelpers.Point p1 = seg.getPoint1();
+    BezierHelpers.Point cp1 = seg.getControlPoint1();
+    BezierHelpers.Point cp2 = seg.getControlPoint2();
+    double x = BezierHelpers.bezierInterpolation(t, p2.getX(), cp2.getX(), cp1.getX(), p1.getX());
+    double y = BezierHelpers.bezierInterpolation(t, p2.getY(), cp2.getY(), cp1.getY(), p1.getY());
+    return new PointDouble(x, y);
   }
 
 	public static JsArray<Segment> segments(List<Integer> points) {
 		return segments(toPoints(points));
 	}
+	public static JsArray<Segment> segments(JsArray<Point> points) {
+		JsArray<Segment> result = JsArray.createArray().cast();
+		for (int i = 0; i + 1 < points.length(); i += 2) {
+			Point p1 = points.get(i);
+			Point p2 = points.get(i + 1);
+			// straight segment
+			Segment seg = createSegment(p1.getX(), p1.getY(), p1.getX(), p1.getY(), p2.getX(), p2.getY(), p2.getX(), p2.getY());
+			result.push(seg);
+		}
+		return result;
+	}
 
-	public static native JsArray<Segment> segments(JsArray<Point> points)/*-{
+	public static JsArray<Segment> smoothSegments(List<Integer> points) {
+		return smoothSegments(toPoints(points));
+	}
+	public static native JsArray<Segment> smoothSegments(JsArray<Point> points)/*-{
 		return $wnd.sketchboard.smoothPointsToSegments(points)
 	}-*/;
 
