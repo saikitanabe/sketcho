@@ -29,7 +29,9 @@ public class ToolFrame extends SimplePanel {
 		panel.setHeight("100%");
 		panel.setSpacing(0);
 		this.toolbar = new Libarary(surface, height, modeManager, editorContext);
+		// DEBUGGING START handy way to disable library, just comment next line
 		panel.add(toolbar);
+		// DEBUGGING END
 		panel.setCellHeight(toolbar, height+"px");
 //		h = (int) (height * 0.2);
 		properties = new Properties(90, surface, surface.getSelectionHandler(), editorContext);
