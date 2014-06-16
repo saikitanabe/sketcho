@@ -2,14 +2,9 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>sketcho-aggregate</artifactId>
-        <groupId>net.sevenscales</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
     <groupId>net.sevenscales.confluence.plugins</groupId>
     <artifactId>sketcho-confluence</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
     <packaging>atlassian-plugin</packaging>
     <name>Sketchboard.Me Confluence Plugin</name>
     <description>UML, Free hand and Mind Map Drawing Plugin for Confluence</description>
@@ -229,19 +224,19 @@
     </properties>
  -->
     <properties>
-        <amps.version>4.2.20</amps.version>
+        <amps.version>5.0.2</amps.version>
         <confluence.data.version>3.5</confluence.data.version>
         <confluence.version>4.0</confluence.version>
         <upm.license.compatibility.version>2.3</upm.license.compatibility.version>
         <sal.api.version>2.4.0</sal.api.version>
         <atlassian.templaterenderer.version>1.0.5</atlassian.templaterenderer.version>
     
-        <!-- <upm.license.compatibility.version>2.3</upm.license.compatibility.version>
+<!--         <amps.version>5.0.2</amps.version>
+        <upm.license.compatibility.version>2.3</upm.license.compatibility.version>
         <sal.api.version>2.4.0</sal.api.version>
-        <confluence.version>5.5.0</confluence.version>
-        <confluence.data.version>5.5.0</confluence.data.version>
-        <amps.version>4.2.20</amps.version>
-        <plugin.testrunner.version>1.1.4</plugin.testrunner.version>        
-        <atlassian.templaterenderer.version>1.0.5</atlassian.templaterenderer.version> -->
-    </properties>
+        <confluence.version>5.5.2</confluence.version>
+        <confluence.data.version>5.5.2</confluence.data.version>
+        <plugin.testrunner.version>1.2.0</plugin.testrunner.version>
+        <atlassian.templaterenderer.version>1.0.5</atlassian.templaterenderer.version>
+ -->    </properties>
 </project>

@@ -32,23 +32,23 @@
 	
 	 <!-- PRODUCTION SETUP... -->
   <!-- Production => UNCOMMENT -->
-<!--  <set-property name="gwt.logging.enabled" value="FALSE"/> -->
+ <set-property name="gwt.logging.enabled" value="FALSE"/>
 
   <!-- Production => COMMENT -->
   
-  <add-linker name="xsiframe" />
+<!--   <add-linker name="xsiframe" />
   <set-configuration-property name="devModeRedirectEnabled" value="true" />
-  
+ -->  
 <!--  <inherits name="com.googlecode.mgwt.MGWT"/> -->
 <!--  <set-configuration-property name="mgwt.superdevmode" value="on" /> -->
 
   <!-- Production => COMMENT stack trace sources mapping -->
-  <set-property name="compiler.stackMode" value="emulated" />
+<!--   <set-property name="compiler.stackMode" value="emulated" />
   <set-configuration-property name="compiler.emulatedStack.recordLineNumbers"
     value="true" />
   <set-configuration-property name="compiler.emulatedStack.recordFileNames"
     value="true" />
-
+ -->
   <!-- PRODUCTION SETUP... DONE -->
 	
 
