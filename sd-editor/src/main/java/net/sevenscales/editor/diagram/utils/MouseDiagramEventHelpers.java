@@ -53,17 +53,21 @@ public class MouseDiagramEventHelpers {
     List<Diagram> diagrams = new ArrayList<Diagram>();
     for (Diagram d : selectedItems) {
       addRelatedConnections(d, diagrams);
-      if (d instanceof IRelationship) {
-        // cannot use IParentElement since comment thread is handling sending differently
-        // when child is dragged parent is moved, all children are relative to parent
-        // in here parent is moved (relationship) and children should store their position as well
-        addChildren((IRelationship)d, diagrams);
-      }
+      addChildren(d, diagrams);
     }
     return diagrams;
   }
 
-  private static void addChildren(IParentElement parent, List<Diagram> diagrams) {
+  private static void addChildren(Diagram diagram, List<Diagram> diagrams) {
+    if (diagram instanceof IRelationship) {
+      // cannot use IParentElement since comment thread is handling sending differently
+      // when child is dragged parent is moved, all children are relative to parent
+      // in here parent is moved (relationship) and children should store their position as well
+      doAddChildren((IRelationship)diagram, diagrams);
+    }
+  }
+
+  private static void doAddChildren(IRelationship parent, List<Diagram> diagrams) {
     for (IChildElement child : parent.getChildren()) {
       if (!diagrams.contains(child)) {
         diagrams.add(child.asDiagram());
@@ -77,6 +81,7 @@ public class MouseDiagramEventHelpers {
         IDiagramItemRO di = ae.getRelationship().getDiagramItem();
         if (di.getClientId() != null && !diagrams.contains(ae.getRelationship())) {
           diagrams.add(ae.getRelationship());
+          addChildren(ae.getRelationship(), diagrams);
         }
       }
     }
