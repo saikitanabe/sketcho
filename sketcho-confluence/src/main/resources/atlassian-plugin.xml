@@ -35,7 +35,7 @@
    </web-resource>
 
 	<web-item key="add-sketcho-action-web-ui-editor" name="add-sketcho-action-web-ui-editor" section="system.editor.featured.macros.default" weight="11">
-    <label key="i18n.property.key.for.the.text.describing.your.icon"/>
+    <label key="Sketchboard.Me Macro"/>
     <link linkId="sketcho"/>
 	</web-item>
 
