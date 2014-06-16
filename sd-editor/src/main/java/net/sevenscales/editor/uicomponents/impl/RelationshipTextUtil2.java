@@ -1,5 +1,8 @@
 package net.sevenscales.editor.uicomponents.impl;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
@@ -190,6 +193,14 @@ public class RelationshipTextUtil2 implements RelationshipParser {
 				return lines[0];
 			}
 			return "";
+			// String result = "";
+			// for (int i = 0; i < lines.length - 1; ++i) {
+			// 	if (i > 0) {
+			// 		result += "\n";
+			// 	}
+			// 	result += lines[i];
+			// }
+			// return result;
 		}
 		
 		public String parseConnection() {
