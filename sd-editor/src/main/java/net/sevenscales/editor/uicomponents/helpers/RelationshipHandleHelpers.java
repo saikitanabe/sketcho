@@ -394,9 +394,9 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   public void dragEnd(Diagram sender) {
-//    if (parentRelationship == null) {
-//      return;
-//    }
+   if (parentRelationship != sender) {
+     return;
+   }
 
     logger.debug("RelationshipHandleHelpers.dragEnd...");
     
