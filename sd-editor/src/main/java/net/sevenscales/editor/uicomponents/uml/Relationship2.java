@@ -1423,6 +1423,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //    prevPoints.addAll(points);
 //    System.out.println("doSetShape:"+points+" "+anchorMap);
     relLine.setShape(points);
+    initializeChildren();
   	if (TouchHelpers.isSupportsTouch() && surface.getMouseDiagramManager().getDragHandler().isDragging()) {
   		// performance improvement needed on touch devices; there is not enough
   		// processing power to calculate arrow head shapes on every touch move.
@@ -1485,7 +1486,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     conditionallyCalculateDiamond();
 
     relationshipText.setShape(this);
-    // moveChildrenRelatively();
+    moveChildren();
 
 //    String color = startSelection.getVisibility() ? "blue" : "black";
 //  line.setShape(start.x, start.y, end.x, end.y);
@@ -2176,6 +2177,16 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
           child.setPosition(anchorPoint.x + child.getFixedLeft(), anchorPoint.y + child.getFixedTop());
         }
       }
+    }
+  }
+
+  public void initializeChildren() {
+    if (children != null) {
+      for (IChildElement child : children) {
+        if (!child.isInitialized()) {
+          child.updateFixedDistance();
+        }
+      }      
     }
   }
 }

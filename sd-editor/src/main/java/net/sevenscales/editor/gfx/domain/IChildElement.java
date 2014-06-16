@@ -15,6 +15,9 @@ public interface IChildElement {
   double getRelativeDistanceLeft();
   double getRelativeDistanceTop();
   void setPosition(double left, double top);
+
+  boolean isInitialized();
+  void updateFixedDistance();
   SegmentPoint fixedPointIndex();
 	double getFixedLeft();
   double getFixedTop();

@@ -260,11 +260,11 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     // }
   }
 
-  private void moveChildrenRelatively(Diagram sender) {
-    if (parentRelated(sender)) {
-      parentRelationship.moveChildren();
-    }
-  }
+  // private void moveChildrenRelatively(Diagram sender) {
+  //   if (parentRelated(sender)) {
+  //     parentRelationship.moveChildren();
+  //   }
+  // }
 
   private boolean parentRelated(Diagram sender) {
     return parentRelationship != null && 
@@ -312,7 +312,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     moveHandlesIfParentIsDragged(sender, dx, dy);
     moveParentAccordingToHandle(sender, dx, dy);
     preHighlightTargetAnchor(sender);
-    moveChildrenRelatively(sender);
+    // moveChildrenRelatively(sender);
   }
 
   private void moveHandlesIfParentIsDragged(Diagram sender, int dx, int dy) {

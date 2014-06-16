@@ -666,6 +666,13 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	@Override
+	public boolean isInitialized() {
+		return false;
+	}
+	@Override
+	public void updateFixedDistance() {
+	}
+	@Override
 	public SegmentPoint fixedPointIndex() {
 		return null;
 	}
