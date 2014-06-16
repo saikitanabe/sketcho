@@ -1559,7 +1559,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	  // }
 
     ElementColorScheme current = getCurrentColorScheme();
-    logger.debug("current: " + current.getBackgroundColor() + " backgroundColor " + backgroundColor);
     setColorInfo(info, 
                  getBackgroundOrDefaultColor(current, paper),
                  getBorderOrDefaultColor(current, paper), 

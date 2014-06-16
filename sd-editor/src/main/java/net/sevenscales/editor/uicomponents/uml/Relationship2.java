@@ -13,6 +13,7 @@ import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
+import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramDragHandler;
 import net.sevenscales.editor.diagram.DiagramResizeHandler;
@@ -1285,12 +1286,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   private ChildTextElement createChildLabel(int screenX, int screenY) {
-    TextShape ts = new TextShape(screenX, screenY, 100, 30);
+    ScaleHelpers.ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint(screenX, screenY, surface);
+    TextShape ts = new TextShape(stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y, 100, 30);
     DiagramItemDTO tdto = new DiagramItemDTO();
     tdto.setParentId(getDiagramItem().getClientId());
     ChildTextElement result = new ChildTextElement(surface, 
                                           ts, 
-                                          Theme.getCurrentThemeName().getBoardBackgroundColor().create(), 
+                                          Theme.ThemeName.PAPER.getBoardBackgroundColor().create(), 
                                           Theme.getCurrentColorScheme().getBorderColor().create(), 
                                           Theme.getCurrentColorScheme().getTextColor().create(), 
                                           "",
