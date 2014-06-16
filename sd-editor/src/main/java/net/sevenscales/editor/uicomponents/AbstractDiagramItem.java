@@ -420,11 +420,15 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   public void showResizeHandles() {
-    resizeHelpers.show(this);
+    if (resizeHelpers != null) {
+      resizeHelpers.show(this);
+    }
   }
 
   public void hideResizeHandles() {
-    resizeHelpers.hideGlobalElement();
+    if (resizeHelpers != null) {
+      resizeHelpers.hideGlobalElement();
+    }
   }
   
   public int getResizeIndentX() {

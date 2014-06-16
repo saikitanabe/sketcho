@@ -12,8 +12,11 @@ import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
+import net.sevenscales.editor.uicomponents.TextElementHorizontalFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
+import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.SegmentPoint;
@@ -46,6 +49,16 @@ public class ChildTextElement extends TextElement implements IChildElement {
 		// });
 
     super.constructorDone();
+	}
+
+	@Override
+	protected ResizeHelpers createResizeHelpers() {
+		return null;
+	}
+
+	@Override
+	protected TextElementFormatUtil createTextFormatter(HasTextElement hasTextElement) {
+		return new TextElementHorizontalFormatUtil(this, hasTextElement, getGroup(), surface.getEditorContext());
 	}
 
 	@Override

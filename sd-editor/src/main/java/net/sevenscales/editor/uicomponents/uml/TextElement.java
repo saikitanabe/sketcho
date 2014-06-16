@@ -40,9 +40,9 @@ public class TextElement extends AbstractDiagramItem implements
 	private TextShape shape;
 	private Point coords = new Point();
 	private IGroup group;
-	private TextElementVerticalFormatUtil textUtil;
-	private int minimumWidth = 25;
-	private int minimumHeight = 20;
+	private TextElementFormatUtil textUtil;
+	private int minimumWidth = 5;
+	private int minimumHeight = 5;
 
 	public TextElement(ISurfaceHandler surface, TextShape newShape,
 			Color backgroundColor, Color borderColor, Color textColor, String text, boolean editable, IDiagramItemRO item) {
@@ -60,7 +60,7 @@ public class TextElement extends AbstractDiagramItem implements
 
 		addEvents(attachBoundary);
 
-		resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
+		resizeHelpers = createResizeHelpers();
 //		resizeHelpers.setVisible(false);
 
 		// attachBoundary.addGraphicsMouseDownHandler(this);
@@ -71,14 +71,21 @@ public class TextElement extends AbstractDiagramItem implements
 
 		// shapes.add(attachBoundary);
 		
-		textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group,
-				surface.getEditorContext());
+		textUtil = createTextFormatter(hasTextElement);
 		setReadOnly(!editable);
 
 		setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
 		setText(text);
 		
     super.constructorDone();
+	}
+
+	protected ResizeHelpers createResizeHelpers() {
+		return ResizeHelpers.createResizeHelpers(surface);
+	}
+
+	protected TextElementFormatUtil createTextFormatter(HasTextElement hasTextElement) {
+		return new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
 	}
 
 	// nice way to clearly separate interface methods :)
@@ -249,10 +256,6 @@ public class TextElement extends AbstractDiagramItem implements
 	//
 	// // group.setClip(shape.left, shape.top, shape.width, shape.height);
 	// }
-
-	public boolean onResizeArea(int x, int y) {
-		return resizeHelpers.isOnResizeArea();
-	}
 
 	public Info getInfo() {
 		fillInfo(shape);

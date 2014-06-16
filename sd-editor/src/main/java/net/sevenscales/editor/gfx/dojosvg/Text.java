@@ -25,6 +25,7 @@ class Text extends Shape implements IText {
 	private boolean prevTspanWeight;
 	private double currentLineLength;
 	private boolean startsNewline;
+	private boolean tspanMode = false;
   
 	Text(IContainer container) {
 		rawNode = createText(container.getContainer());
@@ -157,7 +158,7 @@ class Text extends Shape implements IText {
 	}-*/;
 
 	public double getTextWidth() {
-		if ((UiUtils.isSafari() || UiUtils.isFirefox()) && justTextNoTspan(rawNode)) {
+		if ((UiUtils.isSafari() || UiUtils.isFirefox()) && !tspanMode) {
 			int fontSize = parseFontSize(getFontSize());
 			return MeasurementPanel.getOffsetWidth(getText(), fontSize);
 		}
@@ -176,12 +177,6 @@ class Text extends Shape implements IText {
 		return result;
 	}
 	
-	private native boolean justTextNoTspan(JavaScriptObject rawNode)/*-{
-		// var text = rawNode.getShape().text
-		return rawNode.rawNode.firstChild.nodeType == 3
-		// return text != null && text.firstChild == null;
-	}-*/;
-	
 	public double getLastSpanWidth() {
 		return _lastSpanWidth(rawNode);
 	}
@@ -191,10 +186,10 @@ class Text extends Shape implements IText {
 	}-*/;
 
 	public native double getTextWidth(JavaScriptObject rawNode)/*-{
-		if (rawNode.getShape().text) {
-			// possible this is just text content set through setShape({text:text});
-			return rawNode.getTextWidth();
-		}
+		// if (rawNode.getShape().text) {
+		// 	// possible this is just text content set through setShape({text:text});
+		// 	return rawNode.getTextWidth();
+		// }
 		
 		if (!rawNode.rawNode || !rawNode.rawNode.childNodes) {
 			return 0;
@@ -204,7 +199,10 @@ class Text extends Shape implements IText {
 		for (var count = 0; count < rawNode.rawNode.childNodes.length; ++count) {
 			var tag = rawNode.rawNode.childNodes[count];
 			if (tag && tag.tagName == "tspan" && $wnd.jQuery.trim(tag.firstChild.data) != "") {
-				result += tag.getComputedTextLength();
+				var len = tag.getComputedTextLength()
+				if (len > result) {
+					result = len
+				}
 			}
 		}
 		return result;
@@ -256,6 +254,7 @@ class Text extends Shape implements IText {
   public void addText(JavaScriptObject tokens, int x, int width) {
 	  Element r = getRawNode(rawNode);
 	  addText(r, tokens, x, width);
+	  tspanMode = true;
   }
   
   private native void addText(JavaScriptObject parent,JavaScriptObject tokens, int x, int width)/*-{

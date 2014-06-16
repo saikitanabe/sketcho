@@ -258,6 +258,10 @@ public class TextElementFormatUtil {
     return fontProperty.marginBottom;
 	}
   
+  public void setText(String newText, boolean editable, boolean force) {
+    setText(newText, editable);
+  }
+
   public void setText(String newText, boolean editable) {
   	try {
     	_setText(newText, editable);
@@ -416,7 +420,7 @@ public class TextElementFormatUtil {
 	  	        t.setFontWeight(weight);
 	          }
 	        } else {
-	          x += START_X;
+	          x += getStartX();
 	        }
 	        
 	        if (prevtext != null) {
@@ -460,6 +464,10 @@ public class TextElementFormatUtil {
 //      t.setFill("#E18400");
 //    }
  }
+
+  protected int getStartX() {
+    return START_X;
+  }
 
   protected int getTextTop(int row) {
     return hasTextElement.getY() + getMarginTop() + (row * fontProperty.rowHeight);
