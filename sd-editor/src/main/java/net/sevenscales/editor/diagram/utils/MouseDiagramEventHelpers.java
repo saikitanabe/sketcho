@@ -17,6 +17,7 @@ import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
 import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.gfx.domain.IRelationship;
 import net.sevenscales.editor.gfx.domain.IChildElement;
+import net.sevenscales.editor.uicomponents.CircleElement;
 
 public class MouseDiagramEventHelpers {
   public static void fireDiagramAddedEvent(Diagram item, ISurfaceHandler surface, ActionType actionType) {
@@ -59,6 +60,9 @@ public class MouseDiagramEventHelpers {
   }
 
   private static void addChildren(Diagram diagram, List<Diagram> diagrams) {
+    if (diagram instanceof CircleElement) {
+      addChildren(diagram.getOwnerComponent(), diagrams);
+    }
     if (diagram instanceof IRelationship) {
       // cannot use IParentElement since comment thread is handling sending differently
       // when child is dragged parent is moved, all children are relative to parent
