@@ -56,6 +56,12 @@ public class ChildTextElement extends TextElement implements IChildElement {
     return super.onAttachArea(anchor, x, y);
   }
 
+  @Override
+  public void copyFrom(IDiagramItemRO diagramItem) {
+  	super.copyFrom(diagramItem);
+  	updateFixedDistance();
+  }
+
 	@Override
 	public Info getInfo() {
 		// TODO add parent client id
