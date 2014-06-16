@@ -16,11 +16,15 @@ public class Theme {
   private ElementColorScheme commentThreadColorScheme;
 
   public enum ThemeName {
-    WHITE("white", "#fff"), BLACK("black", "#272822"), SEPIA("sepia", "#FBF0D9"), PAPER("paper", "#FAFAFA"), GRID("grid", "#FAFAFA");
+    WHITE("white", new Color(0xff, 0xff, 0xff, 1)), 
+    BLACK("black", new Color(0x27, 0x28, 0x22, 1)),
+    SEPIA("sepia", new Color(0xFB, 0xF0, 0xD9, 1)), 
+    PAPER("paper", new Color(0xFA, 0xFA, 0xFA, 1)), 
+    GRID("grid", new Color(0xFA, 0xFA, 0xFA, 1));
     
     private String name;
-    private String boardBackgroundColor;
-    private ThemeName(String name, String boardBackgroundColor) {
+    private Color boardBackgroundColor;
+    private ThemeName(String name, Color boardBackgroundColor) {
       this.name = name;
       this.boardBackgroundColor = boardBackgroundColor;
     }
@@ -29,7 +33,7 @@ public class Theme {
       return name;
     }
 
-    public String getBoardBackgroundColor() {
+    public Color getBoardBackgroundColor() {
       return boardBackgroundColor;
     }
     

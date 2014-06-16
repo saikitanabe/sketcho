@@ -631,7 +631,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		textArea.setVisible(true);
 
 		if ("transparent".equals(diagram.getTextAreaBackgroundColor())) {
-			textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor());
+			textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
 		} else {
 			textArea.getElement().getStyle().setBackgroundColor(diagram.getTextAreaBackgroundColor());
 		}

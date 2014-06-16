@@ -412,4 +412,8 @@ public class TextElement extends AbstractDiagramItem implements
            ContextMenuItem.LAYERS.getValue();
   }
 
+  protected IRectangle getAttachBoundary() {
+  	return attachBoundary;
+  }
+
 }

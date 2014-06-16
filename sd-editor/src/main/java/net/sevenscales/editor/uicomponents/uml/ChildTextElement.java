@@ -1,8 +1,7 @@
 package net.sevenscales.editor.uicomponents.uml;
 
-// import com.google.gwt.core.client.Scheduler;
-
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.TextShape;
@@ -31,7 +30,7 @@ public class ChildTextElement extends TextElement implements IChildElement {
 	private SegmentPoint fixedPointIndex;
 	private double fixedLeft;
 	private double fixedTop;
-  private net.sevenscales.editor.gfx.domain.ICircle tempC1;
+  // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
 
 
 	public ChildTextElement(ISurfaceHandler surface, TextShape newShape,
@@ -40,14 +39,8 @@ public class ChildTextElement extends TextElement implements IChildElement {
 		this.parent = parent;
 		parent.addChild(this);
 
-		tempC1 = net.sevenscales.editor.gfx.domain.IShapeFactory.Util.factory(editable).createCircle(getGroup());
-
-		// Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-		// 	public void execute() {
-		// 		updateFixedDistance();
-		// 	}
-		// });
-
+		// tempC1 = net.sevenscales.editor.gfx.domain.IShapeFactory.Util.factory(editable).createCircle(getGroup());
+    setBackgroundColor(backgroundColor);
     super.constructorDone();
 	}
 
@@ -108,9 +101,9 @@ public class ChildTextElement extends TextElement implements IChildElement {
   }
 	@Override
   public void setPosition(double left, double top) {
-    tempC1.setShape(left, top, 5);
-    tempC1.setStroke(150, 150, 150, 1);
-    tempC1.setFill(150, 150, 150, 1);
+    // tempC1.setShape(left, top, 5);
+    // tempC1.setStroke(150, 150, 150, 1);
+    // tempC1.setFill(150, 150, 150, 1);
     setShape(new int[]{(int) left, (int) top, getWidth(), getHeight()});
   	// // setShape((int) left, (int) top, getWidth(), getTop());
   	// select();
@@ -148,6 +141,17 @@ public class ChildTextElement extends TextElement implements IChildElement {
 		fixedLeft = getLeft() - anchorPoint.x;
 		fixedTop =  getTop() - anchorPoint.y;
 		initialized = true;
+  }
+
+  @Override
+  public boolean canSetBackgroundColor() {
+  	return true;
+  }
+
+  @Override
+	public void setBackgroundColor(int red, int green, int blue, double opacity) {
+  	super.setBackgroundColor(red, green, blue, opacity);
+    getAttachBoundary().setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }
 
 }

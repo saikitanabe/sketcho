@@ -984,11 +984,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   
   @Override
   public void setBackgroundColor(int red, int green, int blue, double opacity) {
-//  	if (opacity > 0) {
-	  	backgroundColor.red = red;
-	  	backgroundColor.green = green;
-	  	backgroundColor.blue = blue;
-//  	}
+  	backgroundColor.red = red;
+  	backgroundColor.green = green;
+  	backgroundColor.blue = blue;
   	backgroundColor.opacity = opacity;
   }
   
@@ -1561,6 +1559,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	  // }
 
     ElementColorScheme current = getCurrentColorScheme();
+    logger.debug("current: " + current.getBackgroundColor() + " backgroundColor " + backgroundColor);
     setColorInfo(info, 
                  getBackgroundOrDefaultColor(current, paper),
                  getBorderOrDefaultColor(current, paper), 

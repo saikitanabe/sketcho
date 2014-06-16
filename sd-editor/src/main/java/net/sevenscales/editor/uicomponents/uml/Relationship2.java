@@ -663,7 +663,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     this.points = points.points;
     handler = new ConnectionMoveHandler();
     children = new ArrayList<IChildElement>();
-    group = IShapeFactory.Util.factory(editable).createGroup(surface.getConnectionLayer());
+    group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
 
     // DEBUG curve visualization START
     tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
@@ -1290,9 +1290,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     tdto.setParentId(getDiagramItem().getClientId());
     ChildTextElement result = new ChildTextElement(surface, 
                                           ts, 
-                                          Theme.getCurrentColorScheme().getBackgroundColor(), 
-                                          Theme.getCurrentColorScheme().getBorderColor(), 
-                                          Theme.getCurrentColorScheme().getTextColor(), 
+                                          Theme.getCurrentThemeName().getBoardBackgroundColor().create(), 
+                                          Theme.getCurrentColorScheme().getBorderColor().create(), 
+                                          Theme.getCurrentColorScheme().getTextColor().create(), 
                                           "",
                                           editable, 
                                           tdto, 
@@ -1569,7 +1569,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       inheritance.setFill("#" + color);
     } else {
       // no fill => hide line under the shape
-      inheritance.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
+      inheritance.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
     }
   }
 
@@ -1579,7 +1579,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       aggregate.setFill("#" + color);
     } else {
       // no fill => hide line under the shape
-      aggregate.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
+      aggregate.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
     }
   }
 

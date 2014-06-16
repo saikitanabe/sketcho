@@ -33,7 +33,7 @@ class SvgBase {
 		} else if (isThemeBackgroundColor(fill)) {
 			// if fill is theme background then use paper background
 			// used in arrows to hide line, e.g. in inheritance
-			params.put(FILL_TEMPLATE, ThemeName.PAPER.getBoardBackgroundColor());
+			params.put(FILL_TEMPLATE, ThemeName.PAPER.getBoardBackgroundColor().toHexStringWithHash());
 		}
 	}
 
