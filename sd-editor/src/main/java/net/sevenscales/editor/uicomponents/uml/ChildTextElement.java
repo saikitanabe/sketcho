@@ -120,9 +120,15 @@ public class ChildTextElement extends TextElement implements IChildElement {
 	public void snapshotTransformations() {
 		super.snapshotTransformations();
 		// called before this element is dragged
+		resetStartDragPosition();
+  }
+
+	private void resetStartDragPosition() {
   	originalX = 0;
   	originalY = 0;
-  }
+  	prevDX = 0;
+  	prevDY = 0;
+	}
 
 	@Override
   public void setPosition(double left, double top) {
@@ -192,6 +198,7 @@ public class ChildTextElement extends TextElement implements IChildElement {
   @Override
 	public void saveLastTransform(int dx, int dy) {
 		super.saveLastTransform(dx, dy);
+		resetStartDragPosition();
 		getDiagramItem().addShapeProperty(ShapeProperty.NO_TEXT_AUTO_ALIGN);
 		updateFixedDistance();
 	}
