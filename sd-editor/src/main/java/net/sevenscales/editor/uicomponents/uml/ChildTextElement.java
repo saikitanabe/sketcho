@@ -17,6 +17,7 @@ import net.sevenscales.editor.uicomponents.TextElementHorizontalFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers;
 import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.SegmentPoint;
@@ -31,6 +32,10 @@ public class ChildTextElement extends TextElement implements IChildElement {
 	private SegmentPoint fixedPointIndex;
 	private double fixedLeft;
 	private double fixedTop;
+	private int originalX;
+	private int originalY;
+	private int prevDX;
+	private int prevDY;
   // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
 
 
@@ -47,6 +52,11 @@ public class ChildTextElement extends TextElement implements IChildElement {
 
 	@Override
 	protected ResizeHelpers createResizeHelpers() {
+		return null;
+	}
+
+	@Override
+	protected IConnectionHelpers createConnectionHelpers() {
 		return null;
 	}
 
@@ -110,18 +120,48 @@ public class ChildTextElement extends TextElement implements IChildElement {
   public double getRelativeDistanceTop() {
   	return rtop;
   }
+
+  @Override
+	public void snapshotTransformations() {
+		super.snapshotTransformations();
+		// called before this element is dragged
+  	originalX = 0;
+  	originalY = 0;
+  }
+
 	@Override
   public void setPosition(double left, double top) {
     // tempC1.setShape(left, top, 5);
     // tempC1.setStroke(150, 150, 150, 1);
     // tempC1.setFill(150, 150, 150, 1);
-   //  if (fixedPointIndex != null && fixedPointIndex.inSegmentIndex == 1) {
-   //  	// left = left - getWidth() / 2.0;
-	  // }
+    // potential code to move attached relationships
+    if (originalX == 0 && originalY == 0) {
+	  	originalX = getLeft();
+	  	originalY = getTop();
+    }
 
-    setShape(new int[]{(int) left, (int) top, getWidth(), getHeight()});
+    int roundedLeft = (int) left;
+    int roundedTop = (int) top;
+    int ddx = roundedLeft - originalX;
+    int ddy = roundedTop - originalY;
+
+		int dx = ddx - prevDX;
+		int dy = ddy - prevDY;
+
+  	moveAttachedRelationships(dx, dy);
+
+  	prevDX = ddx;
+  	prevDY = ddy;
+  	// potential code ends
+
+    setShape(new int[]{roundedLeft, roundedTop, getWidth(), getHeight()});
   	// // setShape((int) left, (int) top, getWidth(), getTop());
-  	// select();
+  }
+
+	private void moveAttachedRelationships(int dx, int dy) {
+		for (AnchorElement ae : getAnchors()) {
+			ae.dispatch(dx, dy, 0L);
+		}
   }
 
 	@Override

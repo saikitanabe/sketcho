@@ -1,6 +1,9 @@
 package net.sevenscales.editor.gfx.domain;
 
+import java.util.Collection;
+
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 
 public interface IChildElement {
 	Diagram getParent();
@@ -21,4 +24,6 @@ public interface IChildElement {
   SegmentPoint fixedPointIndex();
 	double getFixedDistanceLeft();
   double getFixedDistanceTop();
+
+  Collection<AnchorElement> getAnchors();
 }

@@ -397,7 +397,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
   
   public void select() {
-  	logger.debug("select {}", connectionHelpers.isShown());
     selected = true;
     if (anchorPoint != null) {
       anchorPoint.setVisibility(false);
@@ -885,7 +884,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       anchorPoint.setVisibility(!value);
     }
     // connection helpers should be always visible when setting read only state
-    connectionHelpers.setVisibility(false);
+    if (connectionHelpers != null) {
+      connectionHelpers.setVisibility(false);
+    }
   }
   
 /////////////////////////////////
@@ -1222,7 +1223,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     logger.debugTime();
     logger.start("copyFrom 7");
 		
-		if (connectionHelpers.isShownFor(this)) {
+		if (connectionHelpers != null && connectionHelpers.isShownFor(this)) {
 			connectionHelpers.show(this);
 		}
 
@@ -1652,18 +1653,24 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
 
   protected void toggleConnectionHelpers() {
-    connectionHelpers.toggle(this);
+    if (connectionHelpers != null) {
+      connectionHelpers.toggle(this);
+    }
   }
 	
 	@Override
 	public void hideConnectionHelpers() {
-		connectionHelpers.hideForce();
+    if (connectionHelpers != null) {
+      connectionHelpers.hideForce();
+    }
 	}
 	public void applyHelpersShape() {
 		if (resizeHelpers != null) {
 			resizeHelpers.setShape();
 		}
-    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
+    if (connectionHelpers != null) {
+      connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
+    }
 	}
 
   // too much is processed and most probably gets executed

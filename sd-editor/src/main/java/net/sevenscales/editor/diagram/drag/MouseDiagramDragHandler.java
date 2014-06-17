@@ -43,6 +43,8 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.IParentElement;
+import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
@@ -340,13 +342,14 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 				moveRelatedDragHandlerAccordingToCircleHandle(dd, dx, dy);
 
 				// some connections are following this element drag => drag with relationship connection
-				Collection<AnchorElement> anchors = dd.getAnchors();
-
-				// System.out.println(anchors.size()+" "+dispachSequence+" dx: "+dx+" dy: "+dy);
-				for (AnchorElement ae : anchors) {
-					ae.dispatch(dx, dy, sequence);
-				}
+				moveAnchors(dd.getAnchors(), dx, dy, sequence);
 			}
+		}
+	}
+
+	private void moveAnchors(Collection<AnchorElement> anchors, int dx, int dy, long sequence) {
+		for (AnchorElement ae : anchors) {
+			ae.dispatch(dx, dy, sequence);
 		}
 	}
 

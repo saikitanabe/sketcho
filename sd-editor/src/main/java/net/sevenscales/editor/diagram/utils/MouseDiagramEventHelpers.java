@@ -75,6 +75,7 @@ public class MouseDiagramEventHelpers {
     for (IChildElement child : parent.getChildren()) {
       if (!diagrams.contains(child)) {
         diagrams.add(child.asDiagram());
+        addRelatedConnections(child.asDiagram(), diagrams);
       }
     }
   }
