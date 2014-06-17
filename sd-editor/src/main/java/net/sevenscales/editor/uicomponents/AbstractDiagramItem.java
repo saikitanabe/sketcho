@@ -526,7 +526,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   protected AnchorElement makeFixedTempAnchorProperties(Anchor anchor, int x, int y) {
     Integer[] fixedAnchorPoints = getFixedAnchorPoints();
     if (fixedAnchorPoints != null) {
-      AnchorUtils.anchorPoint(x, y, tempAnchorProperties, fixedAnchorPoints);
+      AnchorUtils.anchorPoint(x, y, getLeft(), getTop(), getWidth(), getHeight(), tempAnchorProperties, fixedAnchorPoints);
       AnchorElement result = makeAnchorElementFromTemp(anchor);
       result.setFixedPoint(true);
       return result;
@@ -590,7 +590,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
    	 	AnchorUtils.relativeValue(tempAnchorProperties, x, y, getLeft(), getTop(), getWidth(), getHeight());
       return false;
     } else {
-      AnchorUtils.anchorPoint(x, y, tempAnchorProperties, fixedAnchorPoints);
+      AnchorUtils.anchorPoint(x, y, getLeft(), getTop(), getWidth(), getHeight(), tempAnchorProperties, fixedAnchorPoints);
       return true;
     }
 	}

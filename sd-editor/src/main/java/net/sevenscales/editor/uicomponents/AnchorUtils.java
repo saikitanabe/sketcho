@@ -190,18 +190,19 @@ public class AnchorUtils {
   	return result;
   }
   
-  public static void anchorPoint(int x, int y, AnchorProperties ap, List<Integer> points) {
+  public static void anchorPoint(int x, int y, int left, int top, int width, int height, AnchorProperties ap, List<Integer> points) {
   	Integer[] array = new Integer[points.size()];
   	int xindex = findClosestPoint(x, y, points.toArray(array));
     
     ap.x = points.get(xindex);
     ap.y = points.get(xindex + 1);
+    ap.cardinalDirection = findCardinalDirection(ap.x, ap.y, left, top, width, height);
 //    ap.relativeValueX = Math.abs((points.get(xindex)-left)/(double)width);
 //    ap.relativeValueY = Math.abs((tempay-top)/(double)height);
   }
   
-  public static void anchorPoint(int left, int top, AnchorProperties ap, Integer[] points) {
-  	int xindex = findClosestPoint(left, top, points);
+  public static void anchorPoint(int x, int y, int left, int top, int width, int height, AnchorProperties ap, Integer[] points) {
+  	int xindex = findClosestPoint(x, y, points);
     if (xindex + 1 < points.length) {
       ap.x = points[xindex];
       ap.y = points[xindex + 1];
@@ -209,6 +210,7 @@ public class AnchorUtils {
       // just set fixed index and if fixed points are set then use directly the index
       ap.relativeValueX = xindex;
       ap.relativeValueY = xindex + 1;
+      ap.cardinalDirection = findCardinalDirection(ap.x, ap.y, left, top, width, height);
     }
   }
 
