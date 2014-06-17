@@ -184,6 +184,14 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 
 	@Override
+	public void addShapeProperty(ShapeProperty shapeProperty) {
+		if (shapeProperties == null) {
+			shapeProperties = 0;
+		}
+		this.shapeProperties |= shapeProperty.getValue();
+	}
+
+	@Override
 	public Integer getDisplayOrder() {
 		return displayOrder;
 	}

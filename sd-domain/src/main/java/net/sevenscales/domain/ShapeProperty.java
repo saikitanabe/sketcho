@@ -16,7 +16,8 @@ public enum ShapeProperty {
 	DEGREES_90 												(0x002000),
 	SHAPE_AUTO_RESIZE_TRUE  					(0x010000),
 	SHAPE_AUTO_RESIZE_FALSE						(0x020000),
-	CURVED_ARROW										  (0x100000);
+	CURVED_ARROW										  (0x100000),
+	NO_TEXT_AUTO_ALIGN								(0x000020);
 
 	private int value;
 
@@ -79,6 +80,14 @@ public enum ShapeProperty {
 
 	public static boolean isCurvedArrow(int value) {
 		return (value & CURVED_ARROW.getValue()) == CURVED_ARROW.getValue();
+	}
+
+	public static boolean isNoTextAutoAlign(Integer value) {
+		if (value == null) {
+			// nothing is set and text auto align is on
+			return false;
+		}
+		return (value & NO_TEXT_AUTO_ALIGN.getValue()) == NO_TEXT_AUTO_ALIGN.getValue();
 	}
 
 }

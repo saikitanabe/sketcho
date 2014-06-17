@@ -2,6 +2,7 @@ package net.sevenscales.domain.api;
 
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ISvgDataRO;
+import net.sevenscales.domain.ShapeProperty;
 
 
 public interface IDiagramItem extends IDiagramItemRO {
@@ -13,6 +14,7 @@ public interface IDiagramItem extends IDiagramItemRO {
 	void setTextColor(String textColor);
   void setFontSize(Integer fontSize);
   void setShapeProperties(Integer shapeProperties);
+  void addShapeProperty(ShapeProperty shapeProperty);
   void setDisplayOrder(Integer displayOrder);
 	void setVersion(int version);
   void setClientId(String clientId);

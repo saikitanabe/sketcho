@@ -11,6 +11,7 @@ import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementHorizontalFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
@@ -128,7 +129,8 @@ public class ChildTextElement extends TextElement implements IChildElement {
 		super.editingEnded();
 
   	fixedPointIndex = parent.findClosestSegmentPointIndex(getLeft(), getTop());
-  	if (fixedPointIndex != null && fixedPointIndex.inSegmentIndex == 1) {
+  	if (fixedPointIndex != null && fixedPointIndex.inSegmentIndex == 1 &&
+  			!ShapeProperty.isNoTextAutoAlign(getDiagramItem().getShapeProperties())) {
 			PointDouble anchorPoint = parent.getPoint(fixedPointIndex);
 			double left = anchorPoint.x - getTextWidth() / 2.0;
 			fixedLeft = left - anchorPoint.x;
@@ -155,6 +157,7 @@ public class ChildTextElement extends TextElement implements IChildElement {
   @Override
 	public void saveLastTransform(int dx, int dy) {
 		super.saveLastTransform(dx, dy);
+		getDiagramItem().addShapeProperty(ShapeProperty.NO_TEXT_AUTO_ALIGN);
 		updateFixedDistance();
 	}
 
