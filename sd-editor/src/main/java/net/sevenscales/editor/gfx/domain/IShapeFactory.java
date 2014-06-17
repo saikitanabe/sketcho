@@ -47,8 +47,10 @@ public interface IShapeFactory {
   IImage createImage(IContainer container, int x, int y, int widht, int height, String src);
   public IEllipse createEllipse(IContainer surface);
   public IEllipse createEllipse(ISurface surface);
-  public IText createText(ISurface surface);
-  public IText createText(IContainer container);
+  IText createText(ISurface surface, boolean baselineBottom);
+  IText createText(IContainer container, boolean baselineBottom);
+  IText createText(ISurface surface);
+  IText createText(IContainer container);
   public IPolyline createPolyline(IContainer container);
   public IPolyline createPolyline(IContainer container, int[] points);
   public IPolyline createPolyline(IContainer container, double[] points);

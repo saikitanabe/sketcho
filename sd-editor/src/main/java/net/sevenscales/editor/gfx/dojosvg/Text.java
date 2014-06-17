@@ -26,8 +26,10 @@ class Text extends Shape implements IText {
 	private double currentLineLength;
 	private boolean startsNewline;
 	private boolean tspanMode = false;
+	private boolean baselineBottom = false;
   
-	Text(IContainer container) {
+	Text(IContainer container, boolean baselineBottom) {
+		this.baselineBottom = baselineBottom;
 		rawNode = createText(container.getContainer());
 		setFontWeight(WEIGHT_NORMAL);
 	}
@@ -253,12 +255,12 @@ class Text extends Shape implements IText {
   
   public void addText(JavaScriptObject tokens, int x, int width) {
 	  Element r = getRawNode(rawNode);
-	  addText(r, tokens, x, width);
+	  addText(r, tokens, x, width, baselineBottom);
 	  tspanMode = true;
   }
   
-  private native void addText(JavaScriptObject parent,JavaScriptObject tokens, int x, int width)/*-{
-		var svgText = $wnd.svgTextArea(parent, x, width);
+  private native void addText(JavaScriptObject parent,JavaScriptObject tokens, int x, int width, boolean baselineBottom)/*-{
+		var svgText = $wnd.svgTextArea(parent, x, width, baselineBottom);
     var elements = svgText.addTokens(tokens);
   }-*/;
   

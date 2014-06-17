@@ -88,12 +88,19 @@ public class ShapeFactoryDojoSvg implements IShapeFactory {
   	return new Image(container, x, y, widht, height, src);
   }
 
+  public IText createText(ISurface surface, boolean baselineBottom) {
+    return new Text((Surface) surface, baselineBottom);
+  }
+
   public IText createText(ISurface surface) {
-    return new Text((Surface) surface);
+    return new Text((Surface) surface, false);
   }
 
   public IText createText(IContainer container) {
-    return new Text(container);
+    return new Text(container, false);
+  }
+  public IText createText(IContainer container, boolean baselineBottom) {
+    return new Text(container, baselineBottom);
   }
 
 }

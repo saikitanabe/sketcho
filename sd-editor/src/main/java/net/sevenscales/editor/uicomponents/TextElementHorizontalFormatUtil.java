@@ -139,11 +139,12 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
   }
 
 	private IText createText(boolean editable) {
-    IText text = IShapeFactory.Util.factory(editable).createText(textGroup);
+    IText text = IShapeFactory.Util.factory(editable).createText(textGroup, true);
     text.setFontFamily(IText.SANS);
 //    hasTextElement.addShape(text);
     text.setFill(hasTextElement.getTextColorAsString());
     text.setAttribute("xml:space", "preserve");
+
 
     if (textAnchor != null) {
       setTextAnchor(text, textAnchor);
