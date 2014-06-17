@@ -1240,6 +1240,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   public Diagram showEditorForDiagram(int screenX, int screenY) {
+    if (!"".equals(textUtil.parseLeftText()) || 
+        !"".equals(textUtil.parseRightText()) || 
+        !"".equals(textUtil.parseLabel())) {
+      return this;
+    }
     // creates always a new child text element
     return createChildLabel(screenX, screenY);
   }
