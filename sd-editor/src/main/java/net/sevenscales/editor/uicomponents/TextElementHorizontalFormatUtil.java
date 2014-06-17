@@ -36,6 +36,7 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
 
   private double prevTextHeight = 0;
   private IText text;
+  private String textAnchor;
 
 	public TextElementHorizontalFormatUtil(Diagram parent, HasTextElement hasTextElement, IGroup group, EditorContext editorContext) {
   	super(parent, hasTextElement, group, editorContext);
@@ -143,7 +144,11 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
 //    hasTextElement.addShape(text);
     text.setFill(hasTextElement.getTextColorAsString());
     text.setAttribute("xml:space", "preserve");
-    
+
+    if (textAnchor != null) {
+      setTextAnchor(text, textAnchor);
+    }
+
 //    if (token.fontWeight) {
 //    	text.setFontWeight(IText.WEIGHT_BOLD);
 //    } else {
@@ -176,5 +181,24 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
     return result;
   }
 
+  @Override
+  public double getTextWidth() {
+    return text.getTextWidth();
+  }
+
+  @Override
+  public void alignMiddle() {
+    textAnchor = "middle";
+    // setTextAnchor(text, textAnchor);
+  }
+
+  @Override
+  public boolean isAlignMiddle() {
+    return textAnchor != null;
+  }
+
+  private void setTextAnchor(IText text, String textAnchor) {
+    // text.setAttribute("style", "text-anchor:" + textAnchor);
+  }
 
 }

@@ -371,7 +371,7 @@ public class TextElementFormatUtil {
   }
 
   private void resizeElement() {
-    int width = getTextWidth();
+    double width = getTextWidth();
     int rows = lines.size();
     int height = getMarginTop() + rows * fontProperty.rowHeight + fontProperty.marginBottom;
 
@@ -381,7 +381,7 @@ public class TextElementFormatUtil {
     if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION) && hasTextElement.supportElementResize()) {
       // during OT operation element is not resized and everything is 
       // copied as is, element size and text
-      hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), width, height);
+      hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), (int) width, height);
     }
   }
 
@@ -518,8 +518,8 @@ public class TextElementFormatUtil {
 		this.forceTextAlign = forceTextAlign;
 	}
 
-	public int getTextWidth() {
-		return (int) widestWidth + getMargin(); // +margin
+	public double getTextWidth() {
+		return widestWidth + getMargin(); // +margin
 	}
 	
 	public double getTextHeight() {
@@ -552,6 +552,14 @@ public class TextElementFormatUtil {
   public void remove() {
     clearLines();
     textGroup.remove();
+  }
+
+  public void alignMiddle() {
+
+  }
+
+  public boolean isAlignMiddle() {
+    return false;
   }
 
 }

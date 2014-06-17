@@ -513,7 +513,7 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 	@Override
 	public int getTextAreaWidth() {
 //		return textareaWidth == 0 ? textUtil.getTextWidth() : textareaWidth;
-		return textUtil.getTextWidth();
+		return (int) textUtil.getTextWidth();
 	}
 	
 	@Override

@@ -677,11 +677,11 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		return null;
 	}
 	@Override
-  public double getFixedLeft() {
+  public double getFixedDistanceLeft() {
   	return 0;
   }
   @Override
-  public double getFixedTop() {
+  public double getFixedDistanceTop() {
   	return 0;
   }
 

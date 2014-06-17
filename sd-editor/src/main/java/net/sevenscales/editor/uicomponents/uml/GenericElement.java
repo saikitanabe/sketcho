@@ -415,7 +415,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	@Override
 	public int getTextAreaLeft() {
   	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-			return getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2;
+			return (int) (getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2);
 		} else {
 			return super.getTextAreaLeft();
 		}
@@ -433,7 +433,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	@Override
 	public int getTextAreaWidth() {
   	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-    	return textUtil.getTextWidth();
+    	return (int) textUtil.getTextWidth();
     } else {
 			return super.getTextAreaWidth();
   	}

@@ -54,6 +54,16 @@ public class ChildTextElement extends TextElement implements IChildElement {
 		return new TextElementHorizontalFormatUtil(this, hasTextElement, getGroup(), surface.getEditorContext());
 	}
 
+	// @Override
+	// protected int getTextX() {
+	// 	if (fixedPointIndex != null && fixedPointIndex.inSegmentIndex == 1) {
+	// 		// center if attached to middle point
+	// 		return super.getTextX() - (int) getTextWidth() / 2;
+	// 	} else {
+	// 		return super.getTextX();
+	// 	}
+	// }
+
 	@Override
   public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
   	if (anchor.getRelationship() == parent.asDiagram()) {
@@ -104,17 +114,41 @@ public class ChildTextElement extends TextElement implements IChildElement {
     // tempC1.setShape(left, top, 5);
     // tempC1.setStroke(150, 150, 150, 1);
     // tempC1.setFill(150, 150, 150, 1);
+   //  if (fixedPointIndex != null && fixedPointIndex.inSegmentIndex == 1) {
+   //  	// left = left - getWidth() / 2.0;
+	  // }
+
     setShape(new int[]{(int) left, (int) top, getWidth(), getHeight()});
   	// // setShape((int) left, (int) top, getWidth(), getTop());
   	// select();
   }
 
 	@Override
-  public double getFixedLeft() {
+	public void editingEnded() {
+		super.editingEnded();
+
+  	fixedPointIndex = parent.findClosestSegmentPointIndex(getLeft(), getTop());
+  	if (fixedPointIndex != null && fixedPointIndex.inSegmentIndex == 1) {
+			PointDouble anchorPoint = parent.getPoint(fixedPointIndex);
+			double left = anchorPoint.x - getTextWidth() / 2.0;
+			fixedLeft = left - anchorPoint.x;
+			setPosition(left, getTop());
+  	}
+	}
+
+  // @Override
+  // public void editingEnded() {
+  //   super.editingEnded();
+  //   updateFixedDistance();
+  //   parent.moveChild(this);
+  // }
+
+	@Override
+  public double getFixedDistanceLeft() {
   	return fixedLeft;
   }
   @Override
-  public double getFixedTop() {
+  public double getFixedDistanceTop() {
   	return fixedTop;
   }
 
@@ -137,6 +171,7 @@ public class ChildTextElement extends TextElement implements IChildElement {
   @Override
   public void updateFixedDistance() {
   	fixedPointIndex = parent.findClosestSegmentPointIndex(getLeft(), getTop());
+
   	PointDouble anchorPoint = parent.getPoint(fixedPointIndex);
 		fixedLeft = getLeft() - anchorPoint.x;
 		fixedTop =  getTop() - anchorPoint.y;
@@ -168,5 +203,26 @@ public class ChildTextElement extends TextElement implements IChildElement {
     }
     return false; 
   }	
+
+	@Override
+	public int getTextAreaLeft() {
+		return getLeft();
+	}
+	
+	@Override
+	public int getTextAreaTop() {
+		return getTop();
+	}
+	
+	@Override
+	public int getTextAreaWidth() {
+		return getWidth() + 40;
+	}
+	
+	@Override
+	public int getTextAreaHeight() {
+		return getHeight();
+	}
+
 
 }

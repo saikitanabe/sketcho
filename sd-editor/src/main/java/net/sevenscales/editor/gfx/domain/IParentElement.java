@@ -11,4 +11,5 @@ public interface IParentElement {
 	List<IChildElement> getChildren();
 	SegmentPoint findClosestSegmentPointIndex(int x, int y);
 	PointDouble getPoint(SegmentPoint segmentPoint);
+	void moveChild(IChildElement child);
 }

@@ -476,7 +476,7 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
 	
 	@Override
 	public int getTextAreaLeft() {
-		return getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2;
+		return (int) (getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2);
 	}
 	
 	@Override
@@ -486,7 +486,7 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
 	
 	@Override
 	public int getTextAreaWidth() {
-		return textUtil.getTextWidth();
+		return (int) textUtil.getTextWidth();
 	}
 	
 	@Override

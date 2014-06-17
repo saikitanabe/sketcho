@@ -98,7 +98,7 @@ public class TextElement extends AbstractDiagramItem implements
 				}
 
 				public int getX() {
-					return attachBoundary.getX();
+					return getTextX();
 				}
 
 				public int getY() {
@@ -156,6 +156,10 @@ public class TextElement extends AbstractDiagramItem implements
 				}
 
 			};
+	}
+
+	protected int getTextX() {
+		return attachBoundary.getX();
 	}
 
 	protected IShape createElement(IContainer surface) {
@@ -217,6 +221,10 @@ public class TextElement extends AbstractDiagramItem implements
 
 	public String getText() {
 		return textUtil.getText();
+	}
+
+	public double getTextWidth() {
+		return textUtil.getTextWidth();
 	}
 
 	@Override
@@ -287,6 +295,9 @@ public class TextElement extends AbstractDiagramItem implements
 	}
 
 	public void setShape(int left, int top, int width, int height) {
+		// if (textUtil.isAlignMiddle()) {
+		// 	left -= width / 2.0;
+		// }
 		attachBoundary.setShape(left, top, width, height, 4);
 		textUtil.setTextShape();
     super.applyHelpersShape();

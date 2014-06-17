@@ -1287,8 +1287,23 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   private ChildTextElement createChildLabel(int screenX, int screenY) {
     ScaleHelpers.ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint(screenX, screenY, surface);
+    // TODO 
+    // - if close to middle => calculate above and center
+    // - if seq diagram either of the ends, start and end closer to top => above 
+    // - if two points and relative straight arrow horizontally => above relationship
     TextShape ts = new TextShape(stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y, 100, 30);
+    SegmentPoint sp = findClosestSegmentPointIndex(ts.rectShape.left, ts.rectShape.top);
+    PointDouble point = getPoint(sp);
+
+    if (sp.inSegmentIndex == 1) {
+      ts.rectShape.left = (int) point.x;
+    }
+    ts.rectShape.top = (int) point.y - 18;
+    
     DiagramItemDTO tdto = new DiagramItemDTO();
+    // hmm, vois aina olla tama moodi, jolloin keskittaa 
+    // tai voi myos paivittaa taman jos siirretaan pois keskelta...
+    // tdto.setShapeProperties(AUTO_CENTER);
     tdto.setParentId(getDiagramItem().getClientId());
     ChildTextElement result = new ChildTextElement(surface, 
                                           ts, 
@@ -2173,12 +2188,17 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       int width = getWidth();
       int height = getHeight();
       for (IChildElement child : children) {
-        SegmentPoint segmentPoint = child.fixedPointIndex();
-        if (segmentPoint != null) {
-          PointDouble anchorPoint = getPoint(segmentPoint);
-          child.setPosition(anchorPoint.x + child.getFixedLeft(), anchorPoint.y + child.getFixedTop());
-        }
+        moveChild(child);
       }
+    }
+  }
+
+  @Override
+  public void moveChild(IChildElement child) {
+    SegmentPoint segmentPoint = child.fixedPointIndex();
+    if (segmentPoint != null) {
+      PointDouble anchorPoint = getPoint(segmentPoint);
+      child.setPosition(anchorPoint.x + child.getFixedDistanceLeft(), anchorPoint.y + child.getFixedDistanceTop());
     }
   }
 
