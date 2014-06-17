@@ -55,12 +55,14 @@ public class Theme {
     private Color textColor;
     private Color borderColor;
     private Color backgroundColor;
-    public ElementColorScheme(Color textColor, Color borderColor,
-        Color backgroundColor) {
+    private ThemeName themeName;
+
+    public ElementColorScheme(Color textColor, Color borderColor, Color backgroundColor, ThemeName themeName) {
       super();
       this.textColor = textColor;
       this.borderColor = borderColor;
       this.backgroundColor = backgroundColor;
+      this.themeName = themeName;
     }
     public Color getTextColor() {
       return textColor;
@@ -70,6 +72,9 @@ public class Theme {
     }
     public Color getBackgroundColor() {
       return backgroundColor;
+    }
+    public Color getBoardBackgroundColor() {
+      return themeName.getBoardBackgroundColor();
     }
     
     @Override
@@ -104,27 +109,34 @@ public class Theme {
     defaultColorMap = new HashMap<String, ElementColorScheme>();
     defaultColorMap.put(ThemeName.WHITE.name, new ElementColorScheme(createDefaultTextColorOnWhite(),
                                                                      createDefaultBorderColorOnWhite(),
-                                                                     createDefaultBackgroundColor()));
+                                                                     createDefaultBackgroundColor(),
+                                                                     ThemeName.WHITE));
     defaultColorMap.put(ThemeName.BLACK.name, new ElementColorScheme(createDefaultTextColorOnBlack(),
                                                                      createDefaultTextColorOnBlack(),
-                                                                     createDefaultBackgroundColor()));
+                                                                     createDefaultBackgroundColor(),
+                                                                     ThemeName.BLACK));
     defaultColorMap.put(ThemeName.PAPER.name, new ElementColorScheme(createDefaultTextColorOnWhite(),
                                                                      createDefaultBorderColorOnWhite(),
-                                                                     createDefaultBackgroundColor()));
+                                                                     createDefaultBackgroundColor(),
+                                                                     ThemeName.PAPER));
     defaultColorMap.put(ThemeName.SEPIA.name, new ElementColorScheme(createDefaultTextColorOnSepia(), 
                                                                      createDefaultBorderColorOnSepia(), 
-                                                                     createDefaultBackgroundColor()));
+                                                                     createDefaultBackgroundColor(),
+                                                                     ThemeName.SEPIA));
     defaultColorMap.put(ThemeName.GRID.name, new ElementColorScheme(createDefaultTextColorOnWhite(),
                                                                      createDefaultBorderColorOnWhite(),
-                                                                     createDefaultBackgroundColor()));
+                                                                     createDefaultBackgroundColor(),
+                                                                     ThemeName.GRID));
 
+    // comments don't have specific background!
     commentColorScheme = new ElementColorScheme(createDefaultCommentTextColor(),
                                                 createDefaultCommentBorderColor(),
-                                                createDefaultCommentBackgroundColor());
-
+                                                createDefaultCommentBackgroundColor(),
+                                                ThemeName.PAPER);
     commentThreadColorScheme = new ElementColorScheme(createDefaultCommentThreadTextColor(),
                                                       createDefaultCommentThreadBorderColor(),
-                                                      createDefaultCommentThreadBackgroundColor());
+                                                      createDefaultCommentThreadBackgroundColor(),
+                                                      ThemeName.PAPER);
 
     currentThemeName = ThemeName.PAPER;
     currentColorScheme = defaultColorMap.get(currentThemeName.name);

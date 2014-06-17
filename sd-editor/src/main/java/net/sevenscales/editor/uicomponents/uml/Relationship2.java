@@ -1292,7 +1292,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     tdto.setParentId(getDiagramItem().getClientId());
     ChildTextElement result = new ChildTextElement(surface, 
                                           ts, 
-                                          Theme.ThemeName.PAPER.getBoardBackgroundColor().create(), 
+                                          Theme.getCurrentThemeName().getBoardBackgroundColor().create(), 
                                           Theme.getCurrentColorScheme().getBorderColor().create(), 
                                           Theme.getCurrentColorScheme().getTextColor().create(), 
                                           "",

@@ -150,17 +150,23 @@ public class ChildTextElement extends TextElement implements IChildElement {
 
   @Override
 	public void setBackgroundColor(int red, int green, int blue, double opacity) {
-		// store color normally
   	super.setBackgroundColor(red, green, blue, opacity);
-
-  	// but actuall background color is switched if bg is default paper background color
-		Color paperBg = Theme.ThemeName.PAPER.getBoardBackgroundColor();
-		if (paperBg.red == red && paperBg.green == green && paperBg.blue == blue && paperBg.opacity == opacity) {
-			Color currentBg = Theme.getCurrentThemeName().getBoardBackgroundColor();
-	    getAttachBoundary().setFill(currentBg.red, currentBg.green, currentBg.blue, currentBg.opacity);
-		} else {
-	    getAttachBoundary().setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
-		}
+	  getAttachBoundary().setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }
+
+  @Override
+	public Color getDefaultBackgroundColor(Theme.ElementColorScheme colorScheme) {
+		// provided PAPER theme as reference when needed e.g. on save
+		return colorScheme.getBoardBackgroundColor();
+	}
+
+	@Override
+  public boolean usesSchemeDefaultTextColor(Theme.ElementColorScheme colorScheme) {
+    if (colorScheme.getBoardBackgroundColor().equals(backgroundColor) && 
+    	  getDefaultTextColor(colorScheme).equals(getTextColorAsColor())) {
+      return true;
+    }
+    return false; 
+  }	
 
 }

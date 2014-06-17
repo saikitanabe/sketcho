@@ -152,7 +152,7 @@ public class TextElement extends AbstractDiagramItem implements
 
 				@Override
 				public String getTextColorAsString() {
-					return "#" + textColor.toHexString();
+					return getTextColorAsColor().toHexStringWithHash();
 				}
 
 			};
