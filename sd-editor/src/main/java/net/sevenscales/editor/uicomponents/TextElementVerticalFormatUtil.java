@@ -70,6 +70,11 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
   }
 
   @Override
+  protected int getStartX() {
+    return 0;
+  }
+
+  @Override
   protected int getTextTop(int row) {
     return hasTextElement.getY() + DEFAULT_TOP_MARGIN;
   }
