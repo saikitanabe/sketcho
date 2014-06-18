@@ -22,6 +22,7 @@ import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.SegmentPoint;
 import net.sevenscales.editor.gfx.domain.PointDouble;
+import net.sevenscales.editor.content.ui.ContextMenuItem;
 
 
 public class ChildTextElement extends TextElement implements IChildElement {
@@ -268,6 +269,14 @@ public class ChildTextElement extends TextElement implements IChildElement {
 	public int getTextAreaHeight() {
 		return getHeight();
 	}
+
+  @Override
+  public int supportedMenuItems() {
+  	return ContextMenuItem.NO_MENU.getValue() | 
+           ContextMenuItem.COLOR_MENU.getValue() |
+           ContextMenuItem.URL_LINK.getValue() | 
+           ContextMenuItem.DELETE.getValue();
+  }
 
 
 }
