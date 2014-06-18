@@ -70,7 +70,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
 
   // Debug curve control point and arrow angle debugging
-  private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  // private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
   // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
   // private net.sevenscales.editor.gfx.domain.ICircle tempC2;
 
@@ -667,7 +667,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
 
     // DEBUG curve visualization START
-    tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
+    // tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
     // tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
     // tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
     // DEBUG curve visualization END
@@ -1567,19 +1567,52 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private void calculateCurvedDiamond() {
     BezierHelpers.Segment segment = relLine.getFirstSegment();
     if (segment != null) {
-      double nextx = segment.getPoint1().getX();
-      double cp2x = segment.getControlPoint1().getX();
-      double cp1x = segment.getControlPoint2().getX();
-      double prevx = segment.getPoint2().getX();
+      double prevx = segment.getPoint1().getX();
+      double cp1x = segment.getControlPoint1().getX();
+      double cp2x = segment.getControlPoint2().getX();
+      double nextx = segment.getPoint2().getX();
 
-      double nexty = segment.getPoint1().getY(); 
-      double cp2y = segment.getControlPoint1().getY();
-      double cp1y = segment.getControlPoint2().getY();
-      double prevy = segment.getPoint2().getY();
+      double prevy = segment.getPoint1().getY(); 
+      double cp1y = segment.getControlPoint1().getY();
+      double cp2y = segment.getControlPoint2().getY();
+      double nexty = segment.getPoint2().getY();
 
-      double t = 0.05;
-      double bx = BezierHelpers.bezierInterpolation(t, nextx, cp2x, cp1x, prevx);
-      double by = BezierHelpers.bezierInterpolation(t, nexty, cp2y, cp1y, prevy);
+      // could be possible to get some approximation
+      // before iteration...
+      // double tx = 20 / Math.abs(prevx - cp2x);
+      // double ty = 20 / Math.abs(prevy - cp2y);
+      // double tx = 0.5;
+      // double ty = 0.5;
+
+      double bx = 0;
+      double by = 0;
+
+      // need to iterate diamond head to have 
+      // point better in curve
+      for (double t = 0.05; t <= 0.5; t += 0.025) {
+        bx = BezierHelpers.bezierInterpolation(t, prevx, cp1x, cp2x, nextx);
+        by = BezierHelpers.bezierInterpolation(t, prevy, cp1y, cp2y, nexty);
+        double dx = Math.abs(bx - prevx);
+        double dy = Math.abs(by - prevy);
+        double distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance >= 19) {
+          break;
+        }
+        // if (distance < 20 / 4) {
+        //   t *= 4;
+        // } else if (distance < 20 / 2) {
+        //   t *= 2;
+        // } else {
+          // t += 0.025;
+        // }
+      }
+      
+      // tempCircle.setShape(bx, by, 5);
+      // tempCircle.setStroke(218, 57, 57, 1);
+
+      // tempC1.setShape(cp2x, cp2y, 5);
+      // tempC1.setStroke(51, 57, 57, 1);
+      // tempC1.setFill(51, 57, 57, 1);
 
       calculateDiamond(angle, ARROW_WIDTH, points.get(0), points.get(1), bx, by);
     }
