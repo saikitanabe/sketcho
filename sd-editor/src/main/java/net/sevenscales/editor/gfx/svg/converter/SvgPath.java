@@ -9,6 +9,7 @@ import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IPath;
+import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
 import net.sevenscales.domain.utils.SLogger;
 
@@ -37,7 +38,9 @@ public class SvgPath extends SvgLine {
     /* TODO IE hack ENDS */
 
     params.put("%stroke%", rgb(String.valueOf(path.getStrokeColor().toRgb())));
+    
     // params.put("%style%", path.getStyle());
+
     
     String fill = "none";
     Color color = path.getFillColor();
@@ -59,6 +62,12 @@ public class SvgPath extends SvgLine {
 
 
     String template = "<path d='%d%' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width%;vector-effect:non-scaling-stroke' />";
+
+    if (path.getStrokeStyle() != null && path.getStrokeStyle().equals(ILine.DASH)) {
+      template = "<path d='%d%' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width%;stroke-dasharray:%style%;vector-effect:non-scaling-stroke' />";
+      params.put("%style%", "4,3");
+    }
+
 //    String template = "<polyline points='%points' style='%fill;stroke:rgb(%stroke%);stroke-width:%stroke-width%;%fill-opacity;'/>";
 //    if (poly.getStyle() != null) {
 //      template = "<polyline points='%points' style='%fill;stroke:rgb(%stroke%);stroke-width:%stroke-width%;stroke-dasharray:%style;%fill-opacity;'/>";
