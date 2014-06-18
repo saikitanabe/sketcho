@@ -49,10 +49,14 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.editor.gfx.domain.IParentElement;
+import net.sevenscales.editor.gfx.domain.IChildElement;
+import net.sevenscales.editor.gfx.domain.SegmentPoint;
+import net.sevenscales.editor.gfx.domain.PointDouble;
 
 import com.google.gwt.core.client.GWT;
 
-public class CommentThreadElement extends AbstractDiagramItem implements SupportsRectangleShape {
+public class CommentThreadElement extends AbstractDiagramItem implements SupportsRectangleShape, IParentElement {
 	private static final SLogger logger = SLogger.createLogger(CommentThreadElement.class);
 
 //	private Rectangle rectSurface;
@@ -799,4 +803,28 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	@Override
 	public void unannotate() {
 	}
+
+	@Override
+	public void addChild(IChildElement child) {
+	}
+	@Override
+	public Diagram asDiagram() {
+		return this;
+	}
+	@Override
+	public List<IChildElement> getChildren() {
+		return null;
+	}
+	@Override
+	public SegmentPoint findClosestSegmentPointIndex(int x, int y) {
+		return null;
+	}
+	@Override
+	public PointDouble getPoint(SegmentPoint segmentPoint) {
+		return null;
+	}
+	@Override
+	public void moveChild(IChildElement child) {
+	}
+
 }
