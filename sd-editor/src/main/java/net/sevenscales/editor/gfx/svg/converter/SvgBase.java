@@ -59,7 +59,7 @@ class SvgBase {
     	params.put(TEXT_COLOR_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getTextColor().toHexString());
     }
 
-		if (diagram.usesSchemeDefaultBorderColor(Theme.getCurrentColorScheme())) {
+		if (diagram.usesSchemeDefaultBorderColor(Theme.getCurrentColorScheme()) && !diagram.isAnnotation()) {
 			applyDefaultBorderColors(params);	
 		}
 
