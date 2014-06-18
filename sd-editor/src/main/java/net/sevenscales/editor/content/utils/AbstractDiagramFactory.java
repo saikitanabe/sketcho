@@ -349,12 +349,12 @@ public interface AbstractDiagramFactory {
       int y = Integer.valueOf(s[1]);
       int width = Integer.valueOf(s[2]);
       int height = Integer.valueOf(s[3]);
-      return new TextShape(x, y, width, height).move(moveX, moveY);
+      return new ChildTextShape(x, y, width, height).move(moveX, moveY);
     }
 
     public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new ChildTextElement(surface,
-                (TextShape)shape,
+                (ChildTextShape)shape,
                 DiagramItemFactory.parseBackgroundColor(item),
                 DiagramItemFactory.parseBorderColor(item),
                 DiagramItemFactory.parseTextColor(item),

@@ -55,7 +55,7 @@ public class CommentFactory {
 			CommentElement comment = createComment(item);
 			if (comment != null) {
 				factory.addDiagram(comment);
-			} else if (item.getParentId() != null && ElementType.TEXT_ITEM.getValue().equals(item.getType())) {
+			} else if (item.getParentId() != null && ElementType.CHILD_TEXT.getValue().equals(item.getType())) {
 				factory.addDiagram(createChildTextItem(item));
 			}
 		}

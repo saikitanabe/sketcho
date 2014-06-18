@@ -40,6 +40,7 @@ class ShapeParser {
 		new ParserMap(ElementType.STORAGE, new AbstractDiagramFactory.StorageFactory()),
 		// new ParserMap(ElementType.COMMENT, new AbstractDiagramFactory.CommentFactory()),
 		new ParserMap(ElementType.TEXT_ITEM, new AbstractDiagramFactory.TextItemFactory()),
+		new ParserMap(ElementType.CHILD_TEXT, new AbstractDiagramFactory.ChildTextItemFactory()),
 		new ParserMap(ElementType.ACTOR, new AbstractDiagramFactory.ActorFactory()),
 		new ParserMap(ElementType.RELATIONSHIP, new AbstractDiagramFactory.RelationshipFactory()),
 		new ParserMap(ElementType.FREEHAND, new AbstractDiagramFactory.FreehandFactory()),

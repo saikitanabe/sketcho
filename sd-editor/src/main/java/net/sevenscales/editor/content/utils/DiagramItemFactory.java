@@ -39,10 +39,12 @@ import net.sevenscales.editor.diagram.shape.RectShape;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
 import net.sevenscales.editor.diagram.shape.SequenceShape;
 import net.sevenscales.editor.diagram.shape.ServerShape;
+import net.sevenscales.editor.diagram.shape.ChildTextShape;
 import net.sevenscales.editor.diagram.shape.TextShape;
 import net.sevenscales.editor.diagram.shape.UMLPackageShape;
 import net.sevenscales.editor.diagram.shape.ImageShape;
 import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityChoiceElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityElement;
@@ -88,15 +90,15 @@ public class DiagramItemFactory {
    */
   public static final int ITEM_VERSION = 6;
   
-  public static Diagram create(IDiagramItemRO item, ISurfaceHandler surface, boolean editable) {
+  public static Diagram create(IDiagramItemRO item, ISurfaceHandler surface, boolean editable, IParentElement parent) {
     // 0, 0 create to exact position
-    return DiagramItemFactory.create(0, 0, item, surface, editable);
+    return DiagramItemFactory.create(0, 0, item, surface, editable, parent);
   }
 
-  public static Diagram create(int moveX, int moveY, IDiagramItemRO item, ISurfaceHandler surface, boolean editable) {
+  public static Diagram create(int moveX, int moveY, IDiagramItemRO item, ISurfaceHandler surface, boolean editable, IParentElement parent) {
     AbstractDiagramFactory factory = ShapeParser.factory(item);
     Info shape = factory.parseShape(item, moveX, moveY);
-    Diagram result = factory.parseDiagram(surface, shape, editable, item, /*parent*/null);
+    Diagram result = factory.parseDiagram(surface, shape, editable, item, parent);
     return applyDiagramItem(result, item);
   }
 
@@ -221,6 +223,12 @@ public class DiagramItemFactory {
       result = getItem(diagram);
       shapetext += rect2ShapeText(note.rectShape, moveX, moveY);
       type = ElementType.COMMENT.getValue();
+    } else if (shape instanceof ChildTextShape) {
+      // NOTE ChildTextShape needs to be before TextShape due to inheritance
+      ChildTextShape text = (ChildTextShape) shape;
+      result = getItem(diagram);
+      shapetext += rect2ShapeText(text.rectShape, moveX, moveY);
+      type = ElementType.CHILD_TEXT.getValue();
     } else if (shape instanceof TextShape) {
       TextShape text = (TextShape) shape;
       result = getItem(diagram);

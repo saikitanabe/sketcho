@@ -19,7 +19,7 @@ import net.sevenscales.editor.diagram.DiagramDragHandler;
 import net.sevenscales.editor.diagram.DiagramResizeHandler;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
-import net.sevenscales.editor.diagram.shape.TextShape;
+import net.sevenscales.editor.diagram.shape.ChildTextShape;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.diagram.utils.PathFitter;
 import net.sevenscales.editor.diagram.utils.BezierHelpers;
@@ -1296,7 +1296,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     // - if close to middle => calculate above and center
     // - if seq diagram either of the ends, start and end closer to top => above 
     // - if two points and relative straight arrow horizontally => above relationship
-    TextShape ts = new TextShape(stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y, 100, 30);
+    ChildTextShape ts = new ChildTextShape(stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y, 100, 30);
     SegmentPoint sp = findClosestSegmentPointIndex(ts.rectShape.left, ts.rectShape.top);
     PointDouble point = getPoint(sp);
 

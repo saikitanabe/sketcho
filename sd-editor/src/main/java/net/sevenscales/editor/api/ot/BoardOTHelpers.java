@@ -23,6 +23,7 @@ import net.sevenscales.editor.diagram.DiagramSearch;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
+import net.sevenscales.editor.gfx.domain.IParentElement;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
@@ -193,7 +194,7 @@ public class BoardOTHelpers {
       diagrams.add(diagram);
 		}
 		
-		reattachHelpers.reattachRelationships();
+		reattachHelpers.reattachRelationshipsAndDraw();
 		
 		// 0 on originator
 		boolean validation = (diagrams.size() == items.size() || diagrams.size() == 0);
@@ -211,8 +212,13 @@ public class BoardOTHelpers {
   		// doesn't need to create lazily since comment thread is already
   		// on board or it is not possible to create comment
     	result = commentFactory.createCommentInOT(diro, diagramSearch);
+	  } else if (diro.getParentId() != null) {
+	  	Diagram parent = diagramSearch.findByClientId(diro.getParentId());
+	  	if (parent != null && parent instanceof IParentElement) {
+		    result = DiagramItemFactory.create(diro, surface, true, (IParentElement) parent);
+	  	}
 	  } else {
-	    result = DiagramItemFactory.create(diro, surface, true);
+	    result = DiagramItemFactory.create(diro, surface, true, /*parent*/ null);
 	  }
     surface.add(result, true, false);
     return result;

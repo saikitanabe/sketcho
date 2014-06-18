@@ -154,7 +154,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     		// create comments lazily or any parent child relation elements
     		commentFactory.add(item);
     	} else {
-		  	Diagram diagram = DiagramItemFactory.create(item, surface, editable);
+		  	Diagram diagram = DiagramItemFactory.create(item, surface, editable, /*parent*/ null);
 		  	commentFactory.process(diagram);
     		_addDiagram(diagram, surface, reattachHelpers, commentFactory, asSelected);
     	}

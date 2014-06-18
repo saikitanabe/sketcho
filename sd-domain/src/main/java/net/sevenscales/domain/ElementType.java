@@ -15,6 +15,7 @@ public enum ElementType {
 	STORAGE("storage"),
 	COMMENT("comment"),
 	TEXT_ITEM("textitem"),
+	CHILD_TEXT("childtext"),
 	ACTOR("actoritem"),
 	RELATIONSHIP("relationship"),
 	FREEHAND("freehand"), /* deprecated legary freehand */

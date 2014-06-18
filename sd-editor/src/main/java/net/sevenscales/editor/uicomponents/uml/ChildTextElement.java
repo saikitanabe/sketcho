@@ -4,7 +4,7 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
-import net.sevenscales.editor.diagram.shape.TextShape;
+import net.sevenscales.editor.diagram.shape.ChildTextShape;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.gfx.domain.Color;
@@ -40,7 +40,7 @@ public class ChildTextElement extends TextElement implements IChildElement {
   // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
 
 
-	public ChildTextElement(ISurfaceHandler surface, TextShape newShape,
+	public ChildTextElement(ISurfaceHandler surface, ChildTextShape newShape,
 			Color backgroundColor, Color borderColor, Color textColor, String text, boolean editable, IDiagramItemRO item, IParentElement parent) {
 		super(surface, newShape, backgroundColor, borderColor, textColor, text, editable, item);
 		this.parent = parent;
@@ -84,12 +84,6 @@ public class ChildTextElement extends TextElement implements IChildElement {
   	super.copyFrom(diagramItem);
   	updateFixedDistance();
   }
-
-	@Override
-	public Info getInfo() {
-		// TODO add parent client id
-		return super.getInfo();
-	}
 
 	@Override
 	public Diagram getParent() {

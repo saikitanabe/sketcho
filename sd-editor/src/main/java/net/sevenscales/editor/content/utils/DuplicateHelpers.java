@@ -155,7 +155,7 @@ public class DuplicateHelpers {
 			di.setClientId(newClientId);
 
 			// always editable at this point
-			Diagram copied = DiagramItemFactory.create(x, y, di, surface, true);
+			Diagram copied = DiagramItemFactory.create(x, y, di, surface, true, /*parent*/ null);
 			state.newItems.add(copied);
 			state.reattachHelpers.processDiagram(copied);
 			state.addRelationshipIfAny(copied);
