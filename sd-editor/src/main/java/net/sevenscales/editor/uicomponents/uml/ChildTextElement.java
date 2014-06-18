@@ -272,5 +272,10 @@ public class ChildTextElement extends TextElement implements IChildElement {
            ContextMenuItem.DELETE.getValue();
   }
 
+  @Override
+	public void removeFromParent() {
+		super.removeFromParent();
+		parent.removeChild(this);
+	}
 
 }

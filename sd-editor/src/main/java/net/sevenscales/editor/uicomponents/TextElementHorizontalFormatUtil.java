@@ -54,20 +54,27 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
     // calculateAndNotifyHeight(hasTextElement.getWidth());
   }
 
+  @Override
+  public void setTextShape() {
+    if (text != null) {
+      text.setShape(hasTextElement.getX(), hasTextElement.getY());
+    }
+  }
+
   private void calculateLines2() {
     try {
       this.tokens = TokenParser.parse2(getText());
-      // token to be reused in html formatting
-      
-      clearLines();
-      List<IShape> currentline = new ArrayList<IShape>();
-      lines.add(currentline);
-      
+      removeEarlierText();
       text = createText(true);
-      currentline.add(text);
       text.addText(tokens, hasTextElement.getX(), 0);
     } catch (Exception e) {
       logger.error("tokens: " + tokens, e);
+    }
+  }
+
+  private void removeEarlierText() {
+    if (text != null) {
+      text.remove();
     }
   }
 
@@ -85,9 +92,6 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
     double width = text.getTextWidth();
     double height = text.getTextHeight();
 
-    // only resize when size increases; currently disabled
-//      width = width > rectSurface.getWidth() ? width : rectSurface.getWidth();
-//      height = height > rectSurface.getHeight() ? height : rectSurface.getHeight();
     if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION) && hasTextElement.supportElementResize()) {
       // during OT operation element is not resized and everything is 
       // copied as is, element size and text

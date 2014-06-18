@@ -2187,6 +2187,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   @Override
+  public void removeChild(IChildElement child) {
+    children.remove(child);
+  }
+
+  @Override
   public Diagram asDiagram() {
     return this;
   }

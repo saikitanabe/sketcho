@@ -7,6 +7,7 @@ import net.sevenscales.editor.diagram.Diagram;
 
 public interface IParentElement {
 	void addChild(IChildElement child);
+	void removeChild(IChildElement child);
 	Diagram asDiagram();
 	List<IChildElement> getChildren();
 	SegmentPoint findClosestSegmentPointIndex(int x, int y);

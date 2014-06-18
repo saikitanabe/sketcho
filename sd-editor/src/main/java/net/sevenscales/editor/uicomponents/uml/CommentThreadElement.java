@@ -807,6 +807,9 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	@Override
 	public void addChild(IChildElement child) {
 	}
+  @Override
+  public void removeChild(IChildElement child) {
+  }
 	@Override
 	public Diagram asDiagram() {
 		return this;

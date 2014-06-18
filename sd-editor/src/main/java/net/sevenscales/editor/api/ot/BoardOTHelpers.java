@@ -24,6 +24,8 @@ import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.gfx.domain.IParentElement;
+import net.sevenscales.editor.gfx.domain.IChildElement;
+import net.sevenscales.editor.gfx.domain.IRelationship;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
@@ -215,7 +217,8 @@ public class BoardOTHelpers {
 	  } else if (diro.getParentId() != null) {
 	  	Diagram parent = diagramSearch.findByClientId(diro.getParentId());
 	  	if (parent != null && parent instanceof IParentElement) {
-		    result = DiagramItemFactory.create(diro, surface, true, (IParentElement) parent);
+	  		IParentElement p = (IParentElement) parent;
+		    result = DiagramItemFactory.create(diro, surface, true, p);
 	  	}
 	  } else {
 	    result = DiagramItemFactory.create(diro, surface, true, /*parent*/ null);
