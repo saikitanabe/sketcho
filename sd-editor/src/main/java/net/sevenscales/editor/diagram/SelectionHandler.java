@@ -321,18 +321,21 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     // first remove children if any since e.g. comment thread
     // cannot be deleted straight, but through 0 child automatically.
     Diagram removeItem = diagram.getOwnerComponent(ActionType.DELETE);
+    removeChildElements(removeItem, removed);
+    if (AuthHelpers.allowedToDelete(removeItem)) {
+      removed.add(removeItem);
+      removeItem.removeFromParent();
+      dragHandlers.remove(removeItem);
+    }
+  }
+
+  private void removeChildElements(Diagram removeItem, Set<Diagram> removed) {
     List<? extends Diagram> childElements = removeItem.getChildElements();
     if (childElements != null) {
       for (int i = childElements.size() - 1; i >= 0; --i) {
         Diagram d = childElements.get(i);
         _remove(d, removed);
       }
-    }
-
-    if (AuthHelpers.allowedToDelete(removeItem)) {
-      removed.add(removeItem);
-      removeItem.removeFromParent();
-      dragHandlers.remove(removeItem);
     }
   }
 

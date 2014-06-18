@@ -1606,7 +1606,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
           // t += 0.025;
         // }
       }
-      
+
       // tempCircle.setShape(bx, by, 5);
       // tempCircle.setStroke(218, 57, 57, 1);
 
@@ -2194,6 +2194,15 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   @Override
   public List<IChildElement> getChildren() {
     return children;
+  }
+
+  @Override
+  public List<? extends Diagram> getChildElements() {
+    List<Diagram> result = new ArrayList<Diagram>();
+    for (IChildElement child : children) {
+      result.add(child.asDiagram());
+    }
+    return result;
   }
 
   @Override
