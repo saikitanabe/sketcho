@@ -224,6 +224,19 @@ class Text extends Shape implements IText {
 
 	private native double getTextHeight(JavaScriptObject rawNode)/*-{
 		return rawNode.rawNode.getBBox().height;
+		// if (!rawNode.rawNode || !rawNode.rawNode.childNodes) {
+		// 	return 0;
+		// } 
+		
+		// var result = 0;
+		// for (var count = 0; count < rawNode.rawNode.childNodes.length; ++count) {
+		// 	var tag = rawNode.rawNode.childNodes[count];
+		// 	if (tag && tag.tagName == "tspan" && $wnd.jQuery.trim(tag.firstChild.data) != "") {
+		// 		var len = tag.getBBox().height
+		// 		result += len
+		// 	}
+		// }
+		// return result;
 	}-*/;
 	  
   @Override

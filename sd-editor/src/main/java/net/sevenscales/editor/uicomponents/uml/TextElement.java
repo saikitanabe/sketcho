@@ -58,6 +58,9 @@ public class TextElement extends AbstractDiagramItem implements
 		// attachBoundary.setFill(255, 255, 255, 0.1);
 		attachBoundary.setFill("transparent");
 
+		// child text element prints background as well
+		// so should text element do later
+		shapes.add(attachBoundary);
 		addEvents(attachBoundary);
 
 		resizeHelpers = createResizeHelpers();

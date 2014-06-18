@@ -19,7 +19,7 @@ class SvgBase {
 	* Relationships use background color as transparent color to hide line.
 	*/
 	private static boolean isThemeBackgroundColor(String color) {
-		if (color != null && color.equals(Theme.getCurrentThemeName().getBoardBackgroundColor())) {
+		if (color != null && color.equals(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash())) {
 			return true;
 		}
 		return false;
@@ -33,7 +33,7 @@ class SvgBase {
 		} else if (isThemeBackgroundColor(fill)) {
 			// if fill is theme background then use paper background
 			// used in arrows to hide line, e.g. in inheritance
-			params.put(FILL_TEMPLATE, ThemeName.PAPER.getBoardBackgroundColor().toHexStringWithHash());
+			params.put(FILL_TEMPLATE, ThemeName.WHITE.getBoardBackgroundColor().toHexStringWithHash());
 		}
 	}
 
