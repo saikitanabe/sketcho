@@ -20,6 +20,7 @@ import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
+import net.sevenscales.editor.diagram.utils.CommentFactory;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.domain.utils.SLogger;
@@ -42,14 +43,28 @@ public class DuplicateHelpers {
 
 	private static class State {
 		public Map<String, String> clientIdMapping = new HashMap<String, String>();
+		public CommentFactory commentFactory;
 		public ReattachHelpers reattachHelpers = new ReattachHelpers();
 		public Set<Relationship2> relationships = new HashSet<Relationship2>();
 		public List<Diagram> newItems = new ArrayList<Diagram>();
+
+		public State(ISurfaceHandler surface) {
+ 			commentFactory = new CommentFactory(surface, /*editable*/true);
+		}
 
 		public void addRelationshipIfAny(Diagram diagram) {
 			if (diagram instanceof Relationship2) {
 				relationships.add((Relationship2) diagram);
 			}
+		}
+
+		public void add(Diagram copied) {
+			newItems.add(copied);
+			reattachHelpers.processDiagram(copied);
+			addRelationshipIfAny(copied);
+
+			// Apply theme colors
+			BoardColorHelper.applyThemeToDiagram(copied, Theme.getColorScheme(Theme.ThemeName.PAPER), Theme.getCurrentColorScheme());
 		}
 	}
 	
@@ -71,15 +86,14 @@ public class DuplicateHelpers {
 			// replace old connections with new client ids
 			replaceOldConnections(state.relationships, state.clientIdMapping);
 
-			boolean force = false;
-			state.reattachHelpers.reattachRelationships(force, false);
+			state.reattachHelpers.reattachRelationshipsAndDraw();
 
 			surface.addAsSelected(state.newItems, true, true);
 		}
 	}
 
 	private State duplicateAndMapClientIds(Diagram[] selected, BoardDocument boardDocument) {
-		State result = new State();
+		State result = new State(surface);
 		int i = 0;
 		for (Diagram diagram : selected) {
 			Diagram duplicated = diagram.duplicate(selected.length > 1);
@@ -122,7 +136,7 @@ public class DuplicateHelpers {
 	}
 
 	private State copyAndMapClientIds(int x, int y, List<IDiagramItemRO> items, BoardDocument boardDocument) {
-		State state = new State();
+		final State state = new State(surface);
 		int i = 0;
 
 		int left = Integer.MAX_VALUE;
@@ -144,7 +158,27 @@ public class DuplicateHelpers {
 		for (IDiagramItemRO di : items) {
   		copyAndMap(moveX, moveY, di, ++i, state, boardDocument);
 		}
+
+		mapChildToNewParent(state);
+
+    state.commentFactory.lazyInit(new CommentFactory.Factory() {
+    	public void addDiagram(Diagram diagram) {
+    		state.add(diagram);
+    	}
+    }, moveX, moveY);
+
 		return state;
+	}
+
+	private void mapChildToNewParent(State state) {
+		for (IDiagramItemRO child : state.commentFactory.getChildren()) {
+			if (child.getParentId() != null && !"".equals(child.getParentId())) {
+				String newParentId = state.clientIdMapping.get(child.getParentId());
+				if (newParentId != null && !"".equals(newParentId) && child instanceof IDiagramItem) {
+					((IDiagramItem) child).setParentId(newParentId);
+				}
+			}
+		}		
 	}
 
 	private void copyAndMap(int x, int y, IDiagramItemRO diro, int i, State state, BoardDocument boardDocument) {
@@ -155,13 +189,13 @@ public class DuplicateHelpers {
 			di.setClientId(newClientId);
 
 			// always editable at this point
-			Diagram copied = DiagramItemFactory.create(x, y, di, surface, true, /*parent*/ null);
-			state.newItems.add(copied);
-			state.reattachHelpers.processDiagram(copied);
-			state.addRelationshipIfAny(copied);
-
-			// Apply theme colors
-			BoardColorHelper.applyThemeToDiagram(copied, Theme.getColorScheme(Theme.ThemeName.PAPER), Theme.getCurrentColorScheme());
+			if (diro.getParentId() != null) {
+				state.commentFactory.add(di);
+			} else {
+				Diagram copied = DiagramItemFactory.create(x, y, di, surface, true, /*parent*/ null);
+				state.commentFactory.process(copied);
+				state.add(copied);
+			}
 		}
 	}
 

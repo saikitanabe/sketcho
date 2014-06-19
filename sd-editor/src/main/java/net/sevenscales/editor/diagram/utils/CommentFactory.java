@@ -30,7 +30,7 @@ public class CommentFactory {
 		void addDiagram(Diagram diagram);
 	}
 
-	private Set<IDiagramItemRO> comments = new HashSet<IDiagramItemRO>();
+	private Set<IDiagramItemRO> children = new HashSet<IDiagramItemRO>();
 	private Map<String, IParentElement> commentThreadMapping = new HashMap<String, IParentElement>();
 	private ISurfaceHandler surface;
 	private boolean editable;
@@ -40,8 +40,12 @@ public class CommentFactory {
 		this.editable = editable;
 	}
 
-	public void add(IDiagramItemRO comment) {
-		comments.add(comment);
+	public Set<IDiagramItemRO> getChildren() {
+		return children;
+	}
+
+	public void add(IDiagramItemRO child) {
+		children.add(child);
 	}
 	
 	public void process(Diagram diagram) {
@@ -50,22 +54,22 @@ public class CommentFactory {
 		}
 	}
 
-	public void lazyInit(Factory factory) {
-		for (IDiagramItemRO item : comments) {
+	public void lazyInit(Factory factory, int moveX, int moveY) {
+		for (IDiagramItemRO item : children) {
 			CommentElement comment = createComment(item);
 			if (comment != null) {
 				factory.addDiagram(comment);
 			} else if (item.getParentId() != null && ElementType.CHILD_TEXT.getValue().equals(item.getType())) {
-				factory.addDiagram(createChildTextItem(item));
+				factory.addDiagram(createChildTextItem(item, moveX, moveY));
 			}
 		}
 	}
 
-	public Diagram createChildTextItem(IDiagramItemRO item) {
+	public Diagram createChildTextItem(IDiagramItemRO item, int moveX, int moveY) {
 		if (commentThreadMapping.containsKey(item.getParentId())) {
 			IParentElement p = commentThreadMapping.get(item.getParentId());
 			AbstractDiagramFactory factory = new AbstractDiagramFactory.ChildTextItemFactory();
-			Info shape = factory.parseShape(item, 0, 0);
+			Info shape = factory.parseShape(item, moveX, moveY);
 			return factory.parseDiagram(surface, shape, editable, item, p);
 		}
 		return null;
