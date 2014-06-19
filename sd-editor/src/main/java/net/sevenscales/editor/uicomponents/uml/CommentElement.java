@@ -670,6 +670,9 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		return false;
 	}
 	@Override
+	public void resetInitialized() {
+	}
+	@Override
 	public void updateFixedDistance() {
 	}
 	@Override

@@ -20,6 +20,7 @@ public interface IChildElement {
   void setPosition(double left, double top);
 
   boolean isInitialized();
+  void resetInitialized();
   void updateFixedDistance();
   void updateFixedSegment();
   SegmentPoint fixedPointIndex();

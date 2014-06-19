@@ -310,7 +310,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     }
 
     if (morePoints) {
-      parentRelationship.updateChildrenPositions();
+      parentRelationship.resetChildren();
     }
   }
 

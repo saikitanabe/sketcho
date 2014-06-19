@@ -208,6 +208,11 @@ public class ChildTextElement extends TextElement implements IChildElement {
 		return initialized;
 	}
 
+	@Override
+	public void resetInitialized() {
+		initialized = false;
+	}
+
   @Override
   public void updateFixedDistance() {
   	fixedPointIndex = parent.findClosestSegmentPointIndex(getLeft(), getTop());

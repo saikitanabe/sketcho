@@ -988,8 +988,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       points.remove(index * 2 + 1);
       points.remove(index * 2);
       // recalculate segments
-      relLine.setShape(points);
-      updateChildrenSegments();
+      updateSegments();
     }
   }
 
@@ -1803,6 +1802,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 		for (Integer i : shape) {
 			points.add(i);
 		}
+    updateSegments();
 		
 		// TODO update AnchorElements as well...
 		
@@ -2275,11 +2275,16 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     }
   }
 
-  public void updateChildrenPositions() {
-    // update segments
+  public void resetChildren() {
+    for (IChildElement child : children) {
+      // reset so do shape will reinitialize children
+      child.resetInitialized();
+    }
+  }
+
+  public void updateSegments() {
     relLine.setShape(points);
-    // attach according to new segments
-    initializeChildren(true);
+    updateChildrenSegments();
   }
 
 }
