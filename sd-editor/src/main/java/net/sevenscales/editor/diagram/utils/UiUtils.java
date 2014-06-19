@@ -6,7 +6,7 @@ public class UiUtils {
 	}-*/;
 	
 	public static boolean isIE() {
-		if(getUserAgent().contains("msie")) {
+		if (getUserAgent().contains("msie") || getUserAgent().contains("trident")) {
 			return true;
 		}
 		return false;
