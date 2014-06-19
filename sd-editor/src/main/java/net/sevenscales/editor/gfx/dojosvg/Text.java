@@ -160,10 +160,10 @@ class Text extends Shape implements IText {
 	}-*/;
 
 	public double getTextWidth() {
-		if ((UiUtils.isSafari() || UiUtils.isFirefox()) && !tspanMode) {
-			int fontSize = parseFontSize(getFontSize());
-			return MeasurementPanel.getOffsetWidth(getText(), fontSize);
-		}
+		// if ((UiUtils.isSafari() || UiUtils.isFirefox() || UiUtils.isIE()) && !tspanMode) {
+		// 	int fontSize = parseFontSize(getFontSize());
+		// 	return MeasurementPanel.getOffsetWidth(getText(), fontSize);
+		// }
 		return getTextWidth(rawNode);
 	}
 
@@ -188,10 +188,10 @@ class Text extends Shape implements IText {
 	}-*/;
 
 	public native double getTextWidth(JavaScriptObject rawNode)/*-{
-		// if (rawNode.getShape().text) {
-		// 	// possible this is just text content set through setShape({text:text});
-		// 	return rawNode.getTextWidth();
-		// }
+		if (rawNode.getShape().text) {
+			// possible this is just text content set through setShape({text:text});
+			return rawNode.getTextWidth();
+		}
 		
 		if (!rawNode.rawNode || !rawNode.rawNode.childNodes) {
 			return 0;
