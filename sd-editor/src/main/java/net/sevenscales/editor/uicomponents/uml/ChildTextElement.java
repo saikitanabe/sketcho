@@ -219,6 +219,11 @@ public class ChildTextElement extends TextElement implements IChildElement {
   }
 
   @Override
+  public void updateFixedSegment() {
+		fixedPointIndex = parent.findClosestSegmentPointIndex(getLeft(), getTop());
+  }
+
+  @Override
   public boolean canSetBackgroundColor() {
   	return true;
   }

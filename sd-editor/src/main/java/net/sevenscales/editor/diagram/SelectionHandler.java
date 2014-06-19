@@ -24,6 +24,8 @@ import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.IChildElement;
+import net.sevenscales.editor.gfx.domain.IRelationship;
 import net.sevenscales.editor.silver.KeyCodeMap;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
@@ -269,6 +271,12 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     for (Diagram d : removed) {
       if (d.changeRemoveToModify()) {
         convertedToModify.add(d);
+        if (d.getOwnerComponent() instanceof IRelationship) {
+          // need to add owner component children as well
+          for (IChildElement child : ((IRelationship) d.getOwnerComponent()).getChildren()) {
+            convertedToModify.add(child.asDiagram());
+          }
+        }
       } else {
         confirmedRemove.add(d);
       }

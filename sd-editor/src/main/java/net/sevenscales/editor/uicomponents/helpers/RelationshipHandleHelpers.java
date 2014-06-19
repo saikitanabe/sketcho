@@ -289,6 +289,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
 
   private void splitRelationshipShapeIfBendPointDragged(Diagram sender) {
     int parentRelHandlesCount = parentHandlesCount();
+    boolean morePoints = false;
 
     for (int i = 0; i < bendHandles.size(); ++i) {
       CircleElement h = bendHandles.get(i);
@@ -303,8 +304,13 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
         h.setShape(x, y, h.getRadius());
         points.add((i+1)*2, x);
         points.add((i+1)*2+1, y);
+        morePoints = true;
         break;
       }
+    }
+
+    if (morePoints) {
+      parentRelationship.updateChildrenPositions();
     }
   }
 
@@ -402,7 +408,6 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     logger.debug("RelationshipHandleHelpers.dragEnd...");
     
     int parentRelHandlesCount = parentHandlesCount();
-    
     for (int i = 0; i < bendHandles.size(); ++i) {
       CircleElement h = bendHandles.get(i);
       if (i < parentRelHandlesCount - 1 && h == sender && (i * 2 + 5) < points.size()) {

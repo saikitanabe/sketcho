@@ -21,6 +21,7 @@ public interface IChildElement {
 
   boolean isInitialized();
   void updateFixedDistance();
+  void updateFixedSegment();
   SegmentPoint fixedPointIndex();
 	double getFixedDistanceLeft();
   double getFixedDistanceTop();

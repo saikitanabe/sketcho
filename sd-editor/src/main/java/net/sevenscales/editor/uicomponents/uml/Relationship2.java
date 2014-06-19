@@ -987,6 +987,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       // NOTE order is important or would remove wrong y (actually x) if reversed
       points.remove(index * 2 + 1);
       points.remove(index * 2);
+      // recalculate segments
+      relLine.setShape(points);
+      updateChildrenSegments();
     }
   }
 
@@ -1445,7 +1448,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //    prevPoints.addAll(points);
 //    System.out.println("doSetShape:"+points+" "+anchorMap);
     relLine.setShape(points);
-    initializeChildren();
+    initializeChildren(false);
   	if (TouchHelpers.isSupportsTouch() && surface.getMouseDiagramManager().getDragHandler().isDragging()) {
   		// performance improvement needed on touch devices; there is not enough
   		// processing power to calculate arrow head shapes on every touch move.
@@ -2254,13 +2257,29 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     }
   }
 
-  public void initializeChildren() {
+  public void initializeChildren(boolean force) {
     if (children != null) {
       for (IChildElement child : children) {
-        if (!child.isInitialized()) {
+        if (!child.isInitialized() || force) {
           child.updateFixedDistance();
         }
       }      
     }
   }
+
+  public void updateChildrenSegments() {
+    if (children != null) {
+      for (IChildElement child : children) {
+        child.updateFixedSegment();
+      }      
+    }
+  }
+
+  public void updateChildrenPositions() {
+    // update segments
+    relLine.setShape(points);
+    // attach according to new segments
+    initializeChildren(true);
+  }
+
 }
