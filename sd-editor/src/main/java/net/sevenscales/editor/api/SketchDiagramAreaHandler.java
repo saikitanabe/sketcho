@@ -128,7 +128,9 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       RelationshipShape2 rshape = new RelationshipShape2(points);
       rshape.asCurve();
       DiagramItemDTO di = new DiagramItemDTO();
-      di.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue());
+      if (Tools.isCurvedArrow()) {
+        di.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue());
+      }
       // Default arrow type is curved ends configuration
 
       this.createdRelationship = new Relationship2(surface, rshape, defaultRelationship, Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, di);

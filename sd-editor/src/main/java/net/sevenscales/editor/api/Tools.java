@@ -26,7 +26,8 @@ public class Tools {
 
 	private Tools(ISurfaceHandler surface) {
 		this.surface = surface;
-
+		// default is curved arrows
+		_setCurvedArrow(true);
 		// surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
 		// 	@Override
 		// 	public void on(FreehandModeChangedEvent event) {
@@ -83,6 +84,25 @@ public class Tools {
 		return (currentTools & Tool.COMMENT_TOOL.getValue()) == Tool.COMMENT_TOOL.getValue();
 	}
 
+	private boolean _isCurvedArrow() {
+		return (currentTools & Tool.CURVED_ARROW.getValue()) == Tool.CURVED_ARROW.getValue();
+	}
+
+	public static boolean isCurvedArrow() {
+		return instance._isCurvedArrow();
+	}
+
+	private void _setCurvedArrow(boolean enabled) {
+		currentTools = enabled ? (currentTools | Tool.CURVED_ARROW.getValue()) : currentTools & ~Tool.CURVED_ARROW.getValue();
+	}
+
+	public static void enableCurvedArrow() {
+		instance._setCurvedArrow(true);
+	}
+	public static void disableCurvedArrow() {
+		instance._setCurvedArrow(false);
+	}
+
 	public static boolean filterDiagramByCurrentTool(Diagram diagram) {
 		return instance._filterDiagramByCurrentTool(diagram);
 	}
@@ -101,17 +121,12 @@ public class Tools {
 
 	private boolean _filterDiagramByTool(Diagram diagram, int tools) {
 		boolean commentMode = isCommentMode();
-		Tool tool = Tool.getEnum(tools);
-		switch (tool) {
-			case COMMENT_TOOL: {
-				return true;
-			}
-			case NO_TOOL: {
-				return !diagram.isAnnotation();
-			}
+		if (commentMode) {
+			// include all
+			return true;
 		}
-		return true;
-		
+		// do not show annotated and comments
+		return !diagram.isAnnotation();
 	}
 
 }

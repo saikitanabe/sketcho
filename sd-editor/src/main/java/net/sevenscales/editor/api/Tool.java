@@ -1,9 +1,10 @@
 package net.sevenscales.editor.api;
 
 public enum Tool {
-	NO_TOOL				(0x0000),
-	COMMENT_TOOL	(0x0001),
-	FREEHAND_TOOL	(0x0010);
+	NO_TOOL					(0x0000),
+	COMMENT_TOOL		(0x0001),
+	FREEHAND_TOOL		(0x0002),
+	CURVED_ARROW 		(0x0004);
 
 	private int value;
 

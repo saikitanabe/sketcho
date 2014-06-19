@@ -28,6 +28,7 @@ import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.impl.EditorCommon;
 import net.sevenscales.editor.api.auth.AuthHelpers;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.utils.DuplicateHelpers;
 import net.sevenscales.editor.content.utils.EffectHelpers;
@@ -533,6 +534,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				((Relationship2) d).curve();
 			}
 		}
+		Tools.enableCurvedArrow();
 	}
 
 	private void rectifiedArrow() {
@@ -543,6 +545,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				((Relationship2) d).straight();
 			}
 		}
+		Tools.disableCurvedArrow();
 	}
 
 	private void cancel() {
