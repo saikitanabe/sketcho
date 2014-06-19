@@ -54,27 +54,18 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
     // calculateAndNotifyHeight(hasTextElement.getWidth());
   }
 
-  @Override
-  public void setTextShape() {
-    if (text != null) {
-      text.setShape(hasTextElement.getX(), hasTextElement.getY());
-    }
-  }
-
   private void calculateLines2() {
     try {
       this.tokens = TokenParser.parse2(getText());
-      removeEarlierText();
+      clearLines();
+      List<IShape> currentline = new ArrayList<IShape>();
+      lines.add(currentline);
+
       text = createText(true);
+      currentline.add(text);
       text.addText(tokens, hasTextElement.getX(), 0);
     } catch (Exception e) {
       logger.error("tokens: " + tokens, e);
-    }
-  }
-
-  private void removeEarlierText() {
-    if (text != null) {
-      text.remove();
     }
   }
 
