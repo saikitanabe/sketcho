@@ -258,7 +258,7 @@ public class BoardOTHelpers {
 			surface.applyDisplayOrders(items);
 		}
 
-		reattachHelpers.reattachRelationships();
+		reattachHelpers.reattachRelationshipsAndDraw();
 
 		if (diagrams.size() != items.size()) {
 		  throw new MappingNotFoundException(SLogger.format("modifyOT failed for {}", items.toString()));

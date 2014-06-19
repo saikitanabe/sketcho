@@ -1798,24 +1798,38 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	
 	@Override
 	protected void doSetShape(int[] shape) {
-		points.clear();
-		for (Integer i : shape) {
-			points.add(i);
-		}
-    updateSegments();
-		
-		// TODO update AnchorElements as well...
-		
-//		removeHandles();
-    // TODO are these needed? now constructing on selection
-    // not when created...
-//		handles.clear();
-//		bendHandles.clear();
-//		
-//		initHandles();
+    if (isDirty(shape, points)) {
+      points.clear();
+      for (Integer i : shape) {
+        points.add(i);
+      }
+      updateSegments();
+      
+      // TODO update AnchorElements as well...
+      
+  //    removeHandles();
+      // TODO are these needed? now constructing on selection
+      // not when created...
+  //    handles.clear();
+  //    bendHandles.clear();
+  //    
+  //    initHandles();
 
-		doSetShape();
+      doSetShape();
+    }
 	}
+
+  private boolean isDirty(int[] shape, List<Integer> points) {
+    if (shape.length != points.size()) {
+      return true;
+    }
+    for (int i = 0; i < shape.length; ++i) {
+      if (shape[i] != points.get(i)) {
+        return true;
+      }
+    }
+    return false;
+  }
 	
 	public List<Integer> getPoints() {
 		return points;
@@ -2171,6 +2185,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     if (isCurved()) {
       info.asCurve();
+    } else {
+      info.asStraight();
     }
     redraw();
   }
