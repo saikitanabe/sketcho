@@ -136,8 +136,9 @@ public class SvgConverter {
 
         // all shapes are under group
         IGroup group = d.getGroup();
-        if (d instanceof IChildElement) {
-          // should move with parent element; only parent group has been moved
+        if (d.getDiagramItem().isComment()) {
+          // comment should move with parent element; only parent group has been moved
+          // NOTE child text element is living it's own life
           group = ((IChildElement) d).getParent().getGroup();
         }
         items += groupStart(group);
