@@ -621,6 +621,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	    }
 			
 			reattachHelpers.processDiagram(dd);
+			dragEndAnchors(dd.getAnchors());
 		}
 
 		// relationship can be dragged as a whole and force it to find anchor both ends.
@@ -636,6 +637,12 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 			insertMoveToSingle = null;
 		} else {
 			MouseDiagramEventHelpers.fireDiagramsChangedEvenet(selectedItems, surface, ActionType.DRAGGING);
+		}
+	}
+
+	private void dragEndAnchors(Collection<AnchorElement> anchors) {
+		for (AnchorElement ae : anchors) {
+			ae.dragEnd();
 		}
 	}
 		

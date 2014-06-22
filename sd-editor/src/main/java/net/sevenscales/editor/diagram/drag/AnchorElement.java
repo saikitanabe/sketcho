@@ -85,6 +85,10 @@ public class AnchorElement {
     // }
 }
 
+  public void dragEnd() {
+    anchor.dragEnd();
+  }
+
   public void highlight(boolean value) {
     if (!diagram.isSelected()) {
       diagram.setHighlight(value);

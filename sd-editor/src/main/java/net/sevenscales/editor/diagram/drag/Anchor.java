@@ -151,6 +151,10 @@ public class Anchor implements AnchorMoveHandler {
 		relationship.getAnchorMoveHandler().moving(anchorElement, dx, dy, dispachSequence);
 	}
 
+	public void dragEnd() {
+		relationship.anchorDragEnd();
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		return this == obj;

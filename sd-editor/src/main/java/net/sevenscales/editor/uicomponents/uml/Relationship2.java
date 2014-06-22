@@ -2179,6 +2179,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return handler;
   }
 
+  public void anchorDragEnd() {
+    // need to redraw start and end arrows on correct position
+    doSetShape();
+  }
+
   @Override
   protected void setShapeProperties(Integer shapeProperties) {
     super.setShapeProperties(shapeProperties);
