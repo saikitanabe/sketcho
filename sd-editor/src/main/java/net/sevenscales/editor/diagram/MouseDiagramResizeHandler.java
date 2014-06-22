@@ -114,7 +114,6 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 			resizing = true;
 			// resize component
 //			System.out.println("resize component:" + resizeInfo.area);
-			parent.setResize(true);
 			
 			MatrixPointJS dp = MatrixPointJS.createScaledTransform(gridUtils.dx(point.getScreenX()), gridUtils.dy(point.getScreenY()), surface.getScaleFactor());
 			int dx = dp.getDX() - prevDX;
@@ -168,8 +167,14 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 		this.sender = null;
 		mouseDown = false;
 		resizing = false;
-		parent.setResize(false);
 		onResizeArea = false;
+	}
+
+	/**
+	* Reserves resize are same as starting to resize.
+	*/
+	public boolean isResizing() {
+		return onResizeArea;
 	}
 
 	@Override

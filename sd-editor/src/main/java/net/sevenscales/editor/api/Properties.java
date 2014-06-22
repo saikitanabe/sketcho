@@ -100,8 +100,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 				if (event.getPoint() != null) {
 					// iPad needs to show editor and direct show of text area shows input
 					// if there is anything deferred, keyboard will not be shown
-					setTextCoordinatesAndShowEditor(event.getPoint().getScreenX(), event.getPoint().getScreenY(),
-																					event.getPoint().getX(), event.getPoint().getY());
+					onDoubleClick(diagram, event.getPoint());
 				} else {
 					showEditor(diagram, diagram.getText(), diagram.getLeft(), diagram.getTop(), event.isJustCreated());
 				}
@@ -471,19 +470,14 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 
 	@Override
-	public void onDoubleClick(Diagram sender, final MatrixPointJS point) {
+	public void onDoubleClick(Diagram sender, MatrixPointJS point) {
 		if (sender != null) {
 			// parent element can create + switch to child element
 			// e.g. relationship creates child element and that should be edited after that
 			selectedDiagram = sender.showEditorForDiagram(point.getScreenX(), point.getScreenY());
-			
-			// hacking focus set on text area chrome
-			Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-				@Override
-				public void execute() {
-					setTextCoordinatesAndShowEditor(point.getScreenX(), point.getScreenY(), point.getX(), point.getY());
-				}
-			});
+
+			// Now chrome works and is able to focus directly
+			setTextCoordinatesAndShowEditor(point.getScreenX(), point.getScreenY(), point.getX(), point.getY());
 		}
 	}
 
