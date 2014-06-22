@@ -1026,6 +1026,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
    * NOTE this actually not called at the moment... rel handl helpers calls doSetShape on dragEnd for now.
    */
   public void dragEnd(Diagram sender) {
+    logger.debug("Relationship2.dragEnd...");
     currentDragged = null;
 //    relationshipHandleHelpers.dragEnd(sender);
     
@@ -1456,6 +1457,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       aggregate.setVisibility(false);
   		return;
   	}
+    logger.debug("Relationship2.doSetShape()");
 
     int size = points.size();
     double x1 = points.get(size - 4);

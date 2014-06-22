@@ -98,6 +98,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 				selectedDiagram = diagram;
 				surface.getEditorContext().set(EditorProperty.PROPERTY_EDITOR_SELECT_ALL_ENABLED, true);
 				if (event.getPoint() != null) {
+					// iPad needs to show editor and direct show of text area shows input
+					// if there is anything deferred, keyboard will not be shown
 					setTextCoordinatesAndShowEditor(event.getPoint().getScreenX(), event.getPoint().getScreenY(),
 																					event.getPoint().getX(), event.getPoint().getY());
 				} else {
