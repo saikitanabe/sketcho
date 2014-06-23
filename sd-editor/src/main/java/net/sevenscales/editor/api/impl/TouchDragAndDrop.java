@@ -140,6 +140,7 @@ public class TouchDragAndDrop implements TouchStartHandler, TouchMoveHandler, To
 	private void fireMouseDown(TouchStartEvent event) {
 		Touch touch = TouchHelpers.firstTouch(event);
 		if (touch != null) {
+			event.stopPropagation();
 			TouchHelpers.fillContext(touch, context);
 			MouseDownEvent e = TouchHelpers.createMouseDownEvent(touch);
 		  touchHandler.onTouchToMouseDown(e);
@@ -149,6 +150,7 @@ public class TouchDragAndDrop implements TouchStartHandler, TouchMoveHandler, To
 	private void fireMouseMove(TouchMoveEvent event) {
 		Touch touch = TouchHelpers.firstTouch(event);
 		if (touch != null) {
+			event.stopPropagation();
 			TouchHelpers.fillContext(touch, context);
 		  MouseMoveEvent e = TouchHelpers.createMouseMoveEvent(touch);
 		  touchHandler.onTouchToMouseMove(e);
@@ -162,6 +164,7 @@ public class TouchDragAndDrop implements TouchStartHandler, TouchMoveHandler, To
 			return;
 		}
 		
+		event.stopPropagation();
 		MouseUpEvent e = TouchHelpers.createMouseUpEvent(context);
 	  touchHandler.onTouchToMouseUp(e);
 	}
