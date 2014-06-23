@@ -179,7 +179,7 @@ public class BoardOTHelpers {
 
 	private void insertOT(String originator, List<IDiagramItemRO> items) throws MappingNotFoundException {
 		Set<Diagram> diagrams = new HashSet<Diagram>();
-    ReattachHelpers reattachHelpers = new ReattachHelpers(surface.createDiagramSearch());
+    ReattachHelpers reattachHelpers = new ReattachHelpers(surface.createDiagramSearch(), true);
 
 		for (IDiagramItemRO diro: items) {
 			// TODO diagram should never be found!?!?
@@ -236,7 +236,7 @@ public class BoardOTHelpers {
 	private void modifyOT(String originator, List<IDiagramItemRO> items) throws MappingNotFoundException {
 		logger.debug2("modifyOT items.length() {}", items.size());
 		Set<Diagram> diagrams = new HashSet<Diagram>();
-    ReattachHelpers reattachHelpers = new ReattachHelpers(diagramSearch);
+    ReattachHelpers reattachHelpers = new ReattachHelpers(diagramSearch, true);
 
     Map<String,Boolean> dirtyFields = new HashMap<String,Boolean>();
 		for (IDiagramItemRO diro : items) {

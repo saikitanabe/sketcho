@@ -36,9 +36,9 @@ public class ReattachHelpers {
 	public ReattachHelpers() {
 	}
 	
-	public ReattachHelpers(DiagramSearch diagramSearch) {
+	public ReattachHelpers(DiagramSearch diagramSearch, boolean searchConnections) {
 		this.diagramSearch = diagramSearch;
-		this.searchConnections = true;
+		this.searchConnections = searchConnections;
 	}
 	
 	public void processDiagram(Diagram diagram) {
@@ -79,6 +79,8 @@ public class ReattachHelpers {
   	Set<Relationship2> rels = diagramSearch.findRelationshipsByConnectedToClientId(diagram.getDiagramItem().getClientId());
   	for (Relationship2 rel : rels) {
   		relationships.add(rel);
+  		addConnection(rel.getStartClientId());
+  		addConnection(rel.getEndClientId());
   	}
 	}
 
