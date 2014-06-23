@@ -439,8 +439,16 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		} else {
 			// ensure sending... try at least once more
 //			onceMore = true;
-			buffer.text = textArea.getText();
-			buffer.diagram = selectedDiagram;
+			if (!bufferTextIsSent()) {
+				// do not send if check says it is already sent
+				// this is due to automatic chile text element delete when text is empty
+				// text is no longer found for undo/redo
+				buffer.text = textArea.getText();
+				buffer.diagram = selectedDiagram;
+			} else {
+				buffer.text = "";
+				buffer.diagram = null;
+			}
 		}
 	}
 
@@ -449,7 +457,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			@Override
 			public boolean execute() {
 				lastSentText = buffer.diagram.getText(textEditX, textEditY);
-				
+	
 				Properties.this.editorCommon.fireChangedWithRelatedRelationships(buffer.diagram);
 		    sending = false;
 		    

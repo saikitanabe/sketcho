@@ -1,5 +1,7 @@
 package net.sevenscales.editor.uicomponents.uml;
 
+import com.google.gwt.core.client.Scheduler;
+
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.diagram.Diagram;
@@ -164,14 +166,24 @@ public class ChildTextElement extends TextElement implements IChildElement {
 	public void editingEnded() {
 		super.editingEnded();
 
-  	fixedPointIndex = parent.findClosestSegmentPointIndex(getLeft(), getTop());
-  	if (fixedPointIndex != null && fixedPointIndex.inSegmentIndex == 1 &&
-  			!ShapeProperty.isNoTextAutoAlign(getDiagramItem().getShapeProperties())) {
-			PointDouble anchorPoint = parent.getPoint(fixedPointIndex);
-			double left = anchorPoint.x - getTextWidth() / 2.0;
-			fixedLeft = left - anchorPoint.x;
-			setPosition(left, getTop());
-  	}
+		if ("".equals(getText())) {
+			Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+				public void execute() {
+					// Deferred auto delete, so empty text modify will be before
+					// delete OT
+					surface.getSelectionHandler().remove(ChildTextElement.this);
+				}
+			});
+		} else {
+	  	fixedPointIndex = parent.findClosestSegmentPointIndex(getLeft(), getTop());
+	  	if (fixedPointIndex != null && fixedPointIndex.inSegmentIndex == 1 &&
+	  			!ShapeProperty.isNoTextAutoAlign(getDiagramItem().getShapeProperties())) {
+				PointDouble anchorPoint = parent.getPoint(fixedPointIndex);
+				double left = anchorPoint.x - getTextWidth() / 2.0;
+				fixedLeft = left - anchorPoint.x;
+				setPosition(left, getTop());
+	  	}
+		}
 	}
 
   // @Override
