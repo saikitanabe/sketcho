@@ -59,6 +59,10 @@ import com.google.gwt.user.client.Window;
 public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	private static final SLogger logger = SLogger.createLogger(MouseDiagramDragHandler.class);
 
+	static {
+		SLogger.addFilter(MouseDiagramDragHandler.class);
+	}
+
 	private Diagram currentDiagram;
 	private Set<DiagramDragHandler> dragHandlers;
 	private boolean dragging = false;
@@ -156,7 +160,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	}
 
 	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
-		if (sender != null && !parent.getResize() && !surface.getEditorContext().isFreehandMode()) {
+		if (sender != null && !parent.isResizing() && !surface.getEditorContext().isFreehandMode()) {
 			// Debug.print("onMouseDown:"+x+"y:"+y);
 			// System.out.println("drag mouse down"+sender);
 			// drag handler is not interested in canvas events
@@ -282,7 +286,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	}
 
 	private void drag(MatrixPointJS point) {
- 		if (currentDiagram != null && !parent.getResize() && gridUtils.passTreshold(point)) {
+ 		if (currentDiagram != null && !parent.isResizing() && gridUtils.passTreshold(point)) {
 			// if not resizing area => drag
 			if (mouseDown && !dragging) {
 				// Debug.print("dragstarted");
@@ -588,6 +592,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	}
 	
 	private void dragEnd(Set<Diagram> selectedItems, MatrixPointJS point) {
+		logger.debug("dragEnd...");
 		// logger.start("MouseDiagramDragHandler.dragEnd SUM");
 		// logger.start("MouseDiagramDragHandler.dragEnd 1");
 		dragging = false;
