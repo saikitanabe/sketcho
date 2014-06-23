@@ -27,7 +27,7 @@ public class LongPressHandler implements MouseDownHandler,
 																				 TouchEndHandler {
 	private static final SLogger logger = SLogger.createLogger(LongPressHandler.class);
 	private static final int THRESHOLD;
-	private static final int TIME_OUT = 400;
+	private static final int TIME_OUT = 700;
 	private final LongPressTimer timer = new LongPressTimer();
 	
 	static {
