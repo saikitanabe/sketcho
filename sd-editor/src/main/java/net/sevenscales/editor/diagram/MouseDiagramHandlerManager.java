@@ -410,7 +410,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		
 		Set<Diagram> selected = selectionHandler.getSelectedItems();
 		if (selected.size() == 1) {
-			Diagram s = selected.iterator().next();
+			Diagram s = selected.iterator().next().getOwnerComponent();
 	    MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
 			surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(s, point));
 		} else if (selected.size() == 0) {
