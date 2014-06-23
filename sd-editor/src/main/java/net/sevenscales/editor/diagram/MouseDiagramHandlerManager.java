@@ -4,6 +4,8 @@ package net.sevenscales.editor.diagram;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.dom.client.Element;
+
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.SketchDiagramAreaHandler;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -16,7 +18,10 @@ import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDiagramHandler, MouseState {
 	private static final SLogger logger = SLogger.createLogger(MouseDiagramHandlerManager.class);
 
-	private boolean resize = false;
+	static {
+		SLogger.addFilter(MouseDiagramHandlerManager.class);
+	}
+
 	private MouseDiagramDragHandler dragHandler;
 //	private MouseDiagramBendHandler bendHandler;
 	private SelectionHandler selectionHandler;
@@ -66,6 +71,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		sketchDiagramAreaHandler = new SketchDiagramAreaHandler(surface, modeManager);
 		new LinkHandler(surface);
 		
+		handleDoubleTap(surface.getElement(), this);
 		// addMouseDiagramHandler(sketchDiagramAreaHandler);
 	}
 
@@ -265,14 +271,6 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		onMouseUp(sender, point);
   }
 
-	public void setResize(boolean resize) {
-		this.resize = resize;
-	}
-	
-	public boolean getResize() {
-		return this.resize;
-	}
-
 	public void makeDraggable(Diagram diagram) {
 	  if (surface.getEditorContext().isEditable()) {
 	    diagram.addMouseDiagramHandler(dragHandler);
@@ -347,9 +345,15 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 
 	@Override
 	public void onDoubleClick(Diagram sender, MatrixPointJS point) {
-		resizeHandler.onDoubleClick(sender, point);
-		surfaceClickHandler.onDoubleClick(sender, point);
+		// resizeHandler.onDoubleClick(sender, point);
+		// surfaceClickHandler.onDoubleClick(sender, point);
 	}
+
+	@Override
+	public boolean isResizing() {
+		return resizeHandler.isResizing();
+	}
+
 
 	@Override
 	public boolean isDragging() {
@@ -364,6 +368,21 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	@Override	
 	public boolean isLassoing() {
 		return lassoSelectionHandler.isLassoing();
+	}
+
+	private native void handleDoubleTap(Element e, MouseDiagramHandlerManager me)/*-{
+		$wnd.Hammer(e, {preventDefault: true}).on('doubletap', function(event) {
+			// console.log('handleDoubleTap', event)
+			if (event.gesture.center.clientX && event.gesture.center.clientY) {
+				me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(II)(event.gesture.center.clientX, event.gesture.center.clientY);
+			}
+		})
+	}-*/;
+
+	private void doubleTap(int x, int y) {
+		logger.debug("doubleTap...");
+		// cannot check connect mode, or will not show property editor
+		_fireLongPress(x, y);
 	}
 
 	/**

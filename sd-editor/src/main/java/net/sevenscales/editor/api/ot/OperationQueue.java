@@ -103,6 +103,15 @@ public class OperationQueue {
 		return false;
 	}
 
+	public boolean containsOnlyUserMoveOperations() {
+		for (SendOperation o : queuedOperations) {
+			if (!OTOperation.USER_MOVE.equals(o.getOperation())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public String toJsonAndClear() {
 		String result = toJson(queuedOperations);
 		queuedOperations.clear();
