@@ -470,14 +470,24 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 
 	@Override
-	public void onDoubleClick(Diagram sender, MatrixPointJS point) {
+	public void onDoubleClick(Diagram sender, final MatrixPointJS point) {
 		if (sender != null) {
 			// parent element can create + switch to child element
 			// e.g. relationship creates child element and that should be edited after that
 			selectedDiagram = sender.showEditorForDiagram(point.getScreenX(), point.getScreenY());
 
-			// Now chrome works and is able to focus directly
-			setTextCoordinatesAndShowEditor(point.getScreenX(), point.getScreenY(), point.getX(), point.getY());
+			if (TouchHelpers.isSupportsTouch()) {
+				// iPad cannot have any deferred to focus keyboard
+				setTextCoordinatesAndShowEditor(point.getScreenX(), point.getScreenY(), point.getX(), point.getY());
+			} else {
+				// chrome on macbook air doesn't focus keyboard if not deferred
+				Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+					@Override
+					public void execute() {
+						setTextCoordinatesAndShowEditor(point.getScreenX(), point.getScreenY(), point.getX(), point.getY());
+					}
+				});
+			}
 		}
 	}
 
