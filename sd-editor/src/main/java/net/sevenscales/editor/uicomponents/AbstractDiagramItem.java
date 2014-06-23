@@ -27,7 +27,6 @@ import net.sevenscales.editor.content.utils.Rgb;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.ClickDiagramHandler;
-import net.sevenscales.editor.diagram.ClickDiagramHandlerCollection;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramProxy;
 import net.sevenscales.editor.diagram.DiagramSelectionHandler;
@@ -95,10 +94,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   private long dispachSequence;
   protected MouseDiagramListenerCollection  mouseListeners;
-  private ClickDiagramHandlerCollection clickListeners;
   private boolean mouseDown = false;
   private DiagramProxy ownerComponent;
-  private DoubleClickState state;
   private DragState dragState;
   protected int diffFromMouseDownX;
   protected int diffFromMouseDownY;
@@ -164,8 +161,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     this.borderColorSwitch = borderColor.create();
     this.textColor = textColor;
     mouseListeners = new MouseDiagramListenerCollection();
-    clickListeners = new ClickDiagramHandlerCollection();
-    state = new DoubleClickState();
     
     connectionHelpers = createConnectionHelpers();
     
@@ -250,33 +245,16 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     int x = event.getElementOffsetX(surface.getElement());
     int y = event.getElementOffsetY(surface.getElement());
     MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
-//    System.out.println("down click:" + this+"x:"+x+"y:"+y);
     mouseListeners.fireMouseDown(this, point, keys);
     mouseDown = true;
-    
-    if (((AbstractDiagramItem)getOwnerComponent()).state.downClick() && editable) {
-      clickListeners.fireDoubleClick(getOwnerComponent(), point);
-    }
   }
   
-  protected void handleEventDoubleClick(Event event) {
-    int x = 0;
-    int y = 0;
-//    int x = SurfaceUtil.eventGetOffsetX(surface.getElement(), event);
-//    int y = SurfaceUtil.eventGetOffsetY(surface.getElement(), event);
-//    System.out.println("double click");
-//    clickListeners.fireDoubleClick(this, x, y);
-  }
-
   public void onMouseUp(GraphicsEvent event) {
     int x = SurfaceUtil.eventGetElementOffsetX(surface.getElement(), event);
     int y = SurfaceUtil.eventGetElementOffsetY(surface.getElement(), event);
     MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
     mouseListeners.fireMouseUp(this, point);
     
-    if (mouseDown) {
-      clickListeners.fireClick(this, x, y, 0);
-    }
     mouseDown = false;
   }
   
@@ -347,14 +325,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   public void removeMouseDiagramHandler(MouseDiagramHandler listener) {
     mouseListeners.remove(listener);
-  }
-  
-  public void registerClickHandler(ClickDiagramHandler listener) {
-    clickListeners.addClickHandler(listener);
-  }
-  
-  public void unregisterClickHandler(ClickDiagramHandler listener) {
-    clickListeners.removeClickHandler(listener);
   }
   
   public void accept(ISurfaceHandler surface) {

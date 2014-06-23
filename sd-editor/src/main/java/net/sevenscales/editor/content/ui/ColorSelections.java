@@ -283,13 +283,13 @@ public class ColorSelections extends Composite {
 	}
 
 	private native void tapDefaultColor(Element e, ColorSelections me)/*-{
-		$wnd.Hammer(e).on('tap', function() {
+		$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
 			me.@net.sevenscales.editor.content.ui.ColorSelections::onRestoreDefaults()();
 		})
 	}-*/;
 
 	private native void tapTransparent(Element e, ColorSelections me)/*-{
-		$wnd.Hammer(e).on('tap', function() {
+		$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
 			me.@net.sevenscales.editor.content.ui.ColorSelections::onTransparent()();
 		})
 	}-*/;

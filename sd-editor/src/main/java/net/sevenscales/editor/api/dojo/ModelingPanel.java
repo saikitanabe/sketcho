@@ -130,7 +130,6 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 			surface.setStyleName("sd-editor-surface-modeling-area");
 			this.toolFrame = new ToolFrame(surface, 700, modeManager, editorContext, autohide);
 			surface.setPropertiesTextArea(toolFrame.getProperties());
-			surface.registerClickHandler(toolFrame.getProperties());
 			editorContext.setPropertiesArea(toolFrame.getProperties());
 
 			if (editorContext.isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {

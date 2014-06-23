@@ -218,7 +218,6 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
       List<Diagram> items = createToolbarItems();
     	editorContext.set(EditorProperty.ON_SURFACE_LOAD, false);
       for (Diagram item : items) {
-        item.registerClickHandler(this);
         toolpool.add(item, true); 
       }
       

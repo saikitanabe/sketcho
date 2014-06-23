@@ -101,7 +101,7 @@ public class TopButtons extends Composite {
   }
 
 	private native void tapColor(Element e)/*-{
-		$wnd.Hammer(e).on('tap', function() {
+		$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
 			$wnd.$('.tooltip').hide()
 			$wnd.$($doc).trigger('showFreehandColorMenu', e)
 		})

@@ -24,7 +24,6 @@ import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.content.utils.DiagramDisplaySorter;
 import net.sevenscales.editor.diagram.ClickDiagramHandler;
-import net.sevenscales.editor.diagram.ClickDiagramHandlerCollection;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramDragHandler;
 import net.sevenscales.editor.diagram.DiagramResizeHandler;
@@ -35,7 +34,6 @@ import net.sevenscales.editor.diagram.KeyEventListener;
 import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.diagram.MouseDiagramHandlerManager;
 import net.sevenscales.editor.diagram.SelectionHandler;
-import net.sevenscales.editor.diagram.SourcesClickDiagramEvents;
 import net.sevenscales.editor.diagram.utils.DiagramDisplayOrderList;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.base.GraphicsMouseDownHandler;
@@ -54,7 +52,6 @@ import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
-import net.sevenscales.editor.uicomponents.DoubleClickState;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.HasTouchEndHandlers;
@@ -79,7 +76,8 @@ import com.google.gwt.user.client.ui.Widget;
 
 
 class SurfaceHandler extends SimplePanel implements 
-							SourcesClickDiagramEvents, ILoadObserver, IKeyEventHandler,
+							ILoadObserver, 
+							IKeyEventHandler,
               GraphicsMouseDownHandler,
               GraphicsMouseUpHandler,
               GraphicsMouseMoveHandler,
@@ -96,12 +94,9 @@ class SurfaceHandler extends SimplePanel implements
 	protected MouseDiagramHandlerManager mouseDiagramManager;
 	private KeyEventHandler keyEventHandler;
 	private LoadEventListenerCollection loadEventListenerCollection;
-	private ClickDiagramHandlerCollection clickListenerCollection;
+	// private ClickDiagramHandlerCollection clickListenerCollection;
 	private boolean editable;
 	private boolean deleteSupported;
-//  private SimplePanel panel;
-//	private DoubleClickHandler handler;
-	private DoubleClickState state = new DoubleClickState();
 	private EventRegistry eventRegistry = new EventRegistry();
   private boolean dragEnabled = true;
   private boolean proxyOnDrag;
@@ -156,8 +151,6 @@ class SurfaceHandler extends SimplePanel implements
 		
 		keyEventHandler.add(mouseDiagramManager.getSelectionHandler());
 //		keyEventHandler.add(mouseDiagramManager.getBendHandler());
-		
-		clickListenerCollection = new ClickDiagramHandlerCollection();
 		
 		if (editable) {
 
@@ -240,6 +233,11 @@ class SurfaceHandler extends SimplePanel implements
 //    setWidget(panel);
 		logger.debug("init {}... done", name);
 	}
+
+	@Override
+	public void setId(String id) {
+		getElement().setId(id);
+	}
 	
 //	public void addDoubleClickHandler(DoubleClickHandler handler) {
 //		// TODO: hack
@@ -314,7 +312,6 @@ class SurfaceHandler extends SimplePanel implements
 //				diagrams.add(diagram.getOwnerComponent());
 //			}
 			diagram.addMouseDiagramHandler(mouseDiagramManager);
-			clickListenerCollection.addClickHandler(diagram);
 			diagram.accept(this);
 		}
 		
@@ -366,7 +363,6 @@ class SurfaceHandler extends SimplePanel implements
 	public void remove(Diagram diagram) {
 		diagrams.remove(diagram);
 		mouseDiagramManager.diagramRemoved(diagram);
-		clickListenerCollection.remove(diagram);
 		IGroup group = diagram.getGroup(); 
 		if (group != null) {
 			_removeShape(group.getContainer());
@@ -506,14 +502,6 @@ class SurfaceHandler extends SimplePanel implements
     }
 	}
 
-	public void registerClickHandler(ClickDiagramHandler listener) {
-		clickListenerCollection.add(listener);
-	}
-
-	public void unregisterClickHandler(ClickDiagramHandler listener) {
-		clickListenerCollection.remove(listener);
-	}
-	
 	public List<Diagram> getDiagrams() {
 		return diagrams;
 	}
@@ -581,11 +569,6 @@ class SurfaceHandler extends SimplePanel implements
 //    int x = event.getElementOffsetX(getElement());
 //    int y = event.getElementOffsetY(getElement());
     mouseDiagramManager.onMouseDown(null, point, keys);
-    
-		if (state.downClick()) {
-	//		mouseDiagramManager.onDoubleClick(event);
-			mouseDiagramManager.onDoubleClick(null, point);
-		}
     
 //		if (properties != null) {
 //			properties.setFocus(true);

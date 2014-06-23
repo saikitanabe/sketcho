@@ -20,7 +20,7 @@ import net.sevenscales.editor.gfx.domain.Point;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public interface Diagram extends SourcesMouseDiagramEvents, SourcesClickDiagramEvents {
+public interface Diagram extends SourcesMouseDiagramEvents {
   public void applyTransform(int dx, int dy);
   void setTransform(int dx, int dy);
   public void resetTransform();

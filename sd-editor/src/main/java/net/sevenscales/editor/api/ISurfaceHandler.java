@@ -39,11 +39,13 @@ import net.sevenscales.domain.IDiagramItemRO;
 
 
 public interface ISurfaceHandler {
+	public static final String DRAWING_AREA_ID = "drawingareaid";
 	public static final String DRAWING_AREA = "drawingarea";
 	public static final String LIBRARY_AREA = "libraryarea";
 
 	void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
 			EditorContext editorContext);
+	void setId(String id);
 
 	boolean isLibrary();
 	void show();

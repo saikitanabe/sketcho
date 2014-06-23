@@ -511,7 +511,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}-*/;
 
 	private native void tapCurvedArrow(Element e, UiContextMenu me)/*-{
-		$wnd.Hammer(e).on('tap', function() {
+		$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
 			$wnd.$('.tooltip').hide()
 			me.@net.sevenscales.editor.content.ui.UiContextMenu::curvedArrow()();
 			// $wnd.$($doc).trigger('showFreehandColorMenu', e)
@@ -519,7 +519,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}-*/;
 
 	private native void tapRectifiedArrow(Element e, UiContextMenu me)/*-{
-		$wnd.Hammer(e).on('tap', function() {
+		$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
 			$wnd.$('.tooltip').hide()
 			me.@net.sevenscales.editor.content.ui.UiContextMenu::rectifiedArrow()();
 			// $wnd.$($doc).trigger('showFreehandColorMenu', e)

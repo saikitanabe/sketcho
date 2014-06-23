@@ -15,7 +15,7 @@ abstract class Graphics extends GraphicsBase {
     } else if (eventType.equals(ON_MOUSE_MOVE)) {
       nativeConnectMouseMove(rawNode, eventType);
     } else if (eventType.equals(ON_DOUBLE_CLICK)) {
-      nativeConnectDoubleClick(rawNode, eventType);
+      // nativeConnectDoubleClick(rawNode, eventType);
     } else if (eventType.equals(ON_MOUSE_DOWN)) {
       nativeConnectOnMouseDown(rawNode, eventType);
     } else if (eventType.equals(ON_MOUSE_UP)) {
