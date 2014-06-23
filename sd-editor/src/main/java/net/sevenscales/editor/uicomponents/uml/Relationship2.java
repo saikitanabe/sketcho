@@ -182,9 +182,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     SLogger.addFilter(Relationship2.class);
 
 		if (TouchHelpers.isSupportsTouch()) {
-			SELECTION_AREA_WIDTH = 15;
+			SELECTION_AREA_WIDTH = 25;
 		} else {
-			SELECTION_AREA_WIDTH = 6;
+			SELECTION_AREA_WIDTH = 10;
 		}
 	}
   
@@ -201,7 +201,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //      polyline.setFill(150, 150, 150, 0.5);
       lineBackground = IShapeFactory.Util.factory(editable).createPath(group, null);
       lineBackground.setStroke(51, 51, 51, 0);
-      lineBackground.setStrokeWidth(10);
+      lineBackground.setStrokeWidth(SELECTION_AREA_WIDTH);
       
       elements.add(path);
       elements.add(lineBackground);
