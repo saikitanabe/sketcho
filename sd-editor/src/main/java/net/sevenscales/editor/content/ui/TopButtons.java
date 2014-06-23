@@ -110,11 +110,13 @@ public class TopButtons extends Composite {
 	public void setVisible(FreehandModeChangedEvent event) {
 		super.setVisible(Tools.isCommentMode());
 		freehandOn.getStyle().setDisplay(Display.NONE);
+		colorize.getStyle().setDisplay(Display.NONE);
 		if (event.isEnabled()) {
 			// do not set visible if freehand mode is not on
 			// this is due to initial load
 			super.setVisible(event.isEnabled());
 			freehandOn.getStyle().setDisplay(Display.INLINE);
+			colorize.getStyle().setDisplay(Display.INLINE);
 			// String text = editorContext.<FreehandModeType>getAs(EditorProperty.FREEHAND_MODE_TYPE).toString();
 			// if (event.isModeTypeChanged()) {
 			// 	text = event.getModeType().toString();
