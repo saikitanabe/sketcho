@@ -88,9 +88,15 @@ public class DuplicateHelpers {
 				top = Math.min(top, d.getTop());
 			}
 			List<? extends IDiagramItemRO> items = BoardDocumentHelpers.diagramsToItems(toduplicate);
-			paste(left + 20, top + 35, items, boardDocument, true);
+			// missing functional languages!
+			// need to create new instances of diagram items, or it will be a mess, due to shared model
+			List<IDiagramItem> copies = new ArrayList<IDiagramItem>();
+			for (IDiagramItemRO diro : items) {
+				copies.add(diro.copy());
+			}
+			paste(left + 20, top + 35, copies, boardDocument, true);
 		} else if (toduplicate.size() == 1) {
-			// TODO special one item duplicate, e.g. sequence or horizontal bar
+			// special one item duplicate, e.g. sequence or horizontal bar
 			Diagram duplicated = toduplicate.get(0).duplicate();
 			surface.addAsSelected(duplicated, true, true);
 		}
