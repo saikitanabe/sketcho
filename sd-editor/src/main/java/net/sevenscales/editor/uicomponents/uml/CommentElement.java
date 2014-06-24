@@ -28,6 +28,7 @@ import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.gfx.domain.IChildElement;
+import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.gfx.domain.SegmentPoint;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
@@ -648,6 +649,10 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	@Override
 	public Diagram asDiagram() {
 		return this;
+	}
+
+	public Diagram duplicate(IParentElement parent) {
+		return null;
 	}
 
 	@Override

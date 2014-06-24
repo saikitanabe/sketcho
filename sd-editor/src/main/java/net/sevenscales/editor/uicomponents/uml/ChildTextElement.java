@@ -14,6 +14,7 @@ import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementHorizontalFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
@@ -72,6 +73,34 @@ public class ChildTextElement extends TextElement implements IChildElement {
 	// 		return super.getTextX();
 	// 	}
 	// }
+
+  @Override
+	public Diagram duplicate(boolean partOfMultiple) {
+		return null;
+	}
+
+  @Override
+	public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
+		return null;
+	}
+
+  @Override
+	public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
+		// TextShape newShape = new TextShape(x, y, attachBoundary.getWidth(),
+		// 		attachBoundary.getHeight());
+		// Diagram result = createDiagram(surface, newShape, getText(), getEditable());
+		// return result;
+		return null;
+	}
+
+	@Override
+	public Diagram duplicate(IParentElement parent) {
+		ChildTextShape newShape = new ChildTextShape(getLeft() + 20, getTop() + 20, getWidth(), getHeight());
+		DiagramItemDTO dto = new DiagramItemDTO();
+		dto.setParentId(parent.asDiagram().getDiagramItem().getParentId());
+
+		return new ChildTextElement(surface, newShape, new Color(backgroundColor), new Color(borderColor), new Color(textColor), getText(), editable, dto, parent);
+	}
 
 	@Override
   public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
@@ -289,6 +318,7 @@ public class ChildTextElement extends TextElement implements IChildElement {
   @Override
   public int supportedMenuItems() {
   	return ContextMenuItem.NO_MENU.getValue() | 
+  				 ContextMenuItem.DUPLICATE.getValue() |
            ContextMenuItem.COLOR_MENU.getValue() |
            ContextMenuItem.URL_LINK.getValue() | 
            ContextMenuItem.DELETE.getValue();

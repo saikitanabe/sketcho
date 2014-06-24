@@ -11,6 +11,9 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.editor.gfx.domain.IRelationship;
+import net.sevenscales.editor.gfx.domain.IChildElement;
+import net.sevenscales.editor.uicomponents.uml.ChildTextElement;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.BoardDocument;
 import net.sevenscales.editor.api.EditorProperty;
@@ -21,6 +24,7 @@ import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.diagram.utils.CommentFactory;
+import net.sevenscales.editor.diagram.DiagramSearch;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.domain.utils.SLogger;
@@ -69,13 +73,11 @@ public class DuplicateHelpers {
 	}
 	
 	public void duplicate(BoardDocument boardDocument) {
-		Diagram[] selected = new Diagram[]{};
-		selected = selectionHandler.getSelectedItems().toArray(selected);
-
 		// iterate all items and duplicate + generate client id; map original client id to new duplicated id
 		// reconnect relationships based on mapped client IDs
 
-		State state = duplicateAndMapClientIds(selected, boardDocument);
+		DiagramSearch search = surface.createDiagramSearch();
+		State state = duplicateAndMapClientIds(selectionHandler.getSelectedItems(), boardDocument, search);
 
 		addItemsToTheBoard(state);
 	}
@@ -92,33 +94,73 @@ public class DuplicateHelpers {
 		}
 	}
 
-	private State duplicateAndMapClientIds(Diagram[] selected, BoardDocument boardDocument) {
+	private State duplicateAndMapClientIds(Set<Diagram> selected, BoardDocument boardDocument, DiagramSearch search) {
 		State result = new State(surface);
 		int i = 0;
-		for (Diagram diagram : selected) {
-			Diagram duplicated = diagram.duplicate(selected.length > 1);
+		Set<Diagram> toduplicate = resolveAlsoParents(selected, search);
+		for (Diagram diagram : toduplicate) {
+			Diagram duplicated = diagram.duplicate(selected.size() > 1);
 			if (duplicated != null) {
-				// if item supports duplication
-				result.newItems.add(duplicated);
-				
-				DiagramItemDTO di = (DiagramItemDTO) DiagramItemFactory.createOrUpdate(duplicated);
-				// copy also custom data to be handled later
-				// di.copyFrom(diagram.getDiagramItem());
+				processDuplicate(result, ++i, boardDocument, duplicated, diagram);
 
-				// same as copyFrom but doesn't copy location that has been just set in 
-				// diagram.duplicate
-				duplicated.duplicateFrom(diagram.getDiagramItem());
-
-				// generate new client id
-				di.setClientId(ClientIdHelpers.generateClientId(++i, boardDocument));
-				
-				result.addRelationshipIfAny(duplicated);
-				
-				result.clientIdMapping.put(diagram.getDiagramItem().getClientId(), di.getClientId());
-				result.reattachHelpers.processDiagram(duplicated);
+				if (diagram instanceof IRelationship) {
+					// children are handled through parent
+					IRelationship originalParent = (IRelationship) diagram;
+					for (IChildElement child : originalParent.getChildren()) {
+						if (child instanceof ChildTextElement && duplicated instanceof IRelationship) {
+							ChildTextElement c = (ChildTextElement) child;
+							Diagram duplicatedChild = c.duplicate((IRelationship) duplicated);
+							processDuplicate(result, ++i, boardDocument, duplicatedChild, child.asDiagram());
+						}
+					}
+				}
 			}
 		}
 		return result;
+	}
+
+	/**
+	* Skips child elements and instead parents. Other elements are added as is.
+	*/
+	private Set<Diagram> resolveAlsoParents(Set<Diagram> diagrams, DiagramSearch search) {
+		Set<Diagram> result = new HashSet<Diagram>();
+		for (Diagram d : diagrams) {
+			String parentId = d.getDiagramItem().getParentId();
+			if (parentId != null && d instanceof ChildTextElement) {
+				Diagram parent = search.findByClientId(parentId);
+				result.add(parent);
+			} else {
+				result.add(d);
+			}
+			result.add(d);
+		}
+		return result;
+	}
+
+	/**
+	* Copies data to duplicated element.
+	*/
+	private void processDuplicate(State result, int i, BoardDocument boardDocument, Diagram duplicated, Diagram original) {
+		if (duplicated != null) {
+			// if item supports duplication
+			result.newItems.add(duplicated);
+			
+			DiagramItemDTO di = (DiagramItemDTO) DiagramItemFactory.createOrUpdate(duplicated);
+			// copy also custom data to be handled later
+			// di.copyFrom(diagram.getDiagramItem());
+
+			// // same as copyFrom but doesn't copy location that has been just set in 
+			// // diagram.duplicate
+			duplicated.duplicateFrom(original.getDiagramItem());
+
+			// generate new client id
+			di.setClientId(ClientIdHelpers.generateClientId(i, boardDocument));
+
+			result.addRelationshipIfAny(duplicated);
+			
+			result.clientIdMapping.put(original.getDiagramItem().getClientId(), di.getClientId());
+			result.reattachHelpers.processDiagram(duplicated);
+		}
 	}
 
 	public void paste(int x, int y, List<IDiagramItemRO> items, BoardDocument boardDocument, boolean editable) {
