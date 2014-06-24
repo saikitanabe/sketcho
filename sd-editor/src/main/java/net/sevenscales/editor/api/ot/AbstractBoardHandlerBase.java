@@ -249,14 +249,8 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
 //		}
 //	}
 
-	protected List<? extends IDiagramItemRO> diagramsToItems(Iterable<Diagram> diagrams) {
-		List<Diagram> filteredDiagrams = DiagramHelpers.filterOwnerDiagramsAsListKeepOrder(diagrams, ActionType.NONE);
-		List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.getDiagramsAsDTOKeepOrder(filteredDiagrams, true);
-		return operationItems;
-	}
-
 	protected final void sendOperation(String boardName, String originator, String operation, Iterable<Diagram> diagrams)  {
-		List<? extends IDiagramItemRO> operationItems = diagramsToItems(diagrams);
+		List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.diagramsToItems(diagrams);
 		applyLocalSendOperation(operation, operationItems);
 		if (notUndoOrRedo(operation)) {
 			// undo and redo are always translated to change operation (insert, move, delete...)

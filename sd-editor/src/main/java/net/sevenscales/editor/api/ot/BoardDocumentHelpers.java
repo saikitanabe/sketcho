@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
@@ -12,8 +13,12 @@ import net.sevenscales.domain.utils.DiagramItemIdComparator;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.DiagramSearch;
+import net.sevenscales.editor.uicomponents.uml.ChildTextElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.api.ot.BoardUser.BoardUserJson;
+import net.sevenscales.editor.gfx.domain.IRelationship;
+import net.sevenscales.editor.gfx.domain.IChildElement;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsonUtils;
@@ -33,7 +38,38 @@ public class BoardDocumentHelpers {
 
 	public BoardDocumentHelpers() {
 	}
-	
+
+	public static List<Diagram> resolveAlsoParents(Set<Diagram> diagrams, DiagramSearch search) {
+		List<Diagram> result = new ArrayList<Diagram>();
+		for (Diagram d : diagrams) {
+			String parentId = d.getDiagramItem().getParentId();
+			if (parentId != null && d instanceof ChildTextElement) {
+				Diagram parent = search.findByClientId(parentId);
+				addUnique(parent, result);
+			} else if (d instanceof IRelationship) {
+				IRelationship parent = (IRelationship) d;
+				for (IChildElement child : parent.getChildren()) {
+					addUnique(child.asDiagram(), result);
+				}
+			}
+			addUnique(d, result);
+		}
+		return result;
+	}
+
+	public static void addUnique(Diagram d, List<Diagram> list) {
+		if (!list.contains(d)) {
+			list.add(d);
+		}
+	}
+
+
+	public static List<? extends IDiagramItemRO> diagramsToItems(Iterable<Diagram> diagrams) {
+		List<Diagram> filteredDiagrams = net.sevenscales.editor.content.utils.DiagramHelpers.filterOwnerDiagramsAsListKeepOrder(diagrams, net.sevenscales.editor.api.ActionType.NONE);
+		List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.getDiagramsAsDTOKeepOrder(filteredDiagrams, true);
+		return operationItems;
+	}
+
 	public static List<IDiagramItem> getDiagramsAsDTO(List<Diagram> diagrams, boolean updateDiagramItem) {
 		Collections.sort(diagrams, DIAGRAM_IDENTIFIER_COMPARATOR);
 		List<IDiagramItem> result = new ArrayList<IDiagramItem>();
