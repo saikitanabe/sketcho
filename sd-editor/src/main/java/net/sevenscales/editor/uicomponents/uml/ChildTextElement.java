@@ -4,6 +4,7 @@ import com.google.gwt.core.client.Scheduler;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.ChildTextShape;
@@ -248,6 +249,17 @@ public class ChildTextElement extends TextElement implements IChildElement {
 		resetStartDragPosition();
 		getDiagramItem().addShapeProperty(ShapeProperty.NO_TEXT_AUTO_ALIGN);
 		updateFixedDistance();
+	}
+
+	@Override
+	public Diagram getOwnerComponent(ActionType actionType) {
+		switch (actionType) {
+			case DRAGGING:
+				// need to send parent before child text or text position will be
+				// incorrect on the other side
+				return parent.asDiagram();
+		} 
+		return this;
 	}
 
 	@Override
