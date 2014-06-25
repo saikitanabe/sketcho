@@ -257,8 +257,11 @@ public class ChildTextElement extends TextElement implements IChildElement {
 			case DRAGGING:
 				// need to send parent before child text or text position will be
 				// incorrect on the other side
-				return parent.asDiagram();
-		} 
+				// if moved as part of other selected items
+				if (partOfMultipleSelection) {
+					return parent.asDiagram();
+				}
+		}
 		return this;
 	}
 
