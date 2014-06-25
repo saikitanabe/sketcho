@@ -41,7 +41,6 @@ public class ChildTextElement extends TextElement implements IChildElement {
 	private int originalY;
 	private int prevDX;
 	private int prevDY;
-	private boolean partOfMultipleSelection;
   // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
 
 
@@ -149,16 +148,6 @@ public class ChildTextElement extends TextElement implements IChildElement {
 		super.snapshotTransformations();
 		// called before this element is dragged
 		resetStartDragPosition();
-		partOfMultipleSelection = surface.getSelectionHandler().getSelectedItems().size() > 1;
-  }
-
-  @Override
-  public void setTransform(int dx, int dy) {
-  	if (!partOfMultipleSelection)	{
-  		// ignore child text movement if part of multiple selection
-  		// supports only to move child text alone
-  		super.setTransform(dx, dy);
-  	}
   }
 
 	private void resetStartDragPosition() {
@@ -249,20 +238,6 @@ public class ChildTextElement extends TextElement implements IChildElement {
 		resetStartDragPosition();
 		getDiagramItem().addShapeProperty(ShapeProperty.NO_TEXT_AUTO_ALIGN);
 		updateFixedDistance();
-	}
-
-	@Override
-	public Diagram getOwnerComponent(ActionType actionType) {
-		switch (actionType) {
-			case DRAGGING:
-				// need to send parent before child text or text position will be
-				// incorrect on the other side
-				// if moved as part of other selected items
-				if (partOfMultipleSelection) {
-					return parent.asDiagram();
-				}
-		}
-		return this;
 	}
 
 	@Override

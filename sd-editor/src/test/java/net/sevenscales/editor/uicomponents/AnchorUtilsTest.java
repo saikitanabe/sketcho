@@ -17,7 +17,7 @@ public class AnchorUtilsTest extends TestCase {
 		points.add(30); 		points.add(35);
 		points.add(40); 		points.add(45);
 
-		AnchorUtils.anchorPoint(10, 15, tempAnchorProperties, points);
+		AnchorUtils.anchorPoint(10, 15, 0, 0, 100, 30, tempAnchorProperties, points);
 		Assert.assertEquals(20, tempAnchorProperties.x);
 		Assert.assertEquals(25, tempAnchorProperties.y);
 	}

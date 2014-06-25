@@ -21,7 +21,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyAssociation() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("-");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(!rs.isDirected());
@@ -37,7 +37,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyAssociationWithArrowText() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("-\\>");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(!rs.isDirected());
@@ -54,7 +54,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyAssociationLabel() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("pallo\nkala-");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(!rs.isDirected());
@@ -70,7 +70,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyAssociationLabelWindows() {
 	    RelationshipTextUtil2 su = new RelationshipTextUtil2();
 	    su.setText("pallo\r\nkala-");
-	    Info s = su.parseShape();
+	    Info s = su.parseShape(false);
 	    assertTrue(s instanceof RelationshipShape2);
 	    RelationshipShape2 rs = (RelationshipShape2) s;
 	    assertTrue(!rs.isDirected());
@@ -86,7 +86,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyAssociationLabelLeftRight() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("label\nleft-right");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(!rs.isDirected());
@@ -103,7 +103,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyRigtAssociationText() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("-*");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(!rs.isDirected());
@@ -119,7 +119,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyLeftAssociationText() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("*-");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(!rs.isDirected());
@@ -135,7 +135,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyAssociationTexts0() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("left-right");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(!rs.isDirected());
@@ -153,7 +153,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyAssociationDirectedTexts() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("left->right");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(rs.isDirected());
@@ -171,7 +171,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyAssociationDirectedBothTexts() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("left<->right");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(rs.isDirected());
@@ -189,7 +189,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyAssociationTexts1() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("left--right");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(!rs.isDirected());
@@ -207,7 +207,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyAssociationTexts2() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("left-->right");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(rs.isDirected());
@@ -225,7 +225,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyAssociationTexts3() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("left<>->right");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(rs.isDirected());
@@ -243,7 +243,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyDependancy() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("--");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(rs.isDependancy());    
@@ -256,7 +256,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyDirectedDependancy() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("-->");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(rs.isDependancy());    
@@ -269,7 +269,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyDirectedBothDependancy() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("<-->");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(rs.isDependancy());    
@@ -282,7 +282,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyInheritance() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("-|>");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(!rs.isDependancy());    
@@ -294,7 +294,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyOwns() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("<>-");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(!rs.isDependancy());    
@@ -307,7 +307,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyOwnsFilled() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("<*>-");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(!rs.isDependancy());    
@@ -321,7 +321,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyOwnsDirected() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("<>->");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
     assertTrue(!rs.isDependancy());    
@@ -334,7 +334,7 @@ public class RelationshipTextUtil2Test extends TestCase {
   public void testLegacyOwnsDirectedFilled() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("motivus\nstart<*>->end");
-    Info s = su.parseShape();
+    Info s = su.parseShape(false);
     assertTrue(s instanceof RelationshipShape2);
     RelationshipShape2 rs = (RelationshipShape2) s;
 

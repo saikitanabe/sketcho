@@ -162,8 +162,6 @@ public class AnchorUtils {
     ap.relativeValueX = round((sharpX - elementLeft) / (double) elementWidth);
     ap.relativeValueY = round((sharpY - elementTop) / (double) elementHeight);
     ap.cardinalDirection = cardinalDirection;
-
-    logger.debug("ap.relativeValueY {}", ap.relativeValueY);
   }
   
   /**

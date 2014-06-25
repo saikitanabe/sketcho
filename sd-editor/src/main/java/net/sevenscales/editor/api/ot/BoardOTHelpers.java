@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Collections;
 
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.utils.ElementTypeComparator;
 import net.sevenscales.domain.DiagramItemField;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -236,6 +238,8 @@ public class BoardOTHelpers {
 	private void modifyOT(String originator, List<IDiagramItemRO> items) throws MappingNotFoundException {
 		logger.debug2("modifyOT items.length() {}", items.size());
 		Set<Diagram> diagrams = new HashSet<Diagram>();
+    Collections.sort(items, new ElementTypeComparator.DiagramItemComparator());
+
     ReattachHelpers reattachHelpers = new ReattachHelpers(diagramSearch, true);
 
     Map<String,Boolean> dirtyFields = new HashMap<String,Boolean>();

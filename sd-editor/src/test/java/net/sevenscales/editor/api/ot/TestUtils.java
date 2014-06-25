@@ -24,13 +24,18 @@ public class TestUtils {
 			DiagramItemDTO di = new DiagramItemDTO(generateText(), 
 					 ELEMENT_ITEMS[(int)(Math.random() * (ELEMENT_ITEMS.length - 1))], 
 					 "530,115,63,19", 
+					 /*extension*/ null,
 					 "204,204,255,0:51,51,51,1",
 					 "68,68,68,1", 
+					 /*fontSize*/ null,
+					 /*shapeProperties*/ null,
+					 /*displayOrder*/ null,
 					 1, 
 					 1L, 
 					 id,
-					 "",
-					 null);
+					 /*customData*/null,
+					 /*links*/null,
+					 /*parentId*/null);
 			result.add(di);
 			System.out.println(di);
 		}

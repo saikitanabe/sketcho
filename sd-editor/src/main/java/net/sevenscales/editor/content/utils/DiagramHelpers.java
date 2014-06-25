@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Collections;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.diagram.Diagram;
@@ -13,6 +14,7 @@ import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.gfx.domain.IPath.PathTransformer;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
 import net.sevenscales.editor.api.ActionType;
+import net.sevenscales.domain.utils.ElementTypeComparator;
 
 
 public class DiagramHelpers {
@@ -64,14 +66,15 @@ public class DiagramHelpers {
 		Diagram[] result = new Diagram[1];
 		return filtered.toArray(result);
 	}
-	
-	public static List<Diagram> filterOwnerDiagramsAsList(Iterable<Diagram> diagrams, ActionType actionType) {
+
+	public static List<Diagram> filterOwnerDiagramsAsListOrderByType(Iterable<Diagram> diagrams, ActionType actionType) {
 		List<Diagram> result = new DiagramList();
 		for (Diagram d : diagrams) {
 			d = d.getOwnerComponent(actionType);
 			// will not add duplicate items, checks if index already exists with a client id
 			result.add(d);
 		}
+		Collections.sort(result, new ElementTypeComparator.DiagramComparator());
 		return result;
 	}
 

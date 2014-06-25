@@ -32,7 +32,7 @@ public class MouseDiagramEventHelpers {
   public static void fireDiagramsChangedEvenet(Set<Diagram> selectedItems, ISurfaceHandler surface, ActionType actionType) {
     if (surface.getEditorContext().isTrue(EditorProperty.ON_CHANGE_ENABLED)) {
       // get all follow up connections
-      List<Diagram> diagrams = DiagramHelpers.filterOwnerDiagramsAsList(selectedItems, actionType);
+      List<Diagram> diagrams = DiagramHelpers.filterOwnerDiagramsAsListOrderByType(selectedItems, actionType);
       List<Diagram> rels = followers(selectedItems);
       diagrams.addAll(rels);
       surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(diagrams));

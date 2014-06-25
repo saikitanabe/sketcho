@@ -17,13 +17,19 @@ public class BoardDocumentTest extends TestCase {
 		this.original1Item = new ArrayList<IDiagramItemRO>();
 		original1Item.add(new DiagramItemDTO("Use Case", 
 															 "ellipseitem", 
-															 "530,115,63,19", 
+															 "530,115,63,19",
+															 /*extension*/ null,
 															 "204,204,255,0:51,51,51,1",
 															 "68,68,68,1", 
+															 /*fontSize*/ null,
+															 /*shapeProperties*/ null,
+															 /*displayOrder*/ null,
 															 1, 
 															 1L, 
 															 "1", 
-															 "", null));
+															 /*customData*/null,
+															 /*links*/null,
+															 /*parentId*/null));
 
 		return new BoardDocument(original1Item, "Test 1 Item Document");
 	}
@@ -52,13 +58,18 @@ public class BoardDocumentTest extends TestCase {
 		insert.add(new DiagramItemDTO("Insert Me", 
 															 "ellipseitem", 
 															 "530,115,63,19", 
+															 /*extension*/ null,
 															 "204,204,255,0:51,51,51,1",
 															 "68,68,68,1", 
+															 /*fontSize*/ null,
+															 /*shapeProperties*/ null,
+															 /*displayOrder*/ null,
 															 1, 
 															 2L, 
-															 TestUtils.generateId(1), 
-															 "", 
-															 null));
+															 TestUtils.generateId(1),
+															 /*customData*/null,
+															 /*links*/null,
+															 /*parentId*/null));
 		doc.apply(OTOperation.INSERT, insert);
 		
 		assertEquals("after insert there should be 2 items", 101, doc.size());
@@ -83,13 +94,18 @@ public class BoardDocumentTest extends TestCase {
 		modify.add(new DiagramItemDTO("Modify Me", 
 															 "ellipseitem", 
 															 "530,115,63,19", 
+															 /*extension*/ null,
 															 "204,204,255,0:51,51,51,1",
 															 "68,68,68,1", 
+															 /*fontSize*/ null,
+															 /*shapeProperties*/ null,
+															 /*displayOrder*/ null,
 															 1, 
 															 2L, 
 															 TestUtils.generateId(2), 
-															 "",
-															 null));
+															 /*customData*/null,
+															 /*links*/null,
+															 /*parentId*/null));
 		doc.apply(OTOperation.MODIFY, modify);
 		
 		assertEquals("wrong text", "Modify Me", doc.getDocument().get(1).getText());
@@ -102,13 +118,18 @@ public class BoardDocumentTest extends TestCase {
 		modify.add(new DiagramItemDTO("Modify Me", 
 															 "ellipseitem", 
 															 "530,115,63,19", 
+															 /*extension*/ null,
 															 "204,204,255,0:51,51,51,1",
 															 "68,68,68,1", 
+															 /*fontSize*/ null,
+															 /*shapeProperties*/ null,
+															 /*displayOrder*/ null,															 
 															 1, 
 															 2L, 
 															 TestUtils.generateId(2), 
-															 "",
-															 null));
+															 /*customData*/null,
+															 /*links*/null,
+															 /*parentId*/null));
 		doc.apply(OTOperation.MODIFY, modify);
 		
 		assertTrue("ID is not unique", doc.isUnique(TestUtils.generateId(1)));

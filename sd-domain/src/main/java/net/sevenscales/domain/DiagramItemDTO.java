@@ -435,6 +435,10 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.CLIENT_ID);
 		}
+		if (checkIfNotSame(parentId, item.getParentId())) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.PARENT);
+		}
 		if (checkIfNotSame(customData, item.getCustomData())) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.CUSTOM_DATA);
@@ -453,7 +457,8 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		}
 
 		if (links != item.getLinks() || (links != null && !links.equals(item.getLinks()))) {
-			return false;
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.LINKS);
 		}
 
 		if (checkIfNotSame(extension, item.getExtension())) {
