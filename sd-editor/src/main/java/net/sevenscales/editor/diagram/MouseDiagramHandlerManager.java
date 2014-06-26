@@ -12,6 +12,7 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.diagram.drag.MouseDiagramDragHandler;
+import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 
@@ -71,7 +72,14 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		sketchDiagramAreaHandler = new SketchDiagramAreaHandler(surface, modeManager);
 		new LinkHandler(surface);
 		
-		handleDoubleTap(surface.getElement(), this);
+		if (!UiUtils.isIE()) {
+			handleDoubleTap(surface.getElement(), this);
+		} else {
+			// IE looses all mouse events if Hammer is used for double click
+			// so handling through jquery on, this solution will not work on
+			// Microsoft Surface
+			handleMouseDoubleClick(surface.getElement(), this);
+		}
 		// addMouseDiagramHandler(sketchDiagramAreaHandler);
 	}
 
@@ -376,6 +384,12 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			if (event.gesture.center.clientX && event.gesture.center.clientY) {
 				me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(II)(event.gesture.center.clientX, event.gesture.center.clientY);
 			}
+		})
+	}-*/;
+
+	private native void handleMouseDoubleClick(Element e, MouseDiagramHandlerManager me)/*-{
+		$wnd.$(e).on('dblclick', function(e) {
+			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(II)(e.clientX, e.clientY);
 		})
 	}-*/;
 
