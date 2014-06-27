@@ -13,6 +13,7 @@ public enum RelationShipType {
 	AGGREGATION("<>-"), 
 	AGGREGATION_FILLED("<*>-"), 
 	SYNCHRONIZED("-|*>"),
+	REALIZE("--|>"),
 	REVERSE("");
 	
 	private String value;

@@ -1,8 +1,5 @@
 package net.sevenscales.editor.uicomponents.impl;
 
-import java.util.List;
-import java.util.ArrayList;
-
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
@@ -11,7 +8,6 @@ public class RelationshipTextUtil2 implements RelationshipParser {
 	public static final int LEGACY_REL_FORMAT_VERSION_NUMBER = 3;
 	public static final int NEW_REL_FORMAT_VERSION_NUMBER = 4;
 
-	private Integer currentDataVersion;
 	private RelationshipParser parser;
 
 	public RelationshipTextUtil2(/*Integer currentDataVersion*/) {
@@ -107,8 +103,13 @@ public class RelationshipTextUtil2 implements RelationshipParser {
 				leftEnd = arrowLine.indexOf(RelationShipType.SYNCHRONIZED.getValue());
 				rightStart = leftEnd + RelationShipType.SYNCHRONIZED.getValue().length();
 				relationshipShape.type = RelationShipType.SYNCHRONIZED;
+			} else if (arrowLine.matches(".*--\\|>.*")) {
+				result |= RelationshipShape2.INHERITANCE | RelationshipShape2.DEPENDANCY;
+				leftEnd = arrowLine.indexOf(RelationShipType.REALIZE.getValue());
+				rightStart = leftEnd + RelationShipType.REALIZE.getValue().length();
+				relationshipShape.type = RelationShipType.REALIZE;
 			} else if (arrowLine.matches(".*-\\|>.*")) {
-				result |= RelationshipShape2.INHERITANCE;
+				result |= RelationshipShape2.INHERITANCE ;
 				leftEnd = arrowLine.indexOf(RelationShipType.INHERITANCE.getValue());
 				rightStart = leftEnd + RelationShipType.INHERITANCE.getValue().length();
 				relationshipShape.type = RelationShipType.INHERITANCE;

@@ -290,7 +290,19 @@ public class RelationshipTextUtil2Test extends TestCase {
     assertTrue(!rs.isAggregate());
     assertTrue(rs.isInheritance());    
   }
-  
+
+  public void testRealize() {
+	    RelationshipTextUtil2 su = new RelationshipTextUtil2();
+	    su.setText("--|>");
+	    Info s = su.parseShape(false);
+	    assertTrue(s instanceof RelationshipShape2);
+	    RelationshipShape2 rs = (RelationshipShape2) s;
+	    assertTrue("Should be dashed line", rs.isDependancy());    
+	    assertTrue(!rs.isDirected());
+	    assertTrue(!rs.isAggregate());
+	    assertTrue(rs.isInheritance());    
+	  }
+
   public void testLegacyOwns() {
     RelationshipTextUtil2 su = new RelationshipTextUtil2();
     su.setText("<>-");

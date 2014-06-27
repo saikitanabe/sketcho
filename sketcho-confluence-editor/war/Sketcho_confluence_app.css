@@ -746,7 +746,7 @@ td.colorSelection {
 }
 
 
-[class ^="icon-conn-"],[class *=" icon-conn"] {
+[class ^="arrow-icon-"],[class *=" arrow-icon"] {
   display: inline-block;
   background-image: url(images/relations.png);
   width: 43px;
@@ -754,40 +754,40 @@ td.colorSelection {
   background-size: cover;
   vertical-align: middle;
 }
-.icon-conn-directed {
+.arrow-icon-directed {
 	background-position: 0 0;
 }
-.icon-conn-directed-both {
+.arrow-icon-directed-both {
 	background-position: 0 -18px;
 }
-.icon-conn-inheritance {
+.arrow-icon-inheritance {
 	background-position: 0 -36px;
 }
-.icon-conn-line {
+.arrow-icon-line {
 	background-position: 0 -72px;
 }
-.icon-conn-dependency {
+.arrow-icon-dependency {
 	background-position: 0 -54px;
 }
-.icon-conn-dependency-both {
+.arrow-icon-dependency-both {
 	background-position: 0 -90px;
 }
-.icon-conn-dashedline {
+.arrow-icon-dashedline {
 	background-position: 0 -144px;
 }
-.icon-conn-aggregation {
+.arrow-icon-aggregation {
 	background-position: 0 -126px;
 }
-.icon-conn-aggregation-filled {
+.arrow-icon-aggregation-filled {
 	background-position: 0 -108px;
 }
-.icon-conn-aggregationboth {
+.arrow-icon-aggregationboth {
 	background-position: 0 -162px;
 }
-.icon-conn-aggregationboth-filled {
+.arrow-icon-aggregationboth-filled {
 	background-position: 0 -180px;
 }
-.icon-conn-synch {
+.arrow-icon-synch {
 	background-position: 0 -198px;
 }
 

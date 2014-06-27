@@ -55,6 +55,10 @@ public class LineSelections extends Composite {
 	public void onDashedLine(ClickEvent event) {
 		selectionHandler.itemSelected(RelationShipType.DEPENDANCY);
 	}
+	@UiHandler("realize")
+	public void onRealize(ClickEvent event) {
+		selectionHandler.itemSelected(RelationShipType.REALIZE);
+	}
 	@UiHandler("iline")
 	public void onILine(ClickEvent event) {
 		selectionHandler.itemSelected(RelationShipType.INHERITANCE);

@@ -100,18 +100,18 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 	}
 
 	private void removeLineClassNames() {
-		relationarrow.removeClassName("icon-conn-directed");
-		relationarrow.removeClassName("icon-conn-directed-both");
-		relationarrow.removeClassName("icon-conn-inheritance");
-		relationarrow.removeClassName("icon-conn-line");
-		relationarrow.removeClassName("icon-conn-dependency");
-		relationarrow.removeClassName("icon-conn-dependency-both");
-		relationarrow.removeClassName("icon-conn-dashedline");
-		relationarrow.removeClassName("icon-conn-aggregation");
-		relationarrow.removeClassName("icon-conn-aggregation-filled");
-		relationarrow.removeClassName("icon-conn-aggregationboth");
-		relationarrow.removeClassName("icon-conn-aggregationboth-filled");
-		relationarrow.removeClassName("icon-conn-synch");
+		relationarrow.removeClassName("arrow-icon-directed");
+		relationarrow.removeClassName("arrow-icon-directed-both");
+		relationarrow.removeClassName("arrow-icon-inheritance");
+		relationarrow.removeClassName("arrow-icon-line");
+		relationarrow.removeClassName("arrow-icon-dependency");
+		relationarrow.removeClassName("arrow-icon-dependency-both");
+		relationarrow.removeClassName("arrow-icon-dashedline");
+		relationarrow.removeClassName("arrow-icon-aggregation");
+		relationarrow.removeClassName("arrow-icon-aggregation-filled");
+		relationarrow.removeClassName("arrow-icon-aggregationboth");
+		relationarrow.removeClassName("arrow-icon-aggregationboth-filled");
+		relationarrow.removeClassName("arrow-icon-synch");
 	}
 
 	@Override
@@ -119,40 +119,43 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 		removeLineClassNames();
 		switch (type) {
 		case DIRECTED:
-			relationarrow.addClassName("icon-conn-directed");
+			relationarrow.addClassName("arrow-icon-directed");
 			break;
 		case DIRECTED_BOTH:
-			relationarrow.addClassName("icon-conn-directed-both");
+			relationarrow.addClassName("arrow-icon-directed-both");
 			break;
 		case INHERITANCE:
-			relationarrow.addClassName("icon-conn-inheritance");
+			relationarrow.addClassName("arrow-icon-inheritance");
 			break;
 		case LINE:
-			relationarrow.addClassName("icon-conn-line");
+			relationarrow.addClassName("arrow-icon-line");
 			break;
 		case DEPENDANCY_DIRECTED:
-			relationarrow.addClassName("icon-conn-dependency");
+			relationarrow.addClassName("arrow-icon-dependency");
 			break;
 		case DEPENDANCY_DIRECTED_BOTH:
-			relationarrow.addClassName("icon-conn-dependency-both");
+			relationarrow.addClassName("arrow-icon-dependency-both");
 			break;
 		case DEPENDANCY:
-			relationarrow.addClassName("icon-conn-dashedline");
+			relationarrow.addClassName("arrow-icon-dashedline");
 			break;
 		case AGGREGATION_DIRECTED:
-			relationarrow.addClassName("icon-conn-aggregation");
+			relationarrow.addClassName("arrow-icon-aggregation");
 			break;
 		case AGGREGATION_DIRECTED_FILLED:
-			relationarrow.addClassName("icon-conn-aggregation-filled");
+			relationarrow.addClassName("arrow-icon-aggregation-filled");
 			break;
 		case AGGREGATION:
-			relationarrow.addClassName("icon-conn-aggregationboth");
+			relationarrow.addClassName("arrow-icon-aggregationboth");
 			break;
 		case AGGREGATION_FILLED:
-			relationarrow.addClassName("icon-conn-aggregationboth-filled");
+			relationarrow.addClassName("arrow-icon-aggregationboth-filled");
 			break;
 		case SYNCHRONIZED:
-			relationarrow.addClassName("icon-conn-synch");
+			relationarrow.addClassName("arrow-icon-synch");
+			break;
+		case REALIZE:
+			relationarrow.addClassName("arrow-icon-realize");
 			break;
 		}
 		select(type);

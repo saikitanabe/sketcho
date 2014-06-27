@@ -40,7 +40,7 @@
 			<tr>
 				<td ui:field="relationbutton"
 					class="selectConnection {style.button}">
-					<div ui:field="relationarrow" class="icon-conn-directed"></div>
+					<div ui:field="relationarrow" class="arrow-icon-directed"></div>
 				</td>
 				<td ui:field="drop"
 					class="{style.button} dropButton">
