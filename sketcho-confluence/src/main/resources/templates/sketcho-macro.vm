@@ -38,10 +38,13 @@
 
 #if ($editable)
   <img src="$imgUrl" onclick="openSketch('$modelingSpace', '$pageId', '$modelName', '.$classname', '$editable')" class="skme-img $classname" />
-  <div class="sketcho-svg-viewer">
+  <div class="sketcho-svg-viewer $classname" data-model-name='$modelName' data-page-id='$pageId'>
     $svgContent
   </div>
   <div onclick="openSketch('$modelingSpace', '$pageId', '$modelName', '.$classname', '$editable')" class="sketchboardme-link">Edit Diagram</div>
 #else 
+  <div class="sketcho-svg-viewer $classname" data-model-name='$modelName' data-page-id='$pageId'>
+    $svgContent
+  </div>
   <img class="skme-img" src="$imgUrl" />
 #end
