@@ -18,6 +18,7 @@ import com.atlassian.confluence.setup.BootstrapManager;
 import com.atlassian.confluence.setup.settings.SettingsManager;
 import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.confluence.util.velocity.VelocityUtils;
+import com.atlassian.confluence.velocity.htmlsafe.HtmlFragment;
 import com.atlassian.renderer.RenderContext;
 import com.atlassian.renderer.v2.RenderMode;
 import com.atlassian.renderer.v2.macro.BaseMacro;
@@ -151,8 +152,11 @@ public class SketchoMacro extends BaseMacro {
 				context.put("export",
 						!pageContext.getOutputType().equals(RenderContext.DISPLAY));
 				context.put("pageId", page.getIdAsString());
+				context.put("svgUrl", svgUrl(params, context, pageContext));
+				context.put("svgContent", svgContent(params, context, pageContext));
 				context.put("imgUrl", imgUrl(params, context, pageContext));
 				context.put("classname", spaceId.replaceAll(":", "-").replaceAll("\\.", "_").replaceAll("\\s", "_"));
+				// System.out.println("context: " + context);
 //				context.put("trialLicense", sketchoManager.isTrialLicense());
 //				context.put("termsViolation", !sketchoManager.validUserCount());
 
@@ -201,6 +205,25 @@ public class SketchoMacro extends BaseMacro {
 			return "";
 		}
 		return new StringBuilder().append(context.get("contextPath")).append(a.getDownloadPath()).toString();
+	}
+
+	private String svgUrl(Map<String, String> params, Map<String, Object> context, PageContext pageContext) {
+		Page page = (Page) pageContext.getEntity();
+		Attachment a = attachmentManager.getAttachment(page, AttachmentStore.PRE + (String) params.get("name") + ".svg");
+		if (a == null) {
+			return "";
+		}
+		return new StringBuilder().append(context.get("contextPath")).append(a.getDownloadPath()).toString();
+	}
+
+	private HtmlFragment svgContent(Map<String, String> params, Map<String, Object> context, PageContext pageContext) {
+		Page page = (Page) pageContext.getEntity();
+		Attachment a = attachmentManager.getAttachment(page, AttachmentStore.PRE + (String) params.get("name") + ".svg");
+		if (a == null) {
+			return new HtmlFragment("");
+		}
+		// return new StringBuilder().append(context.get("contextPath")).append(a.getDownloadPath()).toString();
+		return new HtmlFragment(storeHandler.loadContent(page.getId(), params.get("name"), ".svg"));
 	}
 
 	private String restServicePath(String contextPath) {

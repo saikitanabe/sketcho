@@ -26,7 +26,7 @@ public class SvgUtil {
 
 //  private static String svgString = "<?xml version='1.0' encoding='UTF-8'?><svg xmlns:xlink='http://www.w3.org/1999/xlink' xmlns='http://www.w3.org/2000/svg'  width='700' height='500'><polyline points='280,145 320,215 480,195' style='fill:none;stroke:black;stroke-width:1;stroke-dasharray:none;'/><polyline points='469,201 480,195 469,191' style='fill:none;stroke:black;stroke-width:1;stroke-dasharray:none;'/><text x='464' y='185' style='font-weight:bold; font-size: 12px; text-anchor: start; font-family: Arial;'></text><text x='320' y='203' style='font-weight:bold; font-size: 12px; text-anchor: start; font-family: Arial;'></text><text x='304' y='166' style='font-weight:bold; font-size: 12px; text-anchor: start; font-family: Arial;'></text><ellipse cx='280' cy='120' rx='50' ry='25' style='fill:rgb(240,240,202);stroke:rgb(0,0,0);stroke-width:1'/><text x='280' y='123' style='font-weight:bold; font-size: 12px; text-anchor: middle; font-family: Arial;'>Ellipse</text><ellipse cx='530' cy='195' rx='50' ry='25' style='fill:rgb(240,240,202);stroke:rgb(0,0,0);stroke-width:1'/><text x='530' y='198' style='font-weight:bold; font-size: 12px; text-anchor: middle; font-family: Arial;'>Ellipse</text></svg>";
 	
-	private static String FONT_FAMILY;
+	public static String FONT_FAMILY;
 	private static final String[] CANDIDATES = new String[]{"helvetica", "arial", "arialmt", "arial mt", "liberationsans", "sans-serif", "nimbus sans l"};
 
 	static {
@@ -75,7 +75,7 @@ public class SvgUtil {
     ByteArrayInputStream fis;
     ByteArrayOutputStream fos;
     try {
-      fis = new ByteArrayInputStream(svg.replaceAll("Arial2Change", FONT_FAMILY).getBytes("UTF-8"));
+      fis = new ByteArrayInputStream(svg.getBytes("UTF-8"));
 
     TranscoderInput input = new TranscoderInput(fis);
 

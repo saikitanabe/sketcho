@@ -56,7 +56,7 @@ public class StoreRestService {
 	@Consumes({ MediaType.APPLICATION_JSON })
 	public Response getSketch(DiagramContentJson diagram) {
 //		log.debug("getSketch: pageId(" + diagram.getPageId() + ") name(" + diagram.getName() + ")");
-		String modelXML = store.loadContent(diagram.getPageId(), diagram.getName());
+		String modelXML = store.loadContent(diagram.getPageId(), diagram.getName(), ".xml");
 		DiagramContentJson json = new DiagramContentJson();
 		if (modelXML != null) {
 			IDiagramContent fromStore = (IDiagramContent) xstream.fromXML(modelXML);
@@ -77,7 +77,7 @@ public class StoreRestService {
 //			log.debug("@GET id: " + id);
 //			log.debug("getSketch: pageId(" + pageId + ") name(" + name + ")");
 
-			String modelXML = store.loadContent(pageId, name);
+			String modelXML = store.loadContent(pageId, name, ".xml");
 			// log.debug("getSketch {0}", modelXML);
 			if (modelXML != null) {
 				IDiagramContent fromStore = (IDiagramContent) xstream.fromXML(modelXML);
@@ -94,10 +94,12 @@ public class StoreRestService {
 		DiagramContentDTO content = diagram.asDTO();
 //		log.debug("diagram pageId {} name {}", diagram.getPageId(), diagram.getName());
 		
-		byte[] image = SvgUtil.createPng(diagram.getSvg(), diagram.getName());
+		String svg = diagram.getSvg().replaceAll("Arial2Change", SvgUtil.FONT_FAMILY);
+		byte[] image = SvgUtil.createPng(svg, diagram.getName());
 
 		StoreEntry entry = new StoreEntry();
 		entry.setDiagramContent(xstream.toXML(content));
+		entry.setSvg(svg);
 		entry.setImage(image);
 		// String entryXML = xstream.toXML(entry);
 		String key = store.store(diagram.getPageId(), diagram.getName(), entry);

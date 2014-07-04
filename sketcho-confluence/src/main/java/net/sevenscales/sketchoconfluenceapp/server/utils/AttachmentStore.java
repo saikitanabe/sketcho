@@ -83,27 +83,30 @@ public class AttachmentStore implements IStore {
     return out.toByteArray();
   }
 
-  public String loadContent(Long pageId, String name) {
+  public String loadContent(Long pageId, String name, String ext) {
 //  	log.debug("pageId({}) name({})", pageId, name);
   	// user should not have possibility open xml
   	// if doesn't have edit rights
   	checkPagePermissions(pageId, Permission.EDIT);
 
     ContentEntityObject e = contentEntityManager.getById(pageId);
-    Attachment a = attachmentManager.getAttachment(e, PRE+name+".xml");
+    Attachment a = attachmentManager.getAttachment(e, PRE+name+ext);
     if (a == null) {
       return null;
     }
-    
-    byte[] contentBytes = toByteArray(a);
-    String result = null;
-    try {
-      result = new String(contentBytes, "UTF8");
-    } catch (UnsupportedEncodingException e1) {
-      e1.printStackTrace();
-      throw new RuntimeException(e1);
-    }
-    return result;
+    return loadAttachment(a);
+  }
+  
+  public String loadAttachment(Attachment a) {
+	byte[] contentBytes = toByteArray(a);
+	String result = null;
+	try {
+	  result = new String(contentBytes, "UTF8");
+	} catch (UnsupportedEncodingException e1) {
+	  e1.printStackTrace();
+	  throw new RuntimeException(e1);
+	}
+	return result;
   }
 
   public String store(Long pageId, String name, StoreEntry entry) {
@@ -114,9 +117,11 @@ public class AttachmentStore implements IStore {
     // XML
     ContentEntityObject e = contentEntityManager.getById(pageId);
     String xmlAttachmentName = PRE+name+".xml";
+    String svgAttachmentName = PRE+name+".svg";
     int version;
     try {
       version = addAttachment(e, "text/xml; charset=utf-8", xmlAttachmentName, entry.getDiagramContent().getBytes("UTF8"));
+      addAttachment(e, "text/xml; charset=utf-8", svgAttachmentName, entry.getSvg().getBytes("UTF8"));
     } catch (UnsupportedEncodingException e1) {
       e1.printStackTrace();
       throw new RuntimeException(e1);

@@ -4,6 +4,7 @@ package net.sevenscales.sketchoconfluenceapp.server.utils;
 public class StoreEntry {
   private byte[] image;
   private String diagramContent;
+  private String svg;
   private int version;
   
   public byte[] getImage() {
@@ -18,6 +19,13 @@ public class StoreEntry {
   }
   public void setDiagramContent(String diagramContent) {
     this.diagramContent = diagramContent;
+  }
+
+  public void setSvg(String svg) {
+    this.svg = svg;
+  }
+  public String getSvg() {
+    return svg;
   }
   
   public int getVersion() {
