@@ -17,7 +17,7 @@ var svgViewer = (function() {
 				// console.log('restServicePath: ' + restServicePath.value)
 
 				$.getJSON(restServicePath.value + pageId + "%3A" + modelName + ".json", function(data) {
-					console.log(data)
+					// console.log(data)
 					data.width = width
 					gwtModelToSvg(data, function(svg) {
 						// console.log("svg: " + svg)
