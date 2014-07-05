@@ -141,15 +141,15 @@ public class SketchoEditor extends Composite implements Spinner {
 	}
 
   private native void init(SketchoEditor me)/*-{
-    $wnd.gwtModelToSvg = function(json) {
-      return me.@net.sevenscales.sketchoconfluenceapp.client.view.SketchoEditor::gwtModelToSvg(Lcom/google/gwt/core/client/JavaScriptObject;)(json);
+    $wnd.gwtModelToSvg = function(json, handler) {
+      me.@net.sevenscales.sketchoconfluenceapp.client.view.SketchoEditor::gwtModelToSvg(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(json, handler);
     }
   }-*/;
 
-  private String gwtModelToSvg(JavaScriptObject json) {
+  private void gwtModelToSvg(JavaScriptObject json, JavaScriptObject handler) {
     logger.debug("gwtModelToSvg...");
-    SvgHandler svgHandler = new SvgHandler(json);
-    return svgHandler.getSvg();
+    SvgHandler svgHandler = new SvgHandler(json, handler);
+    // svgHandler.getSvg();
   }
   
 	public void openSketch(String spaceId, Long pageId, String name, String selector, boolean editable) {

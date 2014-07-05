@@ -39,9 +39,15 @@ import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.diagram.DiagramSearch;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.utils.SLogger;
 
 
-public class UnAttachedSurface implements ISurfaceHandler {
+public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
+	private static SLogger logger = SLogger.createLogger(UnAttachedSurface.class);
+	static {
+		SLogger.addFilter(UnAttachedSurface.class);
+	}
+
 	private EditorContext editorContext;
 	private ISurface surface;
 	private IGroup connectionLayer3;
@@ -50,23 +56,37 @@ public class UnAttachedSurface implements ISurfaceHandler {
 	private IGroup containerLayer1;
 	private IGroup rootLayer0;
 	private List<Diagram> diagrams;
+	private ILoadObserver loadObserver;
+	private boolean editable;
 
-	public UnAttachedSurface(EditorContext editorContext) {
+	public UnAttachedSurface(EditorContext editorContext, ILoadObserver loadObserver) {
 		this.editorContext = editorContext;
-		boolean editable = false;
-		surface = IShapeFactory.Util.factory(editable).createSurface();
-		SimplePanel no = new SimplePanel();
-		surface.init(no, new ILoadObserver() {
-			public void loaded() {
+		this.loadObserver = loadObserver;
+		this.editable = false;
+		this.diagrams = new ArrayList<Diagram>();
+	}
 
-			}
-		});
+	@Override
+	protected void onLoad() {
+		logger.debug("onLoad {}...");
+		if (surface == null) {
+			surface = IShapeFactory.Util.factory(editable).createSurface();
+			surface.init(this, new ILoadObserver() {
+				public void loaded() {
+					// loaded();
+				}
+			});
+			loaded();
+		}
+	}
+
+	private void loaded() {
 		rootLayer0 = IShapeFactory.Util.factory(editable).createGroup(surface);
 		containerLayer1 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
 		elementLayer2 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
 		connectionLayer3 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
 		interactionLayer4 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
-		this.diagrams = new ArrayList<Diagram>();
+		loadObserver.loaded();
 	}
 
 	public void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
@@ -196,9 +216,9 @@ public class UnAttachedSurface implements ISurfaceHandler {
 	public void setName(String name) {
 
 	}
-	public <H extends EventHandler> HandlerRegistration addDomHandler(final H handler, DomEvent.Type<H> type) {
-		return null;
-	}
+	// public <H extends EventHandler> HandlerRegistration addDomHandler(final H handler, DomEvent.Type<H> type) {
+	// 	return null;
+	// }
 	public void dispatchDiagram(MatrixPointJS point) {
 
 	}
@@ -217,9 +237,9 @@ public class UnAttachedSurface implements ISurfaceHandler {
 	public boolean isVerticalDrag() {
 		return false;
 	}
-	public com.google.gwt.user.client.Element getElement() {
-		return null;
-	}
+	// public com.google.gwt.user.client.Element getElement() {
+	// 	return null;
+	// }
 	public void addKeyEventHandler(KeyEventListener keyEventHandler) {
 
 	}

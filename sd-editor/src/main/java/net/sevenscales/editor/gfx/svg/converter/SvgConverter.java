@@ -135,10 +135,14 @@ public class SvgConverter {
     for (Diagram d : diagrams) {
       if (!(d instanceof CircleElement)) {
         d.toSvgStart();
-        d.unselect();
+        if (surfaceHandler.getEditorContext().isEditable()) {
+          d.unselect();
+        }
         shapes.clear();
         shapes.add(d.getElements());
 
+        // whole element can be used as link
+        items += linkStart(d);
         // all shapes are under group
         IGroup group = d.getGroup();
         if (d instanceof IChildElement) {
@@ -167,6 +171,7 @@ public class SvgConverter {
           items += toSvg(d, textElements, editorContext, fontToChange);
         }
         items += groupEnd();
+        items += linkEnd(d);
         d.toSvgEnd();
       }
     }
@@ -188,8 +193,27 @@ public class SvgConverter {
     result.width = outerright - outerleft;
     result.height = outerbottom-outertop;
 //    String result = svgStart + " x='"+outerleft+"'"+" y='"+outertop+"'"+ " width='"+outerright+"' height='"+outerbottom+"'"+svgStartClose;
-    result.svg = svgStart + " viewBox='"+outerleft+" "+outertop+" "+(outerright-outerleft)+" "+(outerbottom-outertop)+"'"+
-    								" width='" + width() + "' height='" + height() + "'"+svgStartClose;
+    if (fontToChange) {
+      result.svg = svgStart + " viewBox='"+outerleft+" "+outertop+" "+(outerright-outerleft)+" "+(outerbottom-outertop)+"'" + " width='" + width() + "' height='" + height() + "'" + svgStartClose;
+    } else {
+      // Confluence svg rendering directly no page
+      // neeed to scale according to widht provided for the diagram
+      // same logic as plain img has when it scales
+
+      // by default uses real width and height, no scaling
+      int viewBoxWidth = (outerright-outerleft);
+      int viewBoxHeight = (outerbottom-outertop);
+      double svgWidth = viewBoxWidth;
+      if (viewBoxWidth > content.getWidth()) {
+        // scale according to parent div width
+        svgWidth = content.getWidth();
+        double sizeFactorial = svgWidth / viewBoxWidth;
+        // scale height according to width factorial
+        viewBoxHeight *= sizeFactorial;
+      }
+      logger.debug("viewBoxWidth {} viewBoxHeight {}", viewBoxWidth, viewBoxHeight);
+      result.svg = svgStart + " viewBox='"+outerleft+" "+outertop+" " + viewBoxWidth + " " + viewBoxHeight + "'" + " width='" + svgWidth + "' height='" + viewBoxHeight + "'" + svgStartClose;
+    }
 //    result.svg = SafeHtmlUtils.htmlEscape(result.svg);
 //    String result = svgStart + " width='100%' height='100%'"+svgStartClose;
     result.svg += items;
@@ -226,6 +250,22 @@ public class SvgConverter {
 
   private String groupEnd() {
     return "</g>";
+  }
+
+  private String linkStart(Diagram d) {
+    String result = "";
+    if (d.hasLink()) {
+      result += "<a xlink:href='" + d.getLink() + "' target='_blank'>";
+    }
+    return result;
+  }
+
+  private String linkEnd(Diagram d) {
+    if (d.hasLink()) {
+      return "</a>";
+    } else {
+      return "";
+    }
   }
 
 	private String toSvg(Diagram d, List<List<IShape>> shapes, EditorContext editorContext, boolean fontToChange) {

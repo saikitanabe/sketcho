@@ -34,6 +34,7 @@ public class JSONContentParser {
 		content.setName(JSONParserHelpers.getString(jsonContent.get("name")));
 		content.setCreatedTime(JSONParserHelpers.getLong(jsonContent.get("createdAt")));
 		content.setModifiedTime(JSONParserHelpers.getLong(jsonContent.get("updatedAt")));
+		content.setWidth(JSONParserHelpers.getInteger(jsonContent.get("width")));
 		
 		JSONArray items = jsonContent.get("items").isArray();
 		if (items != null) {

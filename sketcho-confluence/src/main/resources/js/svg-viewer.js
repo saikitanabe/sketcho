@@ -1,30 +1,32 @@
 var svgViewer = (function() {
-	var svgViewer = {}
+	var svgViewer = {dojoReady: false}
 
 	function loadSvg(svgAttachment) {
 		// $('#svgfile').load('Sample.svg'})
 	}
 
-	function loadAll(pageId) {
-		console.log('loadAll...')
+	function _loadAll() {
+		console.log("_loadAll...")
 		$('.sketcho-svg-viewer').each(function(index) {
-			// var name = _.filter($(this).attr("class").split(/\s+/), function(c) {
-			// 	return c !== 'sketcho-svg-viewer'
-			// })
-
+			var width = $(this).width()
 			var modelName = $(this).attr("data-model-name")
 			var pageId = $(this).attr("data-page-id")
 
 			if (modelName && pageId) {
-				console.log('name: ' + modelName)
-				console.log('restServicePath: ' + restServicePath.value)
+				// console.log('name: ' + modelName)
+				// console.log('restServicePath: ' + restServicePath.value)
+
+				console.log("width: ", width)
 
 				$.getJSON(restServicePath.value + pageId + "%3A" + modelName + ".json", function(data) {
-					// console.log(data)
-					var svg = gwtModelToSvg(data)
-					var $svg = $(svg)
-					$('.' + modelName).each(function(index) {
-						$(this).html($svg)
+					console.log(data)
+					data.width = width
+					gwtModelToSvg(data, function(svg) {
+						// console.log("svg: " + svg)
+						var $svg = $(svg)
+						$('.' + modelName).each(function(index) {
+							$(this).html($svg)
+						})
 					})
 					// console.log("svg: " + svg)
 				})
@@ -34,8 +36,21 @@ var svgViewer = (function() {
 		})
 	}
 
+	var renderSvg = _.after(2, _loadAll);
+	function loadAll() {
+		console.log('loadAll...')
+		renderSvg()
+		// renderSvg is run once, after gwt module and dojo lib have been loaded
+	}
+
+	function dojoLoaded() {
+		svgViewer.dojoReady = true
+	}
+
 	svgViewer.loadSvg = loadSvg
 	svgViewer.loadAll = loadAll
+	svgViewer.dojoLoaded = dojoLoaded
+	svgViewer.isDojoReady = svgViewer.dojoReady
 
 	return svgViewer
 }())

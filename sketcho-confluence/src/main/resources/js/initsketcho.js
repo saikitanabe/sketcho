@@ -73,6 +73,7 @@ AJS.toInit(function () {
 	 		AJS.log("Configuring Sketchboard.Me dojo.js... loaded");
 	 		AJS.log("Configuring Sketchboard.Me dojo.js baseUrl " + dojo.config.baseUrl + "...");
 	 		require(["dojox/gfx", "dojox/color"]);
+      svgViewer.loadAll()
 			AJS.log("Configuring Sketchboard.Me... done");
 	 	}
  	};

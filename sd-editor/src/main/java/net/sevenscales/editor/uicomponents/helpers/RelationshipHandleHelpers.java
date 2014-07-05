@@ -61,7 +61,13 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     initDefaults();
   }
 
-  public static RelationshipHandleHelpers createConnectionHelpers(ISurfaceHandler surface, Relationship2 parentRelationship) {
+  public static RelationshipHandleHelpers createConnectionHelpers(ISurfaceHandler surface, Relationship2 
+    parentRelationship) {
+    
+    if (!surface.getEditorContext().isEditable()) {
+      return null;
+    }
+
     RelationshipHandleHelpers result = instances.get(surface);
     if (result == null) {
       if (ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
