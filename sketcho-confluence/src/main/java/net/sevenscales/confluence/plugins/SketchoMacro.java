@@ -4,6 +4,7 @@ import java.util.Map;
 
 import net.sevenscales.sketchoconfluenceapp.server.utils.AttachmentStore;
 import net.sevenscales.sketchoconfluenceapp.server.utils.IStore;
+import net.sevenscales.sketchoconfluenceapp.server.utils.SvgUtil;
 
 import com.atlassian.bandana.BandanaManager;
 import com.atlassian.confluence.pages.Attachment;
@@ -153,7 +154,10 @@ public class SketchoMacro extends BaseMacro {
 						!pageContext.getOutputType().equals(RenderContext.DISPLAY));
 				context.put("pageId", page.getIdAsString());
 				context.put("svgUrl", svgUrl(params, context, pageContext));
-				context.put("svgContent", svgContent(params, context, pageContext));
+
+				// NOTE this is potential attack vector since could put any javascript to the page
+				// cannot be used until proper svg validator exists, that doesn't allow javascript
+				// context.put("svgContent", svgContent(params, context, pageContext));
 				context.put("imgUrl", imgUrl(params, context, pageContext));
 				context.put("classname", spaceId.replaceAll(":", "-").replaceAll("\\.", "_").replaceAll("\\s", "_"));
 				// System.out.println("context: " + context);
@@ -223,10 +227,13 @@ public class SketchoMacro extends BaseMacro {
 			return new HtmlFragment("");
 		}
 		// return new StringBuilder().append(context.get("contextPath")).append(a.getDownloadPath()).toString();
-		return new HtmlFragment(storeHandler.loadContent(page.getId(), params.get("name"), ".svg"));
+		String svg = storeHandler.loadContent(page.getId(), params.get("name"), ".svg");
+		String safeSvg = SvgUtil.validatedSvg(svg);
+		System.out.println("safeSvg: " + safeSvg);
+		return new HtmlFragment(safeSvg);
 	}
 
-	private String restServicePath(String contextPath) {
+	private String  restServicePath(String contextPath) {
 		String restPath = "/rest/storerestservice/1.0/sketch/";
 //		if (settingsManager != null) {
 ////			// newer versions of Confluence

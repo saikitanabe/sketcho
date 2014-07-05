@@ -6,7 +6,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -17,8 +20,7 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.TranscodingHints;
 import org.apache.batik.transcoder.image.PNGTranscoder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.batik.transcoder.svg2svg.SVGTranscoder;
 
 
 public class SvgUtil {
@@ -58,6 +60,33 @@ public class SvgUtil {
   	}
 		return "";
 	}
+
+  // NOTE this doesn't validate yet!!!, but 
+  // perhaps could be a way to do validation with Batik
+  // need to get rid of <script></script> tags
+  public static String validatedSvg(String svg) {
+	String result = "";
+    SVGTranscoder transcoder = new SVGTranscoder();
+    
+    try {
+    	// ByteArrayInputStream fis = new ByteArrayInputStream(svg.getBytes("UTF-8"));
+      Reader stringReader = new StringReader(svg);
+      TranscoderInput input = new TranscoderInput(stringReader);
+      //TranscoderInput input = new TranscoderInput(fis);
+      //ByteArrayOutputStream fos = new ByteArrayOutputStream();
+
+      Writer stringWriter = new java.io.StringWriter();
+      TranscoderOutput output = new TranscoderOutput(stringWriter);
+      transcoder.transcode(input, output);
+      // Flush and close the stream
+      stringWriter.flush();
+      stringWriter.close();
+      result = stringWriter.toString();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    return result;
+  }
 
 	public static byte[] createPng(String svg, String name) {
     // Create a PNG transcoder
