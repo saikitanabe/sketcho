@@ -121,7 +121,8 @@ public class AttachmentStore implements IStore {
     int version;
     try {
       version = addAttachment(e, "text/xml; charset=utf-8", xmlAttachmentName, entry.getDiagramContent().getBytes("UTF8"));
-      addAttachment(e, "text/xml; charset=utf-8", svgAttachmentName, entry.getSvg().getBytes("UTF8"));
+      // This would store svg file as an attachment, but for now svg is rendered on page load from xml
+      // addAttachment(e, "text/xml; charset=utf-8", svgAttachmentName, entry.getSvg().getBytes("UTF8"));
     } catch (UnsupportedEncodingException e1) {
       e1.printStackTrace();
       throw new RuntimeException(e1);
