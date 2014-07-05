@@ -64,6 +64,8 @@ public class Sketcho_confluence_app implements EntryPoint {
       app.@net.sevenscales.sketchoconfluenceapp.client.Sketcho_confluence_app::openSketch(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)
         (moduleSpaceId, pageId, sketchName, selector, editable);
     };
+
+    $wnd.svgViewer.loadAll()
     
 //    $wnd.sketchoEditorLoaded();
   }-*/;

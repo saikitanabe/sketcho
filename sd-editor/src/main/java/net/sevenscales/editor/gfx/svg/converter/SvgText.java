@@ -29,7 +29,7 @@ public class SvgText extends SvgBase {
     return s;
 	}
   
-  public static String svg(IText t, int transformX, int transformY, Diagram diagram) {
+  public static String svg(IText t, int transformX, int transformY, Diagram diagram, boolean fontToChange) {
     Map<String,String> params = new HashMap<String, String>();
     params.put("%x", String.valueOf(t.getX() + transformX));
     params.put("%y", String.valueOf(t.getY() + transformY));
@@ -42,7 +42,11 @@ public class SvgText extends SvgBase {
     // sans-serif doesn't work on batik 1.6, need to test again with 1.7
     // SansSerif, 11 has not been tried out yet, quality is pretty fine, but doesn't fit
     // Arial hack
-    params.put("%font-family", "Arial2Change");
+    if (fontToChange) {
+      params.put("%font-family", "Arial2Change");
+    } else {
+      params.put("%font-family", t.getFontFamily());
+    }
     // yeps, this is needed when working with client side svg => canvas => png
     // with confluence, not working at the moment
 //    params.put("%font-family", "sans-serif, Arial");

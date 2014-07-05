@@ -105,26 +105,31 @@ public class SvgConverter {
   * If any elements are selected, export only those to svg.
   */
   private Diagram[] getDiagrams(ISurfaceHandler surfaceHandler) {
-    Set<Diagram> selected = surfaceHandler.getSelectionHandler().getSelectedItems();
-    if (onlySelected && selected.size() > 0) {
-      return SortHelpers.toArray(selected);
+    Diagram[] result = null;
+    if (onlySelected) {
+      Set<Diagram> selected = surfaceHandler.getSelectionHandler().getSelectedItems();
+      if (onlySelected && selected.size() > 0) {
+        result = SortHelpers.toArray(selected);
+      }
+    } else {
+      if (filter != null && filter.size() > 0) {
+        result = SortHelpers.toArray(surfaceHandler.getDiagrams(), filter);
+      } else {
+        result = SortHelpers.toArray(surfaceHandler.getDiagrams());
+      }
     }
 
-    Diagram[] result = null;
-    if (filter != null && filter.size() > 0) {
-      result = SortHelpers.toArray(surfaceHandler.getDiagrams(), filter);
-    } else {
-      result = SortHelpers.toArray(surfaceHandler.getDiagrams());
-    }
     return result;
   }
 
-  public SvgData convertToSvg(IDiagramContent content, ISurfaceHandler surfaceHandler) {
+  public SvgData convertToSvg(IDiagramContent content, ISurfaceHandler surfaceHandler, boolean fontToChange) {
   	EditorContext editorContext = surfaceHandler.getEditorContext();
     Diagram[] diagrams = getDiagrams(surfaceHandler);
     String items = "";
     
-    ResizeHelpers.createResizeHelpers(surfaceHandler).hideGlobalElement();
+    if (surfaceHandler.getEditorContext().isEditable()) {
+      ResizeHelpers.createResizeHelpers(surfaceHandler).hideGlobalElement();
+    }
     
     List<List<IShape>> shapes = new ArrayList<List<IShape>>();
     for (Diagram d : diagrams) {
@@ -149,7 +154,7 @@ public class SvgConverter {
           items += groupStart(subgroup);
         }
 
-        items += toSvg(d, shapes, editorContext);
+        items += toSvg(d, shapes, editorContext, fontToChange);
 
         if (subgroup != null) {
           // close subgroup
@@ -159,7 +164,7 @@ public class SvgConverter {
         // text helper elements are not included in getElements
         List<List<IShape>> textElements = d.getTextElements();
         if (textElements != null) {
-          items += toSvg(d, textElements, editorContext);
+          items += toSvg(d, textElements, editorContext, fontToChange);
         }
         items += groupEnd();
         d.toSvgEnd();
@@ -223,7 +228,7 @@ public class SvgConverter {
     return "</g>";
   }
 
-	private String toSvg(Diagram d, List<List<IShape>> shapes, EditorContext editorContext) {
+	private String toSvg(Diagram d, List<List<IShape>> shapes, EditorContext editorContext, boolean fontToChange) {
   	String result = "";
     if (d.isVisible()) {
   	  // don't set read only state, because might not be visible
@@ -251,7 +256,7 @@ public class SvgConverter {
 	      for (IShape s : line) {
 	        // convert to concrete svg shape with factory
 	        if (s.isVisible()) {
-	          String svg = SvgFactory.convert(s, 0, 0, editorContext, d);
+	          String svg = SvgFactory.convert(s, 0, 0, editorContext, d, fontToChange);
 	          result += svg;
 	        }
 	      }

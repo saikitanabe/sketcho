@@ -24,6 +24,11 @@ public class JSONContentParser {
 		}
 	}
 
+	public JSONContentParser(JSONObject jsonContent) {
+		content = new DiagramContentDTO();
+		parse(jsonContent);
+	}
+
 	private void parse(JSONObject jsonContent) {
 		content.setVersion(JSONParserHelpers.getInt(jsonContent.get("version")));
 		content.setName(JSONParserHelpers.getString(jsonContent.get("name")));

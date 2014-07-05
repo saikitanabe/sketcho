@@ -47,6 +47,10 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 	private static final String WHITE_LINE = "dddddd";
 	
 	public static ResizeHelpers createResizeHelpers(ISurfaceHandler surface) {
+		if (!surface.getEditorContext().isEditable()) {
+			return null;
+		}
+
 		ResizeHelpers result = instances.get(surface);
 		if (result == null) {
 //			if (ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {

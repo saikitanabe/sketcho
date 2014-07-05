@@ -38,6 +38,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 
 	private IUiDiagramContent uiContent;
 	private boolean editable;
+	private boolean tools;
 	private EditorContext editorContext;
 	private IModeManager modeManager;
 	private ResizeHelpers resizeHelpers;
@@ -61,6 +62,11 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 				}
 			}
 		});
+	}
+
+	public UiModelContentHandler(EditorContext editorContext) {
+		this.editorContext = editorContext;
+		this.editable = false;
 	}
 
 	public void externalize() {
@@ -110,7 +116,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 		}
 	}
 
-  public void addContentItems(final IDiagramContent dContent, final ISurfaceHandler surface) {
+  public void addContentItems(IDiagramContent dContent, ISurfaceHandler surface) {
 //  	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 //			@Override
 //			public void execute() {
@@ -118,7 +124,9 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 		  	editorContext.set(EditorProperty.AUTO_RESIZE_ENABLED, false);
 		  	editorContext.set(EditorProperty.ON_CHANGE_ENABLED, false);
 		  	editorContext.set(EditorProperty.ON_SURFACE_LOAD, true);
+
 		    addContentItems(dContent, surface, false);
+
 		  	editorContext.set(EditorProperty.ON_SURFACE_LOAD, false);
 		  	// but autoresize back
 		  	editorContext.set(EditorProperty.ON_CHANGE_ENABLED, true);
@@ -133,14 +141,16 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
   	final ReattachHelpers reattachHelpers = new ReattachHelpers();
   	final CommentFactory commentFactory = new CommentFactory(surface, editable);
 
-    surface.getMouseDiagramManager().getSelectionHandler().unselectAll();
-    surface.getMouseDiagramManager().getSelectionHandler().selectionOn(asSelected);
+  	if (surface.getMouseDiagramManager() != null) {
+	    surface.getMouseDiagramManager().getSelectionHandler().unselectAll();
+	    surface.getMouseDiagramManager().getSelectionHandler().selectionOn(asSelected);
+  	}
 
     surface.suspendRedraw();
     
     IDiagramItem[] items = new IDiagramItem[dContent.getDiagramItems().size()];
     dContent.getDiagramItems().toArray(items);
-    
+
    	Arrays.sort(items, DiagramDisplaySorter.createDiagramItemComparator());
     
     int i = 0;
@@ -163,7 +173,9 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     	}
     }
 
-    Tools.setAtLeastOneAnnotation(atLeastOneAnnotation);
+    if (editable) {
+	    Tools.setAtLeastOneAnnotation(atLeastOneAnnotation);
+    }
 
     // could be more common; interface ChildElement e.g. with Relationship
     // Text for reusing "Just Text" elements
@@ -192,7 +204,9 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 //		}
 //   });
    
-   surface.getMouseDiagramManager().getSelectionHandler().selectionOn(false);
+   if (editable) {
+	   surface.getMouseDiagramManager().getSelectionHandler().selectionOn(false);
+   }
    surface.unsuspendRedrawAll();
   }
 
