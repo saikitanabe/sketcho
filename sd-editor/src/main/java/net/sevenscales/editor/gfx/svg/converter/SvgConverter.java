@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.safehtml.shared.UriUtils;
+import com.google.gwt.safehtml.shared.SafeUri;
+
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
@@ -255,7 +258,9 @@ public class SvgConverter {
   private String linkStart(Diagram d) {
     String result = "";
     if (d.hasLink()) {
-      result += "<a xlink:href='" + d.getLink() + "' target='_blank'>";
+      // This could be user modified straight in attachment (on Confluence)
+      SafeUri url = UriUtils.fromString(d.getLink());
+      result += "<a xlink:href='" + url.asString() + "' target='_blank'>";
     }
     return result;
   }
