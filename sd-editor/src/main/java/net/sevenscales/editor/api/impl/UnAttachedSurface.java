@@ -67,6 +67,15 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	}
 
 	@Override
+	public void removeFromParent() {
+		for (Diagram d : diagrams) {
+			d.removeFromParent();
+		}
+		diagrams.clear();
+		super.removeFromParent();
+	}
+
+	@Override
 	protected void onLoad() {
 		logger.debug("onLoad {}...");
 		if (surface == null) {

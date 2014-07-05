@@ -3,10 +3,11 @@ package net.sevenscales.editor.api;
 import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.dom.client.Style.Visibility;
+import com.google.gwt.dom.client.Style;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.UnAttachedSurface;
@@ -37,16 +38,20 @@ public class SvgHandler {
 		this.json = json;
 		this.handler = handler;
 		this.editorContext = new EditorContext();
-    this.surface = new UnAttachedSurface(editorContext, new ILoadObserver() {
-			public void loaded() {
-				handleLoaded();
-			}
-		});
+		// if (SvgHandler.surface == null) {
+	    surface = new UnAttachedSurface(editorContext, new ILoadObserver() {
+				public void loaded() {
+					handleLoaded();
+				}
+			});
 
-		// Firefor cannot render manipulate dom if not attached
-		// chrome could do without adding to DOM
-		surface.getElement().getStyle().setVisibility(Visibility.HIDDEN);
-		RootPanel.get().add(surface);
+			// Firefor cannot render manipulate dom if not attached
+			// chrome could do without adding to DOM
+			surface.getElement().getStyle().setDisplay(Style.Display.NONE);
+			RootPanel.get().add(surface);
+		// } else {
+		// 	surface.clearAndInit();
+		// }
 	}
 
 	private void handleLoaded() {
@@ -63,6 +68,16 @@ public class SvgHandler {
 			this.svg = data.svg;
 			nativeReady(handler, data.svg);
     }
+
+    // synchronous from RootPanel.get().add, so break out
+		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			@Override
+			public void execute() {
+	    	surface.removeFromParent();
+			}
+		});
+
+		// RootPanel.get().remove(surface);
   }
 
 	public String getSvg() {
