@@ -6,7 +6,7 @@ var svgViewer = (function() {
 	}
 
 	function _loadAll() {
-		console.log("_loadAll...")
+		// console.log("_loadAll...")
 		$('.sketcho-svg-viewer').each(function(index) {
 			var width = $(this).width()
 			var modelName = $(this).attr("data-model-name")
@@ -15,8 +15,6 @@ var svgViewer = (function() {
 			if (modelName && pageId) {
 				// console.log('name: ' + modelName)
 				// console.log('restServicePath: ' + restServicePath.value)
-
-				console.log("width: ", width)
 
 				$.getJSON(restServicePath.value + pageId + "%3A" + modelName + ".json", function(data) {
 					console.log(data)
@@ -38,14 +36,19 @@ var svgViewer = (function() {
 
 	var renderSvg = _.after(2, _loadAll);
 	function loadAll() {
-		console.log('loadAll...')
+		// console.log('loadAll...')
 		renderSvg()
 		// renderSvg is run once, after gwt module and dojo lib have been loaded
+		// this is due to different load order Firefox and Chrome are having
+		// on Chrome dojo is loaded before GWT module, on Firefox vice versa
 	}
 
 	function dojoLoaded() {
 		svgViewer.dojoReady = true
 	}
+
+	var lazyLayout = _.debounce(_loadAll, 300)
+	$(window).resize(lazyLayout)
 
 	svgViewer.loadSvg = loadSvg
 	svgViewer.loadAll = loadAll
