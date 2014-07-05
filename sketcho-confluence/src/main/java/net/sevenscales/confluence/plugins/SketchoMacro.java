@@ -140,7 +140,7 @@ public class SketchoMacro extends BaseMacro {
 //				if (editable) {
 //					editable = sketchoManager.editableByUser();
 //				}
-				
+
 				context.put("restServicePath", restServicePath(contextPath));
 				context.put("contextPath", contextPath);
 				context.put("pluginPath", pluginPath);
@@ -160,6 +160,9 @@ public class SketchoMacro extends BaseMacro {
 				// context.put("svgContent", svgContent(params, context, pageContext));
 				context.put("imgUrl", imgUrl(params, context, pageContext));
 				context.put("classname", spaceId.replaceAll(":", "-").replaceAll("\\.", "_").replaceAll("\\s", "_"));
+
+				context.put("svg", params.get("svg"));
+
 				// System.out.println("context: " + context);
 //				context.put("trialLicense", sketchoManager.isTrialLicense());
 //				context.put("termsViolation", !sketchoManager.validUserCount());

@@ -5,32 +5,36 @@ var svgViewer = (function() {
 		// $('#svgfile').load('Sample.svg'})
 	}
 
+	function loadModel(modelName, pageId, width) {
+		if (modelName && pageId) {
+			// console.log('name: ' + modelName)
+			// console.log('restServicePath: ' + restServicePath.value)
+
+			$.getJSON(restServicePath.value + pageId + "%3A" + modelName + ".json", function(data) {
+				// console.log(data)
+				data.width = width
+				gwtModelToSvg(data, function(svg) {
+					// console.log("svg: " + svg)
+					$('.' + modelName).each(function(index) {
+						// need to create a separate DOM even if same
+						var $svg = $(svg)
+						$(this).html($svg)
+					})
+				})
+				// console.log("svg: " + svg)
+			})
+			// TODO
+			// - URL validation http https
+		}
+	}
+
 	function _loadAll() {
 		// console.log("_loadAll...")
 		$('.sketcho-svg-viewer').each(function(index) {
 			var width = $(this).width()
 			var modelName = $(this).attr("data-model-name")
 			var pageId = $(this).attr("data-page-id")
-
-			if (modelName && pageId) {
-				// console.log('name: ' + modelName)
-				// console.log('restServicePath: ' + restServicePath.value)
-
-				$.getJSON(restServicePath.value + pageId + "%3A" + modelName + ".json", function(data) {
-					// console.log(data)
-					data.width = width
-					gwtModelToSvg(data, function(svg) {
-						// console.log("svg: " + svg)
-						var $svg = $(svg)
-						$('.' + modelName).each(function(index) {
-							$(this).html($svg)
-						})
-					})
-					// console.log("svg: " + svg)
-				})
-				// TODO
-				// - URL validation http https
-			}
+			loadModel(modelName, pageId, width)
 		})
 	}
 
@@ -54,6 +58,15 @@ var svgViewer = (function() {
 	svgViewer.loadAll = loadAll
 	svgViewer.dojoLoaded = dojoLoaded
 	svgViewer.isDojoReady = svgViewer.dojoReady
+
+	window.sketchUpdated = function(modelName) {
+		console.log("modelName..." + modelName)
+		$('.sketcho-svg-viewer.' + modelName).each(function(index) {
+			var pageId = $(this).attr("data-page-id")
+			var width = $(this).width()
+			loadModel(modelName, pageId, width)
+		})
+	}
 
 	return svgViewer
 }())

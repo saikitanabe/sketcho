@@ -98,6 +98,7 @@
 		<resource name="images/" type="download" location="images/" />
 		<parameters>
 			<parameter name="name" type="string" />
+			<parameter name="svg" type="boolean" />
 		</parameters>
 	</xhtml-macro>
 	<!-- <xhtml-macro name="sketcho-confluence" -->
