@@ -5,6 +5,8 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.safehtml.shared.UriUtils;
+import com.google.gwt.safehtml.shared.SafeUri;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UIKeyHelpers;
@@ -47,7 +49,8 @@ class LinkHandler {
 		Diagram selected = surface.getSelectionHandler().getOnlyOneSelected();
 		if (selected != null && selected.getLink() != null) {
 			logger.debug("openLink");
-			Window.open(selected.getLink(), "_blank", "");
+			SafeUri uri = UriUtils.fromString(selected.getLink());
+			Window.open(uri.asString(), "_blank", "");
 		}
 	}
 }
