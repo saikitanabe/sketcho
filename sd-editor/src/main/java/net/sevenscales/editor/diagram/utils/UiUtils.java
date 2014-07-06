@@ -6,10 +6,10 @@ public class UiUtils {
 	}-*/;
 	
 	public static boolean isIE() {
-		if(getUserAgent().contains("msie")) {
-			return true;
-		}
-		return false;
+		if (getUserAgent().contains("msie") || getUserAgent().contains("trident")) {
+	    return true;
+    }
+    return false;
 	}
 
   public native static boolean isSafari()/*-{

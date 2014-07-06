@@ -19,6 +19,7 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.JSONContentParser;
 import net.sevenscales.editor.gfx.domain.ILoadObserver;
+import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.domain.utils.SLogger;
 
 
@@ -38,6 +39,11 @@ public class SvgHandler {
 		this.json = json;
 		this.handler = handler;
 		this.editorContext = new EditorContext();
+		if (UiUtils.isIE()) {
+			// ie doesn't support vector-effect
+			editorContext.set(EditorProperty.CONFLUENCE_MODE, true);
+		}
+
 		// if (SvgHandler.surface == null) {
 	    surface = new UnAttachedSurface(editorContext, new ILoadObserver() {
 				public void loaded() {
@@ -47,7 +53,7 @@ public class SvgHandler {
 
 			// Firefor cannot render manipulate dom if not attached
 			// chrome could do without adding to DOM
-			surface.getElement().getStyle().setDisplay(Style.Display.NONE);
+			// surface.getElement().getStyle().setDisplay(Style.Display.NONE);
 			RootPanel.get().add(surface);
 		// } else {
 		// 	surface.clearAndInit();
