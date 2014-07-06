@@ -14,7 +14,7 @@ MEM="-Xmx1024M -XX:MaxPermSize=256M"
 #net.sevenscales.sketchoconfluenceapp.Sketcho_confluence_app"
 
 PARAMS="$MEM -cp $GWT/gwt-codeserver.jar:$GWT/gwt-dev.jar:$GWT/gwt-user.jar:${RESOURCES[*]}:${SOURCES[*]}
-com.google.gwt.dev.codeserver.CodeServer $BIND_ADDRESS -port 8081 -workDir $WORK_DIR -src
+com.google.gwt.dev.codeserver.CodeServer $BIND_ADDRESS -workDir $WORK_DIR -src
 /Users/saikitanabe/Documents/sources/sketcho/sketcho-confluence-editor/src/main/java
 net.sevenscales.sketchoconfluenceapp.Sketcho_confluence_app"
 
