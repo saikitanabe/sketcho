@@ -99,7 +99,7 @@ public class Sketcho_confluence_app implements EntryPoint {
 //      endpoint.setServiceEntryPoint(value);
       ContentService.Util.service_url = value;
 //      log("servicePath changed:"+endpoint.getServiceEntryPoint());
-      log("contentServicePath changed:"+ContentService.Util.service_url);
+      // log("contentServicePath changed:"+ContentService.Util.service_url);
     } catch (Exception e) {
       // don't do anything resource is gwt
     }
@@ -116,7 +116,7 @@ public class Sketcho_confluence_app implements EntryPoint {
     try {
       Dictionary resourcesPathDict = Dictionary.getDictionary("resourcesPath");
       String value = resourcesPathDict.get("value");
-      log("resourcesPath:" + value);
+      // log("resourcesPath:" + value);
       resourcesPath = value;
     } catch (Exception e) {
       // don't do anything => use default value
@@ -125,7 +125,7 @@ public class Sketcho_confluence_app implements EntryPoint {
     try {
       Dictionary dict = Dictionary.getDictionary("restServicePath");
       restServicePath = dict.get("value");
-      log("restServicePath: " + restServicePath);
+      // log("restServicePath: " + restServicePath);
     } catch (Exception e) {
       // don't do anything resource is gwt
     }

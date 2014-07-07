@@ -392,12 +392,12 @@ public class SketchoEditor extends Composite implements Spinner {
     boardHandler.clear();
 
     applyImageUrl();
-    notifyUpdated(name);
+    notifyUpdated(name, selector);
     hideSpinner();
 	}
 
-  private native void notifyUpdated(String modelName)/*-{
-    $wnd.sketchUpdated(modelName)
+  private native void notifyUpdated(String modelName, String className)/*-{
+    $wnd.sketchUpdated(modelName, className)
   }-*/;
 	
   private void enableConfluenceShortCuts(boolean enable) {

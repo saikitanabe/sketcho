@@ -148,18 +148,21 @@ public class SketchoMacro extends BaseMacro {
 				context.put("modelName", modelName);
 				// context.put("writeScript", writeScript);
 				context.put("servletPath", contextPath + "/plugins/servlet");
-				String spaceId = storeHandler.versionKey(page.getId(), modelName);
-				context.put("modelingSpace", spaceId);
+				String versionId = storeHandler.versionKey(page.getId(), modelName);
+				context.put("modelingSpace", versionId);
 				context.put("export",
 						!pageContext.getOutputType().equals(RenderContext.DISPLAY));
 				context.put("pageId", page.getIdAsString());
-				context.put("svgUrl", svgUrl(params, context, pageContext));
+				// context.put("svgUrl", svgUrl(params, context, pageContext));
 
 				// NOTE this is potential attack vector since could put any javascript to the page
 				// cannot be used until proper svg validator exists, that doesn't allow javascript
 				// context.put("svgContent", svgContent(params, context, pageContext));
+
 				context.put("imgUrl", imgUrl(params, context, pageContext));
-				context.put("classname", spaceId.replaceAll(":", "-").replaceAll("\\.", "_").replaceAll("\\s", "_"));
+				String classname = versionId.replaceAll(":", "-").replaceAll("\\.", "_").replaceAll("\\s", "_");
+				context.put("classname", classname);
+				context.put("svgClassName", classname + "_svg");
 
 				context.put("svg", params.get("svg"));
 

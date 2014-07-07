@@ -5,9 +5,10 @@ var svgViewer = (function() {
 		// $('#svgfile').load('Sample.svg'})
 	}
 
-	function loadModel(modelName, pageId, width) {
+	function loadModel(modelName, pageId, className, width) {
 		if (modelName && pageId) {
 			// console.log('name: ' + modelName)
+			// console.log('className: ' + className)
 			// console.log('restServicePath: ' + restServicePath.value)
 
 			$.getJSON(restServicePath.value + pageId + "%3A" + modelName + ".json", function(data) {
@@ -15,7 +16,7 @@ var svgViewer = (function() {
 				data.width = width
 				gwtModelToSvg(data, function(svg) {
 					// console.log("svg: " + svg)
-					$('.' + modelName).each(function(index) {
+					$('.' + className).each(function(index) {
 						// need to create a separate DOM even if same
 						var $svg = $(svg)
 						$(this).html($svg)
@@ -34,7 +35,8 @@ var svgViewer = (function() {
 			var width = $(this).width()
 			var modelName = $(this).attr("data-model-name")
 			var pageId = $(this).attr("data-page-id")
-			loadModel(modelName, pageId, width)
+			var className = $(this).attr("data-class-name")
+			loadModel(modelName, pageId, className, width)
 		})
 	}
 
@@ -59,12 +61,14 @@ var svgViewer = (function() {
 	svgViewer.dojoLoaded = dojoLoaded
 	svgViewer.isDojoReady = svgViewer.dojoReady
 
-	window.sketchUpdated = function(modelName) {
-		console.log("modelName..." + modelName)
-		$('.sketcho-svg-viewer.' + modelName).each(function(index) {
+	window.sketchUpdated = function(modelName, className) {
+		// console.log("modelName..." + modelName)
+		// console.log("className..." + className)
+		$('.sketcho-svg-viewer.' + className + "_svg").each(function(index) {
 			var pageId = $(this).attr("data-page-id")
+			var className = $(this).attr("data-class-name")
 			var width = $(this).width()
-			loadModel(modelName, pageId, width)
+			loadModel(modelName, pageId, className, width)
 		})
 	}
 
