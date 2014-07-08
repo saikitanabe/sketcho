@@ -150,7 +150,10 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
     result.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     // path.setStrokeCap("round");
     if (style != null && !"".equals(style)) {
-	    result.setAttribute("style", style);
+    	style = styleAccordingToBackground(style);
+    	if (!"".equals(style)) {
+		    result.setAttribute("style", style);
+    	}
     }
     result.setAttribute("vector-effect", "non-scaling-stroke");
   	result.setShape(path);
@@ -162,6 +165,22 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 			IPath path = createSubPath(p.getPath(), p.getStyle());
 			paths.add(path);
 		}
+	}
+
+	private String styleAccordingToBackground(String style) {
+    Theme.ElementColorScheme current = getCurrentColorScheme();
+		if (!usesSchemeDefaultBackgroundColor(current)) {
+			// if background color is changed, then some parts should look like background
+			String bgcolor = Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash();
+			style = style.replace("fill:bgcolor", "fill:" + bgcolor);
+			style = style.replace("stroke:bgcolor", bgcolor);
+		} else {
+			style = style.replace("fill:bgcolor", "");
+			style = style.replace("stroke:bgcolor", "");
+		}
+		// fill:bgcolor
+		// stroke:bordercolor
+		return style;
 	}
 	
 	@Override
