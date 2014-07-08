@@ -30,6 +30,7 @@ public class LibraryShapes {
 	  shapes.put(ElementType.IPHONE, new LibraryShape(ElementType.IPHONE, 24, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12));
 	  shapes.put(ElementType.WEB_BROWSER, new LibraryShape(ElementType.WEB_BROWSER, 50, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12));
 	  shapes.put(ElementType.RECT, new LibraryShape(ElementType.RECT, 50, 35, 0, 2, 2));
+    shapes.put(ElementType.SWITCH, new LibraryShape(ElementType.SWITCH, 50, 35, 0, 2, 2));
 	}
 
 	public static LibraryShape get(ElementType type) {

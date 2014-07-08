@@ -45,7 +45,8 @@ public enum ElementType {
 	IPHONE("iphone"),
 	WEB_BROWSER("w-browser"),
 	RECT("rect"),
-	FREEHAND2("freehand2");
+	FREEHAND2("freehand2"),
+	SWITCH("switch");
 
 	private String value;
 

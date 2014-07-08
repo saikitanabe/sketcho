@@ -32,23 +32,26 @@
 	
 	 <!-- PRODUCTION SETUP... -->
   <!-- Production => UNCOMMENT -->
- <set-property name="gwt.logging.enabled" value="FALSE"/>
+<!--  <set-property name="gwt.logging.enabled" value="FALSE"/> -->
 
   <!-- Production => COMMENT -->
   
-<!--   <add-linker name="xsiframe" />
-  <set-configuration-property name="devModeRedirectEnabled" value="true" />
- -->  
+  <add-linker name="xsiframe" />
+  <set-configuration-property name="devModeUrlWhitelistRegexp" value="http://(localhost|127\.0\.0\.1|saikis-macbook.local|176\.16\.43\.1)(:\d+)?/.*" />
+
+  <!-- IE debugging use ant dev and have only one permutation since -bindAddress doesn't work at the moment -->
+  <!-- <set-property name="user.agent" value="gecko1_8"/> -->
+  
 <!--  <inherits name="com.googlecode.mgwt.MGWT"/> -->
 <!--  <set-configuration-property name="mgwt.superdevmode" value="on" /> -->
 
   <!-- Production => COMMENT stack trace sources mapping -->
-<!--   <set-property name="compiler.stackMode" value="emulated" />
+  <set-property name="compiler.stackMode" value="emulated" />
   <set-configuration-property name="compiler.emulatedStack.recordLineNumbers"
     value="true" />
   <set-configuration-property name="compiler.emulatedStack.recordFileNames"
     value="true" />
- -->
+
   <!-- PRODUCTION SETUP... DONE -->
 	
 
