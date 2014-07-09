@@ -77,6 +77,7 @@ class ShapeParser {
 		new ParserMap(ElementType.TABLET_UP, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.TABLET_HORIZONTAL, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.OLD_PHONE, new AbstractDiagramFactory.GenericFactory()),
+		new ParserMap(ElementType.ANDROID, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.FREEHAND2, new AbstractDiagramFactory.GenericFactory())
 	};
 

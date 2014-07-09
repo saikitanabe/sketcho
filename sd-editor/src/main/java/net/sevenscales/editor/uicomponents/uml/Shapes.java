@@ -224,6 +224,13 @@ public class Shapes {
 			new Proto("m 9.49127,44.6909 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
 			new Proto("m 16.6208,44.6909 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;")
 		}, 24, 50));
+
+		shapes.put(ElementType.ANDROID, new Group(new Proto[]{
+			new Proto("m 5.77398,0 14.452,0 c 3.19878,0 5.77398,2.5752 5.77398,5.774 l 0,38.452 c 0,3.1988 -2.57519,5.774 -5.77398,5.774 l -14.452,0 c -3.19878,0 -5.77398,-2.5752 -5.77398,-5.774 l 0,-38.452 c 0,-3.1988 2.57519,-5.774 5.77398,-5.774 z ", "fill:bordercolor;"),
+			new Proto("m 2.1572,6.576 21.6856,0 0,36.848 -21.6856,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 15.1274,46.6587 c 0,0.515806 -0.952467,0.93395 -2.12739,0.93395 -1.17493,0 -2.1274,-0.418144 -2.1274,-0.93395 0,-0.515808 0.952467,-0.93395 2.1274,-0.93395 1.17493,0 2.12739,0.418142 2.12739,0.93395 z ", "fill:#fefefe;stroke:none;fill-opacity:1;")
+		}, 26, 50));
+		
 	}
 
 	public static Group get(String elementType) {

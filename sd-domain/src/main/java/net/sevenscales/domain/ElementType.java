@@ -53,7 +53,8 @@ public enum ElementType {
 	SERVER2("server2"),
 	TABLET_UP("tablet_u"),
 	TABLET_HORIZONTAL("tablet_h"),
-	OLD_PHONE("phone");
+	OLD_PHONE("phone"),
+	ANDROID("android");
 
 	private String value;
 
