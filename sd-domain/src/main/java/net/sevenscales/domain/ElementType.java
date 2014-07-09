@@ -49,7 +49,8 @@ public enum ElementType {
 	SWITCH("switch"),
 	ROUTER("router"),
 	DESKTOP("desktop"),
-	LAPTOP("laptop");
+	LAPTOP("laptop"),
+	SERVER2("server2");
 
 	private String value;
 

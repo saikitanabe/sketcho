@@ -153,7 +153,10 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
     	style = handleStyle(result, style);
 	    result.setAttribute("style", style);
     }
-    result.setAttribute("vector-effect", "non-scaling-stroke");
+
+    if (!surface.isLibrary()) {
+	    result.setAttribute("vector-effect", "non-scaling-stroke");
+    }
   	result.setShape(path);
   	return result;
 	}
@@ -320,7 +323,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 
 	  	subgroup.setScale(factorX, factorY);
 	  	subgroup.setTransform(left, top);
-	  	if (UiUtils.isIE()) {
+	  	if (UiUtils.isIE() || surface.isLibrary()) {
 			  // no need to use, which doesn't work svg => pdf, scale down stroke width
 			  // vector-effect="non-scaling-stroke"
 	  		// ie8 - ie10 doesn't support vector-effect
@@ -389,7 +392,12 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   public void setBackgroundColor(int red, int green, int blue, double opacity) {
   	super.setBackgroundColor(red, green, blue, opacity);
   	for (IPath path : paths) {
-	    path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+  		if (!path.isFillAsBorderColor()) {
+		    path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+  		}
+	    // if (path.isFillAsBorderColor()) {
+	    // 	path.setFill(color);
+	    // }
   	}
   }
 

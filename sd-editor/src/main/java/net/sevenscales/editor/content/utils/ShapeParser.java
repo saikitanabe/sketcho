@@ -73,6 +73,7 @@ class ShapeParser {
 		new ParserMap(ElementType.ROUTER, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.DESKTOP, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.LAPTOP, new AbstractDiagramFactory.GenericFactory()),
+		new ParserMap(ElementType.SERVER2, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.FREEHAND2, new AbstractDiagramFactory.GenericFactory())
 	};
 

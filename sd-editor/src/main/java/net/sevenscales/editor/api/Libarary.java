@@ -337,10 +337,9 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         LibraryShapes.get(ElementType.TRIANGLE)
       },
       {
-        LibraryShapes.get(ElementType.CLOUD),
-        LibraryShapes.get(ElementType.FIREWALL),
         LibraryShapes.get(ElementType.BUBBLE),
-        LibraryShapes.get(ElementType.BUBBLE_R)
+        LibraryShapes.get(ElementType.BUBBLE_R),
+        LibraryShapes.get(ElementType.RECT)
       },
       {
         LibraryShapes.get(ElementType.CIRCLE),
@@ -355,15 +354,19 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         LibraryShapes.get(ElementType.ARROW_LEFT)
       },
       {
-        LibraryShapes.get(ElementType.IPHONE),
-        LibraryShapes.get(ElementType.WEB_BROWSER),
-        LibraryShapes.get(ElementType.RECT)
+        LibraryShapes.get(ElementType.CLOUD),
+        LibraryShapes.get(ElementType.FIREWALL),
+        LibraryShapes.get(ElementType.SWITCH),
+        LibraryShapes.get(ElementType.ROUTER)
       },
       {
-        LibraryShapes.get(ElementType.SWITCH),
-        LibraryShapes.get(ElementType.ROUTER),
+        LibraryShapes.get(ElementType.IPHONE),
+        LibraryShapes.get(ElementType.WEB_BROWSER),
         LibraryShapes.get(ElementType.DESKTOP),
-        LibraryShapes.get(ElementType.LAPTOP),
+        LibraryShapes.get(ElementType.LAPTOP)
+      },
+      {
+        LibraryShapes.get(ElementType.SERVER2)
       }
     };
 
