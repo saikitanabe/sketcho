@@ -54,7 +54,8 @@ public enum ElementType {
 	TABLET_UP("tablet_u"),
 	TABLET_HORIZONTAL("tablet_h"),
 	OLD_PHONE("phone"),
-	ANDROID("android");
+	ANDROID("android"),
+	LIGHTBULB("lightbulb");
 
 	private String value;
 
