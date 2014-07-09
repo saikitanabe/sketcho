@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.sevenscales.confluence.plugins</groupId>
     <artifactId>sketcho-confluence</artifactId>
-    <version>3.1.0</version>
+    <version>3.1.1</version>
     <packaging>atlassian-plugin</packaging>
     <name>Sketchboard.Me Confluence Plugin</name>
     <description>UML, Free hand and Mind Map Drawing Plugin for Confluence</description>
