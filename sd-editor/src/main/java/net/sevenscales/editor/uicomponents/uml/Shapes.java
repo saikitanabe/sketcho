@@ -207,6 +207,23 @@ public class Shapes {
 			new Proto("m 3.03149,16.6267 c -0.553205,0 -1.00164,0.3909 -1.00164,0.8732 0,0.4822 0.448434,0.8731 1.00164,0.8731 0.553205,0 1.00164,-0.3909 1.00164,-0.8731 0,-0.4823 -0.448434,-0.8732 -1.00164,-0.8732 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
 			new Proto("m 44.618,32.3354 0,-29.671 -38.8119,0 0,29.671 z ", "fill:#fefefe;stroke:none;fill-opacity:1;")
 		}, 50, 35));
+
+		shapes.put(ElementType.OLD_PHONE, new Group(new Proto[]{
+			new Proto("m 3.04036,0 17.9193,0 c 1.68436,0 3.04036,1.356 3.04036,3.0403 l 0,43.9193 c 0,1.6844 -1.356,3.0404 -3.04036,3.0404 l -17.9193,0 c -1.68436,0 -3.04036,-1.356 -3.04036,-3.0404 l 0,-43.9193 c 0,-1.6843 1.356,-3.0403 3.04036,-3.0403 z ", "fill:bordercolor;"),
+			new Proto("m 2.42553,2.3136 19.1489,0 0,23.9074 -19.1489,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 9.49127,28.3738 5.04255,0 0,4.82 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 16.6208,29.5627 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 2.3617,29.5627 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 2.3617,35.604 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 16.6208,35.604 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 9.49127,40.1476 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 16.6208,40.1476 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 2.3617,40.1476 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 9.49127,35.604 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 2.3617,44.6909 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 9.49127,44.6909 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 16.6208,44.6909 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;")
+		}, 24, 50));
 	}
 
 	public static Group get(String elementType) {

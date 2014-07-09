@@ -52,7 +52,8 @@ public enum ElementType {
 	LAPTOP("laptop"),
 	SERVER2("server2"),
 	TABLET_UP("tablet_u"),
-	TABLET_HORIZONTAL("tablet_h");
+	TABLET_HORIZONTAL("tablet_h"),
+	OLD_PHONE("phone");
 
 	private String value;
 
