@@ -35,6 +35,8 @@ public class LibraryShapes {
     shapes.put(ElementType.DESKTOP, new LibraryShape(ElementType.DESKTOP, 50, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
     shapes.put(ElementType.LAPTOP, new LibraryShape(ElementType.LAPTOP, 50, 28, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
     shapes.put(ElementType.SERVER2, new LibraryShape(ElementType.SERVER2, 25, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
+    shapes.put(ElementType.TABLET_UP, new LibraryShape(ElementType.TABLET_UP, 40, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
+    shapes.put(ElementType.TABLET_HORIZONTAL, new LibraryShape(ElementType.TABLET_HORIZONTAL, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
 	}
 
 	public static LibraryShape get(ElementType type) {

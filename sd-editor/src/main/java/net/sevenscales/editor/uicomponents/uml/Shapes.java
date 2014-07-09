@@ -195,6 +195,18 @@ public class Shapes {
 			new Proto("m 1.976496,16.329000 21.047013,0 0,5.8983 -21.047013,0 z ", "fill:#fefefe;stroke-color:#fefefe;fill-opacity:1;"),
 			new Proto("m 14.901691,30.034619 a 2.401708,2.4329 0 1 1 -4.803417,0 2.401708,2.432900 0 1 1 4.803417,0 z ", "fill:#fefefe;stroke-color:#fefefe;fill-opacity:1;")
 		}, 25, 50));
+
+		shapes.put(ElementType.TABLET_UP, new Group(new Proto[]{
+			new Proto("m 4.39569,0.6193 31.2086,0 c 2.0921,0 3.77635,1.6843 3.77635,3.7764 l 0,41.2087 c 0,2.092 -1.68425,3.7763 -3.77635,3.7763 l -31.2086,0 c -2.0921,0 -3.77635,-1.6843 -3.77635,-3.7763 l 0,-41.2087 c 0,-2.0921 1.68425,-3.7764 3.77635,-3.7764 z ", "fill:bordercolor;"),
+			new Proto("m 21,46.9324 c 0,0.5523 -0.447716,1 -1,1 -0.552285,0 -1,-0.4477 -1,-1 0,-0.5523 0.447715,-1 1,-1 0.552284,0 1,0.4477 1,1 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 3.00791,5.4139 33.9841,0 0,38.7484 -33.9841,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;")
+		}, 40, 50));
+
+		shapes.put(ElementType.TABLET_HORIZONTAL, new Group(new Proto[]{
+			new Proto("m 49.4205,31.1238 0,-27.2479 c 0,-1.8265 -1.68706,-3.2969 -3.78259,-3.2969 l -41.2762,0 c -2.09543,0 -3.78249,1.4704 -3.78249,3.2969 l 0,27.2479 c 0,1.8265 1.68706,3.297 3.78249,3.297 l 41.2762,0 c 2.09553,0 3.78259,-1.4705 3.78259,-3.297 z ", "fill:bordercolor;"),
+			new Proto("m 3.03149,16.6267 c -0.553205,0 -1.00164,0.3909 -1.00164,0.8732 0,0.4822 0.448434,0.8731 1.00164,0.8731 0.553205,0 1.00164,-0.3909 1.00164,-0.8731 0,-0.4823 -0.448434,-0.8732 -1.00164,-0.8732 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
+			new Proto("m 44.618,32.3354 0,-29.671 -38.8119,0 0,29.671 z ", "fill:#fefefe;stroke:none;fill-opacity:1;")
+		}, 50, 35));
 	}
 
 	public static Group get(String elementType) {

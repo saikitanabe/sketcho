@@ -50,7 +50,9 @@ public enum ElementType {
 	ROUTER("router"),
 	DESKTOP("desktop"),
 	LAPTOP("laptop"),
-	SERVER2("server2");
+	SERVER2("server2"),
+	TABLET_UP("tablet_u"),
+	TABLET_HORIZONTAL("tablet_h");
 
 	private String value;
 
