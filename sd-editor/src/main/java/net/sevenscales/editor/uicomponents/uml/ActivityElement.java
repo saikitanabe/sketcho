@@ -54,7 +54,7 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
     group.setAttribute("cursor", "default");
 
 		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
-		boundary.setStroke(borderWebColor);
+		boundary.setStroke(borderColor);
 		boundary.setStrokeWidth(getStrokeWidth());
 		boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 		
@@ -144,8 +144,8 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
     };
     
 		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
+		public Color getTextColor() {
+			return textColor;
 		};
 
   };
@@ -276,7 +276,7 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
 	}
   
   @Override
-	public void setHighlightColor(String color) {
+	public void setHighlightColor(Color color) {
 		boundary.setStroke(color);
 	}
 	

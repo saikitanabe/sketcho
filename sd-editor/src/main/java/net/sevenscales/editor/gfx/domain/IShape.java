@@ -3,7 +3,7 @@ package net.sevenscales.editor.gfx.domain;
 import com.google.gwt.core.client.JavaScriptObject;
 
 public interface IShape extends IGraphics {
-  void setStroke(String color);
+  void setStroke(Color color);
 	void setStroke(int red, int green, int blue, double opacity);
 	void setStroke(int red, int green, int blue, double opacity, double width);
   void setStrokeWidth(double width);
@@ -12,7 +12,7 @@ public interface IShape extends IGraphics {
   void setStrokeCap(String value);
   String getStrokeCap();
 //  public abstract JavaScriptObject getStroke();
-  void setFill(String color);
+  void setFill(Color color);
   void setFill(int red, int green, int blue, double opacity);
   Color getFillColor();
 //  public abstract JavaScriptObject getFill();
@@ -61,5 +61,9 @@ public interface IShape extends IGraphics {
   boolean isThemeSupported();
   void setSupportsTheme(boolean themeSupported);
 
-
+  /**
+  * Generic element custom color support.
+  */
+  void setFillAsBorderColor(boolean value);
+  boolean isFillAsBorderColor();
 }

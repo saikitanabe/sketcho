@@ -51,8 +51,8 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
     group.setAttribute("cursor", "default");
 
 		visible = IShapeFactory.Util.factory(editable).createCircle(group);
-		visible.setStroke("#" + this.borderColor.toHexString());
-		visible.setFill("#" + this.backgroundColor.toHexString());
+		visible.setStroke(this.borderColor);
+		visible.setFill(this.backgroundColor);
 		
 		boundary = IShapeFactory.Util.factory(editable).createCircle(group);
 		boundary.setStroke(0, 0, 0, 0);
@@ -234,7 +234,7 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
     setShape(shape[0], shape[1], shape[2]);
 	}
   
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
   	visible.setStroke(color);
   }
   

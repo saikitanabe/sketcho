@@ -89,7 +89,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	public CommentElement(ISurfaceHandler surface, CommentShape newShape, String text, 
 										 Color backgroundColor, Color borderColor, Color textColor, boolean editable,
 										 CommentThreadElement parentThread, CommentDTO commentData, IDiagramItemRO item) {
-		super(editable, surface, backgroundColor, borderColor, backgroundColor.opacity == 0 ? parentThread.getTextColorAsColor() : textColor, item);
+		super(editable, surface, backgroundColor, borderColor, backgroundColor.opacity == 0 ? parentThread.getTextColor() : textColor, item);
 		this.shape = newShape;
 		this.parentThread = parentThread;
 		setDiagramItem(commentData);
@@ -305,8 +305,8 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
       return CommentElement.this;
     }
 		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
+		public Color getTextColor() {
+			return textColor;
 		};
 
   };
@@ -368,8 +368,8 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
       return CommentElement.this;
     }
 		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
+		public Color getTextColor() {
+			return textColor;
 		};
 
   };
@@ -532,7 +532,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   public void setHighlight(boolean highlight) {
   }
   @Override
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
     boundary.setStroke(color);
   }
 

@@ -1,4 +1,5 @@
 package net.sevenscales.editor.gfx.domain;
+
 public class Color {
   public int red;
   public int green;

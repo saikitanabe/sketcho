@@ -196,8 +196,8 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
       return EllipseElement.this;
     }
 		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
+		public Color getTextColor() {
+			return textColor;
 		};
 
   };
@@ -526,7 +526,7 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
   }
 
   @Override
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
 		ellipse.setStroke(color);
   }
 	

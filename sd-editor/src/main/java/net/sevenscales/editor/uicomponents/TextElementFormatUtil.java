@@ -26,6 +26,7 @@ import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
+import net.sevenscales.editor.gfx.domain.Color;
 
 public class TextElementFormatUtil {
 	private static final SLogger logger = SLogger.createLogger(TextElementFormatUtil.class);
@@ -124,7 +125,7 @@ public class TextElementFormatUtil {
     int getTextMargin(int fontSize);
     boolean forceAutoResize();
     GraphicsEventHandler getGraphicsMouseHandler();
-		String getTextColorAsString();
+		Color getTextColor();
 		boolean verticalAlignMiddle();
 		boolean boldText();
     boolean supportElementResize();
@@ -205,7 +206,7 @@ public class TextElementFormatUtil {
 //	  		if (s instanceof IText) {
 //			    IText t = (IText) s;
 	//		    t.setStroke("#" + color.toHexString());
-			    s.setFill(hasTextElement.getTextColorAsString());
+			    s.setFill(hasTextElement.getTextColor());
 //	  		}
 	  		
 	  		// difficult to see use default line color
@@ -313,7 +314,7 @@ public class TextElementFormatUtil {
       if (t.equals("--")) {
         // create separator line
         ILine separator = IShapeFactory.Util.factory(editable).createLine(textGroup);
-        separator.setStroke(hasTextElement.getTextColorAsString());
+        separator.setStroke(hasTextElement.getTextColor());
 //        separator.setStrokeWidth(0.5);
 //        separator.setFill(250, 250, 200, 2);
         
@@ -343,7 +344,7 @@ public class TextElementFormatUtil {
          text.setText(t);
          currentline.add(text);
 //         hasTextElement.addShape(text);
-         text.setFill(hasTextElement.getTextColorAsString());
+         text.setFill(hasTextElement.getTextColor());
 //         shapes.add(text);
          
          double textWidth = text.getTextWidth();

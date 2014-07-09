@@ -13,13 +13,13 @@ public class ColorHelpers {
 		return r + g + b;
 	}
 
-	public static String createBorderColor(Color color) {
+	public static Color createBorderColor(Color color) {
 		return borderColorByBackground(color.red, color.green, color.blue);
 	}
 	
-	public static String createBorderColor(String color) {
+	public static Color createBorderColor(String color) {
 		if (color.equals("transparent")) {
-			return "#555555";
+			return new Color(0x55, 0x55, 0x55, 1);
 		}
 		Rgb rgb = toRgb(color);
 		return borderColorByBackground(rgb.red, rgb.green, rgb.blue);
@@ -51,16 +51,12 @@ public class ColorHelpers {
 		return new Rgb(r, g, b);
 	}
 
-	public static String borderColorByBackground(int red, int green, int blue) {
+	public static Color borderColorByBackground(int red, int green, int blue) {
 		JavaScriptObject hsv = rgbToHsv(red, green, blue);
 		JavaScriptObject rgb = hsv2rgb(getIntValue(hsv, 0), getIntValue(hsv, 1),
 				getIntValue(hsv, 2) - 10);
 
-		String result = "#"
-				+ asHexColor(getIntValue(rgb, 0), getIntValue(rgb, 1),
-						getIntValue(rgb, 2));
-
-		return result;
+		return new Color(getIntValue(rgb, 0), getIntValue(rgb, 1), getIntValue(rgb, 2), 1);
 	}
 
 	private static native JavaScriptObject rgbToHsv(int r, int g, int b)/*-{

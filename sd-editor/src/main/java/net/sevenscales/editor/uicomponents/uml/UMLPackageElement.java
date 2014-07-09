@@ -142,8 +142,8 @@ public class UMLPackageElement extends AbstractDiagramItem implements SupportsRe
     };
     
 		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
+		public Color getTextColor() {
+			return textColor;
 		};
 
   };
@@ -356,7 +356,7 @@ public class UMLPackageElement extends AbstractDiagramItem implements SupportsRe
   }
 
   @Override
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
     rectSurface.setStroke(color);
     cornerRect.setStroke(color);
   }

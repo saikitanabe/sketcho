@@ -19,6 +19,7 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.Point;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.silver.SilverUtils;
 import net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers;
@@ -60,7 +61,7 @@ public class CircleElement extends AbstractDiagramItem {
 		circle = IShapeFactory.Util.factory(editable).createCircle(group);
 		circle.setShape(circleX, circleY, radius);
 		circle.setFill(255, 255, 255, 0.6);
-		circle.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+		circle.setStroke(Theme.getCurrentColorScheme().getBorderColor());
 		shapes.add(circle);
 
 		if (selectionRadius <= radius) {
@@ -106,7 +107,7 @@ public class CircleElement extends AbstractDiagramItem {
 	}
 	public void unselect() {
 	  super.unselect();
-    circle.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+    circle.setStroke(Theme.getCurrentColorScheme().getBorderColor());
     // CircleElement is only used with owner component
     if (!getOwnerComponent().isRemoved()) {
     	// parent element might be already removed
@@ -218,7 +219,7 @@ public class CircleElement extends AbstractDiagramItem {
 	  circle.setRadius(radius);
 	}
 	
-	public void setStroke(String color) {
+	public void setStroke(Color color) {
 	  circle.setStroke(color);
 	}
   

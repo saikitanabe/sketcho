@@ -276,11 +276,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		  	// Color newbg = new Color(color.getRr(), color.getGg(), color.getBb(), color.getOpacity());
 		  	Color newbg = color.getBackgroundColor();
 				d.setBackgroundColor(color.getBackgroundColor());
-	    	String borderWebColor = ColorHelpers.borderColorByBackground(newbg.red, newbg.green, newbg.blue);
-	    	net.sevenscales.editor.content.utils.Rgb rgb = ColorHelpers.toRgb(borderWebColor);
-	    	rgb.a = 1;
-	    	Color newbordercolor = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
-	      d.setBorderColor(newbordercolor);
+	    	Color borderColor = ColorHelpers.borderColorByBackground(newbg.red, newbg.green, newbg.blue);
+	    	// Color newbordercolor = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
+	      d.setBorderColor(borderColor);
 			}
 		
 			if (!"transparent".equals(d.getTextAreaBackgroundColor())) {
@@ -650,7 +648,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			textArea.getElement().getStyle().setBackgroundColor(diagram.getTextAreaBackgroundColor());
 		}
 
-		textArea.getElement().getStyle().setColor("#" + diagram.getTextColorAsColor().toHexString());
+		textArea.getElement().getStyle().setColor("#" + diagram.getTextColor().toHexString());
 		textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
 		setTextAreaHeight(diagram.getTextAreaHeight());
 		textArea.getElement().getStyle().setProperty("textAlign", diagram.getTextAreaAlign());

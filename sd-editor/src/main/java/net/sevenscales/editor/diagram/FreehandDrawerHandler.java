@@ -242,7 +242,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 
   private void createNewPath() {
     currentFreehandPath = new FreehandPath(surface);
-    currentFreehandPath.changeColor(currentColor.toHexStringWithHash());
+    currentFreehandPath.changeColor(currentColor);
     freehandPahts.add(currentFreehandPath);
   }
 

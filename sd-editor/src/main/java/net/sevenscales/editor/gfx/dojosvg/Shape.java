@@ -16,19 +16,11 @@ abstract class Shape extends Graphics implements IShape {
 	private int svgdx;
 	private int svgdy;
 	private boolean themeSupported = true;
+	private boolean fillAsBorderColor = false;
 	
-	final public void setStroke(String color) {
+	final public void setStroke(Color color) {
 		if (visibility) {
-			if (!"transparent".equals(color)) {
-	//			nativeSetStrokeColor(color, rawNode);
-				color = color.length() > 6 ? color.substring(1, 7) : color; 
-				int red = Integer.valueOf(color.substring(0, 2), 16);
-				int green = Integer.valueOf(color.substring(2, 4), 16);
-				int blue = Integer.valueOf(color.substring(4, 6), 16);
-				nativeSetStroke(rawNode, red, green, blue, 1);
-			} else {
-				nativeSetStroke(rawNode, 0xff, 0xff, 0xff, 0);
-			}
+			nativeSetStroke(rawNode, color.red, color.green, color.blue, color.opacity);
 		}
 	}
 	
@@ -181,9 +173,9 @@ abstract class Shape extends Graphics implements IShape {
 	  return result;
   };
 
-	final public void setFill(String color) {
+	final public void setFill(Color color) {
 		if (visibility)
-			nativeSetFill(rawNode, color);
+			nativeSetFill(rawNode, color.red, color.green, color.blue, color.opacity);
 	}
 
 	final public void setFill(int red, int green, int blue, double opacity) {
@@ -498,6 +490,13 @@ abstract class Shape extends Graphics implements IShape {
   }
   public void setSupportsTheme(boolean themeSupported) {
   	this.themeSupported = themeSupported;
+  }
+
+  public void setFillAsBorderColor(boolean value) {
+  	this.fillAsBorderColor = value;
+  }
+  public boolean isFillAsBorderColor() {
+  	return fillAsBorderColor;
   }
 	
 }

@@ -210,7 +210,7 @@ public class ForkElement extends AbstractDiagramItem implements SupportsRectangl
     setShape(shape[0], shape[1], shape[2], shape[3]);
 	}
   
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
   	visible.setStroke(color);
   }
   

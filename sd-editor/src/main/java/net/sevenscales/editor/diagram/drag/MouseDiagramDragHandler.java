@@ -45,6 +45,7 @@ import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.gfx.domain.IChildElement;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
@@ -95,7 +96,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	private List<Diagram> prevXHigilights;
 	private List<Diagram> prevYHighlights;
 	private Relationship2 insertMoveToSingle;
-	private static final String LINE_HELPER_COLOR = "#dddddd"; 
+	private static final Color LINE_HELPER_COLOR = new Color(0xdd, 0xdd, 0xdd, 1); 
 	
 	public MouseDiagramDragHandler(ISurfaceHandler surface, MouseDiagramHandlerManager parent,
 			ISelectionHandler selectionHandler) {
@@ -149,7 +150,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 
 	}
 		
-	private ILine createLine(String strokeColor, double strokeWidth, IGroup group) {
+	private ILine createLine(Color strokeColor, double strokeWidth, IGroup group) {
 		ILine line = IShapeFactory.Util.factory(true).createLine(group);
 		line.setStyle(ILine.SOLID);
 		line.setStrokeWidth(strokeWidth);

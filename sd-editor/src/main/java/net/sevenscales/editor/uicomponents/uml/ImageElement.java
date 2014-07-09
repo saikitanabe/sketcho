@@ -259,7 +259,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   	}
   }
 
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
 		background.setStroke(color);
   }
   

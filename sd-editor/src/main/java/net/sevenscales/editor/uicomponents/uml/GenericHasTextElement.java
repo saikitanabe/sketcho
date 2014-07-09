@@ -8,6 +8,7 @@ import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.gfx.domain.IShape;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 
 
@@ -132,8 +133,8 @@ class GenericHasTextElement extends AbstractHasTextElement {
   };
   
 	@Override
-	public String getTextColorAsString() {
-		return "#" + parent.getTextColor();
+	public Color getTextColor() {
+		return parent.getTextColor();
 	}
 
 	@Override

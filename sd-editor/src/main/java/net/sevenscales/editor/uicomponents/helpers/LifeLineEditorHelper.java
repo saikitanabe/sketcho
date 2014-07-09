@@ -11,6 +11,7 @@ import net.sevenscales.editor.diagram.shape.CircleShape;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.domain.DiagramItemDTO;
 
 public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
@@ -73,7 +74,7 @@ public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
     startSelection = new CircleElement(surface.getInteractionLayer(), surface, this, 0, 0, SequenceElement.RADIUS_START, SequenceElement.RADIUS_SELECTION, editable, new DiagramItemDTO());
     startSelection.setVerticalMovement(true);
     surface.add(startSelection, true);
-    startSelection.setStroke("#1D00FF");
+    startSelection.setStroke(new Color(0x1D, 0x00, 0xFF, 1));
 //    startSelection.addMouseDiagramHandler(this);
     startSelection.setVisible(false);
 
@@ -138,7 +139,7 @@ public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
     circleShape.centerY = parent.getLine().getY2() + parent.getTransformY();
     circleShape.radius = 10;
     startSelection.setShape(circleShape);
-    startSelection.setStroke(parent.getColor());
+    startSelection.setStroke(parent.getBorderColor());
   }
 
   @Override

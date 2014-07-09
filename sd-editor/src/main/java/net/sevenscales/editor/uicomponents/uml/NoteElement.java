@@ -269,8 +269,8 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
       return NoteElement.this;
     }
 		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
+		public Color getTextColor() {
+			return textColor;
 		}
 
     public int getMarginLeft() {
@@ -440,7 +440,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
   }
   
   @Override
-	public void setHighlightColor(String color) {
+	public void setHighlightColor(Color color) {
 		boundary.setStroke(color);
 	}
   

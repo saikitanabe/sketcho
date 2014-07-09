@@ -168,8 +168,7 @@ public interface Diagram extends SourcesMouseDiagramEvents {
 	void setTextColor(Color color);
   void setFontSize(Integer fontSize);
   Integer getFontSize();
-	String getTextColor();
-	Color getTextColorAsColor();
+	Color getTextColor();
 	public boolean onArea(int left, int top, int right, int bottom);
 	// to check it point hovers this element; element can have magnetic area
 	public boolean onArea(int x, int y);
@@ -209,7 +208,7 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   // void setHeightAccordingToText();
 	// special cases for highlight, in case some diagram items don't support
 	// simple border color changes
-	void setHighlightColor(String color);
+	void setHighlightColor(Color color);
 	void restoreHighlighColor();
 	// void setBorderColor(String color);
 	void setBorderColor(Color color);
@@ -228,8 +227,7 @@ public interface Diagram extends SourcesMouseDiagramEvents {
 	int getTextAreaHeight();
 	String getTextAreaAlign();
 	boolean supportsOnlyTextareaDynamicHeight();
-	String getBorderColor();
-	Color getBorderColorAsColor();
+	Color getBorderColor();
 	boolean supportsTextEditing();
   boolean supportsAlignHighlight();
 	int supportedMenuItems();

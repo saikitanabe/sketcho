@@ -124,7 +124,7 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
     
 
     setReadOnly(!editable);
-    setHighlightColor(borderWebColor);
+    setHighlightColor(borderColor);
 //		shapes.add(group);
     super.constructorDone();
 	}
@@ -179,8 +179,8 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
       return Actor.this;
     }
 		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
+		public Color getTextColor() {
+			return textColor;
 		};
   };
 
@@ -478,7 +478,7 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
   }
   
   @Override
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
 //  	if (color.equals(borderColor)) {
 //  		// actor uses line color
 //  		color = DEFAULT_LINE_COLOR;

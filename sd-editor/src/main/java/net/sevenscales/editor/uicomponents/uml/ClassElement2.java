@@ -59,7 +59,7 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
     rectSurface = (IRectangle) createElement(group);
     rectSurface.setShape(shape.left, shape.top, shape.width, shape.height, DEFAULT_CLASS_RADIUS);
     rectSurface.setStrokeWidth(STROKE_WIDTH);
-    rectSurface.setStroke(borderWebColor);
+    rectSurface.setStroke(borderColor);
     rectSurface.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     addEvents(rectSurface);
 
@@ -128,8 +128,8 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
     };
     
 		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
+		public Color getTextColor() {
+			return textColor;
 		};
 
   };
@@ -273,7 +273,7 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
 	}
     
   @Override
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
     rectSurface.setStroke(color);
   }
 

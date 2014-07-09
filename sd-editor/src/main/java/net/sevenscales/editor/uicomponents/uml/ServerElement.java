@@ -198,8 +198,8 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
     };
     
 		@Override
-		public String getTextColorAsString() {
-		  return "#" + textColor.toHexString();
+		public Color getTextColor() {
+		  return textColor;
 		};
 
   };
@@ -456,7 +456,7 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
   }
   
   @Override
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
     roof.setStroke(color);
     front.setStroke(color);
     frontPanel1.setStroke(color);

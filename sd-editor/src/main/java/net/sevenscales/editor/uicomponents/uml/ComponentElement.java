@@ -61,7 +61,7 @@ public class ComponentElement extends AbstractDiagramItem implements SupportsRec
 
     rectSurface = (IRectangle) createElement(group);
     rectSurface.setStrokeWidth(STROKE_WIDTH);
-    rectSurface.setStroke(borderWebColor);
+    rectSurface.setStroke(borderColor);
     rectSurface.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     
     comp1 = IShapeFactory.Util.factory(editable).createRectangle(group);
@@ -160,8 +160,8 @@ public class ComponentElement extends AbstractDiagramItem implements SupportsRec
     };
     
 		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
+		public Color getTextColor() {
+			return textColor;
 		};
 
   };
@@ -360,7 +360,7 @@ public class ComponentElement extends AbstractDiagramItem implements SupportsRec
   }
   
   @Override
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
     rectSurface.setStroke(color);
   }
 

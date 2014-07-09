@@ -145,16 +145,26 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 
 	private IPath createSubPath(String path, String style) {
     IPath result = IShapeFactory.Util.factory(editable).createPath(subgroup, pathTransformer);
-    result.setStroke(borderWebColor);
+    result.setStroke(borderColor);
     result.setStrokeWidth(FREEHAND_STROKE_WIDTH);
     result.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     // path.setStrokeCap("round");
     if (style != null && !"".equals(style)) {
+    	style = handleStyle(result, style);
 	    result.setAttribute("style", style);
     }
     result.setAttribute("vector-effect", "non-scaling-stroke");
   	result.setShape(path);
   	return result;
+	}
+
+	private String handleStyle(IPath path, String style) {
+		if (style.contains("fill:bordercolor")) {
+			path.setFillAsBorderColor(true);
+			// need to clear or will contain invalid fill valud since bordercolor is not hex code or pre color code
+			style = style.replace("fill:bordercolor", "");
+		}
+		return style;
 	}
 
 	private void createCustomPaths(List<? extends IPathRO> pathros) {
@@ -365,9 +375,12 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   	return theshape != null ? theshape.height : shape.getSvgData().getHeight();
   }
 
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
   	for (IPath path : paths) {
 			path.setStroke(color);
+			if (path.isFillAsBorderColor()) {
+				path.setFill(color);
+			}
   	}
 		// background.setStroke(color);
   }

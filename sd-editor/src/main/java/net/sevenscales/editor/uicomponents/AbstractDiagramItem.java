@@ -88,8 +88,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 //	public static Color createDefaultBackgroundColor() { return new Color(0x66, 0x99, 0xff, 0); }
 //	public static Color createDefaultBorderColor() { return null; } // create legacy color that is null
 //	public static final String DEFAULT_BORDER_COLOR = "#cccccc";
-  public static final String DEFAULT_SELECTION_COLOR = "#1D00FF";
-  public static final String HIGHLIGHT_COLOR = "#FF0000";
+  public static final Color DEFAULT_SELECTION_COLOR = new Color(0x1D, 0x00, 0xFF, 1);
+  public static final Color HIGHLIGHT_COLOR = new Color(0xFF, 0x00, 0x00, 1);
   public static final double STROKE_WIDTH = 2.0;
 
   private long dispachSequence;
@@ -128,7 +128,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	protected OnAttachAreaListener onAttachAreaListener;
   protected List<IShape> shapes = new ArrayList<IShape>();
 	private SizeChangedHandler sizeChangedHandler;
-	protected String borderWebColor;
 	private boolean highlightOn;
   private Point coords = new Point();
   private int transformX;
@@ -173,16 +172,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     }
     
     this.borderColor = borderColor;
-    if (borderColor != null) {
-    	this.borderWebColor = "#" + borderColor.toHexString();
-    } else {
-    	this.borderColor = new Color();
+    if (borderColor == null) {
     	// legacy border color is calculated
-    	this.borderWebColor = ColorHelpers.createBorderColor(backgroundColor);
-			Rgb borderRgb = ColorHelpers.toRgb(borderWebColor);
-			this.borderColor.red = borderRgb.red;
-			this.borderColor.green = borderRgb.green;
-			this.borderColor.blue = borderRgb.blue;
+    	this.borderColor = ColorHelpers.createBorderColor(backgroundColor);
     }
   }
 
@@ -1002,12 +994,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
   
   @Override
-  public String getTextColor() {
-  	return ColorSelections.rgb2hex(textColor.red, textColor.green, textColor.blue);
-  }
-  
-  @Override
-  public Color getTextColorAsColor() {
+  public Color getTextColor() {
     return textColor;
   }
 
@@ -1274,12 +1261,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     if (selected) {
       setHighlightColor(DEFAULT_SELECTION_COLOR);
     } else {
-      setBorderColor(getBorderColorAsColor());
+      setBorderColor(getBorderColor());
     }
 	}
 
   @Override
-	public void setHighlightColor(String color) {
+	public void setHighlightColor(Color color) {
 	}
 
   // @Override
@@ -1297,12 +1284,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   @Override
   public void setBorderColor(Color color) {
     borderColor.copy(color);
-    if (color.opacity == 0) {
-      this.borderWebColor = "transparent";
-    } else {
-      this.borderWebColor = color.toHexString();
-    }
-    setHighlightColor(borderWebColor);
+    setHighlightColor(color);
     applyAnnotationColors();
   }
 
@@ -1427,18 +1409,13 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     return false;
   }
 	
-	public String getBorderColor() {
-		return borderWebColor;
-	}
-	
-	@Override
-	public Color getBorderColorAsColor() {
-	  return borderColor;
+	public Color getBorderColor() {
+		return borderColor;
 	}
 	
   public void setHighlight(boolean highlight) {
   	this.highlightOn = highlight;
-    String color = borderWebColor;
+    Color color = borderColor;
     if (highlight) {
       color = HIGHLIGHT_COLOR;
     }
@@ -1578,11 +1555,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
    */
   @Override
   public boolean usesSchemeDefaultColors(ElementColorScheme colorScheme) {
-    if (!this.getDefaultTextColor(colorScheme).equals(this.getTextColorAsColor())) {
+    if (!this.getDefaultTextColor(colorScheme).equals(this.getTextColor())) {
       return false;
     }
     
-    if (!this.getDefaultBorderColor(colorScheme).equals(this.getBorderColorAsColor())) {
+    if (!this.getDefaultBorderColor(colorScheme).equals(this.getBorderColor())) {
       return false;
     }
     if (!(this.getDefaultBackgroundColor(colorScheme).equals(this.getBackgroundColorAsColor()))) {
@@ -1596,14 +1573,14 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     // check text default color only background opacity is transparent
     // othwerwise if there is a background fill, then text color is set based on background color
     // or set as custom
-    if (backgroundColor.opacity == 0 && this.getDefaultTextColor(colorScheme).equals(this.getTextColorAsColor())) {
+    if (backgroundColor.opacity == 0 && this.getDefaultTextColor(colorScheme).equals(this.getTextColor())) {
       return true;
     }
     return false; 
   }
   @Override
   public boolean usesSchemeDefaultBorderColor(ElementColorScheme colorScheme) {
-    if (this.getDefaultBorderColor(colorScheme).equals(this.getBorderColorAsColor())) {
+    if (this.getDefaultBorderColor(colorScheme).equals(this.getBorderColor())) {
       return true;
     }
     return false;
@@ -1713,7 +1690,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   public void applyAnnotationColors() {
     if (getDiagramItem() != null && getDiagramItem().isAnnotation() && supportsAnnotationColors()) {
-      setHighlightColor(Theme.getCommentThreadColorScheme().getBackgroundColor().toHexString());
+      setHighlightColor(Theme.getCommentThreadColorScheme().getBackgroundColor());
     }
   }
 

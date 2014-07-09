@@ -300,8 +300,8 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
       return CommentThreadElement.this;
     }
 		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
+		public Color getTextColor() {
+			return textColor;
 		};
 
   };
@@ -539,7 +539,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
   }
 
   @Override
-	public void setHighlightColor(String color) {
+	public void setHighlightColor(Color color) {
 		boundary.setStroke(color);
 	}
   	

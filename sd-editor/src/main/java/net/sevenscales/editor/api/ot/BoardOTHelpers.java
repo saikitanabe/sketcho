@@ -28,12 +28,13 @@ import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.IRelationship;
+import net.sevenscales.editor.gfx.domain.Color;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 
 public class BoardOTHelpers {
-	public static final String HIGHLIGHT_COLOR = "00E000";
+	public static final Color HIGHLIGHT_COLOR = new Color(0x00, 0xE0, 0x00, 1);
 	private ISurfaceHandler surface;
 	private DiagramSearch diagramSearch;
 	private CommentFactory commentFactory;

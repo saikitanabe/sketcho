@@ -46,7 +46,10 @@ public enum ElementType {
 	WEB_BROWSER("w-browser"),
 	RECT("rect"),
 	FREEHAND2("freehand2"),
-	SWITCH("switch");
+	SWITCH("switch"),
+	ROUTER("router"),
+	DESKTOP("desktop"),
+	LAPTOP("laptop");
 
 	private String value;
 

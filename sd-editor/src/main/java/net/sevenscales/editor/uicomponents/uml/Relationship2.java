@@ -146,7 +146,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     private void createIfNull() {
       if (arrowStart == null) {
         arrowStart = IShapeFactory.Util.factory(parent.editable).createPolyline(parent.group, parent.arrowPoints);
-        arrowStart.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+        arrowStart.setStroke(Theme.getCurrentColorScheme().getBorderColor());
         arrowStart.setFill(255, 255, 255, 0);
         parent.shapes.add(arrowStart);
       }
@@ -164,7 +164,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       }
     }
 
-    void setStroke(String color) {
+    void setStroke(Color color) {
       createIfNullAndDirectedStart();
       if (arrowStart != null) {
         arrowStart.setStroke(color);
@@ -196,7 +196,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     public RelLine() {
       path = IShapeFactory.Util.factory(editable).createPath(group, null);
-      path.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+      path.setStroke(Theme.getCurrentColorScheme().getBorderColor());
       // do not fill polyline, because it will be selectable area and hides everything under it!
 //      polyline.setFill(150, 150, 150, 0.5);
       lineBackground = IShapeFactory.Util.factory(editable).createPath(group, null);
@@ -277,7 +277,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       return BezierHelpers.smooth(points);
     }
 
-    public void setStroke(String color) {
+    public void setStroke(Color color) {
       path.setStroke(color);
     }
 
@@ -1362,7 +1362,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     fireSizeChanged();
     
     // reapply border color to see dashed and solid line changes
-    setBorderColor(getBorderColorAsColor());
+    setBorderColor(getBorderColor());
     // applyAnnotationColors();
   }
 
@@ -1622,23 +1622,23 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     }
   }
 
-  private void fillInheritance(String color) {
+  private void fillInheritance(Color color) {
     if (info != null && info.isInheritance() && info.isFilled()) {
       // if solid then use board color
-      inheritance.setFill("#" + color);
+      inheritance.setFill(color);
     } else {
       // no fill => hide line under the shape
-      inheritance.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
+      inheritance.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
     }
   }
 
-  private void fillAggregate(String color) {
+  private void fillAggregate(Color color) {
     if (info != null && info.isAggregate() && info.isFilled()) {
       // if solid then use board color
-      aggregate.setFill("#" + color);
+      aggregate.setFill(color);
     } else {
       // no fill => hide line under the shape
-      aggregate.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
+      aggregate.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
     }
   }
 
@@ -1838,18 +1838,18 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	}
 	
 	@Override
-	public String getBorderColor() {
-		return Theme.getCurrentColorScheme().getBorderColor().toHexString();
+	public Color getBorderColor() {
+		return Theme.getCurrentColorScheme().getBorderColor();
 	}
 
 	@Override
 	public void restoreHighlighColor() {
-		setBorderColor(getBorderColorAsColor());
+		setBorderColor(getBorderColor());
     // applyAnnotationColors();
 	}
   
   @Override
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
   	relLine.setStroke(color);
     arrow.setStroke(color);
     arrowStartPolyline.setStroke(color);

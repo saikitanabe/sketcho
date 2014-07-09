@@ -290,7 +290,7 @@ public class ChildTextElement extends TextElement implements IChildElement {
 	@Override
   public boolean usesSchemeDefaultTextColor(Theme.ElementColorScheme colorScheme) {
     if (colorScheme.getBoardBackgroundColor().equals(backgroundColor) && 
-    	  getDefaultTextColor(colorScheme).equals(getTextColorAsColor())) {
+    	  getDefaultTextColor(colorScheme).equals(getTextColor())) {
       return true;
     }
     return false; 

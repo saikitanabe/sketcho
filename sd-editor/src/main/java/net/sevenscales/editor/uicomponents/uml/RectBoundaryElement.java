@@ -138,8 +138,8 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
     };
     
 		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
+		public Color getTextColor() {
+			return textColor;
 		};
 
   };
@@ -318,7 +318,7 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
   }
 
   @Override
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
     rectSurface.setStroke(color);
     headerBackground.setStroke(color);
   }

@@ -56,7 +56,7 @@ public class TextElement extends AbstractDiagramItem implements
 		attachBoundary = IShapeFactory.Util.factory(editable)
 				.createRectangle(group);
 		// attachBoundary.setFill(255, 255, 255, 0.1);
-		attachBoundary.setFill("transparent");
+		attachBoundary.setFill(new Color(0, 0, 0, 0));
 
 		// child text element prints background as well
 		// so should text element do later
@@ -154,8 +154,8 @@ public class TextElement extends AbstractDiagramItem implements
 				}
 
 				@Override
-				public String getTextColorAsString() {
-					return getTextColorAsColor().toHexStringWithHash();
+				public Color getTextColor() {
+					return TextElement.this.getTextColor();
 				}
 
 			};
@@ -310,11 +310,11 @@ public class TextElement extends AbstractDiagramItem implements
 
 	}
 
-	public void setHighlightColor(String color) {
+	public void setHighlightColor(Color color) {
 		if (!color.equals(BoardOTHelpers.HIGHLIGHT_COLOR)
 				&& !color.equals(DEFAULT_SELECTION_COLOR)) {
 			// text element default border color is transparent
-			color = "transparent";
+			color = new Color(0, 0, 0, 0);
 		}
 
 		attachBoundary.setStroke(color);

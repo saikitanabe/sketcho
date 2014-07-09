@@ -17,6 +17,7 @@ import net.sevenscales.editor.gfx.base.GraphicsTouchStartHandler;
 import net.sevenscales.editor.gfx.domain.ICircle;
 import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 
 public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpHandler, IGlobalElement {
@@ -43,8 +44,8 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 	
 	private static final int cornerwidth = 10;
 	
-	private static final String DARK_LINE = "222222";
-	private static final String WHITE_LINE = "dddddd";
+	private static final Color DARK_LINE = new Color(0x22, 0x22, 0x22, 1);
+	private static final Color WHITE_LINE = new Color(0xdd, 0xdd, 0xdd, 1);
 	
 	public static ResizeHelpers createResizeHelpers(ISurfaceHandler surface) {
 		ResizeHelpers result = instances.get(surface);
@@ -163,7 +164,7 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 		});
 	}
 	
-	private ILine createLine(String strokeColor, double strokeWidth) {
+	private ILine createLine(Color strokeColor, double strokeWidth) {
 		ILine line = IShapeFactory.Util.factory(true).createLine(surface.getInteractionLayer());
 		line.setStyle(ILine.SOLID);
 		line.setStrokeWidth(strokeWidth);

@@ -67,7 +67,7 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
     
     path = IShapeFactory.Util.factory(editable).createPath(group, pathTransformer);
 //  path = IShapeFactory.Util.factory(editable).createPolyline(group);
-	  path.setStroke(borderWebColor);
+	  path.setStroke(borderColor);
 	  path.setStrokeWidth(STROKE_WIDTH);
 	  path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 
@@ -186,8 +186,8 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
     };
     
 		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
+		public Color getTextColor() {
+			return textColor;
 		};
 
   };
@@ -364,7 +364,7 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
   }
   
   @Override
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
 		path.setStroke(color);
 	  path.setAttribute("stroke-linecap", "square");
 	  path.setAttribute("stroke-linejoin", "round");

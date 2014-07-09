@@ -33,6 +33,8 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.gfx.domain.Point;
+import net.sevenscales.editor.gfx.domain.Color;
+
 
 public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseMoveHandler, 
 																					GraphicsTouchMoveHandler, GraphicsTouchEndHandler, 
@@ -58,7 +60,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	private boolean someElementIsDragged;
 	private boolean freehandModeOn;
 
-	private static final String ON_COLOR = "#777777";
+	private static final Color ON_COLOR = new Color(0x77, 0x77, 0x77, 1);
 	private boolean resizeOn;
 	
 	private static Map<ISurfaceHandler, IConnectionHelpers> instances;
@@ -350,9 +352,9 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 
 	private ConnectionHandle createCombinedConnectionHandle(ICircle visibleHandle) {
 	  ICircle connectionHandle = IShapeFactory.Util.factory(true).createCircle(group);
-	  connectionHandle.setStroke("transparent");
+	  connectionHandle.setStroke(new Color(0, 0, 0, 0));
 //	  connectionHandle.setFill(200, 200, 200, 0.6);
-	  connectionHandle.setFill("transparent");
+	  connectionHandle.setFill(new Color(0, 0, 0, 0));
 		final ConnectionHandle result = new ConnectionHandle(visibleHandle, connectionHandle);
 		
 		highlightConnectionHandleOnMouseEvents(result);

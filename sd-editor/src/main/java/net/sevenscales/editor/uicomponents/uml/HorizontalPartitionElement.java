@@ -141,8 +141,8 @@ public class HorizontalPartitionElement extends AbstractDiagramItem implements S
     };
     
 		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
+		public Color getTextColor() {
+			return textColor;
 		};
 
   };
@@ -310,7 +310,7 @@ public class HorizontalPartitionElement extends AbstractDiagramItem implements S
   }
 
   @Override
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
     rectSurface.setStroke(color);
     headerBackground.setStroke(color);
   }

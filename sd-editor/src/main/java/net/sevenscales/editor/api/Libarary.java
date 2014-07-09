@@ -357,8 +357,13 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
       {
         LibraryShapes.get(ElementType.IPHONE),
         LibraryShapes.get(ElementType.WEB_BROWSER),
-        LibraryShapes.get(ElementType.RECT),
-        LibraryShapes.get(ElementType.SWITCH)
+        LibraryShapes.get(ElementType.RECT)
+      },
+      {
+        LibraryShapes.get(ElementType.SWITCH),
+        LibraryShapes.get(ElementType.ROUTER),
+        LibraryShapes.get(ElementType.DESKTOP),
+        LibraryShapes.get(ElementType.LAPTOP),
       }
     };
 

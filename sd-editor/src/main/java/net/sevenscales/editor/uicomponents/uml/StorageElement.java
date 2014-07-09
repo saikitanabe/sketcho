@@ -83,7 +83,7 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
 		rightLine.setStrokeWidth(STROKE_WIDTH);
 		
     background = IShapeFactory.Util.factory(editable).createRectangle(group);
-    background.setFill("transparent");
+    background.setFill(new Color(0, 0, 0, 0));
     addEvents(background);
 		
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
@@ -210,8 +210,8 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
     };
     
 		@Override
-		public String getTextColorAsString() {
-			return "#" + textColor.toHexString();
+		public Color getTextColor() {
+			return textColor;
 		};
 
   };
@@ -340,7 +340,7 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
 	}
   
   @Override
-	public void setHighlightColor(String color) {
+	public void setHighlightColor(Color color) {
 		topCircle.setStroke(color);
 		bottomCircle.setStroke(color);
 		leftLine.setStroke(color);

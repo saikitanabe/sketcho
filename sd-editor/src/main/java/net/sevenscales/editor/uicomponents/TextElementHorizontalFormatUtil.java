@@ -137,7 +137,7 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
     IText text = IShapeFactory.Util.factory(editable).createText(textGroup, true);
     text.setFontFamily(IText.SANS);
 //    hasTextElement.addShape(text);
-    text.setFill(hasTextElement.getTextColorAsString());
+    text.setFill(hasTextElement.getTextColor());
     text.setAttribute("xml:space", "preserve");
 
 

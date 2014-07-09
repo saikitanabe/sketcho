@@ -235,7 +235,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     return createHandle(x, y, radius, selectionRadius, AbstractDiagramItem.DEFAULT_SELECTION_COLOR, setDeleteHandler);
   }
 
-  private CircleElement createHandle(int x, int y, int radius, int selectionRadius, String color, boolean setDeleteHandler) {
+  private CircleElement createHandle(int x, int y, int radius, int selectionRadius, Color color, boolean setDeleteHandler) {
     boolean editable = true;
     CircleElement h = new CircleElement(surface.getInteractionLayer(), surface, this, x, y, radius, selectionRadius, editable, new DiagramItemDTO());
     h.setStroke(color);

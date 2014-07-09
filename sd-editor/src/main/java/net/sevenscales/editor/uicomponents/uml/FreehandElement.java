@@ -62,7 +62,7 @@ public class FreehandElement extends AbstractDiagramItem {
     group.setAttribute("cursor", "default");
 
     path = IShapeFactory.Util.factory(editable).createPath(group, pathTransformer);
-    path.setStroke(borderWebColor);
+    path.setStroke(borderColor);
     path.setStrokeWidth(FREEHAND_STROKE_WIDTH);
     path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     
@@ -297,7 +297,7 @@ public class FreehandElement extends AbstractDiagramItem {
 		return result;
 	}
 	
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
 		path.setStroke(color);
   }
   

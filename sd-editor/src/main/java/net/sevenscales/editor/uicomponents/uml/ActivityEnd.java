@@ -60,7 +60,7 @@ public class ActivityEnd extends AbstractDiagramItem implements SupportsRectangl
 		visible.setFill(0, 0, 0, 0);
 		
 		boundary = IShapeFactory.Util.factory(editable).createCircle(group);
-		boundary.setStroke("transparent");
+		boundary.setStroke(new Color(0, 0, 0, 0));
 		boundary.setFill(200, 200, 200, 0);
 		
 //		resizeElement = IShapeFactory.Util.factory(editable).createRectangle(group);
@@ -134,7 +134,7 @@ public class ActivityEnd extends AbstractDiagramItem implements SupportsRectangl
 //    relationshipHandle.setShape(left+width/2, top);
 	}
 	
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
     visible.setStroke(color);
   }
   

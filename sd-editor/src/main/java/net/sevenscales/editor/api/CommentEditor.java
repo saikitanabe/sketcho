@@ -267,7 +267,7 @@ class CommentEditor  extends Composite {
 			commentArea.getStyle().setWidth(diagram.getWidth(), Unit.PX);
 			textArea.getElement().getStyle().setWidth(diagram.getWidth() - 30, Unit.PX);
 			textArea.getElement().getStyle().setHeight(50, Unit.PX);
-			textArea.getElement().getStyle().setColor("#" + diagram.getTextColorAsColor().toHexString());
+			textArea.getElement().getStyle().setColor("#" + diagram.getTextColor().toHexString());
 			showCommentArea();
 
 			// if comment thread should be increased dyncamically this is a working

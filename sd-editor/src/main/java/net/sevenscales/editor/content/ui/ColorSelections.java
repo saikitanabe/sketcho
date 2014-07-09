@@ -174,9 +174,8 @@ public class ColorSelections extends Composite {
 				color.setBackgroundColor(currentColor.getBackgroundColor().create());
 				color.setTextColor(currentColor.getTextColor().create());
 				// set border color based on background
-				String borderHex = ColorHelpers.createBorderColor(currentColor.getBackgroundColor());
-				Rgb borderRgb = ColorHelpers.toRgb(borderHex);
-				color.setBorderColor(new Color(borderRgb.red, borderRgb.green, borderRgb.blue, 1));
+				Color borderColor = ColorHelpers.createBorderColor(currentColor.getBackgroundColor());
+				color.setBorderColor(borderColor);
 				break;
 			case TEXT:
 				color.setTextColor(currentColor.getTextColor().create());

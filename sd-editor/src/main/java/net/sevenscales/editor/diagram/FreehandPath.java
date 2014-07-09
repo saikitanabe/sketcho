@@ -22,6 +22,7 @@ import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.shape.FreehandShape;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
@@ -46,7 +47,7 @@ class FreehandPath {
     polyline = IShapeFactory.Util.factory(true).createPolyline(group);
 
     polyline.setVisibility(true);
-    polyline.setStroke(Theme.getCurrentColorScheme().getBorderColor().toHexString());
+    polyline.setStroke(Theme.getCurrentColorScheme().getBorderColor());
     polyline.setStrokeWidth(FreehandElement.FREEHAND_STROKE_WIDTH);
   }
 
@@ -63,9 +64,9 @@ class FreehandPath {
     return null;
   }
 
-  void changeColor(String color) {
+  void changeColor(Color color) {
     if (color == null) {
-      color = Theme.getCurrentColorScheme().getBorderColor().toHexString();
+      color = Theme.getCurrentColorScheme().getBorderColor();
     }
     polyline.setStroke(color);
   }

@@ -44,7 +44,6 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 	public static final int RADIUS_SELECTION = 25;
 	
   private ILine line;
-  private String color = "#000000";
   private ILifeLineEditor lifeLineEditor;
   private ISurfaceHandler surface;
   private Point currentDragStartPoint = new Point();
@@ -76,7 +75,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 
 		line = IShapeFactory.Util.factory(editable).createLine(getGroup());
 //		line.setShape(x1, y1, x2, y2);
-		line.setStroke(borderWebColor);
+		line.setStroke(borderColor);
 		line.setStyle(ILine.DASHED);
 		
 		addEvents(line);
@@ -342,8 +341,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 //	@Override
 	public void select() {
 	  super.select();
-	  color = "#1D00FF";
-	  setHighlightColor(color);
+	  setHighlightColor(DEFAULT_SELECTION_COLOR);
 
 	  // HACK: when background is moved lineShape is no longer
 	  // in correct position. Probably it lineShape should be removed
@@ -360,8 +358,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 	//	@Override
 	public void unselect() {
 	  super.unselect();
-    color = borderWebColor;
-    setHighlightColor(color);
+    setHighlightColor(borderColor);
     lifeLineEditor.hide(this);
 	}
 	
@@ -480,7 +477,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
   }
   
   @Override
-  public void setHighlightColor(String color) {
+  public void setHighlightColor(Color color) {
   	super.setHighlightColor(color);
 	  line.setStroke(color);
   }
@@ -543,10 +540,6 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
     return line;
   }
 	
-	public String getColor() {
-    return color;
-  }
-
   @Override
   public boolean isSequenceElement() {
     return true;

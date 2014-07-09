@@ -17,6 +17,7 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.uicomponents.CircleElement;
 
 
@@ -171,7 +172,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
   		// lazy intialization
       group = IShapeFactory.Util.factory(true).createGroup(surface.getSurface());
       lassoRectangle = IShapeFactory.Util.factory(true).createRectangle(group);
-      lassoRectangle.setStroke("#f0f0f0");
+      lassoRectangle.setStroke(new Color(0xf0, 0xf0, 0xf0, 1));
       lassoRectangle.setFill(0, 0, 0, 0.1);
       lassoRectangle.setVisibility(false);
   	}
