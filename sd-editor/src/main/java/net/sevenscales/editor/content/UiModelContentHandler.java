@@ -28,6 +28,7 @@ import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.diagram.utils.CommentFactory;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
+import net.sevenscales.editor.uicomponents.CircleElement;
 
 public class UiModelContentHandler implements SurfaceLoadedEventListener {
 	private static final SLogger logger = SLogger.createLogger(UiModelContentHandler.class);
@@ -146,6 +147,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     int i = 0;
     boolean atLeastOneAnnotation = false;
     editorContext.set(EditorProperty.HOLD_ARROW_DRAWING, true);
+
     for (IDiagramItem item : items) {
     	// client id cannot clash because single user environment and done only for 
     	// legacy Confluence boards that didn't use client id for diagram items.
@@ -181,6 +183,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     editorContext.set(EditorProperty.HOLD_ARROW_DRAWING, false);
     reattachHelpers.reattachRelationshipsAndDraw();
 
+    setInitialBoardPosition(surface);
    // small hack to send package elements to background on load
    // could be replaced with static layering values for container elements
    // e.g. package element should be on background always
@@ -196,6 +199,21 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
    
    surface.getMouseDiagramManager().getSelectionHandler().selectionOn(false);
    surface.unsuspendRedrawAll();
+  }
+
+  private void setInitialBoardPosition(ISurfaceHandler surface) {
+    int left = Integer.MAX_VALUE;
+    int top = Integer.MAX_VALUE;
+
+  	for (Diagram d : surface.getDiagrams()) {
+  		if (!(d instanceof CircleElement)) {
+  			left = Math.min(left, d.getLeft());
+  			top = Math.min(top, d.getTop());
+  		}
+  	}
+  	if (left != Integer.MAX_VALUE && top != Integer.MAX_VALUE) {
+	  	surface.getRootLayer().setTransform(-left + 100, -top + 100);
+  	}
   }
 
   private void _addDiagram(Diagram diagram, ISurfaceHandler surface, ReattachHelpers reattachHelpers, CommentFactory commentFactory, boolean asSelected) {
