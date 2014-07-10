@@ -17,6 +17,7 @@ abstract class Shape extends Graphics implements IShape {
 	private int svgdy;
 	private boolean themeSupported = true;
 	private boolean fillAsBorderColor = false;
+	private boolean fillAsBoardBackgroundColor = false;
 	
 	final public void setStroke(Color color) {
 		if (visibility) {
@@ -497,6 +498,14 @@ abstract class Shape extends Graphics implements IShape {
   }
   public boolean isFillAsBorderColor() {
   	return fillAsBorderColor;
+  }
+
+	public void setFillAsBoardBackgroundColor(boolean value) {
+		this.fillAsBoardBackgroundColor = value;
+	}
+
+  public boolean isFillAsBoardBackgroundColor() {
+  	return fillAsBoardBackgroundColor;
   }
 	
 }

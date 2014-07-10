@@ -66,4 +66,6 @@ public interface IShape extends IGraphics {
   */
   void setFillAsBorderColor(boolean value);
   boolean isFillAsBorderColor();
+  void setFillAsBoardBackgroundColor(boolean value);
+  boolean isFillAsBoardBackgroundColor();
 }

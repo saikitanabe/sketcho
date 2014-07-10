@@ -190,45 +190,45 @@ public class Shapes {
 
 		shapes.put(ElementType.SERVER2, new Group(new Proto[]{
 			new Proto("m 3.644492,0 17.71102,0 c 2.019047,0 3.64449,1.6254 3.64449,3.6445 l 0,42.711 c 0,2.019 -1.625443,3.6445 -3.644490,3.644500 l -17.711020,0 c -2.019047,0 -3.644490,-1.6255 -3.644490,-3.6445 l 0,-42.711 c 0,-2.0191 1.625443,-3.644500 3.644490,-3.644500 z ", "fill:bordercolor;"),
-			new Proto("m 1.976496,2.489200 21.047013,0 0,5.8982 -21.047013,0 z ", "fill:#fefefe;stroke-color:#fefefe;fill-opacity:1;"),
-			new Proto("m 1.976496,9.409100 21.047013,0 0,5.8983 -21.047013,0 z ", "fill:#fefefe;stroke-color:#fefefe;fill-opacity:1;"),
-			new Proto("m 1.976496,16.329000 21.047013,0 0,5.8983 -21.047013,0 z ", "fill:#fefefe;stroke-color:#fefefe;fill-opacity:1;"),
-			new Proto("m 14.901691,30.034619 a 2.401708,2.4329 0 1 1 -4.803417,0 2.401708,2.432900 0 1 1 4.803417,0 z ", "fill:#fefefe;stroke-color:#fefefe;fill-opacity:1;")
+			new Proto("m 1.976496,2.489200 21.047013,0 0,5.8982 -21.047013,0 z ", "fill:bgcolor;stroke-color:#fefefe;fill-opacity:1;"),
+			new Proto("m 1.976496,9.409100 21.047013,0 0,5.8983 -21.047013,0 z ", "fill:bgcolor;stroke-color:#fefefe;fill-opacity:1;"),
+			new Proto("m 1.976496,16.329000 21.047013,0 0,5.8983 -21.047013,0 z ", "fill:bgcolor;stroke-color:#fefefe;fill-opacity:1;"),
+			new Proto("m 14.901691,30.034619 a 2.401708,2.4329 0 1 1 -4.803417,0 2.401708,2.432900 0 1 1 4.803417,0 z ", "fill:bgcolor;stroke-color:#fefefe;fill-opacity:1;")
 		}, 25, 50));
 
 		shapes.put(ElementType.TABLET_UP, new Group(new Proto[]{
 			new Proto("m 4.39569,0.6193 31.2086,0 c 2.0921,0 3.77635,1.6843 3.77635,3.7764 l 0,41.2087 c 0,2.092 -1.68425,3.7763 -3.77635,3.7763 l -31.2086,0 c -2.0921,0 -3.77635,-1.6843 -3.77635,-3.7763 l 0,-41.2087 c 0,-2.0921 1.68425,-3.7764 3.77635,-3.7764 z ", "fill:bordercolor;"),
-			new Proto("m 21,46.9324 c 0,0.5523 -0.447716,1 -1,1 -0.552285,0 -1,-0.4477 -1,-1 0,-0.5523 0.447715,-1 1,-1 0.552284,0 1,0.4477 1,1 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 3.00791,5.4139 33.9841,0 0,38.7484 -33.9841,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;")
+			new Proto("m 21,46.9324 c 0,0.5523 -0.447716,1 -1,1 -0.552285,0 -1,-0.4477 -1,-1 0,-0.5523 0.447715,-1 1,-1 0.552284,0 1,0.4477 1,1 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 3.00791,5.4139 33.9841,0 0,38.7484 -33.9841,0 z ", "fill:bgcolor;stroke:none;")
 		}, 40, 50));
 
 		shapes.put(ElementType.TABLET_HORIZONTAL, new Group(new Proto[]{
 			new Proto("m 49.4205,31.1238 0,-27.2479 c 0,-1.8265 -1.68706,-3.2969 -3.78259,-3.2969 l -41.2762,0 c -2.09543,0 -3.78249,1.4704 -3.78249,3.2969 l 0,27.2479 c 0,1.8265 1.68706,3.297 3.78249,3.297 l 41.2762,0 c 2.09553,0 3.78259,-1.4705 3.78259,-3.297 z ", "fill:bordercolor;"),
-			new Proto("m 3.03149,16.6267 c -0.553205,0 -1.00164,0.3909 -1.00164,0.8732 0,0.4822 0.448434,0.8731 1.00164,0.8731 0.553205,0 1.00164,-0.3909 1.00164,-0.8731 0,-0.4823 -0.448434,-0.8732 -1.00164,-0.8732 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 44.618,32.3354 0,-29.671 -38.8119,0 0,29.671 z ", "fill:#fefefe;stroke:none;fill-opacity:1;")
+			new Proto("m 3.03149,16.6267 c -0.553205,0 -1.00164,0.3909 -1.00164,0.8732 0,0.4822 0.448434,0.8731 1.00164,0.8731 0.553205,0 1.00164,-0.3909 1.00164,-0.8731 0,-0.4823 -0.448434,-0.8732 -1.00164,-0.8732 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 44.618,32.3354 0,-29.671 -38.8119,0 0,29.671 z ", "fill:bgcolor;stroke:none;")
 		}, 50, 35));
 
 		shapes.put(ElementType.OLD_PHONE, new Group(new Proto[]{
 			new Proto("m 3.04036,0 17.9193,0 c 1.68436,0 3.04036,1.356 3.04036,3.0403 l 0,43.9193 c 0,1.6844 -1.356,3.0404 -3.04036,3.0404 l -17.9193,0 c -1.68436,0 -3.04036,-1.356 -3.04036,-3.0404 l 0,-43.9193 c 0,-1.6843 1.356,-3.0403 3.04036,-3.0403 z ", "fill:bordercolor;"),
-			new Proto("m 2.42553,2.3136 19.1489,0 0,23.9074 -19.1489,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 9.49127,28.3738 5.04255,0 0,4.82 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 16.6208,29.5627 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 2.3617,29.5627 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 2.3617,35.604 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 16.6208,35.604 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 9.49127,40.1476 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 16.6208,40.1476 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 2.3617,40.1476 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 9.49127,35.604 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 2.3617,44.6909 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 9.49127,44.6909 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 16.6208,44.6909 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;")
+			new Proto("m 2.42553,2.3136 19.1489,0 0,23.9074 -19.1489,0 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 9.49127,28.3738 5.04255,0 0,4.82 -5.04255,0 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 16.6208,29.5627 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 2.3617,29.5627 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 2.3617,35.604 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 16.6208,35.604 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 9.49127,40.1476 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 16.6208,40.1476 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 2.3617,40.1476 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 9.49127,35.604 5.04255,0 0,2.4421 -5.04255,0 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 2.3617,44.6909 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 9.49127,44.6909 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 16.6208,44.6909 5.04255,0 0,2.4422 -5.04255,0 z ", "fill:bgcolor;stroke:none;")
 		}, 24, 50));
 
 		shapes.put(ElementType.ANDROID, new Group(new Proto[]{
 			new Proto("m 5.77398,0 14.452,0 c 3.19878,0 5.77398,2.5752 5.77398,5.774 l 0,38.452 c 0,3.1988 -2.57519,5.774 -5.77398,5.774 l -14.452,0 c -3.19878,0 -5.77398,-2.5752 -5.77398,-5.774 l 0,-38.452 c 0,-3.1988 2.57519,-5.774 5.77398,-5.774 z ", "fill:bordercolor;"),
-			new Proto("m 2.1572,6.576 21.6856,0 0,36.848 -21.6856,0 z ", "fill:#fefefe;stroke:none;fill-opacity:1;"),
-			new Proto("m 15.1274,46.6587 c 0,0.515806 -0.952467,0.93395 -2.12739,0.93395 -1.17493,0 -2.1274,-0.418144 -2.1274,-0.93395 0,-0.515808 0.952467,-0.93395 2.1274,-0.93395 1.17493,0 2.12739,0.418142 2.12739,0.93395 z ", "fill:#fefefe;stroke:none;fill-opacity:1;")
+			new Proto("m 2.1572,6.576 21.6856,0 0,36.848 -21.6856,0 z ", "fill:bgcolor;stroke:none;"),
+			new Proto("m 15.1274,46.6587 c 0,0.515806 -0.952467,0.93395 -2.12739,0.93395 -1.17493,0 -2.1274,-0.418144 -2.1274,-0.93395 0,-0.515808 0.952467,-0.93395 2.1274,-0.93395 1.17493,0 2.12739,0.418142 2.12739,0.93395 z ", "fill:bgcolor;stroke:none;")
 		}, 26, 50));
 
 		shapes.put(ElementType.LIGHTBULB, new Group(new Proto[]{

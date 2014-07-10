@@ -66,6 +66,12 @@ class SvgBase {
 		if (diagram.usesSchemeDefaultBackgroundColor(Theme.getCurrentColorScheme())) {
 			applyDefaultBackgroundColors(params);
 		}
+
+		if (shape.isFillAsBorderColor() && diagram.usesSchemeDefaultBorderColor(Theme.getCurrentColorScheme())) {
+			params.put(FILL_TEMPLATE, Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toHexStringWithHash());
+		} else if (shape.isFillAsBoardBackgroundColor()) {
+			params.put(FILL_TEMPLATE, ThemeName.PAPER.getBoardBackgroundColor().toHexStringWithHash());
+		}
 	}
 
 	public static String parse(IShape shape, String template, Map<String,String> params, Diagram diagram) {

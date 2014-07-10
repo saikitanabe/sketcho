@@ -162,10 +162,13 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	private String handleStyle(IPath path, String style) {
-		if (style.contains("fill:bordercolor")) {
+		if (style.contains("fill:bordercolor;")) {
 			path.setFillAsBorderColor(true);
 			// need to clear or will contain invalid fill valud since bordercolor is not hex code or pre color code
-			style = style.replace("fill:bordercolor", "");
+			style = style.replace("fill:bordercolor;", "");
+		} else if (style.contains("fill:bgcolor;")) {
+			path.setFillAsBoardBackgroundColor(true);
+			style = style.replace("fill:bgcolor;", "");
 		}
 		return style;
 	}
@@ -383,7 +386,9 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 			path.setStroke(color);
 			if (path.isFillAsBorderColor()) {
 				path.setFill(color);
-			}
+			} else if (path.isFillAsBoardBackgroundColor()) {
+  			path.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
+  		}
   	}
 		// background.setStroke(color);
   }
@@ -392,12 +397,9 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   public void setBackgroundColor(int red, int green, int blue, double opacity) {
   	super.setBackgroundColor(red, green, blue, opacity);
   	for (IPath path : paths) {
-  		if (!path.isFillAsBorderColor()) {
+  		if (!path.isFillAsBorderColor() && !path.isFillAsBoardBackgroundColor()) {
 		    path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   		}
-	    // if (path.isFillAsBorderColor()) {
-	    // 	path.setFill(color);
-	    // }
   	}
   }
 
