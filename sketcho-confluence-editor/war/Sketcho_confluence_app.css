@@ -681,17 +681,32 @@ td.colorSelection {
 [class^="context-icon-"],
 [class*=" context-icon-"] {
 	display: inline-block;
-	background-image: url(images/appicons-sprite4.png);
+	background-image: url(images/context-menu.png);
 	width: 15px;
 	height: 15px;
   background-size: cover;
   vertical-align: middle;
+}
+.context-icon-pro {
+  background-position: 0 180px;
 }
 .context-icon-pen-white2 {
 	background-position: 0 75px;
 }
 .context-icon-duplicate2 {
   background-position: 0 165px;
+}
+.context-icon-rectified-arrow {
+	background-position: 0 345px;
+}
+.context-icon-curved-arrow {
+	background-position: 0 360px;
+}
+.context-icon-reverse-connection2 {
+	background-position: 0 120px;
+}
+.context-icon-colorize2-black {
+	background-position: 0 330px;
 }
 .context-icon-colorize2 {
 	background-position: 0 135px;
@@ -744,6 +759,7 @@ td.colorSelection {
 .context-icon-upload {
 	background-position: 0 315px;
 }
+
 
 
 [class ^="arrow-icon-"],[class *=" arrow-icon"] {

@@ -72,7 +72,13 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     initDefaults();
   }
 
-  public static RelationshipHandleHelpers createConnectionHelpers(ISurfaceHandler surface, Relationship2 parentRelationship) {
+  public static RelationshipHandleHelpers createConnectionHelpers(ISurfaceHandler surface, Relationship2 
+    parentRelationship) {
+    
+    if (!surface.getEditorContext().isEditable()) {
+      return null;
+    }
+
     RelationshipHandleHelpers result = instances.get(surface);
     if (result == null) {
       if (ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
@@ -587,11 +593,11 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   @Override
   public void release() {
     for (CircleElement h : handles) {
-      h.removeFromParent();
+      h.removeFromParentForce();
     }
     
     for (CircleElement b : bendHandles) {
-      b.removeFromParent();
+      b.removeFromParentForce();
     }
     
     parentRelationship = null;

@@ -98,6 +98,7 @@
 		<resource name="images/" type="download" location="images/" />
 		<parameters>
 			<parameter name="name" type="string" />
+			<parameter name="svg" type="boolean" />
 		</parameters>
 	</xhtml-macro>
 	<!-- <xhtml-macro name="sketcho-confluence" -->
@@ -163,8 +164,17 @@
 		<resource type="download" name="marked-svg.min.js" location="js/marked-svg.min.js">
 			<param name="batch" value="true" />
 		</resource>
+		<resource type="download" name="hammer.min.js" location="js/hammer.min.js">
+			<param name="batch" value="true" />
+		</resource>
 		<resource type="download" name="paper.min.js" location="js/paper.min.js">
 			<param name="batch" value="true" />
+		</resource>
+		<resource type="download" name="sketchboard.min.js" location="js/sketchboard.min.js">
+			<param name="batch" value="true" />
+		</resource>
+		<resource type="download" name="svg-viewer.js" location="js/svg-viewer.js">
+			<param name="batch" value="false" />
 		</resource>
 		<resource type="download" name="initsketcho.js" location="js/initsketcho.js">
 			<param name="batch" value="false" />

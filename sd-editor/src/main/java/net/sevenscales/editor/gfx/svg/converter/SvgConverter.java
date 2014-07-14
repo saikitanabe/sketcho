@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.safehtml.shared.UriUtils;
+import com.google.gwt.safehtml.shared.SafeUri;
+
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
@@ -105,35 +108,44 @@ public class SvgConverter {
   * If any elements are selected, export only those to svg.
   */
   private Diagram[] getDiagrams(ISurfaceHandler surfaceHandler) {
-    Set<Diagram> selected = surfaceHandler.getSelectionHandler().getSelectedItems();
-    if (onlySelected && selected.size() > 0) {
-      return SortHelpers.toArray(selected);
+    Diagram[] result = null;
+    if (onlySelected) {
+      Set<Diagram> selected = surfaceHandler.getSelectionHandler().getSelectedItems();
+      if (onlySelected && selected.size() > 0) {
+        result = SortHelpers.toArray(selected);
+      }
+    } else {
+      if (filter != null && filter.size() > 0) {
+        result = SortHelpers.toArray(surfaceHandler.getDiagrams(), filter);
+      } else {
+        result = SortHelpers.toArray(surfaceHandler.getDiagrams());
+      }
     }
 
-    Diagram[] result = null;
-    if (filter != null && filter.size() > 0) {
-      result = SortHelpers.toArray(surfaceHandler.getDiagrams(), filter);
-    } else {
-      result = SortHelpers.toArray(surfaceHandler.getDiagrams());
-    }
     return result;
   }
 
-  public SvgData convertToSvg(IDiagramContent content, ISurfaceHandler surfaceHandler) {
+  public SvgData convertToSvg(IDiagramContent content, ISurfaceHandler surfaceHandler, boolean fontToChange) {
   	EditorContext editorContext = surfaceHandler.getEditorContext();
     Diagram[] diagrams = getDiagrams(surfaceHandler);
     String items = "";
     
-    ResizeHelpers.createResizeHelpers(surfaceHandler).hideGlobalElement();
+    if (surfaceHandler.getEditorContext().isEditable()) {
+      ResizeHelpers.createResizeHelpers(surfaceHandler).hideGlobalElement();
+    }
     
     List<List<IShape>> shapes = new ArrayList<List<IShape>>();
     for (Diagram d : diagrams) {
       if (!(d instanceof CircleElement)) {
         d.toSvgStart();
-        d.unselect();
+        if (surfaceHandler.getEditorContext().isEditable()) {
+          d.unselect();
+        }
         shapes.clear();
         shapes.add(d.getElements());
 
+        // whole element can be used as link
+        items += linkStart(d);
         // all shapes are under group
         IGroup group = d.getGroup();
         if (d.getDiagramItem().isComment()) {
@@ -150,7 +162,7 @@ public class SvgConverter {
           items += groupStart(subgroup);
         }
 
-        items += toSvg(d, shapes, editorContext);
+        items += toSvg(d, shapes, editorContext, fontToChange);
 
         if (subgroup != null) {
           // close subgroup
@@ -160,9 +172,10 @@ public class SvgConverter {
         // text helper elements are not included in getElements
         List<List<IShape>> textElements = d.getTextElements();
         if (textElements != null) {
-          items += toSvg(d, textElements, editorContext);
+          items += toSvg(d, textElements, editorContext, fontToChange);
         }
         items += groupEnd();
+        items += linkEnd(d);
         d.toSvgEnd();
       }
     }
@@ -184,8 +197,27 @@ public class SvgConverter {
     result.width = outerright - outerleft;
     result.height = outerbottom-outertop;
 //    String result = svgStart + " x='"+outerleft+"'"+" y='"+outertop+"'"+ " width='"+outerright+"' height='"+outerbottom+"'"+svgStartClose;
-    result.svg = svgStart + " viewBox='"+outerleft+" "+outertop+" "+(outerright-outerleft)+" "+(outerbottom-outertop)+"'"+
-    								" width='" + width() + "' height='" + height() + "'"+svgStartClose;
+    if (fontToChange) {
+      result.svg = svgStart + " viewBox='"+outerleft+" "+outertop+" "+(outerright-outerleft)+" "+(outerbottom-outertop)+"'" + " width='" + width() + "' height='" + height() + "'" + svgStartClose;
+    } else {
+      // Confluence svg rendering directly no page
+      // neeed to scale according to widht provided for the diagram
+      // same logic as plain img has when it scales
+
+      // by default uses real width and height, no scaling
+      int viewBoxWidth = (outerright-outerleft);
+      int viewBoxHeight = (outerbottom-outertop);
+      double svgWidth = viewBoxWidth;
+      if (viewBoxWidth > content.getWidth()) {
+        // scale according to parent div width
+        svgWidth = content.getWidth();
+        double sizeFactorial = svgWidth / viewBoxWidth;
+        // scale height according to width factorial
+        viewBoxHeight *= sizeFactorial;
+      }
+      logger.debug("viewBoxWidth {} viewBoxHeight {}", viewBoxWidth, viewBoxHeight);
+      result.svg = svgStart + " viewBox='"+outerleft+" "+outertop+" " + viewBoxWidth + " " + viewBoxHeight + "'" + " width='" + svgWidth + "' height='" + viewBoxHeight + "'" + svgStartClose;
+    }
 //    result.svg = SafeHtmlUtils.htmlEscape(result.svg);
 //    String result = svgStart + " width='100%' height='100%'"+svgStartClose;
     result.svg += items;
@@ -224,7 +256,25 @@ public class SvgConverter {
     return "</g>";
   }
 
-	private String toSvg(Diagram d, List<List<IShape>> shapes, EditorContext editorContext) {
+  private String linkStart(Diagram d) {
+    String result = "";
+    if (d.hasLink()) {
+      // This could be user modified straight in attachment (on Confluence)
+      SafeUri url = UriUtils.fromString(d.getLink());
+      result += "<a xlink:href='" + url.asString() + "'>";
+    }
+    return result;
+  }
+
+  private String linkEnd(Diagram d) {
+    if (d.hasLink()) {
+      return "</a>";
+    } else {
+      return "";
+    }
+  }
+
+	private String toSvg(Diagram d, List<List<IShape>> shapes, EditorContext editorContext, boolean fontToChange) {
   	String result = "";
     if (d.isVisible()) {
   	  // don't set read only state, because might not be visible
@@ -252,7 +302,7 @@ public class SvgConverter {
 	      for (IShape s : line) {
 	        // convert to concrete svg shape with factory
 	        if (s.isVisible()) {
-	          String svg = SvgFactory.convert(s, 0, 0, editorContext, d);
+	          String svg = SvgFactory.convert(s, 0, 0, editorContext, d, fontToChange);
 	          result += svg;
 	        }
 	      }

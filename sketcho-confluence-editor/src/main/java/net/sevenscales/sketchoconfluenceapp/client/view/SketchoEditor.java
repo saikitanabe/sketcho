@@ -16,6 +16,7 @@ import net.sevenscales.editor.api.event.EditDiagramPropertiesEndedEventHandler;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
+import net.sevenscales.editor.api.SvgHandler;
 import net.sevenscales.editor.content.ContentSaveListener;
 import net.sevenscales.editor.content.Context;
 import net.sevenscales.editor.content.UiSketchoBoardEditContent;
@@ -32,6 +33,7 @@ import net.sevenscales.sketchoconfluenceapp.client.util.ot.Spinner;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -55,6 +57,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class SketchoEditor extends Composite implements Spinner {
 	private static SLogger logger = SLogger.createLogger(SketchoEditor.class);
+  static {
+    SLogger.addFilter(SketchoEditor.class);
+  }
 
 	// to calculate weather Confluence shortcut keys should be enabled or not
 	// editor is closed
@@ -132,7 +137,20 @@ public class SketchoEditor extends Composite implements Spinner {
   	configureContext(editorContext);
     initWidget(uiBinder.createAndBindUi(this));
     deck.showWidget(0);
+    init(this);
 	}
+
+  private native void init(SketchoEditor me)/*-{
+    $wnd.gwtModelToSvg = function(json, handler) {
+      me.@net.sevenscales.sketchoconfluenceapp.client.view.SketchoEditor::gwtModelToSvg(Lcom/google/gwt/core/client/JavaScriptObject;Lcom/google/gwt/core/client/JavaScriptObject;)(json, handler);
+    }
+  }-*/;
+
+  private void gwtModelToSvg(JavaScriptObject json, JavaScriptObject handler) {
+    logger.debug("gwtModelToSvg...");
+    SvgHandler svgHandler = new SvgHandler(json, handler);
+    // svgHandler.getSvg();
+  }
   
 	public void openSketch(String spaceId, Long pageId, String name, String selector, boolean editable) {
 		this.spaceId = spaceId;
@@ -243,8 +261,7 @@ public class SketchoEditor extends Composite implements Spinner {
                 		assert(content != null);
                 		// do not save if content has not changed
           	        SvgConverter sc = new SvgConverter(false);
-          	        SvgData svg = sc.convertToSvg((IDiagramContent) content,
-          	        		currentEditContent.getModelingPanel().getSurface());
+          	        SvgData svg = sc.convertToSvg((IDiagramContent) content, currentEditContent.getModelingPanel().getSurface(), true);
           	        DiagramContentFactory.store(pageId, name, (IDiagramContent) content, svg, new AsyncCallback<String>() {
           	        	@Override
           	        	public void onSuccess(String result) {
@@ -375,8 +392,13 @@ public class SketchoEditor extends Composite implements Spinner {
     boardHandler.clear();
 
     applyImageUrl();
+    notifyUpdated(name, selector);
     hideSpinner();
 	}
+
+  private native void notifyUpdated(String modelName, String className)/*-{
+    $wnd.sketchUpdated(modelName, className)
+  }-*/;
 	
   private void enableConfluenceShortCuts(boolean enable) {
 		System.out.println("numberOfEditorOpen simultaneously: " + numberOfEditorOpen);

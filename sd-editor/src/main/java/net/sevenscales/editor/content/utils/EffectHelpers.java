@@ -23,7 +23,7 @@ public class EffectHelpers {
 	}-*/;
 	
 	public static native void tooltipper()/*-{
-	  if (typeof $wnd.jq172 == "function") $wnd.jq172('.tooltipper').tooltip();
+	  if (typeof $wnd.jq172 == "function") $wnd.jq172('.tooltipper').tooltip({container:'body'});
 	  else if (typeof $wnd.jQuery == "function") $wnd.jQuery('.tooltipper').tooltip({container:'body'});
 	}-*/;
 

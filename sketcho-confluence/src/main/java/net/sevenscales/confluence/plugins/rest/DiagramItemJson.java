@@ -48,6 +48,8 @@ public class DiagramItemJson {
 	private Integer crc;
   @XmlElement(required = false, name = "a")
   private Integer a;
+  @XmlElement(required = false, name = "p")
+  private String p;
   @XmlElement(required = false, name = "r")
   private Integer r;
   @XmlElement(required = false, name = "uat")
@@ -127,6 +129,13 @@ public class DiagramItemJson {
 	public void setClientId(String clientId) {
 		this.clientId = clientId;
 	}
+
+	public String getP() {
+		return p;
+	}
+	public void setP(String p) {
+		this.p = p;
+	}
 	
 	public String getCd() {
 		return cd;
@@ -198,7 +207,8 @@ public class DiagramItemJson {
   							  new Long(getId()), 
   							  getClientId(), 
   							  getCd(),
-  							  links);
+  							  links,
+  							  getP());
   }
   
 	public static DiagramItemJson fromDTO(IDiagramItemRO from) {
@@ -215,6 +225,7 @@ public class DiagramItemJson {
 		result.setVersion(from.getVersion());
 		result.setId(from.getId());
 		result.setClientId(from.getClientId());
+		result.setP(from.getParentId());
 		result.setCd(from.getCustomData());
 
 		List<? extends IUrlLinkRO> links = from.getLinks();

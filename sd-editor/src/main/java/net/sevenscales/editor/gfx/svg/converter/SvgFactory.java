@@ -14,14 +14,14 @@ import net.sevenscales.editor.gfx.domain.IText;
 
 public class SvgFactory {
 
-  public static String convert(IShape s, int transformX, int transformY, EditorContext editorContext, Diagram diagram) {
+  public static String convert(IShape s, int transformX, int transformY, EditorContext editorContext, Diagram diagram, boolean fontToChange) {
     String result = "";
     if (s instanceof IRectangle) {
       IRectangle r = (IRectangle) s;
       result = SvgRect.svg(r, transformX, transformY, diagram);
     } else if (s instanceof IText) {
       IText t = (IText)s;
-      result = SvgText.svg(t, transformX, transformY, diagram);
+      result = SvgText.svg(t, transformX, transformY, diagram, fontToChange);
     } else if (s instanceof ILine) {
       ILine l = (ILine) s;
       result = SvgLine.svg(l, transformX, transformY, diagram);

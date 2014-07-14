@@ -3,6 +3,7 @@ package net.sevenscales.sketchoconfluenceapp.server.utils;
 import java.util.ArrayList;
 
 import com.atlassian.bandana.BandanaManager;
+import com.atlassian.confluence.pages.Attachment;
 import com.atlassian.confluence.setup.bandana.ConfluenceBandanaContext;
 import com.atlassian.spring.container.ContainerManager;
 
@@ -54,7 +55,7 @@ public class BandanaStore implements IStore {
     return entry.getImage();
   }
   
-  public String loadContent(Long pageId, String name) {
+  public String loadContent(Long pageId, String name, String ext) {
 //    Integer currentVersio = (Integer) bandanaManager.getValue(context, versionKey);
 //    if (currentVersio == null) {
 //      return null;
@@ -68,6 +69,10 @@ public class BandanaStore implements IStore {
     String versionKey = versionKey(pageId, name);
     StoreEntry entry = (StoreEntry) bandanaManager.getValue(context, versionKey);
     return entry.getDiagramContent();
+  }
+  
+  public String loadAttachment(Attachment a) {
+	  return null;
   }
 
   public String store(Long pageId, String name, StoreEntry entry) {

@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.ArrayList;
 
 import junit.framework.TestCase;
-
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.editor.utils.ElementTypeComparator;
 
 
 public class ElementTypeComparatorTest extends TestCase {

@@ -37,8 +37,18 @@
 #end
 
 #if ($editable)
-  <img src="$imgUrl" onclick="openSketch('$modelingSpace', '$pageId', '$modelName', '.$classname', '$editable')" class="skme-img $classname" />
+  #if ($svg)
+    <div class="sketcho-svg-viewer $svgClassName" data-model-name='$modelName' data-page-id='$pageId' data-class-name='$svgClassName'>
+    </div>
+  #else
+    <img src="$imgUrl" onclick="openSketch('$modelingSpace', '$pageId', '$modelName', '.$classname', '$editable')" class="skme-img $classname" />
+  #end
   <div onclick="openSketch('$modelingSpace', '$pageId', '$modelName', '.$classname', '$editable')" class="sketchboardme-link">Edit Diagram</div>
 #else 
-  <img class="skme-img" src="$imgUrl" />
+  #if ($svg)
+    <div class="sketcho-svg-viewer $svgClassName" data-model-name='$modelName' data-page-id='$pageId' data-class-name='$svgClassName'>
+    </div>
+  #else
+    <img class="skme-img" src="$imgUrl" />
+  #end
 #end

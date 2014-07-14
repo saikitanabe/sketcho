@@ -180,6 +180,11 @@ public class CircleElement extends AbstractDiagramItem {
   	}
   }
 
+  public void removeFromParentForce() {
+		// normal remove parent element
+		super.getOwnerComponent().removeFromParent();
+  }
+
   @Override
   public boolean changeRemoveToModify() {
     if (deleteHandler !=null) {

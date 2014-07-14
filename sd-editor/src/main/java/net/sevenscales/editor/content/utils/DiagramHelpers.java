@@ -13,8 +13,8 @@ import net.sevenscales.editor.diagram.utils.DiagramDisplayOrderList;
 import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.gfx.domain.IPath.PathTransformer;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
+import net.sevenscales.editor.utils.ElementTypeComparator;
 import net.sevenscales.editor.api.ActionType;
-import net.sevenscales.domain.utils.ElementTypeComparator;
 
 
 public class DiagramHelpers {

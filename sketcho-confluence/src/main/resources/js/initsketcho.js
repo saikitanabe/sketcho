@@ -5,6 +5,26 @@ var cancelStream = jq172(window).asEventStream('keydown').filter(function(e) {
 					 e.ctrlKey != 1 && e.metaKey != 1 && e.shiftKey != 1 && e.altKey != 1
 	})
 
+  window.shiftDownStream = jq172(window).asEventStream('keydown').filter(function(e) {
+    return e.keyCode == 16 && e.shiftKey == 1 && !isEditorOpen() && e.ctrlKey != 1 && e.metaKey != 1 && e.altKey != 1
+  })
+
+  window.shiftUpStream = jq172(window).asEventStream('keyup').filter(function(e) {
+    return e.keyCode == 16 && !isEditorOpen() && e.ctrlKey != 1 && e.metaKey != 1 && e.altKey != 1
+  })
+
+  window.changeFreehandColorStream = Bacon.fromBinder(function(sink) {
+    function push(event, data) {
+      sink(data)
+    }
+
+    $(document).on('showFreehandColorMenu', push)
+
+    return function() {
+      $(document).off('showFreehandColorMenu', push)
+    }
+  })
+
 	var newLibraryImageStream = Bacon.fromBinder(function(sink) {
     function push(event, data) {
       sink(data)
@@ -73,6 +93,7 @@ AJS.toInit(function () {
 	 		AJS.log("Configuring Sketchboard.Me dojo.js... loaded");
 	 		AJS.log("Configuring Sketchboard.Me dojo.js baseUrl " + dojo.config.baseUrl + "...");
 	 		require(["dojox/gfx", "dojox/color"]);
+      svgViewer.loadAll()
 			AJS.log("Configuring Sketchboard.Me... done");
 	 	}
  	};

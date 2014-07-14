@@ -1,10 +1,11 @@
-package net.sevenscales.domain.utils;
+package net.sevenscales.editor.utils;
 
 import java.util.Comparator;
 
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.utils.DiagramItemIdComparator;
 
 
 public class ElementTypeComparator {

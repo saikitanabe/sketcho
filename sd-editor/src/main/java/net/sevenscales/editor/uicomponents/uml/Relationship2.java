@@ -971,7 +971,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   public void removeFromParent() {
     super.removeFromParent();
 
-    relationshipHandleHelpers.hide(this);
+    if (relationshipHandleHelpers != null) {
+      relationshipHandleHelpers.hide(this);
+    }
 
     detachConnections();    
 

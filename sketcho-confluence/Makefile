@@ -31,6 +31,7 @@ tag:
 build:
 	make -C ../sketcho-confluence-editor prod
 	make -C ../../marked-token prod
+	make -C ../../paper.js-custom copy-min
 	atlas-mvn clean package
 
 run:

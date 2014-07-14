@@ -2,14 +2,9 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>sketcho-aggregate</artifactId>
-        <groupId>net.sevenscales</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
     <groupId>net.sevenscales.confluence.plugins</groupId>
     <artifactId>sketcho-confluence</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.1</version>
     <packaging>atlassian-plugin</packaging>
     <name>Sketchboard.Me Confluence Plugin</name>
     <description>UML, Free hand and Mind Map Drawing Plugin for Confluence</description>
@@ -17,60 +12,6 @@
         <name>7scales Ltd</name>
         <url>http://7scales.com</url>
     </organization>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-confluence-plugin</artifactId>
-                <version>${amps.version}</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <productVersion>${confluence.version}</productVersion>
-                    <productDataVersion>${confluence.data.version}</productDataVersion>
-                    <instructions>
-                        <Private-Package>com.atlassian.upm.license.storage.lib*</Private-Package>
-                        <DynamicImport-Package>com.atlassian.upm.api.license.entity;version="2.0.1", com.atlassian.upm.api.license;version="2.0.1", com.atlassian.upm.api.util;version="2.0.1", com.atlassian.upm.license.storage.plugin;version="${upm.license.compatibility.version}"</DynamicImport-Package>
-                    </instructions>
-                    <bundledArtifacts>
-                        <bundledArtifact>
-                            <groupId>com.atlassian.upm</groupId>
-                            <artifactId>atlassian-universal-plugin-manager-plugin</artifactId>
-                            <version>1.6.3</version>
-                        </bundledArtifact>
-                        <bundledArtifact>
-                            <groupId>com.atlassian.upm</groupId>
-                            <artifactId>plugin-license-storage-plugin</artifactId>
-                            <version>${upm.license.compatibility.version}</version>
-                        </bundledArtifact>
-                    </bundledArtifacts>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-storage-plugin</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                            <includeArtifactIds>plugin-license-storage-plugin</includeArtifactIds>
-                            <stripVersion>true</stripVersion>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -182,13 +123,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>net.sevenscales</groupId>
-            <artifactId>sd-domain</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>batik</groupId>
             <artifactId>batik-all</artifactId>
             <version>1.6</version>
@@ -218,30 +152,44 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <!--     <properties>
-        <confluence.version>5.4.1</confluence.version>
-        <confluence.data.version>5.4.1</confluence.data.version>
-        <amps.version>4.2.10</amps.version>
-        <plugin.testrunner.version>1.1.2</plugin.testrunner.version>
-        <atlassian.templaterenderer.version>1.0.5</atlassian.templaterenderer.version>
-        <upm.license.compatibility.version>2.3</upm.license.compatibility.version>
-        <sal.api.version>2.4.0</sal.api.version>
-    </properties>
- -->
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>com.atlassian.maven.plugins</groupId>
+          <artifactId>maven-confluence-plugin</artifactId>
+          <version>${amps.version}</version>
+          <extensions>true</extensions>
+          <configuration>
+              <productVersion>${confluence.version}</productVersion>
+              <productDataVersion>${confluence.data.version}</productDataVersion>
+              <enableFastdev>false</enableFastdev>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+          <configuration>
+              <source>1.6</source>
+              <target>1.6</target>
+          </configuration>
+        </plugin>
+      </plugins>
+    </build>
     <properties>
-        <amps.version>4.2.20</amps.version>
+        <amps.version>5.0.2</amps.version>
         <confluence.data.version>3.5</confluence.data.version>
         <confluence.version>4.0</confluence.version>
         <upm.license.compatibility.version>2.3</upm.license.compatibility.version>
         <sal.api.version>2.4.0</sal.api.version>
         <atlassian.templaterenderer.version>1.0.5</atlassian.templaterenderer.version>
-    
-        <!-- <upm.license.compatibility.version>2.3</upm.license.compatibility.version>
+
+        <!-- <amps.version>5.0.2</amps.version>
+        <upm.license.compatibility.version>2.3</upm.license.compatibility.version>
         <sal.api.version>2.4.0</sal.api.version>
-        <confluence.version>5.5.0</confluence.version>
-        <confluence.data.version>5.5.0</confluence.data.version>
-        <amps.version>4.2.20</amps.version>
-        <plugin.testrunner.version>1.1.4</plugin.testrunner.version>        
+        <confluence.version>5.5.2</confluence.version>
+        <confluence.data.version>5.5.2</confluence.data.version>
+        <plugin.testrunner.version>1.2.0</plugin.testrunner.version>
         <atlassian.templaterenderer.version>1.0.5</atlassian.templaterenderer.version> -->
+
     </properties>
 </project>

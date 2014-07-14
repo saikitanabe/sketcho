@@ -24,11 +24,17 @@ public class JSONContentParser {
 		}
 	}
 
+	public JSONContentParser(JSONObject jsonContent) {
+		content = new DiagramContentDTO();
+		parse(jsonContent);
+	}
+
 	private void parse(JSONObject jsonContent) {
 		content.setVersion(JSONParserHelpers.getInt(jsonContent.get("version")));
 		content.setName(JSONParserHelpers.getString(jsonContent.get("name")));
 		content.setCreatedTime(JSONParserHelpers.getLong(jsonContent.get("createdAt")));
 		content.setModifiedTime(JSONParserHelpers.getLong(jsonContent.get("updatedAt")));
+		content.setWidth(JSONParserHelpers.getInteger(jsonContent.get("width")));
 		
 		JSONArray items = jsonContent.get("items").isArray();
 		if (items != null) {
