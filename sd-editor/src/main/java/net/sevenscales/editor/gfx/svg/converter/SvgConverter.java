@@ -114,7 +114,9 @@ public class SvgConverter {
       if (onlySelected && selected.size() > 0) {
         result = SortHelpers.toArray(selected);
       }
-    } else {
+    } 
+    if (result == null) {
+      // if no selection then result is still null
       if (filter != null && filter.size() > 0) {
         result = SortHelpers.toArray(surfaceHandler.getDiagrams(), filter);
       } else {
