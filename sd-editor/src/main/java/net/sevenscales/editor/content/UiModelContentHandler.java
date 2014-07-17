@@ -221,8 +221,12 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 
   	for (Diagram d : surface.getDiagrams()) {
   		if (!(d instanceof CircleElement)) {
-  			left = Math.min(left, d.getLeft());
-  			top = Math.min(top, d.getTop());
+  			int candidateLeft = Math.min(left, d.getLeft());
+  			int candidateTop = Math.min(top, d.getTop());
+  			if (candidateLeft < left && candidateTop < top) {
+  				left = candidateLeft;
+	  			top = candidateTop;
+  			}
   		}
   	}
   	if (left != Integer.MAX_VALUE && top != Integer.MAX_VALUE) {
