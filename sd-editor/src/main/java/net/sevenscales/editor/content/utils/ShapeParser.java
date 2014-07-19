@@ -12,7 +12,7 @@ import net.sevenscales.editor.diagram.shape.*;
 import net.sevenscales.domain.utils.SLogger;
 
 
-class ShapeParser {
+public class ShapeParser {
 	private static SLogger logger = SLogger.createLogger(ShapeParser.class);
 
 	private static class ParserMap {
@@ -82,7 +82,7 @@ class ShapeParser {
 		new ParserMap(ElementType.FREEHAND2, new AbstractDiagramFactory.GenericFactory())
 	};
 
-	static AbstractDiagramFactory factory(IDiagramItemRO diro) {
+	public static AbstractDiagramFactory factory(IDiagramItemRO diro) {
 		for (ParserMap pm : PARSER_MAP) {
 			if (pm.elementType.getValue().equals(diro.getType())) {
 				return pm.factory;

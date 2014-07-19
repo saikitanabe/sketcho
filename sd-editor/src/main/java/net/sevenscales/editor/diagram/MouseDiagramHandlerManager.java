@@ -37,6 +37,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	private LassoSelectionHandler lassoSelectionHandler;
 	private FreehandDrawerHandler freehandDrawHandler;
 	private SurfaceClickHandler surfaceClickHandler;
+	private QuickConnectionHandler quickConnectionHandler;
 	private ISurfaceHandler surface;
 	// current handler gets events after mouse down if registered
 	private MouseDiagramHandler currentMouseHandler;
@@ -71,6 +72,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		surfaceClickHandler = new SurfaceClickHandler(surface);
 		sketchDiagramAreaHandler = new SketchDiagramAreaHandler(surface, modeManager);
 		new LinkHandler(surface);
+		quickConnectionHandler = new QuickConnectionHandler(surface);
 		
 		if (!UiUtils.isIE()) {
 			handleDoubleTap(surface.getElement(), this);
@@ -262,6 +264,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		backgroundMoveHandler.onMouseUp(sender, point);
 		lassoSelectionHandler.onMouseUp(sender, point);
 		surfaceClickHandler.onMouseUp(sender, point);
+		quickConnectionHandler.onMouseUp(sender, point);
 		// logger.debugTime();
     currentMouseHandler = null;
 	}
