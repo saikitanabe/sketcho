@@ -272,70 +272,130 @@ public class AnchorUtils {
     public Point end = new Point();
   }
 
+  private static int distance(int x, int y, int x1, int y1) {
+    int dx = Math.abs(x - x1);
+    int dy = Math.abs(y - y1);
+    return (int) Math.sqrt(dx * dx + dy * dy);
+  }
+
   public static ClosestSegment closestSegment(int left, int top, int width, int height, int left2, int top2, int width2, int height2) {
     ClosestSegment result = new ClosestSegment();
 
-    int diffLeftLeft = Math.abs(left - left2);
-    int diffLeftRigth = Math.abs(left - (left2 + width2));
-    int diffRightLeft = Math.abs((left + width) - left2);
-    int diffRightRight = Math.abs((left + width) - (left2 + width2));
+    int distLeftLeft = distance(left, top + height / 2, left2, top2 + height2 / 2);
+    int distLeftRigth = distance(left, top + height / 2, left2 + width2, top2 + height2 / 2);
+    int distLeftTop = distance(left, top + height / 2, left2 + width2 / 2, top2);
+    int distLeftBottom = distance(left, top + height, left2 + width2 / 2, top2 + height2);
 
-    int diffTopTop = Math.abs(top - top2);
-    int diffTopBottom = Math.abs(top - (top2 + height2));
-    int diffBottomTop = Math.abs((top + height) - top2);
-    int diffBottomBottom = Math.abs((top + height) - (top2 + height2));
+    int distRightLeft = distance(left + width, top + height / 2, left2, top2 + height2 / 2);
+    int distRightRight = distance(left + width, top + height / 2, left2 + width2, top2 + height2 / 2);
+    int distRightTop = distance(left + width, top + height / 2, left2 + width2 / 2, top2);
+    int distRightBottom = distance(left + width, top + height / 2, left2 + width2 / 2, top2 + height2);
+
+    int distTopTop = distance(left + width / 2, top, left2 + width2 / 2, top2);
+    int distTopBottom = distance(left + width / 2, top, left2 + width2 / 2, top2 + height2);
+    int distTopLeft = distance(left + width / 2, top, left2, top2 + height2 / 2);
+    int distTopRight = distance(left + width / 2, top, left2 + width2, top2 + height2 / 2);
+
+    int distBottomTop = distance(left + width / 2, top + height, left2 + width2 / 2, top2);
+    int distBottomBottom = distance(left + width / 2, top + height, left2 + width2 / 2, top2 + height2);
+    int distBottomLeft = distance(left + width / 2, top + height, left2, top2 + height2 / 2);
+    int distBottomRight = distance(left + width / 2, top + height, left2 + width2, top2 + height2 / 2);
 
     // vertical edges
-    int smallest = Math.min(diffLeftLeft, diffLeftRigth);
-    smallest = Math.min(smallest, diffRightLeft);
-    smallest = Math.min(smallest, diffRightRight);
+    int smallest = Math.min(distLeftLeft, distLeftRigth);
+    smallest = Math.min(smallest, distLeftTop);
+    smallest = Math.min(smallest, distLeftBottom);
+
+    // TODO all separately
+    smallest = Math.min(smallest, distRightLeft);
+    smallest = Math.min(smallest, distRightRight);
 
     // horizontal edges
-    smallest = Math.min(smallest, diffTopTop);
-    smallest = Math.min(smallest, diffTopBottom);
-    smallest = Math.min(smallest, diffBottomTop);
-    smallest = Math.min(smallest, diffBottomBottom);
+    smallest = Math.min(smallest, distTopTop);
+    smallest = Math.min(smallest, distTopBottom);
+    smallest = Math.min(smallest, distBottomTop);
+    smallest = Math.min(smallest, distBottomBottom);
 
-    if (smallest == diffLeftLeft) {
+    if (smallest == distLeftLeft) {
       result.start.x = left;
       result.start.y = top + height / 2;
       result.end.x = left2;
       result.end.y = top2 + height2 / 2;
-    } else if (smallest == diffLeftRigth) {
+    } else if (smallest == distLeftRigth) {
       result.start.x = left;
       result.start.y = top + height / 2;
       result.end.x = left2 + width2;
       result.end.y = top2 + height2 / 2;
-    } else if (smallest == diffRightLeft) {
+    } else if (smallest == distLeftTop) {
+      result.start.x = left;
+      result.start.y = top + height / 2;
+      result.end.x = left2 + width2 / 2;
+      result.end.y = top2;
+    } else if (smallest == distLeftBottom) {
+      result.start.x = left;
+      result.start.y = top + height / 2;
+      result.end.x = left2 + width2 / 2;
+      result.end.y = top2 + height2;
+    } else if (smallest == distRightLeft) {
       result.start.x = left + width;
       result.start.y = top + height / 2;
       result.end.x = left2;
       result.end.y = top2 + height2 / 2;
-    } else if (smallest == diffRightRight) {
+    } else if (smallest == distRightRight) {
       result.start.x = left + width;
       result.start.y = top + height / 2;
       result.end.x = left2 + width2;
       result.end.y = top2 + height2 / 2;
-    } else if (smallest == diffTopTop) {
+    } else if (smallest == distRightTop) {
+      result.start.x = left + width;
+      result.start.y = top + height / 2;
+      result.end.x = left2 + width2 / 2;
+      result.end.y = top2;
+    } else if (smallest == distRightBottom) {
+      result.start.x = left + width;
+      result.start.y = top + height / 2;
+      result.end.x = left2 + width2 / 2;
+      result.end.y = top2 + height2;
+    } else if (smallest == distTopTop) {
       result.start.x = left + width / 2;
       result.start.y = top;
       result.end.x = left2 + width2 / 2;
       result.end.y = top2;
-    } else if (smallest == diffTopBottom) {
+    } else if (smallest == distTopBottom) {
       result.start.x = left + width / 2;
       result.start.y = top;
       result.end.x = left2 + width2 / 2;
       result.end.y = top2 + height2;
-    } else if (smallest == diffBottomTop) {
+    } else if (smallest == distTopLeft) {
+      result.start.x = left + width / 2;
+      result.start.y = top;
+      result.end.x = left2;
+      result.end.y = top2 + height2 / 2;
+    } else if (smallest == distTopRight) {
+      result.start.x = left + width / 2;
+      result.start.y = top;
+      result.end.x = left2 + width2;
+      result.end.y = top2 + height2 / 2;
+    } else if (smallest == distBottomTop) {
       result.start.x = left + width / 2;
       result.start.y = top + height;
       result.end.x = left2 + width2 / 2;
       result.end.y = top2;
-    } else if (smallest == diffBottomBottom) {
+    } else if (smallest == distBottomBottom) {
       result.start.x = left + width / 2;
       result.start.y = top + height;
       result.end.x = left2 + width2 / 2;
       result.end.y = top2 + height2;
+    } else if (smallest == distBottomLeft) {
+      result.start.x = left + width / 2;
+      result.start.y = top + height;
+      result.end.x = left2;
+      result.end.y = top2 + height2 / 2;
+    } else if (smallest == distBottomRight) {
+      result.start.x = left + width / 2;
+      result.start.y = top + height;
+      result.end.x = left2 + width2;
+      result.end.y = top2 + height2 / 2;
     }
 
     return result;
