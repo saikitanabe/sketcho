@@ -3,6 +3,7 @@ package net.sevenscales.editor.uicomponents;
 import java.util.List;
 
 import net.sevenscales.editor.gfx.domain.IRectangle;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.domain.utils.SLogger;
 
@@ -264,6 +265,80 @@ public class AnchorUtils {
         ae.setAy(((int)(height * ae.getRelativeFactorY())) + top + ATTACH_EXTRA_DISTANCE);
       break;
     }
+  }
+
+  public static class ClosestSegment {
+    public Point start = new Point();
+    public Point end = new Point();
+  }
+
+  public static ClosestSegment closestSegment(int left, int top, int width, int height, int left2, int top2, int width2, int height2) {
+    ClosestSegment result = new ClosestSegment();
+
+    int diffLeftLeft = Math.abs(left - left2);
+    int diffLeftRigth = Math.abs(left - (left2 + width2));
+    int diffRightLeft = Math.abs((left + width) - left2);
+    int diffRightRight = Math.abs((left + width) - (left2 + width2));
+
+    int diffTopTop = Math.abs(top - top2);
+    int diffTopBottom = Math.abs(top - (top2 + height2));
+    int diffBottomTop = Math.abs((top + height) - top2);
+    int diffBottomBottom = Math.abs((top + height) - (top2 + height2));
+
+    // vertical edges
+    int smallest = Math.min(diffLeftLeft, diffLeftRigth);
+    smallest = Math.min(smallest, diffRightLeft);
+    smallest = Math.min(smallest, diffRightRight);
+
+    // horizontal edges
+    smallest = Math.min(smallest, diffTopTop);
+    smallest = Math.min(smallest, diffTopBottom);
+    smallest = Math.min(smallest, diffBottomTop);
+    smallest = Math.min(smallest, diffBottomBottom);
+
+    if (smallest == diffLeftLeft) {
+      result.start.x = left;
+      result.start.y = top + height / 2;
+      result.end.x = left2;
+      result.end.y = top2 + height2 / 2;
+    } else if (smallest == diffLeftRigth) {
+      result.start.x = left;
+      result.start.y = top + height / 2;
+      result.end.x = left2 + width2;
+      result.end.y = top2 + height2 / 2;
+    } else if (smallest == diffRightLeft) {
+      result.start.x = left + width;
+      result.start.y = top + height / 2;
+      result.end.x = left2;
+      result.end.y = top2 + height2 / 2;
+    } else if (smallest == diffRightRight) {
+      result.start.x = left + width;
+      result.start.y = top + height / 2;
+      result.end.x = left2 + width2;
+      result.end.y = top2 + height2 / 2;
+    } else if (smallest == diffTopTop) {
+      result.start.x = left + width / 2;
+      result.start.y = top;
+      result.end.x = left2 + width2 / 2;
+      result.end.y = top2;
+    } else if (smallest == diffTopBottom) {
+      result.start.x = left + width / 2;
+      result.start.y = top;
+      result.end.x = left2 + width2 / 2;
+      result.end.y = top2 + height2;
+    } else if (smallest == diffBottomTop) {
+      result.start.x = left + width / 2;
+      result.start.y = top + height;
+      result.end.x = left2 + width2 / 2;
+      result.end.y = top2;
+    } else if (smallest == diffBottomBottom) {
+      result.start.x = left + width / 2;
+      result.start.y = top + height;
+      result.end.x = left2 + width2 / 2;
+      result.end.y = top2 + height2;
+    }
+
+    return result;
   }
 
 }
