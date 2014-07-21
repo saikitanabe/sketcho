@@ -127,6 +127,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
     // logger.debugTime();
     // logger.start("MouseDiagramHandlerManager.onMouseDown 4");
 
+    quickConnectionHandler.onMouseDown(sender, point, keys);
     selectionHandler.onMouseDown(sender, point, keys);
 
     // logger.debugTime();

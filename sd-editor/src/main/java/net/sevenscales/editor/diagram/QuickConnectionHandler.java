@@ -30,6 +30,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	private ISurfaceHandler surface;
 	private DiagramSearch search;
 	private Diagram previouslySelected;
+	private boolean selectedOnMouseDown;
 
 	public QuickConnectionHandler(ISurfaceHandler surface) {
 		this.surface = surface;
@@ -40,6 +41,11 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	}
 
 	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+		if (previouslySelected != null) {
+			selectedOnMouseDown = previouslySelected.isSelected();
+		} else {
+			selectedOnMouseDown = false;
+		}
 		return false;
 	}
 
@@ -52,14 +58,17 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
 		if (selected.size() == 1) {
 			previouslySelected = selected.iterator().next();
-		} else if (selected.size() == 0 && previouslySelected != null && exists(previouslySelected)) {
+		} else if (selected.size() == 0 && 
+							 previouslySelected != null && 
+							 exists(previouslySelected) && 
+							 selectedOnMouseDown) {
 			ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint(point.getScreenX(), point.getScreenY(), surface);
 			int x = stp.scaledAndTranslatedPoint.x;
 			int y = stp.scaledAndTranslatedPoint.y;
 
 			createConnectedDiagram(previouslySelected, x, y);
 
-			previouslySelected = null;
+			// previouslySelected = null;
 		} else {
 			previouslySelected = null;
 		}
@@ -83,7 +92,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	    AbstractDiagramFactory factory = ShapeParser.factory(item);
 	    int left = previouslySelected.getLeft();
 	    int top = previouslySelected.getTop();
-	    Info shape = factory.parseShape(item, x - left, y - top);
+	    Info shape = factory.parseShape(item, x - left - d.getWidth() / 2, y - top - d.getHeight() / 2);
 
 	    // TODO quick handler should not work if not editable!
 	    // TODO if child text of comment, then need to decide a special case
@@ -100,6 +109,9 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	    newitems.add(newelement);
 	    newitems.add(relationship);
 	    surface.add(newitems, true, false);
+
+	    surface.getSelectionHandler().select(newelement);
+	    previouslySelected = newelement;
 
 			reattachHelpers.reattachRelationshipsAndDraw();
 		
@@ -121,7 +133,8 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		result.setType(ElementType.RELATIONSHIP.getValue());
 		// TODO last selected type
 		result.setText("->");
-		result.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue());
+		result.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue() | 
+															ShapeProperty.CLOSEST_PATH.getValue());
 		result.setShape(closestSegment.start.x + "," + 
 									closestSegment.start.y + "," + 
 									closestSegment.end.x + "," +

@@ -1336,6 +1336,14 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return false;
   }
 
+  private boolean isClosestPath() {
+    Integer props = getDiagramItem().getShapeProperties();
+    if (props != null && ShapeProperty.isClosestPath(props)) {
+      return true;
+    }
+    return false;
+  }
+
   public JsArray<BezierHelpers.Segment> getSegments() {
     return relLine.segments;
   }
@@ -2185,7 +2193,40 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   public void anchorDragEnd() {
     // need to redraw start and end arrows on correct position
-    doSetShape();
+    if (applyClosestPath()) {
+
+    } else {
+      doSetShape();
+    }
+  }
+
+  private boolean applyClosestPath() {
+    boolean result = false;
+    Diagram start = null;
+    Diagram end = null;
+    if (startAnchor != null && endAnchor != null) {
+      start = startAnchor.getDiagram();
+      end = endAnchor.getDiagram();
+    }
+
+    if (isClosestPath() && start != null && end != null) {
+      AnchorUtils.ClosestSegment closestSegment = AnchorUtils.closestSegment(start.getLeft(), start.getTop(), start.getWidth(), start.getHeight(), end.getLeft(), end.getTop(), end.getWidth(), end.getHeight());
+      int[] newpoints = new int[]{closestSegment.start.x,
+                  closestSegment.start.y,
+                  closestSegment.end.x,
+                  closestSegment.end.y};
+      setAnchorElementPosition(closestSegment.start.x, closestSegment.start.y, startAnchor.getAnchorElement());
+      setAnchorElementPosition(closestSegment.end.x, closestSegment.end.y, endAnchor.getAnchorElement());
+      doSetShape(newpoints);
+      result = true;
+    }
+    return result;
+  }
+
+  private void setAnchorElementPosition(int x, int y, AnchorElement ae) {
+    ae.setAx(x);
+    ae.setAy(y);
+    updateCardinalDirection(x, y, ae);
   }
 
   @Override

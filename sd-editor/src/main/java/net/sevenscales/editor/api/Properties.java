@@ -313,7 +313,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		
 	public void addSurface(ISurfaceHandler surfaceHandler, boolean modifiable) {
 	  surfaces.put(surfaceHandler, modifiable);
-	  surfaceHandler.addSelectionListener(this);
+	  // surfaceHandler.addSelectionListener(this);
 //	  if (modifiable) {
 	  // currently it is allowed to modify diagram item text, because otherwise 
 	  // would need to implement text area handling

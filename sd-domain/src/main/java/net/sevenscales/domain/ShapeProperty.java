@@ -17,6 +17,7 @@ public enum ShapeProperty {
 	SHAPE_AUTO_RESIZE_TRUE  					(0x010000),
 	SHAPE_AUTO_RESIZE_FALSE						(0x020000),
 	CURVED_ARROW										  (0x100000),
+	CLOSEST_PATH										  (0x200000),
 	NO_TEXT_AUTO_ALIGN								(0x000020);
 
 	private int value;
@@ -80,6 +81,10 @@ public enum ShapeProperty {
 
 	public static boolean isCurvedArrow(int value) {
 		return (value & CURVED_ARROW.getValue()) == CURVED_ARROW.getValue();
+	}
+
+	public static boolean isClosestPath(int value) {
+		return (value & CLOSEST_PATH.getValue()) == CLOSEST_PATH.getValue();
 	}
 
 	public static boolean isNoTextAutoAlign(Integer value) {
