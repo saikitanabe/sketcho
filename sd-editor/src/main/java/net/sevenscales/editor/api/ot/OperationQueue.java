@@ -75,7 +75,8 @@ public class OperationQueue {
 		// need to add in reverse order to have items applied in correct order on server
 		if (item.operationJson != null && !contains(item)) {
 			queuedOperations.addLast(item);
-		} else if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
+		} else if (!item.operation.equals(OTOperation.USER_MOVE) && LogConfiguration.loggingIsEnabled(Level.FINEST)) {
+			// not checkint user move operations
 			Window.alert("push failed");
 			debugger();
 		}

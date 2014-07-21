@@ -3,6 +3,7 @@ package net.sevenscales.editor.api;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.utils.ShowHideHelpers;
 import net.sevenscales.editor.diagram.DiagramSelectionHandler;
+import net.sevenscales.editor.api.ot.OTBuffer;
 
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -21,14 +22,14 @@ public class ToolFrame extends SimplePanel {
 	private SimplePanel justBacgkround;
 	private ShowHideHelpers showHideHelpers;
 
-  public ToolFrame(ISurfaceHandler surface, int height, IModeManager modeManager, EditorContext editorContext, boolean autohide) {
+  public ToolFrame(ISurfaceHandler surface, int height, IModeManager modeManager, EditorContext editorContext, boolean autohide, OTBuffer otBuffer) {
   	this.editorContext = editorContext;
   	
 		panel = new VerticalPanel();
 		panel.setStyleName("ToolFrame-panel");
 		panel.setHeight("100%");
 		panel.setSpacing(0);
-		this.toolbar = new Libarary(surface, height, modeManager, editorContext);
+		this.toolbar = new Libarary(surface, height, modeManager, editorContext, otBuffer);
 		// DEBUGGING START handy way to disable library, just comment next line
 		panel.add(toolbar);
 		// DEBUGGING END

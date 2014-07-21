@@ -12,6 +12,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ot.ApplyHelpers.DiagramApplyOperation;
 import net.sevenscales.domain.utils.DiagramItemList;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.logging.client.LogConfiguration;
 
 public class OTCompensationTransformer {
@@ -285,6 +286,7 @@ public class OTCompensationTransformer {
   			// cannot fail whole apply; so better to fail 
   			String msg = SLogger.format("Operation {} failed, mapping not found. NEW ITEM STATE: {} \n CURR STATE: {}", operation.getValue(), n.toString(), currentState.toString());
   			logger.error(msg);
+  			GWT.debugger();
   			throw new MappingNotFoundException("mapNewToCurrent failed");
 //  			if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
 //  			  throw new RuntimeException(msg);

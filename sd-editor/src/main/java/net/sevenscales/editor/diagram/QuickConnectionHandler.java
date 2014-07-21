@@ -15,6 +15,8 @@ import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
+import net.sevenscales.editor.api.event.UndoEvent;
+import net.sevenscales.editor.api.ot.CompensationModel;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
@@ -24,13 +26,21 @@ import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.domain.utils.SLogger;
 
 
 class QuickConnectionHandler implements MouseDiagramHandler {
+	private static SLogger logger = SLogger.createLogger(QuickConnectionHandler.class);
+
+	static {
+		SLogger.addFilter(QuickConnectionHandler.class);
+	}
+
 	private ISurfaceHandler surface;
 	private DiagramSearch search;
 	private Diagram previouslySelected;
 	private boolean selectedOnMouseDown;
+	private CompensationModel lastModel;
 
 	public QuickConnectionHandler(ISurfaceHandler surface) {
 		this.surface = surface;
@@ -38,7 +48,26 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 		// TODO ESC key handler deletes created elements and those are
 		// deleted also from undo cache!
+		handleEscKey(this);
 	}
+
+  private native void handleEscKey(QuickConnectionHandler me)/*-{
+    $wnd.cancelStream.onValue(function(v) {
+      me.@net.sevenscales.editor.diagram.QuickConnectionHandler::onEsc()();
+    })
+  }-*/;
+
+  private void onEsc() {
+  	cancelLastOperationIfLastQuickConnection();
+  }
+
+  private void cancelLastOperationIfLastQuickConnection() {
+  	if (lastModel != null && lastModel == surface.getOTBuffer().topModel()) {
+  		logger.debug("canselling cancelLastOperationIfLastQuickConnection...");
+  		surface.getEditorContext().getEventBus().fireEvent(new UndoEvent());
+  	}
+		lastModel = null;
+  }
 
 	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
 		if (previouslySelected != null) {
@@ -54,6 +83,8 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	}
 
 	public void onMouseUp(Diagram sender, MatrixPointJS point) {
+		cancelLastOperationIfLastQuickConnection();
+		
 		// get previously selected!! selection handler could keep that state
 		Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
 		if (selected.size() == 1) {
@@ -114,6 +145,8 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	    previouslySelected = newelement;
 
 			reattachHelpers.reattachRelationshipsAndDraw();
+
+			lastModel = surface.getOTBuffer().topModel();
 		
 	    // open editor for the created element
   		surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(newelement).setJustCreated(true));

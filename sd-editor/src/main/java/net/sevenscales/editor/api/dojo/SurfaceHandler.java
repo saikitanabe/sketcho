@@ -19,6 +19,7 @@ import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.impl.SurfaceDiagramSearch;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
+import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
@@ -121,13 +122,15 @@ class SurfaceHandler extends SimplePanel implements
 	private boolean verticalDragOnly;
 	private String name = "";
 	protected boolean cancelSurfaceClickEvent;
-  
+	private OTBuffer otBuffer;
+
 	public void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
-			EditorContext editorContext) {
+			EditorContext editorContext, OTBuffer otBuffer) {
 		this.editorContext = editorContext;
 		this.modeManager = modeManager;
 		this.editable = editable;
 		this.deleteSupported = deleteSupported;
+		this.otBuffer = otBuffer;
 		logger.debug("init {}...", name);
 		
 		addStyleName("sd-SurfaceHandler");
@@ -1097,6 +1100,11 @@ class SurfaceHandler extends SimplePanel implements
 
 	public HasTouchStartHandlers getHasTouchStartHandlers() {
 		return this;
+	}
+
+	@Override
+	public OTBuffer getOTBuffer() {
+		return otBuffer;
 	}
 
 }

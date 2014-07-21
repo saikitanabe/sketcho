@@ -17,6 +17,7 @@ import net.sevenscales.domain.ShapeProperty;
 
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.TouchHelpers;
+import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.diagram.ClickDiagramHandler;
 import net.sevenscales.editor.diagram.Diagram;
@@ -142,13 +143,13 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		}
 	};
 
-	public Libarary(ISurfaceHandler asurface, int height, IModeManager modeManager, EditorContext editorContext) {
+	public Libarary(ISurfaceHandler asurface, int height, IModeManager modeManager, EditorContext editorContext, OTBuffer otBuffer) {
 		this.surface = asurface;
 		this.editorContext = editorContext;
 		this.toolpool = FactoryDoJo.createSurfaceHandler();
 		toolpool.setName(ISurfaceHandler.LIBRARY_AREA);
 		toolpool.setDisableOnArea(true);
-		toolpool.init(200, 1700, true, modeManager, false, editorContext);
+		toolpool.init(200, 1700, true, modeManager, false, editorContext, otBuffer);
 		
 		setStyle();
 		editorContext.getEventBus().addHandler(ThemeChangedEvent.TYPE, new ThemeChangedEventHandler() {

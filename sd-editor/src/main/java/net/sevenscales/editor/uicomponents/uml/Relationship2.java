@@ -2193,8 +2193,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   public void anchorDragEnd() {
     // need to redraw start and end arrows on correct position
-    if (applyClosestPath()) {
-
+    if (!isSelected() && applyClosestPath()) {
+      // in case this relationship is selected, means part of bigger selection then
+      // do not apply anything just draw along the selection
     } else {
       doSetShape();
     }

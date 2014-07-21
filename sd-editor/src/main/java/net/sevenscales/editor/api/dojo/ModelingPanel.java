@@ -19,6 +19,7 @@ import net.sevenscales.editor.api.impl.DragAndDropHandler;
 import net.sevenscales.editor.api.impl.ModelingPanelEventHandler;
 import net.sevenscales.editor.api.impl.SurfaceEventWrapper;
 import net.sevenscales.editor.api.impl.TouchDragAndDrop;
+import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.ui.ScaleSlider;
 import net.sevenscales.editor.content.ui.UiClickContextMenu;
@@ -69,7 +70,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
   private ScaleSlider scaleSlider;
 	
 	public ModelingPanel(UIObject parent, int width, int height, boolean editable,
-			IModeManager modeManager, EditorContext editorContext, boolean inDialog, boolean autohide) {
+			IModeManager modeManager, EditorContext editorContext, boolean inDialog, boolean autohide, OTBuffer otBuffer) {
 		this._parent = parent;
 		this.inDialog = inDialog;
 		setStyleName("ModelingPanel");
@@ -93,7 +94,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		// now default implementation is in firefox impl.
 		surface = GWT.create(SurfaceHandlerImplFirefox.class);
 		surface.setName(SurfaceHandler.DRAWING_AREA);
-		surface.init(width, height, editable, modeManager, true, editorContext);
+		surface.init(width, height, editable, modeManager, true, editorContext, otBuffer);
 
 		Tools.create(surface);
 		
@@ -128,7 +129,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		add(fp);
 		// if (editable) {
 			surface.setStyleName("sd-editor-surface-modeling-area");
-			this.toolFrame = new ToolFrame(surface, 700, modeManager, editorContext, autohide);
+			this.toolFrame = new ToolFrame(surface, 700, modeManager, editorContext, autohide, otBuffer);
 			surface.setPropertiesTextArea(toolFrame.getProperties());
 			editorContext.setPropertiesArea(toolFrame.getProperties());
 

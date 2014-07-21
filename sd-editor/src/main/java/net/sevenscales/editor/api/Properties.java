@@ -219,6 +219,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			@Override
 			public void onClose(CloseEvent<PopupPanel> event) {
 				logger.info("close properties editor...");
+				_doSend();
 				applyTextToDiagram();
 				Properties.this.editorCommon.fireEditorClosed();
 				if (selectedDiagram == null) {
@@ -424,6 +425,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     selectedDiagram.setText(textArea.getText(), textEditX, textEditY);
 //    fireChanged(selectedDiagram);
     sendBuffer();
+    // synchronous version, starts to lag with long text
+    // editorCommon.fireChangedWithRelatedRelationships(selectedDiagram);
 	}
 	
 	private void sendBuffer() {
@@ -454,18 +457,23 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		Scheduler.get().scheduleFixedDelay(new RepeatingCommand() {
 			@Override
 			public boolean execute() {
-				lastSentText = buffer.diagram.getText(textEditX, textEditY);
-	
-				Properties.this.editorCommon.fireChangedWithRelatedRelationships(buffer.diagram);
-		    sending = false;
-		    
+				_doSend();		    
 //		    System.out.println("buffer != lastSentText: " + buffer + " " + lastSentText + " " + buffer != lastSentText);
 				boolean doitagain = !bufferTextIsSent();
 				return doitagain;
 			}
 		}, 1500);
 	}
-	
+
+	private void _doSend() {
+		if (buffer.diagram != null && !bufferTextIsSent()) {
+			lastSentText = buffer.diagram.getText(textEditX, textEditY);
+
+			Properties.this.editorCommon.fireChangedWithRelatedRelationships(buffer.diagram);
+	    sending = false;
+		}
+  }
+
 	private boolean bufferTextIsSent() {
 	  return buffer.text.equals(lastSentText);
 	}

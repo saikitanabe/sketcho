@@ -98,6 +98,10 @@ public class OTBuffer {
 		}
 	}
 
+	public CompensationModel topModel() {
+		return undoBuffer.getFirst();
+	}
+
 	public CompensationModel undoBuffer() {
     return popAndPush(undoBuffer, redoBuffer);
 	}

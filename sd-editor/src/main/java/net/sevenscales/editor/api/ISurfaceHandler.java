@@ -36,6 +36,7 @@ import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.editor.api.ot.OTBuffer;
 
 
 public interface ISurfaceHandler {
@@ -44,7 +45,7 @@ public interface ISurfaceHandler {
 	public static final String LIBRARY_AREA = "libraryarea";
 
 	void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
-			EditorContext editorContext);
+			EditorContext editorContext, OTBuffer otBuffer);
 	void setId(String id);
 
 	boolean isLibrary();
@@ -140,5 +141,7 @@ public interface ISurfaceHandler {
 	void fireMouseMove(MouseMoveEvent event, boolean toolbar);
 	void fireMouseUp(MouseUpEvent event);
 	void fireMouseOnLeave(MouseMoveEvent event);
+
+	OTBuffer getOTBuffer();
 
 }
