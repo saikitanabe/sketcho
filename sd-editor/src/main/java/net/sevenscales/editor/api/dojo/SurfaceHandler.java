@@ -117,6 +117,7 @@ class SurfaceHandler extends SimplePanel implements
 	private int currentClientY;
 	private int currentClientMouseMoveX;
 	private int currentClientMouseMoveY;
+	private boolean proxyDragAdd;
 	
 	// configuration parameter that e.g. library enables for background movement
 	private boolean verticalDragOnly;
@@ -746,10 +747,16 @@ class SurfaceHandler extends SimplePanel implements
   }
 
   public void addAsDragging(Diagram diagram, boolean ownerComponent, MatrixPointJS point, int keys) {
+  	proxyDragAdd = true;
     add(diagram, ownerComponent);
     mouseDiagramManager.select(diagram);
     mouseDiagramManager.getDragHandler().onMouseDown(diagram, point, keys);
+  	proxyDragAdd = false;
 //    mouseDiagramManager.onMouseMove(null, x-10, y);
+  }
+
+  public boolean isProxyDragAdding() {
+  	return proxyDragAdd;
   }
   
 	public void fireMouseDown(MouseDownEvent event) {

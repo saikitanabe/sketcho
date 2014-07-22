@@ -68,6 +68,7 @@ public interface ISurfaceHandler {
 	void addAsSelected(Diagram diagram, boolean ownerComponent, boolean duplicate);
 	void addAsSelected(List<Diagram> diagrams, boolean ownerComponent, boolean duplicate);
 	void addAsDragging(Diagram diagram, boolean ownerComponent, MatrixPointJS point, int keys);
+	boolean isProxyDragAdding();
 	int getCurrentClientX();
 	int getCurrentClientY();
 	int getCurrentClientMouseMoveX();

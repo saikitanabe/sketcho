@@ -16,6 +16,8 @@ import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.UndoEvent;
+import net.sevenscales.editor.api.event.SelectionEvent;
+import net.sevenscales.editor.api.event.SelectionEventHandler;
 import net.sevenscales.editor.api.ot.CompensationModel;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.Diagram;
@@ -39,16 +41,34 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	private ISurfaceHandler surface;
 	private DiagramSearch search;
 	private Diagram previouslySelected;
-	private boolean selectedOnMouseDown;
 	private CompensationModel lastModel;
+	private boolean notAddedFromLibrary = true;
 
 	public QuickConnectionHandler(ISurfaceHandler surface) {
 		this.surface = surface;
 		search = surface.createDiagramSearch();
 
+
+		surface.getEditorContext().getEventBus().addHandler(SelectionEvent.TYPE, new SelectionEventHandler() {
+			@Override
+			public void onSelection(SelectionEvent event) {
+				checkSelection();
+			}
+		});
+
 		// TODO ESC key handler deletes created elements and those are
 		// deleted also from undo cache!
 		handleEscKey(this);
+	}
+
+	private void checkSelection() {
+		Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
+		if (selected.size() == 1) {
+			previouslySelected = selected.iterator().next();
+			notAddedFromLibrary = !surface.isProxyDragAdding();
+		} else {
+			previouslySelected = null;
+		}
 	}
 
   private native void handleEscKey(QuickConnectionHandler me)/*-{
@@ -58,6 +78,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
   }-*/;
 
   private void onEsc() {
+  	previouslySelected = null;
   	cancelLastOperationIfLastQuickConnection();
   }
 
@@ -70,39 +91,37 @@ class QuickConnectionHandler implements MouseDiagramHandler {
   }
 
 	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
-		if (previouslySelected != null) {
-			selectedOnMouseDown = previouslySelected.isSelected();
-		} else {
-			selectedOnMouseDown = false;
-		}
 		return false;
 	}
 
 	public void onMouseMove(Diagram sender, MatrixPointJS point) {
-
 	}
 
 	public void onMouseUp(Diagram sender, MatrixPointJS point) {
-		cancelLastOperationIfLastQuickConnection();
-		
-		// get previously selected!! selection handler could keep that state
+		if (sender == null) {
+			// let's check only board sent mouse up event;
+			// since library drop would be reseted otherwise
+			// anyway better to have some optimization
+			cancelLastOperationIfLastQuickConnection();
+			checkToCreateQuickConnection(point.getScreenX(), point.getScreenY());
+		}
+	}
+
+	private void checkToCreateQuickConnection(int screenX, int screenY) {
 		Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
-		if (selected.size() == 1) {
-			previouslySelected = selected.iterator().next();
-		} else if (selected.size() == 0 && 
-							 previouslySelected != null && 
-							 exists(previouslySelected) && 
-							 selectedOnMouseDown) {
-			ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint(point.getScreenX(), point.getScreenY(), surface);
+		if (notAddedFromLibrary &&
+			  selected.size() == 0 && 
+				previouslySelected != null && 
+				exists(previouslySelected)) {
+			ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint(screenX, screenY, surface);
 			int x = stp.scaledAndTranslatedPoint.x;
 			int y = stp.scaledAndTranslatedPoint.y;
 
 			createConnectedDiagram(previouslySelected, x, y);
-
-			// previouslySelected = null;
-		} else {
-			previouslySelected = null;
 		}
+		// makes sure that plain drag & drop doesn't create quick connection, but still
+		// remembers what has been dragged and dropped
+		notAddedFromLibrary = true;
 	}
 
 	private void createConnectedDiagram(Diagram d, int x, int y) {
