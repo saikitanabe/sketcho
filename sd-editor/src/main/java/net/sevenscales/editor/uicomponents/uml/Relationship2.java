@@ -2354,4 +2354,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     updateChildrenSegments();
   }
 
+  public void resetClosestPath() {
+    int current = getDiagramItem().getShapeProperties();
+    getDiagramItem().setShapeProperties(ShapeProperty.clear(current, ShapeProperty.CLOSEST_PATH.getValue()));
+  }
+
 }

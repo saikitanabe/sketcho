@@ -258,6 +258,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   public void dragStart(Diagram sender) {
     storeChildrenRelativeDistance(sender);
     splitRelationshipShapeIfBendPointDragged(sender);
+    resetClosestPathIfEndPointDragged(sender);
   }
 
   private void storeChildrenRelativeDistance(Diagram sender) {
@@ -293,6 +294,16 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     return false;
   }
 
+  private void resetClosestPathIfEndPointDragged(Diagram sender) {
+    int parentRelHandlesCount = parentHandlesCount();
+    for (int i = 0; i < handles.size(); ++i) {
+      CircleElement h = handles.get(i);
+      if (i < parentRelHandlesCount && sender == h) {
+        parentRelationship.resetClosestPath();
+      }    
+    }
+  }
+
   private void splitRelationshipShapeIfBendPointDragged(Diagram sender) {
     int parentRelHandlesCount = parentHandlesCount();
     boolean morePoints = false;
@@ -317,6 +328,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
 
     if (morePoints) {
       parentRelationship.resetChildren();
+      parentRelationship.resetClosestPath();
     }
   }
 

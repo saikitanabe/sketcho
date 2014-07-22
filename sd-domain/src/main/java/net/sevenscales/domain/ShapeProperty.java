@@ -95,4 +95,8 @@ public enum ShapeProperty {
 		return (value & NO_TEXT_AUTO_ALIGN.getValue()) == NO_TEXT_AUTO_ALIGN.getValue();
 	}
 
+	public static int clear(int current, int toclear) {
+    return current & ~toclear;
+	}
+
 }
