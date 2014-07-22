@@ -129,7 +129,8 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       rshape.asCurve();
       DiagramItemDTO di = new DiagramItemDTO();
       if (Tools.isCurvedArrow()) {
-        di.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue());
+        di.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue() | 
+                              ShapeProperty.CLOSEST_PATH.getValue());
       }
       // Default arrow type is curved ends configuration
 
