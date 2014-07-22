@@ -19,10 +19,13 @@ import net.sevenscales.editor.api.event.UndoEvent;
 import net.sevenscales.editor.api.event.SelectionEvent;
 import net.sevenscales.editor.api.event.SelectionEventHandler;
 import net.sevenscales.editor.api.ot.CompensationModel;
+import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
+import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
+import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.diagram.MouseDiagramHandler;
@@ -98,11 +101,11 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	}
 
 	public void onMouseUp(Diagram sender, MatrixPointJS point) {
+		cancelLastOperationIfLastQuickConnection();
 		if (sender == null) {
 			// let's check only board sent mouse up event;
 			// since library drop would be reseted otherwise
 			// anyway better to have some optimization
-			cancelLastOperationIfLastQuickConnection();
 			checkToCreateQuickConnection(point.getScreenX(), point.getScreenY());
 		}
 	}
@@ -125,24 +128,35 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	}
 
 	private void createConnectedDiagram(Diagram d, int x, int y) {
-		boolean doNotAllow = (d instanceof IChildElement) || d instanceof Relationship2 || d instanceof CircleElement;
+		boolean doNotAllow = (d instanceof IChildElement) || (d instanceof CommentThreadElement) || d instanceof Relationship2 || d instanceof CircleElement;
 		// could ask from diagram next in diagram
 		// activity start could return activity, activity end could return note...
 		// but more files would be modified and that is not certainly nice...
 		if (!doNotAllow) {
 			ReattachHelpers reattachHelpers = new ReattachHelpers();
 			reattachHelpers.processDiagram(d);
+
+	    int left = previouslySelected.getLeft();
+	    int top = previouslySelected.getTop();
+	    int width = d.getWidth();
+	    int height = d.getHeight();
+
 			// do not duplicate child or relationships, since rel e.g. cannot be connected
 			// if child then e.g. create a note
-			IDiagramItem item = d.getDiagramItem().copy();
+			IDiagramItem item = d.createQuickNext();
+			if (item != null) {
+				item.setBackgroundColor(Theme.getCurrentColorScheme().getBackgroundColor().toRgbWithOpacity());
+			}
+
+			if (item == null) {
+				item = d.getDiagramItem().copy();
+			}
 			// generate id and add elements normally
 			// null to regenerate new client id
 			item.setClientId(null);
 			ClientIdHelpers.generateClientIdIfNotSet(item, 0, surface.getEditorContext().getGraphicalDocumentCache());
 	    AbstractDiagramFactory factory = ShapeParser.factory(item);
-	    int left = previouslySelected.getLeft();
-	    int top = previouslySelected.getTop();
-	    Info shape = factory.parseShape(item, x - left - d.getWidth() / 2, y - top - d.getHeight() / 2);
+	    Info shape = factory.parseShape(item, x - left - width / 2, y - top - height / 2);
 
 	    // TODO quick handler should not work if not editable!
 	    // TODO if child text of comment, then need to decide a special case
@@ -184,7 +198,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		IDiagramItem result = new DiagramItemDTO();
 		result.setType(ElementType.RELATIONSHIP.getValue());
 		// TODO last selected type
-		result.setText("->");
+		result.setText(RelationshipHelpers.relationship(start, surface.getEditorContext(), end));
 		result.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue() | 
 															ShapeProperty.CLOSEST_PATH.getValue());
 		result.setShape(closestSegment.start.x + "," + 

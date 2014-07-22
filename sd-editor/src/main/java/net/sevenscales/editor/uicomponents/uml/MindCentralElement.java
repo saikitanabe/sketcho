@@ -10,6 +10,8 @@ import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 
 
@@ -74,6 +76,14 @@ public class MindCentralElement extends ActivityElement implements SupportsRecta
   public int supportedMenuItems() {
   	return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue() |
            ContextMenuItem.LAYERS.getValue();
+  }
+
+  public IDiagramItem createQuickNext() {
+		IDiagramItem result = new DiagramItemDTO();
+		result.setType(ElementType.ACTIVITY.getValue());
+		result.setShape(getLeft() + "," + getTop() + "," + "92,42");
+		result.setText("Main Topic");
+		return result;
   }
 
 }

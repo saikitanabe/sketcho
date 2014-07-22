@@ -283,4 +283,6 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   // menu support
   void setDuplicateMultiplySize(int factorX, int factorY);
 
+  IDiagramItem createQuickNext();
+
 }

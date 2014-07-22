@@ -1708,4 +1708,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     this.factorY = factorY;
   }
 
+  public IDiagramItem createQuickNext() {
+    return null;
+  }
+
 }
