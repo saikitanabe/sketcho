@@ -1318,7 +1318,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
 
   @Override
-  public void editingEnded() {
+  public void editingEnded(boolean modified) {
     showText();
   }
 
@@ -1706,10 +1706,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public void setDuplicateMultiplySize(int factorX, int factorY) {
     this.factorX = factorX;
     this.factorY = factorY;
-  }
-
-  public IDiagramItem createQuickNext() {
-    return null;
   }
 
 }

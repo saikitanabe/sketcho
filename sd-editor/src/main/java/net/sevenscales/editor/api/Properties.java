@@ -82,6 +82,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private int textEditY;
 	private CommentEditor commentEditor;
 	private EditorCommon editorCommon;
+	private boolean modifiedAtLeastOnce;
 	
 	private static class Buffer {
 		String text;
@@ -368,6 +369,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private void clean() {
     selectedDiagram = null;
     textArea.setText("");
+		modifiedAtLeastOnce = false;
 	}
 
 	private void applyTextToDiagram() {
@@ -384,7 +386,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		}
 		
 		if (editorIsOpen && selectedDiagram != null) {
-			selectedDiagram.editingEnded();			
+			selectedDiagram.editingEnded(modifiedAtLeastOnce);
 		}
 	}
 	
@@ -423,6 +425,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		// }
 
     selectedDiagram.setText(textArea.getText(), textEditX, textEditY);
+    modifiedAtLeastOnce = true;
 //    fireChanged(selectedDiagram);
     sendBuffer();
     // synchronous version, starts to lag with long text

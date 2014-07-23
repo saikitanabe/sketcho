@@ -262,7 +262,7 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   /**
   * Support for diagram text editing, and understanding edit states.
   */
-  void editingEnded();
+  void editingEnded(boolean modified);
 
   // curve arrow support
   boolean isSequenceElement();
@@ -282,7 +282,5 @@ public interface Diagram extends SourcesMouseDiagramEvents {
 
   // menu support
   void setDuplicateMultiplySize(int factorX, int factorY);
-
-  IDiagramItem createQuickNext();
 
 }

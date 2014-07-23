@@ -193,8 +193,8 @@ public class ChildTextElement extends TextElement implements IChildElement {
   }
 
 	@Override
-	public void editingEnded() {
-		super.editingEnded();
+	public void editingEnded(boolean modified) {
+		super.editingEnded(modified);
 
 		if ("".equals(getText())) {
 			Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {

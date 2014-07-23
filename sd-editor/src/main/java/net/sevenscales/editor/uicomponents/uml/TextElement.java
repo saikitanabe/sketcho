@@ -390,13 +390,15 @@ public class TextElement extends AbstractDiagramItem implements
   }
 
   @Override
-  public void editingEnded() {
-  	super.editingEnded();
-  	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
- 			public void execute() {
- 				applyText();
- 			}
- 		});
+  public void editingEnded(boolean modified) {
+  	super.editingEnded(modified);
+  	if (modified) {
+	  	// Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+	 		// 	public void execute() {
+	 				applyText();
+	 		// 	}
+	 		// });
+	  }
   }
 
   private void applyText() {

@@ -423,8 +423,8 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	@Override
-	public void editingEnded() {
-		super.editingEnded();
+	public void editingEnded(boolean modified) {
+		super.editingEnded(modified);
 		parentThread.sort();
 	}
 
