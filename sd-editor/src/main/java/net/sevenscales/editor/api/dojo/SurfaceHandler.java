@@ -1035,11 +1035,6 @@ class SurfaceHandler extends SimplePanel implements
 					none = false;
 				}
 			}
-			
-			// hack to disable connection mode
-			if (none) {
-				modeManager.setConnectionMode(false);
-			}
 		}
 	}
 

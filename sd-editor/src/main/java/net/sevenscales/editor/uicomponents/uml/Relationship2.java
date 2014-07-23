@@ -2355,8 +2355,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   public void resetClosestPath() {
-    int current = getDiagramItem().getShapeProperties();
-    getDiagramItem().setShapeProperties(ShapeProperty.clear(current, ShapeProperty.CLOSEST_PATH.getValue()));
+    if (!surface.getModeManager().isConnectMode()) {
+      int current = getDiagramItem().getShapeProperties();
+      getDiagramItem().setShapeProperties(ShapeProperty.clear(current, ShapeProperty.CLOSEST_PATH.getValue()));
+    }
   }
 
 }

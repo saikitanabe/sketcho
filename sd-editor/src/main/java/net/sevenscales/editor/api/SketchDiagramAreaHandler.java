@@ -40,7 +40,6 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
   private AnchorElement currentAnchorElement;
   private CircleElement currentHandle;
   private IModeManager modeManager;
-  private boolean modeManual;
 
 	public SketchDiagramAreaHandler(ISurfaceHandler surface, IModeManager modeManager) {
 		this.surface = surface;
@@ -100,7 +99,6 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
     if ( sender != null && !(sender instanceof Relationship2) && connectionMode && notFreehandMode() && createdRelationship == null) {
     	logger.debug("Starting to create quick connection sender({})... 2", sender);
       // set connection mode on automatically as long as shift key is down
-      modeManual = modeManager.isConnectMode();
       modeManager.setConnectionMode(true);
       
       // create relationship
@@ -243,11 +241,8 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
     surface.getMouseDiagramManager().getDragHandler().insertMoveElement(tobeadded);
     surface.getMouseDiagramManager().getDragHandler().releaseForce(currentHandle);
 
-    if (!modeManual) {
-      // if mode has not been set manually then release connection mode
-      modeManager.setConnectionMode(false);
-    }
-
+    // there is no manual mode at the moment, it is always possible to make connections
+    modeManager.setConnectionMode(false);
     
     // Currently one click adding is removed and only
     // drag and drop or double click is supported

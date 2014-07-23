@@ -155,6 +155,9 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public void addAsDragging(Diagram diagram, boolean ownerComponent, MatrixPointJS point, int keys) {
 
 	}
+	public boolean isProxyDragAdding() {
+		return false;
+	}
 	public int getCurrentClientX() {
 		return 0;
 	}
