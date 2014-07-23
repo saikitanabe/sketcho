@@ -9,6 +9,8 @@ import net.sevenscales.editor.api.event.SelectionEventHandler;
 import net.sevenscales.editor.api.event.EditorClosedEvent;
 import net.sevenscales.editor.api.event.EditorClosedEventHandler;
 import net.sevenscales.editor.api.event.UnselectAllEvent;
+import net.sevenscales.editor.api.event.BackgroundMoveStartedEvent;
+import net.sevenscales.editor.api.event.BackgroundMoveStartedEventHandler;
 import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesEndedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
@@ -52,6 +54,12 @@ public class EditorCommon {
 				logger.info("onUnselectAll...");
 				// if surface background is selected => hide popup
 				EditorCommon.this.hideEditor.hide();
+			}
+		});
+
+		surface.getEditorContext().getEventBus().addHandler(BackgroundMoveStartedEvent.TYPE, new BackgroundMoveStartedEventHandler() {
+			public void on(BackgroundMoveStartedEvent event) {
+				EditorCommon.this.hideEditor.hide();	
 			}
 		});
 	}

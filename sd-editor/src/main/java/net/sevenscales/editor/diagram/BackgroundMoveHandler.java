@@ -7,6 +7,7 @@ import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.PinchZoomStartedEvent;
 import net.sevenscales.editor.api.event.PinchZoomStartedEventHandler;
+import net.sevenscales.editor.api.event.BackgroundMoveStartedEvent;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
@@ -106,6 +107,9 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
     }
     
     if (backgroundMoving || backgroundMoveInitialContitionOk()) {
+      if (!backgroundMoving) {
+        startBackgroundMove();
+      }
       backgroundMoving = true;
       int dx = gridUtils.dx(point.getScreenX()) + prevTransformDX;
       int dy = gridUtils.dy(point.getScreenY()) + prevTransformDY;
@@ -116,7 +120,10 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
       
       surface.getRootLayer().setTransform(dx, dy);
     }
+  }
 
+  private void startBackgroundMove() {
+    surface.getEditorContext().getEventBus().fireEvent(new BackgroundMoveStartedEvent());
   }
 
   public boolean backgroundMoveInitialContitionOk() {
