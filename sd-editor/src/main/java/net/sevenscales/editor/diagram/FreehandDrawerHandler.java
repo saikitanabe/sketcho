@@ -145,6 +145,20 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
         }
       }
     });
+
+    handleEscKey(this);
+  }
+
+  private native void handleEscKey(FreehandDrawerHandler me)/*-{
+    $wnd.cancelStream.onValue(function(v) {
+      me.@net.sevenscales.editor.diagram.FreehandDrawerHandler::onEsc()();
+    })
+  }-*/;
+
+  private void onEsc() {
+    if (freehandMode()) {
+      fireToggleFreehandMode();
+    }
   }
 
   private void evenDuringFreehandMode(NativePreviewEvent event) {

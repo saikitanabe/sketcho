@@ -59,8 +59,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			}
 		});
 
-		// TODO ESC key handler deletes created elements and those are
-		// deleted also from undo cache!
+		// ESC key handler deletes created elements
 		handleEscKey(this);
 	}
 
