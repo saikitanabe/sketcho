@@ -349,7 +349,18 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     if (textFormatter != null) {
       textFormatter.remove();
     }
+
+    removeConnections();
+
 	}
+
+  private void removeConnections() {
+    for (AnchorElement ae : getAnchors()) {
+      if (ae.getRelationship() != null && ae.getRelationship().noText()) {
+        surface.getSelectionHandler().addToBeRemovedCycle(ae.getRelationship());
+      }
+    }
+  }
 
   public boolean isRemoved() {
     return removed;

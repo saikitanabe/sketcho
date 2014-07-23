@@ -1241,7 +1241,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   public boolean noText() {
-    return "".equals(getTextLabel()) && "".equals(getTextStart()) && "".equals(getTextEnd());
+    return "".equals(getTextLabel()) && "".equals(getTextStart()) && "".equals(getTextEnd()) && children.size() == 0;
   }
 
   public Diagram showEditorForDiagram(int screenX, int screenY) {
