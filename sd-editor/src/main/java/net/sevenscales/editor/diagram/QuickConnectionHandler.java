@@ -199,6 +199,10 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	private IDiagramItem switchType(Diagram d) {
 		IDiagramItem result = null;
 		switch (ElementType.getEnum(d.getDiagramItem().getType())) {
+			case NOTE:
+			case SEQUENCE:
+			case VERTICAL_PARTITION:
+			case HORIZONTAL_PARTITION:
 			case FREEHAND2: {
 				result = createNoteItem(d);
 				break;
@@ -209,14 +213,6 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			}
 			case ACTIVITY_START: {
 				result = createActivityItem(d);
-				break;
-			}
-			case SEQUENCE: {
-				result = createNoteItem(d);
-				break;
-			}
-			case NOTE: {
-				result = createNoteItem(d);
 				break;
 			}
 			case TEXT_ITEM: {

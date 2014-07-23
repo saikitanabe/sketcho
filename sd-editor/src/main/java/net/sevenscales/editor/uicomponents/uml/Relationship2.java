@@ -2361,4 +2361,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     }
   }
 
+  public void asClosestPath() {
+    getDiagramItem().addShapeProperty(ShapeProperty.CLOSEST_PATH);
+  }
+
 }

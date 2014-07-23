@@ -3,6 +3,7 @@ package net.sevenscales.editor.diagram;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.js.ImageInfo;
+import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.CreateElementEvent;
@@ -197,6 +198,9 @@ public class RelationshipDragEndHandler implements
 		Diagram diagram = null;
 		if (currentRel != null) {
 			diagram = createDiagramFromRelationShip(type, imageInfo, x, y);
+      if (!(diagram instanceof SequenceElement)) {
+        currentRel.asClosestPath();
+      }
 			surface.addAsSelected(diagram, true);
 			// this is connect drop element
 			currentRel.anchorEnd(true);

@@ -15,7 +15,6 @@ import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
-import net.sevenscales.editor.uicomponents.uml.SequenceElement;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler;
 import net.sevenscales.editor.api.impl.Theme;
@@ -129,9 +128,6 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       DiagramItemDTO di = new DiagramItemDTO();
       if (Tools.isCurvedArrow()) {
         di.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue());
-      }
-      if (!(sender instanceof SequenceElement)) {
-        di.addShapeProperty(ShapeProperty.CLOSEST_PATH);
       }
       // Default arrow type is curved ends configuration
 
