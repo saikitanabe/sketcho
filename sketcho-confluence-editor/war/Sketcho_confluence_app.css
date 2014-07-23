@@ -117,6 +117,7 @@ body {
     z-index: 1001 !important;
     left: 40px;
     top: 10px;
+    width: 100%;
 }
 
 .toolbar {
