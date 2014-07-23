@@ -22,6 +22,8 @@ import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.api.IDiagramItem;
 
 
 public class ActivityStart extends AbstractDiagramItem implements SupportsRectangleShape {
@@ -258,6 +260,14 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
   public int supportedMenuItems() {
     return super.supportedMenuItems() |
            ContextMenuItem.LAYERS.getValue();
+  }
+
+  public IDiagramItem createQuickNext() {
+		IDiagramItem result = new DiagramItemDTO();
+		result.setType(ElementType.ACTIVITY.getValue());
+		result.setShape(getLeft() + "," + getTop() + "," + "92,42");
+		result.setText("My Activity");
+		return result;
   }
 
 }
