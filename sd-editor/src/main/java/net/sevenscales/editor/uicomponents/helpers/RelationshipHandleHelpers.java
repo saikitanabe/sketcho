@@ -12,6 +12,8 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.RelationshipNotAttachedEvent;
+import net.sevenscales.editor.api.event.UndoEvent;
+import net.sevenscales.editor.api.event.UndoEventHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.diagram.Diagram;
@@ -68,6 +70,12 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     
     // to follow if parent relationship is dragged => update handles position
     surface.addDragHandler(this);
+
+    surface.getEditorContext().getEventBus().addHandler(UndoEvent.TYPE, new UndoEventHandler() {
+      public void on(UndoEvent event) {
+        forceHide();
+      }
+    });
 
     initDefaults();
   }
