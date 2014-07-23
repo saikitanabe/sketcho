@@ -10,6 +10,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.utils.DiagramItemHelpers;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -1102,14 +1103,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     boolean shapeChanged = false;
     if (newshape != null && !newshape.equals(current.getShape())) {
       shapeChanged = true;
-      String shapestr = newshape.replaceFirst("\\s", ",");
-      String[] shapeString = shapestr.split(",");
-      int[] shape = new int[shapeString.length];
-      int i = 0;
-      for (String val : shapeString) {
-        shape[i] = Integer.valueOf(val);
-        i = i + 1;
-      }
+      int [] shape = DiagramItemHelpers.parseShape(newshape);
       setShape(shape);
     }
 

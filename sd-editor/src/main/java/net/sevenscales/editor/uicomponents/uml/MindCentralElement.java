@@ -78,12 +78,4 @@ public class MindCentralElement extends ActivityElement implements SupportsRecta
            ContextMenuItem.LAYERS.getValue();
   }
 
-  public IDiagramItem createQuickNext() {
-		IDiagramItem result = new DiagramItemDTO();
-		result.setType(ElementType.ACTIVITY.getValue());
-		result.setShape(getLeft() + "," + getTop() + "," + "92,42");
-		result.setText("Main Topic");
-		return result;
-  }
-
 }

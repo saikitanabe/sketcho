@@ -262,12 +262,4 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
            ContextMenuItem.LAYERS.getValue();
   }
 
-  public IDiagramItem createQuickNext() {
-		IDiagramItem result = new DiagramItemDTO();
-		result.setType(ElementType.ACTIVITY.getValue());
-		result.setShape(getLeft() + "," + getTop() + "," + "92,42");
-		result.setText("My Activity");
-		return result;
-  }
-
 }

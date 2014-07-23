@@ -13,6 +13,8 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.Dimension;
+import net.sevenscales.domain.utils.DiagramItemHelpers;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.UndoEvent;
@@ -26,6 +28,7 @@ import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
+import net.sevenscales.editor.uicomponents.uml.GenericElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.diagram.MouseDiagramHandler;
@@ -142,14 +145,14 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 			// do not duplicate child or relationships, since rel e.g. cannot be connected
 			// if child then e.g. create a note
-			IDiagramItem item = d.createQuickNext();
-			if (item != null) {
-				item.setBackgroundColor(Theme.getCurrentColorScheme().getBackgroundColor().toRgbWithOpacity());
+			IDiagramItem item = createQuickNext(d);
+
+			Dimension dimension = DiagramItemHelpers.parseDimension(item);
+			if (dimension != null) {
+				width = dimension.width;
+				height = dimension.height;
 			}
 
-			if (item == null) {
-				item = d.getDiagramItem().copy();
-			}
 			// generate id and add elements normally
 			// null to regenerate new client id
 			item.setClientId(null);
@@ -158,14 +161,11 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	    Info shape = factory.parseShape(item, x - left - width / 2, y - top - height / 2);
 
 	    // TODO quick handler should not work if not editable!
-	    // TODO if child text of comment, then need to decide a special case
 	    Diagram newelement = factory.parseDiagram(surface, shape, true, item, null);
 			reattachHelpers.processDiagram(newelement);
 
 	    // create connection with closest connection
 	    Relationship2 relationship = createRelationshipInBetween(d, newelement);
-			// relationship.anchorStart(true);
-			// relationship.anchorEnd(true);
 			reattachHelpers.processDiagram(relationship);
 
 	    List<Diagram> newitems = new ArrayList<Diagram>();
@@ -184,6 +184,78 @@ class QuickConnectionHandler implements MouseDiagramHandler {
   		surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(newelement).setJustCreated(true));
 		}
 	}
+
+	private IDiagramItem createQuickNext(Diagram d) {
+		IDiagramItem result = switchType(d);
+		if (result == null) {
+			result = d.getDiagramItem().copy();
+		} else {
+			// switch type needs some background color
+			result.setBackgroundColor(Theme.getCurrentColorScheme().getBackgroundColor().toRgbWithOpacity());
+		}
+		return result;
+	}
+
+	private IDiagramItem switchType(Diagram d) {
+		IDiagramItem result = null;
+		switch (ElementType.getEnum(d.getDiagramItem().getType())) {
+			case FREEHAND2: {
+				result = createNoteItem(d);
+				break;
+			}
+			case MIND_CENTRAL: {
+				result = createTopicItem(d);
+				break;
+			}
+			case ACTIVITY_START: {
+				result = createActivityItem(d);
+				break;
+			}
+			case SEQUENCE: {
+				result = createNoteItem(d);
+				break;
+			}
+			case NOTE: {
+				result = createNoteItem(d);
+				break;
+			}
+			case TEXT_ITEM: {
+				result = d.getDiagramItem().copy();
+				result.setText("Just text");
+				break;
+			}
+			case FORK: {
+				result = createActivityItem(d);
+				break;
+			}
+
+		}
+		return result;
+	}
+
+	private IDiagramItem createNoteItem(Diagram d) {
+		IDiagramItem result = new DiagramItemDTO();
+		result.setType(ElementType.NOTE.getValue());
+		result.setShape(d.getLeft() + "," + d.getTop() + "," + "150,45");
+		result.setText("Note");
+		return result;
+	}
+
+  private IDiagramItem createTopicItem(Diagram d) {
+		IDiagramItem result = new DiagramItemDTO();
+		result.setType(ElementType.ACTIVITY.getValue());
+		result.setShape(d.getLeft() + "," + d.getTop() + "," + "92,42");
+		result.setText("Main Topic");
+		return result;
+  }
+
+  private IDiagramItem createActivityItem(Diagram d) {
+		IDiagramItem result = new DiagramItemDTO();
+		result.setType(ElementType.ACTIVITY.getValue());
+		result.setShape(d.getLeft() + "," + d.getTop() + "," + "92,42");
+		result.setText("My Activity");
+		return result;
+  }
 
 	private Relationship2 createRelationshipInBetween(Diagram start, Diagram end) {
 		AnchorUtils.ClosestSegment closestPoints = AnchorUtils.closestSegment(start.getLeft(), start.getTop(), start.getWidth(), start.getHeight(), end.getLeft(), end.getTop(), end.getWidth(), end.getHeight());
