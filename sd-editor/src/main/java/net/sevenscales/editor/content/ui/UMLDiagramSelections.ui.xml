@@ -46,6 +46,15 @@
 				</g:HTML>
 			</c:child>
 		</c:FastButton>
+		<c:FastButton ui:field="quickMode" addStyleNames="{style.simple}">
+			<c:child>
+				<g:HTML>
+					<a title="Experimental Super Flow Mode" class="btn btn-custom download-btn tooltipper">
+						<i class="context-icon-quick-mode"></i>
+					</a>-
+				</g:HTML>
+			</c:child>
+		</c:FastButton>
 		<c:FastButton ui:field="commentMode" addStyleNames="{style.simple}">
 			<c:child>
 				<g:HTML>

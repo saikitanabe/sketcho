@@ -59,11 +59,11 @@ public class UiSketchoBoardEditContent extends UiEditBoardContent implements Key
 	}
   
 	// TODO: is editable as parameter of as callback
-  public UiSketchoBoardEditContent(IContent content, Context context, boolean editable, EditorContext editorContext, OTBuffer otBuffer) {
-  	this(content, context, editable, editorContext, true, otBuffer);
+  public UiSketchoBoardEditContent(IContent content, Context context, boolean editable, EditorContext editorContext, OTBuffer otBuffer, Boolean superQuickMode) {
+  	this(content, context, editable, editorContext, true, otBuffer, superQuickMode);
   }
   
-  public UiSketchoBoardEditContent(IContent content, Context context, boolean editable, EditorContext editorContext, boolean supportsUndoMenu, OTBuffer otBuffer) {
+  public UiSketchoBoardEditContent(IContent content, Context context, boolean editable, EditorContext editorContext, boolean supportsUndoMenu, OTBuffer otBuffer, Boolean superQuickMode) {
     super(content, context, false, supportsUndoMenu, editorContext);
     
 //    getWidth().setText(getContent().getWidth().toString());
@@ -75,7 +75,7 @@ public class UiSketchoBoardEditContent extends UiEditBoardContent implements Key
     getEditorContext().set(EditorProperty.SKETCHO_BOARD_MODE, true);
     getEditorContext().setEditable(editable);
 
-    modelingPanel = FactoryDoJo.createModelingPanel(this, getContent().getWidth(), getContent().getHeight(), editable, getModeManager(), getEditorContext(), otBuffer);
+    modelingPanel = FactoryDoJo.createModelingPanel(this, getContent().getWidth(), getContent().getHeight(), editable, getModeManager(), getEditorContext(), otBuffer, superQuickMode);
     modelingPanel.addKeyEventHandler(this);
     modelHandler = new UiModelContentHandler(this, editable, getEditorContext(), getModeManager());
 

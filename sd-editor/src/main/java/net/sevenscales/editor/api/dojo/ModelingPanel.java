@@ -70,7 +70,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
   private ScaleSlider scaleSlider;
 	
 	public ModelingPanel(UIObject parent, int width, int height, boolean editable,
-			IModeManager modeManager, EditorContext editorContext, boolean inDialog, boolean autohide, OTBuffer otBuffer) {
+			IModeManager modeManager, EditorContext editorContext, boolean inDialog, boolean autohide, OTBuffer otBuffer, Boolean superQuickMode) {
 		this._parent = parent;
 		this.inDialog = inDialog;
 		setStyleName("ModelingPanel");
@@ -96,7 +96,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		surface.setName(SurfaceHandler.DRAWING_AREA);
 		surface.init(width, height, editable, modeManager, true, editorContext, otBuffer);
 
-		Tools.create(surface);
+		Tools.create(surface, superQuickMode);
 		
 		editorContext.getEventBus().addHandler(SurfaceScaleEvent.TYPE, new SurfaceScaleEventHandler() {
 			@Override

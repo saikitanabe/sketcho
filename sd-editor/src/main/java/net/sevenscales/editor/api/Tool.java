@@ -4,7 +4,8 @@ public enum Tool {
 	NO_TOOL					(0x0000),
 	COMMENT_TOOL		(0x0001),
 	FREEHAND_TOOL		(0x0002),
-	CURVED_ARROW 		(0x0004);
+	CURVED_ARROW 		(0x0004),
+	QUICK_MODE	 		(0x0008);
 
 	private int value;
 

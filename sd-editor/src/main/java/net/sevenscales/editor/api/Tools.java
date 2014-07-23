@@ -7,6 +7,7 @@ import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeTyp
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
 import net.sevenscales.editor.api.event.CommentModeEvent;
 import net.sevenscales.editor.api.event.CommentModeEventHandler;
+import net.sevenscales.editor.api.event.SuperQuickModeEvent;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.utils.SLogger;
 
@@ -24,8 +25,9 @@ public class Tools {
 	private ISurfaceHandler surface;
 	private int currentTools;
 
-	private Tools(ISurfaceHandler surface) {
+	private Tools(ISurfaceHandler surface, Boolean superQuickMode) {
 		this.surface = surface;
+		_setQuickMode(superQuickMode);
 		// default is curved arrows
 		_setCurvedArrow(true);
 		// surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
@@ -45,9 +47,9 @@ public class Tools {
 		// });
 	}
 
-	public static Tools create(ISurfaceHandler surface) {
+	public static Tools create(ISurfaceHandler surface, Boolean superQuickMode) {
 		if (instance == null) {
-			instance = new Tools(surface);
+			instance = new Tools(surface, superQuickMode);
 		}
 		return instance;
 	}
@@ -74,6 +76,30 @@ public class Tools {
 	private void _toggleCommentMode() {
     setCommentTool(!isCommentMode());
     surface.getEditorContext().getEventBus().fireEvent(new CommentModeEvent(isCommentMode()));
+	}
+
+	public static void toggleQuickMode() {
+		instance._toggleQuickMode();
+	}
+	private void _toggleQuickMode() {
+		setQuickMode(!isQuickMode());
+    surface.getEditorContext().getEventBus().fireEvent(new SuperQuickModeEvent(isQuickMode()));
+	}
+	public static void setQuickMode(boolean enabled) {
+		instance._setQuickMode(enabled);
+	}
+	public void _setQuickMode(boolean enabled) {
+		if (enabled) {
+			currentTools |= Tool.QUICK_MODE.getValue();
+		} else {
+			currentTools &= ~Tool.QUICK_MODE.getValue();
+		}
+	}
+	public static boolean isQuickMode() {
+		return instance._isQuickMode();
+	}
+	private boolean _isQuickMode() {
+		return (currentTools & Tool.QUICK_MODE.getValue()) == Tool.QUICK_MODE.getValue();
 	}
 
 	public static boolean isCommentMode() {

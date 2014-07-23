@@ -17,9 +17,9 @@ import net.sevenscales.domain.utils.SLogger;
 public class FactoryDoJo {
 	private static final SLogger logger = SLogger.createLogger(FactoryDoJo.class);
 
-	public static IModelingPanel createModelingPanel(UIObject parent, int width, int height, boolean editable, IModeManager modeManager, EditorContext editorContext, OTBuffer otBuffer) {
+	public static IModelingPanel createModelingPanel(UIObject parent, int width, int height, boolean editable, IModeManager modeManager, EditorContext editorContext, OTBuffer otBuffer, Boolean superQuickMode) {
 		try {
-			return new ModelingPanel(parent, width, height, editable, modeManager, editorContext, false, true, otBuffer);
+			return new ModelingPanel(parent, width, height, editable, modeManager, editorContext, false, true, otBuffer, superQuickMode);
 		} catch (Exception e) {
 			logger.error("createModelingPanel", e);
 			throw new RuntimeException(e);

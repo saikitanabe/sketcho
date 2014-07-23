@@ -16,6 +16,7 @@ import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.domain.Dimension;
 import net.sevenscales.domain.utils.DiagramItemHelpers;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.UndoEvent;
 import net.sevenscales.editor.api.event.SelectionEvent;
@@ -67,6 +68,10 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	}
 
 	private void checkSelection() {
+		if (!Tools.isQuickMode()) {
+			return;
+		}
+
 		Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
 		if (selected.size() == 1) {
 			previouslySelected = selected.iterator().next();
@@ -103,12 +108,14 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	}
 
 	public void onMouseUp(Diagram sender, MatrixPointJS point) {
+		if (Tools.isQuickMode()) {
 		cancelLastOperationIfLastQuickConnection();
-		if (sender == null) {
-			// let's check only board sent mouse up event;
-			// since library drop would be reseted otherwise
-			// anyway better to have some optimization
-			checkToCreateQuickConnection(point.getScreenX(), point.getScreenY());
+			if (sender == null) {
+				// let's check only board sent mouse up event;
+				// since library drop would be reseted otherwise
+				// anyway better to have some optimization
+				checkToCreateQuickConnection(point.getScreenX(), point.getScreenY());
+			}
 		}
 	}
 
