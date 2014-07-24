@@ -206,6 +206,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	private IDiagramItem switchType(Diagram d) {
 		IDiagramItem result = null;
 		switch (ElementType.getEnum(d.getDiagramItem().getType())) {
+			case IMAGE:
 			case NOTE:
 			case SEQUENCE:
 			case VERTICAL_PARTITION:
