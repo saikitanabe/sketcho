@@ -218,6 +218,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 				result = createTopicItem(d);
 				break;
 			}
+			case CHOICE:
 			case ACTIVITY_START: {
 				result = createActivityItem(d);
 				break;
@@ -231,7 +232,10 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 				result = createActivityItem(d);
 				break;
 			}
-
+			case ACTOR: {
+				result = createUseCase(d);
+				break;
+			}
 		}
 		return result;
 	}
@@ -259,6 +263,14 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		result.setText("My Activity");
 		return result;
   }
+
+	private IDiagramItem createUseCase(Diagram d) {
+		IDiagramItem result = new DiagramItemDTO();
+		result.setType(ElementType.ELLIPSE.getValue());
+		result.setShape(d.getLeft() + "," + d.getTop() + "," + "63,21");
+		result.setText("Use Case");
+		return result;
+	}
 
 	private Relationship2 createRelationshipInBetween(Diagram start, Diagram end) {
 		AnchorUtils.ClosestSegment closestPoints = AnchorUtils.closestSegment(start.getLeft(), start.getTop(), start.getWidth(), start.getHeight(), end.getLeft(), end.getTop(), end.getWidth(), end.getHeight());

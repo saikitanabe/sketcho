@@ -11,6 +11,10 @@ public class DiagramItemHelpers {
   public static Dimension parseDimension(IDiagramItem diagramItem) {
 		Dimension result = null;
 		switch (ElementType.getEnum(diagramItem.getType())) {
+			// case ELLIPSE: {
+			// 	result = parseUseCase(diagramItem.getShape());
+			// 	break;
+			// }
 			case ACTIVITY:
 			case NOTE:
 			case TEXT_ITEM: {
@@ -30,6 +34,15 @@ public class DiagramItemHelpers {
 			result = new Dimension(shape[2], shape[3]);
 		}
 
+		return result;
+	}
+
+	private static Dimension parseUseCase(String shapestr) {
+		Dimension result = null;
+		int[] shape = parseShape(shapestr);
+		if (shape.length == 4) {
+			result = new Dimension(shape[2] * 2, shape[3] * 2);
+		}
 		return result;
 	}
 
