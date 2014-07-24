@@ -281,40 +281,45 @@ public class AnchorUtils {
   public static ClosestSegment closestSegment(int left, int top, int width, int height, int left2, int top2, int width2, int height2) {
     ClosestSegment result = new ClosestSegment();
 
-    int distLeftLeft = distance(left, top + height / 2, left2, top2 + height2 / 2);
-    int distLeftRigth = distance(left, top + height / 2, left2 + width2, top2 + height2 / 2);
-    int distLeftTop = distance(left, top + height / 2, left2 + width2 / 2, top2);
-    int distLeftBottom = distance(left, top + height, left2 + width2 / 2, top2 + height2);
+    int distLeftLeft =      distance(left, top + height / 2, left2, top2 + height2 / 2);
+    int distLeftRigth =     distance(left, top + height / 2, left2 + width2, top2 + height2 / 2);
+    int distLeftTop =       distance(left, top + height / 2, left2 + width2 / 2, top2);
+    int distLeftBottom =    distance(left, top + height / 2, left2 + width2 / 2, top2 + height2);
 
-    int distRightLeft = distance(left + width, top + height / 2, left2, top2 + height2 / 2);
-    int distRightRight = distance(left + width, top + height / 2, left2 + width2, top2 + height2 / 2);
-    int distRightTop = distance(left + width, top + height / 2, left2 + width2 / 2, top2);
-    int distRightBottom = distance(left + width, top + height / 2, left2 + width2 / 2, top2 + height2);
+    int distRightLeft =     distance(left + width, top + height / 2, left2, top2 + height2 / 2);
+    int distRightRight =    distance(left + width, top + height / 2, left2 + width2, top2 + height2 / 2);
+    int distRightTop =      distance(left + width, top + height / 2, left2 + width2 / 2, top2);
+    int distRightBottom =   distance(left + width, top + height / 2, left2 + width2 / 2, top2 + height2);
 
-    int distTopTop = distance(left + width / 2, top, left2 + width2 / 2, top2);
-    int distTopBottom = distance(left + width / 2, top, left2 + width2 / 2, top2 + height2);
-    int distTopLeft = distance(left + width / 2, top, left2, top2 + height2 / 2);
-    int distTopRight = distance(left + width / 2, top, left2 + width2, top2 + height2 / 2);
+    int distTopTop =        distance(left + width / 2, top, left2 + width2 / 2, top2);
+    int distTopBottom =     distance(left + width / 2, top, left2 + width2 / 2, top2 + height2);
+    int distTopLeft =       distance(left + width / 2, top, left2, top2 + height2 / 2);
+    int distTopRight =      distance(left + width / 2, top, left2 + width2, top2 + height2 / 2);
 
-    int distBottomTop = distance(left + width / 2, top + height, left2 + width2 / 2, top2);
-    int distBottomBottom = distance(left + width / 2, top + height, left2 + width2 / 2, top2 + height2);
-    int distBottomLeft = distance(left + width / 2, top + height, left2, top2 + height2 / 2);
-    int distBottomRight = distance(left + width / 2, top + height, left2 + width2, top2 + height2 / 2);
+    int distBottomTop =     distance(left + width / 2, top + height, left2 + width2 / 2, top2);
+    int distBottomBottom =  distance(left + width / 2, top + height, left2 + width2 / 2, top2 + height2);
+    int distBottomLeft =    distance(left + width / 2, top + height, left2, top2 + height2 / 2);
+    int distBottomRight =   distance(left + width / 2, top + height, left2 + width2, top2 + height2 / 2);
 
-    // vertical edges
     int smallest = Math.min(distLeftLeft, distLeftRigth);
     smallest = Math.min(smallest, distLeftTop);
     smallest = Math.min(smallest, distLeftBottom);
 
-    // TODO all separately
     smallest = Math.min(smallest, distRightLeft);
     smallest = Math.min(smallest, distRightRight);
+    smallest = Math.min(smallest, distRightTop);
+    smallest = Math.min(smallest, distRightBottom);
 
     // horizontal edges
     smallest = Math.min(smallest, distTopTop);
     smallest = Math.min(smallest, distTopBottom);
+    smallest = Math.min(smallest, distTopLeft);
+    smallest = Math.min(smallest, distTopRight);
+
     smallest = Math.min(smallest, distBottomTop);
     smallest = Math.min(smallest, distBottomBottom);
+    smallest = Math.min(smallest, distBottomLeft);
+    smallest = Math.min(smallest, distBottomRight);
 
     if (smallest == distLeftLeft) {
       result.start.x = left;
