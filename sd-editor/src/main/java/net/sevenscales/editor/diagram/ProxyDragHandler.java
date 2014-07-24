@@ -44,7 +44,7 @@ public class ProxyDragHandler implements MouseDiagramHandler {
     source.addMouseDiagramHandler(this);
     target.addMouseDiagramHandler(new MouseDiagramHandler() {
       @Override
-      public void onMouseUp(Diagram sender, MatrixPointJS point) {
+      public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
 //        System.out.println("MOUSE UP target");
     		// fire event show property text editor
       	if (sender == null && targetproxy != null) {
@@ -163,7 +163,7 @@ public class ProxyDragHandler implements MouseDiagramHandler {
     }
   }
 
-  public void onMouseUp(Diagram sender, MatrixPointJS point) {
+  public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
     // delete proxy
     removeProxy();
   }
@@ -178,7 +178,7 @@ public class ProxyDragHandler implements MouseDiagramHandler {
   }
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
-  	onMouseUp(sender, point);
+  	onMouseUp(sender, point, 0);
   }
 
   private void removeProxy() {

@@ -83,13 +83,13 @@ public abstract class GraphicsBase implements IGraphics {
 		}
 	}
 
-	protected void onMouseUp(GraphicsEvent event) {
-		eventHandlerCollection.fireOnMouseUp(this, event);
+	protected void onMouseUp(GraphicsEvent event, int keys) {
+		eventHandlerCollection.fireOnMouseUp(this, event, keys);
 		ArrayList<GraphicsMouseUpHandler> handlers = (ArrayList<GraphicsMouseUpHandler>) map
 				.get(GraphicsMouseUpEvent.getType());
 		if (handlers != null) {
 			for (GraphicsMouseUpHandler h : handlers) {
-				h.onMouseUp(event);
+				h.onMouseUp(event, keys);
 			}
 		}
 	}

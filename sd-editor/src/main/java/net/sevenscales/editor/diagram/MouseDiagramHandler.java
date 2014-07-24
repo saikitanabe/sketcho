@@ -6,7 +6,7 @@ public interface MouseDiagramHandler extends MouseDiagramMoveHandler {
 
 	boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys);
 
-	void onMouseUp(Diagram sender, MatrixPointJS point);
+	void onMouseUp(Diagram sender, MatrixPointJS point, int keys);
 
 	void onMouseLeave(Diagram sender, MatrixPointJS point);
 

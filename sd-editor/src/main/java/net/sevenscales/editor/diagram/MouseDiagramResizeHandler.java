@@ -141,7 +141,8 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 		}
 	}
 
-	public void onMouseUp(Diagram sender, MatrixPointJS point) {
+	@Override
+	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
     if (!surface.isDragEnabled()) {
       return;
     }

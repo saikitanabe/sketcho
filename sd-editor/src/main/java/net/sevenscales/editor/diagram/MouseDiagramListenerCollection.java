@@ -14,9 +14,9 @@ public class MouseDiagramListenerCollection extends HashSet<MouseDiagramHandler>
 		}
 	}
 
-	public void fireMouseUp(Diagram sender, MatrixPointJS point) {
+	public void fireMouseUp(Diagram sender, MatrixPointJS point, int keys) {
 		for (MouseDiagramHandler l : this) {
-			l.onMouseUp(sender, point);
+			l.onMouseUp(sender, point, keys);
 		}
 	}
 

@@ -220,7 +220,8 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 		}
 	}
 
-	public void onMouseUp(Diagram sender, MatrixPointJS point) {
+	@Override
+	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
 		// logger.debug("onMouseUp isLassoing={}...", isLassoing);
 		if (isLassoing) {
 			selectItems(point);

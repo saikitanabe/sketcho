@@ -124,7 +124,7 @@ class SurfaceHandlerImplFirefox extends SurfaceHandler {
   
 	  // hack to prevent showing surface context menu => fire click will reset this
 		cancelSurfaceClickEvent = mouseDiagramManager.isMovingBackground();
-	  mouseDiagramManager.onMouseUp(null, MatrixPointJS.createScaledPoint(x, y, getScaleFactor()));
+	  mouseDiagramManager.onMouseUp(null, MatrixPointJS.createScaledPoint(x, y, getScaleFactor()), 0);
   }
 
 }

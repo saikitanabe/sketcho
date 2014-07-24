@@ -24,7 +24,7 @@ public class ModelingPanelEventHandler implements MouseDiagramHandler {
 	}
 
 	@Override
-	public void onMouseUp(Diagram sender, MatrixPointJS point) {
+	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
 		// TODO Auto-generated method stub
 		
 	}

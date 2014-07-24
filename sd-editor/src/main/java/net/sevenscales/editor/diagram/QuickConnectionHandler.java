@@ -27,6 +27,7 @@ import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
@@ -35,6 +36,7 @@ import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.domain.utils.SLogger;
 
 
@@ -107,19 +109,40 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	public void onMouseMove(Diagram sender, MatrixPointJS point) {
 	}
 
-	public void onMouseUp(Diagram sender, MatrixPointJS point) {
+	@Override
+	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
 		if (Tools.isQuickMode()) {
-		cancelLastOperationIfLastQuickConnection();
+			cancelLastOperationIfLastQuickConnection();
 			if (sender == null) {
 				// let's check only board sent mouse up event;
 				// since library drop would be reseted otherwise
 				// anyway better to have some optimization
-				checkToCreateQuickConnection(point.getScreenX(), point.getScreenY());
+				boolean fromPreviousIfAny = keys == IGraphics.SHIFT;
+				checkToCreateQuickConnection(point.getScreenX(), point.getScreenY(), fromPreviousIfAny);
 			}
 		}
 	}
 
-	private void checkToCreateQuickConnection(int screenX, int screenY) {
+	private Diagram findPrevious(Diagram d) {
+		Diagram result = d;
+    for (AnchorElement ae : d.getAnchors()) {
+      if (ae.getRelationship() != null) {
+      	Relationship2 rel = ae.getRelationship();
+      	Diagram start = rel.getStartAnchor().getDiagram();
+      	Diagram end = rel.getEndAnchor().getDiagram();
+
+      	// take the end that is not current diagram
+      	if (start != null && start != d) {
+      		result = start;
+      	} else if (end != null) {
+      		result = end;
+      	}
+      }
+    }
+    return result;
+	}
+
+	private void checkToCreateQuickConnection(int screenX, int screenY, boolean fromPreviousIfAny) {
 		Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
 		if (notAddedFromLibrary &&
 			  selected.size() == 0 && 
@@ -129,7 +152,11 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			int x = stp.scaledAndTranslatedPoint.x;
 			int y = stp.scaledAndTranslatedPoint.y;
 
-			createConnectedDiagram(previouslySelected, x, y);
+			Diagram from = previouslySelected;
+			if (fromPreviousIfAny) {
+				from = findPrevious(previouslySelected);
+			}
+			createConnectedDiagram(from, x, y);
 		}
 		// makes sure that plain drag & drop doesn't create quick connection, but still
 		// remembers what has been dragged and dropped
@@ -145,8 +172,8 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			ReattachHelpers reattachHelpers = new ReattachHelpers();
 			reattachHelpers.processDiagram(d);
 
-	    int left = previouslySelected.getLeft();
-	    int top = previouslySelected.getTop();
+	    int left = d.getLeft();
+	    int top = d.getTop();
 	    int width = d.getWidth();
 	    int height = d.getHeight();
 

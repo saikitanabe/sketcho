@@ -473,7 +473,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
-  	onMouseUp(sender, point);
+  	onMouseUp(sender, point, 0);
   }
 
   private void startDragging(Diagram sender) {
@@ -524,7 +524,8 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		return forcedItems;
 	}
 
-	public void onMouseUp(Diagram sender, MatrixPointJS point) {
+	@Override
+	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
 		// logger.start("MouseDiagramDragHandler.onMouseUp SUM");
 		// logger.start("MouseDiagramDragHandler.onMouseUp 1");
 

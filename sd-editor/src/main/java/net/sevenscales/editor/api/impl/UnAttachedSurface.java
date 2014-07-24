@@ -281,7 +281,7 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public void onMouseDown(GraphicsEvent event, int keys) {
 
 	}
-	public void onMouseUp(GraphicsEvent event) {
+	public void onMouseUp(GraphicsEvent event, int keys) {
 
 	}
 	public void setDisableOnArea(boolean value) {

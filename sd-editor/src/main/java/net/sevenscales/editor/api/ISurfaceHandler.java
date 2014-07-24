@@ -113,7 +113,7 @@ public interface ISurfaceHandler {
 	HandlerRegistration addTouchMoveHandler(TouchMoveHandler handler);
 
 	void onMouseDown(GraphicsEvent event, int keys);
-	void onMouseUp(GraphicsEvent event);
+	void onMouseUp(GraphicsEvent event, int keys);
 
 	void setDisableOnArea(boolean value);
 	void fireLongPress(int x, int y);

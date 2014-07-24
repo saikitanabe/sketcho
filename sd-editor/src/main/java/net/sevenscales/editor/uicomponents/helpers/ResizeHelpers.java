@@ -231,9 +231,9 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 	}
 
 	@Override
-	public void onMouseUp(GraphicsEvent event) {
+	public void onMouseUp(GraphicsEvent event, int keys) {
 		if (parent != null) {
-			parent.onMouseUp(event);
+			parent.onMouseUp(event, keys);
 		}
 	}
 

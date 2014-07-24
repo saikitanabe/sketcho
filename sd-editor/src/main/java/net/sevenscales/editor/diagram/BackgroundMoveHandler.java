@@ -134,7 +134,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
 		return backgroundMoving;
 	}
 
-	public void onMouseUp(Diagram sender, MatrixPointJS point) {
+	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
 //  	complexElementHandler.showComplexElements(diagrams);
     currentSender = null;
     backgroundMouseDown = true;

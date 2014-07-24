@@ -242,11 +242,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     mouseDown = true;
   }
   
-  public void onMouseUp(GraphicsEvent event) {
+  @Override
+  public void onMouseUp(GraphicsEvent event, int keys) {
     int x = SurfaceUtil.eventGetElementOffsetX(surface.getElement(), event);
     int y = SurfaceUtil.eventGetElementOffsetY(surface.getElement(), event);
     MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
-    mouseListeners.fireMouseUp(this, point);
+    mouseListeners.fireMouseUp(this, point, keys);
     
     mouseDown = false;
   }
@@ -931,7 +932,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
   public void onMouseMove(Diagram sender, MatrixPointJS point) {
   }
-  public void onMouseUp(Diagram sender, MatrixPointJS point) {
+  public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
   }
   @Override
   public void onTouchMove(Diagram sender, MatrixPointJS point) {

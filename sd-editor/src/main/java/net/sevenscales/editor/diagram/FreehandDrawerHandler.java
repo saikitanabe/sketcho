@@ -267,7 +267,8 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     return false;
   }
 
-  public void onMouseUp(Diagram sender, MatrixPointJS point) {
+  @Override
+  public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
     if (!staticMovement) {
       endDrawing();
     }

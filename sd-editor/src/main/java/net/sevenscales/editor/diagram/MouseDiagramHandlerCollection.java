@@ -9,9 +9,9 @@ public class MouseDiagramHandlerCollection extends ArrayList<MouseDiagramHandler
     add(handler);
   }
 
-  public void fireMouseUp(Diagram sender, MatrixPointJS point) {
+  public void fireMouseUp(Diagram sender, MatrixPointJS point, int keys) {
     for (MouseDiagramHandler h : this) {
-      h.onMouseUp(sender, point);
+      h.onMouseUp(sender, point, keys);
     }
   }
 

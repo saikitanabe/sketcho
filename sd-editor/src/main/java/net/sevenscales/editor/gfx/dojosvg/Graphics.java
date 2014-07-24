@@ -81,7 +81,8 @@ abstract class Graphics extends GraphicsBase {
 		var self = this;
 		function onMouseUp(e) {
 //			e.preventDefault();
-			self.@net.sevenscales.editor.gfx.dojosvg.Graphics::onMouseUp(Lnet/sevenscales/editor/gfx/base/GraphicsEvent;)(e);
+	    var keys = e.shiftKey ? @net.sevenscales.editor.gfx.domain.IGraphics::SHIFT : 0;
+			self.@net.sevenscales.editor.gfx.dojosvg.Graphics::onMouseUp(Lnet/sevenscales/editor/gfx/base/GraphicsEvent;I)(e,keys);
 		}
 		object.connect(eventType, onMouseUp);
 	}-*/;

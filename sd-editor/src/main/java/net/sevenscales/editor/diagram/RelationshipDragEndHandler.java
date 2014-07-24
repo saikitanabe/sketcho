@@ -181,7 +181,7 @@ public class RelationshipDragEndHandler implements
 			popup.setVisible(true);
 			
 			// face mouse down to release anything running on background
-      surface.getMouseDiagramManager().onMouseUp(null, point);
+      surface.getMouseDiagramManager().onMouseUp(null, point, 0);
 		}
 		logger.debugTime();
 	}
@@ -466,7 +466,7 @@ public class RelationshipDragEndHandler implements
 				popup.setPopupPosition(event.getX() + surface.getAbsoluteLeft() - offsetWidth / 2, 
 								event.getY() + surface.getAbsoluteTop() - offsetHeight / 2);
 				// face mouse down to release anything running on background
-	      surface.getMouseDiagramManager().onMouseUp(null, stp.scaledPoint);
+	      surface.getMouseDiagramManager().onMouseUp(null, stp.scaledPoint, 0);
 			}
 		});
 	}

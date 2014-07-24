@@ -23,7 +23,7 @@ public class SurfaceClickHandler implements MouseDiagramHandler, ClickDiagramHan
 	}
 
 	@Override
-	public void onMouseUp(Diagram sender, final MatrixPointJS point) {
+	public void onMouseUp(Diagram sender, final MatrixPointJS point, int keys) {
 //		System.out.println("sender: " + sender + " " + currentDiagram);
 //		if (sender == null && currentDiagram == null && surface.getEditorContext().isEditable()) {
 //			System.out.println("Click");

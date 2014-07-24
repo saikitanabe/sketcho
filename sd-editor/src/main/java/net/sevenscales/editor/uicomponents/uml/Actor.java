@@ -432,7 +432,7 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 		
 	}
 
-	public void onMouseUp(IGraphics graphics, Event event) {
+	public void onMouseUp(IGraphics graphics, Event event, int keys) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -229,7 +229,7 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
     currentHandle = null;
   }
 
-  public void onMouseUp(Diagram sender, MatrixPointJS point) {
+  public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
     if (createdRelationship != null) {
       // this was a just select for item not creating a relationship
       removeAutoRelation();

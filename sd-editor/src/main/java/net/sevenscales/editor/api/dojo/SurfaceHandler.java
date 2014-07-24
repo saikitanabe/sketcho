@@ -602,14 +602,15 @@ class SurfaceHandler extends SimplePanel implements
 //    mouseDiagramManager.onMouseLeave(null, point);
 	}
 	
-	public void onMouseUp(GraphicsEvent event) {
+	@Override
+	public void onMouseUp(GraphicsEvent event, int keys) {
 //    int x = event.getElementOffsetX(getElement()) - rootLayer.getTransformX();
 //    int y = event.getElementOffsetY(getElement()) - rootLayer.getTransformY();
 //    MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, scaleFactor);
     int x = event.getElementOffsetX(getElement());
     int y = event.getElementOffsetY(getElement());
     MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, getScaleFactor());
-    mouseDiagramManager.onMouseUp(null, point);
+    mouseDiagramManager.onMouseUp(null, point, keys);
     
     // set focus to get key events
 //    Document.get().getElementById("surfaceFocusPanel").focus();

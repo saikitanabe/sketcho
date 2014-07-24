@@ -245,10 +245,11 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
 				com.google.gwt.user.client.Event e = Event.as(event.getNativeEvent());
+				int keys = e.getShiftKey() ? IGraphics.SHIFT : 0;
 				if (surface.getElement().isOrHasChild(Element.as(event.getNativeEvent().getEventTarget()))) {
-					surface.onMouseUp((GraphicsEvent) e);
+					surface.onMouseUp((GraphicsEvent) e, keys);
 				} else if (toolFrame.getToolbar().getElement().isOrHasChild(Element.as(event.getNativeEvent().getEventTarget()))) {
-					toolFrame.getToolbar().onMouseUp((GraphicsEvent) e);
+					toolFrame.getToolbar().onMouseUp((GraphicsEvent) e, keys);
 				}
 			}
 		}, MouseUpEvent.getType());

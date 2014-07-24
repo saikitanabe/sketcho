@@ -228,24 +228,24 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		surface.dispatchDiagram(point);
 	}
 
-	public void onMouseUp(Diagram sender, MatrixPointJS point) {
+	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
 		// logger.start("onMouseUp");
 		// logger.debug("onMouseUp...");
 //		startedConnection = false;
     if (!surface.getEditorContext().isEditable()) {
-  		backgroundMoveHandler.onMouseUp(sender, point);
-			// lassoSelectionHandler.onMouseUp(sender, point);
-			// selectionHandler.onMouseUp(sender, point);
+  		backgroundMoveHandler.onMouseUp(sender, point, keys);
+			// lassoSelectionHandler.onMouseUp(sender, point, keys);
+			// selectionHandler.onMouseUp(sender, point, keys);
       return;
     }
     
     if (currentMouseHandler == sketchDiagramAreaHandler) {
-      sketchDiagramAreaHandler.onMouseUp(sender, point);
+      sketchDiagramAreaHandler.onMouseUp(sender, point, keys);
     }
     
     if (freehandDrawHandler != null) {
-	    freehandDrawHandler.onMouseUp(sender, point);
-			selectionHandler.onMouseUp(sender, point);
+	    freehandDrawHandler.onMouseUp(sender, point, keys);
+			selectionHandler.onMouseUp(sender, point, keys);
 	    if (freehandDrawHandler.handling()) {
 	    	return;
 	    }
@@ -253,19 +253,19 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
     
 //    	mouseDown = false;
 
-//    connectionModeMouseHandler.onMouseUp(sender, point);
-		resizeHandler.onMouseUp(sender, point);
+//    connectionModeMouseHandler.onMouseUp(sender, point, keys);
+		resizeHandler.onMouseUp(sender, point, keys);
 		if (sender == null) {
 			// do not send diagram events
 			// diagrams register them selves straight if those are draggable
-			dragHandler.onMouseUp(sender, point);
+			dragHandler.onMouseUp(sender, point, keys);
 		}
-    handlers.fireMouseUp(sender, point);
-//		bendHandler.onMouseUp(sender, x, y);
-		backgroundMoveHandler.onMouseUp(sender, point);
-		lassoSelectionHandler.onMouseUp(sender, point);
-		surfaceClickHandler.onMouseUp(sender, point);
-		quickConnectionHandler.onMouseUp(sender, point);
+    handlers.fireMouseUp(sender, point, keys);
+//		bendHandler.onMouseUp(sender, x, y, keys);
+		backgroundMoveHandler.onMouseUp(sender, point, keys);
+		lassoSelectionHandler.onMouseUp(sender, point, keys);
+		surfaceClickHandler.onMouseUp(sender, point, keys);
+		quickConnectionHandler.onMouseUp(sender, point, keys);
 		// logger.debugTime();
     currentMouseHandler = null;
 	}
@@ -280,7 +280,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
   }
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
-		onMouseUp(sender, point);
+		onMouseUp(sender, point, 0);
   }
 
 	public void makeDraggable(Diagram diagram) {

@@ -607,10 +607,10 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	}
 
 	@Override
-	public void onMouseUp(GraphicsEvent event) {
+	public void onMouseUp(GraphicsEvent event, int keys) {
 		releaseCurrentHandle();
 		if (parent != null) {
-			parent.onMouseUp(event);
+			parent.onMouseUp(event, keys);
 		}
 	}
 

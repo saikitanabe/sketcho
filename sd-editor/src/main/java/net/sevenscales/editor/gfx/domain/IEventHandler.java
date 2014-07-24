@@ -11,7 +11,7 @@ public interface IEventHandler {
 	void onMouseMove(IGraphics graphics, Event event);
 	void onDoubleClick(IGraphics graphics, Event event);
 	void onMouseDown(IGraphics graphics, Event event, int keys);
-	void onMouseUp(IGraphics graphics, Event event);
+	void onMouseUp(IGraphics graphics, Event event, int keys);
 	void onTouchMove(GraphicsBase shape, GraphicsEvent event);
 	void onTouchStart(GraphicsBase shape, GraphicsEvent event);
 	void onTouchEnd(GraphicsBase shape, GraphicsEvent event);

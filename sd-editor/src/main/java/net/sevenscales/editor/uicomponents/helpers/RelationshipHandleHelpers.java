@@ -525,12 +525,12 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   @Override
-  public void onMouseUp(Diagram sender, MatrixPointJS point) {
+  public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
 //    if (parentRelationship == null) {
 //      return;
 //    }
 
-    parentRelationship.onMouseUp(sender, point);
+    parentRelationship.onMouseUp(sender, point, keys);
   }
 
   @Override

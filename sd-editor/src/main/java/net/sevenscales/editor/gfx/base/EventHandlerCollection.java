@@ -58,10 +58,10 @@ public class EventHandlerCollection {
 		}
 	}
 	
-	public void fireOnMouseUp(IGraphics shape, Event event) {
+	public void fireOnMouseUp(IGraphics shape, Event event, int keys) {
 		for (Handler h : eventHandlers) {
 			if (IGraphics.ON_MOUSE_UP.equals(h.eventType))
-				h.eventHandler.onMouseUp(shape, event);
+				h.eventHandler.onMouseUp(shape, event, keys);
 		}
 	}
 
