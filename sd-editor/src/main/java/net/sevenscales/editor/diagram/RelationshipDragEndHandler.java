@@ -200,8 +200,15 @@ public class RelationshipDragEndHandler implements
 	private void showPopup(int x, int y) {
 		popup.setVisible(false);
 		popup.show();
-		popup.setPopupPosition(x + surface.getAbsoluteLeft() - popup.getOffsetWidth() / 2, 
-				y + surface.getAbsoluteTop() - popup.getOffsetHeight() / 2);
+		int left = x + surface.getAbsoluteLeft() - popup.getOffsetWidth() / 2;
+		int top = y + surface.getAbsoluteTop() - popup.getOffsetHeight() / 2;
+		if (left < 0) {
+			left = 20;
+		}
+		if (top < 0) {
+			top = 20;
+		}
+		popup.setPopupPosition(left, top);
 		popup.setVisible(true);
 	}
 
