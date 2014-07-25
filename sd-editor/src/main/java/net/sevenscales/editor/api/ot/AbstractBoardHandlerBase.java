@@ -60,6 +60,8 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
 	private BoardDocument graphicalDocumentCache;
 	private static final List<ApplyOperation> EMPTY_LIST;
 	private static final List<IDiagramItemRO> EMPTY_ITEM_LIST;
+	private boolean transaction;
+	private List<CompensationModel> transactionModels;
 	// private IGoogleAnalyticsHelper analytics;
 	
 	static {
@@ -74,6 +76,7 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
 		
 		otBuffer = new OTBuffer();
 		compensationTransformer = new OTCompensationTransformer();
+		transactionModels = new ArrayList<CompensationModel>();
 	}
 	
 	private UndoEventHandler undoEventHandler = new UndoEventHandler() {
@@ -299,7 +302,10 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
     try {
       model = compensationTransformer.compensate(op, graphicalDocumentCache.getDocument(), operationItems);
       // push operation to OTBuffer
-      if (model != null) {
+      if (model != null && transaction) {
+      	// handle multiple models as one single transaction => one undo/redo
+      	transactionModels.add(model);
+      } else if (model != null) {
 	      otBuffer.pushToUndoBufferAndResetRedo(model);
       }
       // apply changes to graphical view document after compensation calculation, to have correct
@@ -310,6 +316,16 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
       // save the board (on confluence and reload...) now just ignored :)
     }
 	}
+
+	public void beginTransaction() {
+		transaction = true;
+	}
+
+	public void commitTransaction() {
+		otBuffer.pushToUndoBufferAndResetRedo(transactionModels);
+		transactionModels.clear();
+		transaction = false;
+	}
 	
 	protected void clearOTBuffer() {
 		otBuffer.clear();
@@ -317,25 +333,29 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
 
 	private void applyLocalUndo() {
 		// actions from the buffer to get to prev or next stage
-		CompensationModel undo = otBuffer.undoBuffer();
+		List<CompensationModel> undo = otBuffer.undoBuffer();
 		logger.debug("applyLocalUndo {}", undo);
 		if (undo != null) {
-			OTOperation undoop = OTOperation.getEnum(OTOperation.UNDO.getValue() + "." + undo.undoOperation);
-			applyUndoOrRedoToGraphicalView(undoop, undo.undoJson);
-			graphicalDocumentCache.apply(undoop, undo.undoJson);
-			extendApplyLocalUndo(undoop, undo.undoOperation, undo.undoJson);
+			for (CompensationModel cm : undo) {
+				OTOperation undoop = OTOperation.getEnum(OTOperation.UNDO.getValue() + "." + cm.undoOperation);
+				applyUndoOrRedoToGraphicalView(undoop, cm.undoJson);
+				graphicalDocumentCache.apply(undoop, cm.undoJson);
+				extendApplyLocalUndo(undoop, cm.undoOperation, cm.undoJson);
+			}
 		}
 	}
 	protected abstract void extendApplyLocalUndo(OTOperation undoop, OTOperation undoOperation, List<IDiagramItemRO> undoJson);
 	
 	private void applyLocalRedo() {
-		CompensationModel redo = otBuffer.redoBuffer();
+		List<CompensationModel> redo = otBuffer.redoBuffer();
 		logger.debug("applyLocalRedo {}", redo);
 		if (redo != null) {
-			OTOperation redoop = OTOperation.getEnum(OTOperation.REDO.getValue() + "." + redo.redoOperation);
-			applyUndoOrRedoToGraphicalView(redoop, redo.redoJson);
-			graphicalDocumentCache.apply(redoop, redo.redoJson);
-			extendApplyLocalRedo(redoop, redo.redoOperation, redo.redoJson);
+			for (CompensationModel cm : redo) {
+				OTOperation redoop = OTOperation.getEnum(OTOperation.REDO.getValue() + "." + cm.redoOperation);
+				applyUndoOrRedoToGraphicalView(redoop, cm.redoJson);
+				graphicalDocumentCache.apply(redoop, cm.redoJson);
+				extendApplyLocalRedo(redoop, cm.redoOperation, cm.redoJson);
+			}
 		}
 	}
 	protected abstract void extendApplyLocalRedo(OTOperation redoop, OTOperation redoOperation, List<IDiagramItemRO> redoJson);

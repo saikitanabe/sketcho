@@ -50,7 +50,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	private ISurfaceHandler surface;
 	private DiagramSearch search;
 	private Diagram previouslySelected;
-	private CompensationModel lastModel;
+	private List<CompensationModel> lastModel;
 	private boolean notAddedFromLibrary = true;
 
 	public QuickConnectionHandler(ISurfaceHandler surface) {

@@ -2,6 +2,7 @@ package net.sevenscales.editor.api.ot;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ArrayList;
 
 import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.DiagramItemDTO;
@@ -15,15 +16,21 @@ public class OTBuffer {
 	private static final SLogger logger = SLogger.createLogger(OTBuffer.class);
   private static final int MAX_COUNT = 10;
   		
-	private LinkedList<CompensationModel> undoBuffer;
-	private LinkedList<CompensationModel> redoBuffer;
+	private LinkedList<List<CompensationModel>> undoBuffer;
+	private LinkedList<List<CompensationModel>> redoBuffer;
 
 	public OTBuffer() {
-		undoBuffer = new LinkedList<CompensationModel>();
-		redoBuffer = new LinkedList<CompensationModel>();
+		undoBuffer = new LinkedList<List<CompensationModel>>();
+		redoBuffer = new LinkedList<List<CompensationModel>>();
 	}
 
 	public void pushToUndoBufferAndResetRedo(CompensationModel compensationModel) {
+		List<CompensationModel> models = new ArrayList<CompensationModel>();
+		models.add(compensationModel);
+		pushToUndoBufferAndResetRedo(models);
+	}
+
+	public void pushToUndoBufferAndResetRedo(List<CompensationModel> compensationModel) {
 		alterCompensationModel(compensationModel);
 		undoBuffer.addFirst(compensationModel);
 		if (undoBuffer.size() > MAX_COUNT) {
@@ -45,9 +52,11 @@ public class OTBuffer {
 	/**
 	* Clears aws image url.
 	*/
-	private void alterCompensationModel(CompensationModel compensationModel) {
-		clearAwsExpiredUrls(compensationModel.undoJson);
-		clearAwsExpiredUrls(compensationModel.redoJson);
+	private void alterCompensationModel(List<CompensationModel> compensationModels) {
+		for (CompensationModel compensationModel : compensationModels) {
+			clearAwsExpiredUrls(compensationModel.undoJson);
+			clearAwsExpiredUrls(compensationModel.redoJson);
+		}
 	}
 
 	private void clearAwsExpiredUrls(List<IDiagramItemRO> items) {
@@ -74,10 +83,12 @@ public class OTBuffer {
 		}
 	}
 
-	private void updateBufferComments(LinkedList<CompensationModel> buffer, List<IDiagramItemRO> updates) {
-		for (CompensationModel cm : buffer) {
-			updateCommentItems(cm.undoOperation, cm.undoJson, updates);
-			updateCommentItems(cm.redoOperation, cm.redoJson, updates);
+	private void updateBufferComments(LinkedList<List<CompensationModel>> buffer, List<IDiagramItemRO> updates) {
+		for (List<CompensationModel> cms : buffer) {
+			for (CompensationModel cm : cms) {
+				updateCommentItems(cm.undoOperation, cm.undoJson, updates);
+				updateCommentItems(cm.redoOperation, cm.redoJson, updates);
+			}
 		}
 	}
 
@@ -98,20 +109,20 @@ public class OTBuffer {
 		}
 	}
 
-	public CompensationModel topModel() {
+	public List<CompensationModel> topModel() {
 		return undoBuffer.getFirst();
 	}
 
-	public CompensationModel undoBuffer() {
+	public List<CompensationModel> undoBuffer() {
     return popAndPush(undoBuffer, redoBuffer);
 	}
 
-  public CompensationModel redoBuffer() {
+  public List<CompensationModel> redoBuffer() {
     return popAndPush(redoBuffer, undoBuffer);
   }
 
-  public CompensationModel popAndPush(LinkedList<CompensationModel> topop, LinkedList<CompensationModel> topush) {
-  	CompensationModel result = null;
+  public List<CompensationModel> popAndPush(LinkedList<List<CompensationModel>> topop, LinkedList<List<CompensationModel>> topush) {
+  	List<CompensationModel> result = null;
   	if (topop.size() > 0) {
 	    result = topop.getFirst();
 	    topop.removeFirst();
