@@ -1859,11 +1859,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	}
 	
 	@Override
-	public Color getBorderColor() {
-		return Theme.getCurrentColorScheme().getBorderColor();
-	}
-
-	@Override
 	public void restoreHighlighColor() {
 		setBorderColor(getBorderColor());
     // applyAnnotationColors();
