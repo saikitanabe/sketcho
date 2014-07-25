@@ -605,4 +605,14 @@ public class UMLDiagramSelections extends Composite {
 		scrollHandlers.add(scrollHandler);
 	}
 
+	public void hideCommentElement() {
+		comments.setVisible(false);
+	}
+
+	public void showCommentElement() {
+		if (notConfluence()) {
+			comments.setVisible(true);
+		}
+	}
+
 }

@@ -147,6 +147,7 @@ public class RelationshipDragEndHandler implements
 
 	@Override
 	public void onNotAttached(RelationshipNotAttachedEvent event) {
+		diagramSelections.showCommentElement();
 	  logger.start("show popoup");
 		// System.out.println("onNotAttached: " + event.getRelationship() +
 		// " anchor: " + event.getAnchor());
@@ -208,6 +209,7 @@ public class RelationshipDragEndHandler implements
 	public void on(SwitchElementEvent event) {
 		switchFrom = event.getDiagram();
 		Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(event.getDiagram(), surface);
+		diagramSelections.hideCommentElement();
 		showPopup(screenPosition.x, screenPosition.y);
 	}
 
