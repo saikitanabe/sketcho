@@ -244,7 +244,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	}
 
 	private IDiagramItem switchType(Diagram d) {
-		IDiagramItem result = d.getDiagramItem().copy();
+		IDiagramItem result = null;
 		switch (ElementType.getEnum(d.getDiagramItem().getType())) {
 			case IMAGE:
 			case NOTE:
@@ -252,24 +252,29 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			case VERTICAL_PARTITION:
 			case HORIZONTAL_PARTITION:
 			case FREEHAND2: {
+				result = d.getDiagramItem().copy();
 				result = switchToNoteItem(d, result);
 				break;
 			}
 			case MIND_CENTRAL: {
+				result = d.getDiagramItem().copy();
 				result = switchToTopicItem(d, result);
 				break;
 			}
 			case FORK: 
 			case CHOICE:
 			case ACTIVITY_START: {
+				result = d.getDiagramItem().copy();
 				result = switchToActivityItem(d, result);
 				break;
 			}
 			case TEXT_ITEM: {
+				result = d.getDiagramItem().copy();
 				result.setText("Just text");
 				break;
 			}
 			case ACTOR: {
+				result = d.getDiagramItem().copy();
 				result = switchToUseCase(d, result);
 				break;
 			}
