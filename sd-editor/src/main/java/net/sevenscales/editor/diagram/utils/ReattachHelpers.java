@@ -40,6 +40,10 @@ public class ReattachHelpers {
 		this.diagramSearch = diagramSearch;
 		this.searchConnections = searchConnections;
 	}
+
+	public Set<Relationship2> getRelationships() {
+		return relationships;
+	}
 	
 	public void processDiagram(Diagram diagram) {
 		if (diagram != null && !(diagram instanceof CircleElement)) {

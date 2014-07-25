@@ -363,22 +363,20 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					// diagram position is scaled value, so need to translate to screen pixels...
 					Diagram d = event.getLastSelected();
 					// logger.debug("Last Selected type {} x({}) y({})", d.toString(), d.getLeft(), d.getTop());
-					
-					int left = ScaleHelpers.unscaleValue(UiContextMenu.this.surface.getAbsoluteLeft() + d.getLeft(), UiContextMenu.this.surface.getScaleFactor()) + 
-							UiContextMenu.this.surface.getRootLayer().getTransformX(); 
-					int top = ScaleHelpers.unscaleValue(UiContextMenu.this.surface.getAbsoluteTop() + d.getTop(), UiContextMenu.this.surface.getScaleFactor()) + adjustByDiagramType(d) + 
-							UiContextMenu.this.surface.getRootLayer().getTransformY();
-					
+
+					Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(d, UiContextMenu.this.surface);
+					screenPosition.y += adjustByDiagramType(d);
+										
 					if (UiContextMenu.this.surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE)) {
-						top = UiContextMenu.this.surface.getAbsoluteTop() + ScaleHelpers.unscaleValue(d.getTop(), UiContextMenu.this.surface.getScaleFactor()) + adjustByDiagramType(d) + 
+						screenPosition.y = UiContextMenu.this.surface.getAbsoluteTop() + ScaleHelpers.unscaleValue(d.getTop(), UiContextMenu.this.surface.getScaleFactor()) + adjustByDiagramType(d) + 
 								UiContextMenu.this.surface.getRootLayer().getTransformY();
 					}
 
 					boolean allMenusHidden = setMenuItemVisibility(d, selected);
 					
 					if (!allMenusHidden) {
-						mainContextPosition.left = left;
-						mainContextPosition.top = top;
+						mainContextPosition.left = screenPosition.x;
+						mainContextPosition.top = screenPosition.y;
 						popup.setPopupPositionAndShow(mainContextPosition);
 						EffectHelpers.tooltipper();
 					}

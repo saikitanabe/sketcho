@@ -67,7 +67,7 @@ public class DiagramHelpers {
 		return filtered.toArray(result);
 	}
 
-	public static List<Diagram> filterOwnerDiagramsAsListOrderByType(Iterable<Diagram> diagrams, ActionType actionType) {
+	public static List<Diagram> filterOwnerDiagramsAsListOrderByType(Iterable<? extends Diagram> diagrams, ActionType actionType) {
 		List<Diagram> result = new DiagramList();
 		for (Diagram d : diagrams) {
 			d = d.getOwnerComponent(actionType);

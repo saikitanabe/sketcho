@@ -207,7 +207,8 @@ public class RelationshipDragEndHandler implements
 	@Override
 	public void on(SwitchElementEvent event) {
 		switchFrom = event.getDiagram();
-		showPopup(event.getDiagram().getLeft(), event.getDiagram().getTop());
+		Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(event.getDiagram(), surface);
+		showPopup(screenPosition.x, screenPosition.y);
 	}
 
 	@Override
@@ -292,6 +293,7 @@ public class RelationshipDragEndHandler implements
 		}
 		surface.getSelectionHandler().remove(src, true);
 		reattachHelpers.reattachRelationshipsAndDrawClosestPath();
+		surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(reattachHelpers.getRelationships()));
 
 		// AbstractDiagramFactory factory = ShapeParser.factory(item);
 		// Diagram to = 

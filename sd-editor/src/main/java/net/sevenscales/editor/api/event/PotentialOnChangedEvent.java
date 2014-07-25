@@ -23,7 +23,7 @@ public class PotentialOnChangedEvent extends GwtEvent<PotentialOnChangedEventHan
   	this.diagrams = diagrams;
 	}
   
-  public PotentialOnChangedEvent(Set<Diagram> diagrams) {
+  public PotentialOnChangedEvent(Set<? extends Diagram> diagrams) {
   	this.diagrams = DiagramHelpers.filterOwnerDiagramsAsListOrderByType(diagrams, ActionType.NONE);
 	}
 

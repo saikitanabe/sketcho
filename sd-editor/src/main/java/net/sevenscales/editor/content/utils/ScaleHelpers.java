@@ -4,6 +4,7 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.UiContextMenu;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Point;
+import net.sevenscales.editor.diagram.Diagram;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -53,6 +54,14 @@ public class ScaleHelpers {
 		result.scaledAndTranslatedPoint.x = result.scaledPoint.getX() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformX(), surface.getScaleFactor()); 
 		result.scaledAndTranslatedPoint.y = result.scaledPoint.getY() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor());
 		return result;
+	}
+
+	public static Point diagramPositionToScreenPoint(Diagram d, ISurfaceHandler surface) {
+		int left = ScaleHelpers.unscaleValue(surface.getAbsoluteLeft() + d.getLeft(), surface.getScaleFactor()) + 
+				surface.getRootLayer().getTransformX(); 
+		int top = ScaleHelpers.unscaleValue(surface.getAbsoluteTop() + d.getTop(), surface.getScaleFactor()) + 
+				surface.getRootLayer().getTransformY();
+		return new Point(left, top);
 	}
 	
 	public static int scaleAndTranslateY(int scaledY, ISurfaceHandler surface) {
