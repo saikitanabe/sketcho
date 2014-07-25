@@ -353,7 +353,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 				if (include) {
 					surface.getSelectionHandler().addToBeRemovedCycle(ae.getRelationship());
 				} else {
-					surface.getSelectionHandler().remove(ae.getRelationship());
+					surface.getSelectionHandler().remove(ae.getRelationship(), true);
 				}
 			}
 		}

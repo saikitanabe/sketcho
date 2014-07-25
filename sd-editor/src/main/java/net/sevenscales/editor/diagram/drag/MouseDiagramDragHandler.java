@@ -637,7 +637,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		// and in that sence it is fast. Makes possible to drag sequence relationships
 		// and fix position to a new location.
 		boolean reanchorMovedRelationships = true;
-		reattachHelpers.reattachRelationships(reanchorMovedRelationships, false);
+		reattachHelpers.reattachRelationships(reanchorMovedRelationships, false, false);
 
 		if (insertMoveToSingle != null) {
 			MouseDiagramEventHelpers.fireDiagramAddedEvent(insertMoveToSingle, surface, ActionType.DRAGGING);

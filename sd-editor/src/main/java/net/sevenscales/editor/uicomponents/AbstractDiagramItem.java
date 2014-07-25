@@ -326,10 +326,15 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   public void remove() {
-    surface.getSelectionHandler().remove(this);
+    surface.getSelectionHandler().remove(this, true);
   }
   
 	public void removeFromParent() {
+    removeFromParentWithoutConnections();
+    removeConnections();
+	}
+
+  public void removeFromParentWithoutConnections() {
     if (resizeHelpers != null) {
       resizeHelpers.hide(this);
     }
@@ -343,17 +348,14 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
         }
       }
     }
-		surface.remove(this);
+    surface.remove(this);
     removed = true;
 
     TextElementFormatUtil textFormatter = getTextFormatter();
     if (textFormatter != null) {
       textFormatter.remove();
     }
-
-    removeConnections();
-
-	}
+  }
 
   private void removeConnections() {
     for (AnchorElement ae : getAnchors()) {

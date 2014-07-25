@@ -24,6 +24,7 @@ import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
+import net.sevenscales.editor.api.event.SwitchElementEvent;
 import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.impl.EditorCommon;
@@ -90,6 +91,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement curvedArrow;
 	@UiField AnchorElement rectifiedArrow;
 	@UiField AnchorElement reverseConnection;
+	@UiField AnchorElement switchElement;
 	@UiField AnchorElement colorize;
 	@UiField AnchorElement delete;
 	// @UiField AnchorElement annotate;
@@ -416,6 +418,14 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				reverse();
 			}
 		});
+
+		new FastElementButton(switchElement).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				stopEvent(event);
+				switchElement();
+			}
+		});
 		
 		new FastElementButton(colorize).addClickHandler(new ClickHandler() {
 			@Override
@@ -605,6 +615,15 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	private void reverse() {
 		UiContextMenu.this.editorContext.getEventBus().fireEvent(new RelationshipTypeSelectedEvent(RelationShipType.REVERSE));
 		hide();
+	}
+
+	private void switchElement() {
+		hide();
+		Set<Diagram> selected = selectionHandler.getSelectedItems();
+		if (selected.size() == 1) {
+			Diagram d = selected.iterator().next();
+			editorContext.getEventBus().fireEvent(new SwitchElementEvent(d));
+		}
 	}
 	
 	private void color() {

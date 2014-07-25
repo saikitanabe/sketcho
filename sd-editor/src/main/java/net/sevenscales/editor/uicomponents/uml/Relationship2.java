@@ -2,6 +2,7 @@ package net.sevenscales.editor.uicomponents.uml;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.utils.StringUtil;
@@ -61,6 +62,8 @@ import net.sevenscales.editor.gfx.domain.SegmentPoint;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.logging.client.LogConfiguration;
 
 
 public class Relationship2 extends AbstractDiagramItem implements DiagramDragHandler, DiagramResizeHandler,
@@ -1801,13 +1804,21 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	// }
 
 	private void swapCustomData() {
-		String cd = getDiagramItem().getCustomData();
-		if (cd != null && cd.indexOf(":") > 0) {
-			String[] cds = cd.split(":");
+		String[] cds = parseCustomData();
+		if (cds != null && cds.length == 2) {
 			getDiagramItem().setCustomData(cds[1] + ":" + cds[0]);
 		}
 	}
-	
+
+  private String[] parseCustomData() {
+    String[] result = null;
+    String cd = getDiagramItem().getCustomData();
+    if (cd != null && cd.indexOf(":") > 0) {
+      result = cd.split(":");
+    }
+    return result;
+  }
+
 	@Override
 	protected void doSetShape(int[] shape) {
     if (isDirty(shape, points)) {
@@ -2159,6 +2170,18 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	public String getEndClientId() {
 		return getEndAnchor().getClientId();
 	}
+
+  public void setStartConnectedDiagramId(String clientId) {
+    String endClientId = getEndClientId();
+    String cd = clientId + ":" + (endClientId != null ? endClientId : "");
+    getDiagramItem().setCustomData(cd);
+  }
+
+  public void setEndConnectedDiagramId(String clientId) {
+    String startClientId = getStartClientId();
+    String cd = (startClientId != null ? startClientId : "") + ":" + clientId;
+    getDiagramItem().setCustomData(cd);
+  }
 	
 	public boolean isLegacyAnchor() {
 		return legacyAnchor;
@@ -2201,7 +2224,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     }
   }
 
-  private boolean applyClosestPath() {
+  public boolean applyClosestPath() {
     boolean result = false;
     Diagram start = null;
     Diagram end = null;
@@ -2225,9 +2248,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   private void setAnchorElementPosition(int x, int y, AnchorElement ae) {
-    ae.setAx(x);
-    ae.setAy(y);
-    updateCardinalDirection(x, y, ae);
+    if (ae != null) {
+      ae.setAx(x);
+      ae.setAy(y);
+      updateCardinalDirection(x, y, ae);
+    } else if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
+      GWT.debugger();
+    }
   }
 
   @Override

@@ -65,6 +65,13 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			}
 		});
 
+		// surface.getEditorContext().getEventBus().addHandler(SwitchElementToEvent.TYPE, new SwitchElementToEventHandler() {
+		// 	@Override
+		// 	public void onSelection(SwitchElementToEvent event) {
+		// 		switchElementTo(event.getElementType());
+		// 	}
+		// });
+
 		// ESC key handler deletes created elements
 		handleEscKey(this);
 	}
@@ -134,9 +141,10 @@ class QuickConnectionHandler implements MouseDiagramHandler {
       	// take the end that is not current diagram
       	if (start != null && start != d) {
       		result = start;
-      	} else if (end != null) {
+      		break;
+      	}/* else if (end != null) {
       		result = end;
-      	}
+      	}*/
       }
     }
     return result;
@@ -156,14 +164,14 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			if (fromPreviousIfAny) {
 				from = findPrevious(previouslySelected);
 			}
-			createConnectedDiagram(from, x, y);
+			createConnectedDiagram(from, previouslySelected.getDiagramItem(), x, y);
 		}
 		// makes sure that plain drag & drop doesn't create quick connection, but still
 		// remembers what has been dragged and dropped
 		notAddedFromLibrary = true;
 	}
 
-	private void createConnectedDiagram(Diagram d, int x, int y) {
+	private void createConnectedDiagram(Diagram d, IDiagramItem prevSelectedItem, int x, int y) {
 		boolean doNotAllow = (d instanceof IChildElement) || (d instanceof CommentThreadElement) || d instanceof Relationship2 || d instanceof CircleElement;
 		// could ask from diagram next in diagram
 		// activity start could return activity, activity end could return note...
@@ -179,7 +187,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 			// do not duplicate child or relationships, since rel e.g. cannot be connected
 			// if child then e.g. create a note
-			IDiagramItem item = createQuickNext(d);
+			IDiagramItem item = createQuickNext(d, prevSelectedItem);
 
 			Dimension dimension = DiagramItemHelpers.parseDimension(item);
 			if (dimension != null) {
@@ -219,10 +227,12 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		}
 	}
 
-	private IDiagramItem createQuickNext(Diagram d) {
+	private IDiagramItem createQuickNext(Diagram d, IDiagramItem prevSelectedItem) {
 		IDiagramItem result = switchType(d);
 		if (result == null) {
 			result = d.getDiagramItem().copy();
+			result.setType(prevSelectedItem.getType());
+			// result.setShape(prevSelectedItem.getShape());
 		} else {
 			// switch type needs some background color
 			result.setBackgroundColor(Theme.getCurrentColorScheme().getBackgroundColor().toRgbWithOpacity());

@@ -33,6 +33,7 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   public void unselect();
   public void addDiagramSelectionHandler(DiagramSelectionHandler selectionHandler);
   void removeFromParent();
+  void removeFromParentWithoutConnections();
   boolean isRemoved();
   /**
   * Not deleting whole element, but part of it, so it is actually a modify.

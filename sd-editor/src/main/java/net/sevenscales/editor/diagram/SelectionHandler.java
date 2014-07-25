@@ -223,12 +223,12 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 		selectionHandlers.add(handler);
 	}
 
-  public void remove(Diagram diagram) {
+  public void remove(Diagram diagram, boolean withoutConnections) {
     // clear to be removed so hooks are valid in this cycle
     clearToBeRemovedCycle();
 
     Set<Diagram> removed = new HashSet<Diagram>();
-    _remove(diagram, removed);
+    _remove(diagram, removed, withoutConnections);
 
     handleAdditionalRemovals(removed);
     fireDeletedOrModifyEvent(removed);
@@ -256,7 +256,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
       // Diagram d = diagrams.get(i);
       logger.debug("removeSelected: item {}", d);
 		  if (d.isSelected()) {
-        _remove(d, removed);
+        _remove(d, removed, false);
 		  }
 		}
     logger.debug("removeSelected: removed {}", removed);
@@ -317,14 +317,14 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 
     Set<Diagram> removed = new HashSet<Diagram>();
     for (Diagram remove : forRemoval) {
-      _remove(remove, removed);
+      _remove(remove, removed, false);
     }
 
     handleAdditionalRemovals(removed);
     fireDeletedOrModifyEvent(removed);
   }
 
-  private void _remove(Diagram diagram, Set<Diagram> removed) {
+  private void _remove(Diagram diagram, Set<Diagram> removed, boolean withoutConnections) {
 
     // first remove children if any since e.g. comment thread
     // cannot be deleted straight, but through 0 child automatically.
@@ -332,7 +332,11 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     removeChildElements(removeItem, removed);
     if (AuthHelpers.allowedToDelete(removeItem)) {
       removed.add(removeItem);
-      removeItem.removeFromParent();
+      if (withoutConnections) {
+        removeItem.removeFromParentWithoutConnections();
+      } else {
+        removeItem.removeFromParent();
+      }
       dragHandlers.remove(removeItem);
     }
   }
@@ -342,7 +346,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     if (childElements != null) {
       for (int i = childElements.size() - 1; i >= 0; --i) {
         Diagram d = childElements.get(i);
-        _remove(d, removed);
+        _remove(d, removed, false);
       }
     }
   }

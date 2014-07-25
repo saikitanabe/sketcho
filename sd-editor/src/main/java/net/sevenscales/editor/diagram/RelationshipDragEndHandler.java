@@ -16,6 +16,11 @@ import net.sevenscales.editor.api.event.RelationshipNotAttachedEventHandler;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.SurfaceMouseUpNoHandlingYetEvent;
 import net.sevenscales.editor.api.event.SurfaceMouseUpNoHandlingYetEventHandler;
+import net.sevenscales.editor.api.event.SwitchElementEvent;
+import net.sevenscales.editor.api.event.SwitchElementEventHandler;
+import net.sevenscales.editor.api.event.SwitchElementToEvent;
+import net.sevenscales.editor.api.event.SwitchElementToEventHandler;
+import net.sevenscales.editor.api.event.SwitchElementToEvent;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.LibraryShapes;
@@ -25,6 +30,7 @@ import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoint;
 import net.sevenscales.editor.content.utils.DiagramElementFactory;
+import net.sevenscales.editor.content.ClientIdHelpers;
 import net.sevenscales.editor.diagram.shape.ActivityChoiceShape;
 import net.sevenscales.editor.diagram.shape.ActivityEndShape;
 import net.sevenscales.editor.diagram.shape.ActivityShape;
@@ -45,11 +51,13 @@ import net.sevenscales.editor.diagram.shape.ServerShape;
 import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.utils.DiagramAnchorUtils;
 import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
+import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.ElementColor;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.diagram.drag.Anchor;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.uml.ActivityChoiceElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityElement;
@@ -77,7 +85,7 @@ import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 public class RelationshipDragEndHandler implements
-		RelationshipNotAttachedEventHandler, DiagramSelectionHandler, SurfaceMouseUpNoHandlingYetEventHandler, LibrarySelectionEventHandler {
+		RelationshipNotAttachedEventHandler, DiagramSelectionHandler, SurfaceMouseUpNoHandlingYetEventHandler, LibrarySelectionEventHandler, SwitchElementEventHandler, SwitchElementToEventHandler {
   private static SLogger logger = SLogger.createLogger(RelationshipDragEndHandler.class);
   
 	private PopupPanel popup;
@@ -88,6 +96,7 @@ public class RelationshipDragEndHandler implements
 	private Relationship2 currentRel;
 	private boolean startNode;
 	private UMLDiagramSelections diagramSelections;
+	private Diagram switchFrom;
 
 	public RelationshipDragEndHandler(ISurfaceHandler surface) {
 		this.surface = surface;
@@ -97,7 +106,7 @@ public class RelationshipDragEndHandler implements
 		popup.setWidget(diagramSelections);
 		popup.setAutoHideEnabled(true);
 		popup.setAnimationEnabled(true);
-		
+
 		surface.addDomHandler(new TouchStartHandler() {
 			@Override
 			public void onTouchStart(TouchStartEvent event) {
@@ -109,6 +118,7 @@ public class RelationshipDragEndHandler implements
 		
 		surface.getEditorContext().getEventBus().addHandler(SurfaceMouseUpNoHandlingYetEvent.TYPE, this);
 		surface.getEditorContext().getEventBus().addHandler(LibrarySelectionEvent.TYPE, this);
+		surface.getEditorContext().getEventBus().addHandler(SwitchElementEvent.TYPE, this);
 		surface.getEditorContext().getEventBus().addHandler(CreateElementEvent.TYPE, new CreateElementEventHandler() {
 			@Override
 			public void on(CreateElementEvent event) {
@@ -126,7 +136,11 @@ public class RelationshipDragEndHandler implements
 					x = stp.scaledAndTranslatedPoint.x;
 					y = stp.scaledAndTranslatedPoint.y;
 				}
-				itemSelected(event.getElementType(), event.getImageInfo(), x, y);
+				if (switchFrom == null) {
+					itemSelected(event.getElementType(), event.getImageInfo(), x, y);
+				} else {
+					switchElement(event.getElementType(), event.getImageInfo(), x, y);
+				}
 			}
 		});
 	}
@@ -174,16 +188,40 @@ public class RelationshipDragEndHandler implements
 //				y -= popupHeight;
 //			}
 			
-			popup.setVisible(false);
-			popup.show();
-			popup.setPopupPosition(x + surface.getAbsoluteLeft() - popup.getOffsetWidth() / 2, 
-					y + surface.getAbsoluteTop() - popup.getOffsetHeight() / 2);
-			popup.setVisible(true);
+			showPopup(x, y);
 			
 			// face mouse down to release anything running on background
       surface.getMouseDiagramManager().onMouseUp(null, point, 0);
 		}
 		logger.debugTime();
+	}
+
+	private void showPopup(int x, int y) {
+		popup.setVisible(false);
+		popup.show();
+		popup.setPopupPosition(x + surface.getAbsoluteLeft() - popup.getOffsetWidth() / 2, 
+				y + surface.getAbsoluteTop() - popup.getOffsetHeight() / 2);
+		popup.setVisible(true);
+	}
+
+	@Override
+	public void on(SwitchElementEvent event) {
+		switchFrom = event.getDiagram();
+		showPopup(event.getDiagram().getLeft(), event.getDiagram().getTop());
+	}
+
+	@Override
+	public void on(SwitchElementToEvent event) {
+		// Diagram src = switchFrom;
+		// switchFrom = null;
+
+		// // do not delete connections!
+		// // create new element
+		// diagram = createDiagram(event.getElementType(), imageInfo, src.getLeft(), src.getTop());
+		// AbstractDiagramFactory factory = ShapeParser.factory(item);
+		// Diagram to = 
+		// switch connections to point to the new element
+		// delete switchFrom
 	}
 
   private void setCurrentPosition(int x, int y) {
@@ -215,6 +253,52 @@ public class RelationshipDragEndHandler implements
 		// fire event show property text editor
 		surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(diagram).setJustCreated(true));
 		currentRel = null;
+	}
+
+	public void switchElement(UMLDiagramType type, ImageInfo imageInfo, int x, int y) {
+		hide();
+		Diagram src = switchFrom;
+		switchFrom = null;
+
+		// do not delete connections!
+		// create new element
+		ReattachHelpers reattachHelpers = new ReattachHelpers();
+
+		Diagram to = createDiagram(type, imageInfo, src.getLeft(), src.getTop());
+		to.getDiagramItem().setClientId(null);
+		ClientIdHelpers.generateClientIdIfNotSet(to.getDiagramItem(), 0, surface.getEditorContext().getGraphicalDocumentCache());
+		to.setText(src.getText());
+		reattachHelpers.processDiagram(to);
+		surface.addAsSelected(to, true);
+
+    for (AnchorElement ae : src.getAnchors()) {
+    	Relationship2 rel = ae.getRelationship();
+    	if (rel != null) {
+    		reattachHelpers.processDiagram(rel);
+      	Diagram start = rel.getStartAnchor().getDiagram();
+      	Diagram end = rel.getEndAnchor().getDiagram();
+
+      	String srcClientId = src.getDiagramItem().getClientId();
+      	if (start != null && srcClientId.equals(start.getDiagramItem().getClientId())) {
+      		rel.setStartConnectedDiagramId(to.getDiagramItem().getClientId());
+      		// need to find the other end
+      		reattachHelpers.processDiagram(end);
+      	} else if (end != null && srcClientId.equals(end.getDiagramItem().getClientId())) {
+      		rel.setEndConnectedDiagramId(to.getDiagramItem().getClientId());
+      		// need to find the other end
+      		reattachHelpers.processDiagram(start);
+      	}
+    	}
+		}
+		surface.getSelectionHandler().remove(src, true);
+		reattachHelpers.reattachRelationshipsAndDrawClosestPath();
+
+		// AbstractDiagramFactory factory = ShapeParser.factory(item);
+		// Diagram to = 
+		// switch connections to point to the new element
+		// delete switchFrom
+
+		// surface.getEditorContext().getEventBus().fireEvent(new SwitchElementToEvent(type.getElementType()));
 	}
 
 	private void hide() {
@@ -450,7 +534,7 @@ public class RelationshipDragEndHandler implements
 	private Diagram createTextElement(int x, int y, UMLDiagramType type, Color background, Color borderColor, Color color) {
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 		TextElement result = new TextElement(surface,
-        new TextShape(x, y, 100, 1),
+        new TextShape(x, y, 100, 34),
         background, borderColor, color, type.getValue(), true, new DiagramItemDTO());
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 		return result;
