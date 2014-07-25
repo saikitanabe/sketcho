@@ -391,7 +391,6 @@ public class TextElement extends AbstractDiagramItem implements
 
   @Override
   public void editingEnded(boolean modified) {
-  	super.editingEnded(modified);
   	if (modified) {
 	  	// Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 	 		// 	public void execute() {
@@ -399,6 +398,10 @@ public class TextElement extends AbstractDiagramItem implements
 	 		// 	}
 	 		// });
 	  }
+	  
+	  // need to call as last to make sure attached relationships use
+	  // closest path if set
+  	super.editingEnded(modified);
   }
 
   private void applyText() {

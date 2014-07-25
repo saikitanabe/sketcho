@@ -301,12 +301,10 @@ public class RelationshipDragEndHandler implements
 		surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(reattachHelpers.getRelationships()));
 
 		surface.commitTransaction();
-		// AbstractDiagramFactory factory = ShapeParser.factory(item);
-		// Diagram to = 
-		// switch connections to point to the new element
-		// delete switchFrom
 
-		// surface.getEditorContext().getEventBus().fireEvent(new SwitchElementToEvent(type.getElementType()));
+		boolean markAsDirty = true;
+		boolean selectText = true;
+		surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(to, selectText, markAsDirty));
 	}
 
 	private void hide() {

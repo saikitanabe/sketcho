@@ -1328,6 +1328,17 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   @Override
   public void editingEnded(boolean modified) {
     showText();
+    fixClosestPathRelationships();
+  }
+
+  private void fixClosestPathRelationships() {
+    // not calculated all the time, so need to do after the size is changed
+    for (AnchorElement ae : getAnchors()) {
+      Diagram rel = ae.getRelationship();
+      if (rel != null) {
+        rel.editingEnded(false);
+      }
+    }    
   }
 
   @Override

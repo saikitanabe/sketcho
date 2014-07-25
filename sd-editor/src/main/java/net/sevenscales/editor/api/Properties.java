@@ -19,6 +19,7 @@ import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEventHandler;
 import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
 import net.sevenscales.editor.api.event.ChangeTextSizeEventHandler;
+import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.api.ActionType;
@@ -97,6 +98,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			Diagram diagram = event.getDiagram();
 			if (diagram.supportsTextEditing()) {
 				selectedDiagram = diagram;
+				modifiedAtLeastOnce = event.markAsDirty();
 				surface.getEditorContext().set(EditorProperty.PROPERTY_EDITOR_SELECT_ALL_ENABLED, true);
 				if (event.getPoint() != null) {
 					// iPad needs to show editor and direct show of text area shows input
@@ -556,7 +558,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		this.editorCommon.fireEditorOpen();
 		popup.selectAll(justCreated);
 		popup.show();
-		
+
+		// show element context menu always when showing editor
+		surface.getEditorContext().getEventBus().fireEvent(new SelectionMouseUpEvent(diagram));
 	  
 //	  if (editorContext.get(EditorProperty.PROPERTY_EDITOR_SELECT_ALL_ENABLED).equals(true)) {
 //	  	// property used => need to be reset if needed again

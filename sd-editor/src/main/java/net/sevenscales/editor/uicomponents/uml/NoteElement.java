@@ -500,7 +500,6 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 
   @Override
   public void editingEnded(boolean modified) {
-  	super.editingEnded(modified);
   	if (modified) {
 	  	// Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 	 		// 	public void execute() {
@@ -508,6 +507,10 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	 		// 	}
 	 		// });
 	  }
+
+	  // need to call as last to make sure attached relationships use
+	  // closest path if set
+  	super.editingEnded(modified);
   }
 
   private void applyText() {

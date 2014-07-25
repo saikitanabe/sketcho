@@ -10,14 +10,20 @@ public class ShowDiagramPropertyTextEditorEvent extends GwtEvent<ShowDiagramProp
 	private Diagram diagram;
 	private MatrixPointJS point;
 	private boolean justCreated;
-  
+	private boolean markAsDirty;
+
   public ShowDiagramPropertyTextEditorEvent(Diagram diagram) {
-  	this(diagram, false);
+  	this(diagram, false, false);
+	}
+
+  public ShowDiagramPropertyTextEditorEvent(Diagram diagram, boolean markAsDirty) {
+  	this(diagram, false, markAsDirty);
 	}
   
-  public ShowDiagramPropertyTextEditorEvent(Diagram diagram, boolean justCreated) {
+  public ShowDiagramPropertyTextEditorEvent(Diagram diagram, boolean justCreated, boolean markAsDirty) {
   	this.diagram = diagram;
   	this.justCreated = justCreated;
+  	this.markAsDirty = markAsDirty;
 	}
 
   public ShowDiagramPropertyTextEditorEvent(Diagram diagram, MatrixPointJS point) {
@@ -45,6 +51,10 @@ public class ShowDiagramPropertyTextEditorEvent extends GwtEvent<ShowDiagramProp
 	
 	public boolean isJustCreated() {
 		return justCreated;
+	}
+
+	public boolean markAsDirty() {
+		return markAsDirty;
 	}
 	
 	public ShowDiagramPropertyTextEditorEvent setJustCreated(boolean justCreated) {
