@@ -195,6 +195,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				Display openEditLinkMenuVisibility = Display.NONE;
 				Display changeFontSizeVisibility = Display.NONE;
 				Display layersMenuVisibility = Display.NONE;
+				Display switchElementVisibility = Display.NONE;
 
 				if (diagram.supportsMenu(ContextMenuItem.FREEHAND_MENU)) {
 					freehandMenu = Display.INLINE_BLOCK;
@@ -216,6 +217,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 				if (anySupportsColorMenu(selected)) {
 					colorMenu = Display.INLINE_BLOCK;
+				}
+
+				if (selected.length == 1 && !(selected[0] instanceof Relationship2)) {
+					switchElementVisibility = Display.INLINE_BLOCK;
 				}
 
 				if (selected.length == 1 && selected[0].hasLink()) {
@@ -269,6 +274,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				openlink.getStyle().setDisplay(openEditLinkMenuVisibility);
 				textSize.getStyle().setDisplay(changeFontSizeVisibility);
 				layersMenuButton.getStyle().setDisplay(layersMenuVisibility);
+				switchElement.getStyle().setDisplay(switchElementVisibility);
 
 				if (freehandMenu == Display.NONE && 
 						reverseMenu == Display.NONE &&
