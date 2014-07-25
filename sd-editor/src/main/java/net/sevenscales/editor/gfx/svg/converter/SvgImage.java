@@ -36,7 +36,7 @@ public class SvgImage extends SvgBase {
     params.put("%src%", url);
     
     String template = "<image x='%x%' y='%y%' width='%width%' height='%height%' " +
-    		               "xlink:href='%src%' />";
+    		               "xlink:href=\"%src%\" />";
     return parse(image, template, params, diagram);
   }
 
