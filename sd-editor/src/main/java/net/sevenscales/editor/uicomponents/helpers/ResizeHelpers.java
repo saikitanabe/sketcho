@@ -19,6 +19,9 @@ import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
+import net.sevenscales.editor.api.event.UndoEvent;
+import net.sevenscales.editor.api.event.UndoEventHandler;
+
 
 public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpHandler, IGlobalElement {
 	private static final SLogger logger = SLogger.createLogger(ResizeHelpers.class);
@@ -106,7 +109,13 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 		
 		resizeElement.addGraphicsMouseDownHandler(this);
     resizeElement.addGraphicsMouseUpHandler(this);
-    
+
+    surface.getEditorContext().getEventBus().addHandler(UndoEvent.TYPE, new UndoEventHandler() {
+      public void on(UndoEvent event) {
+        hide();
+      }
+    });
+
     hide();
     
 //    shapes.add(resizeElement);
