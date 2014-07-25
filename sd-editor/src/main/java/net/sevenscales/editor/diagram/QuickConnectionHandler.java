@@ -270,7 +270,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			}
 			case TEXT_ITEM: {
 				result = d.getDiagramItem().copy();
-				result.setText("Just text");
+				result = switchToTextItem(d, result);
 				break;
 			}
 			case ACTOR: {
@@ -286,6 +286,13 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		copy.setType(ElementType.NOTE.getValue());
 		copy.setShape(d.getLeft() + "," + d.getTop() + "," + "150,45");
 		copy.setText("Note");
+		return copy;
+	}
+
+	private IDiagramItem switchToTextItem(Diagram d, IDiagramItem copy) {
+		copy.setType(ElementType.TEXT_ITEM.getValue());
+		copy.setShape(d.getLeft() + "," + d.getTop() + "," + "102,34");
+		copy.setText("Just text");
 		return copy;
 	}
 
