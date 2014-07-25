@@ -275,7 +275,11 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   
   @Override
   public int supportedMenuItems() {
-  	return ContextMenuItem.LAYERS.getValue();
+    return ContextMenuItem.NO_MENU.getValue() | 
+           ContextMenuItem.DUPLICATE.getValue() |
+           ContextMenuItem.URL_LINK.getValue() | 
+           ContextMenuItem.LAYERS.getValue() |
+           ContextMenuItem.DELETE.getValue();
   }
 
   @Override
