@@ -142,9 +142,10 @@ class QuickConnectionHandler implements MouseDiagramHandler {
       	if (start != null && start != d) {
       		result = start;
       		break;
-      	}/* else if (end != null) {
+      	} else if (end != null) {
       		result = end;
-      	}*/
+      		break;
+      	}
       }
     }
     return result;
