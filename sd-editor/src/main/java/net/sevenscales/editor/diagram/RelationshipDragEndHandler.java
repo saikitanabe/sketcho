@@ -280,6 +280,7 @@ public class RelationshipDragEndHandler implements
     		reattachHelpers.processDiagram(rel);
       	Diagram start = rel.getStartAnchor().getDiagram();
       	Diagram end = rel.getEndAnchor().getDiagram();
+      	rel.asClosestPath();
 
       	String srcClientId = src.getDiagramItem().getClientId();
       	if (start != null && srcClientId.equals(start.getDiagramItem().getClientId())) {
