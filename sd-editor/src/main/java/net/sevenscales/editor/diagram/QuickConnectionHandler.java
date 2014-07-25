@@ -9,6 +9,7 @@ import net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoin
 import net.sevenscales.editor.content.utils.AbstractDiagramFactory;
 import net.sevenscales.editor.content.utils.ShapeParser;
 import net.sevenscales.editor.content.ClientIdHelpers;
+import net.sevenscales.editor.content.BoardColorHelper;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
@@ -205,6 +206,8 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 	    // TODO quick handler should not work if not editable!
 	    Diagram newelement = factory.parseDiagram(surface, shape, true, item, null);
+    	BoardColorHelper.applyThemeToDiagram(newelement, Theme.getColorScheme(Theme.ThemeName.PAPER), Theme.getCurrentColorScheme());
+
 			reattachHelpers.processDiagram(newelement);
 
 	    // create connection with closest connection
@@ -233,16 +236,15 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		if (result == null) {
 			result = d.getDiagramItem().copy();
 			result.setType(prevSelectedItem.getType());
-			// result.setShape(prevSelectedItem.getShape());
-		} else {
-			// switch type needs some background color
-			result.setBackgroundColor(Theme.getCurrentColorScheme().getBackgroundColor().toRgbWithOpacity());
 		}
-		return result;
+
+		// for now let's use default colors
+		// user most probably don't want to highligh create node in a same way
+		return setDefaultBackgroundColors(result);
 	}
 
 	private IDiagramItem switchType(Diagram d) {
-		IDiagramItem result = null;
+		IDiagramItem result = d.getDiagramItem().copy();
 		switch (ElementType.getEnum(d.getDiagramItem().getType())) {
 			case IMAGE:
 			case NOTE:
@@ -250,65 +252,57 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			case VERTICAL_PARTITION:
 			case HORIZONTAL_PARTITION:
 			case FREEHAND2: {
-				result = createNoteItem(d);
+				result = switchToNoteItem(d, result);
 				break;
 			}
 			case MIND_CENTRAL: {
-				result = createTopicItem(d);
+				result = switchToTopicItem(d, result);
 				break;
 			}
+			case FORK: 
 			case CHOICE:
 			case ACTIVITY_START: {
-				result = createActivityItem(d);
+				result = switchToActivityItem(d, result);
 				break;
 			}
 			case TEXT_ITEM: {
-				result = d.getDiagramItem().copy();
 				result.setText("Just text");
 				break;
 			}
-			case FORK: {
-				result = createActivityItem(d);
-				break;
-			}
 			case ACTOR: {
-				result = createUseCase(d);
+				result = switchToUseCase(d, result);
 				break;
 			}
 		}
 		return result;
 	}
 
-	private IDiagramItem createNoteItem(Diagram d) {
-		IDiagramItem result = new DiagramItemDTO();
-		result.setType(ElementType.NOTE.getValue());
-		result.setShape(d.getLeft() + "," + d.getTop() + "," + "150,45");
-		result.setText("Note");
-		return result;
+	private IDiagramItem switchToNoteItem(Diagram d, IDiagramItem copy) {
+		copy.setType(ElementType.NOTE.getValue());
+		copy.setShape(d.getLeft() + "," + d.getTop() + "," + "150,45");
+		copy.setText("Note");
+		return copy;
 	}
 
-  private IDiagramItem createTopicItem(Diagram d) {
-		IDiagramItem result = new DiagramItemDTO();
-		result.setType(ElementType.ACTIVITY.getValue());
-		result.setShape(d.getLeft() + "," + d.getTop() + "," + "92,42");
-		result.setText("Main Topic");
-		return result;
+  private IDiagramItem switchToTopicItem(Diagram d, IDiagramItem copy) {
+		copy.setType(ElementType.ACTIVITY.getValue());
+		copy.setShape(d.getLeft() + "," + d.getTop() + "," + "92,42");
+		copy.setText("Main Topic");
+		return copy;
   }
 
-  private IDiagramItem createActivityItem(Diagram d) {
-		IDiagramItem result = new DiagramItemDTO();
-		result.setType(ElementType.ACTIVITY.getValue());
-		result.setShape(d.getLeft() + "," + d.getTop() + "," + "92,42");
-		result.setText("My Activity");
-		return result;
+  private IDiagramItem switchToActivityItem(Diagram d, IDiagramItem copy) {
+		copy.setType(ElementType.ACTIVITY.getValue());
+		copy.setShape(d.getLeft() + "," + d.getTop() + "," + "92,42");
+		copy.setText("My Activity");
+		return copy;
   }
 
-	private IDiagramItem createUseCase(Diagram d) {
-		IDiagramItem result = new DiagramItemDTO();
-		result.setType(ElementType.ELLIPSE.getValue());
-		result.setShape(d.getLeft() + "," + d.getTop() + "," + "63,21");
-		result.setText("Use Case");
-		return result;
+	private IDiagramItem switchToUseCase(Diagram d, IDiagramItem copy) {
+		copy.setType(ElementType.ELLIPSE.getValue());
+		copy.setShape(d.getLeft() + "," + d.getTop() + "," + "63,21");
+		copy.setText("Use Case");
+		return copy;
 	}
 
 	private Relationship2 createRelationshipInBetween(Diagram start, Diagram end) {
@@ -322,16 +316,22 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	private IDiagramItem createRelationshipDTO(AnchorUtils.ClosestSegment closestSegment, Diagram start, Diagram end) {
 		IDiagramItem result = new DiagramItemDTO();
 		result.setType(ElementType.RELATIONSHIP.getValue());
-		// TODO last selected type
 		result.setText(RelationshipHelpers.relationship(start, surface.getEditorContext(), end));
 		result.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue() | 
 															ShapeProperty.CLOSEST_PATH.getValue());
+		setDefaultBackgroundColors(result);
 		result.setShape(closestSegment.start.x + "," + 
 									closestSegment.start.y + "," + 
 									closestSegment.end.x + "," +
 									closestSegment.end.y);
 		result.setCustomData(start.getDiagramItem().getClientId() + ":" + end.getDiagramItem().getClientId());
 		return result;
+	}
+
+	private IDiagramItem setDefaultBackgroundColors(IDiagramItem item) {
+		item.setBackgroundColor(Theme.createDefaultBackgroundColor().toRgbWithOpacity() + ":" + Theme.createDefaultBorderColor().toRgbWithOpacity());
+		item.setTextColor(Theme.createDefaultTextColor().toRgbWithOpacity());
+		return item;
 	}
 
 	public void onMouseLeave(Diagram sender, MatrixPointJS point) {
