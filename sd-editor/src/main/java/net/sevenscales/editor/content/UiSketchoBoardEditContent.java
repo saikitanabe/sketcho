@@ -14,6 +14,7 @@ import net.sevenscales.editor.content.ui.TopButtons;
 
 import net.sevenscales.editor.api.dojo.FactoryDoJo;
 import net.sevenscales.editor.api.ot.OTBuffer;
+import net.sevenscales.editor.api.ot.OperationTransaction;
 
 import net.sevenscales.editor.content.UiModelContentHandler.IUiDiagramContent;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
@@ -59,11 +60,11 @@ public class UiSketchoBoardEditContent extends UiEditBoardContent implements Key
 	}
   
 	// TODO: is editable as parameter of as callback
-  public UiSketchoBoardEditContent(IContent content, Context context, boolean editable, EditorContext editorContext, OTBuffer otBuffer, Boolean superQuickMode) {
-  	this(content, context, editable, editorContext, true, otBuffer, superQuickMode);
+  public UiSketchoBoardEditContent(IContent content, Context context, boolean editable, EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction, Boolean superQuickMode) {
+  	this(content, context, editable, editorContext, true, otBuffer, operationTransaction, superQuickMode);
   }
   
-  public UiSketchoBoardEditContent(IContent content, Context context, boolean editable, EditorContext editorContext, boolean supportsUndoMenu, OTBuffer otBuffer, Boolean superQuickMode) {
+  public UiSketchoBoardEditContent(IContent content, Context context, boolean editable, EditorContext editorContext, boolean supportsUndoMenu, OTBuffer otBuffer, OperationTransaction operationTransaction, Boolean superQuickMode) {
     super(content, context, false, supportsUndoMenu, editorContext);
     
 //    getWidth().setText(getContent().getWidth().toString());
@@ -75,7 +76,7 @@ public class UiSketchoBoardEditContent extends UiEditBoardContent implements Key
     getEditorContext().set(EditorProperty.SKETCHO_BOARD_MODE, true);
     getEditorContext().setEditable(editable);
 
-    modelingPanel = FactoryDoJo.createModelingPanel(this, getContent().getWidth(), getContent().getHeight(), editable, getModeManager(), getEditorContext(), otBuffer, superQuickMode);
+    modelingPanel = FactoryDoJo.createModelingPanel(this, getContent().getWidth(), getContent().getHeight(), editable, getModeManager(), getEditorContext(), otBuffer, operationTransaction, superQuickMode);
     modelingPanel.addKeyEventHandler(this);
     modelHandler = new UiModelContentHandler(this, editable, getEditorContext(), getModeManager());
 

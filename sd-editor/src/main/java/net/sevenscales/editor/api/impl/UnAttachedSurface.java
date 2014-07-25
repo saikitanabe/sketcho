@@ -19,6 +19,7 @@ import com.google.gwt.event.dom.client.HasTouchStartHandlers;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.OTBuffer;
+import net.sevenscales.editor.api.ot.OperationTransaction;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.SurfaceLoadedEventListener;
@@ -92,7 +93,7 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	}
 
 	public void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
-			EditorContext editorContext, OTBuffer otBuffer) {
+			EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction) {
 	}
 	public void setId(String id) {
 		
@@ -348,5 +349,13 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public OTBuffer getOTBuffer() {
 		return null;
 	}
+
+	@Override
+	public void beginTransaction() {
+	}
+	@Override
+	public void commitTransaction() {
+	}
+
 
 }

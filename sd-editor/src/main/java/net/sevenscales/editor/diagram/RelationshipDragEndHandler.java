@@ -261,6 +261,8 @@ public class RelationshipDragEndHandler implements
 		Diagram src = switchFrom;
 		switchFrom = null;
 
+		surface.beginTransaction();
+
 		// do not delete connections!
 		// create new element
 		ReattachHelpers reattachHelpers = new ReattachHelpers();
@@ -295,6 +297,7 @@ public class RelationshipDragEndHandler implements
 		reattachHelpers.reattachRelationshipsAndDrawClosestPath();
 		surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(reattachHelpers.getRelationships()));
 
+		surface.commitTransaction();
 		// AbstractDiagramFactory factory = ShapeParser.factory(item);
 		// Diagram to = 
 		// switch connections to point to the new element

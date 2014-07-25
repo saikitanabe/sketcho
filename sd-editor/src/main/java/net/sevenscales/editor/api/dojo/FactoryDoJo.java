@@ -11,15 +11,16 @@ import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.content.UiSketchoBoardEditContent;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.api.ot.OTBuffer;
+import net.sevenscales.editor.api.ot.OperationTransaction;
 
 import net.sevenscales.domain.utils.SLogger;
 
 public class FactoryDoJo {
 	private static final SLogger logger = SLogger.createLogger(FactoryDoJo.class);
 
-	public static IModelingPanel createModelingPanel(UIObject parent, int width, int height, boolean editable, IModeManager modeManager, EditorContext editorContext, OTBuffer otBuffer, Boolean superQuickMode) {
+	public static IModelingPanel createModelingPanel(UIObject parent, int width, int height, boolean editable, IModeManager modeManager, EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction, Boolean superQuickMode) {
 		try {
-			return new ModelingPanel(parent, width, height, editable, modeManager, editorContext, false, true, otBuffer, superQuickMode);
+			return new ModelingPanel(parent, width, height, editable, modeManager, editorContext, false, true, otBuffer, operationTransaction, superQuickMode);
 		} catch (Exception e) {
 			logger.error("createModelingPanel", e);
 			throw new RuntimeException(e);

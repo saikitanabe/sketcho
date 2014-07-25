@@ -20,6 +20,7 @@ import net.sevenscales.editor.api.impl.SurfaceDiagramSearch;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.editor.api.ot.OTBuffer;
+import net.sevenscales.editor.api.ot.OperationTransaction;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
@@ -124,14 +125,16 @@ class SurfaceHandler extends SimplePanel implements
 	private String name = "";
 	protected boolean cancelSurfaceClickEvent;
 	private OTBuffer otBuffer;
+	private OperationTransaction operationTransaction;
 
 	public void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
-			EditorContext editorContext, OTBuffer otBuffer) {
+			EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction) {
 		this.editorContext = editorContext;
 		this.modeManager = modeManager;
 		this.editable = editable;
 		this.deleteSupported = deleteSupported;
 		this.otBuffer = otBuffer;
+		this.operationTransaction = operationTransaction;
 		logger.debug("init {}...", name);
 		
 		addStyleName("sd-SurfaceHandler");
@@ -1108,6 +1111,15 @@ class SurfaceHandler extends SimplePanel implements
 	@Override
 	public OTBuffer getOTBuffer() {
 		return otBuffer;
+	}
+
+	@Override
+	public void beginTransaction() {
+		operationTransaction.beginTransaction();
+	}
+	@Override
+	public void commitTransaction() {
+		operationTransaction.commitTransaction();
 	}
 
 }

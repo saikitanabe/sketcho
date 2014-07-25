@@ -37,15 +37,17 @@ import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.api.ot.OTBuffer;
+import net.sevenscales.editor.api.ot.OperationTransaction;
 
 
-public interface ISurfaceHandler {
+public interface ISurfaceHandler extends OperationTransaction {
+
 	public static final String DRAWING_AREA_ID = "drawingareaid";
 	public static final String DRAWING_AREA = "drawingarea";
 	public static final String LIBRARY_AREA = "libraryarea";
 
 	void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
-			EditorContext editorContext, OTBuffer otBuffer);
+			EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction);
 	void setId(String id);
 
 	boolean isLibrary();

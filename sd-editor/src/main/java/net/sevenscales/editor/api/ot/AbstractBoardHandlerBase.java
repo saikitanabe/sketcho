@@ -44,7 +44,7 @@ import net.sevenscales.editor.utils.GoogleAnalyticsHelper;
 import com.google.gwt.logging.client.LogConfiguration;
 import com.google.gwt.user.client.Window;
 
-public abstract class AbstractBoardHandlerBase implements Acknowledged {
+public abstract class AbstractBoardHandlerBase implements Acknowledged, OperationTransaction {
 	private static final SLogger logger = SLogger.createLogger(AbstractBoardHandlerBase.class);
 	
 	private String boardName;
@@ -317,12 +317,20 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged {
     }
 	}
 
+	@Override
 	public void beginTransaction() {
+		transactionModels.clear();
 		transaction = true;
 	}
 
+	@Override
 	public void commitTransaction() {
-		otBuffer.pushToUndoBufferAndResetRedo(transactionModels);
+		// create new not to handle same array
+		List<CompensationModel> topush = new ArrayList<CompensationModel>();
+		for (CompensationModel cm : transactionModels) {
+			topush.add(cm);
+		}
+		otBuffer.pushToUndoBufferAndResetRedo(topush);
 		transactionModels.clear();
 		transaction = false;
 	}
