@@ -2224,11 +2224,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     }
   }
 
-  @Override
-  public void editingEnded(boolean modified) {
-    applyClosestPath();
-  }
-
   public boolean applyClosestPath() {
     boolean result = false;
     Diagram start = null;

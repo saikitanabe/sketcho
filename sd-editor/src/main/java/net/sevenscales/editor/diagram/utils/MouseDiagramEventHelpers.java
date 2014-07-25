@@ -83,6 +83,8 @@ public class MouseDiagramEventHelpers {
   private static void addRelatedConnections(Diagram diagram, List<Diagram> diagrams) {
     for (AnchorElement ae : diagram.getAnchors()) {
       if (ae.getRelationship() != null) {
+        // make sure relationship shape is sent correctly to the server
+        ae.getRelationship().applyClosestPath();
         IDiagramItemRO di = ae.getRelationship().getDiagramItem();
         if (di.getClientId() != null && !diagrams.contains(ae.getRelationship())) {
           diagrams.add(ae.getRelationship());

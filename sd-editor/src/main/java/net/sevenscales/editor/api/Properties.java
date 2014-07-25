@@ -473,7 +473,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private void _doSend() {
 		if (buffer.diagram != null && !bufferTextIsSent()) {
 			lastSentText = buffer.diagram.getText(textEditX, textEditY);
-
 			Properties.this.editorCommon.fireChangedWithRelatedRelationships(buffer.diagram);
 	    sending = false;
 		}
