@@ -61,24 +61,21 @@ public class SvgPath extends SvgLine {
     }
 
 
-    String template = "<path d='%d%' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width%;vector-effect:non-scaling-stroke' />";
+    String template = "<path d='%d%' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width%;%vectoreffect%' />";
 
     if (path.getStrokeStyle() != null && path.getStrokeStyle().equals(ILine.DASH)) {
-      template = "<path d='%d%' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width%;stroke-dasharray:%style%;vector-effect:non-scaling-stroke' />";
+      template = "<path d='%d%' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width%;stroke-dasharray:%style%;%vectoreffect%' />";
       params.put("%style%", "4,3");
     }
 
-//    String template = "<polyline points='%points' style='%fill;stroke:rgb(%stroke%);stroke-width:%stroke-width%;%fill-opacity;'/>";
-//    if (poly.getStyle() != null) {
-//      template = "<polyline points='%points' style='%fill;stroke:rgb(%stroke%);stroke-width:%stroke-width%;stroke-dasharray:%style;%fill-opacity;'/>";
-//      params.put("%style", String.valueOf(map.get(poly.getStyle())));
-//    }
+    // for now vector-effect is disabled
+    params.put("%vectoreffect%", "");
 
     return parse(path, template, params, diagram);
   }
 
   private static String strokeWidth(Diagram diagram, IPath path) {
-    if (isConfluence(diagram.getSurfaceHandler()) && (diagram instanceof GenericElement)) {
+    if (/*isConfluence(diagram.getSurfaceHandler()) && */(diagram instanceof GenericElement)) {
       GenericElement ge = (GenericElement) diagram;
       return String.valueOf(ge.scaledStrokeWidth(ge.getFactorX(), ge.getFactorY()));
     } else {
