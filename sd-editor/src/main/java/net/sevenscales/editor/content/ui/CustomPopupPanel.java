@@ -32,9 +32,9 @@ public class CustomPopupPanel extends PopupPanel {
       	hide();
         event.cancel();
       }
-			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE) {
-				hide();
-			}
+			// if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE) {
+			// 	hide();
+			// }
 			break;
 		}
 	}
