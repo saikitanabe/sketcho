@@ -189,7 +189,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 			// do not duplicate child or relationships, since rel e.g. cannot be connected
 			// if child then e.g. create a note
-			IDiagramItem item = createQuickNext(d, prevSelectedItem);
+			IDiagramItem item = createQuickNext(d, prevSelectedItem);			
 
 			Dimension dimension = DiagramItemHelpers.parseDimension(item);
 			if (dimension != null) {
@@ -201,11 +201,22 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			// null to regenerate new client id
 			item.setClientId(null);
 			ClientIdHelpers.generateClientIdIfNotSet(item, 0, surface.getEditorContext().getGraphicalDocumentCache());
+
 	    AbstractDiagramFactory factory = ShapeParser.factory(item);
 	    Info shape = factory.parseShape(item, x - left - width / 2, y - top - height / 2);
 
 	    // TODO quick handler should not work if not editable!
 	    Diagram newelement = factory.parseDiagram(surface, shape, true, item, null);
+	    if (newelement.getWidth() != width || newelement.getHeight() != height) {
+	    	// recreate element in correct position
+	    	width = newelement.getWidth();
+	    	height = newelement.getHeight();
+	    	item = item.copy();
+		    shape = factory.parseShape(item, x - left - width / 2, y - top - height / 2);
+	    	newelement.removeFromParent();
+	    	newelement = factory.parseDiagram(surface, shape, true, item, null);
+	    }
+
     	BoardColorHelper.applyThemeToDiagram(newelement, Theme.getColorScheme(Theme.ThemeName.PAPER), Theme.getCurrentColorScheme());
 
 			reattachHelpers.processDiagram(newelement);
@@ -238,9 +249,9 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			result.setType(prevSelectedItem.getType());
 		}
 
-		// for now let's use default colors
-		// user most probably don't want to highligh create node in a same way
-		return setDefaultBackgroundColors(result);
+		// for now let's use default values like colors
+		// user most probably don't want to highligh created node in a same way
+		return setDefaultValues(result);
 	}
 
 	private IDiagramItem switchType(Diagram d) {
@@ -331,7 +342,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		result.setText(RelationshipHelpers.relationship(start, surface.getEditorContext(), end));
 		result.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue() | 
 															ShapeProperty.CLOSEST_PATH.getValue());
-		setDefaultBackgroundColors(result);
+		setDefaultColors(result);
 		result.setShape(closestSegment.start.x + "," + 
 									closestSegment.start.y + "," + 
 									closestSegment.end.x + "," +
@@ -340,7 +351,14 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		return result;
 	}
 
-	private IDiagramItem setDefaultBackgroundColors(IDiagramItem item) {
+	private IDiagramItem setDefaultValues(IDiagramItem item) {
+		setDefaultColors(item);
+		item.setShapeProperties(ShapeProperty.clear(item.getShapeProperties(), ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue()));
+		item.setFontSize(null);
+		return item;
+	}
+
+	private IDiagramItem setDefaultColors(IDiagramItem item) {
 		item.setBackgroundColor(Theme.createDefaultBackgroundColor().toRgbWithOpacity() + ":" + Theme.createDefaultBorderColor().toRgbWithOpacity());
 		item.setTextColor(Theme.createDefaultTextColor().toRgbWithOpacity());
 		return item;
