@@ -54,6 +54,9 @@ import net.sevenscales.domain.utils.SLogger;
 
 class CommentEditor  extends Composite {
 	private static final SLogger logger = SLogger.createLogger(CommentEditor.class);
+	static {
+		SLogger.addFilter(CommentEditor.class);
+	}
 	private static final String PROPERTIES_EDITOR_STYLE = "properties-TextArea2";
 	private static final int EDITOR_INCREMENT = 90;
 	private static final int EDITOR_INCREMENT_FIRST = 45;
@@ -123,8 +126,7 @@ class CommentEditor  extends Composite {
 			public void onClose(CloseEvent<PopupPanel> event) {
 				// dontCreateComment: comment creation if thread is deleted in OT
 				// editor open: dont' delete comment thread when write comment hint is closed
-				if (!dontCreateComment && 
-						CommentEditor.this.surface.getEditorContext().isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
+				if (!dontCreateComment && editorIsOpen()) {
 					createComment();
 				}
 			}
@@ -140,7 +142,9 @@ class CommentEditor  extends Composite {
 
 		surface.getEditorContext().getEventBus().addHandler(SelectionMouseUpEvent.TYPE, new SelectionMouseUpEventHandler() {
 			public void onSelection(SelectionMouseUpEvent event) {
-				if (event.isOnlyOne()) {
+				if (event.isOnlyOne() && !editorIsOpen()) {
+					logger.debug("SelectionMouseUpEvent...");
+
 					Diagram selected = event.getFirst();
 					if (selected instanceof CommentElement) {
 						selected = ((CommentElement) selected).getParentThread();
@@ -168,7 +172,9 @@ class CommentEditor  extends Composite {
 
 		surface.getEditorContext().getEventBus().addHandler(EditDiagramPropertiesStartedEvent.TYPE, new EditDiagramPropertiesStartedEventHandler() {
 			public void on(EditDiagramPropertiesStartedEvent event) {
+				logger.debug("EditDiagramPropertiesStartedEvent...");
 				donePopup.hide();
+				hideCommentHintBox();
 			}
 		});
 
@@ -213,6 +219,10 @@ class CommentEditor  extends Composite {
 		}
 	}
 
+	private boolean editorIsOpen() {
+		return surface.getEditorContext().isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN);
+	}
+
 	private boolean isEditorNotEmpty() {
 		return !"".equals(textArea.getText());
 	}
@@ -220,6 +230,10 @@ class CommentEditor  extends Composite {
 	void showEditor(Diagram diagram) {
 		show(diagram, calcEditorIncrement(diagram, false));
 		editorCommon.fireEditorOpen();
+	}
+
+	public void editingCommentStarted() {
+		// hideCommentArea
 	}
 
 	private int calcEditorIncrement(Diagram diagram, boolean calcHintSize) {
