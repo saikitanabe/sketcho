@@ -146,7 +146,7 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
 		return -3;
 	}
 	
-  private HasTextElement hasTextElement = new AbstractHasTextElement() {
+  private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
     public int getWidth() {
     	return EllipseElement.this.getWidth();
     }
@@ -376,9 +376,6 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
 		return ellipse.getRawNode();
 	}
 	
-	public void resizeStart() {
-	}
-
 	public boolean resize(Point diff) {
 			return resize(ellipse.getCx(), ellipse.getCy() + diff.y, 
 				   ellipse.getRx() + diff.x, ellipse.getRy() + diff.y);

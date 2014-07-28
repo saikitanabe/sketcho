@@ -135,9 +135,6 @@ public class FreehandElement extends AbstractDiagramItem {
     return result;
   }
 	
-	public void resizeStart() {
-	}
-
 	public boolean resize(Point diff) {
 		return false;
 	}

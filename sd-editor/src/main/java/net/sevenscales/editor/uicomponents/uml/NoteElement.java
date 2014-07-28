@@ -217,7 +217,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 
 	private final int MARGIN_TOP = 5;
 	private final int MARGIN_LEFT = 13;
-  private HasTextElement hasTextElement = new AbstractHasTextElement() {
+  private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
     public int getWidth() {
     	return boundary.getWidth() - MARGIN_LEFT * 2;
     }
@@ -375,9 +375,6 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 		return resizeHelpers.isOnResizeArea();
 	}
 
-	public void resizeStart() {
-	}
-
 	public boolean resize(Point diff) {
 		return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);
 	}
@@ -393,6 +390,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	}
 
 	public void resizeEnd() {
+		super.resizeEnd();
 		textUtil.setText(getText(), editable, true);
 	}
 

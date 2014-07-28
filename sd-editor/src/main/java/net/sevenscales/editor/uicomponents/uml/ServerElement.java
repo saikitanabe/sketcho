@@ -146,7 +146,7 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
   }
   
   // nice way to clearly separate interface methods :)
-  private HasTextElement hasTextElement = new AbstractHasTextElement() {
+  private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
     public int getWidth() {
       return boundary.getWidth();
     }
@@ -282,9 +282,6 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
     return boundary.getRawNode();
   }
   
-  public void resizeStart() {
-  }
-
   public boolean resize(Point diff) {
     return resize(boundary.getX(), boundary.getY(), 
                   boundary.getWidth() + diff.x, boundary.getHeight() + diff.y);     

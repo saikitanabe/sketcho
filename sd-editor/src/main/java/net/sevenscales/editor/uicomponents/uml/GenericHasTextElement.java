@@ -19,6 +19,7 @@ class GenericHasTextElement extends AbstractHasTextElement {
 	private GenericShape shape;
 
 	GenericHasTextElement(GenericElement parent, GenericShape shape) {
+		super(parent);
 		this.parent = parent;
 		this.shape = shape;
 		// possible to customize for each element type

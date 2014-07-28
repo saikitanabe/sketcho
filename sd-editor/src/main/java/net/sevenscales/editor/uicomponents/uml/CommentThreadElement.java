@@ -251,7 +251,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 
 	
   // nice way to clearly separate interface methods :)
-  private HasTextElement hasTextElement = new AbstractHasTextElement() {
+  private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
     public int getWidth() {
     	return boundary.getWidth();
     }
@@ -414,6 +414,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		return resizeHelpers.isOnResizeArea();
 	}
 
+	@Override
 	public void resizeStart() {
 		hideChildren();
 	}

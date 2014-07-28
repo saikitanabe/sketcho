@@ -134,7 +134,7 @@ class FreehandPath {
     GenericElement diagram = new GenericElement(surface, 
       new GenericShape(ElementType.FREEHAND2.getValue(), 
                        pos.scaledAndTranslatedPoint.x, pos.scaledAndTranslatedPoint.y, scaledWidth, scaledHeight, 
-                       ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue(), 
+                       ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue(), 
                        svgdata),
       "", 
       Theme.createDefaultBackgroundColor(), 

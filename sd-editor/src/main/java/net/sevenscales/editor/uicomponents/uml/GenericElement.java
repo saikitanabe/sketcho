@@ -241,9 +241,6 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
     return result;
   }
 	
-	public void resizeStart() {
-	}
-
   public boolean resize(Point diff) {
     return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);
   }
@@ -261,6 +258,8 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	public void resizeEnd() {
+		super.resizeEnd();
+
 		if (textUtil instanceof TextElementVerticalFormatUtil) {
 			((TextElementVerticalFormatUtil)textUtil).setText(getText(), editable, true);
 		}

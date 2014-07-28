@@ -180,9 +180,6 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
 //		return rectSurface.getRawNode();
 //	}
 	
-	public void resizeStart() {
-	}
-
 	public boolean resize(Point diff) {
 		return resize(visible.getX(), visible.getY(), visible.getRadius() + diff.x, visible.getRadius() + diff.y);			
 	}

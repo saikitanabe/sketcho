@@ -95,7 +95,7 @@ public class TextElement extends AbstractDiagramItem implements
 	private HasTextElement hasTextElement = createHasTextElement();
 
 	protected HasTextElement createHasTextElement() {
-		return new AbstractHasTextElement() {
+		return new AbstractHasTextElement(this) {
 				public int getWidth() {
 					return attachBoundary.getWidth();
 				}
@@ -202,9 +202,6 @@ public class TextElement extends AbstractDiagramItem implements
 //		return null;
 //	}
 
-	public void resizeStart() {
-	}
-
 	public boolean resize(Point diff) {
 		return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight()	+ diff.y);
 	}
@@ -219,6 +216,7 @@ public class TextElement extends AbstractDiagramItem implements
 	}
 
 	public void resizeEnd() {
+		super.resizeEnd();
 		textUtil.setText(getText(), editable, true);
 	}
 

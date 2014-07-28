@@ -94,7 +94,7 @@ public class HorizontalPartitionElement extends AbstractDiagramItem implements S
   }
   
   // nice way to clearly separate interface methods :)
-  private HasTextElement hasTextElement = new AbstractHasTextElement() {
+  private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
     public int getWidth() {
       return rectSurface.getWidth();
     }
@@ -206,9 +206,6 @@ public class HorizontalPartitionElement extends AbstractDiagramItem implements S
     return rectSurface.getRawNode();
   }
   
-  public void resizeStart() {
-  }
-
   public boolean resize(Point diff) {
     return resize(rectSurface.getX(), rectSurface.getY(), 
                   rectSurface.getWidth() + diff.x, rectSurface.getHeight() + diff.y);     

@@ -145,9 +145,6 @@ public class ForkElement extends AbstractDiagramItem implements SupportsRectangl
 //		return rectSurface.getRawNode();
 //	}
 	
-	public void resizeStart() {
-	}
-
 	public boolean resize(Point diff) {
 		int width = visible.getWidth();
 		width = shape.orientation == 0 ? width + diff.x : width;

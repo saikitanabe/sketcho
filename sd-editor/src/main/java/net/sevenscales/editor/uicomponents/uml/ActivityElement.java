@@ -95,7 +95,7 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
 	}
 	
   // nice way to clearly separate interface methods :)
-  private HasTextElement hasTextElement = new AbstractHasTextElement() {
+  private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
     public int getWidth() {
       return boundary.getWidth();
     }
@@ -195,9 +195,6 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
 	
 	public boolean onResizeArea(int x, int y) {
 		return resizeHelpers.isOnResizeArea();
-	}
-
-	public void resizeStart() {
 	}
 
 	public boolean resize(Point diff) {

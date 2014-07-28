@@ -129,7 +129,7 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
     super.constructorDone();
 	}
 	
-  private HasTextElement hasTextElement = new AbstractHasTextElement() {
+  private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
     public int getWidth() {
     	return Actor.this.getWidth();
     }
@@ -367,9 +367,6 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 //		return rectSurface.getRawNode();
 //	}
 	
-	public void resizeStart() {
-	}
-
 	public boolean resize(Point diff) {
 	  ++this.dispachSequence;
 //  	MatrixPointJS point = MatrixPointJS.createScaledPoint(diff.x, diff.y, surface.getScaleFactor()); 

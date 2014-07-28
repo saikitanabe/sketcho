@@ -25,8 +25,8 @@ public class LibraryShapes {
 	  shapes.put(ElementType.POLYGON8, new LibraryShape(ElementType.POLYGON8, 40, 40, 0, 3, 3));
 	  shapes.put(ElementType.ARROW_UP, new LibraryShape(ElementType.ARROW_UP, 20, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3));
 	  shapes.put(ElementType.ARROW_DOWN, new LibraryShape(ElementType.ARROW_DOWN, 20, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3));
-	  shapes.put(ElementType.ARROW_RIGHT, new LibraryShape(ElementType.ARROW_RIGHT, 40, 20, ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue(), 3, 3));
-	  shapes.put(ElementType.ARROW_LEFT, new LibraryShape(ElementType.ARROW_LEFT, 40, 20, ShapeProperty.SHAPE_AUTO_RESIZE_FALSE.getValue(), 3, 3));
+	  shapes.put(ElementType.ARROW_RIGHT, new LibraryShape(ElementType.ARROW_RIGHT, 40, 20, ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue(), 3, 3));
+	  shapes.put(ElementType.ARROW_LEFT, new LibraryShape(ElementType.ARROW_LEFT, 40, 20, ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue(), 3, 3));
 	  shapes.put(ElementType.IPHONE, new LibraryShape(ElementType.IPHONE, 24, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12));
 	  shapes.put(ElementType.WEB_BROWSER, new LibraryShape(ElementType.WEB_BROWSER, 50, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12));
 	  shapes.put(ElementType.RECT, new LibraryShape(ElementType.RECT, 50, 35, 0, 2, 2));

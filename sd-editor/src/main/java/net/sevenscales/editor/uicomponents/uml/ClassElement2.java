@@ -81,7 +81,7 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
   }
   
   // nice way to clearly separate interface methods :)
-  private HasTextElement hasTextElement = new AbstractHasTextElement() {
+  private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
     public int getWidth() {
       return rectSurface.getWidth();
     }
@@ -186,9 +186,6 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
     return rectSurface.getRawNode();
   }
   
-  public void resizeStart() {
-  }
-
   public boolean resize(Point diff) {
     return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);
   }

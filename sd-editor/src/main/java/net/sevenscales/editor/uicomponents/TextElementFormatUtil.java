@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import com.google.gwt.logging.client.LogConfiguration;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.diagram.Diagram;
@@ -137,6 +138,12 @@ public class TextElementFormatUtil {
    *
    */
   public abstract static class AbstractHasTextElement implements HasTextElement {
+    private Diagram diagram;
+
+    public AbstractHasTextElement(Diagram diagram) {
+      this.diagram = diagram;
+    }
+
   	@Override
   	public boolean verticalAlignMiddle() {
   		return false;
@@ -149,7 +156,11 @@ public class TextElementFormatUtil {
       return 0;
     }
     public boolean supportElementResize() {
-      return true;
+      boolean result = true;
+      if (ShapeProperty.isShapeAutoResizeFalse(diagram.getDiagramItem().getShapeProperties())) {
+        result = false;
+      }
+      return result;
     }
     public int getMarginLeft() {
       return 0;

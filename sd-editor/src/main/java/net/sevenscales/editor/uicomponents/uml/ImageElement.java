@@ -208,9 +208,6 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
     return result;
   }
 	
-	public void resizeStart() {
-	}
-
   public boolean resize(Point diff) {
     return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);
   }

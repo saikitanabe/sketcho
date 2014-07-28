@@ -161,7 +161,7 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
 	}
 	
   // nice way to clearly separate interface methods :)
-  private HasTextElement hasTextElement = new AbstractHasTextElement() {
+  private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
     public void addShape(IShape shape) {
       shapes.add(shape);    
     }
@@ -261,9 +261,6 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
 	
 	public boolean onResizeArea(int x, int y) {
 		return resizeHelpers.isOnResizeArea();
-	}
-
-	public void resizeStart() {
 	}
 
 	public boolean resize(Point diff) {

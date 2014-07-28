@@ -260,7 +260,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 
 	private final int MARGIN_LEFT = 16;
 	private final int MARGIN_TOP = 20;
-  private HasTextElement hasTitleTextElement = new AbstractHasTextElement() {
+  private HasTextElement hasTitleTextElement = new AbstractHasTextElement(this) {
     public int getWidth() {
     	return boundary.getWidth() - MARGIN_LEFT;
     }
@@ -312,7 +312,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   };
 	
   // nice way to clearly separate interface methods :)
-  private HasTextElement hasTextElement = new AbstractHasTextElement() {
+  private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
     public int getWidth() {
     	return boundary.getWidth() - MARGIN_LEFT;
     }

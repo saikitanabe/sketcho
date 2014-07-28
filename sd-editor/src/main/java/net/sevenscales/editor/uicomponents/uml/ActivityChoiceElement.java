@@ -126,7 +126,7 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 //	}
 	
   // nice way to clearly separate interface methods :)
-  private HasTextElement hasTextElement = new AbstractHasTextElement() {
+  private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
     public int getWidth() {
       return ActivityChoiceElement.this.getWidth();
     }
@@ -264,9 +264,6 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 	
 	public boolean onResizeArea(int x, int y) {
     return resizeHelpers.isOnResizeArea();
-	}
-
-	public void resizeStart() {
 	}
 
 	public boolean resize(Point diff) {
