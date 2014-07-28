@@ -11,6 +11,7 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.utils.DiagramItemHelpers;
+import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -685,7 +686,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
   
   public void resizeStart() {
-    
+    // NOTE if specialization is needed, override this functionality
+    getDiagramItem().addShapeProperty(ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE);
   }
   
   public boolean resize(Point diff) {
@@ -1015,7 +1017,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   @Override
   public void setFontSize(Integer fontSize) {
-    if (fontSize != null) {
+    if (fontSize != null && fontSize > 0) {
       getDiagramItem().setFontSize(fontSize);
       TextElementFormatUtil formatter = getTextFormatter();
       if (formatter != null) {
