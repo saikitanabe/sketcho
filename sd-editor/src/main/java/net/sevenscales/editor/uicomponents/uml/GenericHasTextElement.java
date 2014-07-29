@@ -46,9 +46,9 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
   public int getY() {
-  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+  	if (ShapeProperty.isTextPositionBottom(parent.getDiagramItem().getShapeProperties())) {
 			return parent.getRelativeTop() + parent.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 5;
-  	} else if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
+  	} else if (ShapeProperty.isTextResizeDimVerticalResize(parent.getDiagramItem().getShapeProperties())) {
   		return parent.getRelativeTop() + parent.getHeight() / 2 - ((int) parent.getTextHeight() / 2 + TextElementVerticalFormatUtil.DEFAULT_TOP_MARGIN / 2);
   	} else {
   		return parent.getRelativeTop();
@@ -62,8 +62,8 @@ class GenericHasTextElement extends AbstractHasTextElement {
  
 	@Override
   public boolean verticalAlignMiddle() {
-  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties()) || 
-  		  ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
+  	if (ShapeProperty.isTextPositionBottom(parent.getDiagramItem().getShapeProperties()) || 
+  		  ShapeProperty.isTextResizeDimVerticalResize(parent.getDiagramItem().getShapeProperties())) {
 			return false;
 		} else {
 			return true;
@@ -72,9 +72,9 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
   public boolean supportElementResize() {
-  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+  	if (ShapeProperty.isTextPositionBottom(parent.getDiagramItem().getShapeProperties())) {
 			return false;
-  	} else if (ShapeProperty.isShapeAutoResizeFalse(shape.getShapeProperties())) {
+  	} else if (ShapeProperty.isShapeAutoResizeFalse(parent.getDiagramItem().getShapeProperties())) {
   		return false;
   	} else {
 			return true;
@@ -109,7 +109,7 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
   public boolean supportsTitleCenter() {
-  	if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
+  	if (ShapeProperty.isTextResizeDimVerticalResize(parent.getDiagramItem().getShapeProperties())) {
   		return false;
   	}
     return true;
@@ -122,7 +122,7 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
   public boolean forceAutoResize() {
-  	if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
+  	if (ShapeProperty.isTextResizeDimVerticalResize(parent.getDiagramItem().getShapeProperties())) {
 			return true;
 		}
 		return false;
