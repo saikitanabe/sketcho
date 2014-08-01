@@ -26,10 +26,9 @@ public class SvgImage extends SvgBase {
       // just use browser cached images
       // url = image.getSrc();
     // } else
-    /*if (diagram instanceof ImageElement && absoluteUrl) {
+    if (diagram instanceof ImageElement && absoluteUrl) {
       url = ((ImageElement) diagram).getImageAbsoluteUrl();
-    } else */
-    if (diagram instanceof ImageElement) {
+    } else if (diagram instanceof ImageElement) {
       url = ((ImageElement) diagram).getImageUrl();
     } else {
       // some url hacking to get confluence and Sketchboard.Me working
