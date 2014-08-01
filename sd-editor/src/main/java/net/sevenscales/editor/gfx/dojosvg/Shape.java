@@ -175,7 +175,7 @@ abstract class Shape extends Graphics implements IShape {
   };
 
 	final public void setFill(Color color) {
-		if (visibility)
+		if (visibility && color != null)
 			nativeSetFill(rawNode, color.red, color.green, color.blue, color.opacity);
 	}
 
