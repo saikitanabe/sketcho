@@ -36,6 +36,7 @@ public class SvgHandler {
 	private EditorContext editorContext;
 
 	public SvgHandler(JavaScriptObject json, JavaScriptObject handler) {
+		logger.debug("SvgHandler json: {}", json);
 		this.json = json;
 		this.handler = handler;
 		this.editorContext = new EditorContext();
@@ -70,7 +71,7 @@ public class SvgHandler {
 	    UiModelContentHandler modelHandler = new UiModelContentHandler(editorContext);
 	    modelHandler.addContentItems(content, surface);
 	    SvgConverter converter = new SvgConverter(false);
-			SvgData data = converter.convertToSvg(content, surface, false);
+			SvgData data = converter.convertToSvg(content, surface, false, true);
 			this.svg = data.svg;
 			nativeReady(handler, data.svg);
     }

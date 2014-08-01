@@ -153,11 +153,13 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
     // need to fetch directly and not through angular, since hander
     // needs to be this instance; this certainly will not work
     // on Confluence! :)
-    $wnd.backendProfileService.getSignedUrl({boardId: $wnd.currentBoard().boardId, filename: filename}).then(function(signedUrl) {
-      if (signedUrl) {
-        me.@net.sevenscales.editor.uicomponents.uml.ImageElement::updateImageInfo(Ljava/lang/String;)(signedUrl);
-      }
-    })
+    if (typeof $wnd.backendProfileService !== 'undefined') {
+      $wnd.backendProfileService.getSignedUrl({boardId: $wnd.currentBoard().boardId, filename: filename}).then(function(signedUrl) {
+        if (signedUrl) {
+          me.@net.sevenscales.editor.uicomponents.uml.ImageElement::updateImageInfo(Ljava/lang/String;)(signedUrl);
+        }
+      })
+    }
   }-*/;
 
   public boolean isNotFetchedAwsUrl() {
@@ -297,6 +299,10 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   		return shape.getFilename();
   	}
   	return shape.getUrl();
+  }
+
+  public String getImageAbsoluteUrl() {
+    return shape.getUrl();
   }
 
   /**

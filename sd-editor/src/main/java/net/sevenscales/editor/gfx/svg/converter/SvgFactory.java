@@ -14,7 +14,7 @@ import net.sevenscales.editor.gfx.domain.IText;
 
 public class SvgFactory {
 
-  public static String convert(IShape s, int transformX, int transformY, EditorContext editorContext, Diagram diagram, boolean fontToChange) {
+  public static String convert(IShape s, int transformX, int transformY, EditorContext editorContext, Diagram diagram, boolean fontToChange, boolean absoluteUrl) {
     String result = "";
     if (s instanceof IRectangle) {
       IRectangle r = (IRectangle) s;
@@ -36,7 +36,7 @@ public class SvgFactory {
       result = SvgEllipse.svg(e, transformX, transformY, diagram);
     } else if (s instanceof IImage) {
     	IImage i = (IImage) s;
-    	result = SvgImage.svg(i, transformX, transformY, editorContext, diagram);
+    	result = SvgImage.svg(i, transformX, transformY, editorContext, diagram, absoluteUrl);
     } else if (s instanceof IPath) {
       IPath p = (IPath) s;
       result = SvgPath.svg(p, transformX, transformY, diagram);

@@ -1462,7 +1462,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //    System.out.println("doSetShape:"+points+" "+anchorMap);
     relLine.setShape(points);
     initializeChildren(false);
-  	if (TouchHelpers.isSupportsTouch() && surface.getMouseDiagramManager().getDragHandler().isDragging()) {
+  	if (TouchHelpers.isSupportsTouch() && surface.getMouseDiagramManager() != null && surface.getMouseDiagramManager().getDragHandler().isDragging()) {
   		// performance improvement needed on touch devices; there is not enough
   		// processing power to calculate arrow head shapes on every touch move.
       inheritance.setVisibility(false);

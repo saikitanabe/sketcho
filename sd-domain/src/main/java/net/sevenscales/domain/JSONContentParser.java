@@ -13,6 +13,9 @@ import com.google.gwt.json.client.JSONValue;
 
 public class JSONContentParser {
 	private static final SLogger logger = SLogger.createLogger(JSONContentParser.class);
+	static {
+		SLogger.addFilter(JSONContentParser.class);
+	}
 
 	private DiagramContentDTO content;
 
@@ -30,16 +33,18 @@ public class JSONContentParser {
 	}
 
 	private void parse(JSONObject jsonContent) {
+		logger.debug("jsonContent {}", jsonContent);
 		content.setVersion(JSONParserHelpers.getInt(jsonContent.get("version")));
 		content.setName(JSONParserHelpers.getString(jsonContent.get("name")));
 		content.setCreatedTime(JSONParserHelpers.getLong(jsonContent.get("createdAt")));
 		content.setModifiedTime(JSONParserHelpers.getLong(jsonContent.get("updatedAt")));
 		content.setWidth(JSONParserHelpers.getInteger(jsonContent.get("width")));
-		
+
 		JSONArray items = jsonContent.get("items").isArray();
 		if (items != null) {
 			content.setDiagramItems(JSONContentParser.parseItems(items));
 		}
+
 		// logger.debug("content.getVersion() {} content.getDiagramItems()", content.getVersion(), content.getDiagramItems());
 	}
 

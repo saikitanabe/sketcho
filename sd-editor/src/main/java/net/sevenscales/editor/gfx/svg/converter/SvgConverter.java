@@ -127,7 +127,7 @@ public class SvgConverter {
     return result;
   }
 
-  public SvgData convertToSvg(IDiagramContent content, ISurfaceHandler surfaceHandler, boolean fontToChange) {
+  public SvgData convertToSvg(IDiagramContent content, ISurfaceHandler surfaceHandler, boolean fontToChange, boolean absoluteUrl) {
   	EditorContext editorContext = surfaceHandler.getEditorContext();
     Diagram[] diagrams = getDiagrams(surfaceHandler);
     String items = "";
@@ -164,7 +164,7 @@ public class SvgConverter {
           items += groupStart(subgroup);
         }
 
-        items += toSvg(d, shapes, editorContext, fontToChange);
+        items += toSvg(d, shapes, editorContext, fontToChange, absoluteUrl);
 
         if (subgroup != null) {
           // close subgroup
@@ -174,7 +174,7 @@ public class SvgConverter {
         // text helper elements are not included in getElements
         List<List<IShape>> textElements = d.getTextElements();
         if (textElements != null) {
-          items += toSvg(d, textElements, editorContext, fontToChange);
+          items += toSvg(d, textElements, editorContext, fontToChange, absoluteUrl);
         }
         items += groupEnd();
         items += linkEnd(d);
@@ -276,7 +276,7 @@ public class SvgConverter {
     }
   }
 
-	private String toSvg(Diagram d, List<List<IShape>> shapes, EditorContext editorContext, boolean fontToChange) {
+	private String toSvg(Diagram d, List<List<IShape>> shapes, EditorContext editorContext, boolean fontToChange, boolean absoluteUrl) {
   	String result = "";
     if (d.isVisible()) {
   	  // don't set read only state, because might not be visible
@@ -304,7 +304,7 @@ public class SvgConverter {
 	      for (IShape s : line) {
 	        // convert to concrete svg shape with factory
 	        if (s.isVisible()) {
-	          String svg = SvgFactory.convert(s, 0, 0, editorContext, d, fontToChange);
+	          String svg = SvgFactory.convert(s, 0, 0, editorContext, d, fontToChange, absoluteUrl);
 	          result += svg;
 	        }
 	      }
