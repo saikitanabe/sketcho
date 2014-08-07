@@ -1671,7 +1671,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     anchorEnd(highlight);
     anchorStart(highlight);
 
-    relationshipHandleHelpers.showConditionally(this, true);
+    if (relationshipHandleHelpers != null) {
+      relationshipHandleHelpers.showConditionally(this, true);
+    }
   }
 
   public void anchorEnd(boolean highlight) {
