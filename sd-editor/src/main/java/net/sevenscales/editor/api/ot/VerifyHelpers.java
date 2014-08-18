@@ -9,8 +9,6 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.utils.JsonHelpers;
 import net.sevenscales.editor.content.utils.JsonHelpers.MisMatchException;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.event.OperationQueueRequestEvent;
-import net.sevenscales.editor.api.event.OperationQueueRequestEventHandler;
 
 import com.google.gwt.logging.client.LogConfiguration;
 import com.google.gwt.user.client.Timer;

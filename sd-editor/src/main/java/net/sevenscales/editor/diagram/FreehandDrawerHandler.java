@@ -6,7 +6,6 @@ import java.util.List;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
-import net.sevenscales.editor.api.event.OperationQueueRequestEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
 import net.sevenscales.editor.api.event.ColorSelectedEventHandler;
 import net.sevenscales.editor.api.event.ColorSelectedEvent;
@@ -454,12 +453,12 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 
   private void blockSending() {
     logger.debug("blockSending...");
-    surface.getEditorContext().getEventBus().fireEvent(new OperationQueueRequestEvent(OperationQueueRequestEvent.QueueRequest.BLOCK_SENDING));
+    // surface.getEditorContext().getEventBus().fireEvent(new OperationQueueRequestEvent(OperationQueueRequestEvent.QueueRequest.BLOCK_SENDING));
   }
 
   private void freeSending() {
     logger.debug("freeSending...");
-    surface.getEditorContext().getEventBus().fireEvent(new OperationQueueRequestEvent(OperationQueueRequestEvent.QueueRequest.FREE_SENDING));
+    // surface.getEditorContext().getEventBus().fireEvent(new OperationQueueRequestEvent(OperationQueueRequestEvent.QueueRequest.FREE_SENDING));
   }
 
   private void plot() {
