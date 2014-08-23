@@ -263,7 +263,8 @@ public class SvgConverter {
     if (d.hasLink()) {
       // This could be user modified straight in attachment (on Confluence)
       SafeUri url = UriUtils.fromString(d.getLink());
-      result += "<a xlink:href='" + url.asString() + "'>";
+      String urlString = url.asString().replaceAll("&", "&amp;");
+      result += "<a xlink:href='" + urlString + "'>";
     }
     return result;
   }
