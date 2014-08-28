@@ -425,6 +425,8 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			return;
 		}
 		resizeHandler.onLongPress(x, y);
+
+		logger.debug("double click");
 		
 		Set<Diagram> selected = selectionHandler.getSelectedItems();
 		if (selected.size() == 1) {
@@ -432,7 +434,9 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	    MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
 			surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(s, point));
 		} else if (selected.size() == 0) {
-			surface.getEditorContext().getEventBus().fireEvent(new BoardEmptyAreaClickedEvent(x, y));
+			if (!quickConnectionHandler.handleDoubleTap()) {
+				surface.getEditorContext().getEventBus().fireEvent(new BoardEmptyAreaClickedEvent(x, y));
+			}
 		}
 	}
 	
