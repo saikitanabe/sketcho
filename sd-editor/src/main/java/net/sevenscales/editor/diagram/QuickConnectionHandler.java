@@ -80,9 +80,9 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	}
 
 	private void checkSelection() {
-		if (!Tools.isQuickMode()) {
-			return;
-		}
+		// if (!Tools.isQuickMode()) {
+		// 	return;
+		// }
 
 		Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
 		logger.debug("checkSelection {}", selected);
@@ -126,9 +126,9 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 		this.mouseUpKeys = keys;
 		this.mouseUpPoint = point;
-		if (Tools.isQuickMode()) {
+		// if (Tools.isQuickMode()) {
 			cancelLastOperationIfLastQuickConnection();
-		}
+		// }
 	}
 
 	public boolean handleDoubleTap() {
@@ -137,7 +137,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 	private boolean maybeStartSuperFlow() {
 		boolean result = false;
-		if (Tools.isQuickMode()) {
+		// if (Tools.isQuickMode()) {
 			// cancelLastOperationIfLastQuickConnection();
 			// TODO how to check if just board is double clicked?
 			// if (sender == null) {
@@ -148,8 +148,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 				boolean fromPreviousIfAny = this.mouseUpKeys == IGraphics.SHIFT;
 				result = checkToCreateQuickConnection(mouseUpPoint.getScreenX(), mouseUpPoint.getScreenY(), fromPreviousIfAny);
 			}
-			// }
-		}
+		// }
 		return result;
 	}
 
