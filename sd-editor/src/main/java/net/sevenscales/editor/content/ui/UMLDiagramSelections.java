@@ -147,7 +147,6 @@ public class UMLDiagramSelections extends Composite {
 	@UiField FastButton modifyImages;
 	@UiField FastButton myimages;
 	@UiField FastButton commentMode;
-	@UiField FastButton quickMode;
 	@UiField SimplePanel imagesArea;
 	@UiField FastButton uploadFile;
 	@UiField ScrollPanel scrollPanel;
@@ -255,13 +254,6 @@ public class UMLDiagramSelections extends Composite {
 	public void onCommentMode(ClickEvent event) {
 		stopEvent(event);
 		Tools.toggleCommentMode();
-		selectionHandler.hidePopup();
-	}
-
-	@UiHandler("quickMode")
-	public void onQuickMode(ClickEvent event) {
-		stopEvent(event);
-		Tools.toggleQuickMode();
 		selectionHandler.hidePopup();
 	}
 

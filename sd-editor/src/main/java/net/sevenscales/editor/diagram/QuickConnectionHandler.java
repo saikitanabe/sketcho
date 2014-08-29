@@ -78,9 +78,9 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	}
 
 	private void checkSelection() {
-		if (!Tools.isQuickMode()) {
-			return;
-		}
+		// if (!Tools.isQuickMode()) {
+		// 	return;
+		// }
 
 		Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
 		if (selected.size() == 1) {
@@ -119,7 +119,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 	@Override
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
-		if (Tools.isQuickMode()) {
+		// if (Tools.isQuickMode()) {
 			cancelLastOperationIfLastQuickConnection();
 			if (sender == null) {
 				// let's check only board sent mouse up event;
@@ -128,7 +128,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 				boolean fromPreviousIfAny = keys == IGraphics.SHIFT;
 				checkToCreateQuickConnection(point.getScreenX(), point.getScreenY(), fromPreviousIfAny);
 			}
-		}
+		// }
 	}
 
 	private Diagram findPrevious(Diagram d) {
