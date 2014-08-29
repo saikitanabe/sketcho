@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 
+import com.google.gwt.core.client.Scheduler;
+
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoint;
 import net.sevenscales.editor.content.utils.AbstractDiagramFactory;
@@ -20,8 +22,10 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.UndoEvent;
-import net.sevenscales.editor.api.event.SelectionEvent;
-import net.sevenscales.editor.api.event.SelectionEventHandler;
+// import net.sevenscales.editor.api.event.SelectionEvent;
+// import net.sevenscales.editor.api.event.SelectionEventHandler;
+// import net.sevenscales.editor.api.event.UnselectAllEvent;
+// import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.api.ot.CompensationModel;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.diagram.shape.Info;
@@ -55,18 +59,27 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	private boolean notAddedFromLibrary = true;
 	private int mouseUpKeys;
 	private MatrixPointJS mouseUpPoint;
+	private boolean itWasDoubleTap;
 
 	public QuickConnectionHandler(ISurfaceHandler surface) {
 		this.surface = surface;
 		search = surface.createDiagramSearch();
 
 
-		surface.getEditorContext().getEventBus().addHandler(SelectionEvent.TYPE, new SelectionEventHandler() {
-			@Override
-			public void onSelection(SelectionEvent event) {
-				checkSelection();
-			}
-		});
+		// surface.getEditorContext().getEventBus().addHandler(SelectionEvent.TYPE, new SelectionEventHandler() {
+		// 	@Override
+		// 	public void onSelection(SelectionEvent event) {
+		// 		// checkSelection();
+		// 	}
+		// });
+
+		// surface.getEditorContext().getEventBus().addHandler(UnselectAllEvent.TYPE, new UnselecteAllEventHandler() {
+		// 	@Override
+		// 	public void onUnselectAll(UnselectAllEvent event) {
+		// 		logger.debug("onUnselectAll...");
+		// 		// previouslySelected = null;
+		// 	}
+		// });
 
 		// surface.getEditorContext().getEventBus().addHandler(SwitchElementToEvent.TYPE, new SwitchElementToEventHandler() {
 		// 	@Override
@@ -114,6 +127,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
   }
 
 	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+		// checkSelection();
 		return false;
 	}
 
@@ -128,10 +142,23 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		this.mouseUpPoint = point;
 		// if (Tools.isQuickMode()) {
 			cancelLastOperationIfLastQuickConnection();
+			Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
+				public boolean execute() {
+					logger.debug("up 500...");
+					if (itWasDoubleTap) {
+						itWasDoubleTap = false;
+					} else {
+						checkSelection();
+					}
+					return false;
+				}
+			}, 500);
 		// }
 	}
 
 	public boolean handleDoubleTap() {
+		logger.debug("handleDoubleTap...");
+		itWasDoubleTap = true;
 		return maybeStartSuperFlow();
 	}
 
