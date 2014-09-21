@@ -387,21 +387,21 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		$wnd.Hammer(e, {preventDefault: true}).on('doubletap', function(event) {
 			// console.log('handleDoubleTap', event)
 			if (event.gesture.center.clientX && event.gesture.center.clientY) {
-				me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(II)(event.gesture.center.clientX, event.gesture.center.clientY);
+				me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZ)(event.gesture.center.clientX, event.gesture.center.clientY, event.gesture.srcEvent.shiftKey);
 			}
 		})
 	}-*/;
 
 	private native void handleMouseDoubleClick(Element e, MouseDiagramHandlerManager me)/*-{
 		$wnd.$(e).on('dblclick', function(e) {
-			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(II)(e.clientX, e.clientY);
+			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZ)(e.clientX, e.clientY, false);
 		})
 	}-*/;
 
-	private void doubleTap(int x, int y) {
+	private void doubleTap(int x, int y, boolean shiftKey) {
 		logger.debug("doubleTap...");
 		// cannot check connect mode, or will not show property editor
-		_fireLongPress(x, y);
+		_fireLongPress(x, y, shiftKey);
 	}
 
 	/**
@@ -417,17 +417,19 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			// User is probably trying to draw connection. 
 			return;
 		}
-		_fireLongPress(x, y);
+		_fireLongPress(x, y, false);
 	}
 
-	private void _fireLongPress(int x, int y) {
+	private void _fireLongPress(int x, int y, boolean shiftKey) {
 		if (isResizing()) {
 			// prevent handling if on resize area
 			return;
 		}
 		resizeHandler.onLongPress(x, y);
 
-		surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(false));		
+		if (!shiftKey) {
+			surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(false));		
+		}
 		
 		Set<Diagram> selected = selectionHandler.getSelectedItems();
 		if (selected.size() == 1) {
