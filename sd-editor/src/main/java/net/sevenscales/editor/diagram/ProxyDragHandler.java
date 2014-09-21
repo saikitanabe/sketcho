@@ -7,6 +7,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
+import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.impl.TouchDragAndDrop;
 import net.sevenscales.editor.api.impl.TouchDragAndDrop.ITouchToMouseHandler;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
@@ -138,6 +139,8 @@ public class ProxyDragHandler implements MouseDiagramHandler {
 	  target.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, false);
 	  source.add(sourceproxy, true);
 	  target.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, true);
+
+    target.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(false));
 	}
 
 	public void onMouseMove(Diagram sender, MatrixPointJS point) {

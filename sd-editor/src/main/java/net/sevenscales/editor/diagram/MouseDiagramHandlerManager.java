@@ -11,6 +11,7 @@ import net.sevenscales.editor.api.SketchDiagramAreaHandler;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
+import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.diagram.drag.MouseDiagramDragHandler;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.content.ui.IModeManager;
@@ -425,6 +426,8 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			return;
 		}
 		resizeHandler.onLongPress(x, y);
+
+		surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(false));		
 		
 		Set<Diagram> selected = selectionHandler.getSelectedItems();
 		if (selected.size() == 1) {
