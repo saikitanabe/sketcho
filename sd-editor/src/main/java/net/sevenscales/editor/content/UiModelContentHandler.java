@@ -288,7 +288,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
   		int centerDiffY = clientCenterY - centerY;
 
 	  	// surface.getRootLayer().setTransform(-(left - width / 2), -(top - height / 2));
-	  	surface.getRootLayer().setTransform(-left + centerDiffX, -top + centerDiffY);
+	  	surface.getRootLayer().setTransform(-left + centerDiffX, -top + centerDiffY - 40); // toolbar
   	}
   }
 
