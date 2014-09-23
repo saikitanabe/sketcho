@@ -44,6 +44,8 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 	private IModeManager modeManager;
 	private ResizeHelpers resizeHelpers;
 	private IConnectionHelpers connectionHelpers;
+	private ISurfaceHandler thesurface;
+	private boolean tourStarted;
 
 	public UiModelContentHandler(IUiDiagramContent uiContent, boolean editable, EditorContext editorContext, IModeManager modeManager) {
 		this.editorContext = editorContext;
@@ -63,11 +65,37 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 				}
 			}
 		});
+
+		listenTour(this);
 	}
 
 	public UiModelContentHandler(EditorContext editorContext) {
 		this.editorContext = editorContext;
 		this.editable = false;
+	}
+
+	private native void listenTour(UiModelContentHandler me)/*-{
+		var su = $wnd.streamStartTour.onValue(function() {
+			su()
+			me.@net.sevenscales.editor.content.UiModelContentHandler::startTour()();
+		})
+
+		var eu = $wnd.streamEndTour.onValue(function() {
+			eu()
+			me.@net.sevenscales.editor.content.UiModelContentHandler::endTour()();
+		})
+	}-*/;
+
+	private void startTour() {
+		this.tourStarted = true;
+	}
+
+	private void endTour() {
+		if (thesurface != null) {
+			for (Diagram d : thesurface.getDiagrams()) {
+				d.setVisible(true);
+			}
+		}
 	}
 
 	public void externalize() {
@@ -100,6 +128,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 			IModelingPanel mPanel = (IModelingPanel) uiContent.getModelingPanel();
 			mPanel.reset();
 			ISurfaceHandler surface = mPanel.getSurface();
+			thesurface = surface;
 			
 			// this is just to guarantee that order is correct...
 			resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
@@ -212,7 +241,16 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
    if (editable) {
 	   surface.getMouseDiagramManager().getSelectionHandler().selectionOn(false);
    }
+   if (tourStarted) {
+   	hideShapes(surface);
+   }
    surface.unsuspendRedrawAll();
+  }
+
+  private void hideShapes(ISurfaceHandler surface) {
+		for (Diagram d : surface.getDiagrams()) {
+			d.setVisible(false);
+		}
   }
 
   private void setInitialBoardPosition(ISurfaceHandler surface) {

@@ -503,7 +503,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		// special border => no border
     result.add(new TextElement(this.toolpool,
         new TextShape(120, SOFTWARE_SKETCHING_GROUP + 300, 100, 30),
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), "Just text", true, new DiagramItemDTO()));
+        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), "### Just text", true, new DiagramItemDTO()));
     
 		result.add(new ServerElement(this.toolpool,
 				new ServerShape(30, SOFTWARE_SKETCHING_GROUP + 215, 60, 80),

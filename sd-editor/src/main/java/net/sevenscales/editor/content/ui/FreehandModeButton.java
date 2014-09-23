@@ -32,6 +32,7 @@ public class FreehandModeButton extends HTML {
 			}
 		});
 
+		getElement().setId("tip-freehand");
 		setHTML(SafeHtmlUtils
 				.fromSafeConstant("<button class='btn' style='white-space: nowrap;'><i class='context-icon-pen'></i>Freehand</button>"));
 		// freehandMode.setStyleName("btn-freehand");
@@ -64,5 +65,11 @@ public class FreehandModeButton extends HTML {
 			editorContext.set(EditorProperty.FREEHAND_MODE_TYPE, event.getModeType());
 		}
 		editorContext.set(EditorProperty.FREEHAND_MODE, true);
+		trigger("freehand-on");
 	}
+
+  private native void trigger(String event)/*-{
+    $wnd.$($doc).trigger(event);
+  }-*/;
+
 }

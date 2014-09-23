@@ -324,8 +324,13 @@ class SurfaceHandler extends SimplePanel implements
 		
 		if (editorContext.isTrue(EditorProperty.ON_CHANGE_ENABLED)) {
 			editorContext.getEventBus().fireEvent(new DiagramElementAddedEvent(toAddDiagrams, duplicate));
+			trigger("shape-added");
 		}
 	}
+
+  private native void trigger(String event)/*-{
+    $wnd.$($doc).trigger(event);
+  }-*/;
 
 	public void addAsSelected(Diagram diagram, boolean ownerComponent, boolean duplicate) {
 		List<Diagram> diagrams = new ArrayList<Diagram>();

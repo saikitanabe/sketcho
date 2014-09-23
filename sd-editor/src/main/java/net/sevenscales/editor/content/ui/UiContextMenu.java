@@ -137,6 +137,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		popup.setStyleName("UiContextMenu");
 		popup.setAutoHideEnabled(true);
 		popup.setWidget(this);
+		popup.getElement().setId("tip-shape-added");
 		
 		colorpopup = new PopupPanel();
 		colorpopup.setStyleName("ColorButtonBox");
@@ -384,6 +385,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 						mainContextPosition.left = screenPosition.x;
 						mainContextPosition.top = screenPosition.y;
 						popup.setPopupPositionAndShow(mainContextPosition);
+						trigger("shape-context-menu-shown");
 						EffectHelpers.tooltipper();
 					}
 				}
@@ -514,6 +516,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		tapCurvedArrow(curvedArrow, this);
 		tapRectifiedArrow(rectifiedArrow, this);
 	}
+
+  private native void trigger(String event)/*-{
+    $wnd.$($doc).trigger(event);
+  }-*/;
 
 	private native void handleStreams(UiContextMenu me)/*-{
 		$wnd.cancelStream.onValue(function() {
