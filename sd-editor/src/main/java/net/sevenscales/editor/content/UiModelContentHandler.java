@@ -2,6 +2,8 @@ package net.sevenscales.editor.content;
 
 import java.util.Arrays;
 
+import com.google.gwt.user.client.Window;
+
 import net.sevenscales.domain.api.IContent;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
@@ -256,19 +258,37 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
   private void setInitialBoardPosition(ISurfaceHandler surface) {
     int left = Integer.MAX_VALUE;
     int top = Integer.MAX_VALUE;
+    int bottom = Integer.MIN_VALUE;
+    int right = Integer.MIN_VALUE;
 
   	for (Diagram d : surface.getDiagrams()) {
   		if (!(d instanceof CircleElement)) {
-  			int candidateLeft = Math.min(left, d.getLeft());
-  			int candidateTop = Math.min(top, d.getTop());
-  			if (candidateLeft < left && candidateTop < top) {
-  				left = candidateLeft;
-	  			top = candidateTop;
-  			}
+  			left = Math.min(left, d.getLeft());
+  			top = Math.min(top, d.getTop());
+  			bottom = Math.max(bottom, d.getTop() + d.getHeight());
+				right = Math.max(right, d.getLeft() + d.getWidth());
   		}
   	}
-  	if (left != Integer.MAX_VALUE && top != Integer.MAX_VALUE) {
-	  	surface.getRootLayer().setTransform(-left + 100, -top + 100);
+  	if (left != Integer.MAX_VALUE && top != Integer.MAX_VALUE &&
+  			bottom != Integer.MIN_VALUE && right != Integer.MIN_VALUE) {
+  		int width = right - left;
+  		int height = bottom - top;
+
+  		// from 0,0
+  		int centerX = width / 2;
+  		int centerY = height / 2;
+
+  		// from 0,0
+  		int clientWidth = Window.getClientWidth();
+  		int cliehtHeight = Window.getClientHeight();
+  		int clientCenterX = clientWidth / 2;
+  		int clientCenterY = cliehtHeight / 2;
+
+  		int centerDiffX = clientCenterX - centerX;
+  		int centerDiffY = clientCenterY - centerY;
+
+	  	// surface.getRootLayer().setTransform(-(left - width / 2), -(top - height / 2));
+	  	surface.getRootLayer().setTransform(-left + centerDiffX, -top + centerDiffY);
   	}
   }
 
