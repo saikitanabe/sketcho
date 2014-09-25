@@ -164,7 +164,11 @@ public class SketchoMacro extends BaseMacro {
 				context.put("classname", classname);
 				context.put("svgClassName", classname + "_svg");
 
-				context.put("svg", params.get("svg"));
+				if (params.get("svg") != null) {
+					context.put("svg", Boolean.valueOf(params.get("svg").toString()));
+				} else {
+					context.put("svg", true);
+				}
 
 				// System.out.println("context: " + context);
 //				context.put("trialLicense", sketchoManager.isTrialLicense());
