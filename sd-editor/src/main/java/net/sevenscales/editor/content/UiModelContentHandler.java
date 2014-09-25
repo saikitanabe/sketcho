@@ -77,15 +77,17 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 	}
 
 	private native void listenTour(UiModelContentHandler me)/*-{
-		var su = $wnd.streamStartTour.onValue(function() {
-			su()
-			me.@net.sevenscales.editor.content.UiModelContentHandler::startTour()();
-		})
+		if (typeof $wnd.streamStartTour != 'undefined') {
+			var su = $wnd.streamStartTour.onValue(function() {
+				su()
+				me.@net.sevenscales.editor.content.UiModelContentHandler::startTour()();
+			})
 
-		var eu = $wnd.streamEndTour.onValue(function() {
-			eu()
-			me.@net.sevenscales.editor.content.UiModelContentHandler::endTour()();
-		})
+			var eu = $wnd.streamEndTour.onValue(function() {
+				eu()
+				me.@net.sevenscales.editor.content.UiModelContentHandler::endTour()();
+			})
+		}
 	}-*/;
 
 	private void startTour() {

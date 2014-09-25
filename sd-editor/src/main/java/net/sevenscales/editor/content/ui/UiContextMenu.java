@@ -220,7 +220,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					colorMenu = Display.INLINE_BLOCK;
 				}
 
-				if (selected.length == 1 && !(selected[0] instanceof Relationship2)) {
+				if (notConfluence() && selected.length == 1 && !(selected[0] instanceof Relationship2)) {
 					switchElementVisibility = Display.INLINE_BLOCK;
 				}
 

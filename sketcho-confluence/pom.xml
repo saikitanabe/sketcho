@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.sevenscales.confluence.plugins</groupId>
     <artifactId>sketcho-confluence</artifactId>
-    <version>3.2.0</version>
+    <version>3.2.1</version>
     <packaging>atlassian-plugin</packaging>
     <name>Sketchboard.Me Confluence Plugin</name>
     <description>UML, Free hand and Mind Map Drawing Plugin for Confluence</description>
@@ -186,7 +186,7 @@
         <!-- <amps.version>5.0.2</amps.version>
         <upm.license.compatibility.version>2.3</upm.license.compatibility.version>
         <sal.api.version>2.4.0</sal.api.version>
-        <confluence.version>5.5.2</confluence.version>
+        <confluence.version>5.6.1</confluence.version>
         <confluence.data.version>5.5.2</confluence.data.version>
         <plugin.testrunner.version>1.2.0</plugin.testrunner.version>
         <atlassian.templaterenderer.version>1.0.5</atlassian.templaterenderer.version> -->

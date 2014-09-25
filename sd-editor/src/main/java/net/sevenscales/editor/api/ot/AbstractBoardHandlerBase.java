@@ -388,7 +388,7 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
 		return compensationTransformer;
 	}
 	
-	protected OTBuffer getOtBuffer() {
+	public OTBuffer getOtBuffer() {
 		return otBuffer;
 	}
 	

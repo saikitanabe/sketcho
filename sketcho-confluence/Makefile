@@ -29,6 +29,7 @@ tag:
 	git-graph
 
 build:
+	make -C dojo-custom all
 	make -C ../sketcho-confluence-editor prod
 	make -C ../../marked-token prod
 	make -C ../../paper.js-custom copy-min

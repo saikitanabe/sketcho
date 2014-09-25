@@ -99,8 +99,16 @@ public class Tools {
 		return instance._isQuickMode();
 	}
 	private boolean _isQuickMode() {
-		return (currentTools & Tool.QUICK_MODE.getValue()) == Tool.QUICK_MODE.getValue();
+		if (confluence(surface)) {
+			return false;
+		} else {
+			return (currentTools & Tool.QUICK_MODE.getValue()) == Tool.QUICK_MODE.getValue();
+		}
 	}
+	private boolean confluence(ISurfaceHandler surface) {
+		return surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE);
+	}	
+
 
 	public static boolean isCommentMode() {
 		return instance._isCommentMode();

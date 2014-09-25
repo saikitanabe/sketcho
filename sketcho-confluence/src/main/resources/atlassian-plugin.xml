@@ -98,7 +98,7 @@
 		<resource name="images/" type="download" location="images/" />
 		<parameters>
 			<parameter name="name" type="string" />
-			<parameter name="svg" type="boolean" />
+			<parameter name="svg" type="boolean" default="true" />
 		</parameters>
 	</xhtml-macro>
 	<!-- <xhtml-macro name="sketcho-confluence" -->
@@ -114,13 +114,13 @@
 		<url-pattern>/resources/contentImage</url-pattern>
 	</servlet>
 	<!-- common folders -->
-	<resource type="download" namePattern="dojo/*"
+<!-- 	<resource type="download" namePattern="dojo/*"
 		location="js/dojo-release-1.7.2-custom/dojo/" />
 	<resource type="download" namePattern="dijit/*"
 		location="js/dojo-release-1.7.2-custom/dijit/" />
 	<resource type="download" namePattern="dojox/*"
 		location="js/dojo-release-1.7.2-custom/dojox/" />
-	<resource type="download" name="js/" location="js/" />
+ -->	<resource type="download" name="js/" location="js/" />
 	<resource type="download" name="images/" location="images/" />
 	<web-resource key="script_resource" name="script_resource">
 		<resource type="download" name="bootstrap.min.css" location="assets/css/bootstrap.min.css" />
@@ -130,13 +130,13 @@
 			location="style/Sketcho_confluence_app.css" />
 		<resource type="download" name="images/" location="images/" />
 	</web-resource>
-	<web-resource key="dojo" name="dojo">
+<!-- 	<web-resource key="dojo" name="dojo">
 		<resource type="download" name="dojo/dojo.js"
 			location="js/dojo-release-1.7.2-custom/dojo/dojo.js">
 			<param name="batch" value="false" />
 		</resource>
 	</web-resource>
-	<!-- <web-resource key="sketchboardme-mobile-resources" name="SketchboardMe 
+ -->	<!-- <web-resource key="sketchboardme-mobile-resources" name="SketchboardMe 
 		Resources for Mobile"> -->
 	<!-- <resource type="download" name="initsbmemobile.js" location="js/initsbmemobile.js"> -->
 	<!-- <param name="batch" value="false" /> -->
@@ -156,6 +156,9 @@
 		<resource type="download" name="bacon.min.js" location="js/bacon.min.js">
 			<param name="batch" value="false" />
 		</resource>
+<!-- 		<resource type="download" name="dojo.min.js" location="js/dojo.js.uncompressed.js">
+			<param name="batch" value="false" />
+		</resource> -->
 		<resource type="download"
 			name="js/sketcho_confluence_app/sketcho_confluence_app.nocache.js"
 			location="js/sketcho_confluence_app/sketcho_confluence_app.nocache.js">
@@ -186,6 +189,11 @@
 			location="assets/js/bootstrap.js">
 			<param name="batch" value="false" />
 		</resource>
+<!-- 		<resource type="download" name="dojo.js"
+			location="js/dojo.js.uncompressed.js">
+			<param name="djConfig" value="parseOnLoad:true,gfxRenderer:'svg'" />
+		</resource>
+ -->
 <!-- 		<resource type="download" name="bootstrap-tooltip.js" -->
 <!-- 			location="assets/js/bootstrap-tooltip.js"> -->
 <!-- 			<param name="batch" value="false" /> -->

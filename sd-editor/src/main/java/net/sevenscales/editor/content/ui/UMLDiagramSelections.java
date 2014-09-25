@@ -166,6 +166,7 @@ public class UMLDiagramSelections extends Composite {
 		if (!notConfluence()) {
 			// hide comments on confluence
 			comments.setVisible(false);
+			quickMode.setVisible(false);
 			// _comments.setVisible(false);
 		}
 		

@@ -242,8 +242,10 @@ public class SketchoEditor extends Composite implements Spinner {
           	hideSpinner();
 
           	if (currentEditContent == null) {
-    	      	currentEditContent = new UiSketchoBoardEditContent(result, context, true, editorContext, true);
-    	      	boardHandler = new BoardOTConfluenceHandler(name, context, editorContext, currentEditContent, result);
+              boardHandler = new BoardOTConfluenceHandler(name, context, editorContext, result);
+              currentEditContent = new UiSketchoBoardEditContent(result, context, true, editorContext, boardHandler.getOtBuffer(), boardHandler, true);
+    	      	boardHandler.doSetEditorContent(currentEditContent);
+              boardHandler.init();
     	      	//        editContent.setSupportsEditMenu(false);
 //    	      	currentEditContent.setVisibilityById(UiEditContent.CLOSE_MENU_ITEM, false);
 //    	      	currentEditContent.setVisibilityById(UiEditContent.SAVE_AND_CLOSE_MENU_ITEM, false);
@@ -261,7 +263,7 @@ public class SketchoEditor extends Composite implements Spinner {
                 		assert(content != null);
                 		// do not save if content has not changed
           	        SvgConverter sc = new SvgConverter(false);
-          	        SvgData svg = sc.convertToSvg((IDiagramContent) content, currentEditContent.getModelingPanel().getSurface(), true);
+          	        SvgData svg = sc.convertToSvg((IDiagramContent) content, currentEditContent.getModelingPanel().getSurface(), true, false);
           	        DiagramContentFactory.store(pageId, name, (IDiagramContent) content, svg, new AsyncCallback<String>() {
           	        	@Override
           	        	public void onSuccess(String result) {

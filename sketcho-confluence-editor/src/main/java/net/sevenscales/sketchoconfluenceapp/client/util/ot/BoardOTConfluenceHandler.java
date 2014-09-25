@@ -11,14 +11,22 @@ import net.sevenscales.editor.api.ot.OTOperation;
 import net.sevenscales.editor.content.Context;
 import net.sevenscales.editor.content.UiSketchoBoardEditContent;
 
+
 public class BoardOTConfluenceHandler extends AbstractBoardHandlerBase {
 	private static final SLogger logger = SLogger.createLogger(BoardOTConfluenceHandler.class);
 	
-	public BoardOTConfluenceHandler(String boardName, Context context,
-			EditorContext editorContext, UiSketchoBoardEditContent editorContent, 
+	public BoardOTConfluenceHandler(String boardName, 
+			Context context,
+			EditorContext editorContext, 
 			IDiagramContent initialContent) {
 		super(boardName, context, editorContext);
+	}
+
+	public void doSetEditorContent(UiSketchoBoardEditContent editorContent) {
 		setEditorContent(editorContent);
+	}
+
+	public void init() {
 		initHandlers();
 		initHelpers();
 	}
