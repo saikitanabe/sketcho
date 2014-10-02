@@ -194,9 +194,11 @@ public class BoardOTHelpers {
 				// just hidden
 				diagram.copyFrom(diro);
 			}
-			applyThemeColors(diagram);
-			reattachHelpers.processDiagram(diagram);
-      diagrams.add(diagram);
+			if (diagram != null) {
+				applyThemeColors(diagram);
+				reattachHelpers.processDiagram(diagram);
+	      diagrams.add(diagram);
+			}
 		}
 		
 		reattachHelpers.reattachRelationshipsAndDraw();
@@ -226,7 +228,9 @@ public class BoardOTHelpers {
 	  } else {
 	    result = DiagramItemFactory.create(diro, surface, true, /*parent*/ null);
 	  }
-    surface.add(result, true, false);
+	  if (result != null) {
+	    surface.add(result, true, false);
+	  }
     return result;
 	}
 

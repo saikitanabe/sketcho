@@ -27,7 +27,7 @@ import net.sevenscales.editor.gfx.domain.IParentElement;
 
 public class CommentFactory {
 	public interface Factory {
-		void addDiagram(Diagram diagram);
+		void addDiagram(Diagram diagram, IDiagramItemRO item);
 	}
 
 	private Set<IDiagramItemRO> children = new HashSet<IDiagramItemRO>();
@@ -58,9 +58,9 @@ public class CommentFactory {
 		for (IDiagramItemRO item : children) {
 			CommentElement comment = createComment(item);
 			if (comment != null) {
-				factory.addDiagram(comment);
+				factory.addDiagram(comment, item);
 			} else if (item.getParentId() != null && ElementType.CHILD_TEXT.getValue().equals(item.getType())) {
-				factory.addDiagram(createChildTextItem(item, moveX, moveY));
+				factory.addDiagram(createChildTextItem(item, moveX, moveY), item);
 			}
 		}
 	}

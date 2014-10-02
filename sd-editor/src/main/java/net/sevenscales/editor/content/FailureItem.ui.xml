@@ -1,0 +1,13 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	</ui:style>
+	<g:HTMLPanel styleName="failure-item">
+		<div ui:field="text" class="failure-item-text"></div>
+		<div ui:field="type" class="failure-item-type"></div>
+		<div class="failure-item-delete">
+			<a class="btn btn-primary" ui:field="delete">Delete</a>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder> 

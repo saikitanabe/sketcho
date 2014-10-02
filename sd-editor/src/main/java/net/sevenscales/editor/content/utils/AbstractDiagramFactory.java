@@ -354,14 +354,14 @@ public interface AbstractDiagramFactory {
 
     public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new ChildTextElement(surface,
-                (ChildTextShape)shape,
-                DiagramItemFactory.parseBackgroundColor(item),
-                DiagramItemFactory.parseBorderColor(item),
-                DiagramItemFactory.parseTextColor(item),
-                item.getText(),
-                editable,
-                item,
-                parent);
+              (ChildTextShape)shape,
+              DiagramItemFactory.parseBackgroundColor(item),
+              DiagramItemFactory.parseBorderColor(item),
+              DiagramItemFactory.parseTextColor(item),
+              item.getText(),
+              editable,
+              item,
+              parent);
     }
   }
 

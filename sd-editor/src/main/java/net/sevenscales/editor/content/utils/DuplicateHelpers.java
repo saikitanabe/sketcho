@@ -155,7 +155,7 @@ public class DuplicateHelpers {
 		mapChildToNewParent(state);
 
     state.commentFactory.lazyInit(new CommentFactory.Factory() {
-    	public void addDiagram(Diagram diagram) {
+    	public void addDiagram(Diagram diagram, IDiagramItemRO item) {
     		state.add(diagram);
     	}
     }, moveX, moveY);
@@ -186,8 +186,10 @@ public class DuplicateHelpers {
 				state.commentFactory.add(di);
 			} else {
 				Diagram copied = DiagramItemFactory.create(x, y, di, surface, true, /*parent*/ null);
-				state.commentFactory.process(copied);
-				state.add(copied);
+				if (copied != null) {
+					state.commentFactory.process(copied);
+					state.add(copied);
+				}
 			}
 		}
 	}

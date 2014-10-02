@@ -73,6 +73,10 @@ import com.google.gwt.logging.client.LogConfiguration;
 
 public class DiagramItemFactory {
   private static SLogger logger = SLogger.createLogger(DiagramItemFactory.class);
+
+  static {
+    SLogger.addFilter(DiagramItemFactory.class);
+  }
   
   private static final String[] LEGACY_TEXT_COLOR = new String[]{"68","68","68","1"};
   private static final String[] LEGACY_BG_COLOR = new String[]{"204","204","255","0"};
@@ -96,10 +100,15 @@ public class DiagramItemFactory {
   }
 
   public static Diagram create(int moveX, int moveY, IDiagramItemRO item, ISurfaceHandler surface, boolean editable, IParentElement parent) {
-    AbstractDiagramFactory factory = ShapeParser.factory(item);
-    Info shape = factory.parseShape(item, moveX, moveY);
-    Diagram result = factory.parseDiagram(surface, shape, editable, item, parent);
-    return applyDiagramItem(result, item);
+    try {
+      AbstractDiagramFactory factory = ShapeParser.factory(item);
+      Info shape = factory.parseShape(item, moveX, moveY);
+      Diagram result = factory.parseDiagram(surface, shape, editable, item, parent);
+      return applyDiagramItem(result, item);
+    } catch (Exception e) {
+      logger.error("Failed to load: " + item.toString(), e);
+      return null;
+    }
   }
 
   public static Diagram applyDiagramItem(Diagram result, IDiagramItemRO item) {

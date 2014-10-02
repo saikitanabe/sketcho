@@ -1,5 +1,7 @@
 package net.sevenscales.editor.content;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.google.gwt.user.client.Window;
@@ -7,6 +9,7 @@ import com.google.gwt.user.client.Window;
 import net.sevenscales.domain.api.IContent;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
@@ -48,13 +51,14 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 	private IConnectionHelpers connectionHelpers;
 	private ISurfaceHandler thesurface;
 	private boolean tourStarted;
+	private List<IDiagramItemRO> failed = new ArrayList<IDiagramItemRO>();
 
 	public UiModelContentHandler(IUiDiagramContent uiContent, boolean editable, EditorContext editorContext, IModeManager modeManager) {
 		this.editorContext = editorContext;
 		this.uiContent = uiContent;
 		this.editable = editable;
 		this.modeManager = modeManager;
-		
+
 		editorContext.getEventBus().addHandler(BoardRemoveDiagramsEvent.TYPE, new BoardRemoveDiagramsEventHandler() {
 			@Override
 			public void on(BoardRemoveDiagramsEvent event) {
@@ -200,8 +204,14 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     		commentFactory.add(item);
     	} else {
 		  	Diagram diagram = DiagramItemFactory.create(item, surface, editable, /*parent*/ null);
-		  	commentFactory.process(diagram);
-    		_addDiagram(diagram, surface, reattachHelpers, commentFactory, asSelected);
+		  	if (diagram != null) {
+			  	commentFactory.process(diagram);
+	    		_addDiagram(diagram, surface, reattachHelpers, commentFactory, asSelected);
+		  	} else {
+		  		// add to elements that failed...
+		  		failed.add(item);
+		  		// logger.error("Failed to load: {}", item.toString());
+		  	}
     	}
 
     	if (item.isAnnotation()) {
@@ -218,8 +228,12 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     // need to create comments later to use comment thread
     // group
     commentFactory.lazyInit(new CommentFactory.Factory() {
-    	public void addDiagram(Diagram diagram) {
-				_addDiagram(diagram, surface, reattachHelpers, commentFactory, asSelected);
+    	public void addDiagram(Diagram diagram, IDiagramItemRO item) {
+    		if (diagram != null) {
+					_addDiagram(diagram, surface, reattachHelpers, commentFactory, asSelected);
+    		} else {
+		  		failed.add(item);
+    		}
     	}
     }, 0, 0);
 
@@ -249,6 +263,10 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
    	hideShapes(surface);
    }
    surface.unsuspendRedrawAll();
+
+   if (failed.size() > 0) {
+		new FailureHandlerImpl(failed, surface);
+   }
   }
 
   private void hideShapes(ISurfaceHandler surface) {
