@@ -198,6 +198,7 @@ public class SvgConverter {
     SvgData result = new SvgData();
     result.width = outerright - outerleft;
     result.height = outerbottom-outertop;
+
 //    String result = svgStart + " x='"+outerleft+"'"+" y='"+outertop+"'"+ " width='"+outerright+"' height='"+outerbottom+"'"+svgStartClose;
     if (fontToChange) {
       result.svg = svgStart + " viewBox='"+outerleft+" "+outertop+" "+(outerright-outerleft)+" "+(outerbottom-outertop)+"'" + " width='" + width() + "' height='" + height() + "'" + svgStartClose;
@@ -231,14 +232,14 @@ public class SvgConverter {
   
   private String height() {
   	if (scaleSize == ScaleSize.ORICINAL_SIZE) {
-  		return String.valueOf(outerbottom-outertop);
+  		return String.valueOf(outerbottom - outertop - outertop);
   	}
 		return scaleSize.height - MARGIN_HEIGHT + "mm";
 	}
 
 	private String width() {
   	if (scaleSize == ScaleSize.ORICINAL_SIZE) {
-    	return String.valueOf(outerright - outerleft);
+    	return String.valueOf(outerright - outerleft - outerleft);
   	}
 		return scaleSize.width - MARGIN_WIDTH + "mm";
 	}
