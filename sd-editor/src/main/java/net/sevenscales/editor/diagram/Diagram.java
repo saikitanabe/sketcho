@@ -203,6 +203,10 @@ public interface Diagram extends SourcesMouseDiagramEvents {
 	int getWidth();
 	int getHeight();
   int getHeightWithText();
+  /**
+  * E.g. sequence element has different height on svg export vs. runtime when resizing.
+  */
+  int getSvgHeightWithText();
 	int getCenterX();
 	int getCenterY();
 	void setHeight(int height);

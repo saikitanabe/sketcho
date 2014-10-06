@@ -297,7 +297,7 @@ public class SvgConverter {
     	if (top < outertop) {
     		outertop = top;
     	}
-    	int bottom = top + d.getHeightWithText();
+    	int bottom = top + d.getSvgHeightWithText();
     	if (bottom > outerbottom) {
     		outerbottom = bottom;
     	}

@@ -446,7 +446,12 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
   private int getLifelineHeight() {
     return line.getY2() - line.getY1();
   }
-  
+
+  @Override
+  public int getSvgHeightWithText() {
+    return super.getHeight() + getLifelineHeight();
+  }
+
   @Override
   public void setReadOnly(boolean value) {
     if (selectionArea != null) {

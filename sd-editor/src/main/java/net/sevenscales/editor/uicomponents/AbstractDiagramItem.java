@@ -1095,6 +1095,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public int getHeightWithText() {
     return getHeight();
   }
+
+  @Override
+  public int getSvgHeightWithText() {
+    return getHeightWithText();
+  }
 	
 	@Override
 	public int getCenterX() {
