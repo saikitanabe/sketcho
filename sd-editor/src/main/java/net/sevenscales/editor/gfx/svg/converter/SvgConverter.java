@@ -232,14 +232,14 @@ public class SvgConverter {
   
   private String height() {
   	if (scaleSize == ScaleSize.ORICINAL_SIZE) {
-  		return String.valueOf(outerbottom - outertop - outertop);
+  		return String.valueOf(outerbottom - outertop/* - outertop*/);
   	}
 		return scaleSize.height - MARGIN_HEIGHT + "mm";
 	}
 
 	private String width() {
   	if (scaleSize == ScaleSize.ORICINAL_SIZE) {
-    	return String.valueOf(outerright - outerleft - outerleft);
+    	return String.valueOf(outerright - outerleft/* - outerleft*/);
   	}
 		return scaleSize.width - MARGIN_WIDTH + "mm";
 	}
