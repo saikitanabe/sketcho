@@ -17,6 +17,7 @@ import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.EffectHelpers;
 import net.sevenscales.editor.uicomponents.helpers.ElementHelpers;
 import net.sevenscales.editor.api.impl.FastButton;
+import net.sevenscales.domain.utils.SLogger;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -44,6 +45,11 @@ import com.google.gwt.user.client.DOM;
 
 
 public class UiClickContextMenu extends Composite {
+	private static SLogger logger = SLogger.createLogger(UiClickContextMenu.class);
+
+	static {
+		SLogger.addFilter(UiClickContextMenu.class);
+	}
 
 	private static UiClickContextMenuUiBinder uiBinder = GWT
 			.create(UiClickContextMenuUiBinder.class);
@@ -108,6 +114,7 @@ public class UiClickContextMenu extends Composite {
 		surface.getEditorContext().getEventBus().addHandler(BoardEmptyAreaClickedEvent.TYPE, new BoardEmptyAreaClickEventHandler() {
 			@Override
 			public void on(BoardEmptyAreaClickedEvent event) {
+				logger.debug("BoardEmptyAreaClickedEvent...");
 				showAddElementMenu(event.getX(), event.getY());
 				// openClickMenu(event);
 			}

@@ -437,7 +437,9 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	    MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
 			surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(s, point));
 		} else if (selected.size() == 0) {
-			surface.getEditorContext().getEventBus().fireEvent(new BoardEmptyAreaClickedEvent(x, y));
+			if (!quickConnectionHandler.handleDoubleTap()) {
+				surface.getEditorContext().getEventBus().fireEvent(new BoardEmptyAreaClickedEvent(x, y));
+			}
 		}
 	}
 	

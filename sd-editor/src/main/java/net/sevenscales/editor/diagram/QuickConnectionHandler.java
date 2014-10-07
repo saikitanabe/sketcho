@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 
+import com.google.gwt.core.client.Scheduler;
+
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoint;
 import net.sevenscales.editor.content.utils.AbstractDiagramFactory;
@@ -20,8 +22,10 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.UndoEvent;
-import net.sevenscales.editor.api.event.SelectionEvent;
-import net.sevenscales.editor.api.event.SelectionEventHandler;
+// import net.sevenscales.editor.api.event.SelectionEvent;
+// import net.sevenscales.editor.api.event.SelectionEventHandler;
+// import net.sevenscales.editor.api.event.UnselectAllEvent;
+// import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.api.ot.CompensationModel;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.diagram.shape.Info;
@@ -53,18 +57,29 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	private Diagram previouslySelected;
 	private List<CompensationModel> lastModel;
 	private boolean notAddedFromLibrary = true;
+	private int mouseUpKeys;
+	private MatrixPointJS mouseUpPoint;
+	private boolean itWasDoubleTap;
 
 	public QuickConnectionHandler(ISurfaceHandler surface) {
 		this.surface = surface;
 		search = surface.createDiagramSearch();
 
 
-		surface.getEditorContext().getEventBus().addHandler(SelectionEvent.TYPE, new SelectionEventHandler() {
-			@Override
-			public void onSelection(SelectionEvent event) {
-				checkSelection();
-			}
-		});
+		// surface.getEditorContext().getEventBus().addHandler(SelectionEvent.TYPE, new SelectionEventHandler() {
+		// 	@Override
+		// 	public void onSelection(SelectionEvent event) {
+		// 		// checkSelection();
+		// 	}
+		// });
+
+		// surface.getEditorContext().getEventBus().addHandler(UnselectAllEvent.TYPE, new UnselecteAllEventHandler() {
+		// 	@Override
+		// 	public void onUnselectAll(UnselectAllEvent event) {
+		// 		logger.debug("onUnselectAll...");
+		// 		// previouslySelected = null;
+		// 	}
+		// });
 
 		// surface.getEditorContext().getEventBus().addHandler(SwitchElementToEvent.TYPE, new SwitchElementToEventHandler() {
 		// 	@Override
@@ -78,11 +93,12 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	}
 
 	private void checkSelection() {
-		if (!Tools.isQuickMode()) {
-			return;
-		}
+		// if (!Tools.isQuickMode()) {
+		// 	return;
+		// }
 
 		Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
+		logger.debug("checkSelection {}", selected);
 		if (selected.size() == 1) {
 			previouslySelected = selected.iterator().next();
 			notAddedFromLibrary = !surface.isProxyDragAdding();
@@ -111,6 +127,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
   }
 
 	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+		// checkSelection();
 		return false;
 	}
 
@@ -119,16 +136,47 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 	@Override
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
-		if (Tools.isQuickMode()) {
+		logger.debug("onMouseUp keys {}", keys);
+
+		this.mouseUpKeys = keys;
+		this.mouseUpPoint = point;
+		// if (Tools.isQuickMode()) {
 			cancelLastOperationIfLastQuickConnection();
-			if (sender == null) {
+			Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
+				public boolean execute() {
+					logger.debug("up 500...");
+					if (itWasDoubleTap) {
+						itWasDoubleTap = false;
+					} else {
+						checkSelection();
+					}
+					return false;
+				}
+			}, 500);
+		// }
+	}
+
+	public boolean handleDoubleTap() {
+		logger.debug("handleDoubleTap...");
+		itWasDoubleTap = true;
+		return maybeStartSuperFlow();
+	}
+
+	private boolean maybeStartSuperFlow() {
+		boolean result = false;
+		// if (Tools.isQuickMode()) {
+			// cancelLastOperationIfLastQuickConnection();
+			// TODO how to check if just board is double clicked?
+			// if (sender == null) {
 				// let's check only board sent mouse up event;
 				// since library drop would be reseted otherwise
 				// anyway better to have some optimization
-				boolean fromPreviousIfAny = keys == IGraphics.SHIFT;
-				checkToCreateQuickConnection(point.getScreenX(), point.getScreenY(), fromPreviousIfAny);
+			if (mouseUpPoint != null) {
+				boolean fromPreviousIfAny = this.mouseUpKeys == IGraphics.SHIFT;
+				result = checkToCreateQuickConnection(mouseUpPoint.getScreenX(), mouseUpPoint.getScreenY(), fromPreviousIfAny);
 			}
-		}
+		// }
+		return result;
 	}
 
 	private Diagram findPrevious(Diagram d) {
@@ -152,7 +200,8 @@ class QuickConnectionHandler implements MouseDiagramHandler {
     return result;
 	}
 
-	private void checkToCreateQuickConnection(int screenX, int screenY, boolean fromPreviousIfAny) {
+	private boolean checkToCreateQuickConnection(int screenX, int screenY, boolean fromPreviousIfAny) {
+		boolean result = false;
 		Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
 		if (notAddedFromLibrary &&
 			  selected.size() == 0 && 
@@ -166,14 +215,16 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			if (fromPreviousIfAny) {
 				from = findPrevious(previouslySelected);
 			}
-			createConnectedDiagram(from, previouslySelected.getDiagramItem(), x, y);
+			result = createConnectedDiagram(from, previouslySelected.getDiagramItem(), x, y);
 		}
 		// makes sure that plain drag & drop doesn't create quick connection, but still
 		// remembers what has been dragged and dropped
 		notAddedFromLibrary = true;
+		return result;
 	}
 
-	private void createConnectedDiagram(Diagram d, IDiagramItem prevSelectedItem, int x, int y) {
+	private boolean createConnectedDiagram(Diagram d, IDiagramItem prevSelectedItem, int x, int y) {
+		boolean result = false;
 		boolean doNotAllow = (d instanceof IChildElement) || (d instanceof CommentThreadElement) || d instanceof Relationship2 || d instanceof CircleElement;
 		// could ask from diagram next in diagram
 		// activity start could return activity, activity end could return note...
@@ -239,7 +290,9 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		
 	    // open editor for the created element
   		surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(newelement).setJustCreated(true));
+			result = true;
 		}
+		return result;
 	}
 
 	private IDiagramItem createQuickNext(Diagram d, IDiagramItem prevSelectedItem) {
