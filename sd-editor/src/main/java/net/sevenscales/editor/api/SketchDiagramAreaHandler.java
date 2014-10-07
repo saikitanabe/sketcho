@@ -129,6 +129,10 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       if (Tools.isCurvedArrow()) {
         di.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue());
       }
+
+      // di.addShapeProperty(ShapeProperty.CLOSEST_PATH);
+      // Automatically center connection at first time.
+      di.addShapeProperty(ShapeProperty.CENTERED_PATH);
       // Default arrow type is curved ends configuration
 
       this.createdRelationship = new Relationship2(surface, rshape, defaultRelationship, Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, di);

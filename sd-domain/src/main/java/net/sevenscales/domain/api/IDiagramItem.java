@@ -15,6 +15,7 @@ public interface IDiagramItem extends IDiagramItemRO {
   void setFontSize(Integer fontSize);
   void setShapeProperties(Integer shapeProperties);
   void addShapeProperty(ShapeProperty shapeProperty);
+  void clearShapeProperty(ShapeProperty shapeProperty);
   void setDisplayOrder(Integer displayOrder);
 	void setVersion(int version);
   void setClientId(String clientId);

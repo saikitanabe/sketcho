@@ -17,6 +17,7 @@ public enum ShapeProperty {
 	DISABLE_SHAPE_AUTO_RESIZE					(0x010000),
 	CURVED_ARROW										  (0x100000),
 	CLOSEST_PATH										  (0x200000),
+	CENTERED_PATH											(0x400000),
 	NO_TEXT_AUTO_ALIGN								(0x000020);
 
 	private int value;
@@ -78,6 +79,10 @@ public enum ShapeProperty {
 
 	public static boolean isClosestPath(Integer value) {
 		return value != null && (value & CLOSEST_PATH.getValue()) == CLOSEST_PATH.getValue();
+	}
+
+	public static boolean isCenterPath(Integer value) {
+		return value != null && (value & CENTERED_PATH.getValue()) == CENTERED_PATH.getValue();
 	}
 
 	public static boolean isNoTextAutoAlign(Integer value) {

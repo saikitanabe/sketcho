@@ -1116,7 +1116,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       // surface.getMouseDiagramManager().getDragHandler().attach(this, anchorElement);
 
       anchorElement.highlight(false);
-      doSetShape();
+
+      // hack to center just created connections aligned in center
+      if (modifyEndToCenter(ax, ay)) {
+        // modified separately with new points
+      } else {
+        doSetShape();
+      }
       result = true;
     } else {
       anchor.clear();
@@ -1347,6 +1353,14 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return false;
   }
 
+  private boolean isCenterPath() {
+    Integer props = getDiagramItem().getShapeProperties();
+    if (props != null && ShapeProperty.isCenterPath(props)) {
+      return true;
+    }
+    return false;
+  }
+
   public JsArray<BezierHelpers.Segment> getSegments() {
     return relLine.segments;
   }
@@ -1439,6 +1453,14 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     RelationshipShape2 l = (RelationshipShape2) shape;
     this.info = l;
     doSetShape();
+  }
+
+  public void redrawByEndElement() {
+    if (endAnchor != null && endAnchor.getDiagram() != null) {
+      for (AnchorElement ae : endAnchor.getDiagram().getAnchors()) {
+        ae.dispatch(0, 0, 0);
+      }
+    }
   }
 
   public void redraw() {
@@ -2244,6 +2266,28 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return result;
   }
 
+  public boolean modifyEndToCenter(int x, int y) {
+    // Diagram start = null;
+    Diagram end = null;
+    if (/*startAnchor != null && */endAnchor != null) {
+      // start = startAnchor.getDiagram();
+      end = endAnchor.getDiagram();
+    }
+
+    if (isCenterPath() && end != null) {
+      Point centerEndPoint = AnchorUtils.centerEndPoint(x, y, end.getLeft(), end.getTop(), end.getWidth(), end.getHeight());
+
+      int[] newpoints = new int[]{points.get(0),
+                  points.get(1),
+                  centerEndPoint.x,
+                  centerEndPoint.y};
+      setAnchorElementPosition(centerEndPoint.x, centerEndPoint.y, endAnchor.getAnchorElement());
+      doSetShape(newpoints);
+      return true;
+    }
+    return false;
+  }
+
   private void setAnchorElementPosition(int x, int y, AnchorElement ae) {
     if (ae != null) {
       ae.setAx(x);
@@ -2381,7 +2425,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   public void resetClosestPath() {
     if (!surface.getModeManager().isConnectMode()) {
       int current = getDiagramItem().getShapeProperties();
-      getDiagramItem().setShapeProperties(ShapeProperty.clear(current, ShapeProperty.CLOSEST_PATH.getValue()));
+      getDiagramItem().clearShapeProperty(ShapeProperty.CLOSEST_PATH);
+      getDiagramItem().clearShapeProperty(ShapeProperty.CENTERED_PATH);
     }
   }
 

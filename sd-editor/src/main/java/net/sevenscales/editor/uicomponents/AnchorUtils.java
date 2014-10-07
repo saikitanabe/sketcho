@@ -278,6 +278,30 @@ public class AnchorUtils {
     return (int) Math.sqrt(dx * dx + dy * dy);
   }
 
+  public static Point centerEndPoint(int x, int y, int left, int top, int width, int height) {
+    Point result = new Point(x, y);
+    // which edge
+    int leftdist = Math.abs(x - left);
+    int rightdist = Math.abs(x - (left + width));
+    int topdist = Math.abs(y - top);
+    int bottomdist = Math.abs(x - (top + height));
+
+    int smallest = Math.min(leftdist, rightdist);
+    smallest = Math.min(smallest, topdist);
+    smallest = Math.min(smallest, bottomdist);
+
+    if (smallest == leftdist) {
+      result.y = top + height / 2;
+    } else if (smallest == rightdist) {
+      result.y = top + height / 2;
+    } else if (smallest == topdist) {
+      result.x = left + width / 2;
+    } else if (smallest == bottomdist) {
+      result.x = left + width / 2;
+    }
+    return result;
+  }
+
   public static ClosestSegment closestSegment(int left, int top, int width, int height, int left2, int top2, int width2, int height2) {
     ClosestSegment result = new ClosestSegment();
 
