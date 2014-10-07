@@ -141,24 +141,39 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		this.mouseUpKeys = keys;
 		this.mouseUpPoint = point;
 		// if (Tools.isQuickMode()) {
-			cancelLastOperationIfLastQuickConnection();
+			// cancelLastOperationIfLastQuickConnection();
+			// checkSelection();
+
 			Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
 				public boolean execute() {
 					logger.debug("up 500...");
 					if (itWasDoubleTap) {
+						// keep selection
 						itWasDoubleTap = false;
 					} else {
 						checkSelection();
 					}
 					return false;
 				}
-			}, 500);
+			}, 200); // needs to be fast enought or otherwise, might not even select before double click
 		// }
 	}
 
 	public boolean handleDoubleTap() {
 		logger.debug("handleDoubleTap...");
 		itWasDoubleTap = true;
+
+		// Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
+		// 		public boolean execute() {
+		// 			logger.debug("up 500...");
+		// 			if (itWasDoubleTap) {
+		// 				itWasDoubleTap = false;
+		// 			} else {
+		// 				checkSelection();
+		// 			}
+		// 			return false;
+		// 		}
+		// 	}, 500);		
 		return maybeStartSuperFlow();
 	}
 
