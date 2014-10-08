@@ -61,7 +61,7 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
 //    tempLine2.setStroke("green");
 		
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
-    group.setAttribute("cursor", "default");
+    // group.setAttribute("cursor", "default");
 		
 		ellipse = IShapeFactory.Util.factory(editable).createEllipse(group);
 		ellipse.setShape(info.centerX, info.centerY, info.rx, info.ry);

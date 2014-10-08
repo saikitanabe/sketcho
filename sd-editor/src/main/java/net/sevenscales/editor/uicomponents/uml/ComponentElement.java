@@ -57,7 +57,7 @@ public class ComponentElement extends AbstractDiagramItem implements SupportsRec
     this.shape = newShape;
     
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
-    group.setAttribute("cursor", "default");
+    // group.setAttribute("cursor", "default");
 
     rectSurface = (IRectangle) createElement(group);
     rectSurface.setStrokeWidth(STROKE_WIDTH);

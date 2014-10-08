@@ -50,7 +50,7 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
-    group.setAttribute("cursor", "default");
+    // group.setAttribute("cursor", "default");
 
 		visible = IShapeFactory.Util.factory(editable).createCircle(group);
 		visible.setStroke(this.borderColor);

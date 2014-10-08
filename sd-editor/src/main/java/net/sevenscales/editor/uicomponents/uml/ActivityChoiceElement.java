@@ -57,7 +57,7 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
-    group.setAttribute("cursor", "default");
+    // group.setAttribute("cursor", "default");
 
     fixedAnchorPoints = new Integer[]{shape.rectShape.left, shape.rectShape.top + shape.rectShape.height/2,
 											 shape.rectShape.left + shape.rectShape.width/2, shape.rectShape.top,

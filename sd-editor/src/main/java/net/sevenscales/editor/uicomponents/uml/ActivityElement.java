@@ -51,7 +51,7 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
-    group.setAttribute("cursor", "default");
+    // group.setAttribute("cursor", "default");
 
 		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
 		boundary.setStroke(borderColor);

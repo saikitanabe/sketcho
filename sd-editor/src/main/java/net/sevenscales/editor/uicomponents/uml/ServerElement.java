@@ -74,7 +74,7 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
     this.shape = newShape;
     
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
-    group.setAttribute("cursor", "default");
+    // group.setAttribute("cursor", "default");
 
     roof = IShapeFactory.Util.factory(editable).createPolyline(group);
     roof.setStroke(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);

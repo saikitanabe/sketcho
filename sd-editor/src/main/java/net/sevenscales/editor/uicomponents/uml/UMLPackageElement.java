@@ -55,7 +55,7 @@ public class UMLPackageElement extends AbstractDiagramItem implements SupportsRe
     this.shape = newShape;
     
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getContainerLayer());
-    group.setAttribute("cursor", "default");
+    // group.setAttribute("cursor", "default");
 
     // set clipping area => text is visible only within canvas boundary
 //    group.setClip(shape.left, shape.top, shape.width, shape.height);

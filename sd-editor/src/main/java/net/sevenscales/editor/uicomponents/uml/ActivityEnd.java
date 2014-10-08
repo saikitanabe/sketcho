@@ -49,7 +49,7 @@ public class ActivityEnd extends AbstractDiagramItem implements SupportsRectangl
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
-    group.setAttribute("cursor", "default");
+    // group.setAttribute("cursor", "default");
 
 		innerCircle = IShapeFactory.Util.factory(editable).createCircle(group);
 		innerCircle.setStroke(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);

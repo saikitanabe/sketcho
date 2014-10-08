@@ -98,7 +98,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		group = IShapeFactory.Util.factory(editable).createGroup(parentThread.getGroup());
 		setVisible(false);
 		// group = parentThread.getGroup();
-    // group.setAttribute("cursor", "default");
+    // // group.setAttribute("cursor", "default");
     
     // TODO, implement shadows using svg
 //    leftShadow = IShapeFactory.Util.factory(editable)

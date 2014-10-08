@@ -782,10 +782,12 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		if (on) {
 			freehandOff.addClassName("btn-success");
 			freehandOff.removeClassName("btn-custom");
+			surface.getElement().addClassName("freehand-on");
 		} else {
 			colorSelections.backgroundMode();
 			freehandOff.removeClassName("btn-success");
 			freehandOff.addClassName("btn-custom");
+			surface.getElement().removeClassName("freehand-on");
 		}
 	}
 	

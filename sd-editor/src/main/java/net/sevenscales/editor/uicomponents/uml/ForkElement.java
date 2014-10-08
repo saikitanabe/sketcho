@@ -49,7 +49,7 @@ public class ForkElement extends AbstractDiagramItem implements SupportsRectangl
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
-    group.setAttribute("cursor", "default");
+    // group.setAttribute("cursor", "default");
 
 		visible = IShapeFactory.Util.factory(editable).createRectangle(group);
 		visible.setStroke(borderColor.red, borderColor.green, borderColor.blue, borderColor.opacity);

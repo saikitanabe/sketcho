@@ -81,10 +81,10 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 		getDiagramItem().setShapeProperties(newShape.getShapeProperties());
 
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
-    group.setAttribute("cursor", "default");
+    // group.setAttribute("cursor", "default");
 
 		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
-    // subgroup.setAttribute("cursor", "default");
+    // sub// group.setAttribute("cursor", "default");
 
   	paths = new ArrayList<IPath>(); // theshape.protos.length
   	if (shape.getSvgData() != null) {

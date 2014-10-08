@@ -110,7 +110,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 		getDiagramItem().annotate();
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
-    group.setAttribute("cursor", "default");
+    // group.setAttribute("cursor", "default");
     
     // TODO, implement shadows using svg
 //    leftShadow = IShapeFactory.Util.factory(editable)

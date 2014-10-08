@@ -54,7 +54,7 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
     this.shape = newShape;
     
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
-    group.setAttribute("cursor", "default");
+    // group.setAttribute("cursor", "default");
 
     rectSurface = (IRectangle) createElement(group);
     rectSurface.setShape(shape.left, shape.top, shape.width, shape.height, DEFAULT_CLASS_RADIUS);

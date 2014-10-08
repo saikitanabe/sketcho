@@ -59,7 +59,7 @@ public class FreehandElement extends AbstractDiagramItem {
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
-    group.setAttribute("cursor", "default");
+    // group.setAttribute("cursor", "default");
 
     path = IShapeFactory.Util.factory(editable).createPath(group, pathTransformer);
     path.setStroke(borderColor);

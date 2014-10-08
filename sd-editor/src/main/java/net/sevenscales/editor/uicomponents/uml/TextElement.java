@@ -51,7 +51,7 @@ public class TextElement extends AbstractDiagramItem implements
 
 		group = IShapeFactory.Util.factory(editable).createGroup(
 				surface.getElementLayer());
-		group.setAttribute("cursor", "default");
+		// group.setAttribute("cursor", "default");
 
 		attachBoundary = IShapeFactory.Util.factory(editable)
 				.createRectangle(group);
