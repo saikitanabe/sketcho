@@ -22,8 +22,8 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.UndoEvent;
-// import net.sevenscales.editor.api.event.SelectionEvent;
-// import net.sevenscales.editor.api.event.SelectionEventHandler;
+import net.sevenscales.editor.api.event.SelectionEvent;
+import net.sevenscales.editor.api.event.SelectionEventHandler;
 // import net.sevenscales.editor.api.event.UnselectAllEvent;
 // import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.api.ot.CompensationModel;
@@ -66,12 +66,12 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		search = surface.createDiagramSearch();
 
 
-		// surface.getEditorContext().getEventBus().addHandler(SelectionEvent.TYPE, new SelectionEventHandler() {
-		// 	@Override
-		// 	public void onSelection(SelectionEvent event) {
-		// 		// checkSelection();
-		// 	}
-		// });
+		surface.getEditorContext().getEventBus().addHandler(SelectionEvent.TYPE, new SelectionEventHandler() {
+			@Override
+			public void onSelection(SelectionEvent event) {
+				checkSelection();
+			}
+		});
 
 		// surface.getEditorContext().getEventBus().addHandler(UnselectAllEvent.TYPE, new UnselecteAllEventHandler() {
 		// 	@Override
