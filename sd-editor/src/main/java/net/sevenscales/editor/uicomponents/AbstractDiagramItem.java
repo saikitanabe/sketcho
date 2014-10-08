@@ -92,6 +92,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 //	public static final String DEFAULT_BORDER_COLOR = "#cccccc";
   public static final Color DEFAULT_SELECTION_COLOR = new Color(0x1D, 0x00, 0xFF, 1);
   public static final Color HIGHLIGHT_COLOR = new Color(0x6A, 0xCA, 0x00, 1);
+  // public static final Color HIGHLIGHT_COLOR_TO_ANCHOR = new Color(0x7A, 0xBE, 0x37, 1);
   public static final double STROKE_WIDTH = 2.0;
 
   private long dispachSequence;
@@ -169,7 +170,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       // "singleton" common for all diagram elements, there can be visible only one at a time
       // surface.getSurface()
       anchorPoint = IShapeFactory.Util.factory(editable).createCircle(surface.getInteractionLayer());
-      anchorPoint.setStrokeWidth(1);
+      anchorPoint.setStrokeWidth(2);
       anchorPoint.setVisibility(false);
     }
     
