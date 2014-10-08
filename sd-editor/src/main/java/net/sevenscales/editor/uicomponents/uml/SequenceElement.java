@@ -550,6 +550,12 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
     return true;
   }
 
+  @Override
+  public boolean supportsModifyToCenter() {
+    return false;
+  }
+  
+
 //  @Override
 //  public int getHeight() {
 //  	return line.getY2() - line.getY1() + super.getHeight();
