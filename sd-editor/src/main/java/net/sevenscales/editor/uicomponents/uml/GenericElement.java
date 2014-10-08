@@ -520,4 +520,26 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   	return textUtil.getTextHeight();
   }
 
+  @Override
+  public void select() {
+  	super.select();
+  	background.setStroke(DEFAULT_SELECTION_COLOR);
+  }
+
+  @Override
+  public void unselect() {
+  	super.unselect();
+  	background.setStroke(0x33, 0x33, 0x33, 0);
+  }
+
+  @Override
+  public void setHighlight(boolean highlight) {
+  	super.setHighlight(highlight);
+  	if (highlight) {
+	  	background.setStroke(HIGHLIGHT_COLOR);
+  	} else {
+	  	background.setStroke(0x33, 0x33, 0x33, 0);
+  	}
+  }
+
 }
