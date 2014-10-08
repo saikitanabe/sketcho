@@ -342,4 +342,9 @@ public class HorizontalPartitionElement extends AbstractDiagramItem implements S
   	return true;
   }
 
+  @Override
+  public boolean supportsModifyToCenter() {
+    return false;
+  }
+
 }

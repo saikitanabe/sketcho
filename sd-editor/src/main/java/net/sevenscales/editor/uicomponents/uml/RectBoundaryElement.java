@@ -350,4 +350,9 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
   	return true;
   }
 
+  @Override
+  public boolean supportsModifyToCenter() {
+    return false;
+  }
+
 }
