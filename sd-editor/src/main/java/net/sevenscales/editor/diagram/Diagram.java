@@ -235,6 +235,11 @@ public interface Diagram extends SourcesMouseDiagramEvents {
 	Color getBorderColor();
 	boolean supportsTextEditing();
   boolean supportsAlignHighlight();
+  /**
+  * E.g. use case element doesn't support initial connection drag to be centered.
+  * It has fixed points to anchor.
+  */
+  boolean supportsModifyToCenter();
 	int supportedMenuItems();
   boolean supportsMenu(ContextMenuItem menuItem);
 	int getMeasurementAreaWidth();

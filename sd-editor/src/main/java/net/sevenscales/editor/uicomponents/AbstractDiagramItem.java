@@ -1485,6 +1485,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   @Override
+  public boolean supportsModifyToCenter() {
+    return true;
+  }
+
+  @Override
   public boolean equals(Object obj) {
   	if (obj == this) return true;
     if (obj instanceof AbstractDiagramItem) {

@@ -553,5 +553,11 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
            ContextMenuItem.FONT_SIZE.getValue() |
            ContextMenuItem.LAYERS.getValue();
   }
+
+  @Override
+  public boolean supportsModifyToCenter() {
+    return false;
+  }
+
   
 }

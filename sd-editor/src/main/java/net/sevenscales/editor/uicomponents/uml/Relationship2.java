@@ -2274,7 +2274,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       end = endAnchor.getDiagram();
     }
 
-    if (isCenterPath() && end != null) {
+    if (isCenterPath() && end != null && end.supportsModifyToCenter()) {
       Point centerEndPoint = AnchorUtils.centerEndPoint(x, y, end.getLeft(), end.getTop(), end.getWidth(), end.getHeight());
 
       int[] newpoints = new int[]{points.get(0),
