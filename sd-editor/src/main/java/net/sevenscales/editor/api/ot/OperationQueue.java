@@ -71,16 +71,31 @@ public class OperationQueue {
 
 	}
 
-	public void push(SendOperation item) {
+	public void push(SendOperation item, String boardId) {
 		// need to add in reverse order to have items applied in correct order on server
 		if (item.operationJson != null && !contains(item)) {
 			queuedOperations.addLast(item);
+			storeQueue(boardId);
 		} else if (!item.operation.equals(OTOperation.USER_MOVE) && LogConfiguration.loggingIsEnabled(Level.FINEST)) {
 			// not checkint user move operations
 			Window.alert("push failed");
 			debugger();
 		}
 	}
+
+	private void storeQueue(String boardId) {
+		boolean filterOutUserOperations = true;
+		String json = toJson(queuedOperations, filterOutUserOperations);
+		if (json.length() > 0) {
+			store("q_" + boardId, toJsonArray(json));
+		}
+	}
+
+	private native void store(String key, String jsonStr)/*-{
+		if (typeof $wnd.webStorage !== 'undefined') {
+			$wnd.webStorage.set(key, jsonStr);
+		}
+	}-*/;
 
 	private native void debugger()/*-{
 		debugger;
@@ -114,18 +129,30 @@ public class OperationQueue {
 	}
 
 	public String toJsonAndClear() {
-		String result = toJson(queuedOperations);
+		boolean filterOutUserOperations = false;
+		String result = toJson(queuedOperations, false);
 		queuedOperations.clear();
-		return result;
+		return toJsonArray(result);
 	}
-	
-	private static String toJson(List<SendOperation> operations) {
+
+	private String toJsonArray(String result) {
+		return "[" + result + "]";
+	}
+
+	private static String toJson(List<SendOperation> operations, boolean filterOutUserOperations) {
 		String result = "";
 		for (SendOperation o : operations) {
-			result += o.toJson() + ",";
+			if (result.length() > 0) {
+				result += ",";
+			}
+
+			if (filterOutUserOperations && !OTOperation.USER_MOVE.equals(o.getOperation())) {
+				result += o.toJson();
+			} else if (!filterOutUserOperations) {
+				result += o.toJson();
+			}
 		}
-		result = JsonHelpers.removeLastComma(result);
-		return "[" + result + "]";
+		return result;
 	}
 
 	public boolean isEmpty() {
