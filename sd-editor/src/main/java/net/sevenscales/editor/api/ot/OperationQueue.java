@@ -7,6 +7,7 @@ import java.util.ListIterator;
 
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.json.JsonExtraction;
 import net.sevenscales.domain.JSONParserHelpers;
 import net.sevenscales.editor.api.IEditor;
 import net.sevenscales.editor.content.utils.JsonHelpers;
@@ -73,7 +74,7 @@ public class OperationQueue {
 				JSONValue vitems = obj.get("items");
 				String items = "[]";
 				if (vitems != null && vitems.isArray() != null) {
-					items = vitems.toString();
+					items = JsonExtraction.escapeForSending(vitems.toString());
 				}
 				String guid = null;
 				JSONValue jguid = obj.get("guid");

@@ -170,7 +170,7 @@ public class JsonExtraction {
     return result;
 	}
   
-  protected static String escapeForSending(String value) {
+  public static String escapeForSending(String value) {
     return value
                 .replaceAll("\\\\", "\\\\\\\\")
                 .replaceAll("\\n", "\\\\\\\n")
