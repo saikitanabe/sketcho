@@ -2,17 +2,24 @@ package net.sevenscales.editor.api.ot;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.ListIterator;
 
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.JSONParserHelpers;
 import net.sevenscales.editor.api.IEditor;
 import net.sevenscales.editor.content.utils.JsonHelpers;
+import net.sevenscales.editor.content.ClientIdHelpers;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsonUtils;
+import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.logging.client.LogConfiguration;
 import java.util.logging.Level;
@@ -24,10 +31,12 @@ public class OperationQueue {
 	private LinkedList<SendOperation> queuedOperations;
 	private Acknowledged acknowledged;
 	private IEditor editor;
+	private String boardName;
 
-	public OperationQueue(Acknowledged acknowledged, IEditor editor) {
+	public OperationQueue(Acknowledged acknowledged, IEditor editor, String boardName) {
 		this.acknowledged = acknowledged;
 		this.editor = editor;
+		this.boardName = boardName;
 		queuedOperations = new LinkedList<SendOperation>();
 	}
 	
@@ -44,23 +53,64 @@ public class OperationQueue {
 
 		private OTOperation operation;
 		private String operationJson;
+		private String guid;
 
 		public SendOperation(OTOperation operation, String operationJson) {
-			super();
+			this(operation, operationJson, null);
+		}
+		public SendOperation(OTOperation operation, String operationJson, String guid) {
 			this.operation = operation;
 			this.operationJson = operationJson;
+			this.guid = guid;
+		}
+
+		public static SendOperation fromJson(JSONObject obj) {
+			SendOperation result = null;
+			if (obj != null) {
+				String operation = JSONParserHelpers.getString(obj.get("operation"));
+				// this is json not string, parse accordingly => then to string
+				// converted to json, so string parsing can use gwt json parser!
+				JSONValue vitems = obj.get("items");
+				String items = "[]";
+				if (vitems != null && vitems.isArray() != null) {
+					items = vitems.toString();
+				}
+				String guid = null;
+				JSONValue jguid = obj.get("guid");
+				if (jguid != null && jguid.isString() != null && !"".equals(jguid.isString().stringValue())) {
+					guid = jguid.isString().stringValue();
+				}
+				result = new SendOperation(OTOperation.getEnum(operation), items, guid);
+			}
+			return result;
 		}
 
 		public String toJson() {
-			return SLogger.format("{\"operation\":\"{}\",\"items\":{}}", operation.toString(),
-					operationJson);
+			if (guid != null) {
+				return SLogger.format("{\"operation\":\"{}\",\"items\":{},\"guid\":\"{}\"}", 
+						operation.toString(),
+						operationJson,
+						guid);
+			} else {
+				return SLogger.format("{\"operation\":\"{}\",\"items\":{}}", 
+						operation.toString(),
+						operationJson);
+			}
 			// cannot use gwt utilities since already converted from JSONValue
 			// JSONObject result = new JSONObject();
 			// result.put("operation", new JSONString(operation.toString()));
 			// result.put("items", new JSONString(operationJson));
 			// return result;
 		}
-		
+
+		public void setGuid(String guid) {
+			this.guid = guid;
+		}
+
+		public String getGuid() {
+			return guid;
+		}
+
 		public OTOperation getOperation() {
 			return operation;
 		}
@@ -71,11 +121,11 @@ public class OperationQueue {
 
 	}
 
-	public void push(SendOperation item, String boardId) {
+	public void push(SendOperation item) {
 		// need to add in reverse order to have items applied in correct order on server
 		if (item.operationJson != null && !contains(item)) {
 			queuedOperations.addLast(item);
-			storeQueue(boardId);
+			storeQueue();
 		} else if (!item.operation.equals(OTOperation.USER_MOVE) && LogConfiguration.loggingIsEnabled(Level.FINEST)) {
 			// not checkint user move operations
 			Window.alert("push failed");
@@ -83,12 +133,19 @@ public class OperationQueue {
 		}
 	}
 
-	private void storeQueue(String boardId) {
+	private void storeQueue() {
 		boolean filterOutUserOperations = true;
 		String json = toJson(queuedOperations, filterOutUserOperations);
 		if (json.length() > 0) {
-			store("q_" + boardId, toJsonArray(json));
+			store(queueName(boardName), toJsonArray(json));
+		} else {
+			// nothing so remove whole queue
+			webStorageRemove(queueName(boardName));
 		}
+	}
+
+	private String queueName(String boardId) {
+		return "q_" + boardId;
 	}
 
 	private native void store(String key, String jsonStr)/*-{
@@ -128,12 +185,133 @@ public class OperationQueue {
 		return true;
 	}
 
-	public String toJsonAndClear() {
-		boolean filterOutUserOperations = false;
-		String result = toJson(queuedOperations, false);
-		queuedOperations.clear();
-		return toJsonArray(result);
+	// TODO should this return
+	// JsonData {
+	// 	json: String
+	// 	offline: Boolean
+	// }
+	// - if offline, then should on send originator + "offline", and this client would
+	// update itself as well on lo
+
+	public static class QueueData {
+		public String operations;
+		// true if queue has been created offline and not from active memory
+		// - user edited board offline
+		// - user got online and board is reloaded and send offline data to server
+		public boolean offline;
+
+		private QueueData(String operations, boolean offline) {
+			this.operations = operations;
+			this.offline = offline;
+		}
 	}
+
+	public QueueData toJsonAndClear() {
+		String result = "";
+		boolean offline = false;
+		if (!queuedOperations.isEmpty()) {
+			// queuedOperations.clear();
+			result = prepareForSending();
+		} else {
+			restore();
+			// result = webStorageGet(queueName(boardName));
+			result = prepareForSending();
+			offline = true;
+		}
+
+		return new QueueData(toJsonArray(result), offline);
+	}
+
+	private String prepareForSending() {
+		String guid = ClientIdHelpers.guid();
+		// mark sending with guid
+		// List<SendOperation> tosend = new ArrayList<SendOperation>();
+		for (SendOperation so : queuedOperations) {
+			if (so.getGuid() == null) {
+				// if not marked as sent
+				so.setGuid(guid);
+				// tosend.add(so);
+			}
+		}
+		// sends all operations; all should have guid!
+		// could be debug assert!!
+		boolean filterOutUserOperations = false;
+		return toJson(queuedOperations, filterOutUserOperations);
+	}
+
+	private void restore() {
+		String jsonStr = webStorageGet(queueName(boardName));
+		if (jsonStr != null && !"".equals(jsonStr)) {
+			fromJsonStr(jsonStr);
+		}
+	}
+
+	private void fromJsonStr(String jsonStr) {
+		JSONValue jvalue = JSONParser.parseStrict(jsonStr);
+		JSONArray jqueue = jvalue.isArray();
+		if (jqueue != null) {
+			for (int i = 0; i < jqueue.size(); ++i) {
+				JSONObject obj = jqueue.get(i).isObject();
+				if (obj != null) {
+					SendOperation so = SendOperation.fromJson(obj);
+					if (so != null) {
+						queuedOperations.add(so);
+					}
+				}
+			}
+		}
+	}
+
+	public boolean ack(JsArrayString guids) {
+		boolean result = false;
+		List<String> matched = new ArrayList<String>();
+		for (int i = 0; i < guids.length(); ++i) {
+			String guid = guids.get(i);
+			if (!matched.contains(guid)) {
+				matched.add(guid);
+			}
+		}
+		// remove guided operations from the queue
+    ListIterator<SendOperation> listIterator = queuedOperations.listIterator();
+    while (listIterator.hasNext()) {
+    	SendOperation so = listIterator.next();
+			for (int i = 0; i < guids.length(); ++i) {
+				String guid = guids.get(i);
+				if (guid != null && guid.equals(so.getGuid())) {
+					listIterator.remove();
+					matched.remove(guid);
+				}
+    	}
+    }
+
+		storeQueue();
+		// there was originally some guids and all matched
+		return guids.length() > 0 && matched.size() == 0;
+	}
+
+	public boolean acknowledgedFromServer() {
+		for (SendOperation op : queuedOperations) {
+			if (op.getGuid() != null) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private native String webStorageGet(String key)/*-{
+		if (typeof $wnd.webStorage !== 'undefined') {
+			var result = $wnd.webStorage.get(key);
+			return result
+		}
+		return ""
+	}-*/;
+
+	private native boolean webStorageRemove(String key)/*-{
+		if (typeof $wnd.webStorage !== 'undefined') {
+			return $wnd.webStorage.remove(key)
+		}
+		return false
+	}-*/;
 
 	private String toJsonArray(String result) {
 		return "[" + result + "]";
@@ -142,13 +320,17 @@ public class OperationQueue {
 	private static String toJson(List<SendOperation> operations, boolean filterOutUserOperations) {
 		String result = "";
 		for (SendOperation o : operations) {
-			if (result.length() > 0) {
-				result += ",";
+			boolean add = false;
+			if (filterOutUserOperations && !OTOperation.USER_MOVE.equals(o.getOperation())) {
+				add = true;
+			} else if (!filterOutUserOperations) {
+				add = true;
 			}
 
-			if (filterOutUserOperations && !OTOperation.USER_MOVE.equals(o.getOperation())) {
-				result += o.toJson();
-			} else if (!filterOutUserOperations) {
+			if (add) {
+				if (result.length() > 0) {
+					result += ",";
+				}
 				result += o.toJson();
 			}
 		}
@@ -156,8 +338,20 @@ public class OperationQueue {
 	}
 
 	public boolean isEmpty() {
-		return queuedOperations.isEmpty();
+		if (queuedOperations.isEmpty()) {
+			// check if something is still in web storage
+			return isWebStorageEmpty(queueName(boardName));
+		} else {
+			return false;
+		}
 	}
+
+	private native boolean isWebStorageEmpty(String key)/*-{
+		if (typeof $wnd.webStorage !== 'undefined') {
+			return $wnd.webStorage.isEmpty(key)
+		}
+		return true
+	}-*/;
 
 	public boolean flushedAndAcknowledgedFromServer() {
 		// need to check that server has ack last change, queue must be empty 
