@@ -463,17 +463,23 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 
 	@Override
 	public void onTouchStart(Diagram sender, MatrixPointJS point) {
-		onMouseDown(sender, point, 0);
+  	if (surface.getEditorContext().isEditable()) {
+			onMouseDown(sender, point, 0);
+		}
 	}
 	
   @Override
   public void onTouchMove(Diagram sender, MatrixPointJS point) {
-  	drag(point);
+  	if (surface.getEditorContext().isEditable()) {
+	  	drag(point);
+  	}
   }
 
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
-  	onMouseUp(sender, point, 0);
+  	if (surface.getEditorContext().isEditable()) {
+	  	onMouseUp(sender, point, 0);
+	  }
   }
 
   private void startDragging(Diagram sender) {
