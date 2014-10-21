@@ -83,7 +83,33 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			// Microsoft Surface
 			handleMouseDoubleClick(surface.getElement(), this);
 		}
+
+		handleOnline(this);
 		// addMouseDiagramHandler(sketchDiagramAreaHandler);
+	}
+
+	private native void handleOnline(MouseDiagramHandlerManager me)/*-{
+		if (typeof $wnd.globalStreams !== 'undefined') {
+			$wnd.globalStreams.webStorageSupportedStream.onValue(function(value) {
+				me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::editable(Z)(value);
+			})
+
+			$wnd.globalStreams.onlineStream.onValue(function(value) {
+				$wnd.console.log('onlineStream...', value)
+				if (!value && !webStorage.browserSupportsLocalStorage) {
+					me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::editable(Z)(false);
+				} else if (value) {
+					me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::editable(Z)(true);
+				}
+			})
+		}
+	}-*/;
+
+	private void editable(boolean value) {
+		if (editable) {
+			// possible to change editable only if originally allowed to edit
+			surface.getEditorContext().setEditable(value);
+		}
 	}
 
   public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
