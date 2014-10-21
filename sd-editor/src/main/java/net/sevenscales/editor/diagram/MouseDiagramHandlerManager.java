@@ -421,8 +421,9 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	}
 
 	private void _fireLongPress(int x, int y, boolean shiftKey) {
-		if (isResizing()) {
+		if (isResizing() || !surface.getEditorContext().isEditable()) {
 			// prevent handling if on resize area
+			// double click or long press disabled if not editable
 			return;
 		}
 		resizeHandler.onLongPress(x, y);
