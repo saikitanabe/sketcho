@@ -22,6 +22,10 @@ public class SLogger {
 	private SLogger(Class clazz) {
 		logger = Logger.getLogger(clazz.getName());
 	}
+
+	private SLogger(String name) {
+		logger = Logger.getLogger(name);
+	}
 	
 	public static void setCustomErrorHandler(CustomErrorHandler ceh) {
 		customErrorHandler = ceh;
@@ -96,6 +100,10 @@ public class SLogger {
 
 	public static SLogger createLogger(Class clazz) {
 		return new SLogger(clazz);
+	}
+
+	public static SLogger createLogger(String name) {
+		return new SLogger(name);
 	}
 	
 	public void error(String msg) {
