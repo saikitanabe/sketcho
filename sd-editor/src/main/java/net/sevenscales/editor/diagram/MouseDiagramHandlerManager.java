@@ -95,8 +95,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			})
 
 			$wnd.globalStreams.onlineStream.onValue(function(value) {
-				$wnd.console.log('onlineStream...', value)
-				if (!value && !webStorage.browserSupportsLocalStorage) {
+				if (!value && !$wnd.webStorage.browserSupportsLocalStorage) {
 					me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::editable(Z)(false);
 				} else if (value) {
 					me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::editable(Z)(true);

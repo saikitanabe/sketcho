@@ -177,7 +177,7 @@ public class DuplicateHelpers {
 	private void copyAndMap(int x, int y, IDiagramItemRO diro, int i, State state, BoardDocument boardDocument) {
 		if (allowedToPasteType(diro) && diro instanceof IDiagramItem) {
 			IDiagramItem di = (IDiagramItem) diro;
-			String newClientId = ClientIdHelpers.generateClientId(i, boardDocument);
+			String newClientId = ClientIdHelpers.generateClientId(i, boardDocument, surface.getEditorContext());
 			state.clientIdMapping.put(di.getClientId(), newClientId);
 			di.setClientId(newClientId);
 

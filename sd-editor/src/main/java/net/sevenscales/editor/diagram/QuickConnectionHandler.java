@@ -266,7 +266,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			// generate id and add elements normally
 			// null to regenerate new client id
 			item.setClientId(null);
-			ClientIdHelpers.generateClientIdIfNotSet(item, 0, surface.getEditorContext().getGraphicalDocumentCache());
+			ClientIdHelpers.generateClientIdIfNotSet(item, 0, surface.getEditorContext().getGraphicalDocumentCache(), surface.getEditorContext());
 
 	    AbstractDiagramFactory factory = ShapeParser.factory(item);
 	    Info shape = factory.parseShape(item, x - left - width / 2, y - top - height / 2);

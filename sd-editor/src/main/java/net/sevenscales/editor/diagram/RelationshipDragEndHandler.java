@@ -278,7 +278,7 @@ public class RelationshipDragEndHandler implements
 
 		Diagram to = createDiagram(type, imageInfo, src.getLeft(), src.getTop());
 		to.getDiagramItem().setClientId(null);
-		ClientIdHelpers.generateClientIdIfNotSet(to.getDiagramItem(), 0, surface.getEditorContext().getGraphicalDocumentCache());
+		ClientIdHelpers.generateClientIdIfNotSet(to.getDiagramItem(), 0, surface.getEditorContext().getGraphicalDocumentCache(), surface.getEditorContext());
 		to.setText(src.getText());
 		reattachHelpers.processDiagram(to);
 		surface.addAsSelected(to, true);

@@ -1,17 +1,28 @@
 package net.sevenscales.editor.content;
 
 import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.domain.constants.Constants;
 
 public class ClientIdHelpers {
+
 	public interface UniqueChecker {
 		boolean isUnique(String clientId);
 	}
-	
-	public static String generateClientId(int i, UniqueChecker uniqueChecker) {
+
+	public interface ClockValueFactory {
+		String getSiteId();
+		int newClockValue();
+	}
+
+	public static String generateClientId(int i, UniqueChecker uniqueChecker, ClockValueFactory clockValueFactory) {
 		if (uniqueChecker != null) {
 			String result = null;
 			do {
-				result = generateClientId(i);
+				if (clockValueFactory.getSiteId() == null) {
+					result = generateClientId(i);
+				} else {
+					result = clockValueFactory.getSiteId() + Constants.ID_SEPARATOR + clockValueFactory.newClockValue();
+				}
 			}	while (!uniqueChecker.isUnique(result));
 			
 			return result;
@@ -24,9 +35,9 @@ public class ClientIdHelpers {
 		return ("F" + System.currentTimeMillis() + "" + i + 2012 + Math.abs(Math.random() * 16)).substring(0, 16);
 	}
 	
-  public static void generateClientIdIfNotSet(IDiagramItem item, int i, UniqueChecker uniqueChecker) {
+  public static void generateClientIdIfNotSet(IDiagramItem item, int i, UniqueChecker uniqueChecker, ClockValueFactory clockValueFactory) {
   	if ("".equals(item.getClientId()) || item.getClientId() == null) {
-  		item.setClientId(ClientIdHelpers.generateClientId(i, uniqueChecker));
+  		item.setClientId(ClientIdHelpers.generateClientId(i, uniqueChecker, clockValueFactory));
   	}
 	}
 	

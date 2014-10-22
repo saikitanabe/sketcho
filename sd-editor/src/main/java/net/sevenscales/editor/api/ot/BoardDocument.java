@@ -10,6 +10,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.content.ClientIdHelpers.UniqueChecker;
 import net.sevenscales.editor.content.utils.JsonHelpers;
 import net.sevenscales.domain.utils.JsonFormat;
+import net.sevenscales.domain.constants.Constants;
 
 
 public class BoardDocument implements UniqueChecker {
@@ -18,7 +19,7 @@ public class BoardDocument implements UniqueChecker {
 	private List<IDiagramItemRO> document;
 	private IDiagramItem searchHelper;
 	private String logicalName;
-	
+
 	public BoardDocument(String logicalName) {
 		this.logicalName = logicalName;
 		searchHelper = new DiagramItemDTO();
@@ -160,6 +161,26 @@ public class BoardDocument implements UniqueChecker {
 		int index = findIndex(clientId);
 		// index is negative if clientId is not found
 		return index < 0;
+	}
+
+	public Integer findBiggestClockValueStartingBy(String siteId) {
+		Integer result = null;
+		for (IDiagramItemRO item : document) {
+			String cid = item.getClientId();
+			String[] siteIdClockValue = cid.split(Constants.ID_SEPARATOR);
+			if (siteIdClockValue.length == 2 && 
+				  siteIdClockValue[0].startsWith(siteId)) {
+				try {
+					Integer clockValue = Integer.valueOf(siteIdClockValue[1]);
+					if (result == null || clockValue > result) {
+						result = clockValue;
+					}
+				} catch (Exception e) {
+					logger.error("findBiggestClientIdStartingBy failed to conver value " + siteIdClockValue[1], e);
+				}
+			}
+		}
+		return result;
 	}
 	
 	public String getLogicalName() {

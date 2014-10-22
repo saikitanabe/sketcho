@@ -7,6 +7,7 @@ import java.util.Map;
 
 import net.sevenscales.editor.api.event.EditorClosedEvent;
 import net.sevenscales.editor.api.ot.BoardDocument;
+import net.sevenscales.editor.content.ClientIdHelpers.ClockValueFactory;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Visibility;
@@ -19,7 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
  * @author saikitanabe
  *
  */
-public class EditorContext {
+public class EditorContext implements ClockValueFactory {
 	// to speed up query, if problems make a public field
 	private boolean editable;
 
@@ -29,6 +30,8 @@ public class EditorContext {
 	private Properties propertiesArea;
 	private List<Widget> registeredComponents;
 	private BoardDocument graphicalDocumentCache;
+	private String siteId;
+	private Integer currentClock;
 	
 	public EditorContext() {
 		registeredComponents = new ArrayList<Widget>();
@@ -46,6 +49,14 @@ public class EditorContext {
 	}
 	public void setGraphicalDocumentCache(BoardDocument graphicalDocumentCache) {
 		this.graphicalDocumentCache = graphicalDocumentCache;
+	}
+
+	public void setSiteId(String siteId) {
+		this.siteId = siteId;
+	}
+
+	public String getSiteId() {
+		return siteId;
 	}
 	
 	public HandlerManager getEventBus() {
@@ -133,5 +144,30 @@ public class EditorContext {
 	public native String getCurrentUserDisplayName()/*-{
 		return $wnd.currentUser().displayName;
 	}-*/;
+
+	public int newClockValue() {
+		if (currentClock == null) {
+			loadCurrentClockValue();
+		}
+
+		return ++currentClock;
+	}
+
+	private void loadCurrentClockValue() {
+		if (graphicalDocumentCache != null && siteId != null && siteId.length() > 0) {
+			// for now current clock value can start from 0 always, since page refresh gets a new site id
+			// this is due that comet actor is shared between tabs, user could accidentally edit board and completely
+			// override with same IDs
+
+			// Integer clockValue = graphicalDocumentCache.findBiggestClockValueStartingBy(siteId);
+			// if (clockValue != null) {
+			// 	currentClock = clockValue;
+			// } else {
+			// 	currentClock = 0;
+			// }
+			
+			currentClock = 0;
+		}
+	}
 
 }

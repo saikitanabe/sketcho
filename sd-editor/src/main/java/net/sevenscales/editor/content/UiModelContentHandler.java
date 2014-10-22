@@ -198,7 +198,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     for (IDiagramItem item : items) {
     	// client id cannot clash because single user environment and done only for 
     	// legacy Confluence boards that didn't use client id for diagram items.
-    	ClientIdHelpers.generateClientIdIfNotSet(item, ++i, null);
+    	ClientIdHelpers.generateClientIdIfNotSet(item, ++i, null, null);
     	if (item.getParentId() != null) {
     		// create comments lazily or any parent child relation elements
     		commentFactory.add(item);

@@ -116,7 +116,7 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
 						// generate client id if it is missing; 
 						// case duplicate has already client id to have correct references
 						// case redo has already inserted client id, and now we are using the same id to calculate prev state correctly
-						ClientIdHelpers.generateClientIdIfNotSet(di, ++i, graphicalDocumentCache);
+						ClientIdHelpers.generateClientIdIfNotSet(di, ++i, graphicalDocumentCache, editorContext);
 						addedAnyRealDiagrams = true;
 					}
 				}

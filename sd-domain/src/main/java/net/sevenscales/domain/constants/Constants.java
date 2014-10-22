@@ -5,4 +5,6 @@ public class Constants {
   public static final int PAGE_TYPE_SKETCH = 2;
   
   public static final String SKETCH_STATUS = "Status";
+  
+	public static final String ID_SEPARATOR = "-";
 }
