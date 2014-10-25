@@ -19,6 +19,7 @@ public class BoardDocument implements UniqueChecker {
 	private List<IDiagramItemRO> document;
 	private IDiagramItem searchHelper;
 	private String logicalName;
+	private String checksum;
 
 	public BoardDocument(String logicalName) {
 		this.logicalName = logicalName;
@@ -53,6 +54,14 @@ public class BoardDocument implements UniqueChecker {
 			result += diro.getCrc32();
 		}
 		return result;
+	}
+
+	public void setChecksum(String checksum) {
+		this.checksum = checksum;
+	}
+
+	public String getChecksum() {
+		return checksum;
 	}
 
 	/**
