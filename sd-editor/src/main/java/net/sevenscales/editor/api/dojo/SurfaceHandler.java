@@ -960,8 +960,15 @@ class SurfaceHandler extends SimplePanel implements
 	
 	public void scale(float value) {
 		scale(rootLayer0.getContainer(), value);
+		scaleBackground(value);
 		this.scaleFactor = value;
 	}
+
+	private native void scaleBackground(float value)/*-{
+		var size = 399 * value
+		var sizeValue = size + "px " + size + "px"
+		$wnd.$('#sketchboard-editor').css("background-size", sizeValue)
+	}-*/;
 	
 	public void invertScaleDiagram(Diagram diagram, int x, int y) {
 		// TODO need to reposition to keep diagram in same place
