@@ -96,7 +96,8 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	private List<Diagram> prevXHigilights;
 	private List<Diagram> prevYHighlights;
 	private Relationship2 insertMoveToSingle;
-	private static final Color LINE_HELPER_COLOR = new Color(0xdd, 0xdd, 0xdd, 1); 
+	// private static final Color LINE_HELPER_COLOR = new Color(0xdd, 0xdd, 0xdd, 1); 
+	private static final Color LINE_HELPER_COLOR = new Color(0xDF, 0x00, 0x3B, 1);
 	
 	public MouseDiagramDragHandler(ISurfaceHandler surface, MouseDiagramHandlerManager parent,
 			ISelectionHandler selectionHandler) {
@@ -376,7 +377,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 
 		if (Math.abs(diffx) > 5) {
 			delayX = false;
-			// dehighlightLine(verticalLine);
+			dehighlightLine(verticalLine);
 		}
 		return !delayX;
 	}
@@ -389,7 +390,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		int diffy = y - delayStartY;
 		if (Math.abs(diffy) > 5) {
 			delayY = false;
-			// dehighlightLine(horizontalLine);
+			dehighlightLine(horizontalLine);
 		}
 		return !delayY;
 	}
@@ -414,25 +415,33 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		restoreHighlightColor(prevXHigilights, oneSelected);
 		restoreHighlightColor(prevYHighlights, oneSelected);
 		prevXHigilights = highlightList(highlightCentersX.get(centerX), oneSelected);
+		if (prevXHigilights != null && oneSelected != null) {
+			prevXHigilights.remove(oneSelected);
+		}
 		if (!delayX && prevXHigilights != null && prevXHigilights.size() > 0) {
 			delayX = true;
 			delayStartX = dpx;
-			// highlightLine(verticalLine);
+			highlightLine(verticalLine);
 		}
 		prevYHighlights = highlightList(highlightCentersY.get(centerY), oneSelected);
+		if (prevYHighlights != null && oneSelected != null) {
+			prevYHighlights.remove(oneSelected);
+		}
 		if (!delayY && prevYHighlights != null && prevYHighlights.size() > 0) {
 			delayY = true;
 			delayStartY = dpy;
-			// highlightLine(horizontalLine);
+			highlightLine(horizontalLine);
 		}
 	}
 
 	private void highlightLine(ILine line) {
-		line.setStroke(AbstractDiagramItem.DEFAULT_SELECTION_COLOR);
+		// line.setStroke(AbstractDiagramItem.DEFAULT_SELECTION_COLOR);
+		line.setVisibility(true);
 	}
 
 	private void dehighlightLine(ILine line) {
-		line.setStroke(LINE_HELPER_COLOR);
+		// line.setStroke(LINE_HELPER_COLOR);
+		line.setVisibility(false);
 	}
 	
 	private void restorePreHighlightColors() {
@@ -482,7 +491,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
     prevDX = 0;
     prevDY = 0;
 		dragHandlersStart(sender);
-		showLineHelpers();
+		// showLineHelpers();
 
 		// if (UiUtils.isSafari()) {
 		// safari doesn't support cumulative transformations
