@@ -11,6 +11,7 @@ import net.sevenscales.editor.api.event.BackgroundMoveStartedEvent;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class BackgroundMoveHandler implements MouseDiagramHandler {
@@ -27,6 +28,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
 	private int prevTransformDX;
 	private int prevTransformDY;
   private boolean backgroundMoving;
+  private JavaScriptObject cachedEditor;
 	
 //	private DiagramHelpers.ComplexElementHandler complexElementHandler = new DiagramHelpers.ComplexElementHandler();
 
@@ -119,8 +121,21 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
       }
       
       surface.getRootLayer().setTransform(dx, dy);
+      if (cachedEditor == null) {
+        cachedEditor = getEditor();
+      }
+      moveBgImage(cachedEditor, dx, dy);
     }
   }
+
+  private native JavaScriptObject getEditor()/*-{
+    return $wnd.$('#sketchboard-editor')
+  }-*/;
+
+  private native void moveBgImage(JavaScriptObject editor, int dx, int dy)/*-{
+    var pos = dx + "px " + dy + "px"
+    editor.css("background-position", pos)
+  }-*/;
 
   private void startBackgroundMove() {
     surface.getEditorContext().getEventBus().fireEvent(new BackgroundMoveStartedEvent());
