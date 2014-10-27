@@ -9,6 +9,7 @@ import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.api.IExtension;
 import net.sevenscales.domain.utils.JsonFormat;
+import net.sevenscales.domain.utils.DiagramItemUtils;
 import net.sf.hibernate4gwt.pojo.java5.LazyPojo;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -330,13 +331,6 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		return false;
 	}
 	
-	private <T> boolean checkIfNotSame(T me, T other) {
-		if ((me != null && other == null) || (me == null && other != null) || me != null && !me.equals(other)) {
-			return true;
-		}
-		return false;
-	}
-
 	@Override
 	public IDiagramItem copy() {
 		return new DiagramItemDTO(this);
@@ -378,7 +372,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 
 	private void copyExtensions(IExtension ext) {
 		if (ext.getSvgData() != null) {
-			extension = new ExtensionDTO(ext.getSvgData().copy());
+			extension = new ExtensionDTO(ext.getSvgData().copy(), ext.getLineWidth());
 		}
 	}
 
@@ -396,55 +390,55 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		DiagramItemDTO item = (DiagramItemDTO) diro;
 		boolean result = true;
 
-		if (checkIfNotSame(id, item.getId())) {
+		if (DiagramItemUtils.checkIfNotSame(id, item.getId())) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.ID);
 		}
-		if (checkIfNotSame(text, item.getText())) {
+		if (DiagramItemUtils.checkIfNotSame(text, item.getText())) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.TEXT);
 		}
-		if (checkIfNotSame(type, item.getType())) {
+		if (DiagramItemUtils.checkIfNotSame(type, item.getType())) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.TYPE);
 		}
-		if (checkIfNotSame(shape, item.getShape())) {
+		if (DiagramItemUtils.checkIfNotSame(shape, item.getShape())) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.SHAPE);
 		}
-		if (checkIfNotSame(backgroundColor, item.getBackgroundColor())) {
+		if (DiagramItemUtils.checkIfNotSame(backgroundColor, item.getBackgroundColor())) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.BACKGROUND_COLOR);
 		}
-		if (checkIfNotSame(textColor, item.getTextColor())) {
+		if (DiagramItemUtils.checkIfNotSame(textColor, item.getTextColor())) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.TEXT_COLOR);
 		}
-		if (checkIfNotSame(fontSize, item.fontSize)) {
+		if (DiagramItemUtils.checkIfNotSame(fontSize, item.fontSize)) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.FONT_SIZE);
 		}
-		if (checkIfNotSame(shapeProperties, item.shapeProperties)) {
+		if (DiagramItemUtils.checkIfNotSame(shapeProperties, item.shapeProperties)) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.SHAPE_PROPERTIES);
 		}
-		if (checkIfNotSame(displayOrder, item.displayOrder)) {
+		if (DiagramItemUtils.checkIfNotSame(displayOrder, item.displayOrder)) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.DISPLAY_ORDER);
 		}
-		if (checkIfNotSame(version, item.getVersion())) {
+		if (DiagramItemUtils.checkIfNotSame(version, item.getVersion())) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.VERSION);
 		}
-		if (checkIfNotSame(clientId, item.getClientId())) {
+		if (DiagramItemUtils.checkIfNotSame(clientId, item.getClientId())) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.CLIENT_ID);
 		}
-		if (checkIfNotSame(parentId, item.getParentId())) {
+		if (DiagramItemUtils.checkIfNotSame(parentId, item.getParentId())) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.PARENT);
 		}
-		if (checkIfNotSame(customData, item.getCustomData())) {
+		if (DiagramItemUtils.checkIfNotSame(customData, item.getCustomData())) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.CUSTOM_DATA);
 		}
@@ -466,7 +460,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 			updateDirtyFields(dirtyFields, DiagramItemField.LINKS);
 		}
 
-		if (checkIfNotSame(extension, item.getExtension())) {
+		if (DiagramItemUtils.checkIfNotSame(extension, item.getExtension())) {
 			updateDirtyFields(dirtyFields, DiagramItemField.EXTENSION);
 			result = false;
 		}

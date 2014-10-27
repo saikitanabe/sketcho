@@ -90,7 +90,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   	if (shape.getSvgData() != null) {
   		createCustomPaths(shape.getSvgData().getPaths());
   		// diagram item needs to have extionsion data as well for undo/redo calculation
-			getDiagramItem().setExtension(new ExtensionDTO(shape.getSvgData().copy()));
+			getDiagramItem().setExtension(new ExtensionDTO(shape.getSvgData().copy(), /*lineWidth*/ null));
   	} else {
 	  	theshape = Shapes.get(getDiagramItem().getType());
 	    createSubPaths(theshape);
