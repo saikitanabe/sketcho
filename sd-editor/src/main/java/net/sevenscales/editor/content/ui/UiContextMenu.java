@@ -157,7 +157,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		colorpopup.addAutoHidePartner(colorize);
 
 		fontSizePopup = new TextSizePopup(this);
-		layersPopup = new LayersPopup(surface);
+		layersPopup = new LayersPopup(surface, layersMenuButton);
 
 		surface.addDomHandler(new TouchStartHandler() {
 			@Override
@@ -637,11 +637,15 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}
 	
 	private void color() {
-		if (TouchHelpers.isSupportsTouch()) {
-			colorSelections.showHeader();
-			colorpopup.center();
+		if (colorpopup.isShowing()) {
+			colorpopup.hide();
 		} else {
-			setColorPopupRelativePosition();
+			if (TouchHelpers.isSupportsTouch()) {
+				colorSelections.showHeader();
+				colorpopup.center();
+			} else {
+				setColorPopupRelativePosition();
+			}
 		}
 		EffectHelpers.tooltipperHide();
 	}
@@ -672,7 +676,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 	private void showEditLink() {
 		Diagram selected = selectionHandler.getOnlyOneSelected();
-		if (selected != null) {
+		if (selected != null && !editLinkPopup.isShowing()) {
 			editLinkForm.setLink(selected.getLink());
 			editLinkPopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
 				@Override
@@ -681,6 +685,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				}
 			});
 			EditorCommon.fireEditorOpen(surface);
+		} else {
+			editLinkPopup.hide();
 		}
 	}
 
