@@ -12,6 +12,7 @@ public enum DiagramItemField {
 				STYLE("style"),
 			SVG_WIDTH("width"),
 			SVG_HEIGHT("height"),
+		LINE_WIDTH("lwidth"), // relationship specific line width
 	BACKGROUND_COLOR("backgroundColor"),
 	TEXT_COLOR("textColor"),
 	FONT_SIZE("fsize"),
