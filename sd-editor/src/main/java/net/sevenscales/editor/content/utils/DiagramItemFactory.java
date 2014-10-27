@@ -331,7 +331,7 @@ public class DiagramItemFactory {
       GenericShape s = (GenericShape) shape;
       result = getItem(diagram);
       if (s.getSvgData() != null) {
-        ExtensionDTO ext = new ExtensionDTO(s.getSvgData());
+        ExtensionDTO ext = new ExtensionDTO(s.getSvgData(), /*lineWidth*/ null);
         result.setExtension(ext);
       }
       shapetext += rect2ShapeText(s.rectShape, moveX, moveY);

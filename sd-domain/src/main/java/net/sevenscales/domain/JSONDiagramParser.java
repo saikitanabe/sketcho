@@ -25,7 +25,7 @@ public class JSONDiagramParser {
 												  JSONParserHelpers.getExtension(obj.get(DiagramItemField.EXTENSION.getValue())),
 												  JSONParserHelpers.getString(obj.get("backgroundColor")),
 												  JSONParserHelpers.getString(obj.get("textColor")),
-												  JSONParserHelpers.getInt(obj.get("fsize")),
+												  JSONParserHelpers.getInteger(obj.get("fsize")),
 												  JSONParserHelpers.getInt(obj.get("version")),
 												  JSONParserHelpers.getLong(obj.get("id")),
 												  JSONParserHelpers.getString(obj.get("clientId")),

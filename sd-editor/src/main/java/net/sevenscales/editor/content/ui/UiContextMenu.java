@@ -705,7 +705,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}
 
 	private void showLayersMenu() {
-		layersPopup.show(layersMenuButton.getAbsoluteLeft(), layersMenuButton.getAbsoluteTop() + popup.getOffsetHeight());
+		if (layersPopup.isShowing()) {
+			layersPopup.hide();
+		} else {
+			layersPopup.show(layersMenuButton.getAbsoluteLeft(), layersMenuButton.getAbsoluteTop() + popup.getOffsetHeight());
+		}
 	}
 
 	/**

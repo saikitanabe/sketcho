@@ -133,6 +133,11 @@ public class JsonExtraction {
       jsvgdata.put(DiagramItemField.SVG_HEIGHT.getValue(), new JSONNumber(svgdataro.getHeight()));
       result.put(DiagramItemField.SVG_DATA.getValue(), jsvgdata);
     }
+
+    if (item.getExtension().getLineWidth() != null) {
+      result.put(DiagramItemField.LINE_WIDTH.getValue(), new JSONNumber(item.getExtension().getLineWidth()));
+    }
+
     return result;
   }
 
