@@ -55,6 +55,7 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 		ls.setSelectionHandler(SelectButtonBox.this);
 		popup.setWidget(ls);
 		popup.setAutoHideEnabled(true);
+		popup.addAutoHidePartner(drop);
 
 		DOM.sinkEvents((com.google.gwt.user.client.Element) relationbutton.cast(),
 				Event.ONCLICK);
@@ -87,16 +88,20 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 	}
 
 	private void showPopup() {
-		int left = SelectButtonBox.this.getAbsoluteLeft() - 60;;
-		int top = SelectButtonBox.this.getAbsoluteTop() + 30;
-		// popup.setWidth(panel.getElement().getStyle().getWidth());
-		if (popupUp) {
-			if (SelectButtonBox.this.editorContext.isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {
-				top = SelectButtonBox.this.getAbsoluteTop() - 115;
+		if (!popup.isShowing()) {
+			int left = SelectButtonBox.this.getAbsoluteLeft() - 60;;
+			int top = SelectButtonBox.this.getAbsoluteTop() + 30;
+			// popup.setWidth(panel.getElement().getStyle().getWidth());
+			if (popupUp) {
+				if (SelectButtonBox.this.editorContext.isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {
+					top = SelectButtonBox.this.getAbsoluteTop() - 115;
+				}
 			}
+			popup.setPopupPosition(left, top);
+			popup.show();
+		} else {
+			popup.hide();
 		}
-		popup.setPopupPosition(left, top);
-		popup.show();
 	}
 
 	private void removeLineClassNames() {
