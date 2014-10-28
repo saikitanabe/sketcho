@@ -73,7 +73,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
 
   // Debug curve control point and arrow angle debugging
-  // private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
   // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
   // private net.sevenscales.editor.gfx.domain.ICircle tempC2;
 
@@ -704,10 +704,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
 
     // DEBUG curve visualization START
-    // tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
+    tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
     // tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
     // tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
     // DEBUG curve visualization END
+
 
     startAnchor = new Anchor(this);
     endAnchor = new Anchor(this);
@@ -1516,31 +1517,44 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     lastX = points.get(size - 2);
     lastY = points.get(size - 1);
 
+    return drawingPointsStraight();
+  }
+
+  private List<Integer> drawingPointsStraight() {
+    int size = points.size();
     if (weight == 1) {
       return points;
     }
 
-    double x1 = points.get(size - 4);
-    double y1 = points.get(size - 3);
-    double x2 = points.get(size - 2);
-    double y2 = points.get(size - 1);
+    // begin
+    double beginx1 = points.get(0);
+    double beginy1 = points.get(1);
+    double beginx2 = points.get(2);
+    double beginy2 = points.get(3);
 
-    double beta = AngleUtil2.beta(x1, y1, x2, y2);
+    double beginbeta = AngleUtil2.beta(beginx1, beginy1, beginx2, beginy2);
 
-    // calculate base
     double distanceBegin = distanceBeginByWeight();
-    double betaadjBegin = Math.sin(beta) * distanceBegin;
-    double betanextBegin = Math.cos(beta) * distanceBegin;
+    double betaadjBegin = Math.sin(beginbeta) * distanceBegin;
+    double betanextBegin = Math.cos(beginbeta) * distanceBegin;
 
-    double bx1 = x1 - betanextBegin;
-    double by1 = y1 - betaadjBegin;
+    double bx1 = beginx1 - betanextBegin;
+    double by1 = beginy1 - betaadjBegin;
+
+    // last
+    double lastx1 = points.get(size - 4);
+    double lasty1 = points.get(size - 3);
+    double lastx2 = points.get(size - 2);
+    double lasty2 = points.get(size - 1);
+
+    double endbeta = AngleUtil2.beta(lastx1, lasty1, lastx2, lasty2);
 
     double distanceEnd = distanceEndByWeight();
-    double betaadj = Math.sin(beta) * distanceEnd;
-    double betanext = Math.cos(beta) * distanceEnd;
+    double betaadj = Math.sin(endbeta) * distanceEnd;
+    double betanext = Math.cos(endbeta) * distanceEnd;
 
-    double bx2 = x2 + betanext;
-    double by2 = y2 + betaadj;
+    double bx2 = lastx2 + betanext;
+    double by2 = lasty2 + betaadj;
 
     if (info.isAggregate()) {
       firstX = (int) bx1;
