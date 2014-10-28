@@ -1517,6 +1517,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     lastX = points.get(size - 2);
     lastY = points.get(size - 1);
 
+    if (info.isCurved()) {
+      return points;
+    }
     return drawingPointsStraight();
   }
 
