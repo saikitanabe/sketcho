@@ -28,7 +28,6 @@ public class LineWidthMenu extends Composite {
 	@UiField AnchorElement weight3;
 	@UiField AnchorElement weight4;
 	@UiField AnchorElement weight5;
-	// @UiField AnchorElement moveForward;
 
 	private ISurfaceHandler surface;
 	private PopupPanel parent;
@@ -77,14 +76,6 @@ public class LineWidthMenu extends Composite {
 				weight5();
 			}
 		});
-		// new FastElementButton(moveForward).addClickHandler(new ClickHandler() {
-		// 	@Override
-		// 	public void onClick(ClickEvent event) {
-		// 		stopEvent(event);
-		// 		moveToForward();
-		// 	}
-		// });
-
 	}
 
 	private void setWeight(int weight) {

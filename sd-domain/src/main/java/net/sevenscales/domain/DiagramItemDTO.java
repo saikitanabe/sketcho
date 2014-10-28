@@ -386,9 +386,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 
 	private void copyExtensions(IExtension ext) {
+		ISvgDataRO svg = null;
 		if (ext.getSvgData() != null) {
-			extension = new ExtensionDTO(ext.getSvgData().copy(), ext.getLineWidth());
+			svg = ext.getSvgData().copy();
 		}
+		extension = new ExtensionDTO(svg, ext.getLineWidth());
 	}
 
 	public boolean isComment() {

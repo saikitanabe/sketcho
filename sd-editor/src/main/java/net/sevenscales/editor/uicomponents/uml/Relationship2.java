@@ -2509,8 +2509,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   public void setWeight(int weight) {
     getDiagramItem().setLineWidth(weight);
     doSetShape();
-    // arrow.setStrokeWidth(weight);
-    // relLine.setStrokeWidth(weight);
+    surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
   }
 
 }
