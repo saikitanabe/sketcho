@@ -1,0 +1,27 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+						 xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	</ui:style>
+	
+	<g:HTMLPanel>
+		<div class="btn-group">
+			<a ui:field="weight1" title="Normal" class="btn btn-custom btn-context-menu tooltipper block-link">
+				<div class="line-weight line-weight-1"></div>
+			</a>
+			<a ui:field="weight2" title="Bigger" class="btn btn-custom btn-context-menu tooltipper block-link">
+				<div class="line-weight line-weight-2"></div>
+			</a>
+			<a ui:field="weight3" title="Biggest" class="btn btn-custom btn-context-menu tooltipper block-link">
+				<div class="line-weight line-weight-3"></div>
+			</a>
+			<a ui:field="weight4" title="Biggest" class="btn btn-custom btn-context-menu tooltipper block-link">
+				<div class="line-weight line-weight-4"></div>
+			</a>
+			<a ui:field="weight5" title="Huge" class="btn btn-custom btn-context-menu tooltipper block-link">
+				<div class="line-weight line-weight-5"></div>
+			</a>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder>
+

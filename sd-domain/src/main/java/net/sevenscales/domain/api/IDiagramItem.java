@@ -13,6 +13,7 @@ public interface IDiagramItem extends IDiagramItemRO {
 	void setBackgroundColor(String backgroundColor);
 	void setTextColor(String textColor);
   void setFontSize(Integer fontSize);
+  void setLineWidth(Integer lineWidth);
   void setShapeProperties(Integer shapeProperties);
   void addShapeProperty(ShapeProperty shapeProperty);
   void clearShapeProperty(ShapeProperty shapeProperty);

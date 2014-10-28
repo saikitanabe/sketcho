@@ -175,6 +175,21 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 
 	@Override
+	public Integer getLineWidth() {
+		if (extension != null) {
+			return extension.getLineWidth();
+		}
+		return null;
+	}
+	@Override
+	public void setLineWidth(Integer lineWidth) {
+		if (extension == null) {
+			extension = new ExtensionDTO();
+		}
+		extension.setLineWidth(lineWidth);
+	}
+
+	@Override
 	public Integer getShapeProperties() {
 		return shapeProperties;
 	}
