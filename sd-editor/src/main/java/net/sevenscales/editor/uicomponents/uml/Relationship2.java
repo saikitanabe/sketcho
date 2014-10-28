@@ -79,7 +79,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
 	private IPath inheritance;
   private IPolyline arrow;
-  private IPolyline aggregate;
+  private IPath aggregate;
   private ArrowStartPolyline arrowStartPolyline;
   private RelationshipText2 relationshipText;
 //  private List<IShape> elements = new ArrayList<IShape>();
@@ -733,8 +733,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     arrowStartPolyline = new ArrowStartPolyline(this);
     
-    aggregatePoints = new double[10];
-    aggregate = IShapeFactory.Util.factory(editable).createPolyline(group, aggregatePoints);
+    aggregatePoints = new double[8];
+    aggregate = IShapeFactory.Util.factory(editable).createPath(group, null);
     aggregate.setFill(255, 255, 255, 1);
     
     this.relLine = new RelLine();
@@ -1614,8 +1614,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       aggregatePoints[2] = dleft.x; aggregatePoints[3] = dleft.y;
       aggregatePoints[4] = dline.x; aggregatePoints[5] = dline.y;
       aggregatePoints[6] = dright.x; aggregatePoints[7] = dright.y;
-      aggregatePoints[8] = startx; aggregatePoints[9] = starty;
-      aggregate.setShape(aggregatePoints);
+      aggregate.setShape(aggregatePath());
     }
     aggregate.setVisibility(info.isAggregate());
 //    aggregate.setStroke("black");
@@ -1627,26 +1626,31 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   private String inheritancePath() {
+    return closedPath(inheritancePoints);
+  }
+
+  private String aggregatePath() {
+    return closedPath(aggregatePoints);
+  }
+
+  private String closedPath(double[] apoints) {
     String result = "M";
-    for (int i = 0; i < inheritancePoints.length; i += 2) {
+    for (int i = 0; i < apoints.length; i += 2) {
       if (i > 0) {
         result += " ";
       }
-      double x = inheritancePoints[i];
-      double y = inheritancePoints[i + 1];
+      double x = apoints[i];
+      double y = apoints[i + 1];
       result += x + "," + y;
     }
     return result + "Z";
   }
 
   private int arrowWidth() {
-    switch (weight) {
-      case 3:
-        return ARROW_WIDTH + 6;
-      case 6:
-        return ARROW_WIDTH + 12;
-      default: 
-        return ARROW_WIDTH;
+    if (weight == 1) {
+      return ARROW_WIDTH;
+    } else {
+      return ARROW_WIDTH + weight * 2;
     }
   }
 
