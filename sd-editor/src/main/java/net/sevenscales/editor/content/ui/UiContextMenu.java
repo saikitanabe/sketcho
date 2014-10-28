@@ -7,6 +7,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.content.ui.textsize.TextSizePopup;
 import net.sevenscales.editor.content.ui.textsize.TextSizeHandler;
 import net.sevenscales.editor.content.ui.layers.LayersPopup;
+import net.sevenscales.editor.content.ui.linewidth.LineWidthPopup;
 import net.sevenscales.editor.content.ui.link.EditLinkForm;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
@@ -36,6 +37,7 @@ import net.sevenscales.editor.content.utils.EffectHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
+import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.ImageElement;
@@ -100,11 +102,13 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement openlink;
 	@UiField AnchorElement textSize;
 	@UiField AnchorElement layersMenuButton;
+	@UiField AnchorElement lineWidth;
 	@UiField AnchorElement fileLink;
 
 	private PopupPanel editLinkPopup;
 	private PopupPanel colorpopup;
 	private LayersPopup layersPopup;
+	private LineWidthPopup lineWidthPopup;
 	private TextSizePopup fontSizePopup;
 	private Point popupPosition;
 
@@ -158,6 +162,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 		fontSizePopup = new TextSizePopup(this);
 		layersPopup = new LayersPopup(surface, layersMenuButton);
+		lineWidthPopup = new LineWidthPopup(surface, lineWidth);
 
 		surface.addDomHandler(new TouchStartHandler() {
 			@Override
@@ -220,7 +225,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					colorMenu = Display.INLINE_BLOCK;
 				}
 
-				if (notConfluence() && selected.length == 1 && !(selected[0] instanceof Relationship2)) {
+				if (notConfluence() && selected.length == 1 && !(selected[0] instanceof Relationship2) && !(selected[0] instanceof CircleElement)) {
 					switchElementVisibility = Display.INLINE_BLOCK;
 				}
 
@@ -497,6 +502,14 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			}
 		});
 
+		new FastElementButton(lineWidth).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				stopEvent(event);
+				showLineWeightMenu();
+			}
+		});
+
 		// do not handle undo/redo if property editor is open
 		Event.addNativePreviewHandler(new NativePreviewHandler() {
 		  @Override
@@ -715,6 +728,13 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			layersPopup.hide();
 		} else {
 			layersPopup.show(layersMenuButton.getAbsoluteLeft(), layersMenuButton.getAbsoluteTop() + popup.getOffsetHeight());
+		}
+	}
+	private void showLineWeightMenu() {
+		if (lineWidthPopup.isShowing()) {
+			lineWidthPopup.hide();
+		} else {
+			lineWidthPopup.show(lineWidth.getAbsoluteLeft(), lineWidth.getAbsoluteTop() + popup.getOffsetHeight());
 		}
 	}
 
