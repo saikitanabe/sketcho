@@ -77,7 +77,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
   // private net.sevenscales.editor.gfx.domain.ICircle tempC2;
 
-	private IPolyline inheritance;
+	private IPath inheritance;
   private IPolyline arrow;
   private IPolyline aggregate;
   private ArrowStartPolyline arrowStartPolyline;
@@ -119,6 +119,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private AnchorMoveHandler handler;
 
   private List<IChildElement> children;
+  private int weight = 1;
+
+  private IPath.PathTransformer pathTransformer = new IPath.PathTransformer() {
+    public String getShapeStr(int dx, int dy) {
+      return null;
+    }
+  };
 
   private static class ArrowStartPolyline {
     private IPolyline arrowStart;
@@ -174,6 +181,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       }
     }
 
+    void setStrokeWidth(int width) {
+      createIfNullAndDirectedStart();
+      if (arrowStart != null) {
+        arrowStart.setStrokeWidth(width);
+      }
+    }
+
   }
 	
 //	private TextPosition textUnderEdit = TextPosition.TEXT_ALL;
@@ -200,6 +214,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     public RelLine() {
       path = IShapeFactory.Util.factory(editable).createPath(group, null);
       path.setStroke(Theme.getCurrentColorScheme().getBorderColor());
+      // path.setStrokeWidth(4);
       // do not fill polyline, because it will be selectable area and hides everything under it!
 //      polyline.setFill(150, 150, 150, 0.5);
       lineBackground = IShapeFactory.Util.factory(editable).createPath(group, null);
@@ -219,14 +234,27 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       path.setStrokeStyle(style);
     }
 
-    public void setShape(List<Integer> points) {
-      BezierHelpers.Segment result = null;
-      String shape = "";
-      if (points.size() == 4 || !info.isCurved()) {
+    public void setStrokeWidth(int width) {
+      path.setStrokeWidth(width);
+    }
+
+    public void setShape() {
+      if (isStraight()) {
         segments = BezierHelpers.segments(points);
-        shape = calcTwoPointsCurvePath(points);
       } else {
         segments = BezierHelpers.smoothSegments(points);
+      }
+    }
+
+    private boolean isStraight() {
+      return points.size() == 4 || !info.isCurved();
+    }
+
+    public void applyPoints() {
+      String shape = "";
+      if (isStraight()) {
+        shape = calcTwoPointsCurvePath(points);
+      } else {
         shape = BezierHelpers.smooth(segments);
       }
 
@@ -688,8 +716,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     textUtil = new RelationshipTextUtil2();
     relationshipText = new RelationshipText2(group, surface, editable);
 
-    inheritancePoints = new double[8];
-    inheritance = IShapeFactory.Util.factory(editable).createPolyline(group, inheritancePoints);
+    inheritancePoints = new double[6];
+    inheritance = IShapeFactory.Util.factory(editable).createPath(group, null);
     // inheritance.setFill(255, 255, 255, 1);
     // inheritance.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
     
@@ -1163,8 +1191,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     // System.out.println("beta:" + Math.toDegrees(beta) + " betaadj:" + betaadj
     // + " betanext:" + betanext);
 
-    double bx = (points.get(points.size()-2) + betanext);
-    double by = (points.get(points.size()-1) + betaadj);
+    double bx = x2 + betanext;
+    double by = y2 + betaadj;
 
     double gamma = Math.PI - Math.PI / 2 - beta;
 
@@ -1482,7 +1510,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //    prevPoints.clear();
 //    prevPoints.addAll(points);
 //    System.out.println("doSetShape:"+points+" "+anchorMap);
-    relLine.setShape(points);
+    relLine.setShape();
+
     initializeChildren(false);
   	if (TouchHelpers.isSupportsTouch() && surface.getMouseDiagramManager() != null && surface.getMouseDiagramManager().getDragHandler().isDragging()) {
   		// performance improvement needed on touch devices; there is not enough
@@ -1493,6 +1522,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   		return;
   	}
     logger.debug("Relationship2.doSetShape()");
+
+    doSetWeight();
 
     int size = points.size();
     double x1 = points.get(size - 4);
@@ -1539,12 +1570,14 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       // tempC2.setFill(150, 150, 150, 1);
       // Debug curve visualization END
 
-      calculateArrowHead(angle, ARROW_WIDTH, bx, by, x2, y2);
+      calculateArrowHead(angle, arrowWidth(), bx, by, x2, y2);
     } else {
-      calculateArrowHead(angle, ARROW_WIDTH, x1, y1, x2, y2);
+      calculateArrowHead(angle, arrowWidth(), x1, y1, x2, y2);
     }
 
     conditionallyCalculateDiamond();
+
+    relLine.applyPoints();
 
     relationshipText.setShape(this);
     moveChildren();
@@ -1561,8 +1594,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       inheritancePoints[0] = endx; inheritancePoints[1] = endy;
       inheritancePoints[2] = left.x; inheritancePoints[3] = left.y;
       inheritancePoints[4] = right.x; inheritancePoints[5] = right.y;
-      inheritancePoints[6] = endx; inheritancePoints[7] = endy;
-      inheritance.setShape(inheritancePoints);
+      // inheritancePoints[6] = endx; inheritancePoints[7] = endy;
+      inheritance.setShape(inheritancePath());
     }
     inheritance.setVisibility(info.isInheritance());
 //    inheritance.setStroke("black");
@@ -1593,12 +1626,48 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     relationshipHandleHelpers.doSetShape(currentDragged);
   }
 
+  private String inheritancePath() {
+    String result = "M";
+    for (int i = 0; i < inheritancePoints.length; i += 2) {
+      if (i > 0) {
+        result += " ";
+      }
+      double x = inheritancePoints[i];
+      double y = inheritancePoints[i + 1];
+      result += x + "," + y;
+    }
+    return result + "Z";
+  }
+
+  private int arrowWidth() {
+    switch (weight) {
+      case 3:
+        return ARROW_WIDTH + 6;
+      case 6:
+        return ARROW_WIDTH + 12;
+      default: 
+        return ARROW_WIDTH;
+    }
+  }
+
+  private void doSetWeight() {
+    Integer lineWidth = getDiagramItem().getLineWidth();
+    if (lineWidth != null) {
+      weight = lineWidth;
+    }
+    relLine.setStrokeWidth(weight);
+    arrow.setStrokeWidth(weight);
+    arrowStartPolyline.setStrokeWidth(weight);
+    inheritance.setStrokeWidth(weight);
+    aggregate.setStrokeWidth(weight);
+  }
+
   private void conditionallyCalculateDiamond() {
     if (info.isAggregate() || info.isDirectedStart()) {
       if (isCurved()) {
         calculateCurvedDiamond();
       } else {
-        calculateDiamond(angle, ARROW_WIDTH, points.get(0), points.get(1), points.get(2), points.get(3));
+        calculateDiamond(angle, arrowWidth(), points.get(0), points.get(1), points.get(2), points.get(3));
       }
     }
   }
@@ -1653,7 +1722,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       // tempC1.setStroke(51, 57, 57, 1);
       // tempC1.setFill(51, 57, 57, 1);
 
-      calculateDiamond(angle, ARROW_WIDTH, points.get(0), points.get(1), bx, by);
+      calculateDiamond(angle, arrowWidth(), points.get(0), points.get(1), bx, by);
     }
   }
 
@@ -2418,13 +2487,12 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   public void updateSegments() {
-    relLine.setShape(points);
+    relLine.setShape();
     updateChildrenSegments();
   }
 
   public void resetClosestPath() {
     if (!surface.getModeManager().isConnectMode()) {
-      int current = getDiagramItem().getShapeProperties();
       getDiagramItem().clearShapeProperty(ShapeProperty.CLOSEST_PATH);
       getDiagramItem().clearShapeProperty(ShapeProperty.CENTERED_PATH);
     }
@@ -2432,6 +2500,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   public void asClosestPath() {
     getDiagramItem().addShapeProperty(ShapeProperty.CLOSEST_PATH);
+  }
+
+  public void setWeight(int weight) {
+    getDiagramItem().setLineWidth(weight);
+    doSetShape();
+    // arrow.setStrokeWidth(weight);
+    // relLine.setStrokeWidth(weight);
   }
 
 }
