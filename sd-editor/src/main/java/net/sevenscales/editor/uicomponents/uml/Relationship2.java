@@ -101,6 +101,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private Anchor endAnchor;
   private Anchor startAnchor;
   private List<Integer> points;
+  private Integer firstX;
+  private Integer firstY;
+  private Integer lastX;
+  private Integer lastY;
+
 //  private List<Integer> prevPoints = new ArrayList<Integer>();
   private String text;
   private RelationshipTextUtil2 textUtil;
@@ -238,11 +243,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       path.setStrokeWidth(width);
     }
 
-    public void setShape() {
+    public void setShape(List<Integer> drawPoints) {
       if (isStraight()) {
-        segments = BezierHelpers.segments(points);
+        segments = BezierHelpers.segments(drawPoints);
       } else {
-        segments = BezierHelpers.smoothSegments(points);
+        segments = BezierHelpers.smoothSegments(drawPoints);
       }
     }
 
@@ -250,10 +255,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       return points.size() == 4 || !info.isCurved();
     }
 
-    public void applyPoints() {
+    public void applyPoints(List<Integer> drawPoints) {
       String shape = "";
       if (isStraight()) {
-        shape = calcTwoPointsCurvePath(points);
+        shape = calcTwoPointsCurvePath(drawPoints);
       } else {
         shape = BezierHelpers.smooth(segments);
       }
@@ -693,6 +698,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
           // Relationship2.fixLegacyTextColor(textColor, item), 
           item);
     this.points = points.points;
+
     handler = new ConnectionMoveHandler();
     children = new ArrayList<IChildElement>();
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
@@ -1495,11 +1501,90 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     doSetShape();
   }
 
+  private double distanceBeginByWeight() {
+    return weight - weight / 5;
+  }
+
+  private double distanceEndByWeight() {
+    return weight;
+  }
+
+  private List<Integer> drawingPoints() {
+    int size = points.size();
+    firstX = points.get(0);
+    firstY = points.get(1);
+    lastX = points.get(size - 2);
+    lastY = points.get(size - 1);
+
+    if (weight == 1) {
+      return points;
+    }
+
+    double x1 = points.get(size - 4);
+    double y1 = points.get(size - 3);
+    double x2 = points.get(size - 2);
+    double y2 = points.get(size - 1);
+
+    double beta = AngleUtil2.beta(x1, y1, x2, y2);
+
+    // calculate base
+    double distanceBegin = distanceBeginByWeight();
+    double betaadjBegin = Math.sin(beta) * distanceBegin;
+    double betanextBegin = Math.cos(beta) * distanceBegin;
+
+    double bx1 = x1 - betanextBegin;
+    double by1 = y1 - betaadjBegin;
+
+    double distanceEnd = distanceEndByWeight();
+    double betaadj = Math.sin(beta) * distanceEnd;
+    double betanext = Math.cos(beta) * distanceEnd;
+
+    double bx2 = x2 + betanext;
+    double by2 = y2 + betaadj;
+
+    if (info.isAggregate()) {
+      firstX = (int) bx1;
+      firstY = (int) by1;
+    }
+
+    if (info.isInheritance() || info.isDirected()) {
+      lastX = (int) bx2;
+      lastY = (int) by2;
+    }
+
+    tempCircle.setShape(bx1, by1, 10);
+    tempCircle.setStroke(218, 57, 57, 1);
+
+    return mapEnds(points);
+  }
+
+  private List<Integer> mapEnds(List<Integer> ps) {
+    List<Integer> result = map(ps);
+    int size = result.size();
+    result.set(0, firstX);
+    result.set(1, firstY);
+    result.set(size - 2, lastX);
+    result.set(size - 1, lastY);
+    return result;
+  }
+
+  private List<Integer> map(List<Integer> ps) {
+    List<Integer> result = new ArrayList<Integer>();
+    for (Integer i : ps) {
+      result.add(i);
+    }
+    return result;
+  }
+
   public void doSetShape() {
     if (surface.getEditorContext().isTrue(EditorProperty.HOLD_ARROW_DRAWING)) {
       // optimization since (curve) arrow end elements are not calculated properly
       return;
     }
+
+    doSetWeight();
+    List<Integer> drawPoints = drawingPoints();
+
   	// TODO: optimization has been removed
   	// could compare text content to previous
   	// needs a new member variable prevText
@@ -1510,7 +1595,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //    prevPoints.clear();
 //    prevPoints.addAll(points);
 //    System.out.println("doSetShape:"+points+" "+anchorMap);
-    relLine.setShape();
+    relLine.setShape(drawPoints);
 
     initializeChildren(false);
   	if (TouchHelpers.isSupportsTouch() && surface.getMouseDiagramManager() != null && surface.getMouseDiagramManager().getDragHandler().isDragging()) {
@@ -1523,13 +1608,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   	}
     logger.debug("Relationship2.doSetShape()");
 
-    doSetWeight();
-
     int size = points.size();
     double x1 = points.get(size - 4);
     double y1 = points.get(size - 3);
-    double x2 = points.get(size - 2);
-    double y2 = points.get(size - 1);
+    double x2 = lastX; //points.get(size - 2);
+    double y2 = lastY; // points.get(size - 1);
     if (info.isCurved()) {
       double t = 0.05;
       double nextx = 0;
@@ -1577,7 +1660,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     conditionallyCalculateDiamond();
 
-    relLine.applyPoints();
+    relLine.applyPoints(drawPoints);
 
     relationshipText.setShape(this);
     moveChildren();
@@ -1586,10 +1669,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //  line.setShape(start.x, start.y, end.x, end.y);
 //  line.setStroke(color);
 
-    int endx = points.get(size-2);
-    int endy = points.get(size-1);
-    int startx = points.get(0);
-    int starty = points.get(1);
+    int endx = lastX; //points.get(size-2);
+    int endy = lastY; // points.get(size-1);
+    int startx = firstX;// points.get(0);
+    int starty = firstY; //points.get(1);
     if (info.isInheritance()) {
       inheritancePoints[0] = endx; inheritancePoints[1] = endy;
       inheritancePoints[2] = left.x; inheritancePoints[3] = left.y;
@@ -1623,6 +1706,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     arrowStartPolyline.setShape(startx, starty);
 
     relationshipHandleHelpers.doSetShape(currentDragged);
+
+    tempCircle.moveToFront();
   }
 
   private String inheritancePath() {
@@ -2491,7 +2576,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   public void updateSegments() {
-    relLine.setShape();
+    List<Integer> drawPoints = drawingPoints();
+    relLine.setShape(drawPoints);
     updateChildrenSegments();
   }
 
