@@ -134,8 +134,8 @@ public class JsonExtraction {
       result.put(DiagramItemField.SVG_DATA.getValue(), jsvgdata);
     }
 
-    if (item.getExtension().getLineWidth() != null) {
-      result.put(DiagramItemField.LINE_WIDTH.getValue(), new JSONNumber(item.getExtension().getLineWidth()));
+    if (item.getExtension().getLineWeight() != null) {
+      result.put(DiagramItemField.LINE_WEIGHT.getValue(), new JSONNumber(item.getExtension().getLineWeight()));
     }
 
     return result;

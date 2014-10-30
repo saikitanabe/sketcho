@@ -5,5 +5,5 @@ import net.sevenscales.domain.ISvgDataRO;
 
 public interface IExtension extends IExtensionRO {
 	void setSvgData(ISvgDataRO svgdata);
-	void setLineWidth(Integer lineWidth);
+	void setLineWeight(Integer lineWeight);
 }

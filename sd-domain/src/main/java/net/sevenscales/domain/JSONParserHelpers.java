@@ -80,7 +80,7 @@ public class JSONParserHelpers {
 		if (value != null && value.isObject() != null) {
 			JSONObject extension = value.isObject();
 			result = new ExtensionDTO(getSvgData(extension.get(DiagramItemField.SVG_DATA.getValue())),
-																JSONParserHelpers.getInteger(extension.get(DiagramItemField.LINE_WIDTH.getValue())));
+																JSONParserHelpers.getInteger(extension.get(DiagramItemField.LINE_WEIGHT.getValue())));
 		}
 		return result;
 	}

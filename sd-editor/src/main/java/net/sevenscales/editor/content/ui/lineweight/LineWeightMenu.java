@@ -1,4 +1,4 @@
-package net.sevenscales.editor.content.ui.linewidth;
+package net.sevenscales.editor.content.ui.lineweight;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -16,12 +16,12 @@ import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.api.impl.FastElementButton;
 
 
-public class LineWidthMenu extends Composite {
-	// private static final SLogger logger = SLogger.createLogger(LineWidthMenu.class);
+public class LineWeightMenu extends Composite {
+	// private static final SLogger logger = SLogger.createLogger(LineWeightMenu.class);
 	
-	interface LineWidthMenuUiBinder extends UiBinder<Widget, LineWidthMenu> {
+	interface LineWeightMenuUiBinder extends UiBinder<Widget, LineWeightMenu> {
 	}
-	private static LineWidthMenuUiBinder uiBinder = GWT.create(LineWidthMenuUiBinder.class);
+	private static LineWeightMenuUiBinder uiBinder = GWT.create(LineWeightMenuUiBinder.class);
 
 	@UiField AnchorElement weight1;
 	@UiField AnchorElement weight2;
@@ -32,7 +32,7 @@ public class LineWidthMenu extends Composite {
 	private ISurfaceHandler surface;
 	private PopupPanel parent;
 
-	public LineWidthMenu(ISurfaceHandler surface, PopupPanel parent) {
+	public LineWeightMenu(ISurfaceHandler surface, PopupPanel parent) {
 		this.surface = surface;
 		this.parent = parent;
 
