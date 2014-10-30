@@ -6,14 +6,14 @@ import net.sevenscales.domain.utils.DiagramItemUtils;
 
 public class ExtensionDTO implements IExtension {
 	private ISvgDataRO svgdata;
-	private Integer lineWidth;
+	private Integer lineWeight;
 
 	public ExtensionDTO() {
 	}
 
-	public ExtensionDTO(ISvgDataRO svgdata, Integer lineWidth) {
+	public ExtensionDTO(ISvgDataRO svgdata, Integer lineWeight) {
 		this.svgdata = svgdata;
-		this.lineWidth = lineWidth;
+		this.lineWeight = lineWeight;
 	}
 
 	public ISvgDataRO getSvgData() {
@@ -24,11 +24,11 @@ public class ExtensionDTO implements IExtension {
 		this.svgdata = svgdata;
 	}
 
-	public void setLineWidth(Integer lineWidth) {
-		this.lineWidth = lineWidth;
+	public void setLineWeight(Integer lineWeight) {
+		this.lineWeight = lineWeight;
 	}
-	public Integer getLineWidth() {
-		return lineWidth;
+	public Integer getLineWeight() {
+		return lineWeight;
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class ExtensionDTO implements IExtension {
 				result = false;
 			}
 
-			if (DiagramItemUtils.checkIfNotSame(lineWidth, e.lineWidth)) {
+			if (DiagramItemUtils.checkIfNotSame(lineWeight, e.lineWeight)) {
 				result = false;
 			}
 

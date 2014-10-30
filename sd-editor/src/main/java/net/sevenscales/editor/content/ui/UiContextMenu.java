@@ -7,7 +7,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.content.ui.textsize.TextSizePopup;
 import net.sevenscales.editor.content.ui.textsize.TextSizeHandler;
 import net.sevenscales.editor.content.ui.layers.LayersPopup;
-import net.sevenscales.editor.content.ui.linewidth.LineWidthPopup;
+import net.sevenscales.editor.content.ui.lineweight.LineWeightPopup;
 import net.sevenscales.editor.content.ui.link.EditLinkForm;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
@@ -108,7 +108,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	private PopupPanel editLinkPopup;
 	private PopupPanel colorpopup;
 	private LayersPopup layersPopup;
-	private LineWidthPopup lineWidthPopup;
+	private LineWeightPopup lineWeightPopup;
 	private TextSizePopup fontSizePopup;
 	private Point popupPosition;
 
@@ -162,7 +162,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 		fontSizePopup = new TextSizePopup(this);
 		layersPopup = new LayersPopup(surface, layersMenuButton);
-		lineWidthPopup = new LineWidthPopup(surface, lineWidth);
+		lineWeightPopup = new LineWeightPopup(surface, lineWidth);
 
 		surface.addDomHandler(new TouchStartHandler() {
 			@Override
@@ -731,10 +731,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		}
 	}
 	private void showLineWeightMenu() {
-		if (lineWidthPopup.isShowing()) {
-			lineWidthPopup.hide();
+		if (lineWeightPopup.isShowing()) {
+			lineWeightPopup.hide();
 		} else {
-			lineWidthPopup.show(lineWidth.getAbsoluteLeft(), lineWidth.getAbsoluteTop() + popup.getOffsetHeight());
+			lineWeightPopup.show(lineWidth.getAbsoluteLeft(), lineWidth.getAbsoluteTop() + popup.getOffsetHeight());
 		}
 	}
 

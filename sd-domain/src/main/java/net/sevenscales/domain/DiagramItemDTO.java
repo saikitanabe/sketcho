@@ -175,18 +175,18 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 
 	@Override
-	public Integer getLineWidth() {
+	public Integer getLineWeight() {
 		if (extension != null) {
-			return extension.getLineWidth();
+			return extension.getLineWeight();
 		}
 		return null;
 	}
 	@Override
-	public void setLineWidth(Integer lineWidth) {
+	public void setLineWeight(Integer lineWeight) {
 		if (extension == null) {
 			extension = new ExtensionDTO();
 		}
-		extension.setLineWidth(lineWidth);
+		extension.setLineWeight(lineWeight);
 	}
 
 	@Override
@@ -390,7 +390,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		if (ext.getSvgData() != null) {
 			svg = ext.getSvgData().copy();
 		}
-		extension = new ExtensionDTO(svg, ext.getLineWidth());
+		extension = new ExtensionDTO(svg, ext.getLineWeight());
 	}
 
 	public boolean isComment() {
