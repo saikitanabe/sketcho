@@ -1,8 +1,8 @@
 package net.sevenscales.editor.content.ui;
 
 public enum ContextMenuItem {
-	NO_MENU									(0), 
-	FREEHAND_MENU							(0x0001), 
+	NO_MENU										(0),
+	FREEHAND_MENU							(0x0001),
 	REVERSE_CONNECTION_MENU		(0x0002), 
 	COLOR_MENU								(0x0004), 
 	CHANGE_CONNECTION					(0x0008),
@@ -10,14 +10,15 @@ public enum ContextMenuItem {
 	FONT_SIZE									(0x0020),
 	LAYERS										(0x0040),
 	URL_LINK									(0x0080),
-	DELETE										(0x0100);
-	
+	DELETE										(0x0100),
+	LINE_WEIGHT								(0x0200);
+
 	private int value;
 
 	private ContextMenuItem(int value) {
 		this.value = value;
 	}
-	
+
 	public int getValue() {
 		return this.value;
 	}

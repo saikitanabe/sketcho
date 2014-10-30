@@ -2348,7 +2348,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   
   @Override
   public int supportedMenuItems() {
-  	return super.supportedMenuItems() | ContextMenuItem.REVERSE_CONNECTION_MENU.getValue();
+  	return super.supportedMenuItems() | ContextMenuItem.REVERSE_CONNECTION_MENU.getValue() |
+           ContextMenuItem.LINE_WEIGHT.getValue();
   }
   
   @Override
