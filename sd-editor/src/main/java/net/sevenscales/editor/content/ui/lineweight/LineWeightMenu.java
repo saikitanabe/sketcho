@@ -11,6 +11,7 @@ import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
@@ -30,6 +31,7 @@ public class LineWeightMenu extends Composite {
 	@UiField AnchorElement weight3;
 	@UiField AnchorElement weight4;
 	@UiField AnchorElement weight5;
+	@UiField AnchorElement weight6;
 
 	private ISurfaceHandler surface;
 	private PopupPanel parent;
@@ -78,16 +80,30 @@ public class LineWeightMenu extends Composite {
 				weight5();
 			}
 		});
+		new FastElementButton(weight6).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				stopEvent(event);
+				weight6();
+			}
+		});
 	}
 
 	private void setWeight(int weight) {
 		for (Diagram d : surface.getSelectionHandler().getSelectedItems()) {
+			boolean set = false;
 			if (d instanceof Relationship2) {
 				Relationship2 r = (Relationship2) d;
-				r.setWeight(weight);
+				r.setLineWeight(weight);
+				set = true;
 			} else if (d instanceof GenericFreehandElement) {
 				GenericFreehandElement freehand = (GenericFreehandElement) d;
-				freehand.setWeight(weight);
+				freehand.setLineWeight(weight);
+				set = true;
+			}
+
+			if (set) {
+    		surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(d));
 			}
 		}
 	}
@@ -98,21 +114,26 @@ public class LineWeightMenu extends Composite {
 	}
 
 	private void weight2() {
-		setWeight(3);
+		setWeight(2);
 		parent.hide();
 	}
 
 	private void weight3() {
-		setWeight(6);
+		setWeight(3);
 		parent.hide();
 	}
 
 	private void weight4() {
-		setWeight(12);
+		setWeight(6);
 		parent.hide();
 	}
 
 	private void weight5() {
+		setWeight(12);
+		parent.hide();
+	}
+
+	private void weight6() {
 		setWeight(24);
 		parent.hide();
 	}

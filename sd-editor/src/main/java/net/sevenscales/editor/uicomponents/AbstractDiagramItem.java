@@ -1032,6 +1032,17 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public Integer getFontSize() {
     return getDiagramItem().getFontSize();
   }
+
+  @Override
+  public void setLineWeight(Integer lineWeight) {
+    getDiagramItem().setLineWeight(lineWeight);
+  }
+
+  @Override
+  public Integer getLineWeight() {
+    return getDiagramItem().getLineWeight();
+  }
+
   
   @Override
   public boolean onArea(int left, int top, int right, int bottom) {    
@@ -1218,6 +1229,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     Integer cprops = current.getShapeProperties();
     if (cprops == null && props != null || cprops != null && !cprops.equals(props)) {
       setShapeProperties(props);
+    }
+
+    Integer lineWeight = diagramItem.getLineWeight();
+    Integer clineWeight = current.getLineWeight();
+    if (clineWeight == null && lineWeight != null || clineWeight != null && !clineWeight.equals(lineWeight)) {
+      setLineWeight(lineWeight);
     }
 
     // just copy all fields
