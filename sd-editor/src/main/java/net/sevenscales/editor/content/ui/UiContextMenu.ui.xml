@@ -17,6 +17,9 @@
 			</a>
 			<g:SimplePanel ui:field="changeConnection" styleName="inline-change-connection">
 			</g:SimplePanel>
+			<a ui:field="lineWeight" title="Change Line Weight" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-line-width"></i>
+			</a>
 			<a ui:field="rectifiedArrow" title="Rectified arrow" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-rectified-arrow"></i>
 			</a>
@@ -25,9 +28,6 @@
 			</a>
 			<a ui:field="reverseConnection" title="Reverse Connection" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-reverse-connection2"></i>
-			</a>
-			<a ui:field="lineWeight" title="Change Line Weight" class="btn btn-custom btn-context-menu tooltipper">
-				<i class="context-icon-line-width"></i>
 			</a>
 			<a ui:field="colorize" title="Change Color" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-colorize2"></i>

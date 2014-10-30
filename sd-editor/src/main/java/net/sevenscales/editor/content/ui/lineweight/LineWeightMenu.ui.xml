@@ -21,6 +21,9 @@
 			<a ui:field="weight5" title="Huge" class="btn btn-custom btn-context-menu tooltipper block-link">
 				<div class="line-weight line-weight-5"></div>
 			</a>
+			<a ui:field="weight6" title="Huge" class="btn btn-custom btn-context-menu tooltipper block-link">
+				<div class="line-weight line-weight-6"></div>
+			</a>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

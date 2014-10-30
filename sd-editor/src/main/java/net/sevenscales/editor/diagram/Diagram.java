@@ -169,6 +169,8 @@ public interface Diagram extends SourcesMouseDiagramEvents {
 	void setTextColor(Color color);
   void setFontSize(Integer fontSize);
   Integer getFontSize();
+  void setLineWeight(Integer lineWeight);
+  Integer getLineWeight();
 	Color getTextColor();
 	public boolean onArea(int left, int top, int right, int bottom);
 	// to check it point hovers this element; element can have magnetic area

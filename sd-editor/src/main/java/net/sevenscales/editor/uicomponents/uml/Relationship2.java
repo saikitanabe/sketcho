@@ -11,6 +11,7 @@ import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
@@ -53,7 +54,6 @@ import net.sevenscales.editor.uicomponents.impl.RelationshipTextUtil2;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ShapeProperty;
-import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.gfx.domain.IRelationship;
 import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.gfx.domain.IChildElement;
@@ -2657,10 +2657,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     getDiagramItem().addShapeProperty(ShapeProperty.CLOSEST_PATH);
   }
 
-  public void setWeight(int weight) {
-    getDiagramItem().setLineWeight(weight);
+  @Override
+  public void setLineWeight(Integer lineWeight) {
+    super.setLineWeight(lineWeight);
     doSetShape();
-    surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
   }
 
 }

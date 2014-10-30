@@ -5,7 +5,6 @@ import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
-import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 
 
 public class GenericFreehandElement extends GenericElement {
@@ -13,10 +12,10 @@ public class GenericFreehandElement extends GenericElement {
 		super(surface, newShape, text, backgroundColor, borderColor, textColor, editable, item);
 	}
 
-  public void setWeight(int weight) {
-    getDiagramItem().setLineWeight(weight);
+  @Override
+  public void setLineWeight(Integer lineWeight) {
+    super.setLineWeight(lineWeight);
     doSetStrokeWidth();
-    surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(this));
   }
 
   @Override
