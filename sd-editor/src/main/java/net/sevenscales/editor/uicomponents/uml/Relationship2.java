@@ -73,7 +73,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private static final Color legacyBorderColor = new Color(0x51, 0x51, 0x51, 1);
 
   // Debug curve control point and arrow angle debugging
-  private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  // private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
   // private net.sevenscales.editor.gfx.domain.ICircle tempC1;
   // private net.sevenscales.editor.gfx.domain.ICircle tempC2;
 
@@ -700,7 +700,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
 
     // DEBUG curve visualization START
-    tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
+    // tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
     // tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
     // tempC2 = IShapeFactory.Util.factory(editable).createCircle(group);
     // DEBUG curve visualization END
@@ -1538,8 +1538,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       result.set(size - 2, end.x);
       result.set(size - 1, end.y);
 
-      tempCircle.setShape(end.x, end.y, 10);
-      tempCircle.setStroke(218, 57, 57, 1);
+      // tempCircle.setShape(end.x, end.y, 10);
+      // tempCircle.setStroke(218, 57, 57, 1);
     }
 
     return result;
@@ -1760,7 +1760,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     relationshipHandleHelpers.doSetShape(currentDragged);
 
-    tempCircle.moveToFront();
+    // tempCircle.moveToFront();
   }
 
   private String inheritancePath() {
