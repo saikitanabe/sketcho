@@ -16,7 +16,7 @@ import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeTyp
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.gfx.domain.IPolyline;
-import net.sevenscales.editor.uicomponents.uml.GenericElement;
+import net.sevenscales.editor.uicomponents.uml.GenericFreehandElement;
 import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.shape.FreehandShape;
@@ -131,7 +131,7 @@ class FreehandPath {
     List<PathDTO> paths = new ArrayList<PathDTO>();
     paths.add(new PathDTO(svg, ""));
     SvgDataDTO svgdata = new SvgDataDTO(paths, scaledWidth, scaledHeight);
-    GenericElement diagram = new GenericElement(surface, 
+    GenericFreehandElement diagram = new GenericFreehandElement(surface, 
       new GenericShape(ElementType.FREEHAND2.getValue(), 
                        pos.scaledAndTranslatedPoint.x, pos.scaledAndTranslatedPoint.y, scaledWidth, scaledHeight, 
                        ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue(), 

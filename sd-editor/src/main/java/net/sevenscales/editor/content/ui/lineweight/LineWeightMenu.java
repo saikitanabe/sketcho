@@ -12,7 +12,9 @@ import com.google.gwt.user.client.ui.PopupPanel;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
+import net.sevenscales.editor.uicomponents.uml.GenericFreehandElement;
 import net.sevenscales.editor.api.impl.FastElementButton;
 
 
@@ -83,6 +85,9 @@ public class LineWeightMenu extends Composite {
 			if (d instanceof Relationship2) {
 				Relationship2 r = (Relationship2) d;
 				r.setWeight(weight);
+			} else if (d instanceof GenericFreehandElement) {
+				GenericFreehandElement freehand = (GenericFreehandElement) d;
+				freehand.setWeight(weight);
 			}
 		}
 	}
