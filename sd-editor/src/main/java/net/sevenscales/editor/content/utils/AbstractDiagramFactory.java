@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.domain.ISvgDataRO;
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.diagram.shape.Info;
@@ -444,14 +445,27 @@ public interface AbstractDiagramFactory {
     }
 
     public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
-      return new GenericElement(surface,
-          (GenericShape) shape,
-          item.getText(), 
-          DiagramItemFactory.parseBackgroundColor(item),
-          DiagramItemFactory.parseBorderColor(item),
-          DiagramItemFactory.parseTextColor(item),
-          editable,
-          item);
+      switch (ElementType.getEnum(item.getType())) {
+        case FREEHAND2:
+          return new GenericFreehandElement(surface,
+            (GenericShape) shape,
+            item.getText(), 
+            DiagramItemFactory.parseBackgroundColor(item),
+            DiagramItemFactory.parseBorderColor(item),
+            DiagramItemFactory.parseTextColor(item),
+            editable,
+            item);
+        default: {
+          return new GenericElement(surface,
+              (GenericShape) shape,
+              item.getText(), 
+              DiagramItemFactory.parseBackgroundColor(item),
+              DiagramItemFactory.parseBorderColor(item),
+              DiagramItemFactory.parseTextColor(item),
+              editable,
+              item);
+        }
+      }
     }
   }
 

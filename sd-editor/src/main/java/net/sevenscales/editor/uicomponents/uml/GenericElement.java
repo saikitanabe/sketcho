@@ -90,7 +90,8 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   	if (shape.getSvgData() != null) {
   		createCustomPaths(shape.getSvgData().getPaths());
   		// diagram item needs to have extionsion data as well for undo/redo calculation
-			getDiagramItem().setExtension(new ExtensionDTO(shape.getSvgData().copy(), /*lineWidth*/ null));
+  		Integer lineWeight = item.getExtension() != null ? item.getExtension().getLineWeight() : null;
+			getDiagramItem().setExtension(new ExtensionDTO(shape.getSvgData().copy(), lineWeight));
   	} else {
 	  	theshape = Shapes.get(getDiagramItem().getType());
 	    createSubPaths(theshape);
@@ -146,7 +147,11 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	private IPath createSubPath(String path, String style) {
     IPath result = IShapeFactory.Util.factory(editable).createPath(subgroup, pathTransformer);
     result.setStroke(borderColor);
-    result.setStrokeWidth(FREEHAND_STROKE_WIDTH);
+    if (getDiagramItem().getLineWeight() != null) {
+			result.setStrokeWidth(getDiagramItem().getLineWeight());
+    } else {
+	    result.setStrokeWidth(FREEHAND_STROKE_WIDTH);
+    }
     result.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     // path.setStrokeCap("round");
     if (style != null && !"".equals(style)) {
@@ -329,10 +334,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 			  // no need to use, which doesn't work svg => pdf, scale down stroke width
 			  // vector-effect="non-scaling-stroke"
 	  		// ie8 - ie10 doesn't support vector-effect
-	  		double strokeWidth = scaledStrokeWidth(factorX, factorY);
-		  	for (IPath path : paths) {
-			  	path.setStrokeWidth(strokeWidth);
-		  	}
+	  		doSetStrokeWidth();
 	  	}
 
 	    textUtil.setTextShape();
@@ -340,9 +342,20 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   	}
   }
 
+  protected void doSetStrokeWidth() {
+		double strokeWidth = scaledStrokeWidth(factorX, factorY);
+  	for (IPath path : paths) {
+	  	path.setStrokeWidth(strokeWidth);
+  	}
+  }
+
   public double scaledStrokeWidth(double factorX, double factorY) {
   	double factor = Math.max(factorX, factorY);
-  	double strokeWidth = FREEHAND_STROKE_WIDTH / factor;
+
+		double strokeWidth = FREEHAND_STROKE_WIDTH / factor;
+  	if (getDiagramItem().getLineWeight() != null) {
+	  	strokeWidth = getDiagramItem().getLineWeight() / factor;
+  	}
   	return strokeWidth;
   }
 
