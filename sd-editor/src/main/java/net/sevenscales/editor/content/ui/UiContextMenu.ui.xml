@@ -26,7 +26,7 @@
 			<a ui:field="reverseConnection" title="Reverse Connection" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-reverse-connection2"></i>
 			</a>
-			<a ui:field="lineWidth" title="Change Line Weight" class="btn btn-custom btn-context-menu tooltipper">
+			<a ui:field="lineWeight" title="Change Line Weight" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-line-width"></i>
 			</a>
 			<a ui:field="colorize" title="Change Color" class="btn btn-custom btn-context-menu tooltipper">

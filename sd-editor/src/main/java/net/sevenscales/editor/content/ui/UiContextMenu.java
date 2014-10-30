@@ -102,7 +102,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement openlink;
 	@UiField AnchorElement textSize;
 	@UiField AnchorElement layersMenuButton;
-	@UiField AnchorElement lineWidth;
+	@UiField AnchorElement lineWeight;
 	@UiField AnchorElement fileLink;
 
 	private PopupPanel editLinkPopup;
@@ -162,7 +162,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 		fontSizePopup = new TextSizePopup(this);
 		layersPopup = new LayersPopup(surface, layersMenuButton);
-		lineWeightPopup = new LineWeightPopup(surface, lineWidth);
+		lineWeightPopup = new LineWeightPopup(surface, lineWeight);
 
 		surface.addDomHandler(new TouchStartHandler() {
 			@Override
@@ -202,10 +202,15 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				Display changeFontSizeVisibility = Display.NONE;
 				Display layersMenuVisibility = Display.NONE;
 				Display switchElementVisibility = Display.NONE;
+				Display lineWeightVisibility = Display.NONE;
 
 				if (diagram.supportsMenu(ContextMenuItem.FREEHAND_MENU)) {
 					freehandMenu = Display.INLINE_BLOCK;
 					freehandOnOff(UiContextMenu.this.editorContext.isTrue(EditorProperty.FREEHAND_MODE));
+				}
+
+				if (allSupports(selected, ContextMenuItem.LINE_WEIGHT)) {
+					lineWeightVisibility = Display.INLINE_BLOCK;
 				}
 
 				if (selected.length == 1 && diagram.supportsMenu(ContextMenuItem.REVERSE_CONNECTION_MENU)) {
@@ -213,15 +218,15 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					reverseMenu = Display.INLINE_BLOCK;
 				}
 
-				if (allSupportsFontSizeChange(selected)) {
+				if (allSupports(selected, ContextMenuItem.FONT_SIZE)) {
 					changeFontSizeVisibility = Display.INLINE_BLOCK;
 				}
 
-				if (allSupportsLayers(selected)) {
+				if (allSupports(selected, ContextMenuItem.LAYERS)) {
 					layersMenuVisibility = Display.INLINE_BLOCK;
 				}
 
-				if (anySupportsColorMenu(selected)) {
+				if (anySupports(selected, ContextMenuItem.COLOR_MENU)) {
 					colorMenu = Display.INLINE_BLOCK;
 				}
 
@@ -281,6 +286,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				textSize.getStyle().setDisplay(changeFontSizeVisibility);
 				layersMenuButton.getStyle().setDisplay(layersMenuVisibility);
 				switchElement.getStyle().setDisplay(switchElementVisibility);
+				lineWeight.getStyle().setDisplay(lineWeightVisibility);
 
 				if (freehandMenu == Display.NONE && 
 						reverseMenu == Display.NONE &&
@@ -293,10 +299,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				return false;
 			}
 
-			private boolean anySupportsColorMenu(Diagram[] selected) {
+			private boolean anySupports(Diagram[] selected, ContextMenuItem menuItem) {
 				for (Diagram diagram : selected) {
 					if (AuthHelpers.allowedToEdit(diagram) && 
-						  (diagram.supportedMenuItems() & ContextMenuItem.COLOR_MENU.getValue()) == ContextMenuItem.COLOR_MENU.getValue() &&
+						  (diagram.supportedMenuItems() & menuItem.getValue()) == menuItem.getValue() &&
 						  AuthHelpers.allowColorChange(diagram)) {
 						return true;
 					}
@@ -344,22 +350,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				return result;
 			}
 
-			private boolean allSupportsFontSizeChange(Diagram[] selected) {
+			private boolean allSupports(Diagram[] selected, ContextMenuItem menuItem) {
 				boolean result = false;
 				for (Diagram d : selected) {
 					result = true;
-					if (!ContextMenuItem.supported(d.supportedMenuItems(), ContextMenuItem.FONT_SIZE)) {
-						return false;
-					}
-				}
-				return result;
-			}
-
-			private boolean allSupportsLayers(Diagram[] selected) {
-				boolean result = false;
-				for (Diagram d : selected) {
-					result = true;
-					if (!ContextMenuItem.supported(d.supportedMenuItems(), ContextMenuItem.LAYERS)) {
+					if (!ContextMenuItem.supported(d.supportedMenuItems(), menuItem)) {
 						return false;
 					}
 				}
@@ -502,7 +497,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			}
 		});
 
-		new FastElementButton(lineWidth).addClickHandler(new ClickHandler() {
+		new FastElementButton(lineWeight).addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				stopEvent(event);
@@ -734,7 +729,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		if (lineWeightPopup.isShowing()) {
 			lineWeightPopup.hide();
 		} else {
-			lineWeightPopup.show(lineWidth.getAbsoluteLeft(), lineWidth.getAbsoluteTop() + popup.getOffsetHeight());
+			lineWeightPopup.show(lineWeight.getAbsoluteLeft(), lineWeight.getAbsoluteTop() + popup.getOffsetHeight());
 		}
 	}
 
