@@ -101,10 +101,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private Anchor endAnchor;
   private Anchor startAnchor;
   private List<Integer> points;
-  private Integer firstX;
-  private Integer firstY;
-  private Integer lastX;
-  private Integer lastY;
 
 //  private List<Integer> prevPoints = new ArrayList<Integer>();
   private String text;
@@ -251,10 +247,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       }
     }
 
-    private boolean isStraight() {
-      return points.size() == 4 || !info.isCurved();
-    }
-
     public void applyPoints(List<Integer> drawPoints) {
       String shape = "";
       if (isStraight()) {
@@ -321,6 +313,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 			lineBackground.moveToBack();
 		}
 
+  }
+
+  private boolean isStraight() {
+    return points.size() == 4 || !info.isCurved();
   }
 
   private static class ControlPoint {
@@ -1511,16 +1507,89 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   private List<Integer> drawingPoints() {
-    int size = points.size();
-    firstX = points.get(0);
-    firstY = points.get(1);
-    lastX = points.get(size - 2);
-    lastY = points.get(size - 1);
-
     if (info.isCurved()) {
-      return points;
+      return points;// drawingPointsCurved();
     }
     return drawingPointsStraight();
+  }
+
+  private List<Integer> drawingPointsCurved() {
+    JsArray<BezierHelpers.Segment> segs = null;
+    if (isStraight()) {
+      segs = BezierHelpers.segments(points);
+    } else {
+      segs = BezierHelpers.smoothSegments(points);
+    }
+
+    PointDouble first = weightedCurvePointFirst(segs);
+    PointDouble last = weightedCurvePointLast(segs);
+
+    List<Integer> result = map(points);
+    int size = result.size();
+    result.set(0, (int) first.x);
+    result.set(1, (int) first.y);
+    result.set(size - 2, (int) last.x);
+    result.set(size - 1, (int) last.y);
+
+    tempCircle.setShape(first.x, first.y, 10);
+    tempCircle.setStroke(218, 57, 57, 1);
+
+    return result;
+  }
+
+  private PointDouble weightedCurvePointLast(JsArray<BezierHelpers.Segment> segs) {
+    BezierHelpers.Segment seg = BezierHelpers.lastSegment(segs);
+    return iteratedDistanceLast(seg);
+  }
+
+  private PointDouble weightedCurvePointFirst(JsArray<BezierHelpers.Segment> segs) {
+    BezierHelpers.Segment seg = BezierHelpers.firstSegment(segs);
+    return iteratedDistanceFirst(seg);
+  }
+
+  private PointDouble iteratedDistanceFirst(BezierHelpers.Segment segment) {
+    double prevx = segment.getPoint1().getX();
+    double cp1x = segment.getControlPoint1().getX();
+    double cp2x = segment.getControlPoint2().getX();
+    double nextx = segment.getPoint2().getX();
+
+    double prevy = segment.getPoint1().getY(); 
+    double cp1y = segment.getControlPoint1().getY();
+    double cp2y = segment.getControlPoint2().getY();
+    double nexty = segment.getPoint2().getY();
+    return iteratedDistance(prevx, cp1x, cp2x, nextx, prevy, cp1y, cp2y, nexty);
+  }
+
+  private PointDouble iteratedDistanceLast(BezierHelpers.Segment segment) {
+    double prevx = segment.getPoint2().getX();
+    double cp1x = segment.getControlPoint2().getX();
+    double cp2x = segment.getControlPoint1().getX();
+    double nextx = segment.getPoint1().getX();
+
+    double prevy = segment.getPoint2().getY(); 
+    double cp1y = segment.getControlPoint2().getY();
+    double cp2y = segment.getControlPoint1().getY();
+    double nexty = segment.getPoint1().getY();
+    return iteratedDistance(prevx, cp1x, cp2x, nextx, prevy, cp1y, cp2y, nexty);
+  }
+
+  private PointDouble iteratedDistance(double prevx, double cp1x, double cp2x, double nextx, 
+                                       double prevy, double cp1y, double cp2y, double nexty) {
+
+    double bx = 0;
+    double by = 0;
+
+    for (double t = 0.025; t <= 0.5; t += 0.025) {
+      bx = BezierHelpers.bezierInterpolation(t, prevx, cp1x, cp2x, nextx);
+      by = BezierHelpers.bezierInterpolation(t, prevy, cp1y, cp2y, nexty);
+      double dx = Math.abs(bx - prevx);
+      double dy = Math.abs(by - prevy);
+      double distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance >= 19) {
+        break;
+      }
+    }
+    return new PointDouble(bx, by);
   }
 
   private List<Integer> drawingPointsStraight() {
@@ -1559,29 +1628,29 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     double bx2 = lastx2 + betanext;
     double by2 = lasty2 + betaadj;
 
-    if (info.isAggregate()) {
-      firstX = (int) bx1;
-      firstY = (int) by1;
-    }
+    // if (info.isAggregate()) {
+    //   firstX = (int) bx1;
+    //   firstY = (int) by1;
+    // }
 
-    if (info.isInheritance() || info.isDirected()) {
-      lastX = (int) bx2;
-      lastY = (int) by2;
-    }
+    // if (info.isInheritance() || info.isDirected()) {
+    //   lastX = (int) bx2;
+    //   lastY = (int) by2;
+    // }
 
-    tempCircle.setShape(bx1, by1, 10);
-    tempCircle.setStroke(218, 57, 57, 1);
+    // tempCircle.setShape(bx1, by1, 10);
+    // tempCircle.setStroke(218, 57, 57, 1);
 
-    return mapEnds(points);
+    return mapEnds(points, bx1, by1, bx2, by2);
   }
 
-  private List<Integer> mapEnds(List<Integer> ps) {
+  private List<Integer> mapEnds(List<Integer> ps, double fx, double fy, double lx, double ly) {
     List<Integer> result = map(ps);
     int size = result.size();
-    result.set(0, firstX);
-    result.set(1, firstY);
-    result.set(size - 2, lastX);
-    result.set(size - 1, lastY);
+    result.set(0, (int) fx);
+    result.set(1, (int) fy);
+    result.set(size - 2, (int) lx);
+    result.set(size - 1, (int) ly);
     return result;
   }
 
@@ -1601,10 +1670,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     doSetWeight();
     List<Integer> drawPoints = drawingPoints();
-
-  	// TODO: optimization has been removed
-  	// could compare text content to previous
-  	// needs a new member variable prevText
+    // TODO: optimization has been removed
+    // could compare text content to previous
+    // needs a new member variable prevText
 //    if (prevPoints.equals(points)) {
       // points has not been changed so don't do anything
 //      return;
@@ -1613,23 +1681,23 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //    prevPoints.addAll(points);
 //    System.out.println("doSetShape:"+points+" "+anchorMap);
     relLine.setShape(drawPoints);
-
+    relLine.applyPoints(drawPoints);
     initializeChildren(false);
-  	if (TouchHelpers.isSupportsTouch() && surface.getMouseDiagramManager() != null && surface.getMouseDiagramManager().getDragHandler().isDragging()) {
-  		// performance improvement needed on touch devices; there is not enough
-  		// processing power to calculate arrow head shapes on every touch move.
+    if (TouchHelpers.isSupportsTouch() && surface.getMouseDiagramManager() != null && surface.getMouseDiagramManager().getDragHandler().isDragging()) {
+      // performance improvement needed on touch devices; there is not enough
+      // processing power to calculate arrow head shapes on every touch move.
       inheritance.setVisibility(false);
       arrow.setVisibility(false);
       aggregate.setVisibility(false);
-  		return;
-  	}
+      return;
+    }
     logger.debug("Relationship2.doSetShape()");
 
     int size = points.size();
-    double x1 = points.get(size - 4);
-    double y1 = points.get(size - 3);
-    double x2 = lastX; //points.get(size - 2);
-    double y2 = lastY; // points.get(size - 1);
+    double x1 = drawPoints.get(size - 4);
+    double y1 = drawPoints.get(size - 3);
+    double x2 = drawPoints.get(size - 2);
+    double y2 = drawPoints.get(size - 1);
     if (info.isCurved()) {
       double t = 0.05;
       double nextx = 0;
@@ -1677,8 +1745,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     conditionallyCalculateDiamond();
 
-    relLine.applyPoints(drawPoints);
-
     relationshipText.setShape(this);
     moveChildren();
 
@@ -1686,10 +1752,11 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //  line.setShape(start.x, start.y, end.x, end.y);
 //  line.setStroke(color);
 
-    int endx = lastX; //points.get(size-2);
-    int endy = lastY; // points.get(size-1);
-    int startx = firstX;// points.get(0);
-    int starty = firstY; //points.get(1);
+    int endx = drawPoints.get(size-2);
+    int endy = drawPoints.get(size-1);
+    int startx = drawPoints.get(0);
+    int starty = drawPoints.get(1);
+
     if (info.isInheritance()) {
       inheritancePoints[0] = endx; inheritancePoints[1] = endy;
       inheritancePoints[2] = left.x; inheritancePoints[3] = left.y;
