@@ -427,7 +427,28 @@ public class AnchorUtils {
       result.end.y = top2 + height2 / 2;
     }
 
+    extraDistance(result.start, left, top, width, height);
+    extraDistance(result.end, left2, top2, width2, height2);
+
     return result;
+  }
+
+  private static void extraDistance(Point point, int left, int top, int width, int height) {
+    CardinalDirection cd = findCardinalDirection(point.x, point.y, left, top, width, height);
+    switch (cd) {
+      case WEST:
+        point.x -= ATTACH_EXTRA_DISTANCE;
+      break;
+      case NORTH:
+        point.y -= ATTACH_EXTRA_DISTANCE;
+      break;
+      case EAST:
+        point.x += ATTACH_EXTRA_DISTANCE;
+      break;
+      case SOUTH:
+        point.y += ATTACH_EXTRA_DISTANCE;
+      break;
+    }
   }
 
 }
