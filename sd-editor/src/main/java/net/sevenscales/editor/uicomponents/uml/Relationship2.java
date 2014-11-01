@@ -51,6 +51,7 @@ import net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.RelationshipHandleHelpers;
 import net.sevenscales.editor.uicomponents.impl.RelationshipTextUtil2;
+import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ShapeProperty;
@@ -1118,7 +1119,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
         ps.add(val+diffy);
       }
     }
-    Relationship2 result = new Relationship2(surface, new RelationshipShape2(ps), getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), getEditable(), new DiagramItemDTO());
+    IDiagramItem di = getDiagramItem().copy();
+    di.setClientId(null);
+    Relationship2 result = new Relationship2(surface, new RelationshipShape2(ps), getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), getEditable(), di);
     return result;
   }
 
