@@ -182,185 +182,6 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		});
 		
 		editorContext.getEventBus().addHandler(SelectionMouseUpEvent.TYPE, new SelectionMouseUpEventHandler() {
-
-			/**
-			* Return true if all menu items are hidden.
-			*/
-			private boolean setMenuItemVisibility(Diagram diagram, Diagram[] selected) {
-				Display freehandMenu = Display.NONE;
-				Display reverseMenu = Display.NONE;
-				Display curvedArrowMenu = Display.NONE;
-				Display rectifiedArrowMenu = Display.NONE;
-				Display colorMenu = Display.NONE;
-				boolean changeConnectionMenu = false;
-				Display deleteMenuVisibility = Display.NONE;
-				Display duplicateMenuVisibility = Display.NONE;
-				Display annotateVisibility = Display.NONE;
-				Display unannotateVisibility = Display.NONE;
-				Display addLinkMenuVisibility = Display.NONE;
-				Display openEditLinkMenuVisibility = Display.NONE;
-				Display changeFontSizeVisibility = Display.NONE;
-				Display layersMenuVisibility = Display.NONE;
-				Display switchElementVisibility = Display.NONE;
-				Display lineWeightVisibility = Display.NONE;
-
-				if (diagram.supportsMenu(ContextMenuItem.FREEHAND_MENU)) {
-					freehandMenu = Display.INLINE_BLOCK;
-					freehandOnOff(UiContextMenu.this.editorContext.isTrue(EditorProperty.FREEHAND_MODE));
-				}
-
-				if (allSupports(selected, ContextMenuItem.LINE_WEIGHT)) {
-					lineWeightVisibility = Display.INLINE_BLOCK;
-				}
-
-				if (selected.length == 1 && diagram.supportsMenu(ContextMenuItem.REVERSE_CONNECTION_MENU)) {
-					// cannot show reverse menu if multiple items, at least for now
-					reverseMenu = Display.INLINE_BLOCK;
-				}
-
-				if (allSupports(selected, ContextMenuItem.FONT_SIZE)) {
-					changeFontSizeVisibility = Display.INLINE_BLOCK;
-				}
-
-				if (allSupports(selected, ContextMenuItem.LAYERS)) {
-					layersMenuVisibility = Display.INLINE_BLOCK;
-				}
-
-				if (anySupports(selected, ContextMenuItem.COLOR_MENU)) {
-					colorMenu = Display.INLINE_BLOCK;
-				}
-
-				if (notConfluence() && selected.length == 1 && !(selected[0] instanceof Relationship2) && !(selected[0] instanceof CircleElement)) {
-					switchElementVisibility = Display.INLINE_BLOCK;
-				}
-
-				if (selected.length == 1 && selected[0].hasLink()) {
-					openEditLinkMenuVisibility = Display.INLINE_BLOCK;
-				} else if (selected.length == 1 && diagram.supportsMenu(ContextMenuItem.URL_LINK)) {
-					addLinkMenuVisibility = Display.INLINE_BLOCK;
-				}
-
-				if (selected.length == 1 && selected[0] instanceof ImageElement) {
-					ImageElement img = (ImageElement) selected[0];
-					fileLink.setHref(img.getUrl());
-					fileLink.getStyle().setDisplay(Display.INLINE_BLOCK);
-				} else {
-					fileLink.setHref("");
-					fileLink.getStyle().setDisplay(Display.NONE);
-				}
-
-				boolean onlyComms = onlyComments(selected);
-				if (notConfluence() && anyIsAnnotated(selected) && !onlyComms) {
-					unannotateVisibility = Display.INLINE_BLOCK;
-				} else if (notConfluence() && !onlyComms) {
-					annotateVisibility = Display.INLINE_BLOCK;
-				}
-
-				boolean allowedToShowDeleteMenu = AuthHelpers.allowedToShowDelete(selected);
-				if (allowedToShowDeleteMenu && diagram.supportsMenu(ContextMenuItem.DELETE)) {
-					deleteMenuVisibility = Display.INLINE_BLOCK;
-				}
-
-				if (!ifEvenOneIsComment(selected) && diagram.supportsMenu(ContextMenuItem.DUPLICATE)) {
-					duplicateMenuVisibility = Display.INLINE_BLOCK;
-				}
-
-				boolean justConnections = allConnections(selected);
-				changeConnection.setVisible(justConnections);
-				if (justConnections) {
-					curvedArrowMenu = Display.INLINE_BLOCK;
-					rectifiedArrowMenu = Display.INLINE_BLOCK;
-				}
-
-				freehandOff.getStyle().setDisplay(freehandMenu);
-				reverseConnection.getStyle().setDisplay(reverseMenu);
-				rectifiedArrow.getStyle().setDisplay(rectifiedArrowMenu);
-				curvedArrow.getStyle().setDisplay(curvedArrowMenu);
-				colorize.getStyle().setDisplay(colorMenu);
-				delete.getStyle().setDisplay(deleteMenuVisibility);
-				duplicate.getStyle().setDisplay(duplicateMenuVisibility);
-				// annotate.getStyle().setDisplay(annotateVisibility);
-				// unannotate.getStyle().setDisplay(unannotateVisibility);
-				addlink.getStyle().setDisplay(addLinkMenuVisibility);
-				openlink.getStyle().setDisplay(openEditLinkMenuVisibility);
-				textSize.getStyle().setDisplay(changeFontSizeVisibility);
-				layersMenuButton.getStyle().setDisplay(layersMenuVisibility);
-				switchElement.getStyle().setDisplay(switchElementVisibility);
-				lineWeight.getStyle().setDisplay(lineWeightVisibility);
-
-				if (freehandMenu == Display.NONE && 
-						reverseMenu == Display.NONE &&
-						colorMenu == Display.NONE &&
-						changeConnectionMenu == false &&
-						deleteMenuVisibility == Display.NONE &&
-						duplicateMenuVisibility == Display.NONE) {
-					return true;
-				}
-				return false;
-			}
-
-			private boolean anySupports(Diagram[] selected, ContextMenuItem menuItem) {
-				for (Diagram diagram : selected) {
-					if (AuthHelpers.allowedToEdit(diagram) && 
-						  (diagram.supportedMenuItems() & menuItem.getValue()) == menuItem.getValue() &&
-						  AuthHelpers.allowColorChange(diagram)) {
-						return true;
-					}
-				}
-				return false;
-			}
-
-			private boolean anyIsAnnotated(Diagram[] selected) {
-				for (Diagram diagram : selected) {
-					if (diagram.isAnnotation() && 
-						!(diagram instanceof CommentThreadElement || diagram instanceof CommentElement)) {
-						return true;
-					}
-				}
-				return false;
-			}
-
-			private boolean onlyComments(Diagram[] selected) {
-				boolean result = true;
-				for (Diagram diagram : selected) {
-					if (!(diagram instanceof CommentThreadElement || diagram instanceof CommentElement)) {
-						result = false;
-					}
-				}
-				return result;
-			}
-
-			private boolean ifEvenOneIsComment(Diagram[] selected) {
-				for (Diagram d : selected) {
-					if (d instanceof CommentElement || d instanceof CommentThreadElement) {
-						return true;
-					}
-				}
-				return false;
-			}
-
-			private boolean allConnections(Diagram[] selected) {
-				boolean result = false;
-				for (Diagram d : selected) {
-					result = true;
-					if ( !(d instanceof Relationship2) ) {
-						return false;
-					}
-				}
-				return result;
-			}
-
-			private boolean allSupports(Diagram[] selected, ContextMenuItem menuItem) {
-				boolean result = false;
-				for (Diagram d : selected) {
-					result = true;
-					if (!ContextMenuItem.supported(d.supportedMenuItems(), menuItem)) {
-						return false;
-					}
-				}
-				return result;
-			}
-
 			@Override
 			public void onSelection(SelectionMouseUpEvent event) {
 				Diagram[] selected = new Diagram[]{};
@@ -562,6 +383,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				((Relationship2) d).curve();
 			}
 		}
+		setMenuItemVisibility();
 		Tools.enableCurvedArrow();
 	}
 
@@ -573,6 +395,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				((Relationship2) d).straight();
 			}
 		}
+		setMenuItemVisibility();
 		Tools.disableCurvedArrow();
 	}
 
@@ -862,5 +685,204 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		event.stopPropagation();
 		event.preventDefault();
 	}
+
+	private void setMenuItemVisibility() {
+		Diagram[] selected = new Diagram[]{};
+		selected = UiContextMenu.this.selectionHandler.getSelectedItems().toArray(selected);
+		if (selected.length == 1) {
+			setMenuItemVisibility(selected[0], selected);
+		}
+	}
+
+	/**
+	* Return true if all menu items are hidden.
+	*/
+	private boolean setMenuItemVisibility(Diagram diagram, Diagram[] selected) {
+		Display freehandMenu = Display.NONE;
+		Display reverseMenu = Display.NONE;
+		Display curvedArrowMenu = Display.NONE;
+		Display rectifiedArrowMenu = Display.NONE;
+		Display colorMenu = Display.NONE;
+		boolean changeConnectionMenu = false;
+		Display deleteMenuVisibility = Display.NONE;
+		Display duplicateMenuVisibility = Display.NONE;
+		Display annotateVisibility = Display.NONE;
+		Display unannotateVisibility = Display.NONE;
+		Display addLinkMenuVisibility = Display.NONE;
+		Display openEditLinkMenuVisibility = Display.NONE;
+		Display changeFontSizeVisibility = Display.NONE;
+		Display layersMenuVisibility = Display.NONE;
+		Display switchElementVisibility = Display.NONE;
+		Display lineWeightVisibility = Display.NONE;
+
+		if (diagram.supportsMenu(ContextMenuItem.FREEHAND_MENU)) {
+			freehandMenu = Display.INLINE_BLOCK;
+			freehandOnOff(UiContextMenu.this.editorContext.isTrue(EditorProperty.FREEHAND_MODE));
+		}
+
+		if (allSupports(selected, ContextMenuItem.LINE_WEIGHT)) {
+			lineWeightVisibility = Display.INLINE_BLOCK;
+		}
+
+		if (selected.length == 1 && diagram.supportsMenu(ContextMenuItem.REVERSE_CONNECTION_MENU)) {
+			// cannot show reverse menu if multiple items, at least for now
+			reverseMenu = Display.INLINE_BLOCK;
+		}
+
+		if (allSupports(selected, ContextMenuItem.FONT_SIZE)) {
+			changeFontSizeVisibility = Display.INLINE_BLOCK;
+		}
+
+		if (allSupports(selected, ContextMenuItem.LAYERS)) {
+			layersMenuVisibility = Display.INLINE_BLOCK;
+		}
+
+		if (anySupports(selected, ContextMenuItem.COLOR_MENU)) {
+			colorMenu = Display.INLINE_BLOCK;
+		}
+
+		if (notConfluence() && selected.length == 1 && !(selected[0] instanceof Relationship2) && !(selected[0] instanceof CircleElement)) {
+			switchElementVisibility = Display.INLINE_BLOCK;
+		}
+
+		if (selected.length == 1 && selected[0].hasLink()) {
+			openEditLinkMenuVisibility = Display.INLINE_BLOCK;
+		} else if (selected.length == 1 && diagram.supportsMenu(ContextMenuItem.URL_LINK)) {
+			addLinkMenuVisibility = Display.INLINE_BLOCK;
+		}
+
+		if (selected.length == 1 && selected[0] instanceof ImageElement) {
+			ImageElement img = (ImageElement) selected[0];
+			fileLink.setHref(img.getUrl());
+			fileLink.getStyle().setDisplay(Display.INLINE_BLOCK);
+		} else {
+			fileLink.setHref("");
+			fileLink.getStyle().setDisplay(Display.NONE);
+		}
+
+		boolean onlyComms = onlyComments(selected);
+		if (notConfluence() && anyIsAnnotated(selected) && !onlyComms) {
+			unannotateVisibility = Display.INLINE_BLOCK;
+		} else if (notConfluence() && !onlyComms) {
+			annotateVisibility = Display.INLINE_BLOCK;
+		}
+
+		boolean allowedToShowDeleteMenu = AuthHelpers.allowedToShowDelete(selected);
+		if (allowedToShowDeleteMenu && diagram.supportsMenu(ContextMenuItem.DELETE)) {
+			deleteMenuVisibility = Display.INLINE_BLOCK;
+		}
+
+		if (!ifEvenOneIsComment(selected) && diagram.supportsMenu(ContextMenuItem.DUPLICATE)) {
+			duplicateMenuVisibility = Display.INLINE_BLOCK;
+		}
+
+		boolean justConnections = allConnections(selected);
+		changeConnection.setVisible(justConnections);
+		if (justConnections && selected.length > 1) {
+			// multiple connections
+			curvedArrowMenu = Display.INLINE_BLOCK;
+			rectifiedArrowMenu = Display.INLINE_BLOCK;
+		} else if (justConnections && selected.length == 1) {
+			// just one
+			if (selected[0] instanceof Relationship2) {
+				Relationship2 r = (Relationship2) selected[0];
+				if (r.isCurved()) {
+					rectifiedArrowMenu = Display.INLINE_BLOCK;
+				} else {
+					curvedArrowMenu = Display.INLINE_BLOCK;
+				}
+			}
+		}
+
+		freehandOff.getStyle().setDisplay(freehandMenu);
+		reverseConnection.getStyle().setDisplay(reverseMenu);
+		rectifiedArrow.getStyle().setDisplay(rectifiedArrowMenu);
+		curvedArrow.getStyle().setDisplay(curvedArrowMenu);
+		colorize.getStyle().setDisplay(colorMenu);
+		delete.getStyle().setDisplay(deleteMenuVisibility);
+		duplicate.getStyle().setDisplay(duplicateMenuVisibility);
+		// annotate.getStyle().setDisplay(annotateVisibility);
+		// unannotate.getStyle().setDisplay(unannotateVisibility);
+		addlink.getStyle().setDisplay(addLinkMenuVisibility);
+		openlink.getStyle().setDisplay(openEditLinkMenuVisibility);
+		textSize.getStyle().setDisplay(changeFontSizeVisibility);
+		layersMenuButton.getStyle().setDisplay(layersMenuVisibility);
+		switchElement.getStyle().setDisplay(switchElementVisibility);
+		lineWeight.getStyle().setDisplay(lineWeightVisibility);
+
+		if (freehandMenu == Display.NONE && 
+				reverseMenu == Display.NONE &&
+				colorMenu == Display.NONE &&
+				changeConnectionMenu == false &&
+				deleteMenuVisibility == Display.NONE &&
+				duplicateMenuVisibility == Display.NONE) {
+			return true;
+		}
+		return false;
+	}	
+
+	private boolean anySupports(Diagram[] selected, ContextMenuItem menuItem) {
+		for (Diagram diagram : selected) {
+			if (AuthHelpers.allowedToEdit(diagram) && 
+				  (diagram.supportedMenuItems() & menuItem.getValue()) == menuItem.getValue() &&
+				  AuthHelpers.allowColorChange(diagram)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean anyIsAnnotated(Diagram[] selected) {
+		for (Diagram diagram : selected) {
+			if (diagram.isAnnotation() && 
+				!(diagram instanceof CommentThreadElement || diagram instanceof CommentElement)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean onlyComments(Diagram[] selected) {
+		boolean result = true;
+		for (Diagram diagram : selected) {
+			if (!(diagram instanceof CommentThreadElement || diagram instanceof CommentElement)) {
+				result = false;
+			}
+		}
+		return result;
+	}
+
+	private boolean ifEvenOneIsComment(Diagram[] selected) {
+		for (Diagram d : selected) {
+			if (d instanceof CommentElement || d instanceof CommentThreadElement) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean allConnections(Diagram[] selected) {
+		boolean result = false;
+		for (Diagram d : selected) {
+			result = true;
+			if ( !(d instanceof Relationship2) ) {
+				return false;
+			}
+		}
+		return result;
+	}
+
+	private boolean allSupports(Diagram[] selected, ContextMenuItem menuItem) {
+		boolean result = false;
+		for (Diagram d : selected) {
+			result = true;
+			if (!ContextMenuItem.supported(d.supportedMenuItems(), menuItem)) {
+				return false;
+			}
+		}
+		return result;
+	}
+
+
 
 }
