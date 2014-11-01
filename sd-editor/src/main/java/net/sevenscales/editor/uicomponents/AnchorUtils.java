@@ -284,7 +284,7 @@ public class AnchorUtils {
     int leftdist = Math.abs(x - left);
     int rightdist = Math.abs(x - (left + width));
     int topdist = Math.abs(y - top);
-    int bottomdist = Math.abs(x - (top + height));
+    int bottomdist = Math.abs(y - (top + height));
 
     int smallest = Math.min(leftdist, rightdist);
     smallest = Math.min(smallest, topdist);

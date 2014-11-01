@@ -20,17 +20,17 @@
 			<a ui:field="lineWeight" title="Change Line Weight" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-line-width"></i>
 			</a>
+			<a ui:field="colorize" title="Change Color" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-colorize2"></i>
+			</a>
+			<a ui:field="reverseConnection" title="Reverse Connection" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-reverse-connection2"></i>
+			</a>
 			<a ui:field="rectifiedArrow" title="Rectified arrow" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-rectified-arrow"></i>
 			</a>
 			<a ui:field="curvedArrow" title="Curved arrow" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-curved-arrow"></i>
-			</a>
-			<a ui:field="reverseConnection" title="Reverse Connection" class="btn btn-custom btn-context-menu tooltipper">
-				<i class="context-icon-reverse-connection2"></i>
-			</a>
-			<a ui:field="colorize" title="Change Color" class="btn btn-custom btn-context-menu tooltipper">
-				<i class="context-icon-colorize2"></i>
 			</a>
 			<a ui:field="switchElement" title="Switch Element to an other" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-switch"></i>
