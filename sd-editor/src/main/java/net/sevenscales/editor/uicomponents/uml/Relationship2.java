@@ -2087,6 +2087,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   //    
   //    initHandles();
 
+    } else {
+      // if shape is not changed then need to show hide arrows since state is not updated
       doSetShape();
     }
 	}
