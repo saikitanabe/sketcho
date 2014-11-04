@@ -485,4 +485,9 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		return result;
 	}
 
+	@Override
+	public boolean isSketchiness() {
+		return type.endsWith("_s");
+	}
+
 }

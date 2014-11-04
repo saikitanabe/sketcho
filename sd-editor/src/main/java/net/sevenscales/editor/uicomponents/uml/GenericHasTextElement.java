@@ -65,6 +65,8 @@ class GenericHasTextElement extends AbstractHasTextElement {
   	if (ShapeProperty.isTextPositionBottom(parent.getDiagramItem().getShapeProperties()) || 
   		  ShapeProperty.isTextResizeDimVerticalResize(parent.getDiagramItem().getShapeProperties())) {
 			return false;
+		} else if (ShapeProperty.isTextPositionTop(parent.getDiagramItem().getShapeProperties())) {
+			return false;
 		} else {
 			return true;
 		}
@@ -81,8 +83,16 @@ class GenericHasTextElement extends AbstractHasTextElement {
   	}
   }
 
+  @Override
+  public boolean isSketchiness() {
+  	return parent.isSketchiness();
+  }
+
 	@Override
 	public boolean boldText() {
+  	if (ShapeProperty.isTextResizeDimHorizontalResize(parent.getDiagramItem().getShapeProperties())) {
+  		return true;
+  	}
 		return false;
 	}
 
@@ -98,7 +108,11 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
   public void resize(int x, int y, int width, int height) {
-    parent.resize(x, y, width, width);
+  	if (ShapeProperty.isTextResizeDimHorizontalResize(parent.getDiagramItem().getShapeProperties())) {
+	    parent.resize(x, y, width, height);
+  	} else {
+	    parent.resize(x, y, width, width);
+  	}
     parent.fireSizeChanged();
   }
 

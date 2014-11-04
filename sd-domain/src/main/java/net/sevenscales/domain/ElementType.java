@@ -45,6 +45,7 @@ public enum ElementType {
 	IPHONE("iphone"),
 	WEB_BROWSER("w-browser"),
 	RECT("rect"),
+	RECT_S("rect_s"),
 	FREEHAND2("freehand2"),
 	SWITCH("switch"),
 	ROUTER("router"),

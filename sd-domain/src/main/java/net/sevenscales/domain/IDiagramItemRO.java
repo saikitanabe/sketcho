@@ -44,4 +44,6 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 
 	boolean isComment();
 	boolean compare(IDiagramItemRO diro, Map<String, Boolean> dirtyFields);
+  boolean isSketchiness();
+  
 }

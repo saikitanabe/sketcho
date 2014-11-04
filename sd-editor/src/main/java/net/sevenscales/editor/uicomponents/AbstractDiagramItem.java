@@ -614,6 +614,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
   public void setAutoResize(boolean autoresize) {
   }
+
+  @Override
+  public boolean isSketchiness() {
+    return false;
+  }
   
   public Diagram showEditorForDiagram(int screenX, int screenY) {
     return this;

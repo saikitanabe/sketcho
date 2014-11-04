@@ -70,6 +70,8 @@ public interface Diagram extends SourcesMouseDiagramEvents {
    */
   public boolean isAutoResize();
   public void setAutoResize(boolean autoresize);
+
+  boolean isSketchiness();
   
   /**
   * Called for element that should show text editor.

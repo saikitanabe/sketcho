@@ -555,4 +555,9 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   	}
   }
 
+  @Override
+  public boolean isSketchiness() {
+    return getDiagramItem().isSketchiness();
+  }
+
 }

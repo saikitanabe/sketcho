@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArray;
 
 public class TokenParser {
 	public static class StringToken {
@@ -19,6 +20,22 @@ public class TokenParser {
 
 	public native static JavaScriptObject parse2(String text)/*-{
 		return $wnd.markedToken.parse(text);
+	}-*/;
+
+	public static class JsInlineToken extends JavaScriptObject {
+		protected JsInlineToken() {}
+
+		public final native String getText()/*-{
+			return this.text;
+		}-*/;
+	  public final native String isBold() /*-{
+	  	return this.bold;
+	  }-*/;
+
+	}
+
+	public native static JsArray<JsInlineToken> parseInline(String text)/*-{
+		return $wnd.markedToken.parseInline(text)
 	}-*/;
 
 	public native static String formatHtml(JavaScriptObject tokens)/*-{

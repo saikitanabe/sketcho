@@ -130,6 +130,7 @@ public class TextElementFormatUtil {
 		boolean verticalAlignMiddle();
 		boolean boldText();
     boolean supportElementResize();
+    boolean isSketchiness();
   }
   
   /**
@@ -172,6 +173,9 @@ public class TextElementFormatUtil {
       return 0;
     }
     public void resizeHeight(int height) {
+    }
+    public boolean isSketchiness() {
+      return false;
     }
   }
 
@@ -276,17 +280,26 @@ public class TextElementFormatUtil {
 
   public void setText(String newText, boolean editable) {
   	try {
-    	_setText(newText, editable);
+      _setText(newText, editable);
   	} catch (Exception e) {
   		logger.error("setText... failed", e);
   	}
   }
 
-  private void _setText(String newText, boolean editable) {
-    // convert json text line (\\n) breaks to line breaks
+  private String handleLineBreaks(String newText) {
     newText = newText.replaceAll("\\\\n", "\n");
     newText = newText.replaceAll("\\\\r", "");
-    boolean changed = text != null && text.equals(newText) ? false : true;
+    return newText;
+  }
+
+  private boolean textChanged(String newText) {
+    return text != null && text.equals(newText) ? false : true;
+  }
+
+  private void _setText(String newText, boolean editable) {
+    // convert json text line (\\n) breaks to line breaks
+    newText = handleLineBreaks(newText);
+    boolean changed = textChanged(newText);
     
     createRows(newText, editable);
 
@@ -326,7 +339,10 @@ public class TextElementFormatUtil {
         // create separator line
         ILine separator = IShapeFactory.Util.factory(editable).createLine(textGroup);
         separator.setStroke(hasTextElement.getTextColor());
-//        separator.setStrokeWidth(0.5);
+        // TODO isSketchiness()
+        if (hasTextElement.isSketchiness()) {
+          separator.setStrokeWidth(2);
+        }
 //        separator.setFill(250, 250, 200, 2);
         
         separator.addGraphicsMouseDownHandler((GraphicsMouseDownHandler) hasTextElement.getGraphicsMouseHandler());
@@ -351,7 +367,6 @@ public class TextElementFormatUtil {
          t = t.replaceAll("<<", Character.toString('\u00AB'));
          t = t.replaceAll(">>", Character.toString('\u00BB'));
          
-         // remove trailing and ending white spaces
          text.setText(t);
          currentline.add(text);
 //         hasTextElement.addShape(text);
