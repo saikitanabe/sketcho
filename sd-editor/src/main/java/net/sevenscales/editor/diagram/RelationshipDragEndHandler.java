@@ -65,7 +65,7 @@ import net.sevenscales.editor.uicomponents.uml.ActivityEnd;
 import net.sevenscales.editor.uicomponents.uml.ActivityStart;
 import net.sevenscales.editor.uicomponents.uml.ForkElement;
 import net.sevenscales.editor.uicomponents.uml.Actor;
-import net.sevenscales.editor.uicomponents.uml.ClassElement2;
+import net.sevenscales.editor.uicomponents.uml.ElementFactory;
 import net.sevenscales.editor.uicomponents.uml.EllipseElement;
 import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
@@ -341,14 +341,31 @@ public class RelationshipDragEndHandler implements
 		Color background = current.getBackgroundColor().create();
 		Color borderColor = current.getBorderColor().create();
 		Color color = current.getTextColor().create();
-		
+
+		if (Tools.isSketchMode()) {
+			// try first if sketch element is found
+			// at first only some of the elements are supported...
+			result = createGenericElement(type, x, y, background, borderColor, color);
+		}
+
+		if (result == null) {
+			// try to create with legacy way
+			result = createLegacyDiagram(type, imageInfo, x, y, background, borderColor, color);
+		}
+
+		return result;
+	}
+
+	private Diagram createLegacyDiagram(UMLDiagramType type, ImageInfo imageInfo, int x, int y, Color background, 
+Color borderColor, Color color) {
+		Diagram result = null;
 		switch (type) {
 		case IMAGE: {
 			result = DiagramElementFactory.createImageElement(surface, imageInfo.getFilename(), imageInfo.getUrl(), x, y, imageInfo.getWidth(), imageInfo.getHeight());
 			break;
 		}
 		case CLASS: {
-			ClassElement2 ce = new ClassElement2(surface, new RectShape(x,
+			Diagram ce = ElementFactory.createClassElement(surface, new RectShape(x,
 					y, 1, // auto resizes
 					1), // auto resizes
 					type.getValue(), background, borderColor, color, true, new DiagramItemDTO());
@@ -522,16 +539,26 @@ public class RelationshipDragEndHandler implements
 		case ARROW_LEFT:
 		case BUBBLE_LEFT:
 		case BUBBLE_RIGHT:
-		case ENVELOPE	: {
-			LibraryShapes.LibraryShape ls = LibraryShapes.get(type.getElementType());
+		case ENVELOPE: {
+			result = createGenericElement(type, x, y, background, borderColor, color);
+			break;
+		}
+		}
+		return result;
+	}
+
+	private Diagram createGenericElement(UMLDiagramType type, int x, int y, Color background, 
+Color borderColor, Color color) {
+		Diagram result = null;
+		LibraryShapes.LibraryShape ls = LibraryShapes.get(type.getElementType());
+		if (ls != null) {
+			// there might not be generi library shape available
 			// could multiply width and height
 			GenericElement element = new GenericElement(surface,
 	        new GenericShape(ls.elementType.getValue(), x, y, ls.width, ls.height, ls.shapeProperties, null),
 	        type.getValue(),
 	        background, borderColor, color, true, DiagramItemDTO.createGenericItem(ls.elementType));
 			result = element;
-			break;
-		}
 		}
 		return result;
 	}

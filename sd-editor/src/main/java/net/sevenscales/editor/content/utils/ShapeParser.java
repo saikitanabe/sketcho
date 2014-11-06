@@ -9,6 +9,8 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.*;
+import net.sevenscales.editor.api.Tools;
+import net.sevenscales.editor.uicomponents.uml.Shapes;
 import net.sevenscales.domain.utils.SLogger;
 
 
@@ -69,7 +71,6 @@ public class ShapeParser {
 		new ParserMap(ElementType.IPHONE, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.WEB_BROWSER, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.RECT, new AbstractDiagramFactory.GenericFactory()),
-		new ParserMap(ElementType.RECT_S, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.SWITCH, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.ROUTER, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.DESKTOP, new AbstractDiagramFactory.GenericFactory()),
@@ -85,8 +86,12 @@ public class ShapeParser {
 
 	public static AbstractDiagramFactory factory(IDiagramItemRO diro) {
 		for (ParserMap pm : PARSER_MAP) {
-			if (pm.elementType.getValue().equals(diro.getType())) {
-				return pm.factory;
+			if (Tools.isSketchMode() && Shapes.getSketch(ElementType.getEnum(diro.getType())) != null) {
+				return new AbstractDiagramFactory.GenericFactory();
+			} else {
+				if (pm.elementType.getValue().equals(diro.getType())) {
+					return pm.factory;
+				}
 			}
 		}
 		throw new RuntimeException("Factory not found for " + diro.getType());

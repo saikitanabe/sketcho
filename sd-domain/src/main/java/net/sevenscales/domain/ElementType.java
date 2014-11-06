@@ -71,13 +71,13 @@ public enum ElementType {
 		return this.value + "_s";
 	}
 
-	public static ElementType getEnum(String operation) {
-		if (operation == null) {
+	public static ElementType getEnum(String value) {
+		if (value == null) {
       throw new IllegalArgumentException();
 		}
 		
 		for (ElementType v : values()) {
-      if (operation.equalsIgnoreCase(v.getValue())) return v;
+      if (value.equalsIgnoreCase(v.getValue())) return v;
 		}
 		throw new IllegalArgumentException();
 	}

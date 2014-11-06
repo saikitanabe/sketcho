@@ -52,7 +52,7 @@ import net.sevenscales.editor.uicomponents.uml.ForkElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityEnd;
 import net.sevenscales.editor.uicomponents.uml.ActivityStart;
 import net.sevenscales.editor.uicomponents.uml.Actor;
-import net.sevenscales.editor.uicomponents.uml.ClassElement2;
+import net.sevenscales.editor.uicomponents.uml.ElementFactory;
 import net.sevenscales.editor.uicomponents.uml.ComponentElement;
 import net.sevenscales.editor.uicomponents.uml.EllipseElement;
 import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
@@ -566,7 +566,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
         new DiagramItemDTO()));
 
-		result.add(new ClassElement2(this.toolpool,
+		result.add(ElementFactory.createClassElement(this.toolpool,
 				new RectShape(30, CLASS_GROUP + 40, 100, 60),
 				"<<interface>>\n"+
 				"ClassName\n"+

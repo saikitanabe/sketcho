@@ -112,7 +112,7 @@ public interface AbstractDiagramFactory {
 		}
 
 		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
-      return new ClassElement2(surface,
+      return ElementFactory.createClassElement(surface,
           (RectShape) shape, 
           item.getText(), 
           DiagramItemFactory.parseBackgroundColor(item),

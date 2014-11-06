@@ -373,7 +373,7 @@ new Proto("m2.135216,0 c0,0 13.550818,0.429500 22.864784,0c9.313966,-0.429500 22
 		return result;
 	}
 
-	private static Group getSketch(ElementType type) {
+	public static Group getSketch(ElementType type) {
 		return sketchShapes.get(type.getSketchType());
 	}
 }
