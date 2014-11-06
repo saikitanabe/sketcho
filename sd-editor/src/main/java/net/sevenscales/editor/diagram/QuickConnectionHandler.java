@@ -411,9 +411,6 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		result.setText(RelationshipHelpers.relationship(start, surface.getEditorContext(), end));
 		result.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue() | 
 															ShapeProperty.CLOSEST_PATH.getValue());
-		if (Tools.isSketchMode()) {
-			result.setLineWeight(Constants.SKETCH_MODE_LINE_WEIGHT);
-		}
 		setDefaultColors(result);
 		result.setShape(closestSegment.start.x + "," + 
 									closestSegment.start.y + "," + 

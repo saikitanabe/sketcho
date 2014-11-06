@@ -131,10 +131,6 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
         di.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue());
       }
 
-      if (Tools.isSketchMode()) {
-        di.setLineWeight(Constants.SKETCH_MODE_LINE_WEIGHT);
-      }
-
       // di.addShapeProperty(ShapeProperty.CLOSEST_PATH);
       // Automatically center connection at first time.
       di.addShapeProperty(ShapeProperty.CENTERED_PATH);

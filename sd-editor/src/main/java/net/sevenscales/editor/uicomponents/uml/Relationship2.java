@@ -12,6 +12,7 @@ import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
@@ -55,6 +56,7 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.editor.gfx.domain.IRelationship;
 import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.gfx.domain.IChildElement;
@@ -1799,7 +1801,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     Integer lineWeight = getDiagramItem().getLineWeight();
     if (lineWeight != null) {
       weight = lineWeight;
+    } else if (Tools.isSketchMode()) {
+      weight = Constants.SKETCH_MODE_LINE_WEIGHT;
     }
+
     relLine.setStrokeWidth(weight);
     arrow.setStrokeWidth(weight);
     arrowStartPolyline.setStrokeWidth(weight);
