@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
@@ -41,10 +42,15 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.domain.IPathRO;
 import net.sevenscales.domain.ExtensionDTO;
+import net.sevenscales.domain.constants.Constants;
 
 
 public class GenericElement extends AbstractDiagramItem implements SupportsRectangleShape {
 	private static SLogger logger = SLogger.createLogger(GenericElement.class);
+
+	static {
+		SLogger.addFilter(GenericElement.class);
+	}
 
 	public static double FREEHAND_STROKE_WIDTH = 2;
 	public static int ACTIVITY_START_RADIUS = 10;
@@ -52,7 +58,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 
 	private GenericShape shape;
 	private Point coords = new Point();
-  private List<IPath> paths;
+  private List<PathWrapper> paths;
   private IRectangle background;
   private IGroup group;
   private IGroup subgroup;
@@ -74,6 +80,23 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   	}
   };
 
+  private static class PathWrapper {
+  	IPath path;
+  	Shapes.Proto proto;
+
+  	PathWrapper(IPath path) {
+  		this(path, null);
+  	}
+  	PathWrapper(IPath path, Shapes.Proto proto) {
+  		this.path = path;
+  		this.proto = proto;
+  	}
+
+  	boolean isProto() {
+  		return this.proto != null;
+  	}
+  }
+
 	public GenericElement(ISurfaceHandler surface, GenericShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
 		super(editable, surface, backgroundColor, borderColor, textColor, item);
 
@@ -86,14 +109,15 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
     // sub// group.setAttribute("cursor", "default");
 
-  	paths = new ArrayList<IPath>(); // theshape.protos.length
+  	paths = new ArrayList<PathWrapper>(); // theshape.protos.length
   	if (shape.getSvgData() != null) {
+  		// this is the freehand drawing or any custom svg case!
   		createCustomPaths(shape.getSvgData().getPaths());
   		// diagram item needs to have extionsion data as well for undo/redo calculation
   		Integer lineWeight = item.getExtension() != null ? item.getExtension().getLineWeight() : null;
 			getDiagramItem().setExtension(new ExtensionDTO(shape.getSvgData().copy(), lineWeight));
   	} else {
-	  	theshape = Shapes.get(getDiagramItem().getType());
+	  	theshape = Shapes.get(getDiagramItem().getType(), Tools.isSketchMode());
 	    createSubPaths(theshape);
   	}
 
@@ -105,8 +129,8 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 		
 		addMouseDiagramHandler(this);
 
-		for (IPath path : paths) {
-	    shapes.add(path);
+		for (PathWrapper path : paths) {
+	    shapes.add(path.path);
 		}
 
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
@@ -136,21 +160,26 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	private void createSubPaths(Shapes.Group groupData) {
 		for (Shapes.Proto p : groupData.protos) {
 			IPath path = createSubPath(p);
-			paths.add(path);
+			paths.add(new PathWrapper(path, p));
 		}
 	}
 
 	private IPath createSubPath(Shapes.Proto proto) {
-		return createSubPath(proto.path, proto.style);
-	}
+		return createSubPath(proto.toPath(1, 1), proto.style);
+	}	
 
 	private IPath createSubPath(String path, String style) {
+		logger.debug("createSubPath {}", path);
     IPath result = IShapeFactory.Util.factory(editable).createPath(subgroup, pathTransformer);
     result.setStroke(borderColor);
     if (getDiagramItem().getLineWeight() != null) {
 			result.setStrokeWidth(getDiagramItem().getLineWeight());
     } else {
-	    result.setStrokeWidth(FREEHAND_STROKE_WIDTH);
+    	if (Tools.isSketchMode()) {
+				result.setStrokeWidth(Constants.SKETCH_MODE_LINE_WEIGHT);
+    	} else {
+		    result.setStrokeWidth(FREEHAND_STROKE_WIDTH);
+    	}
     }
     result.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     // path.setStrokeCap("round");
@@ -159,10 +188,13 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	    result.setAttribute("style", style);
     }
 
-    if (!surface.isLibrary()) {
-	    result.setAttribute("vector-effect", "non-scaling-stroke");
-    }
-  	result.setShape(path);
+		// >>>>>>>>>>> Commented out 4.11.2014 - can be deleted after half a year :)
+		// now scaling down line width and each point as inkscape
+		// if (!surface.isLibrary()) {
+	   //  result.setAttribute("vector-effect", "non-scaling-stroke");
+    // }
+    // <<<<<<<<<<< Commented out 4.11.2014
+  	// result.setShape(proto.toPath());
   	return result;
 	}
 
@@ -181,7 +213,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	private void createCustomPaths(List<? extends IPathRO> pathros) {
 		for (IPathRO p : pathros) {
 			IPath path = createSubPath(p.getPath(), p.getStyle());
-			paths.add(path);
+			paths.add(new PathWrapper(path, null));
 		}
 	}
 	
@@ -328,7 +360,12 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 			double factorX = getFactorX();
 			double factorY = getFactorY();
 
-	  	subgroup.setScale(factorX, factorY);
+			if (shape.getSvgData() != null) {
+				// freehand and any custom svg case
+		  	subgroup.setScale(factorX, factorY);
+			} else {
+		  	scalePaths(factorX, factorY);
+			}
 	  	subgroup.setTransform(left, top);
 	  	if (UiUtils.isIE() || surface.isLibrary()) {
 			  // no need to use, which doesn't work svg => pdf, scale down stroke width
@@ -342,10 +379,24 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   	}
   }
 
+  private void scalePaths(double factorX, double factorY) {
+  	for (PathWrapper pw : paths) {
+  		if (pw.isProto()) {
+	  		pw.path.setShape(pw.proto.toPath(factorX, factorY));
+  		}
+  	}
+		// for (Shapes.Proto p : groupData.protos) {
+  // 	for (IPath path : paths) {
+  // 		result.setShape(proto.toPath());
+
+	 //  	// path.scale(factorX, factorY);
+  // 	}
+  }
+
   protected void doSetStrokeWidth() {
 		double strokeWidth = scaledStrokeWidth(factorX, factorY);
-  	for (IPath path : paths) {
-	  	path.setStrokeWidth(strokeWidth);
+  	for (PathWrapper path : paths) {
+	  	path.path.setStrokeWidth(strokeWidth);
   	}
   }
 
@@ -394,12 +445,12 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   }
 
   public void setHighlightColor(Color color) {
-  	for (IPath path : paths) {
-			path.setStroke(color);
-			if (path.isFillAsBorderColor()) {
-				path.setFill(color);
-			} else if (path.isFillAsBoardBackgroundColor()) {
-  			path.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
+  	for (PathWrapper path : paths) {
+			path.path.setStroke(color);
+			if (path.path.isFillAsBorderColor()) {
+				path.path.setFill(color);
+			} else if (path.path.isFillAsBoardBackgroundColor()) {
+  			path.path.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
   		}
   	}
 		// background.setStroke(color);
@@ -408,9 +459,9 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   @Override
   public void setBackgroundColor(int red, int green, int blue, double opacity) {
   	super.setBackgroundColor(red, green, blue, opacity);
-  	for (IPath path : paths) {
-  		if (!path.isFillAsBorderColor() && !path.isFillAsBoardBackgroundColor()) {
-		    path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+  	for (PathWrapper path : paths) {
+  		if (!path.path.isFillAsBorderColor() && !path.path.isFillAsBoardBackgroundColor()) {
+		    path.path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   		}
   	}
   }

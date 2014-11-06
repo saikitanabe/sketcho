@@ -3,11 +3,22 @@ package net.sevenscales.editor.uicomponents.uml;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JavaScriptObject;
+
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.utils.SLogger;
 
 
 public class Shapes {
+	private static final SLogger logger = SLogger.createLogger(Shapes.class);
+
+	static {
+		SLogger.addFilter(Shapes.class);
+	}
+
 	private static final Map<ElementType,Group> shapes;
+	private static final Map<String,Group> sketchShapes;
 
 	public static class Matrix {
 		public double a;
@@ -41,19 +52,102 @@ public class Shapes {
 		}
 	}
 
+	public static class JsPathData extends JavaScriptObject {
+		protected JsPathData() {
+		}
+
+	  public final native String getCode()/*-{
+	  	return this.code;
+	  }-*/;
+	  public final native String getCommand()/*-{
+	  	return this.command;
+	  }-*/;
+	  public final native double getX()/*-{
+	  	return this.x;
+	  }-*/;
+	  public final native double getY()/*-{
+	  	return this.y;
+	  }-*/;
+	  public final native boolean isRelative()/*-{
+	  	return this.relative;
+	  }-*/;
+	  public final native double getX1()/*-{
+	  	return this.x1;
+	  }-*/;
+	  public final native double getY1()/*-{
+	  	return this.y1;
+	  }-*/;
+	  public final native double getX2()/*-{
+	  	return this.x2;
+	  }-*/;
+	  public final native double getY2()/*-{
+	  	return this.y2;
+	  }-*/;
+
+	  public final String toPath(double factorX, double factorY, JsPathData prev) {
+	  	String result = "";
+	  	String code = getCode().toLowerCase();
+	  	if (isRelative()) {
+	  		result = code;
+	  	} else {
+	  		// some bug in parser and this is uppercase...
+	  		// at least chrome doesn't seem to care about that
+	  		// still to lower case as in spec if some browser doesn't work like that...
+	  		result = code;
+	  	}
+	  	
+	  	if ("c".equals(result)) {
+		  	result += (getX1() * factorX) + "," + (getY1() * factorY) + " ";
+		  	result += (getX2() * factorX) + "," + (getY2() * factorY) + " ";
+	  	}
+
+	  	if (!"z".equals(code)) {
+		  	result += (getX() * factorX) + "," + (getY() * factorY);
+	  	}
+	  	// if ("m".equals(getCode())) {
+		  // 	result += getX() + "," + getY();
+	  	// } else if ("l".equals(getCode())) {
+	  	// 	result += getX() + "," + getY();
+	  	// } else if ("c".equals(getCode())) {
+	  	// 	result += getX1() + "," + getY1() + " " + getX2() + "," + getY2() + " " + getX() + "," + getY();
+	  	// }
+	  	return result;
+	  }
+
+	}
+
 	public static class Proto {
-		public String path;
+		public JsArray<JsPathData> pathDatas;
 		public String style;
 
 		private Proto(String path) {
-			this.path = path;
+			this(path, null);
 		}
 
 		private Proto(String path, String style) {
-			this.path = path;
 			this.style = style;
+			pathDatas = parse(path);
+		}
+
+		private native JsArray<JsPathData> parse(String d)/*-{
+			var result = $wnd.svgPathParser.parse(d)
+			return result
+		}-*/;
+
+		public String toPath(double factorX, double factorY) {
+			// could cache if prev factors are the same!
+			String result = "";
+			JsPathData prev = null;
+			for (int i = 0; i < pathDatas.length(); ++i) {
+				JsPathData current = pathDatas.get(i);
+				result += current.toPath(factorX, factorY, prev);
+				prev = current;
+			}
+			logger.debug("toPath factorX {}, factorY {} {}", factorX, factorY, result);
+			return result;
 		}
 	}
+
 
  // <g transform="translate(7.7738567e-7,-308.27059)">
  //  <path opacity="0.85500004" d="m83.703402,82.745628c0,9.906024-10.913134,17.936442-24.375166,17.936442-13.462033,0-24.375166-8.030418-24.375166-17.936442s10.913133-17.936443,24.375166-17.936443c13.462032,0,24.375166,8.030419,24.375166,17.936443z" transform="matrix(0.98649777,0,0,0.92248204,-33.527173,249.43923)" stroke="#000" stroke-miterlimit="4" stroke-dasharray="none" stroke-width="2" fill="none"/>
@@ -61,6 +155,7 @@ public class Shapes {
 
 	static {
 		shapes = new HashMap<ElementType,Group>();
+		sketchShapes = new HashMap<String,Group>();
 
 		shapes.put(ElementType.STAR4, new Group(new Proto[]{
 			new Proto("m 25,49.004685 -8.485281,-15.514719 -15.514719,-8.485280 15.514719,-8.485281 8.485280,-15.514719 8.485281,15.514719 15.514719,8.485280 -15.514719,8.485281 z", "")
@@ -156,9 +251,6 @@ public class Shapes {
 		shapes.put(ElementType.RECT, new Group(new Proto[]{
 			new Proto("m 0.25,0.25 49.5,0 0,34.5 -49.5,0 z", "")
 		}, 50, 35));
-		shapes.put(ElementType.RECT_S, new Group(new Proto[]{
-			new Proto("m 49.1459,1.3847 c 0.104761,6.9675 0.03506,9.4865 0.26563,16.6366 0.0014,2.9517 0.309709,14.36 -0.09515,16.501 -2.42503,0.039 -16.1332,-0.2513 -19.0888,-0.068 -17.2572,-0.6772 -13.5226,0.3262 -29.4849,-0.195 0.082078,-2.3524 -0.00872,-17.0765 -0.043292,-19.4423 0.120578,-5.8357 0.25667,-8.5167 -0.0317819,-14.2045 8.64905,0.2209 16.6681,0.5994 27.3095,0.3107 l 21.8322,-0.326 ", "")
-		}, 50, 35));
 
 		shapes.put(ElementType.SWITCH, new Group(new Proto[]{
 			new Proto("m 0.766624,10.664652 24.999980,12.857130 23.405109,-11.463840 -24.833680,-12.464710 z ", "fill:none"),
@@ -250,14 +342,34 @@ public class Shapes {
 			new Proto("m 26.1069,24.375 c -0.467679,0.033 -0.972758,0.1942 -1.33317,0.3931 -1.13684,0.6273 -2.05558,2.9226 -2.27,3.5024 -0.259948,-0.6887 -1.14118,-2.8637 -2.23397,-3.4666 -0.720833,-0.3978 -1.96329,-0.6605 -2.45016,0 -0.591598,0.8024 0.164702,2.1844 0.900794,2.8591 0.982204,0.9003 3.92746,0.8935 3.92746,0.8935 0,0 0.000525,-0.034 0,-0.036 0.539788,-0.011 2.8424,-0.097 3.71127,-0.8935 0.736092,-0.6746 1.49239,-2.0566 0.900794,-2.8591 -0.243436,-0.3302 -0.685337,-0.4259 -1.15302,-0.3931 z ", ""),
 			new Proto("m 22.4693,28.5688 0,10.6875 ", "")
 		}, 45, 50));
-		
+
+		shapes.put(ElementType.CLASS, new Group(new Proto[]{
+			new Proto("m2.135216,0 l45.729568,0 c1.182910,0 2.135216,0.952300 2.135216,2.135200l0,30.729600 c0,1.182900 -0.952306,2.135200 -2.135216,2.135200l-45.729568,0 c-1.182910,0 -2.135216,-0.952300 -2.135216,-2.135200l0,-30.729600 c0,-1.182900 0.952306,-2.135200 2.135216,-2.135200z", "")
+		}, 50, 35));
+
+		// sketchShapes
+		sketchShapes.put(ElementType.RECT.getSketchType(), new Group(new Proto[]{
+			new Proto("m 49.1459,1.3847 c 0.104761,6.9675 0.03506,9.4865 0.26563,16.6366 0.0014,2.9517 0.309709,14.36 -0.09515,16.501 -2.42503,0.039 -16.1332,-0.2513 -19.0888,-0.068 -17.2572,-0.6772 -13.5226,0.3262 -29.4849,-0.195 0.082078,-2.3524 -0.00872,-17.0765 -0.043292,-19.4423 0.120578,-5.8357 0.25667,-8.5167 -0.0317819,-14.2045 8.64905,0.2209 16.6681,0.5994 27.3095,0.3107 l 21.8322,-0.326 ", "")
+		}, 50, 35));
+
 	}
 
-	public static Group get(String elementType) {
-		return get(ElementType.getEnum(elementType));
+	public static Group get(String elementType, boolean sketch) {
+		return get(ElementType.getEnum(elementType), sketch);
 	}
 
-	public static Group get(ElementType type) {
-		return shapes.get(type);
+	public static Group get(ElementType type, boolean sketch) {
+		Group result = null;
+		if (sketch) {
+			result = getSketch(type);
+		}
+		if (result == null) {
+			result = shapes.get(type);
+		}
+		return result;
+	}
+
+	private static Group getSketch(ElementType type) {
+		return sketchShapes.get(type.getSketchType());
 	}
 }
