@@ -8,6 +8,7 @@ import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
 import net.sevenscales.editor.api.event.CommentModeEvent;
 import net.sevenscales.editor.api.event.CommentModeEventHandler;
 import net.sevenscales.editor.api.event.SuperQuickModeEvent;
+import net.sevenscales.editor.api.event.SketchModeEvent;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.utils.SLogger;
 
@@ -108,6 +109,40 @@ public class Tools {
 	private boolean confluence(ISurfaceHandler surface) {
 		return surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE);
 	}	
+
+
+	public static void setDiagramProperties(Long diagramProperties) {
+		instance._setDiagramProperties(diagramProperties);
+	}
+
+	private void _setDiagramProperties(Long diagramProperties) {
+		boolean sketchMode = (diagramProperties & DiagramProperty.SKETCH_MODE.getValue()) == DiagramProperty.SKETCH_MODE.getValue();
+		setSketchMode(sketchMode);
+	}
+
+	public static boolean isSketchMode() {
+		return instance._isSketchMode();
+	}
+	private boolean _isSketchMode() {
+		return (currentTools & Tool.SKETCH_MODE.getValue()) == Tool.SKETCH_MODE.getValue();
+	}
+	public static void setSketchMode(boolean enabled) {
+		instance._setSketchMode(enabled);
+	}
+	public void _setSketchMode(boolean enabled) {
+		if (enabled) {
+			currentTools |= Tool.SKETCH_MODE.getValue();
+		} else {
+			currentTools &= ~Tool.SKETCH_MODE.getValue();
+		}
+	}
+	public static void toggleSketchMode() {
+		instance._toggleSketchMode();
+	}
+	private void _toggleSketchMode() {
+		setSketchMode(!isSketchMode());
+    surface.getEditorContext().getEventBus().fireEvent(new SketchModeEvent(isSketchMode()));
+	}
 
 
 	public static boolean isCommentMode() {

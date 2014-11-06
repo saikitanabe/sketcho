@@ -185,6 +185,8 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
   	}
 
     surface.suspendRedraw();
+
+    Tools.setDiagramProperties(dContent.getDiagramProperties());
     
     IDiagramItem[] items = new IDiagramItem[dContent.getDiagramItems().size()];
     dContent.getDiagramItems().toArray(items);

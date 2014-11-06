@@ -5,7 +5,8 @@ public enum Tool {
 	COMMENT_TOOL		(0x0001),
 	FREEHAND_TOOL		(0x0002),
 	CURVED_ARROW 		(0x0004),
-	QUICK_MODE	 		(0x0008);
+	QUICK_MODE	 		(0x0008),
+	SKETCH_MODE	 		(0x0010);
 
 	private int value;
 

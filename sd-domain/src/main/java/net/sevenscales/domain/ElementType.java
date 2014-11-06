@@ -45,7 +45,6 @@ public enum ElementType {
 	IPHONE("iphone"),
 	WEB_BROWSER("w-browser"),
 	RECT("rect"),
-	RECT_S("rect_s"),
 	FREEHAND2("freehand2"),
 	SWITCH("switch"),
 	ROUTER("router"),
@@ -66,6 +65,10 @@ public enum ElementType {
 
 	public String getValue() {
 		return this.value;
+	}
+
+	public String getSketchType() {
+		return this.value + "_s";
 	}
 
 	public static ElementType getEnum(String operation) {

@@ -18,6 +18,7 @@ import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.domain.Dimension;
 import net.sevenscales.domain.utils.DiagramItemHelpers;
+import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
@@ -410,6 +411,9 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		result.setText(RelationshipHelpers.relationship(start, surface.getEditorContext(), end));
 		result.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue() | 
 															ShapeProperty.CLOSEST_PATH.getValue());
+		if (Tools.isSketchMode()) {
+			result.setLineWeight(Constants.SKETCH_MODE_LINE_WEIGHT);
+		}
 		setDefaultColors(result);
 		result.setShape(closestSegment.start.x + "," + 
 									closestSegment.start.y + "," + 

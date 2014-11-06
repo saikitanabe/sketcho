@@ -258,6 +258,13 @@ public class UMLDiagramSelections extends Composite {
 		selectionHandler.hidePopup();
 	}
 
+	@UiHandler("sketchMode")
+  public void onSketchMode(ClickEvent event) {
+		stopEvent(event);
+		Tools.toggleSketchMode();
+		selectionHandler.hidePopup();
+	}
+
 	@UiHandler("myimages")
 	public void onMyImages(ClickEvent event) {
 		stopEvent(event);

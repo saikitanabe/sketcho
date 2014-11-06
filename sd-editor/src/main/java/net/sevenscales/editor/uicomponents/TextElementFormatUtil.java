@@ -10,8 +10,10 @@ import com.google.gwt.logging.client.LogConfiguration;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 import net.sevenscales.editor.gfx.base.GraphicsMouseDownHandler;
@@ -340,8 +342,8 @@ public class TextElementFormatUtil {
         ILine separator = IShapeFactory.Util.factory(editable).createLine(textGroup);
         separator.setStroke(hasTextElement.getTextColor());
         // TODO isSketchiness()
-        if (hasTextElement.isSketchiness()) {
-          separator.setStrokeWidth(2);
+        if (Tools.isSketchMode()) {
+          separator.setStrokeWidth(Constants.SKETCH_SEPARATOR_WEIGHT);
         }
 //        separator.setFill(250, 250, 200, 2);
         

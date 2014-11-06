@@ -15,6 +15,7 @@ public class DiagramContentDTO extends ContentDTO implements IDiagramContent, Is
 	private List<IDiagramItemRO> diagramItems = new DiagramItemList();
 	// precision will suffer, but should be enough times to update the board...
   private int version = -1;
+  private Long diagramProperties;
 
   public DiagramContentDTO() {
 	}
@@ -52,6 +53,13 @@ public class DiagramContentDTO extends ContentDTO implements IDiagramContent, Is
 	
 	public void setVersion(int version) {
 		this.version = version;
+	}
+
+	public void setDiagramProperties(Long diagramProperties) {
+		this.diagramProperties = diagramProperties;
+	}
+	public Long getDiagramProperties() {
+		return diagramProperties;
 	}
 	
 	@Override

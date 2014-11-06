@@ -20,6 +20,7 @@ import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.editor.diagram.shape.RelationshipShape2;
 
 
@@ -128,6 +129,10 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       DiagramItemDTO di = new DiagramItemDTO();
       if (Tools.isCurvedArrow()) {
         di.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue());
+      }
+
+      if (Tools.isSketchMode()) {
+        di.setLineWeight(Constants.SKETCH_MODE_LINE_WEIGHT);
       }
 
       // di.addShapeProperty(ShapeProperty.CLOSEST_PATH);

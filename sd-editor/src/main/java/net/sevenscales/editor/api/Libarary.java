@@ -342,7 +342,6 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         LibraryShapes.get(ElementType.BUBBLE),
         LibraryShapes.get(ElementType.BUBBLE_R),
         LibraryShapes.get(ElementType.RECT),
-        LibraryShapes.get(ElementType.RECT_S),
         LibraryShapes.get(ElementType.LIGHTBULB)
       },
       {

@@ -96,6 +96,17 @@
 			</c:child>
 		</c:FastButton>
 
+		<c:FastButton ui:field="sketchMode" addStyleNames="{style.simple}">
+			<c:child>
+				<g:HTML>
+					<a title="Switch Awesome to Corporate" class="btn btn-custom download-btn tooltipper">
+						<i class="">S</i>
+					</a>
+				</g:HTML>
+			</c:child>
+		</c:FastButton>
+
+
 		<g:ScrollPanel ui:field="scrollPanel" styleName="shape-context-panel">
 		<g:HTMLPanel>
 		<g:SimplePanel ui:field="imagesArea"></g:SimplePanel>

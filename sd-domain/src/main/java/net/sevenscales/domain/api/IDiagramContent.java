@@ -9,4 +9,7 @@ public interface IDiagramContent extends IContent {
 	void addItem(IDiagramItemRO diagramItem);
 	void reset();
 	int getVersion();
+
+  void setDiagramProperties(Long properties);
+  Long getDiagramProperties();
 }
