@@ -19,7 +19,10 @@ import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.api.ot.OperationTransaction;
+import net.sevenscales.editor.utils.DiagramItemConfiguration;
 import net.sevenscales.editor.content.ui.IModeManager;
+import net.sevenscales.editor.content.utils.AbstractDiagramFactory;
+import net.sevenscales.editor.content.utils.ShapeParser;
 import net.sevenscales.editor.diagram.ClickDiagramHandler;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSelectionHandler;
@@ -44,6 +47,7 @@ import net.sevenscales.editor.diagram.shape.ServerShape;
 import net.sevenscales.editor.diagram.shape.TextShape;
 import net.sevenscales.editor.diagram.shape.UMLPackageShape;
 import net.sevenscales.editor.diagram.shape.GenericShape;
+import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.uicomponents.uml.ActivityChoiceElement;
@@ -192,7 +196,32 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		
 		setWidget(panel);
     proxyDragHandler = new ProxyDragHandler(toolpool, surface);
+
+    createLibraryOnBoardReady(this);
 	}
+
+  private native void createLibraryOnBoardReady(Libarary me)/*-{
+    $wnd.boardReadyStream.onValue(function() {
+      me.@net.sevenscales.editor.api.Libarary::onBoardReady()();
+    })
+  }-*/;
+
+  private void onBoardReady() {
+    if (items == null) {
+      editorContext.set(EditorProperty.ON_SURFACE_LOAD, true);
+      List<Diagram> items = createToolbarItems();
+      editorContext.set(EditorProperty.ON_SURFACE_LOAD, false);
+      for (Diagram item : items) {
+        toolpool.add(item, true); 
+      }
+      
+      float factor = 0.8f;
+      if (TouchHelpers.isSupportsTouch()) {
+        factor = 0.7f;
+      }
+      toolpool.scale(factor);
+    }
+  }
 
   private native void ngShowImageLibrary()/*-{
     if (typeof $wnd.ngShowImageLibrary != 'undefined') {
@@ -215,20 +244,6 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 	}
 
 	public void onLoaded() {
-	  if (items == null) {
-	  	editorContext.set(EditorProperty.ON_SURFACE_LOAD, true);
-      List<Diagram> items = createToolbarItems();
-    	editorContext.set(EditorProperty.ON_SURFACE_LOAD, false);
-      for (Diagram item : items) {
-        toolpool.add(item, true); 
-      }
-      
-      float factor = 0.8f;
-      if (TouchHelpers.isSupportsTouch()) {
-      	factor = 0.7f;
-      }
-      toolpool.scale(factor);
-	  }
 	}
 
   private void flows(List<Diagram> result) {
@@ -401,7 +416,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
               Theme.createDefaultBorderColor(),
               Theme.createDefaultTextColor(),
               true,
-              DiagramItemDTO.createGenericItem(colShape.elementType));
+              DiagramItemDTO.createByType(colShape.elementType));
         el.setDuplicateMultiplySize(colShape.duplicateFactoryX, colShape.duplicateFactoryY);
         result.add(el);
         colpos += colShape.width;
@@ -566,16 +581,31 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
         new DiagramItemDTO()));
 
-		result.add(ElementFactory.createClassElement(this.toolpool,
-				new RectShape(30, CLASS_GROUP + 40, 100, 60),
-				"<<interface>>\n"+
-				"ClassName\n"+
-				"--\n"+
-				"method()",
-				Theme.createDefaultBackgroundColor(), 
-				Theme.createDefaultBorderColor(),
-				Theme.createDefaultTextColor(), true,
-        new DiagramItemDTO()));
+    DiagramItemDTO item = DiagramItemDTO.createByType(ElementType.CLASS);
+    DiagramItemConfiguration.setDefaultColors(item);
+    item.setText("<<interface>>\n" +
+                 "ClassName\n" +
+                 "--\n" +
+                 "method()");
+    item.setShape(new RectShape(30, CLASS_GROUP + 40, 100, 60).toString());
+    item.setShapeProperties(LibraryShapes.CLASS_LIKE_PROPERTIES);
+    // item.setShape(d.getLeft() + "," + d.getTop() + "," + "150,45");
+
+    AbstractDiagramFactory factory = ShapeParser.factory(item);
+    Info shape = factory.parseShape(item, 0, 0);
+    Diagram diagram = factory.parseDiagram(this.toolpool, shape, true, item, null);
+    result.add(diagram);
+
+		// result.add(ElementFactory.createClassElement(this.toolpool,
+		// 		new RectShape(30, CLASS_GROUP + 40, 100, 60),
+		// 		"<<interface>>\n"+
+		// 		"ClassName\n"+
+		// 		"--\n"+
+		// 		"method()",
+		// 		Theme.createDefaultBackgroundColor(), 
+		// 		Theme.createDefaultBorderColor(),
+		// 		Theme.createDefaultTextColor(), true,
+  //       new DiagramItemDTO()));
 
     result.add(new UMLPackageElement(this.toolpool,
         new UMLPackageShape(120, CLASS_GROUP + 150, 100, 40),

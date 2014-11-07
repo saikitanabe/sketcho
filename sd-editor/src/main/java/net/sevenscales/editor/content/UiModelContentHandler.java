@@ -244,6 +244,8 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     editorContext.set(EditorProperty.HOLD_ARROW_DRAWING, false);
     reattachHelpers.reattachRelationshipsAndDraw();
 
+		trigger("board-rendered");
+
     setInitialBoardPosition(surface);
    // small hack to send package elements to background on load
    // could be replaced with static layering values for container elements
@@ -270,6 +272,10 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 		new FailureHandlerImpl(failed, surface);
    }
   }
+
+  private native void trigger(String event)/*-{
+    $wnd.$($doc).trigger(event);
+  }-*/;
 
   private void hideShapes(ISurfaceHandler surface) {
 		for (Diagram d : surface.getDiagrams()) {
