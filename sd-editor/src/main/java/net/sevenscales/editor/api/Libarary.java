@@ -56,7 +56,6 @@ import net.sevenscales.editor.uicomponents.uml.ForkElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityEnd;
 import net.sevenscales.editor.uicomponents.uml.ActivityStart;
 import net.sevenscales.editor.uicomponents.uml.Actor;
-import net.sevenscales.editor.uicomponents.uml.ElementFactory;
 import net.sevenscales.editor.uicomponents.uml.ComponentElement;
 import net.sevenscales.editor.uicomponents.uml.EllipseElement;
 import net.sevenscales.editor.uicomponents.uml.MindCentralElement;

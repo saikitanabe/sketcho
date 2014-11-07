@@ -45,11 +45,11 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
   private TextElementFormatUtil textUtil;
   private static final int DEFAULT_CLASS_RADIUS = 2;
 
-  ClassElement2(ISurfaceHandler surface, RectShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+  public ClassElement2(ISurfaceHandler surface, RectShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
     this(surface, newShape, text, backgroundColor, borderColor, textColor, editable, false, item);
   }
   
-  ClassElement2(ISurfaceHandler surface, RectShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText, IDiagramItemRO item) {
+  public ClassElement2(ISurfaceHandler surface, RectShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText, IDiagramItemRO item) {
     super(editable, surface, backgroundColor, borderColor, textColor, item);
     this.shape = newShape;
     

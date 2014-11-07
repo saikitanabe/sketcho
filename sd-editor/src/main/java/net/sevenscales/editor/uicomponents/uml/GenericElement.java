@@ -353,6 +353,9 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	  	this.width = width;
 	  	this.height = height;
 
+	  	int orgwidth = getWidth();
+	  	int orgheight = getHeight();
+
 	  	// setting some minimum width and height in case those are zero
 	    background.setShape(left, top, width == 0 ? 4 : width, height == 0 ? 4 : height, 0);
 
@@ -363,7 +366,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 			if (shape.getSvgData() != null) {
 				// freehand and any custom svg case
 		  	subgroup.setScale(factorX, factorY);
-			} else {
+			} else if (width != orgwidth || height != orgheight) {
 		  	scalePaths(factorX, factorY);
 			}
 	  	subgroup.setTransform(left, top);

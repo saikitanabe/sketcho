@@ -65,8 +65,8 @@ import net.sevenscales.editor.uicomponents.uml.ActivityEnd;
 import net.sevenscales.editor.uicomponents.uml.ActivityStart;
 import net.sevenscales.editor.uicomponents.uml.ForkElement;
 import net.sevenscales.editor.uicomponents.uml.Actor;
-import net.sevenscales.editor.uicomponents.uml.ElementFactory;
 import net.sevenscales.editor.uicomponents.uml.EllipseElement;
+import net.sevenscales.editor.uicomponents.uml.ClassElement2;
 import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
@@ -365,7 +365,7 @@ Color borderColor, Color color) {
 			break;
 		}
 		case CLASS: {
-			Diagram ce = ElementFactory.createClassElement(surface, new RectShape(x,
+			Diagram ce = new ClassElement2(surface, new RectShape(x,
 					y, 1, // auto resizes
 					1), // auto resizes
 					type.getValue(), background, borderColor, color, true, new DiagramItemDTO());
