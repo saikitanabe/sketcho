@@ -29,6 +29,7 @@ import net.sevenscales.editor.api.event.SelectionEventHandler;
 // import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.api.ot.CompensationModel;
 import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.utils.DiagramItemConfiguration;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
@@ -411,7 +412,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		result.setText(RelationshipHelpers.relationship(start, surface.getEditorContext(), end));
 		result.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue() | 
 															ShapeProperty.CLOSEST_PATH.getValue());
-		setDefaultColors(result);
+		DiagramItemConfiguration.setDefaultColors(result);
 		result.setShape(closestSegment.start.x + "," + 
 									closestSegment.start.y + "," + 
 									closestSegment.end.x + "," +
@@ -421,15 +422,9 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	}
 
 	private IDiagramItem setDefaultValues(IDiagramItem item) {
-		setDefaultColors(item);
+		DiagramItemConfiguration.setDefaultColors(item);
 		item.setShapeProperties(ShapeProperty.clear(item.getShapeProperties(), ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue()));
 		item.setFontSize(null);
-		return item;
-	}
-
-	private IDiagramItem setDefaultColors(IDiagramItem item) {
-		item.setBackgroundColor(Theme.createDefaultBackgroundColor().toRgbWithOpacity() + ":" + Theme.createDefaultBorderColor().toRgbWithOpacity());
-		item.setTextColor(Theme.createDefaultTextColor().toRgbWithOpacity());
 		return item;
 	}
 

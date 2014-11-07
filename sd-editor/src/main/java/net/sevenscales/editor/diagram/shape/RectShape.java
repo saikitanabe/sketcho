@@ -77,4 +77,8 @@ public class RectShape extends Info {
 		return height;
 	}
 
+	public String toString() {
+		return left + "," + top + "," + width + "," + height;
+	}
+
 }

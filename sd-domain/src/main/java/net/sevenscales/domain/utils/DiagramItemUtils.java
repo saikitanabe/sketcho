@@ -7,4 +7,5 @@ public class DiagramItemUtils {
 		}
 		return false;
 	}
+
 }

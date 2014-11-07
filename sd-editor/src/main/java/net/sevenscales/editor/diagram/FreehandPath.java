@@ -141,7 +141,7 @@ class FreehandPath {
       polyline.getStrokeColor(), 
       Theme.createDefaultTextColor(),
       surface.getEditorContext().isEditable(), 
-      DiagramItemDTO.createGenericItem(ElementType.FREEHAND2));
+      DiagramItemDTO.createByType(ElementType.FREEHAND2));
     // surface.add(diagram, true);
     polyline.setVisibility(false);
     points.clear();

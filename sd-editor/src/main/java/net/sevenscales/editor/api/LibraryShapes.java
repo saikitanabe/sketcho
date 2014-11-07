@@ -9,6 +9,9 @@ import net.sevenscales.domain.ShapeProperty;
 public class LibraryShapes {
 	public static Map<ElementType, LibraryShape> shapes;
 
+  public static final int CLASS_LIKE_PROPERTIES = ShapeProperty.TEXT_POSITION_TOP.getValue() | ShapeProperty.TEXT_RESIZE_DIR_HORIZONTAL.getValue();
+
+
 	static {
 		shapes = new HashMap<ElementType, LibraryShape>();
 	  shapes.put(ElementType.STAR4, new LibraryShape(ElementType.STAR4, 40, 40));
@@ -29,9 +32,8 @@ public class LibraryShapes {
 	  shapes.put(ElementType.ARROW_LEFT, new LibraryShape(ElementType.ARROW_LEFT, 40, 20, ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue(), 3, 3));
 	  shapes.put(ElementType.IPHONE, new LibraryShape(ElementType.IPHONE, 24, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12));
 	  shapes.put(ElementType.WEB_BROWSER, new LibraryShape(ElementType.WEB_BROWSER, 50, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12));
-    int classLikeProperties = ShapeProperty.TEXT_POSITION_TOP.getValue() | ShapeProperty.TEXT_RESIZE_DIR_HORIZONTAL.getValue();
-    shapes.put(ElementType.RECT, new LibraryShape(ElementType.RECT, 50, 35, classLikeProperties, 2, 2));
-    shapes.put(ElementType.CLASS, new LibraryShape(ElementType.CLASS, 50, 35, classLikeProperties, 2, 2));
+    shapes.put(ElementType.RECT, new LibraryShape(ElementType.RECT, 50, 35, CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.CLASS, new LibraryShape(ElementType.CLASS, 50, 35, CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.SWITCH, new LibraryShape(ElementType.SWITCH, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
     shapes.put(ElementType.ROUTER, new LibraryShape(ElementType.ROUTER, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
     shapes.put(ElementType.DESKTOP, new LibraryShape(ElementType.DESKTOP, 50, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
