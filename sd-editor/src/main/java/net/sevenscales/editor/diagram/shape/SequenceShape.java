@@ -11,5 +11,9 @@ public class SequenceShape extends HasRectShape {
   	super(left, top, width, height);
     this.lifeLineHeight = lifeLineHeight;
   }
+
+  public String toString() {
+  	return lifeLineHeight + " " + super.toString();
+  }
   
 }

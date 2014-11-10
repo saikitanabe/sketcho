@@ -15,4 +15,8 @@ public class CenterShape extends Info {
   	centerY += moveY;
     return this;
   }
+
+  public String toString() {
+  	return centerX + "," + centerY;
+  }
 }

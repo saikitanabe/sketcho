@@ -25,5 +25,9 @@ public class ActivityStartShape extends CenterShape {
 	public int getTop() {
 		return centerY - radius;
 	}
+
+	public String toString() {
+		return super.toString() + "," + radius;
+	}
 	
 }

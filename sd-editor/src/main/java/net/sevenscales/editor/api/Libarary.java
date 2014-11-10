@@ -60,7 +60,6 @@ import net.sevenscales.editor.uicomponents.uml.ComponentElement;
 import net.sevenscales.editor.uicomponents.uml.EllipseElement;
 import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
-import net.sevenscales.editor.uicomponents.uml.RectBoundaryElement;
 import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
@@ -247,101 +246,89 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
   private void flows(List<Diagram> result) {
     final Color flowGroupColor = new Color(0x99, 0x99, 0xff, 0);
-    result.add(new RectBoundaryElement(this.toolpool,
-        new RectContainerShape(10, ACTIVITY_GROUP, 220, ACTIVITY_GROUP_HEIGHT),
-        "Flows",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
-        new DiagramItemDTO()));
+
+    result.add(_create(ElementType.VERTICAL_PARTITION,
+                       "Flows",
+                       new RectContainerShape(10, ACTIVITY_GROUP, 220, ACTIVITY_GROUP_HEIGHT).toString()));
     
-    result.add(new ActivityChoiceElement(this.toolpool,
-        new ActivityChoiceShape(185, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 10, 32, 32),
-        "",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
-        new DiagramItemDTO()));
+    result.add(_create(ElementType.CHOICE,
+                       "",
+                       new ActivityChoiceShape(185, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 10, 32, 32).toString()));
 
-    result.add(new ActivityStart(this.toolpool,
-        new ActivityStartShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE, ActivityStart.ACTIVITY_START_RADIUS), true,
-        new DiagramItemDTO()));
+    result.add(_create(ElementType.ACTIVITY_START,
+                       "",
+                       new ActivityStartShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE, ActivityStart.ACTIVITY_START_RADIUS).toString(), null, false,
+                       Theme.createDefaultBorderColor(),
+                       Theme.createDefaultBorderColor(),
+                       Theme.createDefaultTextColor()));
 
-    result.add(new ActivityEnd(this.toolpool,
-        new ActivityEndShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 50, ActivityEnd.ACTIVITY_END_RADIUS), true,
-        new DiagramItemDTO()));
+    result.add(_create(ElementType.ACTIVITY_END,
+                       "",
+                       new ActivityEndShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 50, ActivityEnd.ACTIVITY_END_RADIUS).toString(), null, false,
+                       Theme.createDefaultBorderColor(),
+                       Theme.createDefaultBorderColor(),
+                       Theme.createDefaultTextColor()));
 
-    result.add(new ActivityElement(this.toolpool,
-        new ActivityShape(30, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 10, 100, 30),
-        "My Activity",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
-        new DiagramItemDTO()));
-    
-    result.add(new SequenceElement(this.toolpool, 
-        new SequenceShape(50, ACTIVITY_GROUP + 130, 100, 25, 25),
-        "Sequence",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
-        new DiagramItemDTO()));
-    
-    result.add(new ActivityElement(this.toolpool,
-        new ActivityShape(80, ACTIVITY_GROUP + 220, 100, 30),
-        "Collaboration",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
-        new DiagramItemDTO()));
+    result.add(_create(ElementType.ACTIVITY, "My Activity",
+                 new ActivityShape(30, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 10, 100, 30).toString(),
+                 LibraryShapes.CLASS_LIKE_PROPERTIES));
 
-    result.add(new ForkElement(this.toolpool,
-      new ForkShape(150, ACTIVITY_GROUP + 130, 50, 5),
-      Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
-      new DiagramItemDTO()));
-    result.add(new ForkElement(this.toolpool,
-      new ForkShape(210, ACTIVITY_GROUP + 130, 5, 50, 1),
-      Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
-      new DiagramItemDTO()));
+    result.add(_create(ElementType.SEQUENCE, "Sequence",
+                 new SequenceShape(50, ACTIVITY_GROUP + 130, 100, 25, 25).toString(),
+                 LibraryShapes.CLASS_LIKE_PROPERTIES));
+        
+    result.add(_create(ElementType.ACTIVITY, "Collaboration",
+                 new ActivityShape(80, ACTIVITY_GROUP + 220, 100, 30).toString(),
+                 LibraryShapes.CLASS_LIKE_PROPERTIES));
 
-    Diagram swimline = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(22, ACTIVITY_GROUP + 200, 190, 90), "Swimline", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, new DiagramItemDTO());
-    swimline.setDuplicateMultiplySize(3, 3);
+    result.add(_create(ElementType.FORK, "",
+                 new ForkShape(150, ACTIVITY_GROUP + 130, 50, 5).toString()));
+
+    result.add(_create(ElementType.FORK, "",
+                 new ForkShape(210, ACTIVITY_GROUP + 130, 5, 50, 1).toString()));
+
+    Diagram swimline = _create(ElementType.HORIZONTAL_PARTITION, "Swimline",
+                 new HorizontalPartitionShape(22, ACTIVITY_GROUP + 200, 190, 90).toString());
     result.add(swimline);
   }
 
   private void roadmap(List<Diagram> result) {
     int roadmapIndent = 35;
-    Diagram q1 = new RectBoundaryElement(this.toolpool,
-        new RectContainerShape(roadmapIndent, ROADMAP_GROUP, 195, ROADMAP_GROUP_HEIGHT),
-        "Q1",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), 
-        Theme.createDefaultTextColor(), true,
-        new DiagramItemDTO());
+
+    Diagram q1 = _create(ElementType.VERTICAL_PARTITION,
+                       "Q1",
+                       new RectContainerShape(roadmapIndent, ROADMAP_GROUP, 195, ROADMAP_GROUP_HEIGHT).toString());
     q1.setDuplicateMultiplySize(2, 2);
     result.add(q1);
 
     int marketingY = ROADMAP_GROUP + 25;
     int marketingHeight = ROADMAP_GROUP_HEIGHT / 2 - 10;
-    Diagram marketing = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, marketingY, 220, marketingHeight), "Marketing", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, 
-      new DiagramItemDTO());
+    Diagram marketing = _create(ElementType.HORIZONTAL_PARTITION, "Marketing",
+                                new HorizontalPartitionShape(10, marketingY, 220, marketingHeight).toString());
     marketing.setDuplicateMultiplySize(3, 3);
     result.add(marketing);
 
     int activityIndent = roadmapIndent + 10;
-    result.add(new ActivityChoiceElement(this.toolpool,
-        new ActivityChoiceShape(activityIndent, marketingY + 45, 32, 32),
-        "",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
-        new DiagramItemDTO()));
 
-    result.add(new MindCentralElement(this.toolpool,
-        new MindCentralShape(roadmapIndent + 50, marketingY + 10, 100, 30),
-        "Keynote",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
-        new DiagramItemDTO()));
+    result.add(_create(ElementType.CHOICE,
+                       "",
+                       new ActivityChoiceShape(activityIndent, marketingY + 45, 32, 32).toString()));
+
+    result.add(_create(ElementType.MIND_CENTRAL,
+                       "Keynote",
+                       new MindCentralShape(roadmapIndent + 50, marketingY + 10, 100, 30).toString()));
 
     int productY = marketingY + marketingHeight;
     int productHeight = ROADMAP_GROUP_HEIGHT / 2 - 15;
-    Diagram productLine = new HorizontalPartitionElement(this.toolpool, new HorizontalPartitionShape(10, productY, 220, productHeight), "Product Line", Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
-      new DiagramItemDTO());
+    Diagram productLine = _create(ElementType.HORIZONTAL_PARTITION, "Product Line",
+                                new HorizontalPartitionShape(10, marketingY, 220, marketingHeight).toString());
+
     productLine.setDuplicateMultiplySize(3, 3);
     result.add(productLine);
 
-    result.add(new ActivityElement(this.toolpool,
-        new ActivityShape(roadmapIndent + 10, productY + 30, 100, 30),
-        "Release X",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
-        new DiagramItemDTO()));
+    result.add(_create(ElementType.ACTIVITY, "Release X",
+                 new ActivityShape(roadmapIndent + 10, productY + 30, 100, 30).toString(),
+                 LibraryShapes.CLASS_LIKE_PROPERTIES));
   }
 
   private void general(List<Diagram> result) {
@@ -475,11 +462,9 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 //        new RectShape(30, SOFTWARE_SKETCHING_GROUP_START, 100, 30),
 //        "SimpleClass", ClassElement2.createDefaultBackgroundColor(), Color.createDefaultTextColor(), true));
 		
-    result.add(new RectBoundaryElement(this.toolpool,
-        new RectContainerShape(10, SOFTWARE_SKETCHING_GROUP, 220, SOFTWARE_SKETCHING_GROUP_HEIGHT),
-        "Software Sketching",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
-        new DiagramItemDTO()));
+    result.add(_create(ElementType.VERTICAL_PARTITION,
+                       "Software Sketching",
+                       new RectContainerShape(10, SOFTWARE_SKETCHING_GROUP, 220, SOFTWARE_SKETCHING_GROUP_HEIGHT).toString()));
     
     result.add(new NoteElement(this.toolpool,
         new NoteShape(30, SOFTWARE_SKETCHING_GROUP + GROUP_HEADING_SPACE, 170, 45),
@@ -573,27 +558,16 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 //  	points.add(SOFTWARE_SKETCHING_GROUP_START + 215);
 //    result.add(new Relationship2(this.toolpool, points, "label\n1<>->*", true));
 
+    result.add(_create(ElementType.VERTICAL_PARTITION,
+                       "Class and Package",
+                       new RectContainerShape(10, CLASS_GROUP, 220, CLASS_GROUP_HEIGHT).toString()));
 
-    result.add(new RectBoundaryElement(this.toolpool,
-        new RectContainerShape(10, CLASS_GROUP, 220, CLASS_GROUP_HEIGHT),
-        "Class and Package",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true,
-        new DiagramItemDTO()));
-
-    DiagramItemDTO item = DiagramItemDTO.createByType(ElementType.CLASS);
-    DiagramItemConfiguration.setDefaultColors(item);
-    item.setText("<<interface>>\n" +
+    result.add(_create(ElementType.CLASS, "<<interface>>\n" +
                  "ClassName\n" +
                  "--\n" +
-                 "method()");
-    item.setShape(new RectShape(30, CLASS_GROUP + 40, 100, 60).toString());
-    item.setShapeProperties(LibraryShapes.CLASS_LIKE_PROPERTIES);
-    // item.setShape(d.getLeft() + "," + d.getTop() + "," + "150,45");
-
-    AbstractDiagramFactory factory = ShapeParser.factory(item);
-    Info shape = factory.parseShape(item, 0, 0);
-    Diagram diagram = factory.parseDiagram(this.toolpool, shape, true, item, null);
-    result.add(diagram);
+                 "method()",
+                 new RectShape(30, CLASS_GROUP + 40, 100, 60).toString(),
+                 LibraryShapes.CLASS_LIKE_PROPERTIES));
 
 		// result.add(ElementFactory.createClassElement(this.toolpool,
 		// 		new RectShape(30, CLASS_GROUP + 40, 100, 60),
@@ -615,13 +589,10 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         new DiagramItemDTO()));
     
 		// mindmap group
-    result.add(new RectBoundaryElement(this.toolpool,
-        new RectContainerShape(10, MINDMAP_GROUP, 220, MINDMAP_GROUP_HEIGHT),
-        "Mind Map Library",
-        Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), 
-        Theme.createDefaultTextColor(), true,
-        new DiagramItemDTO()));
-    
+    result.add(_create(ElementType.VERTICAL_PARTITION,
+                       "Mind Map Library",
+                       new RectContainerShape(10, MINDMAP_GROUP, 220, MINDMAP_GROUP_HEIGHT).toString()));
+
 //    result.add(new TextElement(this.toolpool,
 //        new TextShape(20, MINDMAP_GROUP, 100, 30),
 //        new Color(0x44, 0x44, 0x44, 1), new Color(0x44, 0x44, 0x44, 1), "*Mindmap Library*", true));
@@ -663,6 +634,30 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
 		return result;
 	}
+
+  private Diagram _create(ElementType type, String text, String shape) {
+    return _create(type, text, shape, null, true, null, null, null);
+  }
+
+  private Diagram _create(ElementType type, String text, String shape, Integer properties) {
+    return _create(type, text, shape, properties, true, null, null, null);
+  }
+
+  private Diagram _create(ElementType type, String text, String shape, Integer properties, boolean setcolors, Color backgroundColor, Color borderColor, Color textColor) {
+    DiagramItemDTO item = DiagramItemDTO.createByType(type);
+    if (setcolors) {
+      DiagramItemConfiguration.setDefaultColors(item);
+    } else {
+      DiagramItemConfiguration.setColors(item, backgroundColor, borderColor, textColor);
+    }
+    item.setText(text);
+    item.setShape(shape);
+    if (properties != null) {
+      item.setShapeProperties(properties);
+    }
+
+    return ShapeParser.createDiagramElement(item, this.toolpool);
+  }
 
 	public void onClick(Diagram sender, int x, int y, int keys) {
 	}

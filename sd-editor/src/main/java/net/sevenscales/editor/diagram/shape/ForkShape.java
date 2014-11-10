@@ -28,4 +28,8 @@ public class ForkShape extends HasRectShape {
 		}
 	}
 
+  public String toString() {
+    return super.toString() + "," + orientation;
+  }
+
 }

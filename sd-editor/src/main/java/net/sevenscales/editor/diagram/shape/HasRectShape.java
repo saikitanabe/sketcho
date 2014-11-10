@@ -59,4 +59,8 @@ public class HasRectShape extends Info {
 		return rectShape.getHeight();
 	}
 
+	public String toString() {
+		return rectShape.toString();
+	}
+
 }

@@ -9,7 +9,9 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.*;
+import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.api.Tools;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.uicomponents.uml.Shapes;
 import net.sevenscales.domain.utils.SLogger;
 
@@ -109,6 +111,12 @@ public class ShapeParser {
 		}
 
 		throw new RuntimeException("Type not found: " + diro.getType());
+	}
+
+	public static Diagram createDiagramElement(IDiagramItemRO item, ISurfaceHandler surface) {
+    AbstractDiagramFactory factory = ShapeParser.factory(item);
+    Info shape = factory.parseShape(item, 0, 0);
+    return factory.parseDiagram(surface, shape, true, item, null);
 	}
 
 	private static native void debugger()/*-{
