@@ -321,7 +321,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     int productY = marketingY + marketingHeight;
     int productHeight = ROADMAP_GROUP_HEIGHT / 2 - 15;
     Diagram productLine = _create(ElementType.HORIZONTAL_PARTITION, "Product Line",
-                                new HorizontalPartitionShape(10, marketingY, 220, marketingHeight).toString());
+                                new HorizontalPartitionShape(10, productY, 220, productHeight).toString());
 
     productLine.setDuplicateMultiplySize(3, 3);
     result.add(productLine);
