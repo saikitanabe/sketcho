@@ -165,7 +165,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	private IPath createSubPath(Shapes.Proto proto) {
-		return createSubPath(proto.toPath(1, 1), proto.style);
+		return createSubPath(/*proto.toPath(1, 1)*/ null, proto.style);
 	}	
 
 	private IPath createSubPath(String path, String style) {
@@ -194,7 +194,9 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	   //  result.setAttribute("vector-effect", "non-scaling-stroke");
     // }
     // <<<<<<<<<<< Commented out 4.11.2014
-  	// result.setShape(proto.toPath());
+    if (path != null) {
+	  	result.setShape(path);
+    }
   	return result;
 	}
 
