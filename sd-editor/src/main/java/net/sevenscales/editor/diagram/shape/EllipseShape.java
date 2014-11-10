@@ -28,4 +28,8 @@ public class EllipseShape extends CenterShape {
 		return centerY - ry;
 	}
 
+	public String toString() {
+		return super.toString() + "," + rx + "," + ry;
+	}
+
 }

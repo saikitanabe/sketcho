@@ -169,7 +169,6 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	}	
 
 	private IPath createSubPath(String path, String style) {
-		logger.debug("createSubPath {}", path);
     IPath result = IShapeFactory.Util.factory(editable).createPath(subgroup, pathTransformer);
     result.setStroke(borderColor);
     if (getDiagramItem().getLineWeight() != null) {
