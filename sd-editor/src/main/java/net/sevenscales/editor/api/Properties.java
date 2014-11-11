@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.api.event.ColorSelectedEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEventHandler;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
@@ -257,8 +258,24 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		});
 				
 		editorContext.getEventBus().addHandler(ShowDiagramPropertyTextEditorEvent.TYPE, showDiagramText);
+		handleItemRealTimeModify(this);
 
 		setWidget(panel);
+	}
+
+	private native void handleItemRealTimeModify(Properties me)/*-{
+		$wnd.globalStreams.dataItemModifyStream.onValue(function(dataItem) {
+			me.@net.sevenscales.editor.api.Properties::onItemRealTimeModify(Lnet/sevenscales/domain/IDiagramItemRO;)(dataItem)
+		})
+	}-*/;
+
+	private void onItemRealTimeModify(IDiagramItemRO item) {
+		if (selectedDiagram != null && item.getClientId().equals(selectedDiagram.getDiagramItem().getClientId())) {
+			String text = selectedDiagram.getDiagramItem().getText();
+			setTextAreaText(text);
+			// this is state in the server, so kept as sent
+			buffer.text = text;
+		}
 	}
 
 	private void changeFontSize(Integer fontSize) {

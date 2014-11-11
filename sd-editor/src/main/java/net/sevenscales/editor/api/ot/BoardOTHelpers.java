@@ -259,6 +259,7 @@ public class BoardOTHelpers {
 				applyThemeColors(diagram);
 
 				diagrams.add(diagram);
+				diagramRealTimeModified(diagram);
 			}
 		}
 		
@@ -274,6 +275,13 @@ public class BoardOTHelpers {
 		}
   	highlightChanges(originator, diagrams, new OTHighlight(diagrams));
 	}
+
+	private void diagramRealTimeModified(Diagram diagram) {
+		_diagramRealTimeModified(diagram.getDiagramItem());
+	}
+	private native void _diagramRealTimeModified(IDiagramItemRO item)/*-{
+		$wnd.globalStreams.dataItemModifyStream.push(item)
+	}-*/;
 
 	private void applyThemeColors(Diagram diagram) {
     if (diagram.usesSchemeDefaultTextColor(Theme.getColorScheme(ThemeName.PAPER))) {
