@@ -140,7 +140,7 @@ public class UMLDiagramSelections extends Composite {
 	private ISurfaceHandler surface;
 	
 	@UiField VerticalPanel diagramGroups;
-	@UiField FastButton comments;
+	// @UiField FastButton comments;
 	// @UiField FastButton _comments;
 	@UiField HTMLPanel contextMenuArea;
 	@UiField FastButton showDiagrams;
@@ -162,12 +162,14 @@ public class UMLDiagramSelections extends Composite {
 
 		initWidget(uiBinder.createAndBindUi(this));
 
-		if (!notConfluence()) {
+		// >>>>>>>>>>> Commented out 11.11.2014
+		// if (!notConfluence()) {
 			// hide comments on confluence
-			comments.setVisible(false);
-			// quickMode.setVisible(false);
-			// _comments.setVisible(false);
-		}
+			// on board comments are deprecated, and cannot be added any longer
+			// comments.setVisible(false);
+		// }
+		// <<<<<<<<<<< Commented out 11.11.2014
+
 		
 		imagesArea.setVisible(false);
 		modifyImages.setVisible(false);
@@ -347,10 +349,14 @@ public class UMLDiagramSelections extends Composite {
 	public void onnote(ClickEvent event) {
 		fire(UMLDiagramType.NOTE);
 	}
-	@UiHandler("comments")
-	public void oncomments(ClickEvent event) {
-		fireCommentThread();
-	}
+	
+	// >>>>>>>>>>> Commented out 11.11.2014
+	// @UiHandler("comments")
+	// public void oncomments(ClickEvent event) {
+	// 	fireCommentThread();
+	// }
+	// <<<<<<<<<<< Commented out 11.11.2014
+
 	// @UiHandler("_comments")
 	// public void oncommentsMind(ClickEvent event) {
 	// 	fireCommentThread();
@@ -606,13 +612,17 @@ public class UMLDiagramSelections extends Composite {
 	}
 
 	public void hideCommentElement() {
-		comments.setVisible(false);
+		// >>>>>>>>>>> Commented out 11.11.2014
+		// comments.setVisible(false);
+		// >>>>>>>>>>> Commented out 11.11.2014
 	}
 
 	public void showCommentElement() {
-		if (notConfluence()) {
-			comments.setVisible(true);
-		}
+		// >>>>>>>>>>> Commented out 11.11.2014
+		// if (notConfluence()) {
+		// 	comments.setVisible(true);
+		// }
+		// >>>>>>>>>>> Commented out 11.11.2014
 	}
 
 }
