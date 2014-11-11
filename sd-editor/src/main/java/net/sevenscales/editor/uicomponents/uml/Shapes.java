@@ -84,6 +84,23 @@ public class Shapes {
 	  	return this.y2;
 	  }-*/;
 
+	  // A command support
+	  public final native double getRX()/*-{
+	  	return this.rx;
+	  }-*/;
+	  public final native double getRY()/*-{
+	  	return this.ry;
+	  }-*/;
+	  public final native int getXRotation()/*-{
+	  	return this.xAxisRotation;
+	  }-*/;
+	  public final native int getLargeArc()/*-{
+	  	return this.largeArc ? 1 : 0;
+	  }-*/;
+	  public final native int getSweep()/*-{
+	  	return this.sweep ? 1 : 0;
+	  }-*/;
+
 	  public final String toPath(double factorX, double factorY, JsPathData prev) {
 	  	String result = "";
 	  	String code = getCode().toLowerCase();
@@ -96,9 +113,14 @@ public class Shapes {
 	  		result = code;
 	  	}
 	  	
-	  	if ("c".equals(result)) {
+	  	if ("c".equals(code)) {
 		  	result += (getX1() * factorX) + "," + (getY1() * factorY) + " ";
 		  	result += (getX2() * factorX) + "," + (getY2() * factorY) + " ";
+	  	}
+
+	  	if ("a".equals(code)) {
+		  	result += (getRX() * factorX) + "," + (getRY() * factorY) + " " +
+		  						getXRotation() + " " + getLargeArc() + " " + getSweep() + " ";
 	  	}
 
 	  	if (!"z".equals(code)) {
@@ -353,9 +375,8 @@ public class Shapes {
 		}, 50, 35));
 
 		sketchShapes.put(ElementType.CLASS.getSketchType(), new Group(new Proto[]{
-new Proto("m2.135216,0 c0,0 13.550818,0.429500 22.864784,0c9.313966,-0.429500 22.864784,0 22.864784,0c1.182910,0 2.135216,0.952300 2.135216,2.135200c0,0 -0.367897,1.465300 -0.095000,8.879600c0.202533,5.502500 0.095000,21.850000 0.095000,21.850000c0.040976,1.182200 -0.952306,2.135200 -2.135216,2.135200c0,0 -15.529302,0.190700 -22.864784,0c-7.621595,0.667600 -22.864784,0 -22.864784,0c-1.182910,0 -2.135216,-0.952300 -2.135216,-2.135200c0,0 0.286113,-7.668200 0,-15.364800c-0.286113,-7.696600 0,-15.364800 0,-15.364800c0,-1.182900 0.952306,-2.135200 2.135216,-2.135200z", "")
+			new Proto("m2.135216,0 c0,0 13.550818,0.429500 22.864784,0c9.313966,-0.429500 22.864784,0 22.864784,0c1.182910,0 2.135216,0.952300 2.135216,2.135200c0,0 -0.367897,1.465300 -0.095000,8.879600c0.202533,5.502500 0.095000,21.850000 0.095000,21.850000c0.040976,1.182200 -0.952306,2.135200 -2.135216,2.135200c0,0 -15.529302,0.190700 -22.864784,0c-7.621595,0.667600 -22.864784,0 -22.864784,0c-1.182910,0 -2.135216,-0.952300 -2.135216,-2.135200c0,0 0.286113,-7.668200 0,-15.364800c-0.286113,-7.696600 0,-15.364800 0,-15.364800c0,-1.182900 0.952306,-2.135200 2.135216,-2.135200z", "")
 		}, 50, 35));
-
 	}
 
 	public static Group get(String elementType, boolean sketch) {
