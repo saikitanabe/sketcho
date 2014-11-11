@@ -69,7 +69,7 @@ public class UMLDiagramSelections extends Composite {
 	
 	public enum UMLDiagramType {
 		CLASS("SimpleClass", ElementType.CLASS, UMLDiagramGroup.CLASS_DIAGRAM), 
-		USE_CASE("Use Case", ElementType.ELLIPSE, UMLDiagramGroup.USE_CASE_DIAGRAM),
+		USE_CASE("Use Case", ElementType.USE_CASE, UMLDiagramGroup.USE_CASE_DIAGRAM),
 		SEQUENCE("object", ElementType.SEQUENCE,  UMLDiagramGroup.SEQUENCE_DIAGRAM),
 		ACTOR("Actor", ElementType.ACTOR,  UMLDiagramGroup.USE_CASE_DIAGRAM), 
 		NOTE("Note", ElementType.NOTE,  UMLDiagramGroup.CLASS_DIAGRAM), 
@@ -349,7 +349,7 @@ public class UMLDiagramSelections extends Composite {
 	public void onnote(ClickEvent event) {
 		fire(UMLDiagramType.NOTE);
 	}
-	
+
 	// >>>>>>>>>>> Commented out 11.11.2014
 	// @UiHandler("comments")
 	// public void oncomments(ClickEvent event) {

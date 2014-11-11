@@ -92,7 +92,7 @@ public class DiagramItemFactory {
    * version 6: 
    * - relationship supports border colors, legacy border color is interpreted as default rel border color
    */
-  public static final int ITEM_VERSION = 6;
+  public static final int ITEM_VERSION = 7;
   
   public static Diagram create(IDiagramItemRO item, ISurfaceHandler surface, boolean editable, IParentElement parent) {
     // 0, 0 create to exact position

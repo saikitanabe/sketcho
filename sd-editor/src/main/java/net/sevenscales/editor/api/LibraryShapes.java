@@ -34,6 +34,7 @@ public class LibraryShapes {
 	  shapes.put(ElementType.WEB_BROWSER, new LibraryShape(ElementType.WEB_BROWSER, 50, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12));
     shapes.put(ElementType.RECT, new LibraryShape(ElementType.RECT, 50, 35, CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.CLASS, new LibraryShape(ElementType.CLASS, 50, 35, CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.USE_CASE, new LibraryShape(ElementType.USE_CASE, 50, 35, CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.SWITCH, new LibraryShape(ElementType.SWITCH, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
     shapes.put(ElementType.ROUTER, new LibraryShape(ElementType.ROUTER, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
     shapes.put(ElementType.DESKTOP, new LibraryShape(ElementType.DESKTOP, 50, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));

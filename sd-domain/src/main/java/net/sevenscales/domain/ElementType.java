@@ -2,6 +2,7 @@ package net.sevenscales.domain;
 
 public enum ElementType {
 	ELLIPSE("ellipseitem"),
+	USE_CASE("usecase"),
 	SEQUENCE("sequenceitem"),
 	COMPONENT("comp"),
 	SERVER("server"),
@@ -65,10 +66,6 @@ public enum ElementType {
 
 	public String getValue() {
 		return this.value;
-	}
-
-	public String getSketchType() {
-		return this.value + "_s";
 	}
 
 	public static ElementType getEnum(String value) {

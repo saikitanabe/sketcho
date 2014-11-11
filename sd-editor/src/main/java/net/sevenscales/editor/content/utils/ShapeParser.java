@@ -31,6 +31,7 @@ public class ShapeParser {
 
 	private static ParserMap[] PARSER_MAP = {
 		new ParserMap(ElementType.ELLIPSE, new AbstractDiagramFactory.EllipseFactory()),
+		new ParserMap(ElementType.USE_CASE, new AbstractDiagramFactory.GenericFactory()),
 		new ParserMap(ElementType.SEQUENCE, new AbstractDiagramFactory.SequenceFactory()),
 		new ParserMap(ElementType.COMPONENT, new AbstractDiagramFactory.ComponentFactory()),
 		new ParserMap(ElementType.SERVER, new AbstractDiagramFactory.ServerFactory()),

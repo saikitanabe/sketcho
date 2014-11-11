@@ -8,6 +8,8 @@ public class Constants {
   
 	public static final String ID_SEPARATOR = "-";
 
-	public static final int SKETCH_MODE_LINE_WEIGHT = 2;
+	public static final int SKETCH_MODE_LINE_WEIGHT = 3;
 	public static final int SKETCH_SEPARATOR_WEIGHT = 2;
+
+	public static final int ELLIPSE_RECT_SHAPE_VERSION = 7;
 }

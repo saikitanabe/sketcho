@@ -14,6 +14,7 @@ import net.sevenscales.editor.api.event.ThemeChangedEventHandler;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.constants.Constants;
 
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.TouchHelpers;
@@ -476,9 +477,12 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
                        "<<system>>\nActor",
                        new ActorShape(30, SOFTWARE_SKETCHING_GROUP + 120, 25, 40).toString()));
 
-    result.add(_create(ElementType.ELLIPSE,
+    result.add(_create(ElementType.USE_CASE,
                        "Use Case",
-                       new EllipseShape(145, SOFTWARE_SKETCHING_GROUP + 150, 50, 25).toString()));
+                       new GenericShape(ElementType.USE_CASE.getValue(), 120, SOFTWARE_SKETCHING_GROUP + 135, 50, 30).toString(),
+                       // for ELLIPSE
+                       // new EllipseShape(145, SOFTWARE_SKETCHING_GROUP + 150, 50, 25).toString()));
+                       LibraryShapes.CLASS_LIKE_PROPERTIES));
 
     result.add(_create(ElementType.STORAGE,
                        "Db",

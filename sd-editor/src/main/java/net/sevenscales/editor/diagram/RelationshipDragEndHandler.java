@@ -4,6 +4,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.js.ImageInfo;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.CreateElementEvent;
@@ -372,13 +373,6 @@ Color borderColor, Color color) {
 			result = ce;
 			break;
 		}
-		case USE_CASE: {
-      EllipseElement usecase = new EllipseElement(surface, 
-          new EllipseShape(x, y, 1, 1), 
-          type.getValue(), background, borderColor, color, true, new DiagramItemDTO());
-			result = usecase;
-			break;
-		}
 		case SEQUENCE: {
 			SequenceElement se = new SequenceElement(surface, 
 	        new SequenceShape(x, y, 1, 1, 25),
@@ -521,6 +515,7 @@ Color borderColor, Color color) {
 			result = element;
 			break;
 		}
+		case USE_CASE:
 		case SMILEY:
 		case FIREWALL:
 		case POLYGON4:
