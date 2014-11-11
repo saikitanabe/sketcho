@@ -214,7 +214,7 @@ public class Shapes {
 		}, 100, 50));
 
 		shapes.put(ElementType.CIRCLE, new Group(new Proto[]{
-			new Proto("m 49.500201,25.000118 a 24.500050,24.500057 0 1 1 -49.000103,0 24.500050,24.500057 0 1 1 49.000103,0 z", "")
+			new Proto("m49.500201,25.000118 a24.500050,24.500057 0 1 1 -49.000103,0a24.500050,24.500057 0 1 1 49.000103,0 z", "")
 		}, 50, 50));
 
 		shapes.put(ElementType.SMILEY, new Group(new Proto[]{
