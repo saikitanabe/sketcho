@@ -72,6 +72,11 @@ class GenericHasTextElement extends AbstractHasTextElement {
 		}
   }
 
+  @Override
+  public boolean centeredText() {
+  	return ShapeProperty.isCenteredText(parent.getDiagramItem().getShapeProperties());
+  }
+
 	@Override
   public boolean supportElementResize() {
   	if (ShapeProperty.isTextPositionBottom(parent.getDiagramItem().getShapeProperties())) {
@@ -93,7 +98,7 @@ class GenericHasTextElement extends AbstractHasTextElement {
   	if (ShapeProperty.isTextResizeDimHorizontalResize(parent.getDiagramItem().getShapeProperties())) {
   		return true;
   	}
-		return false;
+  	return ShapeProperty.boldTitle(parent.getDiagramItem().getShapeProperties());
 	}
 
 	@Override

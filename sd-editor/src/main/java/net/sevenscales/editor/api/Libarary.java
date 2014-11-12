@@ -475,14 +475,15 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
     result.add(_create(ElementType.ACTOR,
                        "<<system>>\nActor",
-                       new ActorShape(30, SOFTWARE_SKETCHING_GROUP + 120, 25, 40).toString()));
+                       new ActorShape(30, SOFTWARE_SKETCHING_GROUP + 120, 43, 54).toString(), 
+                       ShapeProperty.TEXT_POSITION_BOTTOM.getValue() | ShapeProperty.BOLD_TITLE.getValue()));
 
     result.add(_create(ElementType.USE_CASE,
                        "Use Case",
                        new GenericShape(ElementType.USE_CASE.getValue(), 120, SOFTWARE_SKETCHING_GROUP + 135, 50, 30).toString(),
                        // for ELLIPSE
                        // new EllipseShape(145, SOFTWARE_SKETCHING_GROUP + 150, 50, 25).toString()));
-                       LibraryShapes.CLASS_LIKE_PROPERTIES));
+                       LibraryShapes.CLASS_LIKE_PROPERTIES | ShapeProperty.CENTERED_TEXT.getValue()));
 
     result.add(_create(ElementType.STORAGE,
                        "Db",

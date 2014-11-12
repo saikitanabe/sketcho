@@ -18,7 +18,9 @@ public enum ShapeProperty {
 	CURVED_ARROW										  (0x100000),
 	CLOSEST_PATH										  (0x200000),
 	CENTERED_PATH											(0x400000),
-	NO_TEXT_AUTO_ALIGN								(0x000020);
+	NO_TEXT_AUTO_ALIGN								(0x000020),
+	BOLD_TITLE												(0x000040),
+	CENTERED_TEXT											(0x000080);
 
 	private int value;
 
@@ -91,6 +93,14 @@ public enum ShapeProperty {
 			return false;
 		}
 		return value != null && (value & NO_TEXT_AUTO_ALIGN.getValue()) == NO_TEXT_AUTO_ALIGN.getValue();
+	}
+
+	public static boolean boldTitle(Integer value) {
+		return value != null && (value & BOLD_TITLE.getValue()) == BOLD_TITLE.getValue();	
+	}
+
+	public static boolean isCenteredText(Integer value) {
+		return value != null && (value & CENTERED_TEXT.getValue()) == CENTERED_TEXT.getValue();	
 	}
 
 	public static Integer clear(Integer current, Integer toclear) {

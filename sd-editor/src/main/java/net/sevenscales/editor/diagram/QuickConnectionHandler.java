@@ -25,12 +25,14 @@ import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.UndoEvent;
 import net.sevenscales.editor.api.event.SelectionEvent;
 import net.sevenscales.editor.api.event.SelectionEventHandler;
+import net.sevenscales.editor.api.LibraryShapes;
 // import net.sevenscales.editor.api.event.UnselectAllEvent;
 // import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.api.ot.CompensationModel;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.utils.DiagramItemConfiguration;
 import net.sevenscales.editor.diagram.shape.Info;
+import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
@@ -392,8 +394,12 @@ class QuickConnectionHandler implements MouseDiagramHandler {
   }
 
 	private IDiagramItem switchToUseCase(Diagram d, IDiagramItem copy) {
-		copy.setType(ElementType.ELLIPSE.getValue());
-		copy.setShape(d.getLeft() + "," + d.getTop() + "," + "63,21");
+		copy.setType(ElementType.USE_CASE.getValue());
+		copy.setShape(new GenericShape(ElementType.USE_CASE.getValue(), d.getLeft(), d.getTop(), 106, 42).toString());
+		LibraryShapes.LibraryShape shape = LibraryShapes.get(ElementType.USE_CASE);
+		if (shape != null) {
+			copy.setShapeProperties(shape.shapeProperties);
+		}
 		copy.setText("Use Case");
 		return copy;
 	}

@@ -129,7 +129,8 @@ public class TextElementFormatUtil {
     boolean forceAutoResize();
     GraphicsEventHandler getGraphicsMouseHandler();
 		Color getTextColor();
-		boolean verticalAlignMiddle();
+    boolean verticalAlignMiddle();
+		boolean centeredText();
 		boolean boldText();
     boolean supportElementResize();
     boolean isSketchiness();
@@ -177,6 +178,9 @@ public class TextElementFormatUtil {
     public void resizeHeight(int height) {
     }
     public boolean isSketchiness() {
+      return false;
+    }
+    public boolean centeredText() {
       return false;
     }
   }
@@ -448,7 +452,10 @@ public class TextElementFormatUtil {
 	            weight = IText.WEIGHT_BOLD;
 	  	        t.setFontWeight(weight);
 	          }
-	        } else {
+	        } else if (hasTextElement.centeredText()) {
+            x += hasTextElement.getWidth()/2;
+            align = IText.ALIGN_CENTER;
+          } else {
 	          x += getStartX();
 	        }
 	        
