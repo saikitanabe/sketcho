@@ -500,7 +500,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
     result.add(_create(ElementType.SERVER,
                        "Server",
-                       new ServerShape(30, SOFTWARE_SKETCHING_GROUP + 215, 60, 80).toString()));
+                       new ServerShape(30, SOFTWARE_SKETCHING_GROUP + 215, 63, 73).toString()));
     
     // ACTIVITY DIAGRAM
     
@@ -593,7 +593,12 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 	}
 
   private Diagram _create(ElementType type, String text, String shape) {
-    return _create(type, text, shape, null, true, null, null, null);
+    LibraryShapes.LibraryShape s = LibraryShapes.get(type);
+    Integer properties = null;
+    if (s != null) {
+      properties = s.shapeProperties;
+    }
+    return _create(type, text, shape, properties, true, null, null, null);
   }
 
   private Diagram _create(ElementType type, String text, String shape, Integer properties) {

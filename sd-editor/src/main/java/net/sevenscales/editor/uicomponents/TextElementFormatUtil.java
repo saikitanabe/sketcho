@@ -246,6 +246,12 @@ public class TextElementFormatUtil {
     if (marginTopDefined) {
       return marginTop;
     }
+
+    int _marginTop = hasTextElement.getMarginTop();
+    if (_marginTop > 0) {
+      return _marginTop;
+    }
+
     // otherwise use default marginTop
   	return fontProperty.marginTop;
   }
@@ -277,7 +283,11 @@ public class TextElementFormatUtil {
 	}
   public int getMarginBottom() {
 		// return marginBottom;
-    return fontProperty.marginBottom;
+    int marginBottom = hasTextElement.getMarginBottom();
+    if (marginBottom > 0) {
+      return marginBottom;
+    }
+    return 0;
 	}
   
   public void setText(String newText, boolean editable, boolean force) {
@@ -406,7 +416,7 @@ public class TextElementFormatUtil {
   private void resizeElement() {
     double width = getTextWidth();
     int rows = lines.size();
-    int height = getMarginTop() + rows * fontProperty.rowHeight + fontProperty.marginBottom;
+    int height = getMarginTop() + rows * fontProperty.rowHeight + fontProperty.marginBottom + getMarginBottom();
 
     // only resize when size increases; currently disabled
 //      width = width > rectSurface.getWidth() ? width : rectSurface.getWidth();
@@ -422,6 +432,10 @@ public class TextElementFormatUtil {
     this.degrees = degrees;
   }
 
+  private int middleY(int row) {
+    return hasTextElement.getY() + hasTextElement.getMarginTop() + hasTextElement.getHeight() / 2 - (lines.size() * fontProperty.rowHeight / 2) + (row * fontProperty.rowHeight);
+  }
+
 	public void setTextShape() {
     int row = 1;
 //    double rowHeight = 13.0;
@@ -431,10 +445,15 @@ public class TextElementFormatUtil {
 	    for (IShape s : line) {
 	      if (s instanceof ILine) {
 	        ILine l = (ILine) s;
+          int y = hasTextElement.getY() + (row * fontProperty.rowHeight) + 4;
+          if (hasTextElement.verticalAlignMiddle()) {
+            // some mystical - 8 to get line little bit higher
+            y = middleY(row) - 8;
+          }
 	        l.setShape(hasTextElement.getX() + 1, 
-	        					 hasTextElement.getY() + (row * fontProperty.rowHeight) + 4, 
+	        					 y, 
 	        				   hasTextElement.getX() + hasTextElement.getWidth() - 1, 
-	        				   hasTextElement.getY() + (row * fontProperty.rowHeight) + 4);
+	        				   y);
 	        if (separated == -1) {
 	          separated = row;
 	        }
@@ -467,7 +486,7 @@ public class TextElementFormatUtil {
             y = getTextTop(row);
 	        } else {
 	        	// find middle and then find start y based on all lines
-	        	y = hasTextElement.getY() + hasTextElement.getHeight() / 2 - (lines.size() * fontProperty.rowHeight / 2) + (row * fontProperty.rowHeight);
+	        	y = middleY(row);
 	        	y -= 5; // some base line align
 	        }
 	        		

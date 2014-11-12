@@ -10,12 +10,20 @@ public class LibraryShapes {
 	public static Map<ElementType, LibraryShape> shapes;
 
   public static final int CLASS_LIKE_PROPERTIES = ShapeProperty.TEXT_POSITION_TOP.getValue() | ShapeProperty.TEXT_RESIZE_DIR_HORIZONTAL.getValue();
+  public static final int MIDDLE_CLASS_LIKE_PROPERTIES = ShapeProperty.TEXT_RESIZE_DIR_HORIZONTAL.getValue() | 
+                                                         ShapeProperty.CENTERED_TEXT.getValue();
+
+  public static final int BOTTOM_CLASS_LIKE_PROPERTIES = ShapeProperty.TEXT_POSITION_BOTTOM.getValue() | 
+                                                         ShapeProperty.CENTERED_TEXT.getValue() |
+                                                         ShapeProperty.BOLD_TITLE.getValue();
 
 
 	static {
 		shapes = new HashMap<ElementType, LibraryShape>();
 
-    shapes.put(ElementType.ACTOR, new LibraryShape(ElementType.ACTOR, 48, 60, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3));
+    shapes.put(ElementType.ACTOR, new LibraryShape(ElementType.ACTOR, 48, 60, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.SERVER, new LibraryShape(ElementType.SERVER, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.STORAGE, new LibraryShape(ElementType.STORAGE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
 
 	  shapes.put(ElementType.STAR4, new LibraryShape(ElementType.STAR4, 40, 40));
 	  shapes.put(ElementType.STAR5, new LibraryShape(ElementType.STAR5, 40, 40)); 

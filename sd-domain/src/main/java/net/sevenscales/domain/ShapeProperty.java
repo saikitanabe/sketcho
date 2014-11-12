@@ -10,6 +10,7 @@ public enum ShapeProperty {
 	TEXT_POSITION_RIGHT 							(0x000004),
 	TEXT_POSITION_BOTTOM							(0x000008),
 	TEXT_POSITION_LEFT  							(0x000010),
+	TEXT_POSITION_MIDDLE							(0x000400),
 	TEXT_RESIZE_DIR_HORIZONTAL				(0x000100),
 	TEXT_RESIZE_DIR_VERTICAL					(0x000200),
 	DEGREES_0 												(0x001000),
@@ -49,6 +50,9 @@ public enum ShapeProperty {
 	}
 	public static boolean isTextPositionLeft(Integer value) {
 		return value != null && (value & TEXT_POSITION_LEFT.getValue()) == TEXT_POSITION_LEFT.getValue();
+	}
+	public static boolean isTextPositionMiddle(Integer value) {
+		return value != null && (value & TEXT_POSITION_MIDDLE.getValue()) == TEXT_POSITION_MIDDLE.getValue();
 	}
 
 	/**

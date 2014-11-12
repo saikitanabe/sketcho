@@ -17,13 +17,14 @@ class GenericHasTextElement extends AbstractHasTextElement {
 	private float marginTopFactor;
 	private GenericElement parent;
 	private GenericShape shape;
+	private ElementType elementType;
 
 	GenericHasTextElement(GenericElement parent, GenericShape shape) {
 		super(parent);
 		this.parent = parent;
 		this.shape = shape;
 		// possible to customize for each element type
-		ElementType elementType = ElementType.getEnum(shape.getElementType());
+		elementType = ElementType.getEnum(shape.getElementType());
 		switch (elementType) {
 			case BUBBLE:
 			case BUBBLE_R: {
@@ -47,10 +48,16 @@ class GenericHasTextElement extends AbstractHasTextElement {
 	@Override
   public int getY() {
   	if (ShapeProperty.isTextPositionBottom(parent.getDiagramItem().getShapeProperties())) {
-			return parent.getRelativeTop() + parent.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 5;
+			return parent.getRelativeTop() + parent.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 8;
   	} else if (ShapeProperty.isTextResizeDimVerticalResize(parent.getDiagramItem().getShapeProperties())) {
   		return parent.getRelativeTop() + parent.getHeight() / 2 - ((int) parent.getTextHeight() / 2 + TextElementVerticalFormatUtil.DEFAULT_TOP_MARGIN / 2);
   	} else {
+			// switch (elementType) {
+			// 	case STORAGE: {
+		 //  		return parent.getRelativeTop() + 5;
+		 //  	}
+			// }
+
   		return parent.getRelativeTop();
   	}
   }
@@ -164,7 +171,21 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
 	public int getMarginTop() {
+		switch (elementType) {
+			case STORAGE:
+				return 9;
+		}
+		
 		return (int) (parent.getHeight() * marginTopFactor);
+	}
+
+	@Override
+	public int getMarginBottom() {
+		switch (elementType) {
+			case STORAGE:
+				return 15;
+		}
+		return 0;
 	}
 
 };

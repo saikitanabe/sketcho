@@ -429,7 +429,15 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 	private IDiagramItem setDefaultValues(IDiagramItem item) {
 		DiagramItemConfiguration.setDefaultColors(item);
-		item.setShapeProperties(ShapeProperty.clear(item.getShapeProperties(), ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue()));
+
+		LibraryShapes.LibraryShape ls = LibraryShapes.get(ElementType.getEnum(item.getType()));
+		if (ls != null) {
+			item.setShapeProperties(ls.shapeProperties);
+		} else {
+			// copy values except disabled auto resize
+			item.setShapeProperties(ShapeProperty.clear(item.getShapeProperties(), ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue()));
+		}
+
 		item.setFontSize(null);
 		return item;
 	}
