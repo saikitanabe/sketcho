@@ -24,7 +24,8 @@ public class GenericNoteElement extends GenericElement {
     //   tape.setStroke(0xe2, 0x56, 0x56, 0.7);
 	}
 
-  protected Diagram createGenericElement(GenericShape newShape) {
+  @Override
+  protected Diagram createGenericElement(ISurfaceHandler surface, GenericShape newShape) {
     return new GenericNoteElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, DiagramItemDTO.createByType(ElementType.getEnum(getDiagramItem().getType())));
   }
 

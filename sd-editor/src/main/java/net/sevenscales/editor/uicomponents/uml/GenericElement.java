@@ -284,10 +284,10 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth() * factorX, getHeight() * factorY, shape.getShapeProperties(), shape.getSvgData());
-    return createGenericElement(newShape);
+    return createGenericElement(surface, newShape);
   }
 
-  protected Diagram createGenericElement(GenericShape newShape) {
+  protected Diagram createGenericElement(ISurfaceHandler surface, GenericShape newShape) {
  		return new GenericElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, DiagramItemDTO.createByType(ElementType.getEnum(getDiagramItem().getType())));
   }
 	
