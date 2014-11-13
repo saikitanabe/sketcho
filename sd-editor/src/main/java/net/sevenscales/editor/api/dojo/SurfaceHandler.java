@@ -965,7 +965,8 @@ class SurfaceHandler extends SimplePanel implements
 	}
 
 	private native void scaleBackground(float value)/*-{
-		var size = 399 * value
+		// 399
+		var size = 141.73 * value
 		var sizeValue = size + "px " + size + "px"
 		$wnd.$('#sketchboard-editor').css("background-size", sizeValue)
 	}-*/;
