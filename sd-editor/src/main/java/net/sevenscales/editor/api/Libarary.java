@@ -241,7 +241,16 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
   }-*/;
 
 	private void setStyle() {
-    toolpool.setStyleName("toolbar " + Theme.themeCssClass());
+    toolpool.setStyleName("toolbar " + styleByTheme());
+  }
+
+  private String styleByTheme() {
+    switch (Theme.getCurrentThemeName()) {
+      case GRID:
+        return "theme-grid-lib";
+      default: 
+        return Theme.themeCssClass();
+    }
   }
 
   public void addSelectionHandler(DiagramSelectionHandler handler) {
