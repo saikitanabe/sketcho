@@ -68,7 +68,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   private int height;
   private Shapes.Group theshape;
   private TextElementFormatUtil textUtil;
-  private HasTextElement hasTextElement;
+  private GenericHasTextElement hasTextElement;
 
   private boolean tosvg;
   
@@ -135,6 +135,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
     hasTextElement = new GenericHasTextElement(this, shape);
+    hasTextElement.setMarginLeft(getMarginLeft());
     if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
 	    textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
 	    textUtil.setMarginTop(0);
@@ -155,6 +156,14 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
     }
 
     super.constructorDone();
+	}
+
+	protected GenericHasTextElement getHasTextElement() {
+		return hasTextElement;
+	}
+
+	protected int getMarginLeft() {
+		return 0;
 	}
 
 	private void createSubPaths(Shapes.Group groupData) {
@@ -275,8 +284,11 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth() * factorX, getHeight() * factorY, shape.getShapeProperties(), shape.getSvgData());
-    Diagram result = new GenericElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, DiagramItemDTO.createByType(ElementType.getEnum(getDiagramItem().getType())));
-    return result;
+    return createGenericElement(newShape);
+  }
+
+  protected Diagram createGenericElement(GenericShape newShape) {
+ 		return new GenericElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, DiagramItemDTO.createByType(ElementType.getEnum(getDiagramItem().getType())));
   }
 	
   public boolean resize(Point diff) {
@@ -291,8 +303,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 
 	@Override	
 	public void setHeight(int height) {
-		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height);
-		// dispatchAndRecalculateAnchorPositions();
+		resize(getRelativeLeft(), getRelativeTop(), getWidth(), height);
 	}
 
 	public void resizeEnd() {
@@ -386,7 +397,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   private void scalePaths(double factorX, double factorY) {
   	for (PathWrapper pw : paths) {
   		if (pw.isProto()) {
-	  		pw.path.setShape(pw.proto.toPath(factorX, factorY));
+	  		pw.path.setShape(pw.proto.toPath(factorX, factorY, theshape.width));
   		}
   	}
 		// for (Shapes.Proto p : groupData.protos) {
@@ -613,6 +624,12 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   @Override
   public boolean isSketchiness() {
     return getDiagramItem().isSketchiness();
+  }
+
+  @Override
+  public int supportedMenuItems() {
+    return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue() |
+           ContextMenuItem.LAYERS.getValue();
   }
 
 }

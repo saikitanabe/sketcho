@@ -207,19 +207,25 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
   private void onBoardReady() {
     if (items == null) {
-      editorContext.set(EditorProperty.ON_SURFACE_LOAD, true);
-      List<Diagram> items = createToolbarItems();
-      editorContext.set(EditorProperty.ON_SURFACE_LOAD, false);
-      for (Diagram item : items) {
-        toolpool.add(item, true); 
-      }
-      
-      float factor = 0.8f;
-      if (TouchHelpers.isSupportsTouch()) {
-        factor = 0.7f;
-      }
-      toolpool.scale(factor);
+      // >>>>>>>>>>>> DEBUG remove library
+      createLibrary();
+      // <<<<<<<<<<<< DEBUG remove library
     }
+  }
+
+  private void createLibrary() {
+    editorContext.set(EditorProperty.ON_SURFACE_LOAD, true);
+    List<Diagram> items = createToolbarItems();
+    editorContext.set(EditorProperty.ON_SURFACE_LOAD, false);
+    for (Diagram item : items) {
+      toolpool.add(item, true); 
+    }
+    
+    float factor = 0.8f;
+    if (TouchHelpers.isSupportsTouch()) {
+      factor = 0.7f;
+    }
+    toolpool.scale(factor);
   }
 
   private native void ngShowImageLibrary()/*-{
@@ -471,7 +477,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     
     result.add(_create(ElementType.NOTE,
                        "*Note* this!",
-                       new NoteShape(30, SOFTWARE_SKETCHING_GROUP + GROUP_HEADING_SPACE, 170, 45).toString()));
+                       new NoteShape(30, SOFTWARE_SKETCHING_GROUP + GROUP_HEADING_SPACE, 165, 40).toString()));
 
     result.add(_create(ElementType.ACTOR,
                        "<<system>>\nActor",

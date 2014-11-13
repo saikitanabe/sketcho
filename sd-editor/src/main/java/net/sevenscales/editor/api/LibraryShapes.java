@@ -24,6 +24,7 @@ public class LibraryShapes {
     shapes.put(ElementType.ACTOR, new LibraryShape(ElementType.ACTOR, 48, 60, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.SERVER, new LibraryShape(ElementType.SERVER, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.STORAGE, new LibraryShape(ElementType.STORAGE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.NOTE, new LibraryShape(ElementType.NOTE, 47, 55, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3));
 
 	  shapes.put(ElementType.STAR4, new LibraryShape(ElementType.STAR4, 40, 40));
 	  shapes.put(ElementType.STAR5, new LibraryShape(ElementType.STAR5, 40, 40)); 

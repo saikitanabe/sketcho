@@ -101,7 +101,7 @@ public class Shapes {
 	  	return this.sweep ? 1 : 0;
 	  }-*/;
 
-	  public final String toPath(double factorX, double factorY, JsPathData prev) {
+	  public final String toPath(double factorX, double factorY) {
 	  	String result = "";
 	  	String code = getCode().toLowerCase();
 	  	if (isRelative()) {
@@ -139,19 +139,75 @@ public class Shapes {
 	  	return result;
 	  }
 
+	  public final String toPathMove(int moveX, int moveY) {
+	  	String code = getCode().toLowerCase();
+	  	String result = code;
+	  	if ("c".equals(code)) {
+		  	result += (getX1()) + "," + (getY1()) + " ";
+		  	result += (getX2()) + "," + (getY2()) + " ";
+	  	}
+
+	  	if ("a".equals(code)) {
+		  	result += (getRX()) + "," + (getRY()) + " " +
+		  						getXRotation() + " " + getLargeArc() + " " + getSweep() + " ";
+	  	}
+
+	  	if ("v".equals(code)) {
+		  	result += (getY());
+	  	}
+	  	else if (!"z".equals(code) && !"m".equals(code)) {
+		  	result += (getX()) + "," + (getY());
+	  	}
+
+	  	if ("m".equals(code)) {
+		  	result += (getX() + moveX) + "," + (getY() + moveY);
+	  	}
+	  	return result;
+	  }
+
 	}
 
 	public static class Proto {
 		public JsArray<JsPathData> pathDatas;
 		public String style;
+		private boolean scalable;
+		private double width;
 
 		private Proto(String path) {
-			this(path, null);
+			this(path, null, true);
 		}
 
 		private Proto(String path, String style) {
+			this(path, style, true);
+		}
+
+		private Proto(String path, String style, boolean scalable) {
 			this.style = style;
+			this.scalable = scalable;
 			pathDatas = parse(path);
+
+			width = getWidth();
+		}
+
+		private double getWidth() {
+	  	double right = Double.MIN_VALUE;
+	  	double left = Double.MAX_VALUE;
+	  	double result = 0;
+	  	double prevx = 0;
+			for (int i = 0; i < pathDatas.length(); ++i) {
+				JsPathData pd = pathDatas.get(i);
+
+				double x = pd.getX() + prevx;
+				if (x > right) {
+					right = x;
+				}
+				if (x < left) {
+					left = x;
+				}
+				result = right - left;
+				prevx = x;
+			}
+			return result;
 		}
 
 		private native JsArray<JsPathData> parse(String d)/*-{
@@ -159,15 +215,24 @@ public class Shapes {
 			return result
 		}-*/;
 
-		public String toPath(double factorX, double factorY) {
+		public String toPath(double factorX, double factorY, double mainWidth) {
 			// could cache if prev factors are the same!
 			String result = "";
-			JsPathData prev = null;
 			for (int i = 0; i < pathDatas.length(); ++i) {
 				JsPathData current = pathDatas.get(i);
-				result += current.toPath(factorX, factorY, prev);
-				prev = current;
+				if (scalable) {
+					result += current.toPath(factorX, factorY);
+				} else {
+					// factorX = 1;
+					// factorY = 1;
+					// double shouldBeWidth = width * factorX;
+					// double shouldBeX = current.getX() * factorX;
+					// double moveX = shouldBeX + shouldBeWidth / 2;
+
+					result += current.toPathMove((int) ((-1 * width / 2) + (mainWidth / 2 * factorX)), 0);
+				}
 			}
+
 			logger.debug("toPath factorX {}, factorY {} {}", factorX, factorY, result);
 			return result;
 		}
@@ -409,7 +474,14 @@ new Proto("m4.923248,22.671800 l4.285660,3.061200 ", "")
 new Proto("m0.139629,8.109600 v25.554700 c-0.085370,0 10.417202,8.051700 25.819637,7.351300c15.402434,-0.700300 23.453844,-6.300900 23.453844,-6.300900v-25.554700 ", ""),
 new Proto("m26.043228,0.408300 c29.996845,2.647000 33.606048,14.002900 0,14.702900c-33.605696,0.700700 -35.705436,-17.853000 0,-14.702900 z", "")
 		}, 49.963425, 41.105717));
+
+		sketchShapes.put(ElementType.NOTE, new Group(new Proto[]{
+new Proto("m0,0.033600 l49.976084,-0.191900 l0.441281,12.445600 l-50.172731,-0.038300  z", "stroke-linejoin:round;"),
+new Proto("m3.248271,-6.202400 l38.009314,-2.407400 l-0.603969,2.407400 l3.762540,0.531500 l-2.130631,2.445800 l-1.313180,1.852100 l3.613041,0 l-2.874526,2.848300 l2.216143,2.706900 l-40.979521,2.250000 l0.300789,-2.406600 l-2.715465,-0.902500 l3.318235,-1.503800 l-3.851042,-3.491200 l3.364879,-1.282200 l-2.052295,-1.423800 l1.935688,-1.624500  z", "fill:bordercolor;stroke:none;", false)
+		}, 49.924129, 12.190000));
 	}
+
+
 
 	public static Group get(String elementType, boolean sketch) {
 		return get(ElementType.getEnum(elementType), sketch);

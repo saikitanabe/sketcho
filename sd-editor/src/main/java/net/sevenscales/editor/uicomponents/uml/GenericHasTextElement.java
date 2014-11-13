@@ -15,6 +15,7 @@ import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 class GenericHasTextElement extends AbstractHasTextElement {
 	private float marginLeftFactor;
 	private float marginTopFactor;
+	private int marginLeft;
 	private GenericElement parent;
 	private GenericShape shape;
 	private ElementType elementType;
@@ -128,6 +129,11 @@ class GenericHasTextElement extends AbstractHasTextElement {
     parent.fireSizeChanged();
   }
 
+  @Override
+	public void resizeHeight(int height) {
+		parent.setHeight(height);
+  }
+
 	@Override
   public void setLink(String link) {
     parent.setLink(link);
@@ -166,7 +172,13 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
 	public int getMarginLeft() {
+		if (marginLeft > 0) {
+			return marginLeft;
+		}
 		return (int) (parent.getWidth() * marginLeftFactor);
+	}
+	protected void setMarginLeft(int marginLeft) {
+		this.marginLeft = marginLeft;
 	}
 
 	@Override

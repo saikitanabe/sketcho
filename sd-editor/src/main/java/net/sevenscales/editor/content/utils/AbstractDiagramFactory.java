@@ -446,6 +446,16 @@ public interface AbstractDiagramFactory {
 
     public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       switch (ElementType.getEnum(item.getType())) {
+        case NOTE: {
+          return new GenericNoteElement(surface,
+            (GenericShape) shape,
+            item.getText(), 
+            DiagramItemFactory.parseBackgroundColor(item),
+            DiagramItemFactory.parseBorderColor(item),
+            DiagramItemFactory.parseTextColor(item),
+            editable,
+            item);
+        }
         case FREEHAND2:
           return new GenericFreehandElement(surface,
             (GenericShape) shape,
