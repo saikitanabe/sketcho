@@ -233,7 +233,7 @@ public class Shapes {
 				}
 			}
 
-			logger.debug("toPath factorX {}, factorY {} {}", factorX, factorY, result);
+			// logger.debug("toPath factorX {}, factorY {} {}", factorX, factorY, result);
 			return result;
 		}
 	}

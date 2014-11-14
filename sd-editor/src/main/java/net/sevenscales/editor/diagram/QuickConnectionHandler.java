@@ -102,7 +102,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		// }
 
 		Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
-		logger.debug("checkSelection {}", selected);
+		// logger.debug("checkSelection {}", selected);
 		if (selected.size() == 1) {
 			previouslySelected = selected.iterator().next();
 			notAddedFromLibrary = !surface.isProxyDragAdding();
@@ -140,7 +140,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 	@Override
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
-		logger.debug("onMouseUp keys {}", keys);
+		// logger.debug("onMouseUp keys {}", keys);
 
 		this.mouseUpKeys = keys;
 		this.mouseUpPoint = point;
@@ -150,7 +150,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 			Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
 				public boolean execute() {
-					logger.debug("up 500...");
+					// logger.debug("up 500...");
 					if (itWasDoubleTap) {
 						// keep selection
 						itWasDoubleTap = false;
