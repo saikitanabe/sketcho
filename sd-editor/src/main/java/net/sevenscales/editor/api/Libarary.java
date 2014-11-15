@@ -51,6 +51,9 @@ import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.IRectangle;
+import net.sevenscales.editor.gfx.domain.IText;
+import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.uicomponents.uml.ActivityChoiceElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityElement;
 import net.sevenscales.editor.uicomponents.uml.ForkElement;
@@ -87,7 +90,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
   private FlowPanel panel;
 
 	private static final int GROUP_SPACE = 25;
-	private static final int GROUP_HEADING_SPACE = 45;
+	private static final int GROUP_HEADING_SPACE = 55;
 
 	private static final int SOFTWARE_SKETCHING_GROUP = 25;
 	private static final int SOFTWARE_SKETCHING_GROUP_HEIGHT = 410;
@@ -153,7 +156,8 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		this.toolpool = FactoryDoJo.createSurfaceHandler();
 		toolpool.setName(ISurfaceHandler.LIBRARY_AREA);
 		toolpool.setDisableOnArea(true);
-		toolpool.init(200, 1700, true, modeManager, false, editorContext, otBuffer, operationTransaction);
+		toolpool.init(220, 1700, true, modeManager, false, editorContext, otBuffer, operationTransaction);
+    toolpool.setSvgClassName("library-svg");
 		
 		setStyle();
 		editorContext.getEventBus().addHandler(ThemeChangedEvent.TYPE, new ThemeChangedEventHandler() {
@@ -263,9 +267,11 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
   private void flows(List<Diagram> result) {
     final Color flowGroupColor = new Color(0x99, 0x99, 0xff, 0);
 
-    result.add(_create(ElementType.VERTICAL_PARTITION,
-                       "Flows",
-                       new RectContainerShape(10, ACTIVITY_GROUP, 220, ACTIVITY_GROUP_HEIGHT).toString()));
+    addSection("Flows", new RectContainerShape(10, ACTIVITY_GROUP, 220, ACTIVITY_GROUP_HEIGHT));
+
+    // result.add(_create(ElementType.VERTICAL_PARTITION,
+    //                    "Flows",
+    //                    new RectContainerShape(10, ACTIVITY_GROUP, 220, ACTIVITY_GROUP_HEIGHT).toString()));
     
     result.add(_create(ElementType.CHOICE,
                        "",
@@ -472,6 +478,26 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     // result.add(rect);
   }
 
+  private void addSection(String title, RectContainerShape shape) {
+    IText sectionTitle = IShapeFactory.Util.factory(true).createText(toolpool.getRootLayer());
+    sectionTitle.setText(title);
+    sectionTitle.setFontSize("18px");
+    // sectionTitle.setFontFamily("Roboto");
+    sectionTitle.setFill(0x88, 0x89, 0x8A, 1);
+
+    double width = sectionTitle.getTextWidth();
+    double left = shape.getLeft() + shape.getWidth() / 2 - width / 2;
+    sectionTitle.setShape((int) left, shape.getTop() + 30);
+
+    // sectionTitle.setFontWeight(IText.WEIGHT_BOLD);
+
+
+    IRectangle section = IShapeFactory.Util.factory(true).createRectangle(toolpool.getRootLayer());
+    section.setShape(shape.getLeft(), shape.getTop(), shape.getWidth(), shape.getHeight(), 27);
+    section.setFill(0xF1, 0xEF, 0xEF, 1); // transparent
+    section.moveToBack();
+  }
+
 	private List<Diagram> createToolbarItems() {
 		boolean currentValue = editorContext.isTrue(EditorProperty.AUTO_RESIZE_ENABLED);
 		
@@ -479,30 +505,36 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		
 		List<Diagram> result = new ArrayList<Diagram>();
 		
+    addSection("Software Sketching", new RectContainerShape(10, SOFTWARE_SKETCHING_GROUP, 220, SOFTWARE_SKETCHING_GROUP_HEIGHT));
+
 		// software sketching group		
-    result.add(_create(ElementType.VERTICAL_PARTITION,
-                       "Software Sketching",
-                       new RectContainerShape(10, SOFTWARE_SKETCHING_GROUP, 220, SOFTWARE_SKETCHING_GROUP_HEIGHT).toString()));
+    // result.add(_create(ElementType.VERTICAL_PARTITION,
+    //                    "Software Sketching",
+    //                    new RectContainerShape(10, SOFTWARE_SKETCHING_GROUP, 220, SOFTWARE_SKETCHING_GROUP_HEIGHT).toString()));
     
     result.add(_create(ElementType.NOTE,
                        "*Note* this!",
-                       new NoteShape(30, SOFTWARE_SKETCHING_GROUP + GROUP_HEADING_SPACE, 165, 40).toString()));
+                       new NoteShape(40, SOFTWARE_SKETCHING_GROUP + GROUP_HEADING_SPACE, 165, 40).toString()));
 
     result.add(_create(ElementType.ACTOR,
                        "<<system>>\nActor",
-                       new ActorShape(30, SOFTWARE_SKETCHING_GROUP + 120, 43, 54).toString(), 
+                       new ActorShape(40, SOFTWARE_SKETCHING_GROUP + 120, 43, 54).toString(), 
                        ShapeProperty.TEXT_POSITION_BOTTOM.getValue() | ShapeProperty.BOLD_TITLE.getValue()));
 
     result.add(_create(ElementType.USE_CASE,
                        "Use Case",
-                       new GenericShape(ElementType.USE_CASE.getValue(), 120, SOFTWARE_SKETCHING_GROUP + 135, 50, 30).toString(),
+                       new GenericShape(ElementType.USE_CASE.getValue(), 110, SOFTWARE_SKETCHING_GROUP + 135, 50, 30).toString(),
                        // for ELLIPSE
                        // new EllipseShape(145, SOFTWARE_SKETCHING_GROUP + 150, 50, 25).toString()));
                        LibraryShapes.CLASS_LIKE_PROPERTIES | ShapeProperty.CENTERED_TEXT.getValue()));
 
+    result.add(_create(ElementType.SERVER,
+                       "Server",
+                       new ServerShape(40, SOFTWARE_SKETCHING_GROUP + 225, 63, 73).toString()));
+
     result.add(_create(ElementType.STORAGE,
                        "Db",
-                       new DbShape(160, SOFTWARE_SKETCHING_GROUP + 220, 100, 30).toString()));
+                       new DbShape(130, SOFTWARE_SKETCHING_GROUP + 230, 100, 30).toString()));
     
     result.add(_create(ElementType.COMPONENT,
                        "Component",
@@ -513,9 +545,6 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
                        "### Just text",
                        new TextShape(120, SOFTWARE_SKETCHING_GROUP + 300, 100, 30).toString()));
 
-    result.add(_create(ElementType.SERVER,
-                       "Server",
-                       new ServerShape(30, SOFTWARE_SKETCHING_GROUP + 215, 63, 73).toString()));
     
     // ACTIVITY DIAGRAM
     
@@ -562,9 +591,10 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 //  	points.add(SOFTWARE_SKETCHING_GROUP_START + 215);
 //    result.add(new Relationship2(this.toolpool, points, "label\n1<>->*", true));
 
-    result.add(_create(ElementType.VERTICAL_PARTITION,
-                       "Class and Package",
-                       new RectContainerShape(10, CLASS_GROUP, 220, CLASS_GROUP_HEIGHT).toString()));
+    addSection("Class and Package", new RectContainerShape(10, CLASS_GROUP, 220, CLASS_GROUP_HEIGHT));
+    // result.add(_create(ElementType.VERTICAL_PARTITION,
+    //                    "Class and Package",
+    //                    new RectContainerShape(10, CLASS_GROUP, 220, CLASS_GROUP_HEIGHT).toString()));
 
     result.add(_create(ElementType.CLASS, "<<interface>>\n" +
                  "ClassName\n" +
@@ -578,9 +608,10 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
                        new UMLPackageShape(120, CLASS_GROUP + 150, 100, 40).toString()));
     
 		// mindmap group
-    result.add(_create(ElementType.VERTICAL_PARTITION,
-                       "Mind Map Library",
-                       new RectContainerShape(10, MINDMAP_GROUP, 220, MINDMAP_GROUP_HEIGHT).toString()));
+    addSection("Mind Map Library", new RectContainerShape(10, MINDMAP_GROUP, 220, MINDMAP_GROUP_HEIGHT));
+    // result.add(_create(ElementType.VERTICAL_PARTITION,
+    //                    "Mind Map Library",
+    //                    new RectContainerShape(10, MINDMAP_GROUP, 220, MINDMAP_GROUP_HEIGHT).toString()));
 
     result.add(_create(ElementType.MIND_CENTRAL,
                    "Central Topic",
