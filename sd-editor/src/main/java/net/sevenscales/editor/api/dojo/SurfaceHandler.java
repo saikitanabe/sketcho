@@ -119,6 +119,7 @@ class SurfaceHandler extends SimplePanel implements
 	private int currentClientMouseMoveX;
 	private int currentClientMouseMoveY;
 	private boolean proxyDragAdd;
+	private String svgClassName;
 	
 	// configuration parameter that e.g. library enables for background movement
 	private boolean verticalDragOnly;
@@ -259,6 +260,7 @@ class SurfaceHandler extends SimplePanel implements
   // new Surface();
 //  		surface.init(this.panel);
   		surface.init(this, this);
+			surface.setAttribute("class", svgClassName);
       mouseDiagramManager.reset();
       surface.load();
 			logger.debug("onLoad {}... done", name);
@@ -1133,6 +1135,13 @@ class SurfaceHandler extends SimplePanel implements
 	@Override
 	public void commitTransaction() {
 		operationTransaction.commitTransaction();
+	}
+
+	@Override
+	public void setSvgClassName(String classname) {
+		// String current = surface.getAttribute("class");
+		// current = current.length() > 0 ? " " : "";
+		svgClassName = classname;
 	}
 
 }

@@ -184,7 +184,11 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 			result.setStrokeWidth(getDiagramItem().getLineWeight());
     } else {
     	if (Tools.isSketchMode()) {
-				result.setStrokeWidth(Constants.SKETCH_MODE_LINE_WEIGHT);
+    		if (surface.isLibrary()) {
+					result.setStrokeWidth(Constants.SKETCH_MODE_LINE_WEIGHT_LIBRARY);
+    		} else {
+    			result.setStrokeWidth(Constants.SKETCH_MODE_LINE_WEIGHT);
+    		}
     	} else {
 		    result.setStrokeWidth(FREEHAND_STROKE_WIDTH);
     	}
@@ -382,7 +386,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 		  	scalePaths(factorX, factorY);
 			}
 	  	subgroup.setTransform(left, top);
-	  	if (UiUtils.isIE() || surface.isLibrary()) {
+	  	if (UiUtils.isIE()) {
 			  // no need to use, which doesn't work svg => pdf, scale down stroke width
 			  // vector-effect="non-scaling-stroke"
 	  		// ie8 - ie10 doesn't support vector-effect

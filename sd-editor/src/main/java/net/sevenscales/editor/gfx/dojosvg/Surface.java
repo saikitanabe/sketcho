@@ -184,7 +184,7 @@ class Surface extends Graphics implements IContainer, ISurface {
 	
   @Override
   public void setAttribute(String name, String value) {
-  	setAttribute(rawNode, name, value);
+  	setAttribute(surface, name, value);
   }
   
   private native void setAttribute(JavaScriptObject rawNode, String name, String value)/*-{

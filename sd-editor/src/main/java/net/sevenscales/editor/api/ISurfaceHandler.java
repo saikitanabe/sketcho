@@ -126,6 +126,8 @@ public interface ISurfaceHandler extends OperationTransaction {
 	int getAbsoluteLeft();
 	int getAbsoluteTop();
 	void setStyleName(String style);
+	void addStyleName(String style);
+	void setSvgClassName(String classname);
 	void setVisible(boolean visible);
 
 	DiagramSearch createDiagramSearch();

@@ -357,5 +357,8 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public void commitTransaction() {
 	}
 
+	@Override
+	public void setSvgClassName(String classname) {
+	}
 
 }
