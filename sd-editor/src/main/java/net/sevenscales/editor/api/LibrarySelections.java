@@ -1,7 +1,8 @@
 package net.sevenscales.editor.api;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.dom.client.Element;
+// import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -32,11 +33,11 @@ public class LibrarySelections extends Composite {
 	
 	private LibrarySelectedHandler librarySelectedHandler;
 
-	@UiField AnchorElement software;
-	@UiField AnchorElement mindmap;
-	@UiField AnchorElement roadmap;
-	@UiField AnchorElement general;
-	@UiField AnchorElement images;
+	@UiField Element software;
+	@UiField Element mindmap;
+	@UiField Element roadmap;
+	@UiField Element general;
+	@UiField Element images;
 	@UiField DivElement btnGroup;
 //	@UiField AnchorElement roadmap;
 

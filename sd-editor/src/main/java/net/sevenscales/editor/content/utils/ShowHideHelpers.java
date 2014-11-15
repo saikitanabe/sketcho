@@ -35,6 +35,9 @@ public class ShowHideHelpers {
 		this.outer = outer;
 		this.inner = inner;
 		this.editorContext = editorContext;
+
+		outer.setVisible(false);
+
 		final RepeatingCommand hideslider = new RepeatingCommand() {
 			@Override
 			public boolean execute() {
@@ -97,7 +100,9 @@ public class ShowHideHelpers {
 		}
 
 		onOuterElement = true;
+
 		EffectHelpers.fadeIn(inner.getElement());
+		EffectHelpers.fadeOut(outer.getElement());
 	}
 
 	public void forceFadeOut() {
@@ -110,6 +115,7 @@ public class ShowHideHelpers {
 			trigger("library-hide");
 		}
 		EffectHelpers.fadeOut(inner.getElement());
+		EffectHelpers.fadeIn(outer.getElement());
 	}
 
 	private boolean notConfluence() {

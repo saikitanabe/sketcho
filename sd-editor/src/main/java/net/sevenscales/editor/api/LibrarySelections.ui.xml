@@ -4,16 +4,14 @@
 	<ui:style>
 	</ui:style>
 	<g:HTMLPanel>
-		<div ui:field="btnGroup" class="btn-group library-selection" data-toggle="buttons-radio">
-		  <a ui:field="software" class="btn btn-mini active" style="color: #333333; text-decoration: none;">Software</a>
-      <a ui:field="mindmap" class="btn btn-mini" style="color: #333333; text-decoration: none;">Mind Map</a>
-      <a ui:field="roadmap" class="btn btn-mini" style="color: #333333; text-decoration: none;">Roadmap</a>
-      <a ui:field="general" class="btn btn-mini" style="color: #333333; text-decoration: none;">General</a>
-      <a ui:field="images" class="btn btn-mini" style="color: #333333; text-decoration: none;">My Images</a>
-		
-<!-- 		  <a ui:field="software" class="btn btn-mini"><i class="icon-user icon"></i> Software</a> -->
-<!--       <a ui:field="mindmap" class="btn btn-mini"><i class="icon-user icon"></i> Mindmap</a> -->
-<!--       <a ui:field="roadmap" class="btn btn-mini"><i class="icon-user icon"></i> Roadmap</a> -->
+		<div ui:field="btnGroup" class="library-selection">
+			<ul class="ul-none ul-horizontal">
+				<li ui:field="software" class="library-selection-active">Software</li>
+				<li ui:field="mindmap">Mind Map</li>
+		  	<li ui:field="roadmap">Roadmap</li>
+		  	<li ui:field="general">General</li>
+		  	<li ui:field="images">My Images</li>
+		  </ul>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder> 
