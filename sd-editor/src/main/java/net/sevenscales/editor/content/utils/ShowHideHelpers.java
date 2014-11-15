@@ -81,6 +81,19 @@ public class ShowHideHelpers {
 			}
 		}, MouseDownEvent.getType());
 
+		handleLibraryStreams(this);
+	}
+
+	private native void handleLibraryStreams(ShowHideHelpers me)/*-{
+		$wnd.globalStreams.closeLibraryStram.onValue(function(value) {
+			me.@net.sevenscales.editor.content.utils.ShowHideHelpers::onLibraryStream(Z)(value);
+		})
+	}-*/;
+
+	private void onLibraryStream(boolean value) {
+		if (value) {
+			hide();
+		}
 	}
 
 	private void listenTouch() {

@@ -187,6 +187,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     panel.setStyleName("library");
 		panel.add(toolpool.getWidget());
 		panel.add(new LibrarySelections(librarySelectedHandler, editorContext));
+    panel.add(new CloseLibrary());
 		
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
