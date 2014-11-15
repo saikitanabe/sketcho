@@ -19,22 +19,22 @@ public class ToolFrame extends SimplePanel {
 	private Properties properties;
   private Libarary toolbar;
 	private EditorContext editorContext;
-	private VerticalPanel panel;
+	// private VerticalPanel panel;
 	private SimplePanel justBacgkround;
 	private ShowHideHelpers showHideHelpers;
 
   public ToolFrame(ISurfaceHandler surface, int height, IModeManager modeManager, EditorContext editorContext, boolean autohide, OTBuffer otBuffer, OperationTransaction operationTransaction) {
   	this.editorContext = editorContext;
   	
-		panel = new VerticalPanel();
-		panel.setStyleName("ToolFrame-panel");
-		panel.setHeight("100%");
-		panel.setSpacing(0);
+		// panel = new VerticalPanel();
+		// panel.setStyleName("ToolFrame-panel");
+		// panel.setHeight("100%");
+		// panel.setSpacing(0);
 		this.toolbar = new Libarary(surface, height, modeManager, editorContext, otBuffer, operationTransaction);
 		// DEBUGGING START handy way to disable library, just comment next line
-		panel.add(toolbar);
+		// panel.add(toolbar);
 		// DEBUGGING END
-		panel.setCellHeight(toolbar, height+"px");
+		// panel.setCellHeight(toolbar, height+"px");
 //		h = (int) (height * 0.2);
 		properties = new Properties(90, surface, surface.getSelectionHandler(), editorContext);
 		properties.addSurface(surface, true); 
@@ -46,11 +46,13 @@ public class ToolFrame extends SimplePanel {
 		justBacgkround.setWidget(new HTML("&nbsp;"));
 		justBacgkround.setStyleName("library-showhide-area");
 		
-		justBacgkround.setWidget(panel);
+		// justBacgkround.setWidget(panel);
+		RootPanel.get().add(toolbar);
+		
 		
 		if (editorContext.isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {
 			// currently enabled only on Sketchboard.Me
-			showHideHelpers = new ShowHideHelpers(justBacgkround, panel, editorContext.isEditable(), editorContext);
+			showHideHelpers = new ShowHideHelpers(justBacgkround, toolbar, editorContext.isEditable(), editorContext);
 		}
 
 		if (editorContext.isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {
