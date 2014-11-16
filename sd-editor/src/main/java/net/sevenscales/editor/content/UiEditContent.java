@@ -14,7 +14,6 @@ import net.sevenscales.editor.api.event.SelectionEvent;
 import net.sevenscales.editor.api.event.SelectionEventHandler;
 import net.sevenscales.editor.api.event.UnselectAllEvent;
 import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
-import net.sevenscales.editor.content.ui.FreehandModeButton;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.ui.ModeBarUi;
 import net.sevenscales.editor.content.ui.SelectButtonBox;
@@ -239,16 +238,12 @@ public abstract class UiEditContent extends UiContent implements KeyDownHandler 
     
     // ColorButtonBox colorButton = new ColorButtonBox(getEditorContext());
   	
-    Widget freehandMode = new FreehandModeButton(getEditorContext());
-
   	result.add(save);
   	result.add(cancel);
   	result.add(deleteSelected);
 //  	result.add(modeBar);
   	// result.add(relationShipType);
   	// result.add(colorButton);
-
-  	result.add(freehandMode);
 
   	return result;
   }

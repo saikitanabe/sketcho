@@ -15,12 +15,10 @@ import net.sevenscales.editor.api.event.CancelButtonClickedEventHandler;
 import net.sevenscales.editor.api.event.SaveButtonClickedEvent;
 import net.sevenscales.editor.api.event.SaveButtonClickedEventHandler;
 import net.sevenscales.editor.content.ui.ConfluenceMenu;
-import net.sevenscales.editor.content.ui.FreehandModeButton;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.ui.ModeBarUi;
 import net.sevenscales.editor.content.ui.SelectButtonBox;
 import net.sevenscales.editor.content.ui.SimpleColorHandler;
-import net.sevenscales.editor.content.ui.UndoMenu;
 import net.sevenscales.editor.ui.UpDownController.ISizeCallback;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -299,9 +297,6 @@ public abstract class UiEditBoardContent extends UiContent implements KeyDownHan
 //  	result.add(modeBar);
   	// result.add(relationShipType);
 //  	result.add(colorButton);
-  	if (supportsUndoMenu) {
-  		result.add(new UndoMenu(getEditorContext()));
-  	}
 
   	return result;
   }
