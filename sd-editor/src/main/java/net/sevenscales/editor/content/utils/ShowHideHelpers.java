@@ -114,7 +114,8 @@ public class ShowHideHelpers {
 
 		onOuterElement = true;
 
-		EffectHelpers.fadeIn(inner.getElement());
+		inner.setVisible(true);
+		// EffectHelpers.fadeIn(inner.getElement());
 		EffectHelpers.fadeOut(outer.getElement());
 	}
 
@@ -127,7 +128,9 @@ public class ShowHideHelpers {
 		if (notConfluence()) {
 			trigger("library-hide");
 		}
-		EffectHelpers.fadeOut(inner.getElement());
+
+		inner.setVisible(false);
+		// EffectHelpers.fadeOut(inner.getElement());
 		EffectHelpers.fadeIn(outer.getElement());
 	}
 
