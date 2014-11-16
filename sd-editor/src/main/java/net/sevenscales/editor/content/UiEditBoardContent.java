@@ -290,8 +290,6 @@ public abstract class UiEditBoardContent extends UiContent implements KeyDownHan
 //		});
     
 //    ColorButtonBox colorButton = new ColorButtonBox(getEditorContext());
-
-    Widget freehandMode = new FreehandModeButton(getEditorContext());
   	
 //  	result.add(save);
 //  	result.add(cancel);
@@ -301,7 +299,6 @@ public abstract class UiEditBoardContent extends UiContent implements KeyDownHan
 //  	result.add(modeBar);
   	// result.add(relationShipType);
 //  	result.add(colorButton);
-  	result.add(freehandMode);
   	if (supportsUndoMenu) {
   		result.add(new UndoMenu(getEditorContext()));
   	}
