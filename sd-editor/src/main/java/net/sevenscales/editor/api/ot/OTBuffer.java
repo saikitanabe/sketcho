@@ -28,6 +28,7 @@ public class OTBuffer {
 		List<CompensationModel> models = new ArrayList<CompensationModel>();
 		models.add(compensationModel);
 		pushToUndoBufferAndResetRedo(models);
+		state();
 	}
 
 	public void pushToUndoBufferAndResetRedo(List<CompensationModel> compensationModel) {
@@ -39,6 +40,8 @@ public class OTBuffer {
 		}
 		
 		redoBuffer.clear();
+
+		state();
 		
     logger.debug2("pushToUndoBufferAndResetRedo: undo size {}, redo size {}", undoBuffer.size(), redoBuffer.size());
 	}
@@ -114,11 +117,37 @@ public class OTBuffer {
 	}
 
 	public List<CompensationModel> undoBuffer() {
-    return popAndPush(undoBuffer, redoBuffer);
+     List<CompensationModel> result = popAndPush(undoBuffer, redoBuffer);
+
+     state();
+     return result;
 	}
 
+	private void state() {
+		if (undoBuffer.size() <= 0) {
+			undoStreamState(false);
+		} else {
+			undoStreamState(true);
+		}
+
+		if (redoBuffer.size() <= 0) {
+			redoStreamState(false);
+		} else {
+			redoStreamState(true);
+		}
+	}
+
+	private native void undoStreamState(boolean state)/*-{
+		$wnd.globalStreams.undoStackStream.push(state)
+	}-*/;
+	private native void redoStreamState(boolean state)/*-{
+		$wnd.globalStreams.redoStackStream.push(state)
+	}-*/;
+
   public List<CompensationModel> redoBuffer() {
-    return popAndPush(redoBuffer, undoBuffer);
+    List<CompensationModel> result = popAndPush(redoBuffer, undoBuffer);
+    state();
+    return result;
   }
 
   public List<CompensationModel> popAndPush(LinkedList<List<CompensationModel>> topop, LinkedList<List<CompensationModel>> topush) {

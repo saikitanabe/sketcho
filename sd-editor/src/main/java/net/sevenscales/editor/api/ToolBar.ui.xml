@@ -6,8 +6,8 @@
 		<ul class="ul-none ul-horizontal">
 			<li ui:field="map"><a class="menu-btn2"><i class="menu-ico2-world"></i></a></li>
 			<li ui:field="freehand"><span class="menu-btn2-big"><a class="menu-btn2"><i class="menu-ico2-freehand"></i></a></span></li>
-			<li ui:field="undo"><a class="menu-btn2 menu-btn2-left"><i class="menu-ico2-undo"></i></a></li>
-			<li ui:field="redo"><a class="menu-btn2-join"><i class="menu-ico2-redo-inactive"></i></a></li>
+			<li ui:field="undo"><a class="menu-btn2 menu-btn2-left menu-btn2-left-inactive"><i class="menu-ico2-undo menu-ico2-undo-inactive"></i></a></li>
+			<li ui:field="redo"><a class="menu-btn2-join"><i class="menu-ico2-redo menu-ico2-redo-inactive"></i></a></li>
 		</ul>
 	</g:HTMLPanel>
 </ui:UiBinder>
