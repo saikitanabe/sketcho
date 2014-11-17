@@ -156,9 +156,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
   	    if (selectedDiagram != null) {
   	      // enable auto resize if element supports that
   	      // when text is inserted by user.
-  	      selectedDiagram.setAutoResize(true);
-  	      setSelectedDiagramText(textArea.getText());
-          selectedDiagram.setAutoResize(false);
+  	      _setTextFromTextArea();
         }
 		  }
 		});
@@ -260,8 +258,49 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		editorContext.getEventBus().addHandler(ShowDiagramPropertyTextEditorEvent.TYPE, showDiagramText);
 		handleItemRealTimeModify(this);
 
+		handleExternalKeyCode(this);
+
 		setWidget(panel);
 	}
+
+	private void _setTextFromTextArea() {
+		if (selectedDiagram != null) {
+	    selectedDiagram.setAutoResize(true);
+	    setSelectedDiagramText(textArea.getText());
+	    selectedDiagram.setAutoResize(false);
+		}
+	}
+
+	// >>>>>>>>>>>>>> SOLU
+	private native void handleExternalKeyCode(Properties me)/*-{
+		$wnd.globalStreams.keyCodeStream.onValue(function(values) {
+			me.@net.sevenscales.editor.api.Properties::onExternalKeyCode(Ljava/lang/String;I)(values[0], values[1]);
+		})
+	}-*/;
+
+	private void onExternalKeyCode(String character, int keyCode) {
+		String text = selectedDiagram.getText();
+		if (keyCode != 0) {
+			if (text.length() > 1 && keyCode == KeyCodes.KEY_BACKSPACE) {
+				text = text.substring(0, text.length() - 1);
+			} else if (keyCode == KeyCodes.KEY_ENTER) {
+				text += "\n";
+			} else {
+				text += fromCharCode(keyCode);
+			}
+		} else {
+			text += character;
+		}
+		textArea.setText(text);
+
+		_setTextFromTextArea();
+	}
+
+	private native String fromCharCode(int keyCode)/*-{
+ 		return String.fromCharCode(keyCode)
+	}-*/;
+
+	// <<<<<<<<<<<<<< SOLU
 
 	private native void handleItemRealTimeModify(Properties me)/*-{
 		$wnd.globalStreams.dataItemModifyStream.onValue(function(dataItem) {
@@ -658,14 +697,18 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		// line breaks in editor might not increase measurment panel height
 		// therefore need to add something based on line breaks...
 		int textAreaHeight = height + rows / 4 * TextElementFormatUtil.ROW_HEIGHT;
-		textArea.getElement().getStyle().setHeight(textAreaHeight, Unit.PX);
+		textArea.getElement().getStyle().setHeight(400, Unit.PX);
+		// textArea.getElement().getStyle().setHeight(textAreaHeight, Unit.PX);
 	}
 
 	private void _setTextAreaSize(Diagram diagram) {
 		// no need to hide text any longer since markdown editor hides the text with background color.
 		// diagram.hideText();
 		
+		// >>>>>>>>>>>>>>> SOLU
+		// MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
 		MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
+		// <<<<<<<<<<<<<<< SOLU
 		int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
 		int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop();
 
@@ -681,8 +724,12 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			textArea.getElement().getStyle().setBackgroundColor(diagram.getTextAreaBackgroundColor());
 		}
 
-		textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
-		setTextAreaHeight(diagram.getTextAreaHeight());
+		// >>>>>>>>>>>>>>> SOLU
+		// textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
+		textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth() * 2, Unit.PX);
+		// setTextAreaHeight(diagram.getTextAreaHeight());
+		setTextAreaHeight(diagram.getHeight() * 4);
+		// <<<<<<<<<<<<<<< SOLU
 		textArea.getElement().getStyle().setProperty("textAlign", diagram.getTextAreaAlign());
 		
 		textArea.getElement().getStyle().setBorderColor("#bbb");

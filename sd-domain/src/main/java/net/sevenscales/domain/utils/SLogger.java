@@ -46,6 +46,16 @@ public class SLogger {
 		}
 		return true;
 	}
+
+	public static void console(String... values) {
+		if (LogConfiguration.loggingIsEnabled(Level.FINER)) {
+			_console(values);
+		}
+	}
+
+	private native static void _console(String... values)/*-{
+		$wnd.console.log(values)
+	}-*/;
 	
 	public void debug(String msg) {
 		debug("{}", msg);

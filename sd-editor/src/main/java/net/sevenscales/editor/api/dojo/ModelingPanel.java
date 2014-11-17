@@ -7,6 +7,8 @@ import net.sevenscales.editor.api.IModelingPanel;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.ToolFrame;
+import net.sevenscales.editor.api.ToolBar;
+import net.sevenscales.editor.api.MainMenu;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.LongPressHandler;
@@ -53,6 +55,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 	private static final SLogger logger = SLogger.createLogger(ModelingPanel.class);
+
+	static {
+		SLogger.addFilter(ModelingPanel.class);
+	}
 	
 	private SurfaceHandler surface;
 	private int minimumHeight = 700;
@@ -182,8 +188,12 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		dragAndDropHandler = new DragAndDropHandler(surface, toolFrame.getToolbar());
 		touchManager = new TouchDragAndDrop(dragAndDropHandler, toolFrame.getToolbar().getHasTouchStartHandlers());
 		new SurfaceEventWrapper(surface, dragAndDropHandler);
-		// 
-		this.scaleSlider = new ScaleSlider(surface);
+		RootPanel.get().add((new ToolBar(surface)));
+		RootPanel.get().add((new MainMenu(surface)));
+
+		// >>>>>>>>>>> SOLU 14.11.2014 -- commented
+		// this.scaleSlider = new ScaleSlider(surface);
+		// <<<<<<<<<<< SOLU 14.11.2014 -- commented
 
 
 //		});
@@ -274,7 +284,22 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		}
 
 		init(this);
+		// >>>>>>>>>>> SOLU
+		scaleOnLoad(this);
+		// <<<<<<<<<<< SOLU
 	}
+
+	// >>>>>>>>>> SOLU
+  private native void scaleOnLoad(ModelingPanel me)/*-{
+    $wnd.boardReadyStream.onValue(function() {
+      me.@net.sevenscales.editor.api.dojo.ModelingPanel::onBoardReady()();
+    })
+  }-*/;
+
+  private void onBoardReady() {
+  	surface.scale(2f);
+  }
+	// <<<<<<<<<< SOLU
 
 	private native void init(ModelingPanel me)/*-{
 		$wnd.isEditorOpen = function() {
@@ -334,7 +359,10 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
   public void reset() {
     surface.reset();
     surface.getRootLayer().setTransform(0, 0);
-    scaleSlider.reset();
+
+		// >>>>>>>>>>> SOLU 14.11.2014 -- commented
+    // scaleSlider.reset();
+    // <<<<<<<<<<< SOLU 14.11.2014 -- commented
   }
 
   public Widget getWidget() {
