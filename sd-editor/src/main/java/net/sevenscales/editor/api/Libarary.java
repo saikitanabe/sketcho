@@ -270,49 +270,43 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
     addSection("Flows", new RectContainerShape(10, ACTIVITY_GROUP, 220, ACTIVITY_GROUP_HEIGHT));
 
-    // result.add(_create(ElementType.VERTICAL_PARTITION,
-    //                    "Flows",
-    //                    new RectContainerShape(10, ACTIVITY_GROUP, 220, ACTIVITY_GROUP_HEIGHT).toString()));
-    
-    result.add(_create(ElementType.CHOICE,
-                       "",
-                       new ActivityChoiceShape(185, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 10, 32, 32).toString()));
+    result.add(_create(ElementType.ACTIVITY, "My Activity",
+                 new ActivityShape(30, ACTIVITY_GROUP + 45, 100, 30).toString(),
+                 LibraryShapes.CLASS_LIKE_PROPERTIES));
 
-    // if (Tools.)
+    result.add(_create(ElementType.SEQUENCE, "Sequence",
+                 new SequenceShape(40, ACTIVITY_GROUP + 100, 100, 25, 25).toString(),
+                 LibraryShapes.CLASS_LIKE_PROPERTIES));
+
+    // TODO if (Tools.) sketch then use rectangle shapes
     result.add(_create(ElementType.ACTIVITY_START,
                        "",
-                       new ActivityStartShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE, ActivityStart.ACTIVITY_START_RADIUS).toString(), null, false,
+                       new ActivityStartShape(200, ACTIVITY_GROUP + 60, ActivityStart.ACTIVITY_START_RADIUS).toString(), null, false,
                        Theme.createDefaultBorderColor(),
                        Theme.createDefaultBorderColor(),
                        Theme.createDefaultTextColor()));
 
     result.add(_create(ElementType.ACTIVITY_END,
                        "",
-                       new ActivityEndShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 50, ActivityEnd.ACTIVITY_END_RADIUS).toString(), null, false,
+                       new ActivityEndShape(200, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 35, ActivityEnd.ACTIVITY_END_RADIUS).toString(), null, false,
                        Theme.createDefaultBorderColor(),
                        Theme.createDefaultBorderColor(),
                        Theme.createDefaultTextColor()));
 
-    result.add(_create(ElementType.ACTIVITY, "My Activity",
-                 new ActivityShape(30, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 10, 100, 30).toString(),
-                 LibraryShapes.CLASS_LIKE_PROPERTIES));
+    result.add(_create(ElementType.CHOICE,
+                       "",
+                       new ActivityChoiceShape(184, ACTIVITY_GROUP + 110, 32, 32).toString()));
 
-    result.add(_create(ElementType.SEQUENCE, "Sequence",
-                 new SequenceShape(50, ACTIVITY_GROUP + 130, 100, 25, 25).toString(),
-                 LibraryShapes.CLASS_LIKE_PROPERTIES));
+
+    result.add(_create(ElementType.FORK, "",
+                 new ForkShape(160, ACTIVITY_GROUP + 60, 5, 75, 1).toString()));
         
-    result.add(_create(ElementType.ACTIVITY, "Collaboration",
-                 new ActivityShape(80, ACTIVITY_GROUP + 220, 100, 30).toString(),
-                 LibraryShapes.CLASS_LIKE_PROPERTIES));
-
     result.add(_create(ElementType.FORK, "",
-                 new ForkShape(150, ACTIVITY_GROUP + 130, 50, 5).toString()));
+                 new ForkShape(45, ACTIVITY_GROUP + 170, 75, 5).toString()));
 
-    result.add(_create(ElementType.FORK, "",
-                 new ForkShape(210, ACTIVITY_GROUP + 130, 5, 50, 1).toString()));
 
     Diagram swimline = _create(ElementType.HORIZONTAL_PARTITION, "Swimline",
-                 new HorizontalPartitionShape(22, ACTIVITY_GROUP + 200, 190, 90).toString());
+                 new HorizontalPartitionShape(40, ACTIVITY_GROUP + 200, 170, 70).toString());
     result.add(swimline);
   }
 
