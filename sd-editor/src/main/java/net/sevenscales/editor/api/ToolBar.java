@@ -154,13 +154,15 @@ public class ToolBar extends Composite {
 		$wnd.$(e).find('i').toggleClass('menu-ico2-' + type + '-active')
 	}-*/;
 
-private void enabled(FreehandModeChangedEvent event) {
-		toggleButton(freehand, "freehand");
-		// if (event.isModeTypeChanged()) {
-		// 	editorContext.set(EditorProperty.FREEHAND_MODE_TYPE, event.getModeType());
-		// }
-		surface.getEditorContext().set(EditorProperty.FREEHAND_MODE, true);
-		trigger("freehand-on");
+	private void enabled(FreehandModeChangedEvent event) {
+		if (!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE)) {
+			toggleButton(freehand, "freehand");
+			// if (event.isModeTypeChanged()) {
+			// 	editorContext.set(EditorProperty.FREEHAND_MODE_TYPE, event.getModeType());
+			// }
+			surface.getEditorContext().set(EditorProperty.FREEHAND_MODE, true);
+			trigger("freehand-on");
+		}
 	}
 
   private native void trigger(String event)/*-{
@@ -168,7 +170,10 @@ private void enabled(FreehandModeChangedEvent event) {
   }-*/;
 
 	private void disabled() {
-		toggleButton(freehand, "freehand");
+		if (surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE))  {
+			surface.getEditorContext().set(EditorProperty.FREEHAND_MODE, false);
+			toggleButton(freehand, "freehand");
+		}
 	}
 
 	private void onUndo() {

@@ -248,8 +248,8 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   
   private void fireToggleFreehandMode() {
     boolean toggleValue = !surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE);
-    logger.debug("toggleValue {}", toggleValue);
-    surface.getEditorContext().set(EditorProperty.FREEHAND_MODE, toggleValue);
+    // logger.debug("toggleValue {}", toggleValue);
+    // surface.getEditorContext().set(EditorProperty.FREEHAND_MODE, toggleValue);
     surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(toggleValue));
   }
 
