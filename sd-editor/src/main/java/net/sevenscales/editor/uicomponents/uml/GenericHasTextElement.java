@@ -184,6 +184,8 @@ class GenericHasTextElement extends AbstractHasTextElement {
 	@Override
 	public int getMarginTop() {
 		switch (elementType) {
+			case COMPONENT:
+				return 3;
 			case STORAGE:
 				return 9;
 		}
