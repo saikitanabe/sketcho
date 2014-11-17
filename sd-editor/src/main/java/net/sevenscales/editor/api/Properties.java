@@ -283,6 +283,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		if (keyCode != 0) {
 			if (text.length() > 1 && keyCode == KeyCodes.KEY_BACKSPACE) {
 				text = text.substring(0, text.length() - 1);
+			}  else if (keyCode == KeyCodes.KEY_BACKSPACE) {
+				text = "";
 			} else if (keyCode == KeyCodes.KEY_ENTER) {
 				text += "\n";
 			} else {
@@ -456,7 +458,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 //			@Override
 //			public void execute() {
 //		    textArea.setFocus(b);
-//		    textArea.setCursorPos(textArea.getText().length());
+//		    textAreaHeight.setCursorPos(textArea.getText().length());
 //			}
 //		});
 //  }
@@ -717,8 +719,11 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		textArea.setVisible(true);
 
 		if ("transparent".equals(diagram.getTextAreaBackgroundColor())) {
-			textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
+			// >>>>>>>>>>>>> SOLU
+			// textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
+			textArea.getElement().getStyle().setBackgroundColor("#ECE8E6");
 			textArea.getElement().getStyle().setColor(Theme.getCurrentColorScheme().getTextColor().toHexStringWithHash());
+			// <<<<<<<<<<<<< SOLU
 		} else {
 			textArea.getElement().getStyle().setColor("#" + diagram.getTextColor().toHexString());
 			textArea.getElement().getStyle().setBackgroundColor(diagram.getTextAreaBackgroundColor());
