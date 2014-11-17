@@ -26,6 +26,9 @@ public class LibraryShapes {
     shapes.put(ElementType.STORAGE, new LibraryShape(ElementType.STORAGE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.NOTE, new LibraryShape(ElementType.NOTE, 47, 55, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3));
     shapes.put(ElementType.COMPONENT, new LibraryShape(ElementType.COMPONENT, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.ACTIVITY, new LibraryShape(ElementType.ACTIVITY, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.CHOICE, new LibraryShape(ElementType.CHOICE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
+    // shapes.put(ElementType.ACTIVITY_START, new LibraryShape(ElementType.ACTIVITY_START, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
 
 	  shapes.put(ElementType.STAR4, new LibraryShape(ElementType.STAR4, 40, 40));
 	  shapes.put(ElementType.STAR5, new LibraryShape(ElementType.STAR5, 40, 40)); 
