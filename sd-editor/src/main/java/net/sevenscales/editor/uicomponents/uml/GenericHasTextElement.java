@@ -149,6 +149,10 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
   public int getTextMargin(int defaultMargin) {
+  	switch (elementType) {
+  		case COMPONENT:
+  			return (int) (defaultMargin * 20f/30f);
+  	}
   	return (int) (defaultMargin * 50f/30f);
   }
 

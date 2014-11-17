@@ -278,6 +278,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
                        "",
                        new ActivityChoiceShape(185, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 10, 32, 32).toString()));
 
+    // if (Tools.)
     result.add(_create(ElementType.ACTIVITY_START,
                        "",
                        new ActivityStartShape(150, ACTIVITY_GROUP + GROUP_HEADING_SPACE, ActivityStart.ACTIVITY_START_RADIUS).toString(), null, false,
@@ -524,7 +525,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
     result.add(_create(ElementType.USE_CASE,
                        "Use Case",
-                       new GenericShape(ElementType.USE_CASE.getValue(), 110, SOFTWARE_SKETCHING_GROUP + 135, 50, 30).toString(),
+                       new GenericShape(ElementType.USE_CASE.getValue(), 115, SOFTWARE_SKETCHING_GROUP + 135, 50, 30).toString(),
                        // for ELLIPSE
                        // new EllipseShape(145, SOFTWARE_SKETCHING_GROUP + 150, 50, 25).toString()));
                        LibraryShapes.CLASS_LIKE_PROPERTIES | ShapeProperty.CENTERED_TEXT.getValue()));
@@ -535,16 +536,19 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
     result.add(_create(ElementType.STORAGE,
                        "Db",
-                       new DbShape(130, SOFTWARE_SKETCHING_GROUP + 230, 100, 30).toString()));
+                       new DbShape(140, SOFTWARE_SKETCHING_GROUP + 230, 100, 30).toString()));
     
     result.add(_create(ElementType.COMPONENT,
                        "Component",
-                       new ComponentShape(70, SOFTWARE_SKETCHING_GROUP + 350, 100, 60).toString()));
+                       new ComponentShape(40, SOFTWARE_SKETCHING_GROUP + 340, 80, 40).toString()));
     
 		// special border => no border
     result.add(_create(ElementType.TEXT_ITEM,
-                       "### Just text",
-                       new TextShape(120, SOFTWARE_SKETCHING_GROUP + 300, 100, 30).toString()));
+                       "Just\n" +
+                       "----\n" +
+                       "text\n" + 
+                       "----\n",
+                       new TextShape(150, SOFTWARE_SKETCHING_GROUP + 310, 100, 50).toString()));
 
     
     // ACTIVITY DIAGRAM
