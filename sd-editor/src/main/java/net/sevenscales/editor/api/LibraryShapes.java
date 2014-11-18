@@ -28,7 +28,7 @@ public class LibraryShapes {
     shapes.put(ElementType.COMPONENT, new LibraryShape(ElementType.COMPONENT, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.ACTIVITY, new LibraryShape(ElementType.ACTIVITY, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.CHOICE, new LibraryShape(ElementType.CHOICE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
-    // shapes.put(ElementType.ACTIVITY_START, new LibraryShape(ElementType.ACTIVITY_START, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.ACTIVITY_START2, new LibraryShape(ElementType.ACTIVITY_START2, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
 
 	  shapes.put(ElementType.STAR4, new LibraryShape(ElementType.STAR4, 40, 40));
 	  shapes.put(ElementType.STAR5, new LibraryShape(ElementType.STAR5, 40, 40)); 

@@ -278,13 +278,9 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
                  new SequenceShape(40, ACTIVITY_GROUP + 100, 100, 25, 25).toString(),
                  LibraryShapes.CLASS_LIKE_PROPERTIES));
 
-    // TODO if (Tools.) sketch then use rectangle shapes
-    result.add(_create(ElementType.ACTIVITY_START,
+    result.add(_create(ElementType.ACTIVITY_START2,
                        "",
-                       new ActivityStartShape(200, ACTIVITY_GROUP + 60, ActivityStart.ACTIVITY_START_RADIUS).toString(), null, false,
-                       Theme.createDefaultBorderColor(),
-                       Theme.createDefaultBorderColor(),
-                       Theme.createDefaultTextColor()));
+                       new GenericShape(ElementType.ACTIVITY_START2.getValue(), 185, ACTIVITY_GROUP + 45, 30, 30).toString()));
 
     result.add(_create(ElementType.ACTIVITY_END,
                        "",
@@ -519,10 +515,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
     result.add(_create(ElementType.USE_CASE,
                        "Use Case",
-                       new GenericShape(ElementType.USE_CASE.getValue(), 115, SOFTWARE_SKETCHING_GROUP + 135, 50, 30).toString(),
-                       // for ELLIPSE
-                       // new EllipseShape(145, SOFTWARE_SKETCHING_GROUP + 150, 50, 25).toString()));
-                       LibraryShapes.CLASS_LIKE_PROPERTIES | ShapeProperty.CENTERED_TEXT.getValue()));
+                       new GenericShape(ElementType.USE_CASE.getValue(), 115, SOFTWARE_SKETCHING_GROUP + 135, 50, 30).toString()));
 
     result.add(_create(ElementType.SERVER,
                        "Server",
