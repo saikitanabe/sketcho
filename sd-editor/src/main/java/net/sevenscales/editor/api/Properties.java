@@ -152,15 +152,19 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		textArea.setStyleName(PROPERTIES_EDITOR_STYLE);
 //		textArea.setVisibleLines(20); 
 //		textArea.setCharacterWidth(30);
-		textArea.addKeyUpHandler(new KeyUpHandler() {
-		  public void onKeyUp(KeyUpEvent event) {
-  	    if (selectedDiagram != null) {
-  	      // enable auto resize if element supports that
-  	      // when text is inserted by user.
-  	      _setTextFromTextArea();
-        }
-		  }
-		});
+
+		// >>>>>>>>>>>> COMMENTED 18.11.2014
+		// - new onTextAreChange event that handles also copy paste + dictionary
+		// textArea.addKeyUpHandler(new KeyUpHandler() {
+		//   public void onKeyUp(KeyUpEvent event) {
+  // 	    if (selectedDiagram != null) {
+  // 	      // enable auto resize if element supports that
+  // 	      // when text is inserted by user.
+  // 	      _setTextFromTextArea();
+  //       }
+		//   }
+		// });
+		// >>>>>>>>>>> COMMENTED 18.11.2014
 
 		onTextAreaChange(textArea.getElement(), this);
 		
@@ -687,23 +691,21 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		// }
 	}
 
-	// >>>>>>>>>>>> COMMENTED 18.11.2014
-	// private void setMeasurementPanelText(String text) {
-	// 	if (selectedDiagram == null) {
-	// 		return;
-	// 	}
+	private void setMeasurementPanelText(String text) {
+		if (selectedDiagram == null) {
+			return;
+		}
 
-	// 	MeasurementPanel.setPlainTextAsHtml(text, selectedDiagram.getMeasurementAreaWidth());
-	// 	MeasurementPanel.setPosition(selectedDiagram.getLeft() + selectedDiagram.getWidth() + 20, selectedDiagram.getTop());
+		MeasurementPanel.setPlainTextAsHtml(text, selectedDiagram.getMeasurementAreaWidth());
+		MeasurementPanel.setPosition(selectedDiagram.getLeft() + selectedDiagram.getWidth() + 20, selectedDiagram.getTop());
 
-	// 	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-	// 		@Override
-	// 		public void execute() {
-	// 			textArea.getElement().getStyle().setHeight(MeasurementPanel.getOffsetHeight(), Unit.PX);
-	// 		}
-	// 	});
-	// }
-	// <<<<<<<<<<<< COMMENTED 18.11.2014
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+			@Override
+			public void execute() {
+				textArea.getElement().getStyle().setHeight(MeasurementPanel.getOffsetHeight(), Unit.PX);
+			}
+		});
+	}
 
 	// private void setSelectedDiagramHeight() {
 	// 	selectedDiagram.setHeightAccordingToText();
@@ -711,10 +713,17 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
  //  }
 
 	private void setTextAreaHeight() {
-		int rows = rows(textArea.getText());
-		int lheight = lineHeight();
-		int textAreaHeight = lheight * rows;
-		textArea.getElement().getStyle().setHeight(textAreaHeight + lheight, Unit.PX);
+		if (selectedDiagram != null) {
+			if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
+				// in case dynamically resized text should use measurement panel!!!
+				setMeasurementPanelText(textArea.getText());
+			} else {
+				int rows = rows(textArea.getText());
+				int lheight = lineHeight();
+				int textAreaHeight = lheight * rows;
+				textArea.getElement().getStyle().setHeight(textAreaHeight + lheight, Unit.PX);
+			}
+		}
 	}
 
 	private void _setTextAreaSize(Diagram diagram) {
