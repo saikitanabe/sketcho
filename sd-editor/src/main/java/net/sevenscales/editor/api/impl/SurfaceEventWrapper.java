@@ -23,9 +23,9 @@ public class SurfaceEventWrapper implements TouchStartHandler, TouchMoveHandler,
 	private ISurfaceHandler surface;
 	private DragAndDropHandler dragAndDropHandler;
 	private TouchContext context;
- 	// >>>>>>>>>>> SOLU 14.11.2014
-	private boolean mouseDown;
-	// <<<<<<<<<<< SOLU 14.11.2014
+	// >>>>>>>>>>> SOLU 14.11.2014
+	// private boolean mouseDown;
+	// <<<<<<<<<<< SOLU 14.11.2014	
 
 	public SurfaceEventWrapper(ISurfaceHandler surface, DragAndDropHandler dragAndDropHandler) {
 		this.surface = surface;
@@ -41,15 +41,16 @@ public class SurfaceEventWrapper implements TouchStartHandler, TouchMoveHandler,
 	@Override
 	public void onTouchStart(TouchStartEvent event) {
 		// >>>>>>>>>>> SOLU
-		mouseDown = event.getTouches().length() > 1;
-		if (event.getTouches().length() == 2) {
-			surface.getSelectionHandler().unselectAll();	
-		}
+		// mouseDown = event.getTouches().length() > 1;
+		// if (event.getTouches().length() == 2) {
+		// 	surface.getSelectionHandler().unselectAll();	
+		// }
 
-		if (mouseDown) {
-	    fireMouseDown(event);
-		}
-		// >>>>>>>>>>> SOLU
+		// if (mouseDown) {
+	 //    fireMouseDown(event);
+		// }
+		// >>>>>>>>>>> SOLU		
+    fireMouseDown(event);
 	}
 
 	private void fireMouseDown(TouchStartEvent event) {
@@ -64,52 +65,52 @@ public class SurfaceEventWrapper implements TouchStartHandler, TouchMoveHandler,
 	@Override
 	public void onTouchEnd(TouchEndEvent event) {
 		// >>>>>>>>>>> SOLU
-		if (mouseDown) {
-			// if (event.getTouches().length() != 0) {
-			// 	// no multiple touches, end is always zero anyway
-			// 	return;
-			// }
+		// if (mouseDown) {
+		// 	// if (event.getTouches().length() != 0) {
+		// 	// 	// no multiple touches, end is always zero anyway
+		// 	// 	return;
+		// 	// }
 			
-			MouseUpEvent e = TouchHelpers.createMouseUpEvent(context);
-			surface.fireMouseUp(e);
-		}
+		// 	MouseUpEvent e = TouchHelpers.createMouseUpEvent(context);
+		// 	surface.fireMouseUp(e);
+		// }
 		// >>>>>>>>>>> SOLU
+
+		if (event.getTouches().length() != 0) {
+	    // no multiple touches, end is always zero anyway
+	    return;
+	  }
+
+		MouseUpEvent e = TouchHelpers.createMouseUpEvent(context);
+		surface.fireMouseUp(e);
 	}
 
 	@Override
 	public void onTouchMove(TouchMoveEvent event) {
 		// >>>>>>>>>>> SOLU
-		if (mouseDown) {
-	    fireMouseMove(event);
-		}
-		Touch touch = TouchHelpers.firstTouch(event);
-		if (touch != null) {
-			showMyMouse(touch.getClientX(), touch.getClientY());
-			externalTouchPadMove(touch.getClientX(), touch.getClientY());
-		}
-		// <<<<<<<<<<< SOLU
+		// if (mouseDown) {
+	 //    fireMouseMove(event);
+		// }
+		// Touch touch = TouchHelpers.firstTouch(event);
+		// if (touch != null) {
+		// 	showMyMouse(touch.getClientX(), touch.getClientY());
+		// 	externalTouchPadMove(touch.getClientX(), touch.getClientY());
+		// }
+		// <<<<<<<<<<< SOLU		
+    fireMouseMove(event);
+
+    // could handle touch pad move events, but should send events
+    // only after a 100 milli seconds
+		// Touch touch = TouchHelpers.firstTouch(event);
+		// if (touch != null) {
+		// 	externalTouchPadMove(touch.getClientX(), touch.getClientY());
+		// }
 	}
 
-	private native void externalTouchPadMove(double x, double y)/*-{
-		$wnd.globalStreams.touchPadMoveStream.push(x, y)
-	}-*/;
-
-	// >>>>>>>>>>> SOLU
-	private void showMyMouse(double x, double y) {
-		// $wnd.$('mycursor')
-		// ScaleHelpers.ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint((int) x, (int) y, surface);
-		// _showMyCursor(stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y);
-		_showMyCursor(x - 20, y - 20);
-		// move(new ApplyHelpers.BoardUserApplyOperation(OTOperation.USER_MOVE, "me", "", stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y, 0, 0, "", "_me"));
-	};
-
-	private native void _showMyCursor(double x, double y)/*-{
-		var cursor = $wnd.$('#_mycursor')
-    cursor.css({
-      left: x + 'px',
-      top: y + 'px'
-    });
-	}-*/;
+	// >>>>>>>>>>>> SOLU
+	// private native void externalTouchPadMove(double x, double y)/*-{
+	// 	$wnd.globalStreams.touchPadMoveStream.push(x, y)
+	// }-*/;
 	// <<<<<<<<<<<< SOLU
 
 	private void fireMouseMove(TouchMoveEvent event) {

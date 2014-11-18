@@ -191,10 +191,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		RootPanel.get().add((new ToolBar(surface)));
 		RootPanel.get().add((new MainMenu(surface)));
 
-		// >>>>>>>>>>> SOLU 14.11.2014 -- commented
-		// this.scaleSlider = new ScaleSlider(surface);
-		// <<<<<<<<<<< SOLU 14.11.2014 -- commented
-
+		this.scaleSlider = new ScaleSlider(surface);
 
 //		});
 //		surface.addSelectionListener(new DiagramSelectionHandler() {
@@ -284,8 +281,9 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		}
 
 		init(this);
+		
 		// >>>>>>>>>>> SOLU
-		scaleOnLoad(this);
+		// scaleOnLoad(this);
 		// <<<<<<<<<<< SOLU
 	}
 

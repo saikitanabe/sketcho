@@ -735,7 +735,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			// textArea.getElement().getStyle().setBackgroundColor(diagram.getTextAreaBackgroundColor());
 		}
 
-		int fontSize = ((int) (12 * surface.getScaleFactor()));
+		int dFontSize = diagram.getFontSize() != null ? diagram.getFontSize() : 12;
+		int fontSize = ((int) (dFontSize * surface.getScaleFactor()));
 		textArea.getElement().getStyle().setProperty("fontSize", fontSize + "px");
 
 		textArea.getElement().getStyle().setProperty("lineHeight", lineHeight() + "px");
@@ -743,9 +744,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth() * surface.getScaleFactor(), Unit.PX);
 		setTextAreaHeight();
 
-
-		String paddingTop = ((int) (2 * surface.getScaleFactor())) + "";
-		textArea.getElement().getStyle().setProperty("paddingTop", paddingTop);
+		if (surface.getScaleFactor() > 1) {
+			String paddingTop = ((int) (2 * surface.getScaleFactor())) + "";
+			textArea.getElement().getStyle().setProperty("paddingTop", paddingTop);
+		}
 
 		textArea.getElement().getStyle().setProperty("textAlign", diagram.getTextAreaAlign());
 		
