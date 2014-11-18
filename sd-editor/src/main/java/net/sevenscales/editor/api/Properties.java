@@ -261,7 +261,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		editorContext.getEventBus().addHandler(ShowDiagramPropertyTextEditorEvent.TYPE, showDiagramText);
 		handleItemRealTimeModify(this);
 
-		handleExternalKeyCode(this);
+		// >>>>>>>>>>>> SOLU
+		// handleExternalKeyCode(this);
+		// <<<<<<<<<<<< SOLU
 
 		setWidget(panel);
 	}
@@ -287,35 +289,35 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 
 	// >>>>>>>>>>>>>> SOLU
-	private native void handleExternalKeyCode(Properties me)/*-{
-		$wnd.globalStreams.keyCodeStream.onValue(function(values) {
-			me.@net.sevenscales.editor.api.Properties::onExternalKeyCode(Ljava/lang/String;I)(values[0], values[1]);
-		})
-	}-*/;
+	// private native void handleExternalKeyCode(Properties me)/*-{
+	// 	$wnd.globalStreams.keyCodeStream.onValue(function(values) {
+	// 		me.@net.sevenscales.editor.api.Properties::onExternalKeyCode(Ljava/lang/String;I)(values[0], values[1]);
+	// 	})
+	// }-*/;
 
-	private void onExternalKeyCode(String character, int keyCode) {
-		String text = selectedDiagram.getText();
-		if (keyCode != 0) {
-			if (text.length() > 1 && keyCode == KeyCodes.KEY_BACKSPACE) {
-				text = text.substring(0, text.length() - 1);
-			}  else if (keyCode == KeyCodes.KEY_BACKSPACE) {
-				text = "";
-			} else if (keyCode == KeyCodes.KEY_ENTER) {
-				text += "\n";
-			} else {
-				text += fromCharCode(keyCode);
-			}
-		} else {
-			text += character;
-		}
-		textArea.setText(text);
+	// private void onExternalKeyCode(String character, int keyCode) {
+	// 	String text = selectedDiagram.getText();
+	// 	if (keyCode != 0) {
+	// 		if (text.length() > 1 && keyCode == KeyCodes.KEY_BACKSPACE) {
+	// 			text = text.substring(0, text.length() - 1);
+	// 		}  else if (keyCode == KeyCodes.KEY_BACKSPACE) {
+	// 			text = "";
+	// 		} else if (keyCode == KeyCodes.KEY_ENTER) {
+	// 			text += "\n";
+	// 		} else {
+	// 			text += fromCharCode(keyCode);
+	// 		}
+	// 	} else {
+	// 		text += character;
+	// 	}
+	// 	textArea.setText(text);
 
-		_setTextFromTextArea();
-	}
+	// 	_setTextFromTextArea();
+	// }
 
-	private native String fromCharCode(int keyCode)/*-{
- 		return String.fromCharCode(keyCode)
-	}-*/;
+	// private native String fromCharCode(int keyCode)/*-{
+ // 		return String.fromCharCode(keyCode)
+	// }-*/;
 
 	// <<<<<<<<<<<<<< SOLU
 
