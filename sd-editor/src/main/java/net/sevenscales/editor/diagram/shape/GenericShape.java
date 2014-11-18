@@ -2,6 +2,7 @@ package net.sevenscales.editor.diagram.shape;
 
 import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.domain.ISvgDataRO;
+import net.sevenscales.domain.ShapeProperty;
 
 
 public class GenericShape extends HasRectShape {
@@ -52,6 +53,13 @@ public class GenericShape extends HasRectShape {
   }
   public ISvgDataRO getSvgData() {
     return svgdata;
+  }
+
+  public void addShapeProperty(ShapeProperty shapeProperty) {
+    if (shapeProperties == null) {
+      shapeProperties = 0;
+    }
+    this.shapeProperties |= shapeProperty.getValue();
   }
   
 }

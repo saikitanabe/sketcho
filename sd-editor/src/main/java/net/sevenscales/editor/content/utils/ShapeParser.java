@@ -97,7 +97,8 @@ public class ShapeParser {
 				}
 			}
 		}
-		throw new RuntimeException("Factory not found for " + diro.getType());
+		return new AbstractDiagramFactory.GenericFactory();
+		// throw new RuntimeException("Factory not found for " + diro.getType());
 	}
 
 	static Info parse(IDiagramItemRO diro, int moveX, int moveY) {

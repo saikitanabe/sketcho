@@ -445,10 +445,14 @@ public interface AbstractDiagramFactory {
     }
 
     public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
+      GenericShape gh = (GenericShape) shape;
       switch (ElementType.getEnum(item.getType())) {
         case NOTE: {
+          // need to always have vertical text element, conversion from 
+          // official note => sketch note doesn't contain this property!
+          gh.addShapeProperty(ShapeProperty.TEXT_RESIZE_DIR_VERTICAL);
           return new GenericNoteElement(surface,
-            (GenericShape) shape,
+            gh,
             item.getText(), 
             DiagramItemFactory.parseBackgroundColor(item),
             DiagramItemFactory.parseBorderColor(item),
@@ -458,7 +462,7 @@ public interface AbstractDiagramFactory {
         }
         case FREEHAND2:
           return new GenericFreehandElement(surface,
-            (GenericShape) shape,
+            gh,
             item.getText(), 
             DiagramItemFactory.parseBackgroundColor(item),
             DiagramItemFactory.parseBorderColor(item),
@@ -467,7 +471,7 @@ public interface AbstractDiagramFactory {
             item);
         default: {
           return new GenericElement(surface,
-              (GenericShape) shape,
+              gh,
               item.getText(), 
               DiagramItemFactory.parseBackgroundColor(item),
               DiagramItemFactory.parseBorderColor(item),

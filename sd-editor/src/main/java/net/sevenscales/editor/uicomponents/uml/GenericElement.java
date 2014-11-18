@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.Tools;
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
@@ -16,6 +17,7 @@ import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.utils.UiUtils;
+import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IGroup;
@@ -254,7 +256,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 
 	public void doSetText(String newText) {
 		if (textUtil instanceof TextElementVerticalFormatUtil) {
-			((TextElementVerticalFormatUtil) textUtil).setText(newText, editable, true);
+			((TextElementVerticalFormatUtil) textUtil).setText(newText, editable, false);
 		} else {
 	    textUtil.setText(newText, editable);
 		}
@@ -516,7 +518,29 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   public boolean supportsTextEditing() {
   	return true;
   }
-  
+
+  @Override
+  public void editingEnded(boolean modified) {
+		if (textUtil instanceof TextElementVerticalFormatUtil) {
+	  	if (modified) {
+		  	// Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+		 		// 	public void execute() {
+		 				applyText();
+		 		// 	}
+		 		// });
+		  }
+		}
+
+	  // need to call as last to make sure attached relationships use
+	  // closest path if set
+  	super.editingEnded(modified);
+  }
+
+  private void applyText() {
+  	textUtil.setText(textUtil.getText(), true, true);
+  	MouseDiagramEventHelpers.fireChangedWithRelatedRelationships(surface, this, ActionType.TEXT_CHANGED);
+  }
+
 	@Override
 	public int getTextAreaLeft() {
   	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
