@@ -346,6 +346,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			}
 			case FORK: 
 			case CHOICE:
+			case ACTIVITY_START2:
 			case ACTIVITY_START: {
 				result = d.getDiagramItem().copy();
 				result = switchToActivityItem(d, result);
