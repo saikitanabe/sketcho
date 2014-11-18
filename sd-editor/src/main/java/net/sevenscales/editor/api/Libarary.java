@@ -282,12 +282,13 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
                        "",
                        new GenericShape(ElementType.ACTIVITY_START2.getValue(), 187, ACTIVITY_GROUP + 47, 25, 25).toString()));
 
-    result.add(_create(ElementType.ACTIVITY_END,
+    result.add(_create(ElementType.ACTIVITY_END2,
                        "",
-                       new ActivityEndShape(200, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 35, ActivityEnd.ACTIVITY_END_RADIUS).toString(), null, false,
-                       Theme.createDefaultBorderColor(),
-                       Theme.createDefaultBorderColor(),
-                       Theme.createDefaultTextColor()));
+                       new GenericShape(ElementType.ACTIVITY_END2.getValue(), 187, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 24, 25, 25).toString()));
+                       // new ActivityEndShape(200, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 35, ActivityEnd.ACTIVITY_END_RADIUS).toString(), null, false,
+                       // Theme.createDefaultBorderColor(),
+                       // Theme.createDefaultBorderColor(),
+                       // Theme.createDefaultTextColor()));
 
     result.add(_create(ElementType.CHOICE,
                        "",

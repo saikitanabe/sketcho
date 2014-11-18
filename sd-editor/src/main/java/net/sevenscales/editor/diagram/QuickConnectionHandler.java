@@ -334,6 +334,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			case SEQUENCE:
 			case VERTICAL_PARTITION:
 			case HORIZONTAL_PARTITION:
+			case ACTIVITY_END2:
 			case FREEHAND2: {
 				result = d.getDiagramItem().copy();
 				result = switchToNoteItem(d, result);
