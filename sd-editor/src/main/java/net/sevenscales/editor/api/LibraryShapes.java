@@ -30,6 +30,8 @@ public class LibraryShapes {
     shapes.put(ElementType.CHOICE, new LibraryShape(ElementType.CHOICE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.ACTIVITY_START2, new LibraryShape(ElementType.ACTIVITY_START2, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.ACTIVITY_END2, new LibraryShape(ElementType.ACTIVITY_START2, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.FORK_HORIZONTAL, new LibraryShape(ElementType.FORK_HORIZONTAL, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.FORK_VERTICAL, new LibraryShape(ElementType.FORK_VERTICAL, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
 
 	  shapes.put(ElementType.STAR4, new LibraryShape(ElementType.STAR4, 40, 40));
 	  shapes.put(ElementType.STAR5, new LibraryShape(ElementType.STAR5, 40, 40)); 

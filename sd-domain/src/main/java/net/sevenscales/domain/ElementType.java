@@ -27,6 +27,8 @@ public enum ElementType {
 	COMMENT_THREAD("comments"),
 	HORIZONTAL_PARTITION("hpart"),
 	FORK("fork"),
+	FORK_HORIZONTAL("hfork"),
+	FORK_VERTICAL("vfork"),
 	IMAGE("img"),
 	// NOTE url image needs to be a new type!!! G_IMAGE("gimg") Makes aws url and name parsing more robust.
 	STAR4("star4"),

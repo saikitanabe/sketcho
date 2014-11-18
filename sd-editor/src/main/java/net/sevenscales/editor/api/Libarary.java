@@ -295,11 +295,13 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
                        new ActivityChoiceShape(184, ACTIVITY_GROUP + 110, 32, 32).toString()));
 
 
-    result.add(_create(ElementType.FORK, "",
-                 new ForkShape(160, ACTIVITY_GROUP + 60, 5, 75, 1).toString()));
+    // result.add(_create(ElementType.FORK, "",
+                 // new ForkShape(160, ACTIVITY_GROUP + 60, 5, 75, 1).toString()));
+    result.add(_create(ElementType.FORK_VERTICAL, "",
+                 new GenericShape(ElementType.FORK_VERTICAL.getValue(), 160, ACTIVITY_GROUP + 60, 8, 75).toString()));
         
-    result.add(_create(ElementType.FORK, "",
-                 new ForkShape(45, ACTIVITY_GROUP + 170, 75, 5).toString()));
+    result.add(_create(ElementType.FORK_HORIZONTAL, "",
+              new GenericShape(ElementType.FORK_VERTICAL.getValue(), 45, ACTIVITY_GROUP + 170, 75, 8).toString()));
 
 
     Diagram swimline = _create(ElementType.HORIZONTAL_PARTITION, "Swimline",
