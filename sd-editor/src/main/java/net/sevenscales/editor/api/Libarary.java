@@ -280,7 +280,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
     result.add(_create(ElementType.ACTIVITY_START2,
                        "",
-                       new GenericShape(ElementType.ACTIVITY_START2.getValue(), 185, ACTIVITY_GROUP + 45, 30, 30).toString()));
+                       new GenericShape(ElementType.ACTIVITY_START2.getValue(), 187, ACTIVITY_GROUP + 47, 25, 25).toString()));
 
     result.add(_create(ElementType.ACTIVITY_END,
                        "",
