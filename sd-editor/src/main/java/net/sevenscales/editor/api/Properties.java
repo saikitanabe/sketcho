@@ -267,6 +267,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		if (selectedDiagram != null) {
 	    selectedDiagram.setAutoResize(true);
 	    setSelectedDiagramText(textArea.getText());
+	    setTextAreaHeight();
 	    selectedDiagram.setAutoResize(false);
 		}
 	}
@@ -475,7 +476,11 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			// do not allow sending same content again
 			return;
 		}
-		setMeasurementPanelText(text);
+
+		// >>>>>>>>>>>> COMMENTED 18.11.2014
+		// setMeasurementPanelText(text);
+		// <<<<<<<<<<<< COMMENTED 18.11.2014
+
 		// if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
 	    // DIV tryouts,
 			// setMeasurementPanelText(text);
@@ -660,57 +665,47 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		textArea.setText(text);
 		
 		// if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
-			setMeasurementPanelText(text);
+		// >>>>>>>>>>>> COMMENTED 18.11.2014
+		// setMeasurementPanelText(text);
+		// <<<<<<<<<<<< COMMENTED 18.11.2014
 		// }
 	}
 
-	private void setMeasurementPanelText(String text) {
-		if (selectedDiagram == null) {
-			return;
-		}
+	// >>>>>>>>>>>> COMMENTED 18.11.2014
+	// private void setMeasurementPanelText(String text) {
+	// 	if (selectedDiagram == null) {
+	// 		return;
+	// 	}
 
-		MeasurementPanel.setPlainTextAsHtml(text, selectedDiagram.getMeasurementAreaWidth());
-		MeasurementPanel.setPosition(selectedDiagram.getLeft() + selectedDiagram.getWidth() + 20, selectedDiagram.getTop());
+	// 	MeasurementPanel.setPlainTextAsHtml(text, selectedDiagram.getMeasurementAreaWidth());
+	// 	MeasurementPanel.setPosition(selectedDiagram.getLeft() + selectedDiagram.getWidth() + 20, selectedDiagram.getTop());
 
-		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-			@Override
-			public void execute() {
-				textArea.getElement().getStyle().setHeight(MeasurementPanel.getOffsetHeight(), Unit.PX);
-			}
-		});
-
-		// int height = MeasurementHelpers.setMeasurementPanelTextAndResizeDiagram(selectedDiagram, text);
-		// setTextAreaHeight(height);
-		// selectedDiagram.setHeightAccordingToText();
-		// setSelectedDiagramHeight();
-	}
+	// 	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+	// 		@Override
+	// 		public void execute() {
+	// 			textArea.getElement().getStyle().setHeight(MeasurementPanel.getOffsetHeight(), Unit.PX);
+	// 		}
+	// 	});
+	// }
+	// <<<<<<<<<<<< COMMENTED 18.11.2014
 
 	// private void setSelectedDiagramHeight() {
 	// 	selectedDiagram.setHeightAccordingToText();
  //    // selectedDiagram.setHeight(MeasurementPanel.getMeasurementPanel().getOffsetHeight() + TextElementVerticalFormatUtil.DEFAULT_VERTICAL_TEXT_MARGIN);
  //  }
 
-	private void setTextAreaHeight(int height) {
-		// String[] rows = textArea.getText().split("\n");
+	private void setTextAreaHeight() {
 		int rows = rows(textArea.getText());
-		logger.debug("rows.length: {}", rows);
-		// this is some magical approximation of the textarea height
-		// it is at least the size of measurement panel, but extra
-		// line breaks in editor might not increase measurment panel height
-		// therefore need to add something based on line breaks...
-		int textAreaHeight = height + rows / 4 * TextElementFormatUtil.ROW_HEIGHT;
-		textArea.getElement().getStyle().setHeight(400, Unit.PX);
-		// textArea.getElement().getStyle().setHeight(textAreaHeight, Unit.PX);
+		int lheight = lineHeight();
+		int textAreaHeight = lheight * rows;
+		textArea.getElement().getStyle().setHeight(textAreaHeight + lheight, Unit.PX);
 	}
 
 	private void _setTextAreaSize(Diagram diagram) {
 		// no need to hide text any longer since markdown editor hides the text with background color.
 		// diagram.hideText();
 		
-		// >>>>>>>>>>>>>>> SOLU
-		// MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
 		MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
-		// <<<<<<<<<<<<<<< SOLU
 		int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
 		int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop();
 
@@ -719,33 +714,35 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		textArea.setVisible(true);
 
 		if ("transparent".equals(diagram.getTextAreaBackgroundColor())) {
-			// >>>>>>>>>>>>> SOLU
 			// textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
-			textArea.getElement().getStyle().setBackgroundColor("#ECE8E6");
 			textArea.getElement().getStyle().setColor(Theme.getCurrentColorScheme().getTextColor().toHexStringWithHash());
-			// <<<<<<<<<<<<< SOLU
 		} else {
 			textArea.getElement().getStyle().setColor("#" + diagram.getTextColor().toHexString());
-			textArea.getElement().getStyle().setBackgroundColor(diagram.getTextAreaBackgroundColor());
+			// textArea.getElement().getStyle().setBackgroundColor(diagram.getTextAreaBackgroundColor());
 		}
 
-		// >>>>>>>>>>>>>>> SOLU
-		// textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth(), Unit.PX);
-		textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth() * 2, Unit.PX);
-		// setTextAreaHeight(diagram.getTextAreaHeight());
-		setTextAreaHeight(diagram.getHeight() * 4);
-		// <<<<<<<<<<<<<<< SOLU
+		int fontSize = ((int) (12 * surface.getScaleFactor()));
+		textArea.getElement().getStyle().setProperty("fontSize", fontSize + "px");
+
+		textArea.getElement().getStyle().setProperty("lineHeight", lineHeight() + "px");
+
+		textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth() * surface.getScaleFactor(), Unit.PX);
+		setTextAreaHeight();
+
+
+		String paddingTop = ((int) (2 * surface.getScaleFactor())) + "";
+		textArea.getElement().getStyle().setProperty("paddingTop", paddingTop);
+
 		textArea.getElement().getStyle().setProperty("textAlign", diagram.getTextAreaAlign());
 		
-		textArea.getElement().getStyle().setBorderColor("#bbb");
-		textArea.getElement().getStyle().setBorderWidth(1, Unit.PX);
-		textArea.getElement().getStyle().setBorderStyle(BorderStyle.DASHED);
-
-
 // 		if (surface.getScaleFactor() != 1.0f && !"transparent".equals(diagram.getTextAreaBackgroundColor())) {
 // //			diagram.setVisible(false);
 // 			textArea.getElement().getStyle().setBackgroundColor("#" + diagram.getBackgroundColor());
 // 		}
+	}
+
+	private int lineHeight() {
+		return ((int) (17 * surface.getScaleFactor()));
 	}
 
 	private int rows(String text) {
