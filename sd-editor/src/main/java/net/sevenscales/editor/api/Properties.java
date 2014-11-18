@@ -51,6 +51,7 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.BorderStyle;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyEvent;
@@ -160,6 +161,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
         }
 		  }
 		});
+
+		onTextAreaChange(textArea.getElement(), this);
 		
 		editorContext.getEventBus().addHandler(RelationshipTypeSelectedEvent.TYPE, new RelationshipTypeSelectedEventHandler() {
 			private void changeSelected(Diagram diagram, RelationshipTypeSelectedEvent event) {
@@ -261,6 +264,17 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		handleExternalKeyCode(this);
 
 		setWidget(panel);
+	}
+
+	private native void onTextAreaChange(Element e, Properties me)/*-{
+		$wnd.$(e).bind('input propertychange', function(){
+		  // alert($wnd.$(this).val());
+		  me.@net.sevenscales.editor.api.Properties::textAreaChanged()();
+		});		
+	}-*/;
+
+	private void textAreaChanged() {
+		_setTextFromTextArea();
 	}
 
 	private void _setTextFromTextArea() {
