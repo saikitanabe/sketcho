@@ -20,7 +20,7 @@ public class Theme {
     BLACK("black", new Color(0x27, 0x28, 0x22, 1)),
     SEPIA("sepia", new Color(0xFB, 0xF0, 0xD9, 1)), 
     PAPER("paper", new Color(0xFA, 0xFA, 0xFA, 1)), 
-    GRID("grid", new Color(0xFA, 0xFA, 0xFA, 1));
+    GRID("grid", new Color(0xEC, 0xE8, 0xE6, 1));
     
     private String name;
     private Color boardBackgroundColor;
