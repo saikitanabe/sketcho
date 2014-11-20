@@ -1572,7 +1572,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     if (weight == 1) {
       return 0;
     } else {
-      return (int) (weight * 1.9);
+      return (int) (weight * 1.1);
     }
   }
 
