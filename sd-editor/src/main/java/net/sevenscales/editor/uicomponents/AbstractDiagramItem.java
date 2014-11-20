@@ -1751,4 +1751,15 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     this.factorY = factorY;
   }
 
+  // @Override
+  // public void fixCardinality(Anchor anchor) {
+  //   fixCardinality(tempAnchorProperties, anchor);
+  // }
+
+  protected void fixCardinality(AnchorUtils.AnchorProperties aprops, Anchor anchor) {
+    if (anchor.getAnchorElement() != null) {
+      anchor.getAnchorElement().setCardinalDirection(aprops.cardinalDirection);
+    }
+  }
+
 }

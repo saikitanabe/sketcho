@@ -415,6 +415,7 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
       selectionArea.getWidth(), selectionArea.getHeight())) {
     	// anchor to life line if on selection area
     	result = makeFixedTempAnchorProperties(anchor, x, y);
+      fixCardinality(tempAnchorProperties, anchor);
     }
     return result;
   }
@@ -439,7 +440,8 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
   * Cardinality for sequence line can be only from east or west and needs to be checked from
   * arrow direction is it coming from left to right or vice versa.
   */
-  private void fixCardinality(AnchorUtils.AnchorProperties aprops, Anchor anchor) {
+  @Override
+  protected void fixCardinality(AnchorUtils.AnchorProperties aprops, Anchor anchor) {
     Relationship2 r = anchor.getRelationship();
     if (r != null) {
       if (AnchorUtils.isRightToLeft(r.getStartX(), r.getStartY(), r.getEndX(), r.getEndY())) {
@@ -448,6 +450,7 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
         aprops.cardinalDirection = CardinalDirection.WEST;
       }
     }
+    super.fixCardinality(aprops, anchor);
   }
 
   @Override
