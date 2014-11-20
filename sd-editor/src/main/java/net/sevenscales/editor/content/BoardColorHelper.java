@@ -76,11 +76,15 @@ public class BoardColorHelper {
   }
 
   public static void applyThemeToDiagram(Diagram d, ElementColorScheme currentColorScheme, ElementColorScheme newColorScheme) {
-    if (currentColorScheme.equals(newColorScheme)) {
-      // don't do anything except apply annotations if needed
-      d.applyAnnotationColors();
-      return;
-    }
+
+    // >>>>>>>>>>>> COMMENTED 20.11.2014
+    // child text didn't apply correct background color when loading the board
+    // if (currentColorScheme.equals(newColorScheme)) {
+    //   // don't do anything except apply annotations if needed
+    //   d.applyAnnotationColors();
+    //   return;
+    // }
+    // <<<<<<<<<<<< COMMENTED 20.11.2014
 
     boolean notCircleElement = !(d instanceof CircleElement);
     if (notCircleElement) {
