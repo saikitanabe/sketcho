@@ -571,6 +571,10 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	
 	@Override
 	public int getTextAreaTop() {
+		// cannot find enum since user custom types will not be part of enums!!
+		if (hasTextElement.verticalAlignMiddle()) {
+			return textUtil.middleY(0);
+		}
   	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
 			return getTop() + getHeight() - 1;
 		} else {

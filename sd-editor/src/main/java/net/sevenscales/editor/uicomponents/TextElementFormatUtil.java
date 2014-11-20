@@ -432,7 +432,7 @@ public class TextElementFormatUtil {
     this.degrees = degrees;
   }
 
-  private int middleY(int row) {
+  public int middleY(int row) {
     return hasTextElement.getY() + hasTextElement.getMarginTop() + hasTextElement.getHeight() / 2 - (lines.size() * fontProperty.rowHeight / 2) + (row * fontProperty.rowHeight);
   }
 
