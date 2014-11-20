@@ -1067,7 +1067,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   public void dragEnd(Diagram sender) {
     logger.debug("Relationship2.dragEnd...");
     currentDragged = null;
-    // fixCardinalities();
 //    relationshipHandleHelpers.dragEnd(sender);
     
 //    if (isSelected()) {
@@ -1093,17 +1092,6 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //    }
 //    followUpChange = false;
   }
-
-  // private void fixCardinalities() {
-  //   _fixCardinality(startAnchor);
-  //   _fixCardinality(endAnchor);
-  // }
-
-  // private void _fixCardinality(Anchor anchor) {
-  //   if (anchor.getDiagram() != null) {
-  //     anchor.getDiagram().fixCardinality(anchor);
-  //   }
-  // }
   
 //  private void reattachAnchor(Anchor anchor) {
 //    anchor.getAnchorElement().reattach();

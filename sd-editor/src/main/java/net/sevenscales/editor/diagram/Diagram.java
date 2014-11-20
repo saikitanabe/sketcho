@@ -297,12 +297,4 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   // menu support
   void setDuplicateMultiplySize(int factorX, int factorY);
 
-  /**
-  * e.g. Relationship2 calls this on drag end to correct it's shape.
-  * Thick line weight needs to be correctly "off" from attached shape.
-  * E.g. SequenceElement2  fixes line cardinalities at this point so
-  * Relationship2 can be off from sequence line.
-  */
-  // void fixCardinality(Anchor anchor);
-
 }
