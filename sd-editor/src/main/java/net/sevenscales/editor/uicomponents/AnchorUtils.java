@@ -126,7 +126,7 @@ public class AnchorUtils {
     
     int smallest = Math.min(dx, dy);
     smallest = Math.min(smallest, dxw); 
-    smallest = Math.min(smallest, dyh); 
+    smallest = Math.min(smallest, dyh);
     if (smallest == dx) {
       return CardinalDirection.WEST;
     } else if (smallest == dy) {
@@ -137,6 +137,10 @@ public class AnchorUtils {
       return CardinalDirection.SOUTH;
     }
     return CardinalDirection.WEST;
+  }
+
+  public static boolean isRightToLeft(int sx, int sy, int ex, int ey) {
+    return sx - ex > 0;
   }
 
   /**
