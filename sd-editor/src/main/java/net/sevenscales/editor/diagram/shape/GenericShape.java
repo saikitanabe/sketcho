@@ -25,6 +25,10 @@ public class GenericShape extends HasRectShape {
     this(elementType, left, top, width, height, 0, null);
   }
 
+  public GenericShape(String elementType, int left, int top, int width, int height, Integer shapeProperties) {
+    this(elementType, left, top, width, height, shapeProperties, null);
+  }
+
   public GenericShape(String elementType, int left, int top, int width, int height, Integer shapeProperties, ISvgDataRO svgdata) {
     super(left, top, width, height);
     this.elementType = elementType;

@@ -552,7 +552,7 @@ Color borderColor, Color color) {
 			GenericElement element = new GenericElement(surface,
 	        new GenericShape(ls.elementType.getValue(), x, y, ls.width, ls.height, ls.shapeProperties, null),
 	        type.getValue(),
-	        background, borderColor, color, true, DiagramItemDTO.createByType(ls.elementType));
+	        background, borderColor, color, true, LibraryShapes.createByType(ls.elementType));
 			result = element;
 		}
 		return result;

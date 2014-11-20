@@ -7,6 +7,7 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.ActionType;
+import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
@@ -294,7 +295,7 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   }
 
   protected Diagram createGenericElement(ISurfaceHandler surface, GenericShape newShape) {
- 		return new GenericElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, DiagramItemDTO.createByType(ElementType.getEnum(getDiagramItem().getType())));
+ 		return new GenericElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(ElementType.getEnum(getDiagramItem().getType())));
   }
 	
   public boolean resize(Point diff) {

@@ -89,7 +89,11 @@ public class ShapeParser {
 
 	public static AbstractDiagramFactory factory(IDiagramItemRO diro) {
 		for (ParserMap pm : PARSER_MAP) {
-			if (Tools.isSketchMode() && Shapes.getSketch(ElementType.getEnum(diro.getType())) != null) {
+			ElementType type = ElementType.getEnum(diro.getType());
+			if (Tools.isSketchMode() && 
+					// hacked to use sequence factory always, it creates correct sequence sketch element
+					!type.equals(ElementType.SEQUENCE) &&
+					Shapes.getSketch(ElementType.getEnum(diro.getType())) != null) {
 				return new AbstractDiagramFactory.GenericFactory();
 			} else {
 				if (pm.elementType.getValue().equals(diro.getType())) {

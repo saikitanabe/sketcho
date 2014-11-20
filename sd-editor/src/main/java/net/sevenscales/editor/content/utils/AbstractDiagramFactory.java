@@ -17,6 +17,7 @@ import net.sevenscales.editor.uicomponents.uml.*;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 import net.sevenscales.editor.api.impl.Theme.ThemeName;
+import net.sevenscales.editor.api.Tools;
 
 
 public interface AbstractDiagramFactory {
@@ -55,14 +56,25 @@ public interface AbstractDiagramFactory {
 		}
 
 		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
-      return new SequenceElement(surface,
-              (SequenceShape) shape,
-              item.getText(),
-              DiagramItemFactory.parseBackgroundColor(item),
-              DiagramItemFactory.parseBorderColor(item),
-              DiagramItemFactory.parseTextColor(item),
-              editable,
-              item);
+      if (Tools.isSketchMode()) {
+        return new SequenceElement2(surface,
+                (SequenceShape) shape,
+                item.getText(),
+                DiagramItemFactory.parseBackgroundColor(item),
+                DiagramItemFactory.parseBorderColor(item),
+                DiagramItemFactory.parseTextColor(item),
+                editable,
+                item);
+      } else {
+        return new SequenceElement(surface,
+                (SequenceShape) shape,
+                item.getText(),
+                DiagramItemFactory.parseBackgroundColor(item),
+                DiagramItemFactory.parseBorderColor(item),
+                DiagramItemFactory.parseTextColor(item),
+                editable,
+                item);
+      }
 		}
 	}
 

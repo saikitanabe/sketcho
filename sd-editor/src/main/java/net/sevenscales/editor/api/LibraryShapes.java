@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.DiagramItemDTO;
 
 public class LibraryShapes {
 	public static Map<ElementType, LibraryShape> shapes;
@@ -53,6 +54,7 @@ public class LibraryShapes {
 	  shapes.put(ElementType.WEB_BROWSER, new LibraryShape(ElementType.WEB_BROWSER, 50, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12));
     shapes.put(ElementType.RECT, new LibraryShape(ElementType.RECT, 50, 35, CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.CLASS, new LibraryShape(ElementType.CLASS, 50, 35, CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.SEQUENCE, new LibraryShape(ElementType.CLASS, 50, 35, CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.USE_CASE, new LibraryShape(ElementType.USE_CASE, 50, 35, CLASS_LIKE_PROPERTIES | ShapeProperty.CENTERED_TEXT.getValue(), 2, 2));
     shapes.put(ElementType.SWITCH, new LibraryShape(ElementType.SWITCH, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
     shapes.put(ElementType.ROUTER, new LibraryShape(ElementType.ROUTER, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
@@ -104,4 +106,18 @@ public class LibraryShapes {
     // }
 
   }
+
+  public static DiagramItemDTO createByType(ElementType type) {
+    DiagramItemDTO result = new DiagramItemDTO();
+    LibraryShapes.LibraryShape s = LibraryShapes.get(type);
+    Integer properties = null;
+    if (s != null) {
+      properties = s.shapeProperties;
+    }
+
+    result.setType(type.getValue());
+    result.setShapeProperties(properties);
+    return result;
+  }
+
 }

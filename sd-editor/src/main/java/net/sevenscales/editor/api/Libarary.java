@@ -271,12 +271,10 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     addSection("Flows", new RectContainerShape(10, ACTIVITY_GROUP, 220, ACTIVITY_GROUP_HEIGHT));
 
     result.add(_create(ElementType.ACTIVITY, "My Activity",
-                 new ActivityShape(30, ACTIVITY_GROUP + 45, 100, 30).toString(),
-                 LibraryShapes.CLASS_LIKE_PROPERTIES));
+                 new ActivityShape(30, ACTIVITY_GROUP + 45, 100, 30).toString()));
 
     result.add(_create(ElementType.SEQUENCE, "Sequence",
-                 new SequenceShape(40, ACTIVITY_GROUP + 100, 100, 25, 25).toString(),
-                 LibraryShapes.CLASS_LIKE_PROPERTIES));
+                 new SequenceShape(30, ACTIVITY_GROUP + 100, 100, 40, 20).toString()));
 
     result.add(_create(ElementType.ACTIVITY_START2,
                        "",
@@ -301,7 +299,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
                  new GenericShape(ElementType.FORK_VERTICAL.getValue(), 160, ACTIVITY_GROUP + 60, 8, 75).toString()));
         
     result.add(_create(ElementType.FORK_HORIZONTAL, "",
-              new GenericShape(ElementType.FORK_VERTICAL.getValue(), 45, ACTIVITY_GROUP + 170, 75, 8).toString()));
+              new GenericShape(ElementType.FORK_VERTICAL.getValue(), 45, ACTIVITY_GROUP + 170, 85, 8).toString()));
 
 
     Diagram swimline = _create(ElementType.HORIZONTAL_PARTITION, "Swimline",
@@ -344,8 +342,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     result.add(productLine);
 
     result.add(_create(ElementType.ACTIVITY, "Release X",
-                 new ActivityShape(roadmapIndent + 10, productY + 30, 100, 30).toString(),
-                 LibraryShapes.CLASS_LIKE_PROPERTIES));
+                 new ActivityShape(roadmapIndent + 10, productY + 30, 100, 30).toString()));
   }
 
   private void general(List<Diagram> result) {
@@ -513,8 +510,8 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
     result.add(_create(ElementType.ACTOR,
                        "<<system>>\nActor",
-                       new ActorShape(40, SOFTWARE_SKETCHING_GROUP + 120, 43, 54).toString(), 
-                       ShapeProperty.TEXT_POSITION_BOTTOM.getValue() | ShapeProperty.BOLD_TITLE.getValue()));
+                       new ActorShape(40, SOFTWARE_SKETCHING_GROUP + 120, 43, 54).toString())); 
+                       // ShapeProperty.TEXT_POSITION_BOTTOM.getValue() | ShapeProperty.BOLD_TITLE.getValue()));
 
     result.add(_create(ElementType.USE_CASE,
                        "Use Case",
@@ -595,8 +592,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
                  "ClassName\n" +
                  "--\n" +
                  "method()",
-                 new RectShape(30, CLASS_GROUP + 40, 100, 60).toString(),
-                 LibraryShapes.CLASS_LIKE_PROPERTIES));
+                 new RectShape(30, CLASS_GROUP + 40, 100, 60).toString()));
 
     result.add(_create(ElementType.PACKAGE,
                        "package",
@@ -634,20 +630,20 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 	}
 
   private Diagram _create(ElementType type, String text, String shape) {
-    LibraryShapes.LibraryShape s = LibraryShapes.get(type);
-    Integer properties = null;
-    if (s != null) {
-      properties = s.shapeProperties;
-    }
-    return _create(type, text, shape, properties, true, null, null, null);
+    // LibraryShapes.LibraryShape s = LibraryShapes.get(type);
+    // Integer properties = null;
+    // if (s != null) {
+    //   properties = s.shapeProperties;
+    // }
+    return _create(type, text, shape, true, null, null, null);
   }
 
-  private Diagram _create(ElementType type, String text, String shape, Integer properties) {
-    return _create(type, text, shape, properties, true, null, null, null);
-  }
+  // private Diagram _create(ElementType type, String text, String shape) {
+  //   return _create(type, text, shape, properties, true, null, null, null);
+  // }
 
-  private Diagram _create(ElementType type, String text, String shape, Integer properties, boolean setcolors, Color backgroundColor, Color borderColor, Color textColor) {
-    DiagramItemDTO item = DiagramItemDTO.createByType(type);
+  private Diagram _create(ElementType type, String text, String shape, boolean setcolors, Color backgroundColor, Color borderColor, Color textColor) {
+    DiagramItemDTO item = LibraryShapes.createByType(type);
     if (setcolors) {
       DiagramItemConfiguration.setDefaultColors(item);
     } else {
@@ -655,9 +651,6 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     }
     item.setText(text);
     item.setShape(shape);
-    if (properties != null) {
-      item.setShapeProperties(properties);
-    }
 
     return ShapeParser.createDiagramElement(item, this.toolpool);
   }

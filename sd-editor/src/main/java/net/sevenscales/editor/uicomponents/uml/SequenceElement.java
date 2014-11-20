@@ -10,6 +10,7 @@ import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.ISequenceElement;
 import net.sevenscales.editor.diagram.DiagramDragHandler;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.RectShape;
@@ -35,14 +36,11 @@ import net.sevenscales.domain.DiagramItemDTO;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public class SequenceElement extends ClassElement2 implements DiagramDragHandler, SupportsRectangleShape, IExtraConnectionHandler {
+public class SequenceElement extends ClassElement2 implements DiagramDragHandler, SupportsRectangleShape, IExtraConnectionHandler, ISequenceElement {
 	private static SLogger logger = SLogger.createLogger(SequenceElement.class);
 	private static final int RADIUS_EXTRA = 12;
 	private static final int SELECTION_AREA_WIDTH = 12;
-	
-	public static final int RADIUS_START = 12;
-	public static final int RADIUS_SELECTION = 25;
-	
+		
   private ILine line;
   private ILifeLineEditor lifeLineEditor;
   private ISurfaceHandler surface;
@@ -405,7 +403,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
   }
 
   @Override
-  protected boolean setFixedOrRelativeAnchor(int x, int y) {
+  protected boolean setFixedOrRelativeAnchor(int x, int y, Anchor anchor) {
     if (AnchorUtils.onAttachArea(x, y, getLeft(), getTop(), getWidth(), getHeight())) {
       // if on rectangle area
       AnchorUtils.relativeValue(tempAnchorProperties, x, y, getLeft(), getTop(), getWidth(), getHeight());

@@ -144,22 +144,24 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       // - ask from diagram onAttachArea and attach start handle to given event point
       // - diagram could provide force attach to nearest point
       this.currentAnchorElement = sender.onAttachArea(createdRelationship.getStartAnchor(), xx, yy);
-      if (currentAnchorElement == null) {
-        throw new RuntimeException("currentAnchorElement is null");
-      }
-      createdRelationship.getStartAnchor().setPoint(currentAnchorElement.getAx(), currentAnchorElement.getAy());
-      
-      // simulate dragging with relationship end handle
-      // - call MouseDiagramDragHandler:: mouse down
-      // - then just normal mouse move and MouseDiagramDragHandler handles that and rest goes naturally
-      // if however relationship is not attached to anywhere, remove it
-      this.currentHandle = createdRelationship.getEndHandler();
-      currentHandle.setVisible(false);
+      if (currentAnchorElement != null) {
+        createdRelationship.getStartAnchor().setPoint(currentAnchorElement.getAx(), currentAnchorElement.getAy());
+        
+        // simulate dragging with relationship end handle
+        // - call MouseDiagramDragHandler:: mouse down
+        // - then just normal mouse move and MouseDiagramDragHandler handles that and rest goes naturally
+        // if however relationship is not attached to anywhere, remove it
+        this.currentHandle = createdRelationship.getEndHandler();
+        currentHandle.setVisible(false);
 
-      // guarantee that handle is dragged and not bubbled diagram itself
-      surface.getMouseDiagramManager().getDragHandler().force(currentHandle);
-      result = true;
-      logger.debug("SketchDiagramAreaHandler connection created... done");
+        // guarantee that handle is dragged and not bubbled diagram itself
+        surface.getMouseDiagramManager().getDragHandler().force(currentHandle);
+        result = true;
+        logger.debug("SketchDiagramAreaHandler connection created... done");
+      } else {
+        // cleanup
+        createdRelationship = null;
+      }
     }
     return result;
   }

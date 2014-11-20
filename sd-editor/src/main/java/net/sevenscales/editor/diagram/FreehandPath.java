@@ -24,6 +24,7 @@ import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoint;
@@ -141,7 +142,7 @@ class FreehandPath {
       polyline.getStrokeColor(), 
       Theme.createDefaultTextColor(),
       surface.getEditorContext().isEditable(), 
-      DiagramItemDTO.createByType(ElementType.FREEHAND2));
+      LibraryShapes.createByType(ElementType.FREEHAND2));
     // surface.add(diagram, true);
     polyline.setVisibility(false);
     points.clear();

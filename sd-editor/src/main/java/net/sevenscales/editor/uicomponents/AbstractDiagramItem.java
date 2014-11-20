@@ -541,7 +541,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	  tempAnchorProperties.x = x;
 	  tempAnchorProperties.y = y;
 
-    boolean fixedOrRelative = setFixedOrRelativeAnchor(x, y);
+    boolean fixedOrRelative = setFixedOrRelativeAnchor(x, y, anchor);
     result.setRelativeX(tempAnchorProperties.relativeValueX);
     result.setRelativeY(tempAnchorProperties.relativeValueY);
     result.setFixedPoint(fixedOrRelative);
@@ -561,7 +561,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
    * @param y
    * @return false if relative point; true if fixed point
    */
-  protected boolean setFixedOrRelativeAnchor(int x, int y) {
+  protected boolean setFixedOrRelativeAnchor(int x, int y, Anchor anchor) {
     Integer[] fixedAnchorPoints = getFixedAnchorPoints();
     if (fixedAnchorPoints == null) {
     	// do not recalculate relationship position, but use x, y, that's why not using anchorPoint method

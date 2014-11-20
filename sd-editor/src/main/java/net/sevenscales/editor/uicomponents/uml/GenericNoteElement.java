@@ -1,6 +1,7 @@
 package net.sevenscales.editor.uicomponents.uml;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.Color;
@@ -26,7 +27,7 @@ public class GenericNoteElement extends GenericElement {
 
   @Override
   protected Diagram createGenericElement(ISurfaceHandler surface, GenericShape newShape) {
-    return new GenericNoteElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, DiagramItemDTO.createByType(ElementType.getEnum(getDiagramItem().getType())));
+    return new GenericNoteElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(ElementType.getEnum(getDiagramItem().getType())));
   }
 
   @Override
