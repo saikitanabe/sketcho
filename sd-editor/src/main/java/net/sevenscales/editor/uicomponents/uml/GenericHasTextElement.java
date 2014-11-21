@@ -141,10 +141,7 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
   public boolean supportsTitleCenter() {
-  	if (ShapeProperty.isTextResizeDimVerticalResize(parent.getDiagramItem().getShapeProperties())) {
-  		return false;
-  	}
-    return true;
+  	return ShapeProperty.isTextTitleCenter(parent.getDiagramItem().getShapeProperties());
   }
 
 	@Override

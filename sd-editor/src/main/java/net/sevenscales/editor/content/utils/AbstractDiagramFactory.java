@@ -573,6 +573,16 @@ public interface AbstractDiagramFactory {
 		}
 
 		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
+      if (Tools.isSketchMode()) {
+        return new HorizontalPartitionElement2(surface,
+              (HorizontalPartitionShape)shape,
+              item.getText(),
+              DiagramItemFactory.parseBackgroundColor(item),
+              DiagramItemFactory.parseBorderColor(item),
+              DiagramItemFactory.parseTextColor(item),
+          editable,
+          item);      
+      } else {
 				return new HorizontalPartitionElement(surface,
           		(HorizontalPartitionShape)shape,
               item.getText(),
@@ -581,6 +591,7 @@ public interface AbstractDiagramFactory {
               DiagramItemFactory.parseTextColor(item),
           editable,
           item);			
+      }
 		}
 	}
 

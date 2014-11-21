@@ -498,6 +498,7 @@ public class TextElementFormatUtil {
             }
 
             int twidth = (int) t.getTextWidth();
+            align = IText.ALIGN_LEFT;
             // + 1 to y align little bit higher
             t.rotatedxdy(degrees, hasTextElement.getX(), hasTextElement.getY() + 1, -(hasTextElement.getHeight() / 2 + twidth / 2 + 5) , 0);
           }

@@ -5,7 +5,7 @@ package net.sevenscales.domain;
 * Those cannot overlap, so properties can be combined!!
 */
 public enum ShapeProperty {
-	TEXT_POSITION_CENTER							(0x000001),
+	TEXT_TITLE_CENTER									(0x000001),
 	TEXT_POSITION_TOP 								(0x000002),
 	TEXT_POSITION_RIGHT 							(0x000004),
 	TEXT_POSITION_BOTTOM							(0x000008),
@@ -34,10 +34,10 @@ public enum ShapeProperty {
 	}
 
 	/**
-	* TextPosition
+	* Title centered like in class diagram.
 	*/
-	public static boolean isTextPositionCenter(Integer value) {
-		return value != null && (value & TEXT_POSITION_CENTER.getValue()) == TEXT_POSITION_CENTER.getValue();
+	public static boolean isTextTitleCenter(Integer value) {
+		return value != null && (value & TEXT_TITLE_CENTER.getValue()) == TEXT_TITLE_CENTER.getValue();
 	}
 	public static boolean isTextPositionTop(Integer value) {
 		return value != null && (value & TEXT_POSITION_TOP.getValue()) == TEXT_POSITION_TOP.getValue();
