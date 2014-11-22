@@ -114,7 +114,8 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
     
     setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height, shape.lifeLineHeight);
     super.setText(text);
-    
+
+    setLineHighlightColor(borderColor);
     super.constructorDone();
 	}
 	
@@ -518,6 +519,10 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
   @Override
   public void setHighlightColor(Color color) {
   	super.setHighlightColor(color);
+    setLineHighlightColor(color);
+  }
+
+  private void setLineHighlightColor(Color color) {
     if (line != null) {
       line.setStroke(color);
     }
