@@ -58,7 +58,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 	private Set<DiagramDragHandler> dragHandlers;
 	private boolean shiftOn;
 	private Diagram currentHandler;
-  private long dispachSequence;
+  private int dispachSequence;
 	private Diagram lastMultimodeSelectedDiagram;
   private boolean freehandModeOn;
   private Set<Diagram> tobeRemovedInCycle;

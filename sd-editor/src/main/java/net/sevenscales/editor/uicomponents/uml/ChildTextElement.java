@@ -188,7 +188,7 @@ public class ChildTextElement extends TextElement implements IChildElement {
 
 	private void moveAttachedRelationships(int dx, int dy) {
 		for (AnchorElement ae : getAnchors()) {
-			ae.dispatch(dx, dy, 0L);
+			ae.dispatch(dx, dy, 0);
 		}
   }
 

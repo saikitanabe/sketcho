@@ -53,7 +53,7 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 	private IRectangle resizeElement;
 	private boolean onResizeArea;
   private IGroup group;
-  private long dispachSequence;
+  private int dispachSequence;
   private TextElementFormatUtil textUtil;
 	protected int textareaWidth;
 	protected int textareaHeight;

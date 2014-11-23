@@ -73,7 +73,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	private GridUtils gridUtils = new GridUtils();
 //	private int prevX = 0;
 //	private int prevY = 0;
-	private long dispachSequence;
+	private int dispachSequence;
 	private boolean forceOn;
 	private ISelectionHandler selectionHandler;
 	private Set<Diagram> forcedItems = new HashSet<Diagram>();
@@ -322,7 +322,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	}
 	
 	private void move(int dx, int dy) {
-		long sequence = ++MouseDiagramDragHandler.this.dispachSequence;
+		int sequence = ++MouseDiagramDragHandler.this.dispachSequence;
 		for (Diagram dd : moveItems()) {
 			if (!(dd.getOwnerComponent() instanceof CircleElement) || currentDiagram == dd) {
 //					dd.resetTransform();
@@ -353,7 +353,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		}
 	}
 
-	private void moveAnchors(Collection<AnchorElement> anchors, int dx, int dy, long sequence) {
+	private void moveAnchors(Collection<AnchorElement> anchors, int dx, int dy, int sequence) {
 		for (AnchorElement ae : anchors) {
 			ae.dispatch(dx, dy, sequence);
 		}

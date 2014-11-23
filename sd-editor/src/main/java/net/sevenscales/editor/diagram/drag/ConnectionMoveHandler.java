@@ -4,12 +4,12 @@ import java.util.List;
 
 
 public class ConnectionMoveHandler implements AnchorMoveHandler {
-  private long lastDispachSequence = Long.MAX_VALUE;
+  private int lastDispachSequence = Integer.MAX_VALUE;
 
   public ConnectionMoveHandler() {
 	}
 
-	public void moving(AnchorElement anchorElement, int dx, int dy, long dispachSequence) {
+	public void moving(AnchorElement anchorElement, int dx, int dy, int dispachSequence) {
     // need to compare dispachSequence not to move twice when both anchors refer to same 
     // diagram
     if (anchorElement.getRelationship().isSelected()) {

@@ -65,7 +65,7 @@ public class AnchorElement {
    * @param dy
    * @param dispatchSequence needed to identify dispatch events sent at same time 
    */
-  public void dispatch(int dx, int dy, long dispatchSequence) {
+  public void dispatch(int dx, int dy, int dispatchSequence) {
 //    for (AnchorMoveHandler h : handlers) {
 //      h.moving(this, dx, dy);
 //    }
@@ -76,7 +76,7 @@ public class AnchorElement {
     // }
   }
 
-  public void dispatch(long dispachSequence) {
+  public void dispatch(int dispachSequence) {
 //  for (AnchorMoveHandler h : handlers) {
 //    h.moving(this, dx, dy);
 //  }

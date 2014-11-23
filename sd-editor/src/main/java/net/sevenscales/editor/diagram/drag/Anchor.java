@@ -147,7 +147,7 @@ public class Anchor implements AnchorMoveHandler {
 		this.clientId = clientId;
 	}
 
-	public void moving(AnchorElement anchorElement, int dx, int dy, long dispachSequence) {
+	public void moving(AnchorElement anchorElement, int dx, int dy, int dispachSequence) {
 		relationship.getAnchorMoveHandler().moving(anchorElement, dx, dy, dispachSequence);
 	}
 

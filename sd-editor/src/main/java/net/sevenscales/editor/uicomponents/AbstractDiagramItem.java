@@ -95,7 +95,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   // public static final Color HIGHLIGHT_COLOR_TO_ANCHOR = new Color(0x7A, 0xBE, 0x37, 1);
   public static final double STROKE_WIDTH = 2.0;
 
-  private long dispachSequence;
+  private int dispachSequence;
   protected MouseDiagramListenerCollection  mouseListeners;
   private boolean mouseDown = false;
   private DiagramProxy ownerComponent;
@@ -1418,7 +1418,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   	}
 	}
 	
-	protected void dispatch(AnchorElement a, int left, int top, int width, int height, long dispachSequence) {
+	protected void dispatch(AnchorElement a, int left, int top, int width, int height, int dispachSequence) {
 		Integer[] fixedPoints = getFixedAnchorPoints();
 		if (a.isFixedPoint() && fixedPoints != null) {
 			// use fixed point index

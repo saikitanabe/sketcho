@@ -43,7 +43,7 @@ public class EllipseElement extends AbstractDiagramItem implements SupportsRecta
   private Point tempAnchorPoint = new Point();
 //  private Line tempLine;
 //  private Line tempLine2;
-  private long dispatchSequence;
+  private int dispatchSequence;
 	private IGroup group;
 	
   final static double angles[] = {0, Math.toRadians(45), Math.toRadians(90), 
