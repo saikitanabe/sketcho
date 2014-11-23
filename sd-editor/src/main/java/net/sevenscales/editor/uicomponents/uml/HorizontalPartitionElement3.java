@@ -212,8 +212,7 @@ public class HorizontalPartitionElement3 extends AbstractDiagramItem implements 
   }
   
   public boolean resize(Point diff) {
-    return resize(getLeft(), getTop(), 
-                  getWidth() + diff.x, getHeight() + diff.y);     
+    return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);     
   }
 
   public void setShape(int left, int top, int width, int height) {
