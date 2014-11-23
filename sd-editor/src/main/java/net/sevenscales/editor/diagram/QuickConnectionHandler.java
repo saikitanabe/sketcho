@@ -411,7 +411,9 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		IDiagramItem item = createRelationshipDTO(closestPoints, start, end);
     AbstractDiagramFactory factory = ShapeParser.factory(item);
     Info shape = factory.parseShape(item, 0, 0);
-    return (Relationship2) factory.parseDiagram(surface, shape, true, item, null);
+    Relationship2 result = (Relationship2) factory.parseDiagram(surface, shape, true, item, null);
+    result.setType(end.getDefaultRelationship());
+    return result;
 	}
 
 	private IDiagramItem createRelationshipDTO(AnchorUtils.ClosestSegment closestSegment, Diagram start, Diagram end) {
