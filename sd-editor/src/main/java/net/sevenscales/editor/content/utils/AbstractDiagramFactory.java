@@ -574,7 +574,7 @@ public interface AbstractDiagramFactory {
 
 		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       if (Tools.isSketchMode()) {
-        return new HorizontalPartitionElement2(surface,
+        return new HorizontalPartitionElement3(surface,
               (HorizontalPartitionShape)shape,
               item.getText(),
               DiagramItemFactory.parseBackgroundColor(item),
