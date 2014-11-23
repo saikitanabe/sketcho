@@ -10,13 +10,17 @@ import net.sevenscales.domain.DiagramItemDTO;
 public class LibraryShapes {
 	public static Map<ElementType, LibraryShape> shapes;
 
-  public static final int CLASS_LIKE_PROPERTIES = ShapeProperty.TEXT_POSITION_TOP.getValue() | ShapeProperty.TEXT_RESIZE_DIR_HORIZONTAL.getValue();
+  public static final int CLASS_LIKE_PROPERTIES = ShapeProperty.TEXT_POSITION_TOP.getValue() | 
+                                                  ShapeProperty.TEXT_RESIZE_DIR_HORIZONTAL.getValue() |
+                                                  ShapeProperty.TEXT_TITLE_CENTER.getValue();
   public static final int MIDDLE_CLASS_LIKE_PROPERTIES = ShapeProperty.TEXT_RESIZE_DIR_HORIZONTAL.getValue() | 
-                                                         ShapeProperty.CENTERED_TEXT.getValue();
+                                                         ShapeProperty.CENTERED_TEXT.getValue() |
+                                                         ShapeProperty.TEXT_TITLE_CENTER.getValue();
 
   public static final int BOTTOM_CLASS_LIKE_PROPERTIES = ShapeProperty.TEXT_POSITION_BOTTOM.getValue() | 
                                                          ShapeProperty.CENTERED_TEXT.getValue() |
-                                                         ShapeProperty.BOLD_TITLE.getValue();
+                                                         ShapeProperty.BOLD_TITLE.getValue() |
+                                                         ShapeProperty.TEXT_TITLE_CENTER.getValue();
 
 
 	static {
