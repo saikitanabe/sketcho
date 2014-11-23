@@ -29,7 +29,7 @@ public class LibraryShapes {
     shapes.put(ElementType.ACTOR, new LibraryShape(ElementType.ACTOR, 48, 60, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.SERVER, new LibraryShape(ElementType.SERVER, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.STORAGE, new LibraryShape(ElementType.STORAGE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
-    shapes.put(ElementType.NOTE, new LibraryShape(ElementType.NOTE, 47, 55, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3));
+    shapes.put(ElementType.NOTE, new LibraryShape(ElementType.NOTE, 150, 40, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3));
     shapes.put(ElementType.COMPONENT, new LibraryShape(ElementType.COMPONENT, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.ACTIVITY, new LibraryShape(ElementType.ACTIVITY, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.CHOICE, new LibraryShape(ElementType.CHOICE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));

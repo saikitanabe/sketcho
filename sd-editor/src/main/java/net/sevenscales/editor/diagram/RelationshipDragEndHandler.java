@@ -31,6 +31,7 @@ import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoint;
 import net.sevenscales.editor.content.utils.DiagramElementFactory;
+import net.sevenscales.editor.content.utils.ShapeParser;
 import net.sevenscales.editor.content.ClientIdHelpers;
 import net.sevenscales.editor.diagram.shape.ActivityChoiceShape;
 import net.sevenscales.editor.diagram.shape.ActivityEndShape;
@@ -79,6 +80,7 @@ import net.sevenscales.editor.uicomponents.uml.UMLPackageElement;
 import net.sevenscales.editor.uicomponents.uml.ComponentElement;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
+import net.sevenscales.editor.utils.DiagramItemConfiguration;
 
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
@@ -549,11 +551,12 @@ Color borderColor, Color color) {
 		if (ls != null) {
 			// there might not be generi library shape available
 			// could multiply width and height
-			GenericElement element = new GenericElement(surface,
-	        new GenericShape(ls.elementType.getValue(), x, y, ls.width, ls.height, ls.shapeProperties, null),
-	        type.getValue(),
-	        background, borderColor, color, true, LibraryShapes.createByType(ls.elementType));
-			result = element;
+	    DiagramItemDTO item = LibraryShapes.createByType(type.getElementType());
+      DiagramItemConfiguration.setColors(item, background, borderColor, color);
+	    item.setText("");
+	    item.setShape(new GenericShape(ls.elementType.getValue(), x, y, ls.width, ls.height, ls.shapeProperties, null).toString());
+
+	    result = ShapeParser.createDiagramElement(item, surface);
 		}
 		return result;
 	}
