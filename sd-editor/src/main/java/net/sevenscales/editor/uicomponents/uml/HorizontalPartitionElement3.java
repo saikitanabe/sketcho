@@ -108,10 +108,10 @@ public class HorizontalPartitionElement3 extends AbstractDiagramItem implements 
       return HorizontalPartitionElement3.this.getWidth();
     }
     public int getX() {
-      return HorizontalPartitionElement3.this.getLeft();
+      return HorizontalPartitionElement3.this.getRelativeLeft();
     }
     public int getY() {
-      return HorizontalPartitionElement3.this.getTop();
+      return HorizontalPartitionElement3.this.getRelativeTop();
     }
     public int getHeight() {
       return HorizontalPartitionElement3.this.getHeight();
