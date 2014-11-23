@@ -336,6 +336,9 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
 	}
 	
   public String getDefaultRelationship() {
+  	if (ElementType.NOTE.getValue().equals(shape.getElementType())) {
+	    return "--";
+  	}
     return "->";
   }
   
