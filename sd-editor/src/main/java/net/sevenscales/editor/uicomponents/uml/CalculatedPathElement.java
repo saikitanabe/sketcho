@@ -1,7 +1,10 @@
 package net.sevenscales.editor.uicomponents.uml;
 
+import java.util.List;
+import java.util.ArrayList;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.content.utils.ContainerAttachHelpers;
@@ -30,14 +33,14 @@ import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.constants.Constants;
+import net.sevenscales.domain.ElementType;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 
 
-public class HorizontalPartitionElement3 extends AbstractDiagramItem implements SupportsRectangleShape, ContainerType {
-  private IPath rectSurface;
-  private IPath headerBackground;
+public abstract class CalculatedPathElement extends AbstractDiagramItem implements SupportsRectangleShape, ContainerType {
+  private List<IPath> paths;
   private int minimumWidth = 25;
   private int minimumHeight = 25;
   private HorizontalPartitionShape shape;
@@ -45,15 +48,19 @@ public class HorizontalPartitionElement3 extends AbstractDiagramItem implements 
   private Point coords = new Point();
   private IGroup group;
   private TextElementFormatUtil textUtil;
-  private static final int HEADER_HEIGHT = 25;
 
-  public HorizontalPartitionElement3(ISurfaceHandler surface, HorizontalPartitionShape newShape, String text, 
-  		Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
-    this(surface, newShape, text, backgroundColor, borderColor, textColor, editable, false, item);
+  public interface IPathFactory {
+    String createPath(int left, int top, int width, int height);
+    boolean supportsEvents();
   }
+
+  // public CalculatedPathElement(ISurfaceHandler surface, HorizontalPartitionShape newShape, String text, 
+  // 		Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
+  //   this(surface, newShape, text, backgroundColor, borderColor, textColor, editable, false, item);
+  // }
   
-  public HorizontalPartitionElement3(ISurfaceHandler surface, HorizontalPartitionShape newShape, String text, 
-  		Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText, IDiagramItemRO item) {
+  public CalculatedPathElement(ISurfaceHandler surface, HorizontalPartitionShape newShape, String text, 
+  		Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
     super(editable, surface, backgroundColor, borderColor, textColor, item);
     this.shape = newShape;
     
@@ -63,39 +70,16 @@ public class HorizontalPartitionElement3 extends AbstractDiagramItem implements 
     // set clipping area => text is visible only within canvas boundary
 //    group.setClip(shape.left, shape.top, shape.width, shape.height);
 
-    rectSurface = IShapeFactory.Util.factory(editable).createPath(group, null);
-//    rectSurface.setAttribute("cursor", "pointer");
-    // rectSurface.setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height, 2);
-    rectSurface.setStrokeWidth(Constants.SKETCH_MODE_LINE_WEIGHT);
-    rectSurface.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 0); // force transparent
-    rectSurface.setAttribute("style", "stroke-linejoin:round;");
-    
-    headerBackground = IShapeFactory.Util.factory(editable).createPath(group, null);
-    // headerBackground.setShape(shape.rectShape.left, shape.rectShape.top, HEADER_HEIGHT, shape.rectShape.height, 2);
-    headerBackground.setStrokeWidth(Constants.SKETCH_MODE_LINE_WEIGHT);
-    headerBackground.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity)
-    ;
-    headerBackground.setAttribute("style", "stroke-linejoin:round;");
-    // headerBackground.setVisibility(false);
-    
-    addEvents(headerBackground);
-
     addMouseDiagramHandler(this);
-    
-    shapes.add(rectSurface);
-    shapes.add(headerBackground);
-    
+        
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
     textUtil = new TextElementFormatUtil(this, hasTextElement, group, surface.getEditorContext());
-    textUtil.setMarginTop(0);
-    textUtil.setRotate(-90);
-    
-    if (!delayText) {
-    	setText(text);
-    }
+    // textUtil.setMarginTop(0);
+    // textUtil.setRotate(-90);
 
     setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
-
+    setText(text);
+    
     setReadOnly(!editable);
     
     setBorderColor(borderColor);
@@ -105,16 +89,16 @@ public class HorizontalPartitionElement3 extends AbstractDiagramItem implements 
   // nice way to clearly separate interface methods :)
   private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
     public int getWidth() {
-      return HorizontalPartitionElement3.this.getWidth();
+      return CalculatedPathElement.this.getWidth();
     }
     public int getX() {
-      return HorizontalPartitionElement3.this.getRelativeLeft();
+      return CalculatedPathElement.this.getRelativeLeft();
     }
     public int getY() {
-      return HorizontalPartitionElement3.this.getRelativeTop();
+      return CalculatedPathElement.this.getRelativeTop();
     }
     public int getHeight() {
-      return HorizontalPartitionElement3.this.getHeight();
+      return CalculatedPathElement.this.getHeight();
     }
     
     public void removeShape(IShape shape) {
@@ -123,7 +107,7 @@ public class HorizontalPartitionElement3 extends AbstractDiagramItem implements 
     }
 
     public String getLink() {
-      return HorizontalPartitionElement3.this.getLink();
+      return CalculatedPathElement.this.getLink();
     }
 
     public boolean isAutoResize() {
@@ -132,11 +116,11 @@ public class HorizontalPartitionElement3 extends AbstractDiagramItem implements 
 
     public void resize(int x, int y, int width, int height) {
       // Text Element doesn't support resize
-      HorizontalPartitionElement3.this.resize(x, y, width, height);
+      CalculatedPathElement.this.resize(x, y, width, height);
     }
 
     public void setLink(String link) {
-      HorizontalPartitionElement3.this.setLink(link);      
+      CalculatedPathElement.this.setLink(link);      
     }
     public boolean supportsTitleCenter() {
       return false;
@@ -146,7 +130,7 @@ public class HorizontalPartitionElement3 extends AbstractDiagramItem implements 
     }
     
     public GraphicsEventHandler getGraphicsMouseHandler() {
-      return HorizontalPartitionElement3.this;
+      return CalculatedPathElement.this;
     };
     
 		@Override
@@ -182,33 +166,10 @@ public class HorizontalPartitionElement3 extends AbstractDiagramItem implements 
     return duplicate(surface, partOfMultiple);
   }
   
-  @Override
-  public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
-    Point p = getCoords();
-    return duplicate(surface, p.x, p.y + getHeight());
-  }
-  
-  @Override
-  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-  	HorizontalPartitionShape newShape = new HorizontalPartitionShape(x, y, getWidth() * factorX, getHeight() * factorY);
-    Diagram result = createDiagram(surface, newShape, getText(), getEditable());
-    return result;
-  }
-  
-  protected Diagram createDiagram(ISurfaceHandler surface, HorizontalPartitionShape newShape,
-      String text, boolean editable) {
-    return new HorizontalPartitionElement3(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
-  }
-  
-
 //////////////////////////////////////////////////////////////////////
   
   public boolean onResizeArea(int x, int y) {
     return resizeHelpers.isOnResizeArea();
-  }
-
-  public JavaScriptObject getResizeElement() {
-    return rectSurface.getRawNode();
   }
   
   public boolean resize(Point diff) {
@@ -223,12 +184,47 @@ public class HorizontalPartitionElement3 extends AbstractDiagramItem implements 
     rectShape.width = width;
     rectShape.height = height;
 
-    String body = calcBody(left, top, width, height);
-    rectSurface.setShape(round(body));
-    headerBackground.setShape(calclHeader(left, top, width, height));
+    _setShapes(left, top, width, height);
 
     textUtil.setTextShape();
   }
+
+  private void _setShapes(int left, int top, int width, int height) {
+    lazyAllocatePaths();
+    setPathShapes(left, top, width, height);
+  }
+
+  private void lazyAllocatePaths() {
+    if (paths == null) {
+      paths = new ArrayList();
+      for (IPathFactory f : getPathFactories()) {
+        IPath p = IShapeFactory.Util.factory(editable).createPath(group, null);
+        p.setStrokeWidth(Constants.SKETCH_MODE_LINE_WEIGHT);
+        p.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 0); // force transparent
+        p.setAttribute("style", "stroke-linejoin:round;");
+        paths.add(p);
+
+        shapes.add(p);
+
+        if (f.supportsEvents()) {
+          addEvents(p);
+        }
+      }
+    }
+  }
+
+  private void setPathShapes(int left, int top, int width, int height) {
+    // some domain language that path calculation can be stored as string
+    // and loaded from the server
+    // shape would be calculated relatively from left, top, width, height
+    for (int i = 0; i < paths.size(); ++i) {
+      IPath p = paths.get(i);
+      IPathFactory f = getPathFactories().get(i);
+      p.setShape(f.createPath(left, top, width, height));
+    }
+  }
+
+  protected abstract List<IPathFactory> getPathFactories();
 
   private String round(String path) {
     JsArray<Shapes.JsPathData> pdata = parse(path);
@@ -248,29 +244,6 @@ public class HorizontalPartitionElement3 extends AbstractDiagramItem implements 
   private native JsArray<Shapes.JsPathData> _round(JsArray<Shapes.JsPathData> commands)/*-{
     return $wnd.pathHelpers.round(commands, 0.05, true)
   }-*/;
-
-  private String calcBody(int left, int top, int width, int height) {
-    return "m" + (left + HEADER_HEIGHT) + "," + top + 
-           "l" + (width - HEADER_HEIGHT - 3) + "," + 0 + 
-           "l" + 3 + "," + height +
-           "l" + -(width - HEADER_HEIGHT) + "," + 0;
-    // return "m" + (left + HEADER_HEIGHT) + "," + top + 
-    //        "l" + (width - HEADER_HEIGHT) + "," + 0 + 
-    //        "l" + 0 + "," + height +
-    //        "l" + -(width - HEADER_HEIGHT) + "," + 0;
-  }
-  private String calclHeader(int left, int top, int width, int height) {
-    return "m" + left + "," + top + 
-           "l" + (HEADER_HEIGHT + 2) + "," + 0 + 
-           "l" + 2 + "," + height +
-           "l" + -(HEADER_HEIGHT + 2) + "," + 0 + 
-           "z";
-    // return "m" + left + "," + top + 
-    //        "l" + (HEADER_HEIGHT) + "," + 0 + 
-    //        "l" + 0 + "," + height +
-    //        "l" + -(HEADER_HEIGHT + 0) + "," + 0 + 
-    //        "z";
-  }
 
   private native JsArray<Shapes.JsPathData> parse(String d)/*-{
     var result = $wnd.svgPathParser.parse(d)
@@ -333,8 +306,9 @@ public class HorizontalPartitionElement3 extends AbstractDiagramItem implements 
   @Override
 	public void setBackgroundColor(int red, int green, int blue, double opacity) {
   	super.setBackgroundColor(red, green, blue, opacity);
-    rectSurface.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 0);
-    headerBackground.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+    for (IPath p : paths) {
+      p.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 0);
+    }
   }
     
   @Override
@@ -368,8 +342,9 @@ public class HorizontalPartitionElement3 extends AbstractDiagramItem implements 
 
   @Override
   public void setHighlightColor(Color color) {
-    rectSurface.setStroke(color);
-    headerBackground.setStroke(color);
+    for (IPath p : paths) {
+      p.setStroke(color);
+    }
   }
 	
 	@Override
@@ -381,12 +356,7 @@ public class HorizontalPartitionElement3 extends AbstractDiagramItem implements 
 	protected TextElementFormatUtil getTextFormatter() {
 		return textUtil;
 	}
-	
-	@Override
-	public int getTextAreaHeight() {
-		return HEADER_HEIGHT;
-	}
-	
+		
 	@Override
 	public int getTextAreaTop() {
 		return getTop() + 5;
