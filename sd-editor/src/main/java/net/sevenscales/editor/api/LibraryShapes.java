@@ -39,6 +39,8 @@ public class LibraryShapes {
     shapes.put(ElementType.FORK_HORIZONTAL, new LibraryShape(ElementType.FORK_HORIZONTAL, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.FORK_VERTICAL, new LibraryShape(ElementType.FORK_VERTICAL, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.PACKAGE, new LibraryShape(ElementType.PACKAGE, 47, 55, TOP_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.MIND_CENTRAL, new LibraryShape(ElementType.MIND_CENTRAL, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3, 18));
+
 
 	  shapes.put(ElementType.STAR4, new LibraryShape(ElementType.STAR4, 40, 40));
 	  shapes.put(ElementType.STAR5, new LibraryShape(ElementType.STAR5, 40, 40)); 
@@ -48,7 +50,11 @@ public class LibraryShapes {
 	  shapes.put(ElementType.FIREWALL, new LibraryShape(ElementType.FIREWALL, 27, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3));
 	  shapes.put(ElementType.BUBBLE, new LibraryShape(ElementType.BUBBLE, 50, 35, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3));
 	  shapes.put(ElementType.BUBBLE_R, new LibraryShape(ElementType.BUBBLE_R, 50, 35, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3));
-	  shapes.put(ElementType.CIRCLE, new LibraryShape(ElementType.CIRCLE, 40, 40, 0, 3, 3));
+	  shapes.put(ElementType.CIRCLE, new LibraryShape(ElementType.CIRCLE, 40, 40, 
+      ShapeProperty.TEXT_POSITION_MIDDLE.getValue() |
+      ShapeProperty.TEXT_TITLE_CENTER.getValue() | 
+      ShapeProperty.BOLD_TITLE.getValue() |
+      ShapeProperty.CENTERED_TEXT.getValue(), 3, 3));
 	  shapes.put(ElementType.SMILEY, new LibraryShape(ElementType.SMILEY, 40, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 3, 3));
 	  shapes.put(ElementType.POLYGON4, new LibraryShape(ElementType.POLYGON4, 40, 40, 0, 3, 3)); 
 	  shapes.put(ElementType.POLYGON8, new LibraryShape(ElementType.POLYGON8, 40, 40, 0, 3, 3));
@@ -93,22 +99,28 @@ public class LibraryShapes {
     public int height;
     public int duplicateFactoryX;
     public int duplicateFactoryY;
+    public Integer fontSize;
 
-    LibraryShape(ElementType elementType, int width, int height, int shapeProperties, int duplicateFactoryX, int duplicateFactoryY) {
+    LibraryShape(ElementType elementType, int width, int height, int shapeProperties, int duplicateFactoryX, int duplicateFactoryY, Integer fontSize) {
       this.elementType = elementType;
       this.width = width;
       this.height = height;
       this.shapeProperties = shapeProperties;
       this.duplicateFactoryX = duplicateFactoryX;
       this.duplicateFactoryY = duplicateFactoryY;
+      this.fontSize = fontSize;
+    }
+
+    LibraryShape(ElementType elementType, int width, int height, int shapeProperties, int duplicateFactoryX, int duplicateFactoryY) {
+      this(elementType, width, height, shapeProperties, duplicateFactoryX, duplicateFactoryY, null);
     }
 
     LibraryShape(ElementType elementType, int width, int height) {
-      this(elementType, width, height, 0, 1, 1);
+      this(elementType, width, height, 0, 1, 1, null);
     }
 
     LibraryShape(ElementType elementType, int width, int height, int shapeProperties) {
-      this(elementType, width, height, shapeProperties, 1, 1);
+      this(elementType, width, height, shapeProperties, 1, 1, null);
     }
 
     // LibraryShape(ElementType elementType, int shapeProperties) {
@@ -125,12 +137,15 @@ public class LibraryShapes {
     DiagramItemDTO result = new DiagramItemDTO();
     LibraryShapes.LibraryShape s = LibraryShapes.get(type);
     Integer properties = null;
+    Integer fontSize = null;
     if (s != null) {
       properties = s.shapeProperties;
+      fontSize = s.fontSize;
     }
 
     result.setType(type.getValue());
     result.setShapeProperties(properties);
+    result.setFontSize(fontSize);
     return result;
   }
 

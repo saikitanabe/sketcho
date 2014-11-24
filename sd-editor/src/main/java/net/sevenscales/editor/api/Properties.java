@@ -719,7 +719,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 				setMeasurementPanelText(textArea.getText());
 			} else {
 				int rows = rows(textArea.getText());
-				int lheight = lineHeight();
+				int dFontSize = selectedDiagram.getFontSize() != null ? selectedDiagram.getFontSize() : 12;
+				int lheight = lineHeight(dFontSize);
 				int textAreaHeight = lheight * rows;
 				textArea.getElement().getStyle().setHeight(textAreaHeight + lheight, Unit.PX);
 			}
@@ -750,7 +751,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		int fontSize = ((int) (dFontSize * surface.getScaleFactor()));
 		textArea.getElement().getStyle().setProperty("fontSize", fontSize + "px");
 
-		textArea.getElement().getStyle().setProperty("lineHeight", lineHeight() + "px");
+		textArea.getElement().getStyle().setProperty("lineHeight", lineHeight(fontSize) + "px");
 
 		textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth() * surface.getScaleFactor(), Unit.PX);
 		setTextAreaHeight();
@@ -768,8 +769,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 // 		}
 	}
 
-	private int lineHeight() {
-		return ((int) (17 * surface.getScaleFactor()));
+	private int lineHeight(int fontSize) {
+		return ((int) ((fontSize + 5) * surface.getScaleFactor()));
 	}
 
 	private int rows(String text) {
