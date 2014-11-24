@@ -11,7 +11,7 @@ import net.sevenscales.editor.content.utils.ContainerAttachHelpers;
 import net.sevenscales.editor.diagram.ContainerType;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
-import net.sevenscales.editor.diagram.shape.HorizontalPartitionShape;
+import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.shape.RectShape;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
@@ -39,27 +39,28 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 
 
-public abstract class CalculatedPathElement extends AbstractDiagramItem implements SupportsRectangleShape, ContainerType {
+public abstract class CalculatedPathElement extends AbstractDiagramItem implements SupportsRectangleShape, ContainerType, IGenericElement {
   private List<IPath> paths;
   private int minimumWidth = 25;
   private int minimumHeight = 25;
-  private HorizontalPartitionShape shape;
+  private GenericShape shape;
   private RectShape rectShape = new RectShape();
   private Point coords = new Point();
   private IGroup group;
   private TextElementFormatUtil textUtil;
+  private GenericHasTextElement hasTextElement;
 
   public interface IPathFactory {
     String createPath(int left, int top, int width, int height);
     boolean supportsEvents();
   }
 
-  // public CalculatedPathElement(ISurfaceHandler surface, HorizontalPartitionShape newShape, String text, 
+  // public CalculatedPathElement(ISurfaceHandler surface, GenericShape newShape, String text, 
   // 		Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
   //   this(surface, newShape, text, backgroundColor, borderColor, textColor, editable, false, item);
   // }
   
-  public CalculatedPathElement(ISurfaceHandler surface, HorizontalPartitionShape newShape, String text, 
+  public CalculatedPathElement(ISurfaceHandler surface, GenericShape newShape, String text, 
   		Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
     super(editable, surface, backgroundColor, borderColor, textColor, item);
     this.shape = newShape;
@@ -73,6 +74,8 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     addMouseDiagramHandler(this);
         
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
+    hasTextElement = new GenericHasTextElement(this, shape);
+    hasTextElement.setMarginLeft(getMarginLeft());
     textUtil = new TextElementFormatUtil(this, hasTextElement, group, surface.getEditorContext());
     // textUtil.setMarginTop(0);
     // textUtil.setRotate(-90);
@@ -85,60 +88,10 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     setBorderColor(borderColor);
     super.constructorDone();
   }
-  
-  // nice way to clearly separate interface methods :)
-  private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
-    public int getWidth() {
-      return CalculatedPathElement.this.getWidth();
-    }
-    public int getX() {
-      return CalculatedPathElement.this.getRelativeLeft();
-    }
-    public int getY() {
-      return CalculatedPathElement.this.getRelativeTop();
-    }
-    public int getHeight() {
-      return CalculatedPathElement.this.getHeight();
-    }
-    
-    public void removeShape(IShape shape) {
-      group.remove(shape);
-      shapes.remove(shape);
-    }
 
-    public String getLink() {
-      return CalculatedPathElement.this.getLink();
-    }
-
-    public boolean isAutoResize() {
-      return false;
-    }
-
-    public void resize(int x, int y, int width, int height) {
-      // Text Element doesn't support resize
-      CalculatedPathElement.this.resize(x, y, width, height);
-    }
-
-    public void setLink(String link) {
-      CalculatedPathElement.this.setLink(link);      
-    }
-    public boolean supportsTitleCenter() {
-      return false;
-    }
-    public boolean forceAutoResize() {
-      return false;
-    }
-    
-    public GraphicsEventHandler getGraphicsMouseHandler() {
-      return CalculatedPathElement.this;
-    };
-    
-		@Override
-		public Color getTextColor() {
-			return textColor;
-		};
-
-  };
+  protected int getMarginLeft() {
+    return 0;
+  }
 
   public Point getDiffFromMouseDownLocation() {
     return new Point(diffFromMouseDownX, diffFromMouseDownY);
@@ -250,7 +203,8 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     return result
   }-*/;
 
-  protected boolean resize(int left, int top, int width, int height) {
+  @Override
+  public boolean resize(int left, int top, int width, int height) {
     if (width >= minimumWidth && height >= minimumHeight) {
       setShape(left, top, width, height);
       super.applyHelpersShape();
@@ -375,6 +329,16 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
   @Override
   public boolean supportsModifyToCenter() {
     return false;
+  }
+
+  @Override
+  public double getTextHeight() {
+    return textUtil.getTextHeight();
+  }  
+
+  @Override
+  public AbstractDiagramItem getDiagram() {
+    return this;
   }
 
 }

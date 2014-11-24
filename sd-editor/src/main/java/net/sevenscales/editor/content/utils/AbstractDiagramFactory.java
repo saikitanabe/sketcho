@@ -18,6 +18,7 @@ import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 import net.sevenscales.editor.api.impl.Theme.ThemeName;
 import net.sevenscales.editor.api.Tools;
+import net.sevenscales.editor.api.LibraryShapes;
 
 
 public interface AbstractDiagramFactory {
@@ -538,14 +539,31 @@ public interface AbstractDiagramFactory {
 		}
 
 		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
-      return new UMLPackageElement(surface,
-          		(UMLPackageShape)shape,
-              item.getText(),
-              DiagramItemFactory.parseBackgroundColor(item),
-              DiagramItemFactory.parseBorderColor(item),
-              DiagramItemFactory.parseTextColor(item),
-          editable,
-          item);
+      if (Tools.isSketchMode()) {
+        Integer props = null;
+        LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.PACKAGE);
+        if (sh != null) {
+          props = sh.shapeProperties;
+        }
+        GenericShape gs = ((UMLPackageShape) shape).toGenericShape(props);
+        return new PackageElement(surface,
+                gs,
+                item.getText(),
+                DiagramItemFactory.parseBackgroundColor(item),
+                DiagramItemFactory.parseBorderColor(item),
+                DiagramItemFactory.parseTextColor(item),
+            editable,
+            item);
+      } else {
+        return new UMLPackageElement(surface,
+            		(UMLPackageShape)shape,
+                item.getText(),
+                DiagramItemFactory.parseBackgroundColor(item),
+                DiagramItemFactory.parseBorderColor(item),
+                DiagramItemFactory.parseTextColor(item),
+            editable,
+            item);
+      }
 		}
 	}
 

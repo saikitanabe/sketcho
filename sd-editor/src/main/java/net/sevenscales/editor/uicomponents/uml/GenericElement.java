@@ -48,7 +48,7 @@ import net.sevenscales.domain.ExtensionDTO;
 import net.sevenscales.domain.constants.Constants;
 
 
-public class GenericElement extends AbstractDiagramItem implements SupportsRectangleShape {
+public class GenericElement extends AbstractDiagramItem implements IGenericElement, SupportsRectangleShape {
 	private static SLogger logger = SLogger.createLogger(GenericElement.class);
 
 	static {
@@ -302,7 +302,8 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
     return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);
   }
 
-  protected boolean resize(int left, int top, int width, int height) {
+  @Override
+  public boolean resize(int left, int top, int width, int height) {
     setShape(getRelativeLeft(), getRelativeTop(), width, height);
     dispatchAndRecalculateAnchorPositions();
     return true;
@@ -631,9 +632,10 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   	}
   }
 
-  public double getTextHeight() {
+  @Override
+	public double getTextHeight() {
   	return textUtil.getTextHeight();
-  }
+  }  
 
   @Override
   public void select() {
@@ -666,6 +668,10 @@ public class GenericElement extends AbstractDiagramItem implements SupportsRecta
   public int supportedMenuItems() {
     return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue() |
            ContextMenuItem.LAYERS.getValue();
+  }
+
+  public AbstractDiagramItem getDiagram() {
+  	return this;
   }
 
 }

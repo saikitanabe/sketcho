@@ -6,11 +6,12 @@ import java.util.HashMap;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.IDiagramItemRO;
 
 public class LibraryShapes {
 	public static Map<ElementType, LibraryShape> shapes;
 
-  public static final int CLASS_LIKE_PROPERTIES = ShapeProperty.TEXT_POSITION_TOP.getValue() | 
+  public static final int TOP_CLASS_LIKE_PROPERTIES = ShapeProperty.TEXT_POSITION_TOP.getValue() | 
                                                   ShapeProperty.TEXT_RESIZE_DIR_HORIZONTAL.getValue() |
                                                   ShapeProperty.TEXT_TITLE_CENTER.getValue();
   public static final int MIDDLE_CLASS_LIKE_PROPERTIES = ShapeProperty.TEXT_RESIZE_DIR_HORIZONTAL.getValue() | 
@@ -37,6 +38,7 @@ public class LibraryShapes {
     shapes.put(ElementType.ACTIVITY_END2, new LibraryShape(ElementType.ACTIVITY_START2, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.FORK_HORIZONTAL, new LibraryShape(ElementType.FORK_HORIZONTAL, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.FORK_VERTICAL, new LibraryShape(ElementType.FORK_VERTICAL, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.PACKAGE, new LibraryShape(ElementType.PACKAGE, 47, 55, TOP_CLASS_LIKE_PROPERTIES, 3, 3));
 
 	  shapes.put(ElementType.STAR4, new LibraryShape(ElementType.STAR4, 40, 40));
 	  shapes.put(ElementType.STAR5, new LibraryShape(ElementType.STAR5, 40, 40)); 
@@ -56,14 +58,14 @@ public class LibraryShapes {
 	  shapes.put(ElementType.ARROW_LEFT, new LibraryShape(ElementType.ARROW_LEFT, 40, 20, ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue(), 3, 3));
 	  shapes.put(ElementType.IPHONE, new LibraryShape(ElementType.IPHONE, 24, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12));
 	  shapes.put(ElementType.WEB_BROWSER, new LibraryShape(ElementType.WEB_BROWSER, 50, 50, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 12, 12));
-    shapes.put(ElementType.RECT, new LibraryShape(ElementType.RECT, 50, 35, CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.CLASS, new LibraryShape(ElementType.CLASS, 50, 35, CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.SEQUENCE, new LibraryShape(ElementType.CLASS, 50, 35, CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.RECT, new LibraryShape(ElementType.RECT, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.CLASS, new LibraryShape(ElementType.CLASS, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.SEQUENCE, new LibraryShape(ElementType.CLASS, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.HORIZONTAL_PARTITION, new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35, ShapeProperty.TEXT_POSITION_TOP.getValue() |
       // ShapeProperty.CENTERED_TEXT.getValue() |
       ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue() |
       ShapeProperty.BOLD_TITLE.getValue(), 2, 2));
-    shapes.put(ElementType.USE_CASE, new LibraryShape(ElementType.USE_CASE, 50, 35, CLASS_LIKE_PROPERTIES | ShapeProperty.CENTERED_TEXT.getValue(), 2, 2));
+    shapes.put(ElementType.USE_CASE, new LibraryShape(ElementType.USE_CASE, 50, 35, TOP_CLASS_LIKE_PROPERTIES | ShapeProperty.CENTERED_TEXT.getValue(), 2, 2));
     shapes.put(ElementType.SWITCH, new LibraryShape(ElementType.SWITCH, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
     shapes.put(ElementType.ROUTER, new LibraryShape(ElementType.ROUTER, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
     shapes.put(ElementType.DESKTOP, new LibraryShape(ElementType.DESKTOP, 50, 40, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
@@ -125,6 +127,17 @@ public class LibraryShapes {
 
     result.setType(type.getValue());
     result.setShapeProperties(properties);
+    return result;
+  }
+
+  public static DiagramItemDTO createFrom(IDiagramItemRO item) {
+    ElementType type =  ElementType.getEnum(item.getType());
+    DiagramItemDTO result = createByType(type);
+
+    // update default values with dynamic properties
+    Integer props = result.getShapeProperties();
+    props = props | (item.getShapeProperties() & ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue());
+    result.setShapeProperties(props);
     return result;
   }
 

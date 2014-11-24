@@ -319,7 +319,7 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
   }
 	
 	@Override
-	protected boolean resize(int left, int top, int width, int height) {
+	public boolean resize(int left, int top, int width, int height) {
 //	  int length = line.getY2() - line.getY1();
 	  boolean result = super.resize(left, top, width, height);
 //	  int dy = top + height - line.getY1();

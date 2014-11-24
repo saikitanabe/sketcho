@@ -16,12 +16,12 @@ class GenericHasTextElement extends AbstractHasTextElement {
 	private float marginLeftFactor;
 	private float marginTopFactor;
 	private int marginLeft;
-	private GenericElement parent;
+	private IGenericElement parent;
 	private GenericShape shape;
 	private ElementType elementType;
 
-	GenericHasTextElement(GenericElement parent, GenericShape shape) {
-		super(parent);
+	GenericHasTextElement(IGenericElement parent, GenericShape shape) {
+		super(parent.getDiagram());
 		this.parent = parent;
 		this.shape = shape;
 		// possible to customize for each element type
@@ -96,11 +96,6 @@ class GenericHasTextElement extends AbstractHasTextElement {
   	}
   }
 
-  @Override
-  public boolean isSketchiness() {
-  	return parent.isSketchiness();
-  }
-
 	@Override
 	public boolean boldText() {
   	if (ShapeProperty.isTextResizeDimHorizontalResize(parent.getDiagramItem().getShapeProperties())) {
@@ -111,12 +106,12 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
   public String getLink() {
-    return parent.getLink();
+    return parent.getDiagram().getLink();
   }
 
 	@Override
   public boolean isAutoResize() {
-    return parent.isAutoResize();
+    return parent.getDiagram().isAutoResize();
   }
 
 	@Override
@@ -131,12 +126,12 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
   @Override
 	public void resizeHeight(int height) {
-		parent.setHeight(height);
+		parent.getDiagram().setHeight(height);
   }
 
 	@Override
   public void setLink(String link) {
-    parent.setLink(link);
+    // parent.setLink(link);
   }
 
 	@Override
@@ -163,12 +158,12 @@ class GenericHasTextElement extends AbstractHasTextElement {
   
 	@Override
 	public GraphicsEventHandler getGraphicsMouseHandler() {
-    return parent;
+    return parent.getDiagram();
   };
   
 	@Override
 	public Color getTextColor() {
-		return parent.getTextColor();
+		return parent.getDiagram().getTextColor();
 	}
 
 	@Override

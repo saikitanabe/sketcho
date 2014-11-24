@@ -11,7 +11,7 @@ import net.sevenscales.editor.content.utils.ContainerAttachHelpers;
 import net.sevenscales.editor.diagram.ContainerType;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
-import net.sevenscales.editor.diagram.shape.HorizontalPartitionShape;
+import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.shape.RectShape;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
@@ -34,43 +34,37 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.ShapeProperty;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 
 
-public class HorizontalPartitionElement4 extends CalculatedPathElement {
+public class PackageElement extends CalculatedPathElement {
   private int minimumWidth = 25;
   private int minimumHeight = 25;
-  private HorizontalPartitionShape shape;
-  private static final int HEADER_HEIGHT = 25;
+  private GenericShape shape;
+  private static final int HEADER_HEIGHT = 13;
+  private static final int HEADER_WIDTH = (int) (HEADER_HEIGHT * 1.5);
   private List<IPathFactory> factories;
 
-  private static Integer resolveProperties() {
-    LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.HORIZONTAL_PARTITION);
-    if (sh != null) {
-      return sh.shapeProperties;
-    }
-    return null;
-  }
+  // private static Integer resolveProperties() {
+  //   LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.PACKAGE);
+  //   if (sh != null) {
+  //     return sh.shapeProperties;
+  //   }
+  //   return null;
+  // }
 
-  public HorizontalPartitionElement4(ISurfaceHandler surface, HorizontalPartitionShape newShape, String text, 
+  public PackageElement(ISurfaceHandler surface, GenericShape newShape, String text, 
   		Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
     this(surface, newShape, text, backgroundColor, borderColor, textColor, editable, false, item);
   }
   
-  public HorizontalPartitionElement4(ISurfaceHandler surface, HorizontalPartitionShape newShape, String text, 
+  public PackageElement(ISurfaceHandler surface, GenericShape newShape, String text, 
   		Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText, IDiagramItemRO item) {
-    super(surface, newShape.toGenericShape(resolveProperties()), text, backgroundColor, borderColor, textColor, editable, item);
+    super(surface, newShape, text, backgroundColor, borderColor, textColor, editable, item);
     this.shape = newShape;
-    
-    TextElementFormatUtil textUtil = getTextFormatter();
-    textUtil.setMarginTop(0);
-    textUtil.setRotate(-90);
-    
-    // if (!delayText) {
-    	setText(text);
-    // }
     super.constructorDone();
   }
 
@@ -79,22 +73,22 @@ public class HorizontalPartitionElement4 extends CalculatedPathElement {
       factories = new ArrayList<IPathFactory>();
       factories.add(new IPathFactory() {
         public String createPath(int left, int top, int width, int height) {
-          return "m" + (left + HEADER_HEIGHT) + "," + top + 
-                 "l" + (width - HEADER_HEIGHT - 3) + "," + 0 + 
-                 "l" + 3 + "," + height +
-                 "l" + -(width - HEADER_HEIGHT) + "," + 0;
+          return "m" + left + "," + top + 
+                 "l" + 0 + "," + -HEADER_HEIGHT + 
+                 "l" + HEADER_WIDTH + "," + 0 +
+                 "l" + 0 + "," + HEADER_HEIGHT;
 
         }
         public boolean supportsEvents() {
-          return false;
+          return true;
         }
       });
       factories.add(new IPathFactory() {
         public String createPath(int left, int top, int width, int height) {
           return "m" + left + "," + top + 
-                 "l" + (HEADER_HEIGHT + 2) + "," + 0 + 
-                 "l" + 2 + "," + height +
-                 "l" + -(HEADER_HEIGHT + 2) + "," + 0 + 
+                 "l" + width + "," + 0 + 
+                 "l" + 0 + "," + height +
+                 "l" + -width + "," + 0 + 
                  "z";
         }
         public boolean supportsEvents() {
@@ -119,14 +113,15 @@ public class HorizontalPartitionElement4 extends CalculatedPathElement {
   
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-    HorizontalPartitionShape newShape = new HorizontalPartitionShape(x, y, getWidth() * factorX, getHeight() * factorY);
+    GenericShape newShape = new GenericShape(ElementType.PACKAGE.getValue(), x, y, getWidth() * factorX, getHeight() * factorY);
     Diagram result = createDiagram(surface, newShape, getText(), getEditable());
     return result;
   }
   
-  protected Diagram createDiagram(ISurfaceHandler surface, HorizontalPartitionShape newShape,
+  protected Diagram createDiagram(ISurfaceHandler surface, GenericShape newShape,
       String text, boolean editable) {
-    return new HorizontalPartitionElement4(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(ElementType.HORIZONTAL_PARTITION));
+    DiagramItemDTO item = LibraryShapes.createFrom(getDiagramItem());
+    return new PackageElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, item);
   }
 
 }
