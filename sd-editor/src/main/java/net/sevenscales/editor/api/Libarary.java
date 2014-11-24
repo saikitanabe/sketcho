@@ -527,7 +527,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     
     result.add(_create(ElementType.COMPONENT,
                        "Component",
-                       new ComponentShape(40, SOFTWARE_SKETCHING_GROUP + 340, 80, 40).toString()));
+                       new ComponentShape(40, SOFTWARE_SKETCHING_GROUP + 340, 80, 30).toString()));
     
 		// special border => no border
     result.add(_create(ElementType.TEXT_ITEM,
