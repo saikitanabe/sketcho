@@ -40,7 +40,7 @@ import com.google.gwt.core.client.JsArray;
 
 
 public abstract class CalculatedPathElement extends AbstractDiagramItem implements SupportsRectangleShape, ContainerType, IGenericElement {
-  private List<IPath> paths;
+  private List<PathWrapper> paths;
   private int minimumWidth = 25;
   private int minimumHeight = 25;
   private GenericShape shape;
@@ -53,6 +53,16 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
   public interface IPathFactory {
     String createPath(int left, int top, int width, int height);
     boolean supportsEvents();
+  }
+
+  static class PathWrapper {
+    IPathFactory factory;
+    IPath path;
+
+    PathWrapper(IPathFactory factory, IPath path) {
+      this.factory = factory;
+      this.path = path;
+    }
   }
 
   // public CalculatedPathElement(ISurfaceHandler surface, GenericShape newShape, String text, 
@@ -153,7 +163,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
         p.setStrokeWidth(Constants.SKETCH_MODE_LINE_WEIGHT);
         p.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 0); // force transparent
         p.setAttribute("style", "stroke-linejoin:round;");
-        paths.add(p);
+        paths.add(new PathWrapper(f, p));
 
         shapes.add(p);
 
@@ -169,9 +179,9 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     // and loaded from the server
     // shape would be calculated relatively from left, top, width, height
     for (int i = 0; i < paths.size(); ++i) {
-      IPath p = paths.get(i);
+      PathWrapper p = paths.get(i);
       IPathFactory f = getPathFactories().get(i);
-      p.setShape(f.createPath(left, top, width, height));
+      p.path.setShape(f.createPath(left, top, width, height));
     }
   }
 
@@ -258,8 +268,10 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
   @Override
 	public void setBackgroundColor(int red, int green, int blue, double opacity) {
   	super.setBackgroundColor(red, green, blue, opacity);
-    for (IPath p : paths) {
-      p.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, opacity);
+    for (PathWrapper p : paths) {
+      if (p.factory.supportsEvents()) {
+        p.path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, opacity);
+      }
     }
   }
     
@@ -294,8 +306,8 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
 
   @Override
   public void setHighlightColor(Color color) {
-    for (IPath p : paths) {
-      p.setStroke(color);
+    for (PathWrapper p : paths) {
+      p.path.setStroke(color);
     }
   }
 	

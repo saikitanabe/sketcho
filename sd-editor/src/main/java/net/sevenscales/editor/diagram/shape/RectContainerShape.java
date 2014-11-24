@@ -1,5 +1,7 @@
 package net.sevenscales.editor.diagram.shape;
 
+import net.sevenscales.domain.ElementType;
+
 
 public class RectContainerShape extends HasRectShape {
   
@@ -14,4 +16,8 @@ public class RectContainerShape extends HasRectShape {
 		super(rectinfo);
 	}
   
+  public GenericShape toGenericShape(Integer shapeProperties) {
+    return new GenericShape(ElementType.VERTICAL_PARTITION.getValue(), rectShape.left, rectShape.top, rectShape.width, rectShape.height, shapeProperties);
+  }
+
 }

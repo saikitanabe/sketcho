@@ -94,6 +94,7 @@ public class ShapeParser {
 					// hacked to use sequence factory always, it creates correct sequence sketch element
 					!type.equals(ElementType.SEQUENCE) &&
 					!type.equals(ElementType.HORIZONTAL_PARTITION) &&
+					!type.equals(ElementType.VERTICAL_PARTITION) &&
 					!type.equals(ElementType.PACKAGE) &&
 					Shapes.getSketch(ElementType.getEnum(diro.getType())) != null) {
 				return new AbstractDiagramFactory.GenericFactory();

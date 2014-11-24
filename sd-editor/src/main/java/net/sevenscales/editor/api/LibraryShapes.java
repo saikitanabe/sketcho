@@ -62,9 +62,13 @@ public class LibraryShapes {
     shapes.put(ElementType.CLASS, new LibraryShape(ElementType.CLASS, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.SEQUENCE, new LibraryShape(ElementType.CLASS, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.HORIZONTAL_PARTITION, new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35, ShapeProperty.TEXT_POSITION_TOP.getValue() |
-      // ShapeProperty.CENTERED_TEXT.getValue() |
       ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue() |
       ShapeProperty.BOLD_TITLE.getValue(), 2, 2));
+    shapes.put(ElementType.VERTICAL_PARTITION, new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35,
+      ShapeProperty.TEXT_POSITION_TOP.getValue() |
+      ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue() |
+      ShapeProperty.BOLD_TITLE.getValue() |
+      ShapeProperty.TEXT_TITLE_CENTER.getValue(), 2, 2));
     shapes.put(ElementType.USE_CASE, new LibraryShape(ElementType.USE_CASE, 50, 35, TOP_CLASS_LIKE_PROPERTIES | ShapeProperty.CENTERED_TEXT.getValue(), 2, 2));
     shapes.put(ElementType.SWITCH, new LibraryShape(ElementType.SWITCH, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
     shapes.put(ElementType.ROUTER, new LibraryShape(ElementType.ROUTER, 50, 35, ShapeProperty.TEXT_POSITION_BOTTOM.getValue(), 2, 2));
