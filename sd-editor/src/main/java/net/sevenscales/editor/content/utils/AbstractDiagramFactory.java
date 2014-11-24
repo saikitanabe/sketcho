@@ -87,31 +87,14 @@ public interface AbstractDiagramFactory {
 		}
 
 		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
-      if (Tools.isSketchMode()) {
-        Integer props = null;
-        LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.COMPONENT);
-        if (sh != null) {
-          props = sh.shapeProperties;
-        }
-        GenericShape gs = ((ComponentShape) shape).toGenericShape(props);
-        return new ComponentElement2(surface,
-            gs, 
-            item.getText(), 
-            DiagramItemFactory.parseBackgroundColor(item),
-            DiagramItemFactory.parseBorderColor(item),
-            DiagramItemFactory.parseTextColor(item), 
-            editable,
-            item);
-      } else {
-        return new ComponentElement(surface,
-            (ComponentShape) shape, 
-            item.getText(), 
-            DiagramItemFactory.parseBackgroundColor(item),
-            DiagramItemFactory.parseBorderColor(item),
-            DiagramItemFactory.parseTextColor(item), 
-            editable,
-            item);
-      }
+      return new ComponentElement(surface,
+          (ComponentShape) shape, 
+          item.getText(), 
+          DiagramItemFactory.parseBackgroundColor(item),
+          DiagramItemFactory.parseBorderColor(item),
+          DiagramItemFactory.parseTextColor(item), 
+          editable,
+          item);
 		}
 	}
 
