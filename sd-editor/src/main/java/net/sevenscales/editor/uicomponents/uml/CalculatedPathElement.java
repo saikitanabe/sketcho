@@ -64,7 +64,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
   		Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
     super(editable, surface, backgroundColor, borderColor, textColor, item);
     this.shape = newShape;
-    
+
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getContainerLayer());
     // group.setAttribute("cursor", "default");
 
@@ -72,6 +72,8 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
 //    group.setClip(shape.left, shape.top, shape.width, shape.height);
 
     addMouseDiagramHandler(this);
+
+    lazyAllocatePaths();
         
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
     hasTextElement = new GenericHasTextElement(this, shape);
@@ -86,6 +88,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     setReadOnly(!editable);
     
     setBorderColor(borderColor);
+    setBackgroundColor(backgroundColor);
     super.constructorDone();
   }
 
@@ -137,14 +140,9 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     rectShape.width = width;
     rectShape.height = height;
 
-    _setShapes(left, top, width, height);
+    setPathShapes(left, top, width, height);
 
     textUtil.setTextShape();
-  }
-
-  private void _setShapes(int left, int top, int width, int height) {
-    lazyAllocatePaths();
-    setPathShapes(left, top, width, height);
   }
 
   private void lazyAllocatePaths() {
@@ -261,7 +259,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
 	public void setBackgroundColor(int red, int green, int blue, double opacity) {
   	super.setBackgroundColor(red, green, blue, opacity);
     for (IPath p : paths) {
-      p.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 0);
+      p.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, opacity);
     }
   }
     

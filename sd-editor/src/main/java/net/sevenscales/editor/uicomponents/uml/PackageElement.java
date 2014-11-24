@@ -46,15 +46,9 @@ public class PackageElement extends CalculatedPathElement {
   private GenericShape shape;
   private static final int HEADER_HEIGHT = 13;
   private static final int HEADER_WIDTH = (int) (HEADER_HEIGHT * 1.5);
+  private static final int HEADER_OFF = 1;
+  private static final int OFF = 1;
   private List<IPathFactory> factories;
-
-  // private static Integer resolveProperties() {
-  //   LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.PACKAGE);
-  //   if (sh != null) {
-  //     return sh.shapeProperties;
-  //   }
-  //   return null;
-  // }
 
   public PackageElement(ISurfaceHandler surface, GenericShape newShape, String text, 
   		Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
@@ -74,9 +68,9 @@ public class PackageElement extends CalculatedPathElement {
       factories.add(new IPathFactory() {
         public String createPath(int left, int top, int width, int height) {
           return "m" + left + "," + top + 
-                 "l" + 0 + "," + -HEADER_HEIGHT + 
-                 "l" + HEADER_WIDTH + "," + 0 +
-                 "l" + 0 + "," + HEADER_HEIGHT;
+                 "l" + (0 + HEADER_OFF) + "," + -HEADER_HEIGHT + 
+                 "l" + (HEADER_WIDTH + HEADER_OFF) + "," + 0 +
+                 "l" + (-HEADER_OFF) + "," + HEADER_HEIGHT;
 
         }
         public boolean supportsEvents() {
@@ -86,9 +80,9 @@ public class PackageElement extends CalculatedPathElement {
       factories.add(new IPathFactory() {
         public String createPath(int left, int top, int width, int height) {
           return "m" + left + "," + top + 
-                 "l" + width + "," + 0 + 
-                 "l" + 0 + "," + height +
-                 "l" + -width + "," + 0 + 
+                 "l" + (width + OFF) + "," + 0 + 
+                 "l" + (0 - OFF) + "," + height +
+                 "l" + (-width - OFF) + "," + 0 + 
                  "z";
         }
         public boolean supportsEvents() {
