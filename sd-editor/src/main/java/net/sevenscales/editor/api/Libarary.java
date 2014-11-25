@@ -106,7 +106,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 	private static final int MINDMAP_GROUP_HEIGHT = 260;
 
   private static final int ROADMAP_GROUP = MINDMAP_GROUP + MINDMAP_GROUP_HEIGHT + GROUP_SPACE;
-  private static final int ROADMAP_GROUP_HEIGHT = 260;
+  private static final int ROADMAP_GROUP_HEIGHT = 290;
 
   private static final int GENERAL_GROUP = ROADMAP_GROUP + ROADMAP_GROUP_HEIGHT + GROUP_SPACE;
   private static final int GENERAL_GROUP_HEIGHT = 260;
@@ -156,7 +156,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		this.toolpool = FactoryDoJo.createSurfaceHandler();
 		toolpool.setName(ISurfaceHandler.LIBRARY_AREA);
 		toolpool.setDisableOnArea(true);
-		toolpool.init(210, 1700, true, modeManager, false, editorContext, otBuffer, operationTransaction);
+		toolpool.init(210, 1750, true, modeManager, false, editorContext, otBuffer, operationTransaction);
     toolpool.setSvgClassName("library-svg");
 		
 		setStyle();
@@ -308,41 +308,41 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
   }
 
   private void roadmap(List<Diagram> result) {
-    int roadmapIndent = 35;
+    int roadmapIndent = 45;
 
+    addSection("Roadmap", new RectContainerShape(10, ROADMAP_GROUP, 220, ROADMAP_GROUP_HEIGHT));
+
+    int startOffset = 40;
     Diagram q1 = _create(ElementType.VERTICAL_PARTITION,
                        "Q1",
-                       new RectContainerShape(roadmapIndent, ROADMAP_GROUP, 195, ROADMAP_GROUP_HEIGHT).toString());
+                       new RectContainerShape(roadmapIndent, ROADMAP_GROUP + startOffset, 170, ROADMAP_GROUP_HEIGHT - 65).toString());
     q1.setDuplicateMultiplySize(2, 2);
     result.add(q1);
 
-    int marketingY = ROADMAP_GROUP + 25;
-    int marketingHeight = ROADMAP_GROUP_HEIGHT / 2 - 10;
+    int marketingY = ROADMAP_GROUP + 25 + startOffset;
+    int marketingHeight = ROADMAP_GROUP_HEIGHT / 2 - 46;
     Diagram marketing = _create(ElementType.HORIZONTAL_PARTITION, "Marketing",
-                                new HorizontalPartitionShape(10, marketingY, 220, marketingHeight).toString());
+                                new HorizontalPartitionShape(20, marketingY, 195, marketingHeight).toString());
     marketing.setDuplicateMultiplySize(3, 3);
     result.add(marketing);
 
-    int activityIndent = roadmapIndent + 10;
-
-    result.add(_create(ElementType.CHOICE,
-                       "",
-                       new ActivityChoiceShape(activityIndent, marketingY + 45, 32, 32).toString()));
-
     result.add(_create(ElementType.MIND_CENTRAL,
                        "Keynote",
-                       new MindCentralShape(roadmapIndent + 50, marketingY + 10, 100, 30).toString()));
+                       new MindCentralShape(roadmapIndent + 20, marketingY + 10, 100, 30).toString()));
 
     int productY = marketingY + marketingHeight;
-    int productHeight = ROADMAP_GROUP_HEIGHT / 2 - 15;
+    int productHeight = ROADMAP_GROUP_HEIGHT / 2 - 46;
     Diagram productLine = _create(ElementType.HORIZONTAL_PARTITION, "Product Line",
-                                new HorizontalPartitionShape(10, productY, 220, productHeight).toString());
+                                new HorizontalPartitionShape(20, productY, 195, productHeight).toString());
 
     productLine.setDuplicateMultiplySize(3, 3);
     result.add(productLine);
 
+    result.add(_create(ElementType.CHOICE,
+                       "",
+                       new ActivityChoiceShape(roadmapIndent + 30, productY + 10, 32, 32).toString()));
     result.add(_create(ElementType.ACTIVITY, "Release X",
-                 new ActivityShape(roadmapIndent + 10, productY + 30, 100, 30).toString()));
+                 new ActivityShape(roadmapIndent + 10, productY + 50, 100, 30).toString()));
   }
 
   private void general(List<Diagram> result) {
@@ -394,9 +394,14 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
       }
     };
 
+    final int TOP_MARGIN = 40;
     final int COL_SIZE = 40;
     final int ROW_SIZE = 50;
     final int MARGIN = 15;
+
+    addSection("General", new RectContainerShape(10, GENERAL_GROUP, 220,
+      TOP_MARGIN + shapes.length * ROW_SIZE + shapes.length * MARGIN));
+    
     int row = 0;
     for (LibraryShape[] rowShapes : shapes) {
       int col = 0;
@@ -407,7 +412,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
                        new GenericShape(colShape.elementType.getValue(), 
                              // MARGIN + col * COL_SIZE + col * MARGIN, 
                              colpos + col * MARGIN,
-                             GENERAL_GROUP + row * ROW_SIZE + row * MARGIN, 
+                             GENERAL_GROUP + TOP_MARGIN + row * ROW_SIZE + row * MARGIN, 
                              colShape.width, 
                              colShape.height, 
                              colShape.shapeProperties, 
