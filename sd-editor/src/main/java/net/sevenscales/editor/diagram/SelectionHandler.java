@@ -479,6 +479,10 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
       // if freehand mode is on, selection is not supported!
       return;
     }
+    if (surface.isLibrary()) {
+      // library doesn't support selection
+      return;
+    }
 
     // logger.start("SelectionHandler.select SUM");
     // logger.start("SelectionHandler.select 1");

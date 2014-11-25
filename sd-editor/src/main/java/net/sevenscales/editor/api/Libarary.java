@@ -413,21 +413,6 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
                              colShape.shapeProperties, 
                              null).toString());
 
-        // Diagram el = new GenericElement(this.toolpool,
-        //     new GenericShape(colShape.elementType.getValue(), 
-        //                      // MARGIN + col * COL_SIZE + col * MARGIN, 
-        //                      colpos + col * MARGIN,
-        //                      GENERAL_GROUP + row * ROW_SIZE + row * MARGIN, 
-        //                      colShape.width, 
-        //                      colShape.height, 
-        //                      colShape.shapeProperties, 
-        //                      null),
-        //       "",
-        //       Theme.createDefaultBackgroundColor(),
-        //       Theme.createDefaultBorderColor(),
-        //       Theme.createDefaultTextColor(),
-        //       true,
-        //       DiagramItemDTO.createByType(colShape.elementType));
         el.setDuplicateMultiplySize(colShape.duplicateFactoryX, colShape.duplicateFactoryY);
         result.add(el);
         colpos += colShape.width;
