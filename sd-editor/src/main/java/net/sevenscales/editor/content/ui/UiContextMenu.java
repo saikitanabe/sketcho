@@ -482,13 +482,13 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}
 
 	private void colorMenu(final Element e) {
+		colorSelections.hideHeader();
 		colorpopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
 			@Override
 			public void setPosition(int offsetWidth, int offsetHeight) {
-				int left = e.getAbsoluteLeft();
-				int top = e.getAbsoluteTop() + e.getOffsetHeight();
+				int left = e.getAbsoluteLeft() + e.getOffsetWidth() / 2 - offsetWidth / 2;
+				int top = e.getAbsoluteTop() - offsetHeight;
 				colorpopup.setPopupPosition(left, top);
-				colorSelections.hideHeader();
 			}
 		});
 	}

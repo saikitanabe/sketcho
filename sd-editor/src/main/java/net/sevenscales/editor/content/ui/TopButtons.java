@@ -35,7 +35,7 @@ public class TopButtons extends Composite {
 
 	private EditorContext editorContext;
 	
-	@UiField ButtonElement freehandOn;
+	// @UiField ButtonElement freehandOn;
 	@UiField Element colorize;
 	// @UiField ButtonElement commentModeOn;
 
@@ -60,21 +60,21 @@ public class TopButtons extends Composite {
 			}
 		});
 		
-		DOM.sinkEvents((com.google.gwt.user.client.Element) freehandOn.cast(),
-				Event.ONCLICK);
-		DOM.setEventListener(
-				(com.google.gwt.user.client.Element) freehandOn.cast(),
-				new EventListener() {
-					@Override
-					public void onBrowserEvent(Event event) {
-						switch (DOM.eventGetType(event)) {
-						case Event.ONCLICK:
-							setVisible(false);
-							TopButtons.this.editorContext.getEventBus().fireEvent(new FreehandModeChangedEvent(false));
-							break;
-						}
-					}
-				});
+		// DOM.sinkEvents((com.google.gwt.user.client.Element) freehandOn.cast(),
+		// 		Event.ONCLICK);
+		// DOM.setEventListener(
+		// 		(com.google.gwt.user.client.Element) freehandOn.cast(),
+		// 		new EventListener() {
+		// 			@Override
+		// 			public void onBrowserEvent(Event event) {
+		// 				switch (DOM.eventGetType(event)) {
+		// 				case Event.ONCLICK:
+		// 					setVisible(false);
+		// 					TopButtons.this.editorContext.getEventBus().fireEvent(new FreehandModeChangedEvent(false));
+		// 					break;
+		// 				}
+		// 			}
+		// 		});
 
 		tapColor(colorize);
 
@@ -109,13 +109,13 @@ public class TopButtons extends Composite {
 
 	public void setVisible(FreehandModeChangedEvent event) {
 		super.setVisible(Tools.isCommentMode());
-		freehandOn.getStyle().setDisplay(Display.NONE);
+		// freehandOn.getStyle().setDisplay(Display.NONE);
 		colorize.getStyle().setDisplay(Display.NONE);
 		if (event.isEnabled()) {
 			// do not set visible if freehand mode is not on
 			// this is due to initial load
 			super.setVisible(event.isEnabled());
-			freehandOn.getStyle().setDisplay(Display.INLINE);
+			// freehandOn.getStyle().setDisplay(Display.INLINE);
 			colorize.getStyle().setDisplay(Display.INLINE);
 			// String text = editorContext.<FreehandModeType>getAs(EditorProperty.FREEHAND_MODE_TYPE).toString();
 			// if (event.isModeTypeChanged()) {
