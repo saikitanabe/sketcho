@@ -189,7 +189,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		touchManager = new TouchDragAndDrop(dragAndDropHandler, toolFrame.getToolbar().getHasTouchStartHandlers());
 		new SurfaceEventWrapper(surface, dragAndDropHandler);
 		RootPanel.get().add((new ToolBar(surface)));
-		RootPanel.get().add((new MainMenu(surface)));
+		// RootPanel.get().add((new MainMenu(surface)));
 
 		this.scaleSlider = new ScaleSlider(surface);
 
