@@ -50,7 +50,10 @@ public class ToolBar extends Composite {
 			}
 		});
 
-		handleButtons(this, map, freehand, undo, redo);
+		handleButtons(this, freehand, undo, redo);
+		map.setTitle("Map View<br>Start: keep mouse down<br>Drag to reposition board<br>Center: release mouse<br>Shortcut: Z key");
+		handleMapView(map);
+
 		handleUndoRedoShortcuts();
 		handleUndoRedoStreams(this);
 	}
@@ -126,20 +129,36 @@ public class ToolBar extends Composite {
     }
   }
 
-	private native void handleButtons(ToolBar me, Element map, Element freehand, Element undo, Element redo)/*-{
-		$wnd.Hammer(map).on('tap', function() {
-			me.@net.sevenscales.editor.api.ToolBar::onMap()()
-		})
+	private native void handleButtons(ToolBar me, Element freehand, Element undo, Element redo)/*-{
 		$wnd.Hammer(freehand).on('tap', function() {
 			me.@net.sevenscales.editor.api.ToolBar::onFreehand()()
 		})
+		$wnd.$(freehand).tooltip()
 
 		$wnd.Hammer(undo).on('tap', function() {
 			me.@net.sevenscales.editor.api.ToolBar::onUndo()()
 		})
+		$wnd.$(undo).tooltip()
+
 		$wnd.Hammer(redo).on('tap', function() {
 			me.@net.sevenscales.editor.api.ToolBar::onRedo()()
 		})
+		$wnd.$(redo).tooltip()
+	}-*/;
+
+	private native void handleMapView(Element map)/*-{
+		var elem = $wnd.$(map)
+		elem.tooltip({html: true, placement: 'top', container:'body'})
+
+		$wnd.Hammer(elem[0], {holdTimeout: 100, preventDefault: true}).on('hold', function(event) {
+			// elem.find('i').attr('class', 'menu-icon-map-view-dark')
+			$wnd.$($doc).trigger('map-view', 'start')
+		})
+		$wnd.Hammer(elem[0], {preventDefault: true}).on('release', function(event) {
+			// elem.find('i').attr('class', 'menu-icon-map-view')
+			$wnd.$($doc).trigger('map-view', 'end')
+		})
+
 	}-*/;
 
 	private void onMap() {
