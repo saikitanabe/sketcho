@@ -483,6 +483,10 @@ public interface AbstractDiagramFactory {
             editable,
             item);
         default: {
+          // TODO if item.getShapeProperties() == null
+          // could load default shape properties, since this is probably a switch
+          // from awesome => corporate
+          // could restore all except DISABLE_SHAPE_AUTO_RESIZE
           return new GenericElement(surface,
               gh,
               item.getText(), 

@@ -10,11 +10,13 @@ import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
+import net.sevenscales.editor.api.Tools;
 
 
 class GenericHasTextElement extends AbstractHasTextElement {
 	private float marginLeftFactor;
 	private float marginTopFactor;
+	private float marginBottomFactor;
 	private int marginLeft;
 	private IGenericElement parent;
 	private GenericShape shape;
@@ -30,7 +32,12 @@ class GenericHasTextElement extends AbstractHasTextElement {
 			case BUBBLE:
 			case BUBBLE_R: {
 				this.marginLeftFactor = 0.09f;
-				this.marginTopFactor = 0.09f;
+				if (Tools.isSketchMode()) {
+					this.marginTopFactor = 0.05f;
+				} else {
+					this.marginTopFactor = 0.09f;
+				}
+				this.marginBottomFactor = 0.11f;
 				break;
 			}
 		}
@@ -38,7 +45,7 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
   public int getWidth() {
-    return parent.getWidth() - getMarginLeft();
+    return parent.getWidth() - getMarginLeft() * 2;
   }
 
 	@Override
@@ -48,6 +55,10 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
   public int getY() {
+  	if (Tools.isSketchMode() && ElementType.BUBBLE_R.getValue().equals(shape.getElementType())) {
+  		return parent.getRelativeTop() + getMarginTop();
+  	}
+
   	if (ShapeProperty.isTextPositionBottom(parent.getDiagramItem().getShapeProperties())) {
 			return parent.getRelativeTop() + parent.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 8;
   	} else if (ShapeProperty.isTextResizeDimVerticalResize(parent.getDiagramItem().getShapeProperties())) {
@@ -144,6 +155,8 @@ class GenericHasTextElement extends AbstractHasTextElement {
   	switch (elementType) {
   		case COMPONENT:
   			return (int) (defaultMargin * 20f/30f);
+  		case BUBBLE_R:
+  			return getMarginTop();
   	}
   	return (int) (defaultMargin * 50f/30f);
   }
@@ -171,6 +184,9 @@ class GenericHasTextElement extends AbstractHasTextElement {
 		if (marginLeft > 0) {
 			return marginLeft;
 		}
+  	if (ElementType.BUBBLE_R.getValue().equals(shape.getElementType())) {
+  		return 20;
+  	}
 		return (int) (parent.getWidth() * marginLeftFactor);
 	}
 	protected void setMarginLeft(int marginLeft) {
@@ -194,6 +210,8 @@ class GenericHasTextElement extends AbstractHasTextElement {
 		switch (elementType) {
 			case STORAGE:
 				return 15;
+			case BUBBLE_R:
+				return (int) (parent.getHeight() * marginBottomFactor);
 		}
 		return 0;
 	}
