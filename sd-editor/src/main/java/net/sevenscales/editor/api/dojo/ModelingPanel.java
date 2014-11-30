@@ -8,7 +8,6 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.ToolFrame;
 import net.sevenscales.editor.api.ToolBar;
-import net.sevenscales.editor.api.MainMenu;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.LongPressHandler;

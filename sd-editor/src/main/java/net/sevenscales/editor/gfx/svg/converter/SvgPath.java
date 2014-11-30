@@ -6,6 +6,7 @@ import java.util.Map;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IPath;
@@ -75,7 +76,7 @@ public class SvgPath extends SvgLine {
   }
 
   private static String strokeWidth(Diagram diagram, IPath path) {
-    if (/*isConfluence(diagram.getSurfaceHandler()) && */(diagram instanceof GenericElement)) {
+    if (!Tools.isSketchMode() && /*isConfluence(diagram.getSurfaceHandler()) && */(diagram instanceof GenericElement)) {
       GenericElement ge = (GenericElement) diagram;
       return String.valueOf(ge.scaledStrokeWidth(ge.getFactorX(), ge.getFactorY()));
     } else {
