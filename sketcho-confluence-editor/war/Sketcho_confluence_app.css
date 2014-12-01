@@ -184,7 +184,7 @@ visibility: hidden;
   width: 21px;
   position: fixed; /* Or fixed - depends on what you want */
   right: 0;
-  top: 0;
+  top: 40px;
   bottom: 40px;
   background: url("images/left-arrow.png") no-repeat center center;
   user-select: none;

@@ -78,6 +78,7 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.dom.client.Style;
 
 
@@ -88,6 +89,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
   private ProxyDragHandler proxyDragHandler;
 	private EditorContext editorContext;
   private FlowPanel panel;
+  private CloseLibrary closeLibrary;
 
 	private static final int GROUP_SPACE = 25;
 	private static final int GROUP_HEADING_SPACE = 55;
@@ -187,7 +189,9 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     panel.setStyleName("library");
 		panel.add(toolpool.getWidget());
 		panel.add(new LibrarySelections(librarySelectedHandler, editorContext));
-    panel.add(new CloseLibrary());
+    // panel.add(new CloseLibrary());
+    closeLibrary = new CloseLibrary();
+    RootPanel.get().add(closeLibrary);
 		
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
@@ -669,6 +673,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 	public void setVisible(boolean visible) {
 	  super.setVisible(visible);
 	  toolpool.setVisible(visible);
+    closeLibrary.setVisible(visible);
 	}
 
   public Diagram selectedElement() {
