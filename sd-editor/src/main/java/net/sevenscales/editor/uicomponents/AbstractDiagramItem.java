@@ -1324,6 +1324,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     borderColor.copy(color);
     setHighlightColor(color);
     applyAnnotationColors();
+    TextElementFormatUtil textUtil = getTextFormatter();
+    if (textUtil != null) {
+      textUtil.applyBorderColor(color);
+    }
   }
 
 	public void registerOnAttachArea(OnAttachAreaListener listener) {

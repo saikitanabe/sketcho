@@ -357,7 +357,7 @@ public class TextElementFormatUtil {
       if (t.equals("--")) {
         // create separator line
         ILine separator = IShapeFactory.Util.factory(editable).createLine(textGroup);
-        separator.setStroke(hasTextElement.getTextColor());
+        separator.setStroke(parent.getBorderColor());
         // TODO isSketchiness()
         if (Tools.isSketchMode()) {
           separator.setStrokeWidth(Constants.SKETCH_SEPARATOR_WEIGHT);
@@ -409,6 +409,16 @@ public class TextElementFormatUtil {
          }
       }
       lines.add(currentline);
+    }
+  }
+
+  public void applyBorderColor(Color color) {
+    for (List<IShape> line : lines) {
+      for (IShape s : line) {
+        if (s instanceof ILine) {
+          s.setStroke(color);
+        }
+      }
     }
   }
 
