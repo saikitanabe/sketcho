@@ -596,11 +596,10 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
 	@Override
 	public String getTextAreaAlign() {
-		if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
-			return super.getTextAreaAlign();
-		} else {
+		if (ShapeProperty.isCenteredText(shape.getShapeProperties())) {
 			return "center";
 		}
+		return super.getTextAreaAlign();
 	}
 
 	@Override
