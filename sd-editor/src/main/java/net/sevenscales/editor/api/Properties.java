@@ -740,11 +740,11 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		textArea.setVisible(true);
 
 		if ("transparent".equals(diagram.getTextAreaBackgroundColor())) {
-			// textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
+			textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
 			textArea.getElement().getStyle().setColor(Theme.getCurrentColorScheme().getTextColor().toHexStringWithHash());
 		} else {
 			textArea.getElement().getStyle().setColor("#" + diagram.getTextColor().toHexString());
-			// textArea.getElement().getStyle().setBackgroundColor(diagram.getTextAreaBackgroundColor());
+			textArea.getElement().getStyle().setBackgroundColor(diagram.getTextAreaBackgroundColor());
 		}
 
 		int dFontSize = diagram.getFontSize() != null ? diagram.getFontSize() : 12;
