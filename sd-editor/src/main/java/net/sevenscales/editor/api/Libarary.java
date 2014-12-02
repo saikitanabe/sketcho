@@ -158,7 +158,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		this.toolpool = FactoryDoJo.createSurfaceHandler();
 		toolpool.setName(ISurfaceHandler.LIBRARY_AREA);
 		toolpool.setDisableOnArea(true);
-		toolpool.init(210, 1750, true, modeManager, false, editorContext, otBuffer, operationTransaction);
+		toolpool.init(210, 1750, false, modeManager, false, editorContext, otBuffer, operationTransaction);
     toolpool.setSvgClassName("library-svg");
 		
 		setStyle();
