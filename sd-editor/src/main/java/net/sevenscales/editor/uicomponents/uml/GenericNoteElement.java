@@ -32,7 +32,17 @@ public class GenericNoteElement extends GenericElement {
 
   @Override
   protected int getMarginLeft() {
-    return 13;
+    return 15;
+  }
+
+  @Override
+  protected int getMarginBottom() {
+    return 2;
+  }
+
+  @Override
+  protected int getMarginTop() {
+    return 7;
   }
 
   @Override

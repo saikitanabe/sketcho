@@ -139,6 +139,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
     hasTextElement = new GenericHasTextElement(this, shape);
     hasTextElement.setMarginLeft(getMarginLeft());
+    hasTextElement.setMarginTop(getMarginTop());
+    hasTextElement.setMarginBottom(getMarginBottom());
     if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
 	    textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
 	    textUtil.setMarginTop(0);
@@ -166,6 +168,12 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 
 	protected int getMarginLeft() {
+		return 0;
+	}
+	protected int getMarginBottom() {
+		return 0;
+	}
+	protected int getMarginTop() {
 		return 0;
 	}
 

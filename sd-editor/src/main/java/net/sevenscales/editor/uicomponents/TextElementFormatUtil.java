@@ -197,9 +197,11 @@ public class TextElementFormatUtil {
 	protected Diagram parent;
 	private boolean forceTextAlign;
 	protected double widestWidth;
-	private int marginTop;
+  private int marginTop;
+	private int marginBottom;
   // marginTop is used if this is defined
   private boolean marginTopDefined;
+  private boolean marginBottomDefined;
   private int marginLeft;
 	private int margin;
   private boolean marginDefined;
@@ -279,7 +281,8 @@ public class TextElementFormatUtil {
   }
   
   public void setMarginBottom(int marginBottom) {
-		// this.marginBottom = marginBottom;
+    marginBottomDefined = true;
+    this.marginBottom = marginBottom;
 	}
   public int getMarginBottom() {
 		// return marginBottom;

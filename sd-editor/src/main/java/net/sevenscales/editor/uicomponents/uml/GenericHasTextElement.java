@@ -18,6 +18,9 @@ class GenericHasTextElement extends AbstractHasTextElement {
 	private float marginTopFactor;
 	private float marginBottomFactor;
 	private int marginLeft;
+	private int marginTop;
+	private int marginBottom;
+
 	private IGenericElement parent;
 	private GenericShape shape;
 	private ElementType elementType;
@@ -196,9 +199,16 @@ class GenericHasTextElement extends AbstractHasTextElement {
 	protected void setMarginLeft(int marginLeft) {
 		this.marginLeft = marginLeft;
 	}
+	protected void setMarginTop(int marginTop) {
+		this.marginTop = marginTop;
+	}
 
 	@Override
 	public int getMarginTop() {
+		if (marginTop > 0) {
+			return marginTop;
+		}
+
 		switch (elementType) {
 			case COMPONENT:
 				return 0;
@@ -211,6 +221,10 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
 	public int getMarginBottom() {
+		if (marginBottom > 0) {
+			return marginBottom;
+		}
+	
 		switch (elementType) {
 			case STORAGE:
 				return 15;
@@ -219,6 +233,9 @@ class GenericHasTextElement extends AbstractHasTextElement {
 				return (int) (parent.getHeight() * marginBottomFactor);
 		}
 		return 0;
+	}
+	protected void setMarginBottom(int marginBottom) {
+		this.marginBottom = marginBottom;
 	}
 
 };
