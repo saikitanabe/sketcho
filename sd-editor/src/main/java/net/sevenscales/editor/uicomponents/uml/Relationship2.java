@@ -1763,7 +1763,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     arrowStartPolyline.setShape(startx, starty);
 
-    relationshipHandleHelpers.doSetShape(currentDragged);
+    if (relationshipHandleHelpers != null) {
+      relationshipHandleHelpers.doSetShape(currentDragged);
+    }
 
     // tempCircle.moveToFront();
   }
