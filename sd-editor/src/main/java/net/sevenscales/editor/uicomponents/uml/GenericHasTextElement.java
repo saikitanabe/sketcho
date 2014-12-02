@@ -57,6 +57,8 @@ class GenericHasTextElement extends AbstractHasTextElement {
   public int getY() {
   	if (Tools.isSketchMode() && ElementType.BUBBLE_R.getValue().equals(shape.getElementType())) {
   		return parent.getRelativeTop() + getMarginTop();
+  	} else if (Tools.isSketchMode() && ElementType.BUBBLE.getValue().equals(shape.getElementType())) {
+  		return parent.getRelativeTop() + getMarginTop();
   	}
 
   	if (ShapeProperty.isTextPositionBottom(parent.getDiagramItem().getShapeProperties())) {
@@ -156,6 +158,7 @@ class GenericHasTextElement extends AbstractHasTextElement {
   		case COMPONENT:
   			return (int) (defaultMargin * 20f/30f);
   		case BUBBLE_R:
+  		case BUBBLE:
   			return getMarginTop();
   	}
   	return (int) (defaultMargin * 50f/30f);
@@ -184,7 +187,8 @@ class GenericHasTextElement extends AbstractHasTextElement {
 		if (marginLeft > 0) {
 			return marginLeft;
 		}
-  	if (ElementType.BUBBLE_R.getValue().equals(shape.getElementType())) {
+  	if (ElementType.BUBBLE_R.getValue().equals(shape.getElementType()) || 
+  			ElementType.BUBBLE.getValue().equals(shape.getElementType())) {
   		return 20;
   	}
 		return (int) (parent.getWidth() * marginLeftFactor);
@@ -210,6 +214,7 @@ class GenericHasTextElement extends AbstractHasTextElement {
 		switch (elementType) {
 			case STORAGE:
 				return 15;
+			case BUBBLE:
 			case BUBBLE_R:
 				return (int) (parent.getHeight() * marginBottomFactor);
 		}
