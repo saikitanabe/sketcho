@@ -6,7 +6,7 @@
 	<g:HTMLPanel>
 		<div ui:field="btnGroup" class="library-selection">
 			<ul class="ul-none ul-horizontal">
-				<li ui:field="software" class="library-selection-active">Software</li>
+				<li ui:field="software">Software</li>
 				<li ui:field="mindmap">Mind Map</li>
 		  	<li ui:field="roadmap">Roadmap</li>
 		  	<li ui:field="general">General</li>

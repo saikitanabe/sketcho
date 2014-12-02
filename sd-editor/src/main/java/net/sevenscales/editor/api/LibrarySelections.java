@@ -42,11 +42,14 @@ public class LibrarySelections extends Composite {
 //	@UiField AnchorElement roadmap;
 
 	private EditorContext editorContext;
+	private Element active;
 
 	public LibrarySelections(LibrarySelectedHandler handler, EditorContext editorContext) {
 		this.editorContext = editorContext;
 		this.librarySelectedHandler = handler;
 		initWidget(uiBinder.createAndBindUi(this));
+
+		applyActive(software);
 		
 		DOM.sinkEvents((com.google.gwt.user.client.Element) mindmap.cast(),
 				Event.ONCLICK);
@@ -58,6 +61,7 @@ public class LibrarySelections extends Composite {
 						switch (DOM.eventGetType(event)) {
 						case Event.ONCLICK:
 							LibrarySelections.this.librarySelectedHandler.onSelected(Library.MINDMAP);
+							applyActive(mindmap);
 							break;
 						}
 					}
@@ -73,6 +77,7 @@ public class LibrarySelections extends Composite {
 						switch (DOM.eventGetType(event)) {
 						case Event.ONCLICK:
 							LibrarySelections.this.librarySelectedHandler.onSelected(Library.SOFTWARE);
+							applyActive(software);
 							break;
 						}
 					}
@@ -88,6 +93,7 @@ public class LibrarySelections extends Composite {
 						switch (DOM.eventGetType(event)) {
 						case Event.ONCLICK:
 							LibrarySelections.this.librarySelectedHandler.onSelected(Library.ROADMAP);
+							applyActive(roadmap);
 							break;
 						}
 					}
@@ -103,6 +109,7 @@ public class LibrarySelections extends Composite {
 						switch (DOM.eventGetType(event)) {
 						case Event.ONCLICK:
 							LibrarySelections.this.librarySelectedHandler.onSelected(Library.GENERAL);
+							applyActive(general);
 							break;
 						}
 					}
@@ -120,6 +127,7 @@ public class LibrarySelections extends Composite {
 						switch (DOM.eventGetType(event)) {
 						case Event.ONCLICK:
 							LibrarySelections.this.librarySelectedHandler.onSelected(Library.IMAGES);
+							applyActive(images);
 							break;
 						}
 					}
@@ -140,6 +148,15 @@ public class LibrarySelections extends Composite {
 //						}
 //					}
 //				});
+	}
+
+	private void applyActive(Element active) {
+		if (this.active != null) {
+			this.active.removeClassName("library-selection-active");
+		}
+
+		this.active = active;
+		this.active.addClassName("library-selection-active");
 	}
 
 	private void showOrHideImages() {
