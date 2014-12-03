@@ -21,6 +21,7 @@ import net.sevenscales.domain.JSONContentParser;
 import net.sevenscales.editor.gfx.domain.ILoadObserver;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.Tools;
 
 
 public class SvgHandler {
@@ -40,6 +41,7 @@ public class SvgHandler {
 		this.json = json;
 		this.handler = handler;
 		this.editorContext = new EditorContext();
+		Tools.create(editorContext, false);
 		if (UiUtils.isIE()) {
 			// ie doesn't support vector-effect
 			editorContext.set(EditorProperty.CONFLUENCE_MODE, true);

@@ -48,13 +48,13 @@ public class SLogger {
 	}
 
 	public static void console(String... values) {
-		if (LogConfiguration.loggingIsEnabled(Level.FINER)) {
+		if (LogConfiguration.loggingIsEnabled()) {
 			_console(values);
 		}
 	}
 
 	private native static void _console(String... values)/*-{
-		$wnd.console.log(values)
+		if ($wnd.console && $wnd.console.log) $wnd.console.log(values)
 	}-*/;
 	
 	public void debug(String msg) {

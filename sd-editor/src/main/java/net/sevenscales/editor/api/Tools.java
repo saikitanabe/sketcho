@@ -23,22 +23,22 @@ public class Tools {
 	}
 
 
-	private ISurfaceHandler surface;
+	private EditorContext editorContext;
 	private int currentTools;
 
-	private Tools(ISurfaceHandler surface, Boolean superQuickMode) {
-		this.surface = surface;
+	private Tools(EditorContext editorContext, Boolean superQuickMode) {
+		this.editorContext = editorContext;
 		_setQuickMode(superQuickMode);
 		// default is curved arrows
 		_setCurvedArrow(true);
-		// surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
+		// editorContext.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
 		// 	@Override
 		// 	public void on(FreehandModeChangedEvent event) {
 		// 		setFreehandTool(event.isEnabled());
 		// 	}
 		// });
 
-		// surface.getEditorContext().getEventBus().addHandler(CommentModeEvent.TYPE, new CommentModeEventHandler() {
+		// editorContext.getEditorContext().getEventBus().addHandler(CommentModeEvent.TYPE, new CommentModeEventHandler() {
 		// 	@Override
 		// 	public void on(CommentModeEvent event) {
 		// 		if (eventsOn) {
@@ -48,9 +48,9 @@ public class Tools {
 		// });
 	}
 
-	public static Tools create(ISurfaceHandler surface, Boolean superQuickMode) {
+	public static Tools create(EditorContext editorContext, Boolean superQuickMode) {
 		if (instance == null) {
-			instance = new Tools(surface, superQuickMode);
+			instance = new Tools(editorContext, superQuickMode);
 		}
 		return instance;
 	}
@@ -67,7 +67,7 @@ public class Tools {
 		if (isCommentMode() != enabled) {
 			currentTools = enabled ? (currentTools | Tool.COMMENT_TOOL.getValue()) : currentTools & ~Tool.COMMENT_TOOL.getValue();
 			logger.debug("TOOLS {}", currentTools);
-			surface.getEditorContext().getEventBus().fireEvent(new CommentModeEvent(isCommentMode()));
+			editorContext.getEventBus().fireEvent(new CommentModeEvent(isCommentMode()));
 		}
 	}
 
@@ -76,7 +76,7 @@ public class Tools {
 	}
 	private void _toggleCommentMode() {
     setCommentTool(!isCommentMode());
-    surface.getEditorContext().getEventBus().fireEvent(new CommentModeEvent(isCommentMode()));
+    editorContext.getEventBus().fireEvent(new CommentModeEvent(isCommentMode()));
 	}
 
 	public static void toggleQuickMode() {
@@ -84,7 +84,7 @@ public class Tools {
 	}
 	private void _toggleQuickMode() {
 		setQuickMode(!isQuickMode());
-    surface.getEditorContext().getEventBus().fireEvent(new SuperQuickModeEvent(isQuickMode()));
+    editorContext.getEventBus().fireEvent(new SuperQuickModeEvent(isQuickMode()));
 	}
 	public static void setQuickMode(boolean enabled) {
 		instance._setQuickMode(enabled);
@@ -100,14 +100,14 @@ public class Tools {
 		return instance._isQuickMode();
 	}
 	private boolean _isQuickMode() {
-		if (confluence(surface)) {
+		if (confluence()) {
 			return false;
 		} else {
 			return (currentTools & Tool.QUICK_MODE.getValue()) == Tool.QUICK_MODE.getValue();
 		}
 	}
-	private boolean confluence(ISurfaceHandler surface) {
-		return surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE);
+	private boolean confluence() {
+		return editorContext.isTrue(EditorProperty.CONFLUENCE_MODE);
 	}	
 
 
@@ -141,7 +141,7 @@ public class Tools {
 	}
 	private void _toggleSketchMode() {
 		setSketchMode(!isSketchMode());
-    surface.getEditorContext().getEventBus().fireEvent(new SketchModeEvent(isSketchMode()));
+    editorContext.getEventBus().fireEvent(new SketchModeEvent(isSketchMode()));
 	}
 
 

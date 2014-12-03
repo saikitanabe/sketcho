@@ -102,7 +102,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		surface.setName(SurfaceHandler.DRAWING_AREA);
 		surface.init(width, height, editable, modeManager, true, editorContext, otBuffer, operationTransaction);
 
-		Tools.create(surface, superQuickMode);
+		Tools.create(surface.getEditorContext(), superQuickMode);
 		
 		editorContext.getEventBus().addHandler(SurfaceScaleEvent.TYPE, new SurfaceScaleEventHandler() {
 			@Override
