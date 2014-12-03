@@ -75,7 +75,7 @@ public enum ShapeProperty {
 		return value != null && (value & DEGREES_90.getValue()) == DEGREES_90.getValue();
 	}
 
-	public static boolean isShapeAutoResizeFalse(Integer value) {
+	public static boolean isShapeAutoResizeDisabled(Integer value) {
 		return value != null && (value & DISABLE_SHAPE_AUTO_RESIZE.getValue()) == DISABLE_SHAPE_AUTO_RESIZE.getValue();
 	}
 

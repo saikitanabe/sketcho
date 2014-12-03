@@ -459,11 +459,13 @@ public interface AbstractDiagramFactory {
 
     public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       GenericShape gh = (GenericShape) shape;
+      AbstractDiagramFactoryUtils.fixUninitializedDiagramItem(item, gh);
+
       switch (ElementType.getEnum(item.getType())) {
         case NOTE: {
           // need to always have vertical text element, conversion from 
           // official note => sketch note doesn't contain this property!
-          gh.addShapeProperty(ShapeProperty.TEXT_RESIZE_DIR_VERTICAL);
+          // gh.addShapeProperty(ShapeProperty.TEXT_RESIZE_DIR_VERTICAL);
           return new GenericNoteElement(surface,
             gh,
             item.getText(), 
@@ -483,7 +485,8 @@ public interface AbstractDiagramFactory {
             editable,
             item);
         default: {
-          // TODO if item.getShapeProperties() == null
+          // if (item.getShapeProperties() == null) {
+          // }
           // could load default shape properties, since this is probably a switch
           // from awesome => corporate
           // could restore all except DISABLE_SHAPE_AUTO_RESIZE

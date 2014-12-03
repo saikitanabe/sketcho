@@ -59,6 +59,10 @@ public class GenericShape extends HasRectShape {
     return svgdata;
   }
 
+  public void setShapeProperties(Integer shapeProperties) {
+    this.shapeProperties = shapeProperties;
+  }
+
   public void addShapeProperty(ShapeProperty shapeProperty) {
     if (shapeProperties == null) {
       shapeProperties = 0;

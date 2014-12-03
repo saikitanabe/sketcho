@@ -161,7 +161,7 @@ public class TextElementFormatUtil {
     }
     public boolean supportElementResize() {
       boolean result = true;
-      if (ShapeProperty.isShapeAutoResizeFalse(diagram.getDiagramItem().getShapeProperties())) {
+      if (ShapeProperty.isShapeAutoResizeDisabled(diagram.getDiagramItem().getShapeProperties())) {
         result = false;
       }
       return result;
