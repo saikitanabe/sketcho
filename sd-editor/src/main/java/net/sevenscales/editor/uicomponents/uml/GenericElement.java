@@ -681,4 +681,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   	return this;
   }
 
+  protected GenericShape getGenericShape() {
+    return shape;
+  }
+
 }

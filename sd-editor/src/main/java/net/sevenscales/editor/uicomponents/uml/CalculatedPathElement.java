@@ -351,4 +351,8 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     return this;
   }
 
+  protected GenericShape getGenericShape() {
+    return shape;
+  }
+
 }

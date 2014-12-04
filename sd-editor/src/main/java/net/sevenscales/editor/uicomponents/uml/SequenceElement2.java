@@ -76,6 +76,8 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
 	      ISurfaceHandler parent, SequenceShape shape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
 		super(parent, shape.toGenericShape(resolveProperties()), text, backgroundColor, borderColor, textColor, editable, item);
 		this.surface = parent;
+    getDiagramItem().setShapeProperties(getGenericShape().getShapeProperties());
+
 // 		this.seqShape = shape;
 //		lineShape.x1 = shape.rectShape.left + shape.rectShape.width/2;
 //		lineShape.y1 = shape.rectShape.top + shape.rectShape.height;

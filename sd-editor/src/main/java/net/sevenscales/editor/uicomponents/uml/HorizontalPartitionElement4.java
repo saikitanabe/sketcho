@@ -12,7 +12,7 @@ import net.sevenscales.editor.diagram.ContainerType;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.HorizontalPartitionShape;
-import net.sevenscales.editor.diagram.shape.RectShape;
+import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 import net.sevenscales.editor.gfx.domain.Color;
@@ -64,6 +64,7 @@ public class HorizontalPartitionElement4 extends CalculatedPathElement {
   		Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText, IDiagramItemRO item) {
     super(surface, newShape.toGenericShape(resolveProperties()), text, backgroundColor, borderColor, textColor, editable, item);
     this.shape = newShape;
+    getDiagramItem().setShapeProperties(getGenericShape().getShapeProperties());
     
     TextElementFormatUtil textUtil = getTextFormatter();
     textUtil.setMarginTop(0);
