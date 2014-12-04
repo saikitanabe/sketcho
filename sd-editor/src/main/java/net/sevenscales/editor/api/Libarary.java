@@ -502,10 +502,16 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
                        "*Note* this!",
                        new NoteShape(40, SOFTWARE_SKETCHING_GROUP + GROUP_HEADING_SPACE, 165, 40).toString()));
 
-    result.add(_create(ElementType.ACTOR,
-                       "<<system>>\nActor",
-                       new ActorShape(40, SOFTWARE_SKETCHING_GROUP + 120, 43, 54).toString())); 
-                       // ShapeProperty.TEXT_POSITION_BOTTOM.getValue() | ShapeProperty.BOLD_TITLE.getValue()));
+    if (Tools.isSketchMode()) {
+      result.add(_create(ElementType.ACTOR,
+                         "<<system>>\nActor",
+                         new ActorShape(40, SOFTWARE_SKETCHING_GROUP + 120, 43, 54).toString())); 
+                         // ShapeProperty.TEXT_POSITION_BOTTOM.getValue() | ShapeProperty.BOLD_TITLE.getValue()));
+    } else {
+      result.add(_create(ElementType.ACTOR,
+                         "<<system>>\nActor",
+                         new ActorShape(40, SOFTWARE_SKETCHING_GROUP + 120, 25, 40).toString())); 
+    }
 
     result.add(_create(ElementType.USE_CASE,
                        "Use Case",
