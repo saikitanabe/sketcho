@@ -10,7 +10,7 @@ public class SvgLine extends SvgBase {
   public static Map<String,String> map;
   static {
     map = new HashMap<String, String>();
-    map.put("ShortDash", "3, 2");
+    // map.put("ShortDash", "4,1");
     map.put("Solid", "none");
     map.put("solid", "none");
   }
@@ -21,7 +21,7 @@ public class SvgLine extends SvgBase {
     params.put("%y1", String.valueOf(line.getY1() + transformY));
     params.put("%x2", String.valueOf(line.getX2() + transformX));
     params.put("%y2", String.valueOf(line.getY2() + transformY));
-    params.put("%style", String.valueOf(map.get(line.getStyle())));
+    params.put("%style", getLineStyle(line));
     params.put("%stroke%", rgb(line.getStrokeColor().toRgb()));
     String strokeWidth = "1";
     if (line.getStrokeWidth() > 0) {
@@ -31,5 +31,14 @@ public class SvgLine extends SvgBase {
     
     String template = "<line x1='%x1' y1='%y1' x2='%x2' y2='%y2' style='stroke:%stroke%;stroke-width:%width%;stroke-dasharray:%style;'/>";
     return parse(line, template, params, diagram);
+  }
+
+  private static String getLineStyle(ILine line) {
+    if ("ShortDash".equals(line.getStyle())) {
+      int swidth = (int) line.getStrokeWidth();
+      return 4 * swidth + "," + 1 * swidth;
+    } else {
+      return map.get(line.getStyle());
+    }
   }
 }
