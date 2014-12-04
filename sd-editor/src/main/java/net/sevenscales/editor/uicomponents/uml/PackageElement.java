@@ -80,9 +80,9 @@ public class PackageElement extends CalculatedPathElement {
       factories.add(new IPathFactory() {
         public String createPath(int left, int top, int width, int height) {
           return "m" + left + "," + top + 
-                 "l" + (width + OFF) + "," + 0 + 
+                 "l" + (width + OFF) + "," + -OFF + 
                  "l" + (0 - OFF) + "," + height +
-                 "l" + (-width - OFF) + "," + 0 + 
+                 "l" + (-width - OFF) + "," + OFF + 
                  "z";
         }
         public boolean supportsEvents() {
