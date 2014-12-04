@@ -29,6 +29,7 @@ import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.gfx.domain.Point;
+import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers.IExtraConnectionHandler;
 import net.sevenscales.editor.uicomponents.helpers.ILifeLineEditor;
 import net.sevenscales.editor.uicomponents.helpers.LifeLineEditorHelper;
@@ -109,8 +110,8 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
 	  addTouchSupport();
 	  lifeLineEditor = LifeLineEditorHelper.createLifeLineEditorHelper(surface, this, getEditable());
     
-    shapes.add(line);
-    shapes.add(selectionArea);
+    // shapes.add(line);
+    // shapes.add(selectionArea);
 
     setReadOnly(!editable);
     
@@ -120,6 +121,24 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
     setLineHighlightColor(borderColor);
     super.constructorDone();
 	}
+
+  /**
+  * Line is absolute element and not relative at the moment so passed to svg 
+  * generation as absolute shape as text shapes are as well.
+  */
+  @Override
+  public List<List<IShape>> getTextElements() {
+    List<List<IShape>> texts = super.getTextElements();
+    List<List<IShape>> result = new ArrayList<List<IShape>>();
+    for (List<IShape> l : texts) {
+      result.add(l);
+    }
+
+    List<IShape> lineShapes = new ArrayList<IShape>();
+    lineShapes.add(line);
+    result.add(lineShapes);
+    return result;
+  }
 	
 	private void addTouchSupport() {
 	  selectionArea.addGraphicsTouchStartHandler(this);
