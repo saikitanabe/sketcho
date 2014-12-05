@@ -133,22 +133,30 @@ public class ToolBar extends Composite {
 		$wnd.Hammer(freehand).on('tap', function() {
 			me.@net.sevenscales.editor.api.ToolBar::onFreehand()()
 		})
-		$wnd.$(freehand).tooltip()
+		if (!$wnd.isTouch()) {
+			$wnd.$(freehand).tooltip()
+		}
 
 		$wnd.Hammer(undo).on('tap', function() {
 			me.@net.sevenscales.editor.api.ToolBar::onUndo()()
 		})
-		$wnd.$(undo).tooltip()
+		if (!$wnd.isTouch()) {
+			$wnd.$(undo).tooltip()
+		}
 
 		$wnd.Hammer(redo).on('tap', function() {
 			me.@net.sevenscales.editor.api.ToolBar::onRedo()()
 		})
-		$wnd.$(redo).tooltip()
+		if (!$wnd.isTouch()) {
+			$wnd.$(redo).tooltip()
+		}
 	}-*/;
 
 	private native void handleMapView(Element map)/*-{
 		var elem = $wnd.$(map)
-		elem.tooltip({html: true, placement: 'top', container:'body'})
+		if (!$wnd.isTouch()) {
+			elem.tooltip({html: true, placement: 'top', container:'body'})
+		}
 
 		$wnd.Hammer(elem[0], {holdTimeout: 100, preventDefault: true}).on('hold', function(event) {
 			// elem.find('i').attr('class', 'menu-icon-map-view-dark')
