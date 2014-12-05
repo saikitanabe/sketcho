@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Widget;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.LibrarySelections;
+import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.domain.utils.SLogger;
 
 
@@ -74,7 +75,11 @@ public class ShowHideHelpers {
 		outer.addDomHandler(new MouseDownHandler() {
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
-				show();
+				event.preventDefault();
+				event.stopPropagation();
+				if (!TouchHelpers.isSupportsTouch()) {
+					show();
+				}
 //				if (!Element.as(event.getNativeEvent().getEventTarget()).isOrHasChild(inner.getElement())) {
 //					Scheduler.get().scheduleFixedDelay(hideslider, 2000);
 //				}
@@ -100,6 +105,8 @@ public class ShowHideHelpers {
 		outer.addDomHandler(new TouchStartHandler() {
 			@Override
 			public void onTouchStart(TouchStartEvent event) {
+				event.preventDefault();
+				event.stopPropagation();
 				show();
 			}
 		}, TouchStartEvent.getType());

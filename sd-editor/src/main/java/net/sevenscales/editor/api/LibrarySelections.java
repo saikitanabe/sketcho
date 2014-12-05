@@ -13,6 +13,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.dom.client.Style.Display;
 
+import net.sevenscales.editor.api.impl.TouchHelpers;
+
 
 public class LibrarySelections extends Composite {
 
@@ -49,17 +51,21 @@ public class LibrarySelections extends Composite {
 		this.librarySelectedHandler = handler;
 		initWidget(uiBinder.createAndBindUi(this));
 
+		if (TouchHelpers.isSupportsTouch()) {
+			btnGroup.removeClassName("library-selection-no-touch");
+		}
+
 		applyActive(software);
 		
 		DOM.sinkEvents((com.google.gwt.user.client.Element) mindmap.cast(),
-				Event.ONCLICK);
+				Event.ONMOUSEDOWN);
 		DOM.setEventListener(
 				(com.google.gwt.user.client.Element) mindmap.cast(),
 				new EventListener() {
 					@Override
 					public void onBrowserEvent(Event event) {
 						switch (DOM.eventGetType(event)) {
-						case Event.ONCLICK:
+						case Event.ONMOUSEDOWN:
 							LibrarySelections.this.librarySelectedHandler.onSelected(Library.MINDMAP);
 							applyActive(mindmap);
 							break;
@@ -68,14 +74,14 @@ public class LibrarySelections extends Composite {
 				});
 		
 		DOM.sinkEvents((com.google.gwt.user.client.Element) software.cast(),
-				Event.ONCLICK);
+				Event.ONMOUSEDOWN);
 		DOM.setEventListener(
 				(com.google.gwt.user.client.Element) software.cast(),
 				new EventListener() {
 					@Override
 					public void onBrowserEvent(Event event) {
 						switch (DOM.eventGetType(event)) {
-						case Event.ONCLICK:
+						case Event.ONMOUSEDOWN:
 							LibrarySelections.this.librarySelectedHandler.onSelected(Library.SOFTWARE);
 							applyActive(software);
 							break;
@@ -84,14 +90,14 @@ public class LibrarySelections extends Composite {
 				});
 
 		DOM.sinkEvents((com.google.gwt.user.client.Element) roadmap.cast(),
-				Event.ONCLICK);
+				Event.ONMOUSEDOWN);
 		DOM.setEventListener(
 				(com.google.gwt.user.client.Element) roadmap.cast(),
 				new EventListener() {
 					@Override
 					public void onBrowserEvent(Event event) {
 						switch (DOM.eventGetType(event)) {
-						case Event.ONCLICK:
+						case Event.ONMOUSEDOWN:
 							LibrarySelections.this.librarySelectedHandler.onSelected(Library.ROADMAP);
 							applyActive(roadmap);
 							break;
@@ -100,14 +106,14 @@ public class LibrarySelections extends Composite {
 				});
 
 		DOM.sinkEvents((com.google.gwt.user.client.Element) general.cast(),
-				Event.ONCLICK);
+				Event.ONMOUSEDOWN);
 		DOM.setEventListener(
 				(com.google.gwt.user.client.Element) general.cast(),
 				new EventListener() {
 					@Override
 					public void onBrowserEvent(Event event) {
 						switch (DOM.eventGetType(event)) {
-						case Event.ONCLICK:
+						case Event.ONMOUSEDOWN:
 							LibrarySelections.this.librarySelectedHandler.onSelected(Library.GENERAL);
 							applyActive(general);
 							break;
@@ -118,14 +124,14 @@ public class LibrarySelections extends Composite {
 
 
 		DOM.sinkEvents((com.google.gwt.user.client.Element) images.cast(),
-				Event.ONCLICK);
+				Event.ONMOUSEDOWN);
 		DOM.setEventListener(
 				(com.google.gwt.user.client.Element) images.cast(),
 				new EventListener() {
 					@Override
 					public void onBrowserEvent(Event event) {
 						switch (DOM.eventGetType(event)) {
-						case Event.ONCLICK:
+						case Event.ONMOUSEDOWN:
 							LibrarySelections.this.librarySelectedHandler.onSelected(Library.IMAGES);
 							applyActive(images);
 							break;
@@ -135,14 +141,14 @@ public class LibrarySelections extends Composite {
 		
 		showOrHideImages();
 //		DOM.sinkEvents((com.google.gwt.user.client.Element) roadmap.cast(),
-//				Event.ONCLICK);
+//				Event.ONMOUSEDOWN);
 //		DOM.setEventListener(
 //				(com.google.gwt.user.client.Element) roadmap.cast(),
 //				new EventListener() {
 //					@Override
 //					public void onBrowserEvent(Event event) {
 //						switch (DOM.eventGetType(event)) {
-//						case Event.ONCLICK:
+//						case Event.ONMOUSEDOWN:
 //							LibrarySelections.this.librarySelectedHandler.onSelected(Library.ROADMAP);
 //							break;
 //						}

@@ -4,7 +4,7 @@
 	<ui:style>
 	</ui:style>
 	<g:HTMLPanel>
-		<div ui:field="btnGroup" class="library-selection">
+		<div ui:field="btnGroup" class="library-selection library-selection-no-touch">
 			<ul class="ul-none ul-horizontal">
 				<li ui:field="software">Software</li>
 				<li ui:field="mindmap">Mind Map</li>
