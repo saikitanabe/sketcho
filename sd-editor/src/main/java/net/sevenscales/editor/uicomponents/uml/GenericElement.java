@@ -298,7 +298,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-    GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth() * factorX, getHeight() * factorY, shape.getShapeProperties(), shape.getSvgData());
+    GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth() * factorX, getHeight() * factorY, getDiagramItem().getShapeProperties(), shape.getSvgData());
     return createGenericElement(surface, newShape);
   }
 
