@@ -1804,7 +1804,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     if (lineWeight != null) {
       weight = lineWeight;
     } else if (Tools.isSketchMode()) {
-      weight = Constants.SKETCH_MODE_LINE_WEIGHT;
+      weight = Constants.SKETCH_MODE_REL_LINE_WEIGHT;
     }
 
     relLine.setStrokeWidth(weight);
