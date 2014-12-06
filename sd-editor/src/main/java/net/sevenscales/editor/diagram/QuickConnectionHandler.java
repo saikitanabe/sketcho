@@ -371,6 +371,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		copy.setType(ElementType.NOTE.getValue());
 		copy.setShape(d.getLeft() + "," + d.getTop() + "," + "150,45");
 		copy.setText("Note");
+		copy.setExtension(null);
 		return copy;
 	}
 
