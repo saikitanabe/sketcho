@@ -38,6 +38,7 @@ public class ToolBar extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 
 		setStyleName("toolbar2");
+		freehand.setId("tip-freehand");
 
 		surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
 			@Override
