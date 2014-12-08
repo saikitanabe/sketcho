@@ -35,7 +35,7 @@ public class LibraryShapes {
     shapes.put(ElementType.STORAGE, new LibraryShape(ElementType.STORAGE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.NOTE, new LibraryShape(ElementType.NOTE, 150, 40, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3));
     shapes.put(ElementType.COMPONENT, new LibraryShape(ElementType.COMPONENT, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
-    shapes.put(ElementType.ACTIVITY, new LibraryShape(ElementType.ACTIVITY, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.ACTIVITY, new LibraryShape(ElementType.ACTIVITY, 109, 40, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.CHOICE, new LibraryShape(ElementType.CHOICE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.ACTIVITY_START2, new LibraryShape(ElementType.ACTIVITY_START2, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.ACTIVITY_END2, new LibraryShape(ElementType.ACTIVITY_START2, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));

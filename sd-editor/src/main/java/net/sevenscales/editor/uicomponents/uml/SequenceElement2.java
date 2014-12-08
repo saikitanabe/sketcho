@@ -93,7 +93,7 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
 //		line.setShape(x1, y1, x2, y2);
     line.setStroke(borderColor);
     line.setStyle(ILine.DASHED);
-		line.setStrokeWidth(Constants.SKETCH_MODE_LINE_WEIGHT);
+		line.setStrokeWidth(Constants.SKETCH_MODE_REL_LINE_WEIGHT);
 		
 		addEvents(line);
 		

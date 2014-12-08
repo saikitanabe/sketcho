@@ -89,7 +89,7 @@ public class UMLDiagramSelections extends Composite {
 		COMMENT_THREAD("",  ElementType.COMMENT_THREAD, UMLDiagramGroup.CLASS_DIAGRAM),
 		COMMENT("",  ElementType.CLASS, UMLDiagramGroup.CLASS_DIAGRAM),
 		NONE("",  null, UMLDiagramGroup.NONE),
-		COMPONENT("", ElementType.COMPONENT, UMLDiagramGroup.CLASS_DIAGRAM),
+		COMPONENT("Component", ElementType.COMPONENT, UMLDiagramGroup.CLASS_DIAGRAM),
 		SERVER("", ElementType.SERVER, UMLDiagramGroup.CLASS_DIAGRAM),
 		SMILEY("", ElementType.SMILEY, UMLDiagramGroup.CLASS_DIAGRAM),
 		FIREWALL("", ElementType.FIREWALL, UMLDiagramGroup.CLASS_DIAGRAM),

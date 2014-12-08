@@ -554,7 +554,7 @@ Color borderColor, Color color) {
 			// could multiply width and height
 	    DiagramItemDTO item = LibraryShapes.createByType(type.getElementType());
       DiagramItemConfiguration.setColors(item, background, borderColor, color);
-	    item.setText("");
+	    item.setText(type.getValue());
 	    item.setShape(createshape(ls, x, y));
 
 	    result = ShapeParser.createDiagramElement(item, surface);
