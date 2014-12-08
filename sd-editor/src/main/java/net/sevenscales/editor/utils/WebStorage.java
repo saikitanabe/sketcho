@@ -11,7 +11,11 @@ public class WebStorage {
 	public static native String get(String key)/*-{
 		if (typeof $wnd.webStorage !== 'undefined') {
 			var result = $wnd.webStorage.get(key);
-			return result
+			if (result) {
+				return result
+			} else {
+				return ""
+			}
 		}
 		return ""
 	}-*/;
