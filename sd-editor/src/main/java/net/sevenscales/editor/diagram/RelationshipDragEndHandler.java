@@ -4,6 +4,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.js.ImageInfo;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -554,11 +555,19 @@ Color borderColor, Color color) {
 	    DiagramItemDTO item = LibraryShapes.createByType(type.getElementType());
       DiagramItemConfiguration.setColors(item, background, borderColor, color);
 	    item.setText("");
-	    item.setShape(new GenericShape(ls.elementType.getValue(), x, y, ls.width, ls.height, ls.shapeProperties, null).toString());
+	    item.setShape(createshape(ls, x, y));
 
 	    result = ShapeParser.createDiagramElement(item, surface);
 		}
 		return result;
+	}
+
+	private String createshape(LibraryShapes.LibraryShape ls, int x, int y) {
+		if (ElementType.SEQUENCE.getValue().equals(ls.elementType.getValue())) {
+			return new SequenceShape(x, y, ls.width, ls.height, 20).toString();
+		} else {
+			return new GenericShape(ls.elementType.getValue(), x, y, ls.width, ls.height, ls.shapeProperties, null).toString();
+		}
 	}
 
 	private ElementColor selectColor() {
