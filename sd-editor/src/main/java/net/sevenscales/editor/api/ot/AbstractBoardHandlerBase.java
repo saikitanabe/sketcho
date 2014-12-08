@@ -211,7 +211,7 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
 		}
 
 		if (graphicalDocumentCache == null) {
-				graphicalDocumentCache = new BoardDocument(diagramContent.getDiagramItems(), "Graphical Document Cache");
+				graphicalDocumentCache = new BoardDocument(diagramContent.getDiagramItems(), getBoardName() + "-graphic", "Graphical Document Cache");
 				editorContext.setGraphicalDocumentCache(graphicalDocumentCache);
 		} else {
 			graphicalDocumentCache.reset(diagramContent.getDiagramItems());

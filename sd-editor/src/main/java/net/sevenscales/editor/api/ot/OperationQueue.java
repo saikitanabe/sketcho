@@ -12,6 +12,7 @@ import net.sevenscales.domain.JSONParserHelpers;
 import net.sevenscales.editor.api.IEditor;
 import net.sevenscales.editor.content.utils.JsonHelpers;
 import net.sevenscales.editor.content.ClientIdHelpers;
+import net.sevenscales.editor.utils.WebStorage;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsonUtils;
@@ -33,6 +34,7 @@ public class OperationQueue {
 	private Acknowledged acknowledged;
 	private IEditor editor;
 	private String boardName;
+	private String checksum;
 
 	public OperationQueue(Acknowledged acknowledged, IEditor editor, String boardName) {
 		this.acknowledged = acknowledged;
@@ -138,22 +140,16 @@ public class OperationQueue {
 		boolean filterOutUserOperations = true;
 		String json = toJson(queuedOperations, filterOutUserOperations);
 		if (json.length() > 0) {
-			store(queueName(boardName), toJsonArray(json));
+			WebStorage.set(queueName(boardName), toJsonArray(json));
 		} else {
 			// nothing so remove whole queue
-			webStorageRemove(queueName(boardName));
+			WebStorage.remove(queueName(boardName));
 		}
 	}
 
 	private String queueName(String boardId) {
 		return "q_" + boardId;
 	}
-
-	private native void store(String key, String jsonStr)/*-{
-		if (typeof $wnd.webStorage !== 'undefined') {
-			$wnd.webStorage.set(key, jsonStr);
-		}
-	}-*/;
 
 	private native void debugger()/*-{
 		debugger;
@@ -241,7 +237,7 @@ public class OperationQueue {
 	}
 
 	private void restore() {
-		String jsonStr = webStorageGet(queueName(boardName));
+		String jsonStr = WebStorage.get(queueName(boardName));
 		if (jsonStr != null && !"".equals(jsonStr)) {
 			fromJsonStr(jsonStr);
 		}
@@ -299,21 +295,6 @@ public class OperationQueue {
 		return true;
 	}
 
-	private native String webStorageGet(String key)/*-{
-		if (typeof $wnd.webStorage !== 'undefined') {
-			var result = $wnd.webStorage.get(key);
-			return result
-		}
-		return ""
-	}-*/;
-
-	private native boolean webStorageRemove(String key)/*-{
-		if (typeof $wnd.webStorage !== 'undefined') {
-			return $wnd.webStorage.remove(key)
-		}
-		return false
-	}-*/;
-
 	private String toJsonArray(String result) {
 		return "[" + result + "]";
 	}
@@ -341,18 +322,11 @@ public class OperationQueue {
 	public boolean isEmpty() {
 		if (queuedOperations.isEmpty()) {
 			// check if something is still in web storage
-			return isWebStorageEmpty(queueName(boardName));
+			return WebStorage.isEmpty(queueName(boardName));
 		} else {
 			return false;
 		}
 	}
-
-	private native boolean isWebStorageEmpty(String key)/*-{
-		if (typeof $wnd.webStorage !== 'undefined') {
-			return $wnd.webStorage.isEmpty(key)
-		}
-		return true
-	}-*/;
 
 	public boolean flushedAndAcknowledgedFromServer() {
 		// need to check that server has ack last change, queue must be empty 
@@ -360,6 +334,22 @@ public class OperationQueue {
 	  logger.debug("acknowledged.acknowledgedFromServer({}) && isEmpty({}) && !editor.hasPendingChanges({})", 
 	      acknowledged.acknowledgedFromServer(), isEmpty(), !editor.hasPendingChanges());
 		return acknowledged.acknowledgedFromServer() && isEmpty() && !editor.hasPendingChanges();
+	}
+
+	public void setServerDocumentChecksum(String checksum) {
+		this.checksum = checksum;
+		WebStorage.set(checksumName(), checksum);
+	}
+
+	public String getServerDocumentChecksum() {
+		if (checksum == null) {
+			return WebStorage.get(checksumName());
+		}
+		return checksum;
+	}
+
+	private String checksumName() {
+		return boardName + "-server-checksum";
 	}
 
 	/**

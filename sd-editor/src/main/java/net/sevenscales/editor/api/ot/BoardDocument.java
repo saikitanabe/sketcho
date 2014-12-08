@@ -18,10 +18,11 @@ public class BoardDocument implements UniqueChecker {
 
 	private List<IDiagramItemRO> document;
 	private IDiagramItem searchHelper;
+	private String boardId;
 	private String logicalName;
-	private String checksum;
 
-	public BoardDocument(String logicalName) {
+	public BoardDocument(String boardId, String logicalName) {
+		this.boardId = boardId;
 		this.logicalName = logicalName;
 		searchHelper = new DiagramItemDTO();
 	}
@@ -31,8 +32,8 @@ public class BoardDocument implements UniqueChecker {
 	// 	document = BoardDocumentHelpers.fromJson(boardJson);
 	// }
 
-	public BoardDocument(List<? extends IDiagramItemRO> doc, String logicalName) {
-		this(logicalName);
+	public BoardDocument(List<? extends IDiagramItemRO> doc, String boardId, String logicalName) {
+		this(boardId, logicalName);
 		reset(doc);
 	}
 	
@@ -54,14 +55,6 @@ public class BoardDocument implements UniqueChecker {
 			result += diro.getCrc32();
 		}
 		return result;
-	}
-
-	public void setChecksum(String checksum) {
-		this.checksum = checksum;
-	}
-
-	public String getChecksum() {
-		return checksum;
 	}
 
 	/**

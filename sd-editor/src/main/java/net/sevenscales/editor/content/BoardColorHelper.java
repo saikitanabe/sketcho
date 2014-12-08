@@ -54,7 +54,7 @@ public class BoardColorHelper {
     List<IDiagramItem> toolbarItems = BoardDocumentHelpers.getDiagramsAsDTO(toolbar.getDiagrams(), true);
     generateTestIds(toolbarItems);
     if (toolbarDocument == null) {
-      this.toolbarDocument = new BoardDocument(toolbarItems, "ToolbarDocument");
+      this.toolbarDocument = new BoardDocument(toolbarItems, "toolbar-no-id", "ToolbarDocument");
     } else {
       toolbarDocument.reset(toolbarItems);
     }
