@@ -90,6 +90,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 	private EditorContext editorContext;
   private FlowPanel panel;
   private CloseLibrary closeLibrary;
+  private List<Section> sections;
 
 	private static final int GROUP_SPACE = 25;
 	private static final int GROUP_HEADING_SPACE = 55;
@@ -160,8 +161,11 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		toolpool.setDisableOnArea(true);
 		toolpool.init(210, 1750, false, modeManager, false, editorContext, otBuffer, operationTransaction);
     toolpool.setSvgClassName("library-svg");
-		
+
+    sections = new ArrayList<Section>();
+
 		setStyle();
+
 		editorContext.getEventBus().addHandler(ThemeChangedEvent.TYPE, new ThemeChangedEventHandler() {
       @Override
       public void on(ThemeChangedEvent event) {
@@ -251,6 +255,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
 	private void setStyle() {
     toolpool.setStyleName("toolbar " + styleByTheme());
+    updateSections();
   }
 
   private String styleByTheme() {
@@ -464,12 +469,21 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     // result.add(rect);
   }
 
+  static class Section {
+    IText sectionTitle;
+    IRectangle section;
+
+    Section(IText sectionTitle, IRectangle section) {
+      this.sectionTitle = sectionTitle;
+      this.section = section;
+    }
+  }
+
   private void addSection(String title, RectContainerShape shape) {
     IText sectionTitle = IShapeFactory.Util.factory(true).createText(toolpool.getRootLayer());
     sectionTitle.setText(title);
     sectionTitle.setFontSize("18px");
     // sectionTitle.setFontFamily("Roboto");
-    sectionTitle.setFill(0x88, 0x89, 0x8A, 1);
 
     double width = sectionTitle.getTextWidth();
     double left = shape.getLeft() + shape.getWidth() / 2 - width / 2;
@@ -480,8 +494,28 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
     IRectangle section = IShapeFactory.Util.factory(true).createRectangle(toolpool.getRootLayer());
     section.setShape(shape.getLeft(), shape.getTop(), shape.getWidth(), shape.getHeight(), 27);
-    section.setFill(0xF1, 0xEF, 0xEF, 1); // transparent
     section.moveToBack();
+    Section s = new Section(sectionTitle, section);
+    sections.add(s);
+    updateSectionStyle(s);
+  }
+
+  private void updateSectionStyle(Section section) {
+    double opacity = 1;
+    if (Theme.ThemeName.BLACK.equals(Theme.getCurrentThemeName())) {
+      opacity = 0.2;
+      section.sectionTitle.setFill(0xef, 0xef, 0xef, 1);
+    } else {
+      section.sectionTitle.setFill(0x88, 0x89, 0x8A, 1);
+    }
+
+    section.section.setFill(0xF1, 0xEF, 0xEF, opacity);
+  }
+
+  private void updateSections() {
+    for (Section s : sections) {
+      updateSectionStyle(s);
+    }
   }
 
 	private List<Diagram> createToolbarItems() {
