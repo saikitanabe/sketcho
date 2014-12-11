@@ -152,13 +152,13 @@
 							</g:HTML>
 						</c:child>
 					</c:FastButton>
-<!-- 					<c:FastButton ui:field="comments" styleName="{style.focuspanel}">
+					<c:FastButton ui:field="comments" styleName="{style.focuspanel}">
 						<c:child>
 							<g:HTML>
 								<div class="uml-icon-elcomments"></div>
 							</g:HTML>
 						</c:child>
-					</c:FastButton> -->
+					</c:FastButton>
 				</g:VerticalPanel>
 
 				<g:VerticalPanel styleName="uml-selection-table activity-diagram">
@@ -260,13 +260,13 @@
 						</g:HTML>
 					</c:child>
 				</c:FastButton>
-<!-- 				<c:FastButton ui:field="_comments" styleName="{style.focuspanel}">
+				<c:FastButton ui:field="_comments" styleName="{style.focuspanel}">
 					<c:child>
 						<g:HTML>
 							<div class="uml-icon-elcomments"></div>
 						</g:HTML>
 					</c:child>
-				</c:FastButton> -->
+				</c:FastButton>
 			</g:HorizontalPanel>
 
 			<g:HorizontalPanel styleName="uml-selection-table">
