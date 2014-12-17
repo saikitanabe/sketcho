@@ -237,6 +237,10 @@ class Group extends Graphics implements IContainer, IGroup {
 		var m = $wnd.dojox.gfx.matrix;
 		rawNode.setTransform(m.identity);
 	}-*/;
+
+  final public boolean isVisible() {
+    return visible;
+  }
 	
 	final public void setVisible(boolean visible) {
 		this.visible = visible;

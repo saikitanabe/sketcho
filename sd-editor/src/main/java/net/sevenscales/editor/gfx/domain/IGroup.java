@@ -21,6 +21,7 @@ public interface IGroup extends IContainer, IGraphics {
   void rotate(int degrees, int x, int y);
   void unrotate(int degree, int x, int y);
   void resetAllTransforms();
+  boolean isVisible();
   void setVisible(boolean visible);
 	void remove();
   /**
