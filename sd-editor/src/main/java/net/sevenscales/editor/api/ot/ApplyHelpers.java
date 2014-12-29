@@ -87,6 +87,7 @@ public class ApplyHelpers {
 	}
 
 	public static class BoardUserApplyOperation extends ApplyOperation {
+		private String email;
 		private String username;
 		private String avatarUrl;
 		private int x;
@@ -96,8 +97,9 @@ public class ApplyHelpers {
 		private String selectedCids;
 		private String clientIdentifier;
 
-		public BoardUserApplyOperation(OTOperation operation, String username, String avatarUrl, int x, int y, int targetx, int targety, String selectedCids, String clientIdentifier) {
+		public BoardUserApplyOperation(OTOperation operation, String email, String username, String avatarUrl, int x, int y, int targetx, int targety, String selectedCids, String clientIdentifier) {
 			super(operation);
+			this.email = email;
 			this.username = username;
 			this.avatarUrl = avatarUrl;
 			this.x = x;
@@ -106,6 +108,10 @@ public class ApplyHelpers {
 			this.targety = targety;
 			this.selectedCids = selectedCids;
 			this.clientIdentifier = clientIdentifier;
+		}
+
+		public String getEmail() {
+			return email;
 		}
 
 		public String getUsername() {
@@ -168,6 +174,7 @@ public class ApplyHelpers {
 			if (juserobj != null) {
 				JSONBoardUserParser parser = new JSONBoardUserParser(juserobj);
 				return new BoardUserApplyOperation(operation, 
+																					 parser.getEmail(),
 																					 parser.getUsername(), 
 																					 parser.getAvatarUrl(), 
 																					 parser.getX(), 

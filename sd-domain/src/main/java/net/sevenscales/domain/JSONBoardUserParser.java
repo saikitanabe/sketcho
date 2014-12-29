@@ -3,6 +3,7 @@ package net.sevenscales.domain;
 import com.google.gwt.json.client.JSONObject;
 
 public class JSONBoardUserParser {
+	private String email;
 	private String username;
 	private String avatarUrl;
 	private int x;
@@ -13,6 +14,7 @@ public class JSONBoardUserParser {
 	private String cid;
 
 	public JSONBoardUserParser(JSONObject obj) {
+		email = JSONParserHelpers.getString(obj.get("email"));
 		username = JSONParserHelpers.getString(obj.get("username"));
 		avatarUrl = JSONParserHelpers.getString(obj.get("avatarUrl"));
 		x = JSONParserHelpers.getInt(obj.get("x"));
@@ -23,6 +25,9 @@ public class JSONBoardUserParser {
 		cid = JSONParserHelpers.getString(obj.get("cid"));
 	}
 
+	public String getEmail() {
+		return email;
+	}
 	public String getUsername() {
 		return this.username;
 	}
