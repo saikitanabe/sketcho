@@ -21,7 +21,7 @@ public class AnchorUtils {
     public CardinalDirection cardinalDirection = CardinalDirection.NORTH;
   }
   
-  private static final int MAGNETIC_VALUE = 3;
+  private static final int MAGNETIC_VALUE = 10;
   public static final int ATTACH_EXTRA_DISTANCE = 2;
 
   public static boolean onAttachArea(int x, int y, IRectangle rect) {
