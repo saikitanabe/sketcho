@@ -14,6 +14,13 @@ public class BoardDimensions {
 	
 	private BoardDimensions() {
 	}
+
+	private void reset() {
+		leftmost = Integer.MAX_VALUE;
+		topmost = Integer.MAX_VALUE;
+		rightmost = Integer.MIN_VALUE;
+		bottommost = Integer.MIN_VALUE;
+	}
 	
 	public static BoardDimensions instance() {
 		if (instance == null) {
@@ -23,12 +30,14 @@ public class BoardDimensions {
 	}
 
 	public static void resolveDimensions(List<Diagram> diagrams) {
+		instance().reset();
 		for (Diagram diagram : diagrams) {
 			instance()._resolveDimensions(diagram);
 		}
 	}
 
 	public static void resolveDimensions(Diagram diagram) {
+		instance().reset();
 		instance()._resolveDimensions(diagram);
 	}
 
