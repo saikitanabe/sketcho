@@ -137,8 +137,9 @@ class BirdsEye {
 	    
 	    // int clientLeftMargin = 100;
 	    // double clientWidth = Window.getClientWidth() - clientLeftMargin;
-	    double clientWidth = Window.getClientWidth();
-	    double clientHeight = Window.getClientHeight();
+	    double clientWidth = Window.getClientWidth() - 20;
+	    double clientHeight = Window.getClientHeight() - 100;
+
 	    double ratioW = clientWidth / width;
 	    double ratioH = clientHeight / height;
 	    ratio = (ratioW < ratioH) ? ratioW : ratioH;
@@ -148,7 +149,8 @@ class BirdsEye {
 
 	    // int leftPosition = 40;
 	    // surface.getRootLayer().setTransform((int)-(leftmost * ratio) + leftPosition, (int)-(topmost * ratio));
-	    surface.getRootLayer().setTransform((int)-(leftmost * ratio), (int)-(topmost * ratio));
+	    surface.getRootLayer().setTransform((int)((-leftmost * ratio) + 10 * ratio), 
+	    																		(int)((-topmost * ratio) + 10 * ratio));
 
 	  	birdsEyeDown = true;
 	  	followMouse();
