@@ -653,10 +653,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@Override
 	public void itemSelected(ElementColor color, ColorTarget colorTarget) {
 		logger.debug2("itemSelected color {}, colorTarget {}...", color, colorTarget);
-		colorpopup.hide();
 		this.color = color;
-//		setCurrentColors();
-		popup.hide();
+		// >>>>>> usability 6.12.2015 color menu is kept open as long as clicked outside context menu
+		// colorpopup.hide();
+		// popup.hide();
+		// <<<<<< usability ends
 		editorContext.getEventBus().fireEvent(new ColorSelectedEvent(color, colorTarget));
 	}
 
