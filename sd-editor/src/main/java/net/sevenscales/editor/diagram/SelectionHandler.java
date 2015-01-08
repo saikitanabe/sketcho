@@ -267,6 +267,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 
     handleAdditionalRemovals(removed);
     fireDeletedOrModifyEvent(removed);
+    removeGroups();
 	}
 
   private void fireDeletedOrModifyEvent(Set<Diagram> removed) {
