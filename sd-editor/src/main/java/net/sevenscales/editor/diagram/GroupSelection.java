@@ -28,10 +28,13 @@ class GroupSelection {
 
     groupOutlineGroup.setTransform(BoardDimensions.getLeftmost(), BoardDimensions.getTopmost());
 
-    int left = 0;
-    int top = 0;
-    int width = BoardDimensions.getWidth();
-    int height = BoardDimensions.getHeight();
+    int extra = 5;
+
+    int left = -extra;
+    int top = -extra;
+    int width = BoardDimensions.getWidth() + 2 * extra;
+    int height = BoardDimensions.getHeight() + 2 * extra;
+    
     int[] points = new int[]{left,
                              top,
                              width,
