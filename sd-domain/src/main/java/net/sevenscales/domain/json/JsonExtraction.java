@@ -92,6 +92,11 @@ public class JsonExtraction {
     result.put("cd", new JSONString(safeJsonString(item.getCustomData())));
     result.put("crc", new JSONNumber(item.getCrc32()));
 
+    if (item.getGroup() != null) {
+      // 0 is default and is omitted
+      result.put(DiagramItemField.GROUP.getValue(), new JSONString(item.getGroup()));
+    }
+
     if (item.isAnnotation()) {
 	    result.put("a", new JSONNumber(item.getAnnotation()));
     }

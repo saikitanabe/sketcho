@@ -72,6 +72,7 @@ public class JSONDiagramParser {
 														  JSONParserHelpers.getString(obj.get("clientId")),
 														  JSONParserHelpers.getString(obj.get("cd")),
 														  JSONParserHelpers.getDouble(obj.get("crc")),
+														  JSONParserHelpers.getString(obj.get(DiagramItemField.GROUP.getValue())),
 														  JSONParserHelpers.getInt(obj.get("a")),
 														  JSONParserHelpers.getInt(obj.get("r")),
 														  JSONParserHelpers.getListUrl(obj.get("links")),

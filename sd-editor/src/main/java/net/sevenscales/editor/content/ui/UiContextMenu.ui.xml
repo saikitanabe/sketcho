@@ -51,6 +51,10 @@
 				<i class="context-icon-open-link"></i>
 			</a>
  -->			
+ 			<a ui:field="group" title="Group shapes together" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-group"></i>
+			</a>
+
  			<a ui:field="addlink" title="Add Link" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-link2"></i>
 			</a>

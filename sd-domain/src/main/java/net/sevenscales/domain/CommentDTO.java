@@ -16,7 +16,7 @@ public class CommentDTO extends DiagramItemDTO {
 
 	public CommentDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer tsize,
 			Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, List<UrlLinkDTO> links, String parentThreadId, String username, String userDisplayName, long createdAt, long updatedAt) {
-		super(text, type, shape, extension, backgroundColor, textColor, tsize, /* shapeProperties */null, /* displayOrder */ null, version, id, clientId, customData, crc32, annotation, resolved, links, parentThreadId);
+		super(text, type, shape, extension, backgroundColor, textColor, tsize, /* shapeProperties */null, /* displayOrder */ null, version, id, clientId, customData, crc32, /*group*/ null, annotation, resolved, links, parentThreadId);
 		this.username = username;
 		this.userDisplayName = userDisplayName;
 		this.createdAt = createdAt;

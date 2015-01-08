@@ -516,16 +516,16 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
       // if sender differs, need to check that owner component
       // is not d
       if (d != sender && d.isSelected()) {
-        d.unselect();
+        unselectGroup(d);
 //        selectedItems.remove(d);
       }
     }
   }
 
   if (selected && shiftOn) {
-    sender.unselect();
+    unselectGroup(sender);
   } else {
-    sender.select();
+    selectGroup(sender);
   }
 
   // logger.debugTime();
@@ -550,7 +550,33 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   // select again, to have correct colors in relationship circle elements :)
 //  sender.select();
 	}
-  
+
+  public void selectGroup(Diagram diagram) {
+    String group = diagram.getDiagramItem().getGroup();
+    if (group != null) {
+      for (Diagram d : surface.getDiagrams()) {
+        if (group.equals(d.getDiagramItem().getGroup())) {
+          d.select();
+        }
+      }
+    } else {
+      diagram.select();
+    }
+  }
+
+  public void unselectGroup(Diagram diagram) {
+    String group = diagram.getDiagramItem().getGroup();
+    if (group != null) {
+      for (Diagram d : surface.getDiagrams()) {
+        if (group.equals(d.getDiagramItem().getGroup())) {
+          d.unselect();
+        }
+      }
+    } else {
+      diagram.unselect();
+    }
+  }
+
 	public void select(List<Diagram> toSelectDiagrams) {
 		unselectAll();
 	  List<Diagram> notifyDiagrams = new ArrayList<Diagram>();

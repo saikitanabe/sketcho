@@ -22,6 +22,7 @@ public enum DiagramItemField {
 	CUSTOM_DATA("cd"),
 	VERSION("version"),
 	CRC("crc"),
+	GROUP("group"),
 	ANNOTATION("a"),
 	RESOLVED("r"),
 	LINKS("links"),

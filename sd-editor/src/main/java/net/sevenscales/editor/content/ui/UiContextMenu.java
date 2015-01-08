@@ -1,6 +1,7 @@
 package net.sevenscales.editor.content.ui;
 
 import java.util.Set;
+import java.util.Iterator;
 import java.util.HashSet;
 
 import net.sevenscales.domain.utils.SLogger;
@@ -104,6 +105,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement layersMenuButton;
 	@UiField AnchorElement lineWeight;
 	@UiField AnchorElement fileLink;
+	@UiField AnchorElement group;
 
 	private PopupPanel editLinkPopup;
 	private PopupPanel colorpopup;
@@ -344,6 +346,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		closeOnSave();
 		tapCurvedArrow(curvedArrow, this);
 		tapRectifiedArrow(rectifiedArrow, this);
+		tapGroup(group, this);
 	}
 
   private native void trigger(String event)/*-{
@@ -375,6 +378,13 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		})
 	}-*/;
 
+	private native void tapGroup(Element e, UiContextMenu me)/*-{
+		$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
+			$wnd.$('.tooltip').hide()
+			me.@net.sevenscales.editor.content.ui.UiContextMenu::groupOrUngroupShapes()();
+		})
+	}-*/;
+
 	private void curvedArrow() {
 		logger.debug("curvedArrow...");
 		Set<Diagram> selected = selectionHandler.getSelectedItems();
@@ -397,6 +407,50 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		}
 		setMenuItemVisibility();
 		Tools.disableCurvedArrow();
+	}
+
+	private void groupOrUngroupShapes() {
+		Set<Diagram> selected = selectionHandler.getSelectedItems();
+
+		if (selected.size() > 1) {
+			Iterator<Diagram> i = selected.iterator();
+			if (i.hasNext() && i.next().getDiagramItem().getGroup() != null) {
+				ungroupSelected(selected);
+			} else {
+				groupSelected(selected);
+			}
+
+			surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(selected));
+		}
+	}
+
+	private void groupSelected(Set<Diagram> selected) {
+		// ClientIdHelpers.generateClientId(1, graphicalDocumentCache, surface.getEditorContext());
+		String groupId = null;
+		for (Diagram d : selected) {
+			if (groupId == null) {
+				groupId = d.getDiagramItem().getClientId();
+			}
+
+			if (!(d instanceof CommentThreadElement)) {
+				d.setGroupId(groupId);
+			}
+		}
+	}
+
+	private void ungroupSelected(Set<Diagram> selected) {
+		for (Diagram s : selected) {
+			String group = s.getDiagramItem().getGroup();
+			if (group != null) {
+				for (Diagram d : surface.getDiagrams()) {
+					if (group.equals(d.getDiagramItem().getGroup())) {
+						d.getDiagramItem().setGroup(null);
+						d.unselect();
+						selected.add(d);
+					}
+				}
+			}
+		}
 	}
 
 	private void cancel() {
@@ -717,6 +771,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		Display layersMenuVisibility = Display.NONE;
 		Display switchElementVisibility = Display.NONE;
 		Display lineWeightVisibility = Display.NONE;
+		Display groupVisibility = Display.NONE;
 
 		if (diagram.supportsMenu(ContextMenuItem.FREEHAND_MENU)) {
 			freehandMenu = Display.INLINE_BLOCK;
@@ -770,6 +825,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			annotateVisibility = Display.INLINE_BLOCK;
 		}
 
+		if (selected.length > 1 && !ifEvenOneIsComment(selected)) {
+			groupVisibility = Display.INLINE_BLOCK;
+		}
+
 		boolean allowedToShowDeleteMenu = AuthHelpers.allowedToShowDelete(selected);
 		if (allowedToShowDeleteMenu && diagram.supportsMenu(ContextMenuItem.DELETE)) {
 			deleteMenuVisibility = Display.INLINE_BLOCK;
@@ -812,6 +871,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		layersMenuButton.getStyle().setDisplay(layersMenuVisibility);
 		switchElement.getStyle().setDisplay(switchElementVisibility);
 		lineWeight.getStyle().setDisplay(lineWeightVisibility);
+		group.getStyle().setDisplay(groupVisibility);
 
 		if (freehandMenu == Display.NONE && 
 				reverseMenu == Display.NONE &&

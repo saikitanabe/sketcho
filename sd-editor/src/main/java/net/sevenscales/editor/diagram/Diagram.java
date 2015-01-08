@@ -136,6 +136,8 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   void setLink(String link);
   String getLink();
   boolean hasLink();
+
+  void setGroupId(String groupId);
   
   /**
   * These are needed if element needs to do something differently

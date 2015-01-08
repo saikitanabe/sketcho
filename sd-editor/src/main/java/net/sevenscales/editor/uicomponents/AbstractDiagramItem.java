@@ -827,6 +827,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     return link != null && link.length() > 3;
   }
 
+  public void setGroupId(String groupId) {
+    data.setGroup(groupId);
+  }
+
   public void setVisible(boolean visible) {
     if (this.visible != visible) {
       this.visible = visible; 
