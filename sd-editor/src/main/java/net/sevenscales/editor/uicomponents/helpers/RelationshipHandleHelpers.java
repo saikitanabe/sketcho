@@ -135,6 +135,10 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
   
   private void applyPositionByParent(boolean show) {
+    if (parentRelationship.getDiagramItem().isGroup()) {
+      return;
+    }
+
     int parentRelHandlesCount = parentHandlesCount();
     int handlesSize = handles.size();
     logger.debug("  parentHandlesCount {}, handlesSize {}", parentRelHandlesCount, handlesSize);
