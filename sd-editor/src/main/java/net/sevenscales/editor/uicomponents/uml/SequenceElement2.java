@@ -616,7 +616,17 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
   public boolean supportsModifyToCenter() {
     return false;
   }
-  
+
+  // cannot be used directly like this, doubles height all the time 
+  // @Override
+  // public int getHeight() {
+  //   int lineHeight = 0;
+  //   if (line != null) {
+  //     lineHeight = line.getY2() - line.getY1();
+  //   }
+  //   return super.getHeight() + lineHeight;
+  // }
+ 
 
 //  @Override
 //  public int getHeight() {
