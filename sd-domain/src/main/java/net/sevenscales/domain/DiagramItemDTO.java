@@ -276,7 +276,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 	@Override
 	public boolean isGroup() {
-		return group != null;
+		return group != null && !"".equals(group);
 	}
 
 	@Override

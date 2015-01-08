@@ -413,8 +413,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		Set<Diagram> selected = selectionHandler.getSelectedItems();
 
 		if (selected.size() > 1) {
-			Iterator<Diagram> i = selected.iterator();
-			if (i.hasNext() && i.next().getDiagramItem().getGroup() != null) {
+			if (isEvenOnePartOfGroup(selected)) {
 				ungroupSelected(selected);
 			} else {
 				groupSelected(selected);
@@ -422,6 +421,15 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 			surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(selected));
 		}
+	}
+
+	private boolean isEvenOnePartOfGroup(Set<Diagram> diagrams) {
+		for (Diagram d : diagrams) {
+			if (d.getDiagramItem().isGroup()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void groupSelected(Set<Diagram> selected) {
