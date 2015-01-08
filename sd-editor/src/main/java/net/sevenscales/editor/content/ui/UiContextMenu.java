@@ -427,14 +427,19 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	private void groupSelected(Set<Diagram> selected) {
 		// ClientIdHelpers.generateClientId(1, graphicalDocumentCache, surface.getEditorContext());
 		String groupId = null;
+		Diagram sample = null;
 		for (Diagram d : selected) {
 			if (groupId == null) {
 				groupId = d.getDiagramItem().getClientId();
+				sample = d;
 			}
 
 			if (!(d instanceof CommentThreadElement)) {
 				d.setGroupId(groupId);
 			}
+		}
+		if (sample != null) {
+			selectionHandler.select(sample);
 		}
 	}
 
@@ -451,6 +456,9 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				}
 			}
 		}
+
+		selectionHandler.unselectAll();
+		hide();
 	}
 
 	private void cancel() {
