@@ -35,6 +35,10 @@ class Polyline extends Shape implements IPolyline {
     container.getContainer(), createNativePoints(points));
   }
 
+	Polyline(Surface surface) {
+		this.rawNode = createPolyline(surface.getContainer());
+	}
+
 	Polyline(Surface surface, int[] points) {
 		this.rawNode = createPolyline(
 		surface.getContainer(), createNativePoints(points));
@@ -183,14 +187,12 @@ class Polyline extends Shape implements IPolyline {
 		array.push( {x:x, y:y} );
 	}-*/;
 
-  public static native JavaScriptObject createPolyline
-	  (JavaScriptObject surface)/*-{
+  public static native JavaScriptObject createPolyline(JavaScriptObject surface)/*-{
 	  return surface.createPolyline();
 	}-*/;
 
-    public static native JavaScriptObject createPolyline
-      (JavaScriptObject surface, JavaScriptObject points)/*-{
-	    return surface.createPolyline( {points:points} );
-	  }-*/;
+  public static native JavaScriptObject createPolyline(JavaScriptObject surface, JavaScriptObject points)/*-{
+    return surface.createPolyline( {points:points} );
+  }-*/;
     
 }

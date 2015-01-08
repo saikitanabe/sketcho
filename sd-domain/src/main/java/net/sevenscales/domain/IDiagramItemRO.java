@@ -34,6 +34,7 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	String getCustomData();
 	double getCrc32();
 	String getGroup();
+	boolean isGroup();
 	int getAnnotation();
 	int getResolved();
 	boolean isAnnotation();

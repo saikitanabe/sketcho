@@ -647,7 +647,9 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   @Override
   public void select() {
   	super.select();
-  	background.setStroke(DEFAULT_SELECTION_COLOR);
+  	if (!getDiagramItem().isGroup()) {
+	  	background.setStroke(DEFAULT_SELECTION_COLOR);
+  	}
   }
 
   @Override

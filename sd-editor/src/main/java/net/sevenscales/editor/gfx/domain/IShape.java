@@ -49,6 +49,8 @@ public interface IShape extends IGraphics {
   void setStrokeStyle(String style);
   String getStrokeStyle();
 
+  void setStrokeDashArray(String style);
+
   String getStyle();
   void setStyle(String style);
 

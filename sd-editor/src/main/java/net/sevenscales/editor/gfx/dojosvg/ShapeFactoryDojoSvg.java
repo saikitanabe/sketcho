@@ -74,6 +74,10 @@ public class ShapeFactoryDojoSvg implements IShapeFactory {
   public IPolyline createPolyline(ISurface surface, List<Integer> points) {
     return new Polyline((Surface) surface, points);
   }
+
+  public IPolyline createPolyline(ISurface surface) {
+    return new Polyline((Surface) surface);
+  }
   
   public IPath createPath(IContainer surface, PathTransformer transformer) {
   	return new Path(surface, transformer);

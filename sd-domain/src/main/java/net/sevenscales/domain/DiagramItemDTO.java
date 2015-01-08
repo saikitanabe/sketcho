@@ -274,6 +274,10 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	public void setGroup(String group) {
 		this.group = group;
 	}
+	@Override
+	public boolean isGroup() {
+		return group != null;
+	}
 
 	@Override
 	public int getAnnotation() {

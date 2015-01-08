@@ -22,10 +22,16 @@ import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.UnselectAllEvent;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.auth.AuthHelpers;
+import net.sevenscales.editor.api.BoardDimensions;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.IRelationship;
+import net.sevenscales.editor.gfx.domain.IPath;
+import net.sevenscales.editor.gfx.domain.IGroup;
+import net.sevenscales.editor.gfx.domain.ILine;
+import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.silver.KeyCodeMap;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
@@ -64,6 +70,8 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   private Set<Diagram> tobeRemovedInCycle;
   private boolean potentialClearSelection;
   private MouseState mouseState;
+  private IPath groupOutline;
+  private IGroup groupOutlineGroup;
 	
 	public SelectionHandler(ISurfaceHandler surface, List<Diagram> diagrams, Set<DiagramDragHandler> dragHandlers, MouseState mouseState) {
 		this.surface = surface;
@@ -554,17 +562,73 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   public void selectGroup(Diagram diagram) {
     String group = diagram.getDiagramItem().getGroup();
     if (group != null) {
+      List<Diagram> groupShapes = new ArrayList<Diagram>();
       for (Diagram d : surface.getDiagrams()) {
         if (group.equals(d.getDiagramItem().getGroup())) {
           d.select();
+          groupShapes.add(d);
         }
       }
+      showGroupOutline(groupShapes);
     } else {
       diagram.select();
     }
   }
 
+  private void showGroupOutline(List<Diagram> groupShapes) {
+    if (groupOutline == null) {
+      groupOutlineGroup = IShapeFactory.Util.factory(true).createGroup(surface.getRootLayer());
+      groupOutline = IShapeFactory.Util.factory(true).createPath(groupOutlineGroup, null);
+      groupOutline.setStroke(new Color(0x33, 0x33, 0x33, 1));
+      groupOutline.setStrokeDashArray("5,10");
+    }
+
+    groupOutline.setShape(groupOutlineShape(groupShapes));
+    groupOutlineGroup.setVisible(true);
+  }
+
+  private String groupOutlineShape(List<Diagram> groupShapes) {
+    BoardDimensions.resolveDimensions(groupShapes);
+
+    groupOutlineGroup.setTransform(BoardDimensions.getLeftmost(), BoardDimensions.getTopmost());
+
+    int left = 0;
+    int top = 0;
+    int width = BoardDimensions.getWidth();
+    int height = BoardDimensions.getHeight();
+    int[] points = new int[]{left,
+                             top,
+                             width,
+                             0,
+                             0,
+                             height,
+                             -width,
+                             0,
+                             0,
+                             -height};
+    String result = null;
+    for (int i = 0; i < points.length; i += 2) {
+      String point = points[i] + "," + points[i + 1];
+      if (result == null) {
+        result = "m" + point;
+      } else {
+        result += " " + point;
+      }
+    }
+    return result;
+  }
+
+  public void movedMaybeGroup(int dx, int dy) {
+    if (groupOutlineGroup != null && groupOutlineGroup.isVisible()) {
+      groupOutlineGroup.setTransform(groupOutlineGroup.getTransformX() + dx, 
+                                   groupOutlineGroup.getTransformY() + dy);
+
+    }
+  }
+
   public void unselectGroup(Diagram diagram) {
+    hideGroupOutline();
+
     String group = diagram.getDiagramItem().getGroup();
     if (group != null) {
       for (Diagram d : surface.getDiagrams()) {
@@ -574,6 +638,12 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
       }
     } else {
       diagram.unselect();
+    }
+  }
+
+  private void hideGroupOutline() {
+    if (groupOutline != null) {
+      groupOutlineGroup.setVisible(false);
     }
   }
 
@@ -705,6 +775,8 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 //      selectedItems.remove(d);
     }
     logger.debugTime();
+
+    hideGroupOutline();
     
     logger.start("unselectAll B");
     selectionHandlers.fireUnselectAll();

@@ -392,7 +392,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 		// 	connectionHelpers.show(this);
 		// }
     
-    if (resizeHelpers != null) {
+    if (resizeHelpers != null && !getDiagramItem().isGroup()) {
     	resizeHelpers.show(this);
     }
   }

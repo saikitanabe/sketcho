@@ -450,6 +450,10 @@ abstract class Shape extends Graphics implements IShape {
   public int getSvgFixY() {
   	return svgdy;
   }
+
+  public void setStrokeDashArray(String value) {
+  	setAttribute("stroke-dasharray", value);
+  }
   
 	public void setStrokeStyle(String style) {
 		_setStrokeStyle(rawNode, style);

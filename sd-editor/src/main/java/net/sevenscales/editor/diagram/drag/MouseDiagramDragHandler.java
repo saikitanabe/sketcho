@@ -351,6 +351,8 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 				moveAnchors(dd.getAnchors(), dx, dy, sequence);
 			}
 		}
+
+		selectionHandler.movedMaybeGroup(dx, dy);
 	}
 
 	private void moveAnchors(Collection<AnchorElement> anchors, int dx, int dy, int sequence) {

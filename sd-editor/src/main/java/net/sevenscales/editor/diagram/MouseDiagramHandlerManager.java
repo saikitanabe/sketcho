@@ -61,6 +61,10 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
       public void unselectAll() {
       	selectionHandler.unselectAll();
       }
+      @Override
+      public void movedMaybeGroup(int dx, int dy) {
+				selectionHandler.movedMaybeGroup(dx, dy);
+      }
     });
 		selectionHandler = new SelectionHandler(surface, diagrams, dragHandler.getDragHandlers(), this);
 		resizeHandler = new MouseDiagramResizeHandler(this, surface, modeManager);
