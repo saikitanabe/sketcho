@@ -557,7 +557,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 
   public void selectGroup(Diagram diagram) {
     String group = diagram.getDiagramItem().getGroup();
-    if (group != null) {
+    if (group != null && !"".equals(group)) {
       List<Diagram> groupShapes = new ArrayList<Diagram>();
       for (Diagram d : surface.getDiagrams()) {
         if (group.equals(d.getDiagramItem().getGroup())) {
