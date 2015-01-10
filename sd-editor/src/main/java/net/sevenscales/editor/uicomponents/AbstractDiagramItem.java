@@ -387,7 +387,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
  
     // if (TouchHelpers.isSupportsTouch()) {
     	// usability for touch devices, hide in case connection helpers are on a way
-    toggleConnectionHelpers();
+    if (!getDiagramItem().isGroup()) {
+      toggleConnectionHelpers();
+    }
 		// } else {
 		// 	connectionHelpers.show(this);
 		// }
