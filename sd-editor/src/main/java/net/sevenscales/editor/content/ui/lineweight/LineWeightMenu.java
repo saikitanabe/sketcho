@@ -1,5 +1,8 @@
 package net.sevenscales.editor.content.ui.lineweight;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -90,6 +93,7 @@ public class LineWeightMenu extends Composite {
 	}
 
 	private void setWeight(int weight) {
+		List<Diagram> changed = new ArrayList<Diagram>();
 		for (Diagram d : surface.getSelectionHandler().getSelectedItems()) {
 			boolean set = false;
 			if (d instanceof Relationship2) {
@@ -103,9 +107,11 @@ public class LineWeightMenu extends Composite {
 			}
 
 			if (set) {
-    		surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(d));
+				changed.add(d);
 			}
 		}
+
+		surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(changed));
 	}
 
 	private void weight1() {
