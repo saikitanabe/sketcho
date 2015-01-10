@@ -46,6 +46,7 @@ import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.ElementColor;
+import net.sevenscales.editor.gfx.domain.IChildElement;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
@@ -442,7 +443,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				sample = d;
 			}
 
-			if (!(d instanceof CommentThreadElement)) {
+			if (!(d instanceof CommentThreadElement) && !(d instanceof IChildElement)) {
+				// comments and child text cannot be part of groups
 				d.setGroupId(groupId);
 			}
 		}
