@@ -48,6 +48,7 @@ public class DuplicateHelpers {
 
 	private static class State {
 		public Map<String, String> clientIdMapping = new HashMap<String, String>();
+		public Map<String, String> mappedGroupIds = new HashMap<String, String>();
 		public CommentFactory commentFactory;
 		public ReattachHelpers reattachHelpers = new ReattachHelpers();
 		public Set<Relationship2> relationships = new HashSet<Relationship2>();
@@ -149,6 +150,8 @@ public class DuplicateHelpers {
 		int moveY = y - top;
 
 		for (IDiagramItemRO di : items) {
+			// need to modify same di, first set group, not to use old group id
+			mapGroup(di, i, state, boardDocument);
   		copyAndMap(moveX, moveY, di, ++i, state, boardDocument);
 		}
 
@@ -178,6 +181,7 @@ public class DuplicateHelpers {
 		if (allowedToPasteType(diro) && diro instanceof IDiagramItem) {
 			IDiagramItem di = (IDiagramItem) diro;
 			String newClientId = ClientIdHelpers.generateClientId(i, boardDocument, surface.getEditorContext());
+
 			state.clientIdMapping.put(di.getClientId(), newClientId);
 			di.setClientId(newClientId);
 
@@ -191,6 +195,19 @@ public class DuplicateHelpers {
 					state.add(copied);
 				}
 			}
+		}
+	}
+
+	private void mapGroup(IDiagramItemRO diro, int i, State state, BoardDocument boardDocument) {
+		if (diro.isGroup() && diro instanceof IDiagramItem) {
+			String mappedGroupId = state.mappedGroupIds.get(diro.getGroup());
+			if (mappedGroupId == null) {
+				// generate a new group identifier
+				mappedGroupId = ClientIdHelpers.generateClientId(i, boardDocument, surface.getEditorContext());
+				state.mappedGroupIds.put(diro.getGroup(), mappedGroupId);
+			}
+
+			((IDiagramItem) diro).setGroup(mappedGroupId);
 		}
 	}
 
