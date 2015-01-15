@@ -194,6 +194,8 @@ public class SvgConverter {
 		  outerbottom = 10;
 		}
 
+    items += waterMark(outerright, outerbottom);
+
 //    System.out.println(outerleft+","+outertop+":"+outerright+","+outerbottom);
     SvgData result = new SvgData();
     result.width = outerright - outerleft;
@@ -229,7 +231,14 @@ public class SvgConverter {
     // logger.debug("result.svg: {}", result.svg);
     return result;
   }
-  
+
+  private native String waterMark(int right, int bottom)/*-{
+    if (typeof $wnd.waterMark != 'undefined') {
+      return $wnd.waterMark(right, bottom);
+    }
+    return "";
+  }-*/;
+
   private String height() {
   	if (scaleSize == ScaleSize.ORICINAL_SIZE) {
   		return String.valueOf(outerbottom - outertop/* - outertop*/);
