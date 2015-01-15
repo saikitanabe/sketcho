@@ -33,7 +33,6 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 	private int prevDX;
 	private int prevDY;
 	private boolean keepAspectRatio;	
-	private double aspectRatio;
 	
 	public MouseDiagramResizeHandler(MouseDiagramHandlerManager parent, ISurfaceHandler surface, 
 	    IModeManager modeManager) {
@@ -55,13 +54,6 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 			keepAspectRatio = keys == IGraphics.SHIFT;
 			int width = sender.getWidth();
 			int height = sender.getHeight();
-
-			// aspectRatio = 1;
-			// if (width > height) {
-			// 	aspectRatio = width / (double) height;
-			// } else {
-				// aspectRatio = height / (double) width;
-			// }
 
 			onResizeArea = sender.onResizeArea(point.getX(), point.getY());
 			if (onResizeArea) {
@@ -159,9 +151,6 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 					diffTemp.x = dx;
 					diffTemp.y = (int) (newHeight - height);
 				}
-				// diffTemp.y = (int) (dx * aspectRatio);
-				// prevDX = prevDY;
-				// prevDY = 
       } else {
 				diffTemp.x = dx;
 				diffTemp.y = dy;
