@@ -32,6 +32,8 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
   private IModeManager modeManager;
 	private int prevDX;
 	private int prevDY;
+	private boolean keepAspectRatio;	
+	private double aspectRatio;
 	
 	public MouseDiagramResizeHandler(MouseDiagramHandlerManager parent, ISurfaceHandler surface, 
 	    IModeManager modeManager) {
@@ -48,8 +50,19 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
     }
     
     boolean result = false;
-		if (sender != null && !(keys == IGraphics.SHIFT || modeManager.isConnectMode())) {
+		if (sender != null && !(modeManager.isConnectMode())) {
 			// do not handle surface events
+			keepAspectRatio = keys == IGraphics.SHIFT;
+			int width = sender.getWidth();
+			int height = sender.getHeight();
+
+			// aspectRatio = 1;
+			// if (width > height) {
+			// 	aspectRatio = width / (double) height;
+			// } else {
+				// aspectRatio = height / (double) width;
+			// }
+
 			onResizeArea = sender.onResizeArea(point.getX(), point.getY());
 			if (onResizeArea) {
 				this.sender = sender;
@@ -128,8 +141,31 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 //      prevX = x;
 //      prevY = y;
 
-			diffTemp.x = dx;
-			diffTemp.y = dy;
+      if (keepAspectRatio) {
+				int width = this.sender.getWidth();
+				int height = this.sender.getHeight();
+				if (height < width) {
+					double aspectRatio = width / (double) height;
+					double newHeight = height + dy;
+					double newWidth = aspectRatio * newHeight;
+
+					diffTemp.x = (int) (newWidth - width);
+					diffTemp.y = dy;
+				} else {
+					double aspectRatio = height / (double) width;
+					double newWidth = width + dx;
+					double newHeight = aspectRatio * newWidth;
+
+					diffTemp.x = dx;
+					diffTemp.y = (int) (newHeight - height);
+				}
+				// diffTemp.y = (int) (dx * aspectRatio);
+				// prevDX = prevDY;
+				// prevDY = 
+      } else {
+				diffTemp.x = dx;
+				diffTemp.y = dy;
+      }
 			
 			// System.out.println("resizing: diffTemp.x" + dx + " diffTemp.y" + dy);
 
@@ -146,6 +182,7 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
     if (!surface.isDragEnabled()) {
       return;
     }
+    keepAspectRatio = false;
     
 		if (this.sender != null) {
 			this.sender.resizeEnd();
