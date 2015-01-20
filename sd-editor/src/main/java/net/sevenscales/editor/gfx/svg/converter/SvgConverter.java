@@ -213,7 +213,8 @@ public class SvgConverter {
       int viewBoxWidth = (outerright-outerleft);
       int viewBoxHeight = (outerbottom-outertop);
       double svgWidth = viewBoxWidth;
-      if (viewBoxWidth > content.getWidth()) {
+      if (content.getWidth() > 0 && viewBoxWidth > content.getWidth()) {
+        // content width 0 disables scaling to a certain width
         // scale according to parent div width
         svgWidth = content.getWidth();
         double sizeFactorial = svgWidth / viewBoxWidth;
