@@ -80,7 +80,7 @@ abstract class Graphics extends GraphicsBase {
 	native void nativeConnectOnMouseUp(JavaScriptObject object, String eventType)/*-{
 		var self = this;
 		function onMouseUp(e) {
-//			e.preventDefault();
+			e.preventDefault();
 	    var keys = e.shiftKey ? @net.sevenscales.editor.gfx.domain.IGraphics::SHIFT : 0;
 			self.@net.sevenscales.editor.gfx.dojosvg.Graphics::onMouseUp(Lnet/sevenscales/editor/gfx/base/GraphicsEvent;I)(e,keys);
 		}
