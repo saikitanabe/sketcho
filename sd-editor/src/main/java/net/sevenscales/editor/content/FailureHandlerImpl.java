@@ -35,9 +35,11 @@ class FailureHandlerImpl extends Composite {
 	}
 
 	private native void handleClose(FailureHandlerImpl me, Element e)/*-{
-		$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
-			me.@net.sevenscales.editor.content.FailureHandlerImpl::onClose()();
-		})
+		if (typeof $wnd.Hammer != 'undefined') {
+			$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
+				me.@net.sevenscales.editor.content.FailureHandlerImpl::onClose()();
+			})
+		}
 	}-*/;
 
 	private void onClose() {

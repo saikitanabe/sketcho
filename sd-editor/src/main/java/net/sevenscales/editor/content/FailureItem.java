@@ -43,9 +43,11 @@ class FailureItem extends Composite {
 	}
 
 	private native void handleDelete(FailureItem me, Element e)/*-{
-		$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
-			me.@net.sevenscales.editor.content.FailureItem::onDelete()();
-		})
+		if (typeof $wnd.Hammer != 'undefined') {
+			$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
+				me.@net.sevenscales.editor.content.FailureItem::onDelete()();
+			})
+		}
 	}-*/;
 
 	private void onDelete() {
