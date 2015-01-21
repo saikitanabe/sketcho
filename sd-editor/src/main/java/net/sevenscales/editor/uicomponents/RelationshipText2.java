@@ -100,15 +100,22 @@ public class RelationshipText2 {
     end = textUtil.parseRightText();
     label = textUtil.parseLabel();
     
-    labelElement.setText(label);
+    // BUG FIX: trim check is because plain space character makes chrome halt
+    if (label.trim().length() > 0) {
+      labelElement.setText(label);
+    }
     // alignment doesn't work well for now in seq diagrams
 //    labelElement.setAttribute("dominant-baseline", "central");
     
-    startElement.setText(start);
+    if (start.trim().length() > 0) {
+      startElement.setText(start);
+    }
     startElement.setAlignment(IText.ALIGN_CENTER);
     startElement.setAttribute("dominant-baseline", "central");
     
-    endElement.setText(end);
+    if (end.trim().length() > 0) {
+      endElement.setText(end);
+    }
     endElement.setAlignment(IText.ALIGN_CENTER);
     endElement.setAttribute("dominant-baseline", "central");
     
