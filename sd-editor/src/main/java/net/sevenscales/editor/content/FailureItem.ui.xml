@@ -5,6 +5,7 @@
 	</ui:style>
 	<g:HTMLPanel styleName="failure-item">
 		<div ui:field="text" class="failure-item-text"></div>
+		<div ui:field="clientId" class="failure-item-id"></div>
 		<div ui:field="type" class="failure-item-type"></div>
 		<div class="failure-item-delete">
 			<a class="btn btn-primary" ui:field="delete">Delete</a>

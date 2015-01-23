@@ -19,6 +19,7 @@
 					<g:HTMLPanel>
 						<div class="failure-item failure-header">
 							<div class="failure-item-text">Text</div>
+							<div class="failure-item-id">Id</div>
 							<div class="failure-item-type">Shape</div>
 						</div>
 					</g:HTMLPanel>

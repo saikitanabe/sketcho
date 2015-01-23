@@ -25,6 +25,7 @@ class FailureItem extends Composite {
 	}
 
 	@UiField Element text;
+	@UiField Element clientId;
 	@UiField Element type;
 	@UiField Element delete;
 
@@ -37,6 +38,7 @@ class FailureItem extends Composite {
 		this.item = item;
 		initWidget(uiBinder.createAndBindUi(this));
 		text.setInnerText(item.getText());
+		clientId.setInnerText(item.getClientId());
 		type.setInnerText(item.getType());
 
 		handleDelete(this, delete);
