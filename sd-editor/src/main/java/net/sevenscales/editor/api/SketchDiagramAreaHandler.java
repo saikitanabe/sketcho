@@ -131,7 +131,10 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
         di.setShapeProperties(ShapeProperty.CURVED_ARROW.getValue());
       }
 
-      di.addShapeProperty(ShapeProperty.CLOSEST_PATH);
+      // regression bug: sequence elements arrows are all moved back
+      // to original center position!
+      // di.addShapeProperty(ShapeProperty.CLOSEST_PATH);
+
       // Automatically center connection at first time.
       di.addShapeProperty(ShapeProperty.CENTERED_PATH);
       // Default arrow type is curved ends configuration
