@@ -69,7 +69,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private int top;
   private int width;
   private int height;
-  private Shapes.Group theshape;
+  private ShapeGroup theshape;
   private TextElementFormatUtil textUtil;
   private GenericHasTextElement hasTextElement;
 
@@ -85,12 +85,12 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
   private static class PathWrapper {
   	IPath path;
-  	Shapes.Proto proto;
+  	ShapeProto proto;
 
   	PathWrapper(IPath path) {
   		this(path, null);
   	}
-  	PathWrapper(IPath path, Shapes.Proto proto) {
+  	PathWrapper(IPath path, ShapeProto proto) {
   		this.path = path;
   		this.proto = proto;
   	}
@@ -177,14 +177,14 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		return 0;
 	}
 
-	private void createSubPaths(Shapes.Group groupData) {
-		for (Shapes.Proto p : groupData.protos) {
+	private void createSubPaths(ShapeGroup groupData) {
+		for (ShapeProto p : groupData.protos) {
 			IPath path = createSubPath(p);
 			paths.add(new PathWrapper(path, p));
 		}
 	}
 
-	private IPath createSubPath(Shapes.Proto proto) {
+	private IPath createSubPath(ShapeProto proto) {
 		return createSubPath(/*proto.toPath(1, 1)*/ null, proto.style);
 	}	
 
@@ -419,7 +419,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	  		pw.path.setShape(pw.proto.toPath(factorX, factorY, theshape.width));
   		}
   	}
-		// for (Shapes.Proto p : groupData.protos) {
+		// for (ShapeProto p : groupData.protos) {
   // 	for (IPath path : paths) {
   // 		result.setShape(proto.toPath());
 
