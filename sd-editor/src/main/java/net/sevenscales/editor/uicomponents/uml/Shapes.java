@@ -162,11 +162,11 @@ public class Shapes {
 		return ShapeCache.get(elementType, sketch);
 	}
 
-	public static ShapeGroup get(ElementType type, boolean sketch) {
-		return ShapeCache.get(type, sketch);
-	}
+	// public static ShapeGroup get(ElementType type, boolean sketch) {
+	// 	return ShapeCache.get(type, sketch);
+	// }
 
-	public static ShapeGroup getSketch(ElementType type) {
+	public static ShapeGroup getSketch(String type) {
 		return ShapeCache.getSketch(type);
 	}
 }

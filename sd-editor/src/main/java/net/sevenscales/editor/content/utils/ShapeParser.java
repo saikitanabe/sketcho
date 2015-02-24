@@ -96,7 +96,7 @@ public class ShapeParser {
 					!type.equals(ElementType.HORIZONTAL_PARTITION) &&
 					!type.equals(ElementType.VERTICAL_PARTITION) &&
 					!type.equals(ElementType.PACKAGE) &&
-					Shapes.getSketch(ElementType.getEnum(diro.getType())) != null) {
+					Shapes.getSketch(diro.getType()) != null) {
 				return new AbstractDiagramFactory.GenericFactory();
 			} else {
 				if (pm.elementType.getValue().equals(diro.getType())) {
