@@ -6,20 +6,20 @@ import com.google.gwt.core.client.JsArray;
 public class ShapeProto {
 	public JsArray<Shapes.JsPathData> pathDatas;
 	public String style;
-	private boolean scalable;
+	private boolean noscaling;
 	private double width;
 
 	ShapeProto(String path) {
-		this(path, null, true);
+		this(path, null, false);
 	}
 
 	ShapeProto(String path, String style) {
-		this(path, style, true);
+		this(path, style, false);
 	}
 
-	ShapeProto(String path, String style, boolean scalable) {
+	ShapeProto(String path, String style, boolean noscaling) {
 		this.style = style;
-		this.scalable = scalable;
+		this.noscaling = noscaling;
 		pathDatas = parse(path);
 
 		width = getWidth();
@@ -56,7 +56,7 @@ public class ShapeProto {
 		String result = "";
 		for (int i = 0; i < pathDatas.length(); ++i) {
 			Shapes.JsPathData current = pathDatas.get(i);
-			if (scalable) {
+			if (!noscaling) {
 				result += current.toPath(factorX, factorY);
 			} else {
 					// factorX = 1;
