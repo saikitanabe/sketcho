@@ -46,10 +46,10 @@ class ShapeCache {
 		}
 
 		public final native String getPath()/*-{
-			return this.path
+			return this.p
 		}-*/;
 		public final native String getStyle()/*-{
-			return this.style
+			return this.s
 		}-*/;
 		public final native boolean getNoScaling()/*-{
 			return this.noscaling
@@ -70,10 +70,10 @@ class ShapeCache {
 	    return this.s
 	  }-*/;
 	  public final native double getWidth()/*-{
-	    return this.width
+	    return this.w
 	  }-*/;
 	  public final native double getHeight()/*-{
-	    return this.height
+	    return this.h
 	  }-*/;
 
 	}
