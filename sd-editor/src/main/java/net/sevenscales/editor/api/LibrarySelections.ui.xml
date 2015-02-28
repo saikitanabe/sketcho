@@ -10,7 +10,9 @@
 				<li ui:field="mindmap">Mind Map</li>
 		  	<li ui:field="roadmap">Roadmap</li>
 		  	<li ui:field="general">General</li>
-		  	<li ui:field="images">My Images</li>
+		  	<li ui:field="images">Images</li>
+		  	<li ui:field="team">Team</li>
+		  	<li ui:field="extra">Extras</li>
 		  </ul>
 		</div>
 	</g:HTMLPanel>

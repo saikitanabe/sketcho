@@ -123,6 +123,8 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
       toolpool.show();
       panel.getElement().getStyle().setOverflowY(Style.Overflow.SCROLL);
       ngHideImageLibrary();
+      ngHideLibrary("team");
+      ngHideLibrary("extra");
 			
 			switch (library) {
 			case SOFTWARE:
@@ -143,6 +145,16 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         // getWidget().getElement().setScrollTop(GENERAL_GROUP - 220);
         // toolpool.getRootLayer().applyTransform(0, -GENERAL_GROUP + 23);
         ngShowImageLibrary();
+        panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+        toolpool.hide();
+        break;
+      case TEAM:
+        ngShowLibrary("team");
+        panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+        toolpool.hide();
+        break;
+      case EXTRA:
+        ngShowLibrary("extra");
         panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
         toolpool.hide();
         break;
@@ -250,6 +262,18 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
   private native void ngHideImageLibrary()/*-{
     if (typeof $wnd.ngHideImageLibrary != 'undefined') {
       $wnd.ngHideImageLibrary();
+    }
+  }-*/;
+
+  private native void ngShowLibrary(String libraryName)/*-{
+    if (typeof $wnd.ngShowLibrary != 'undefined') {
+      $wnd.ngShowLibrary(libraryName);
+    }
+  }-*/;
+
+  private native void ngHideLibrary(String libraryName)/*-{
+    if (typeof $wnd.ngHideLibrary != 'undefined') {
+      $wnd.ngHideLibrary(libraryName);
     }
   }-*/;
 

@@ -26,7 +26,7 @@ public class LibrarySelections extends Composite {
 	}
 
 	public enum Library {
-		SOFTWARE, MINDMAP, ROADMAP, GENERAL, IMAGES
+		SOFTWARE, MINDMAP, ROADMAP, GENERAL, IMAGES, TEAM, EXTRA
 	}
 
 	public interface LibrarySelectedHandler {
@@ -40,6 +40,8 @@ public class LibrarySelections extends Composite {
 	@UiField Element roadmap;
 	@UiField Element general;
 	@UiField Element images;
+	@UiField Element team;
+	@UiField Element extra;
 	@UiField DivElement btnGroup;
 //	@UiField AnchorElement roadmap;
 
@@ -134,6 +136,38 @@ public class LibrarySelections extends Composite {
 						case Event.ONMOUSEDOWN:
 							LibrarySelections.this.librarySelectedHandler.onSelected(Library.IMAGES);
 							applyActive(images);
+							break;
+						}
+					}
+				});
+
+		DOM.sinkEvents((com.google.gwt.user.client.Element) team.cast(),
+				Event.ONMOUSEDOWN);
+		DOM.setEventListener(
+				(com.google.gwt.user.client.Element) team.cast(),
+				new EventListener() {
+					@Override
+					public void onBrowserEvent(Event event) {
+						switch (DOM.eventGetType(event)) {
+						case Event.ONMOUSEDOWN:
+							LibrarySelections.this.librarySelectedHandler.onSelected(Library.TEAM);
+							applyActive(team);
+							break;
+						}
+					}
+				});
+
+		DOM.sinkEvents((com.google.gwt.user.client.Element) extra.cast(),
+				Event.ONMOUSEDOWN);
+		DOM.setEventListener(
+				(com.google.gwt.user.client.Element) extra.cast(),
+				new EventListener() {
+					@Override
+					public void onBrowserEvent(Event event) {
+						switch (DOM.eventGetType(event)) {
+						case Event.ONMOUSEDOWN:
+							LibrarySelections.this.librarySelectedHandler.onSelected(Library.EXTRA);
+							applyActive(extra);
 							break;
 						}
 					}

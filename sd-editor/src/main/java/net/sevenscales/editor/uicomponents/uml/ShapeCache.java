@@ -9,6 +9,8 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JavaScriptObject;
 
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.js.JsShape;
+import net.sevenscales.domain.js.JsPath;
 
 
 class ShapeCache {
@@ -41,43 +43,6 @@ class ShapeCache {
 		}
 	}-*/;
 
-	static class JsPath extends JavaScriptObject {
-		protected JsPath() {
-		}
-
-		public final native String getPath()/*-{
-			return this.p
-		}-*/;
-		public final native String getStyle()/*-{
-			return this.s
-		}-*/;
-		public final native boolean getNoScaling()/*-{
-			return this.noscaling
-		}-*/;
-	}
-
-	static class JsShape extends JavaScriptObject {
-	  protected JsShape() {
-	  }
-
-	  public final native String getElementType()/*-{
-	    return this.et
-	  }-*/;
-	  public final native int getShapeType()/*-{
-	    return this.st
-	  }-*/;
-	  public final native JsArray<JsPath> getShape()/*-{
-	    return this.s
-	  }-*/;
-	  public final native double getWidth()/*-{
-	    return this.w
-	  }-*/;
-	  public final native double getHeight()/*-{
-	    return this.h
-	  }-*/;
-
-	}
-
 	private static void updateShapes(JsArray<JsShape> shapes) {
 		for (int i = 0; i < shapes.length(); ++i) {
 			JsShape shape = shapes.get(i);
@@ -106,9 +71,19 @@ class ShapeCache {
 		return result;
 	}
 
+	private native static void listen()/*-{
+		if (typeof $wnd.globalStreams.addShapeStream != 'undefined') {
+			$wnd.globalStreams.addShapeToCacheStream.onValue(function(shapes) {
+				@net.sevenscales.editor.uicomponents.uml.ShapeCache::updateShapes(Lcom/google/gwt/core/client/JsArray;)(shapes)
+			})
+		}
+	}-*/;
+
 	static {
 		shapes = new HashMap<String,ShapeGroup>();
 		sketchShapes = new HashMap<String,ShapeGroup>();
+
+		listen();
 
 		loadLibrary();
 
