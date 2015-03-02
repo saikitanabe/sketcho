@@ -23,5 +23,24 @@ public class JsShape extends JavaScriptObject {
 	public final native double getHeight()/*-{
 		return this.h
 	}-*/;
+	public final Integer getProperties() {
+		// some GWT bug with new library shape json
+		// Integer is int though it should be Integer...
+		Integer i = doGetProperties();
+		if (i != null) {
+			return new Integer(parseInt(i));
+		}
+		return null;
+	}
+	private final native Integer doGetProperties()/*-{
+		return this.p
+	}-*/;
+	public final native Integer getFontSize()/*-{
+		return this.f
+	}-*/;
+
+	private static native int parseInt(Object val)/*-{
+    return $wnd.parseInt(val);
+  }-*/;
 
 }
