@@ -7,6 +7,8 @@ import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.editor.uicomponents.uml.ShapeCache;
+import net.sevenscales.editor.uicomponents.uml.ShapeGroup;
 
 public class LibraryShapes {
 	public static Map<ElementType, LibraryShape> shapes;
@@ -30,6 +32,8 @@ public class LibraryShapes {
 	static {
 		shapes = new HashMap<ElementType, LibraryShape>();
 
+    // for these shapes only sketch type comes from svg, corporate is coded
+    // and properties mapping is needed to be for coded types (also SVGs should be updated with correct e.g. data-text-type='horizontal|top|center')
     shapes.put(ElementType.ACTOR, new LibraryShape(ElementType.ACTOR, 48, 60, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.SERVER, new LibraryShape(ElementType.SERVER, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.STORAGE, new LibraryShape(ElementType.STORAGE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
@@ -44,7 +48,11 @@ public class LibraryShapes {
     shapes.put(ElementType.PACKAGE, new LibraryShape(ElementType.PACKAGE, 47, 55, TOP_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.MIND_CENTRAL, new LibraryShape(ElementType.MIND_CENTRAL, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3, 18));
 
+    // shapes.put(ElementType.USE_CASE, new LibraryShape(ElementType.USE_CASE, 50, 35, TOP_CLASS_LIKE_PROPERTIES | ShapeProperty.CENTERED_TEXT.getValue(), 2, 2));
+    // shapes.put(ElementType.CLASS, new LibraryShape(ElementType.CLASS, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
 
+    // ALL GENERIC SHAPES HAS TO BE HERE UNTIL TOOLBAR LIBRARY DOESN'T USE THESE
+    // NOTE: all data-text-type on svg to match these needs to be fixed if these are remove!!
 	  shapes.put(ElementType.STAR4, new LibraryShape(ElementType.STAR4, 40, 40, BOTTOM_CLASS_LIKE_PROPERTIES));
 	  shapes.put(ElementType.STAR5, new LibraryShape(ElementType.STAR5, 40, 40, BOTTOM_CLASS_LIKE_PROPERTIES)); 
 	  shapes.put(ElementType.ENVELOPE, new LibraryShape(ElementType.ENVELOPE, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES));
@@ -64,17 +72,9 @@ public class LibraryShapes {
     shapes.put(ElementType.IPHONE, new LibraryShape(ElementType.IPHONE, 24, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
 	  shapes.put(ElementType.WEB_BROWSER, new LibraryShape(ElementType.WEB_BROWSER, 50, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 4, 4));
     shapes.put(ElementType.RECT, new LibraryShape(ElementType.RECT, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.CLASS, new LibraryShape(ElementType.CLASS, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.SEQUENCE, new LibraryShape(ElementType.SEQUENCE, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.HORIZONTAL_PARTITION, new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35, ShapeProperty.TEXT_POSITION_TOP.getValue() |
-      ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue() |
-      ShapeProperty.BOLD_TITLE.getValue(), 2, 2));
-    shapes.put(ElementType.VERTICAL_PARTITION, new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35,
-      ShapeProperty.TEXT_POSITION_TOP.getValue() |
-      ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue() |
-      ShapeProperty.BOLD_TITLE.getValue() |
-      ShapeProperty.TEXT_TITLE_CENTER.getValue(), 2, 2));
-    shapes.put(ElementType.USE_CASE, new LibraryShape(ElementType.USE_CASE, 50, 35, TOP_CLASS_LIKE_PROPERTIES | ShapeProperty.CENTERED_TEXT.getValue(), 2, 2));
+    shapes.put(ElementType.HORIZONTAL_PARTITION, new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.VERTICAL_PARTITION, new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.SWITCH, new LibraryShape(ElementType.SWITCH, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.ROUTER, new LibraryShape(ElementType.ROUTER, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.DESKTOP, new LibraryShape(ElementType.DESKTOP, 50, 40, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
@@ -133,24 +133,36 @@ public class LibraryShapes {
   }
 
   public static DiagramItemDTO createByType(ElementType type) {
+    return createByType(type.getValue());
+  }
+  public static DiagramItemDTO createByType(String type) {
     DiagramItemDTO result = new DiagramItemDTO();
-    LibraryShapes.LibraryShape s = LibraryShapes.get(type);
+    LibraryShapes.LibraryShape s = LibraryShapes.get(ElementType.getEnum(type));
     Integer properties = null;
     Integer fontSize = null;
     if (s != null) {
       properties = s.shapeProperties;
       fontSize = s.fontSize;
+    } else {
+      // TODO temporary solution
+      //     LibraryShapes.LibraryShape s = LibraryShapes.get(ElementType.getEnum(type));
+      // can be removed
+
+      ShapeGroup sg = ShapeCache.get(type, true);
+      if (sg != null) {
+        properties = sg.getProperties();
+        fontSize = sg.fontSize;
+      }
     }
 
-    result.setType(type.getValue());
+    result.setType(type);
     result.setShapeProperties(properties);
     result.setFontSize(fontSize);
     return result;
   }
 
   public static DiagramItemDTO createFrom(IDiagramItemRO item) {
-    ElementType type =  ElementType.getEnum(item.getType());
-    DiagramItemDTO result = createByType(type);
+    DiagramItemDTO result = createByType(item.getType());
 
     // update default values with dynamic properties
     Integer props = result.getShapeProperties();
