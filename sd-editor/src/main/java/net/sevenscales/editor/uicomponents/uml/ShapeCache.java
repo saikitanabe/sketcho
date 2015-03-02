@@ -11,9 +11,12 @@ import com.google.gwt.core.client.JavaScriptObject;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.js.JsShape;
 import net.sevenscales.domain.js.JsPath;
+import net.sevenscales.domain.utils.SLogger;
 
 
-class ShapeCache {
+public class ShapeCache {
+	private static final SLogger logger = SLogger.createLogger(ShapeCache.class);
+
 	private static final Map<String,ShapeGroup> shapes;
 	private static final Map<String,ShapeGroup> sketchShapes;
 
@@ -63,16 +66,17 @@ class ShapeCache {
 		List<ShapeProto> protos = new ArrayList<ShapeProto>();
 		for (int i = 0; i < shape.getShape().length(); ++i) {
 			JsPath path = shape.getShape().get(i);
+			// logger.debug("shape {}", shape.getElementType());
 			protos.add(new ShapeProto(path.getPath(), path.getStyle(), path.getNoScaling()));
 		}
 		ShapeProto[] prots = new ShapeProto[protos.size()];
 		protos.toArray(prots);
-		ShapeGroup result = new ShapeGroup(prots, shape.getWidth(), shape.getHeight());
+		ShapeGroup result = new ShapeGroup(prots, shape.getWidth(), shape.getHeight(), shape.getProperties());
 		return result;
 	}
 
 	private native static void listen()/*-{
-		if (typeof $wnd.globalStreams.addShapeStream != 'undefined') {
+		if (typeof $wnd.globalStreams.addShapeToCacheStream != 'undefined') {
 			$wnd.globalStreams.addShapeToCacheStream.onValue(function(shapes) {
 				@net.sevenscales.editor.uicomponents.uml.ShapeCache::updateShapes(Lcom/google/gwt/core/client/JsArray;)(shapes)
 			})
@@ -80,6 +84,8 @@ class ShapeCache {
 	}-*/;
 
 	static {
+		SLogger.addFilter(ShapeCache.class);
+
 		shapes = new HashMap<String,ShapeGroup>();
 		sketchShapes = new HashMap<String,ShapeGroup>();
 
