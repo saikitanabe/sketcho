@@ -81,6 +81,8 @@ import net.sevenscales.editor.uicomponents.uml.UMLPackageElement;
 import net.sevenscales.editor.uicomponents.uml.ComponentElement;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
+import net.sevenscales.editor.uicomponents.uml.ShapeGroup;
+import net.sevenscales.editor.uicomponents.uml.ShapeCache;
 import net.sevenscales.editor.utils.DiagramItemConfiguration;
 
 import com.google.gwt.event.dom.client.TouchStartEvent;
@@ -548,25 +550,26 @@ Color borderColor, Color color) {
 	private Diagram createGenericElement(UMLDiagramType type, int x, int y, Color background, 
 Color borderColor, Color color) {
 		Diagram result = null;
-		LibraryShapes.LibraryShape ls = LibraryShapes.get(type.getElementType().getValue());
-		if (ls != null) {
+		ShapeGroup shapeGroup = ShapeCache.get(type.getElementType().getValue(), Tools.isSketchMode());
+		// LibraryShapes.LibraryShape ls = LibraryShapes.get(type.getElementType().getValue());
+		if (shapeGroup != null) {
 			// there might not be generi library shape available
 			// could multiply width and height
-	    DiagramItemDTO item = LibraryShapes.createByType(type.getElementType());
+	    DiagramItemDTO item = LibraryShapes.createByType(type.getElementType().getValue());
       DiagramItemConfiguration.setColors(item, background, borderColor, color);
 	    item.setText(type.getValue());
-	    item.setShape(createshape(ls, x, y));
+	    item.setShape(createshape(shapeGroup, x, y));
 
 	    result = ShapeParser.createDiagramElement(item, surface);
 		}
 		return result;
 	}
 
-	private String createshape(LibraryShapes.LibraryShape ls, int x, int y) {
-		if (ElementType.SEQUENCE.getValue().equals(ls.elementType.getValue())) {
-			return new SequenceShape(x, y, ls.width, ls.height, 20).toString();
+	private String createshape(ShapeGroup shapeGroup, int x, int y) {
+		if (ElementType.SEQUENCE.getValue().equals(shapeGroup.elementType)) {
+			return new SequenceShape(x, y, (int) shapeGroup.width, (int) shapeGroup.height, 20).toString();
 		} else {
-			return new GenericShape(ls.elementType.getValue(), x, y, ls.width, ls.height, ls.shapeProperties, null).toString();
+			return new GenericShape(shapeGroup.elementType, x, y, (int) shapeGroup.width, (int) shapeGroup.height, shapeGroup.properties, null).toString();
 		}
 	}
 

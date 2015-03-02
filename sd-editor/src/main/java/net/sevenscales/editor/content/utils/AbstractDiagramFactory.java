@@ -545,9 +545,9 @@ public interface AbstractDiagramFactory {
 		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       if (Tools.isSketchMode()) {
         Integer props = null;
-        LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.PACKAGE.getValue());
+        LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.PACKAGE.getValue());
         if (sh != null) {
-          props = sh.shapeProperties;
+          props = sh.properties;
         }
         GenericShape gs = ((UMLPackageShape) shape).toGenericShape(props);
         return new PackageElement(surface,
@@ -579,9 +579,9 @@ public interface AbstractDiagramFactory {
 		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       if (Tools.isSketchMode()) {
         Integer props = null;
-        LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.VERTICAL_PARTITION.getValue());
+        LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.VERTICAL_PARTITION.getValue());
         if (sh != null) {
-          props = sh.shapeProperties;
+          props = sh.properties;
         }
         GenericShape gs = ((RectContainerShape) shape).toGenericShape(props);
         return new VerticalPartitionElement(surface,

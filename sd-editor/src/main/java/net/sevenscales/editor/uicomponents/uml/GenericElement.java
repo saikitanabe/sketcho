@@ -303,7 +303,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   }
 
   protected Diagram createGenericElement(ISurfaceHandler surface, GenericShape newShape) {
- 		return new GenericElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(ElementType.getEnum(getDiagramItem().getType())));
+ 		return new GenericElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(getDiagramItem().getType()));
   }
 	
   public boolean resize(Point diff) {

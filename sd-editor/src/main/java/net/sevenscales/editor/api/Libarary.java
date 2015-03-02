@@ -303,17 +303,17 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
     addSection("Flows", new RectContainerShape(10, ACTIVITY_GROUP, 220, ACTIVITY_GROUP_HEIGHT));
 
-    result.add(_create(ElementType.ACTIVITY, "My Activity",
+    result.add(_create(ElementType.ACTIVITY.getValue(), "My Activity",
                  new ActivityShape(30, ACTIVITY_GROUP + 45, 100, 30).toString()));
 
-    result.add(_create(ElementType.SEQUENCE, "Sequence",
+    result.add(_create(ElementType.SEQUENCE.getValue(), "Sequence",
                  new SequenceShape(30, ACTIVITY_GROUP + 100, 100, 40, 20).toString()));
 
-    result.add(_create(ElementType.ACTIVITY_START2,
+    result.add(_create(ElementType.ACTIVITY_START2.getValue(),
                        "",
                        new GenericShape(ElementType.ACTIVITY_START2.getValue(), 187, ACTIVITY_GROUP + 47, 25, 25).toString()));
 
-    result.add(_create(ElementType.ACTIVITY_END2,
+    result.add(_create(ElementType.ACTIVITY_END2.getValue(),
                        "",
                        new GenericShape(ElementType.ACTIVITY_END2.getValue(), 187, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 24, 25, 25).toString()));
                        // new ActivityEndShape(200, ACTIVITY_GROUP + GROUP_HEADING_SPACE + 35, ActivityEnd.ACTIVITY_END_RADIUS).toString(), null, false,
@@ -321,21 +321,21 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
                        // Theme.createDefaultBorderColor(),
                        // Theme.createDefaultTextColor()));
 
-    result.add(_create(ElementType.CHOICE,
+    result.add(_create(ElementType.CHOICE.getValue(),
                        "",
                        new ActivityChoiceShape(184, ACTIVITY_GROUP + 110, 32, 32).toString()));
 
 
-    // result.add(_create(ElementType.FORK, "",
+    // result.add(_create(ElementType.FORK.getValue(), "",
                  // new ForkShape(160, ACTIVITY_GROUP + 60, 5, 75, 1).toString()));
-    result.add(_create(ElementType.FORK_VERTICAL, "",
+    result.add(_create(ElementType.FORK_VERTICAL.getValue(), "",
                  new GenericShape(ElementType.FORK_VERTICAL.getValue(), 160, ACTIVITY_GROUP + 60, 8, 75).toString()));
         
-    result.add(_create(ElementType.FORK_HORIZONTAL, "",
+    result.add(_create(ElementType.FORK_HORIZONTAL.getValue(), "",
               new GenericShape(ElementType.FORK_VERTICAL.getValue(), 45, ACTIVITY_GROUP + 170, 85, 8).toString()));
 
 
-    Diagram swimline = _create(ElementType.HORIZONTAL_PARTITION, "Swimline",
+    Diagram swimline = _create(ElementType.HORIZONTAL_PARTITION.getValue(), "Swimline",
                  new HorizontalPartitionShape(40, ACTIVITY_GROUP + 200, 170, 70).toString());
     result.add(swimline);
   }
@@ -346,7 +346,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     addSection("Roadmap", new RectContainerShape(10, ROADMAP_GROUP, 220, ROADMAP_GROUP_HEIGHT));
 
     int startOffset = 40;
-    Diagram q1 = _create(ElementType.VERTICAL_PARTITION,
+    Diagram q1 = _create(ElementType.VERTICAL_PARTITION.getValue(),
                        "Q1",
                        new RectContainerShape(roadmapIndent, ROADMAP_GROUP + startOffset, 170, ROADMAP_GROUP_HEIGHT - 65).toString());
     q1.setDuplicateMultiplySize(2, 2);
@@ -354,76 +354,76 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 
     int marketingY = ROADMAP_GROUP + 25 + startOffset;
     int marketingHeight = ROADMAP_GROUP_HEIGHT / 2 - 46;
-    Diagram marketing = _create(ElementType.HORIZONTAL_PARTITION, "Marketing",
+    Diagram marketing = _create(ElementType.HORIZONTAL_PARTITION.getValue(), "Marketing",
                                 new HorizontalPartitionShape(20, marketingY, 195, marketingHeight).toString());
     marketing.setDuplicateMultiplySize(3, 3);
     result.add(marketing);
 
-    result.add(_create(ElementType.MIND_CENTRAL,
+    result.add(_create(ElementType.MIND_CENTRAL.getValue(),
                        "Keynote",
                        new MindCentralShape(roadmapIndent + 20, marketingY + 10, 100, 30).toString()));
 
     int productY = marketingY + marketingHeight;
     int productHeight = ROADMAP_GROUP_HEIGHT / 2 - 46;
-    Diagram productLine = _create(ElementType.HORIZONTAL_PARTITION, "Product Line",
+    Diagram productLine = _create(ElementType.HORIZONTAL_PARTITION.getValue(), "Product Line",
                                 new HorizontalPartitionShape(20, productY, 195, productHeight).toString());
 
     productLine.setDuplicateMultiplySize(3, 3);
     result.add(productLine);
 
-    result.add(_create(ElementType.CHOICE,
+    result.add(_create(ElementType.CHOICE.getValue(),
                        "",
                        new ActivityChoiceShape(roadmapIndent + 30, productY + 10, 32, 32).toString()));
-    result.add(_create(ElementType.ACTIVITY, "Release X",
+    result.add(_create(ElementType.ACTIVITY.getValue(), "Release X",
                  new ActivityShape(roadmapIndent + 10, productY + 50, 100, 30).toString()));
   }
 
   private void general(List<Diagram> result) {
     LibraryShape[][] shapes = new LibraryShape[][]{
       {
-        LibraryShapes.get(ElementType.STAR4.getValue()),
-        LibraryShapes.get(ElementType.STAR5.getValue()),
-        LibraryShapes.get(ElementType.ENVELOPE.getValue()),
-        LibraryShapes.get(ElementType.TRIANGLE.getValue())
+        LibraryShapes.getDefaultShape(ElementType.STAR4.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.STAR5.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.ENVELOPE.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.TRIANGLE.getValue())
       },
       {
-        LibraryShapes.get(ElementType.BUBBLE.getValue()),
-        LibraryShapes.get(ElementType.BUBBLE_R.getValue()),
-        LibraryShapes.get(ElementType.RECT.getValue()),
-        LibraryShapes.get(ElementType.LIGHTBULB.getValue())
+        LibraryShapes.getDefaultShape(ElementType.BUBBLE.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.BUBBLE_R.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.RECT.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.LIGHTBULB.getValue())
       },
       {
-        LibraryShapes.get(ElementType.CIRCLE.getValue()),
-        LibraryShapes.get(ElementType.SMILEY.getValue()),
-        LibraryShapes.get(ElementType.POLYGON4.getValue()),
-        LibraryShapes.get(ElementType.POLYGON8.getValue())
+        LibraryShapes.getDefaultShape(ElementType.CIRCLE.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.SMILEY.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.POLYGON4.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.POLYGON8.getValue())
       },
       {
-        LibraryShapes.get(ElementType.ARROW_UP.getValue()),
-        LibraryShapes.get(ElementType.ARROW_DOWN.getValue()),
-        LibraryShapes.get(ElementType.ARROW_RIGHT.getValue()),
-        LibraryShapes.get(ElementType.ARROW_LEFT.getValue())
+        LibraryShapes.getDefaultShape(ElementType.ARROW_UP.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.ARROW_DOWN.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.ARROW_RIGHT.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.ARROW_LEFT.getValue())
       },
       {
-        LibraryShapes.get(ElementType.CLOUD.getValue()),
-        LibraryShapes.get(ElementType.FIREWALL.getValue()),
-        LibraryShapes.get(ElementType.SWITCH.getValue()),
-        LibraryShapes.get(ElementType.ROUTER.getValue())
+        LibraryShapes.getDefaultShape(ElementType.CLOUD.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.FIREWALL.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.SWITCH.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.ROUTER.getValue())
       },
       {
-        LibraryShapes.get(ElementType.IPHONE.getValue()),
-        LibraryShapes.get(ElementType.WEB_BROWSER.getValue()),
-        LibraryShapes.get(ElementType.DESKTOP.getValue()),
-        LibraryShapes.get(ElementType.LAPTOP.getValue())
+        LibraryShapes.getDefaultShape(ElementType.IPHONE.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.WEB_BROWSER.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.DESKTOP.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.LAPTOP.getValue())
       },
       {
-        LibraryShapes.get(ElementType.SERVER2.getValue()),
-        LibraryShapes.get(ElementType.TABLET_UP.getValue()),
-        LibraryShapes.get(ElementType.TABLET_HORIZONTAL.getValue()),
-        LibraryShapes.get(ElementType.OLD_PHONE.getValue())
+        LibraryShapes.getDefaultShape(ElementType.SERVER2.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.TABLET_UP.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.TABLET_HORIZONTAL.getValue()),
+        LibraryShapes.getDefaultShape(ElementType.OLD_PHONE.getValue())
       },
       {
-        LibraryShapes.get(ElementType.ANDROID.getValue())
+        LibraryShapes.getDefaultShape(ElementType.ANDROID.getValue())
       }
     };
 
@@ -440,7 +440,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
       int col = 0;
       int colpos = MARGIN;
       for (LibraryShape colShape : rowShapes) {
-        Diagram el = _create(colShape.elementType,
+        Diagram el = _create(colShape.elementType.getValue(),
                        "",
                        new GenericShape(colShape.elementType.getValue(), 
                              // MARGIN + col * COL_SIZE + col * MARGIN, 
@@ -552,43 +552,43 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     addSection("Software Sketching", new RectContainerShape(10, SOFTWARE_SKETCHING_GROUP, 220, SOFTWARE_SKETCHING_GROUP_HEIGHT));
 
 		// software sketching group		
-    // result.add(_create(ElementType.VERTICAL_PARTITION,
+    // result.add(_create(ElementType.VERTICAL_PARTITION.getValue(),
     //                    "Software Sketching",
     //                    new RectContainerShape(10, SOFTWARE_SKETCHING_GROUP, 220, SOFTWARE_SKETCHING_GROUP_HEIGHT).toString()));
     
-    result.add(_create(ElementType.NOTE,
+    result.add(_create(ElementType.NOTE.getValue(),
                        "*Note* this!",
                        new NoteShape(40, SOFTWARE_SKETCHING_GROUP + GROUP_HEADING_SPACE, 165, 40).toString()));
 
     if (Tools.isSketchMode()) {
-      result.add(_create(ElementType.ACTOR,
+      result.add(_create(ElementType.ACTOR.getValue(),
                          "<<system>>\nActor",
                          new ActorShape(40, SOFTWARE_SKETCHING_GROUP + 120, 43, 54).toString())); 
                          // ShapeProperty.TEXT_POSITION_BOTTOM.getValue() | ShapeProperty.BOLD_TITLE.getValue()));
     } else {
-      result.add(_create(ElementType.ACTOR,
+      result.add(_create(ElementType.ACTOR.getValue(),
                          "<<system>>\nActor",
                          new ActorShape(40, SOFTWARE_SKETCHING_GROUP + 120, 25, 40).toString())); 
     }
 
-    result.add(_create(ElementType.USE_CASE,
+    result.add(_create(ElementType.USE_CASE.getValue(),
                        "Use Case",
                        new GenericShape(ElementType.USE_CASE.getValue(), 115, SOFTWARE_SKETCHING_GROUP + 135, 50, 30).toString()));
 
-    result.add(_create(ElementType.SERVER,
+    result.add(_create(ElementType.SERVER.getValue(),
                        "Server",
                        new ServerShape(40, SOFTWARE_SKETCHING_GROUP + 225, 63, 73).toString()));
 
-    result.add(_create(ElementType.STORAGE,
+    result.add(_create(ElementType.STORAGE.getValue(),
                        "Db",
                        new DbShape(140, SOFTWARE_SKETCHING_GROUP + 230, 100, 30).toString()));
     
-    result.add(_create(ElementType.COMPONENT,
+    result.add(_create(ElementType.COMPONENT.getValue(),
                        "Component",
                        new ComponentShape(40, SOFTWARE_SKETCHING_GROUP + 340, 80, 30).toString()));
     
 		// special border => no border
-    result.add(_create(ElementType.TEXT_ITEM,
+    result.add(_create(ElementType.TEXT_ITEM.getValue(),
                        "Just\n" +
                        "----\n" +
                        "text\n" + 
@@ -642,39 +642,39 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 //    result.add(new Relationship2(this.toolpool, points, "label\n1<>->*", true));
 
     addSection("Class and Package", new RectContainerShape(10, CLASS_GROUP, 220, CLASS_GROUP_HEIGHT));
-    // result.add(_create(ElementType.VERTICAL_PARTITION,
+    // result.add(_create(ElementType.VERTICAL_PARTITION.getValue(),
     //                    "Class and Package",
     //                    new RectContainerShape(10, CLASS_GROUP, 220, CLASS_GROUP_HEIGHT).toString()));
 
-    result.add(_create(ElementType.CLASS, "<<interface>>\n" +
+    result.add(_create(ElementType.CLASS.getValue(), "<<interface>>\n" +
                  "ClassName\n" +
                  "--\n" +
                  "method()",
                  new RectShape(30, CLASS_GROUP + 40, 100, 60).toString()));
 
-    result.add(_create(ElementType.PACKAGE,
+    result.add(_create(ElementType.PACKAGE.getValue(),
                        "package",
                        new UMLPackageShape(120, CLASS_GROUP + 150, 100, 40).toString()));
     
 		// mindmap group
     addSection("Mind Map Library", new RectContainerShape(10, MINDMAP_GROUP, 220, MINDMAP_GROUP_HEIGHT));
-    // result.add(_create(ElementType.VERTICAL_PARTITION,
+    // result.add(_create(ElementType.VERTICAL_PARTITION.getValue(),
     //                    "Mind Map Library",
     //                    new RectContainerShape(10, MINDMAP_GROUP, 220, MINDMAP_GROUP_HEIGHT).toString()));
 
-    result.add(_create(ElementType.MIND_CENTRAL,
+    result.add(_create(ElementType.MIND_CENTRAL.getValue(),
                    "Central Topic",
                    new MindCentralShape(30, MINDMAP_GROUP + 40, 100, 30).toString()));
     
-    result.add(_create(ElementType.ACTIVITY,
+    result.add(_create(ElementType.ACTIVITY.getValue(),
                "Main Topic",
                new ActivityShape(30, MINDMAP_GROUP + 120, 100, 30).toString()));
     
-    result.add(_create(ElementType.TEXT_ITEM,
+    result.add(_create(ElementType.TEXT_ITEM.getValue(),
                "Subtopic",
                new TextShape(30, MINDMAP_GROUP + 170, 100, 30).toString()));
 
-    result.add(_create(ElementType.NOTE,
+    result.add(_create(ElementType.NOTE.getValue(),
                "*Notes!*",
                new NoteShape(30, MINDMAP_GROUP + 205, 170, 45).toString()));
 
@@ -687,21 +687,21 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		return result;
 	}
 
-  private Diagram _create(ElementType type, String text, String shape) {
-    // LibraryShapes.LibraryShape s = LibraryShapes.get(type);
+  private Diagram _create(String elementType, String text, String shape) {
+    // LibraryShapes.LibraryShape s = LibraryShapes.getDefaultShape(type);
     // Integer properties = null;
     // if (s != null) {
     //   properties = s.shapeProperties;
     // }
-    return _create(type, text, shape, true, null, null, null);
+    return _create(elementType, text, shape, true, null, null, null);
   }
 
   // private Diagram _create(ElementType type, String text, String shape) {
   //   return _create(type, text, shape, properties, true, null, null, null);
   // }
 
-  private Diagram _create(ElementType type, String text, String shape, boolean setcolors, Color backgroundColor, Color borderColor, Color textColor) {
-    DiagramItemDTO item = LibraryShapes.createByType(type);
+  private Diagram _create(String elementType, String text, String shape, boolean setcolors, Color backgroundColor, Color borderColor, Color textColor) {
+    DiagramItemDTO item = LibraryShapes.createByType(elementType);
     if (setcolors) {
       DiagramItemConfiguration.setDefaultColors(item);
     } else {

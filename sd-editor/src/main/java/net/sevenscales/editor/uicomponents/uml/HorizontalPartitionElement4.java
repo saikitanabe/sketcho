@@ -48,9 +48,9 @@ public class HorizontalPartitionElement4 extends CalculatedPathElement {
   private List<IPathFactory> factories;
 
   private static Integer resolveProperties() {
-    LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.HORIZONTAL_PARTITION.getValue());
+    LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.HORIZONTAL_PARTITION.getValue());
     if (sh != null) {
-      return sh.shapeProperties;
+      return sh.properties;
     }
     return null;
   }
@@ -128,7 +128,7 @@ public class HorizontalPartitionElement4 extends CalculatedPathElement {
   
   protected Diagram createDiagram(ISurfaceHandler surface, HorizontalPartitionShape newShape,
       String text, boolean editable) {
-    return new HorizontalPartitionElement4(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(ElementType.HORIZONTAL_PARTITION));
+    return new HorizontalPartitionElement4(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(ElementType.HORIZONTAL_PARTITION.getValue()));
   }
 
 }

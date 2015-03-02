@@ -71,7 +71,7 @@ public class ShapeCache {
 		}
 		ShapeProto[] prots = new ShapeProto[protos.size()];
 		protos.toArray(prots);
-		ShapeGroup result = new ShapeGroup(prots, shape.getWidth(), shape.getHeight(), shape.getProperties());
+		ShapeGroup result = new ShapeGroup(shape.getElementType(), prots, shape.getWidth(), shape.getHeight(), shape.getProperties());
 		return result;
 	}
 

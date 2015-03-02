@@ -87,8 +87,42 @@ public class LibraryShapes {
     shapes.put(ElementType.LIGHTBULB.getValue(), new LibraryShape(ElementType.LIGHTBULB, 45, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
 	}
 
-	public static LibraryShape get(String type) {
-		return shapes.get(type);
+  public static LibraryShape getDefaultShape(String type) {
+    return shapes.get(type);
+  }
+
+  public static class ShapeProps {
+    public Integer properties;
+    public Integer fontSize;
+
+    private ShapeProps(Integer properties, Integer fontSize) {
+      this.properties = properties;
+      this.fontSize = fontSize;      
+    }
+  }
+
+	public static ShapeProps getShapeProps(String type) {
+    Integer properties = null;
+    Integer fontSize = null;
+
+    LibraryShapes.LibraryShape s = shapes.get(type);
+
+    if (s != null) {
+      properties = s.shapeProperties;
+      fontSize = s.fontSize;
+    } else {
+      // TODO temporary solution
+      //     LibraryShapes.LibraryShape s = LibraryShapes.get(ElementType.getEnum(type));
+      // can be removed
+
+      ShapeGroup sg = ShapeCache.get(type, true);
+      if (sg != null) {
+        properties = sg.properties;
+        fontSize = sg.fontSize;
+      }
+    }
+
+		return new ShapeProps(properties, fontSize);
 	}
 
   public static class LibraryShape {
@@ -132,32 +166,13 @@ public class LibraryShapes {
 
   }
 
-  public static DiagramItemDTO createByType(ElementType type) {
-    return createByType(type.getValue());
-  }
   public static DiagramItemDTO createByType(String type) {
     DiagramItemDTO result = new DiagramItemDTO();
-    LibraryShapes.LibraryShape s = LibraryShapes.get(type);
-    Integer properties = null;
-    Integer fontSize = null;
-    if (s != null) {
-      properties = s.shapeProperties;
-      fontSize = s.fontSize;
-    } else {
-      // TODO temporary solution
-      //     LibraryShapes.LibraryShape s = LibraryShapes.get(ElementType.getEnum(type));
-      // can be removed
-
-      ShapeGroup sg = ShapeCache.get(type, true);
-      if (sg != null) {
-        properties = sg.properties;
-        fontSize = sg.fontSize;
-      }
-    }
+    ShapeProps sp = getShapeProps(type);
 
     result.setType(type);
-    result.setShapeProperties(properties);
-    result.setFontSize(fontSize);
+    result.setShapeProperties(sp.properties);
+    result.setFontSize(sp.fontSize);
     return result;
   }
 

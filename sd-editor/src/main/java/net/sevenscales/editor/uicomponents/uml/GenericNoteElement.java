@@ -27,7 +27,7 @@ public class GenericNoteElement extends GenericElement {
 
   @Override
   protected Diagram createGenericElement(ISurfaceHandler surface, GenericShape newShape) {
-    return new GenericNoteElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(ElementType.getEnum(getDiagramItem().getType())));
+    return new GenericNoteElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(getDiagramItem().getType()));
   }
 
   @Override

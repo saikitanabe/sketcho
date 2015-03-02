@@ -72,15 +72,15 @@ public enum ElementType {
 		return this.value;
 	}
 
-	public static ElementType getEnum(String value) {
-		if (value == null) {
-      throw new IllegalArgumentException();
-		}
+	// public static ElementType getEnum(String value) {
+	// 	if (value == null) {
+ //      throw new IllegalArgumentException();
+	// 	}
 		
-		for (ElementType v : values()) {
-      if (value.equalsIgnoreCase(v.getValue())) return v;
-		}
-		throw new IllegalArgumentException();
-	}
+	// 	for (ElementType v : values()) {
+ //      if (value.equalsIgnoreCase(v.getValue())) return v;
+	// 	}
+	// 	throw new IllegalArgumentException();
+	// }
 	
 }
