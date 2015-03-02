@@ -6,7 +6,7 @@ public class ShapeGroup {
 		// NOTE: important to keep as float or double; int will be really slow!
 	public double width;
 	public double height;
-	private Integer properties;
+	public Integer properties;
 	public Integer fontSize;
 
 	public ShapeGroup(ShapeProto[] protos, double width, double height, Integer properties) {
@@ -16,7 +16,4 @@ public class ShapeGroup {
 		this.properties = properties;
 	}
 
-	public Integer getProperties() {
-		return this.properties;
-	}
 }

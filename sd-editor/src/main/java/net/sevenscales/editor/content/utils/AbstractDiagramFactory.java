@@ -461,12 +461,34 @@ public interface AbstractDiagramFactory {
       GenericShape gh = (GenericShape) shape;
       AbstractDiagramFactoryUtils.fixUninitializedDiagramItem(item, gh);
 
-      switch (ElementType.getEnum(item.getType())) {
-        case NOTE: {
-          // need to always have vertical text element, conversion from 
-          // official note => sketch note doesn't contain this property!
-          // gh.addShapeProperty(ShapeProperty.TEXT_RESIZE_DIR_VERTICAL);
-          return new GenericNoteElement(surface,
+      if (item.getType().equals(ElementType.NOTE.getValue())) {
+        // need to always have vertical text element, conversion from 
+        // official note => sketch note doesn't contain this property!
+        // gh.addShapeProperty(ShapeProperty.TEXT_RESIZE_DIR_VERTICAL);
+        return new GenericNoteElement(surface,
+          gh,
+          item.getText(), 
+          DiagramItemFactory.parseBackgroundColor(item),
+          DiagramItemFactory.parseBorderColor(item),
+          DiagramItemFactory.parseTextColor(item),
+          editable,
+          item);
+      } else if (item.getType().equals(ElementType.FREEHAND2.getValue())) {
+        return new GenericFreehandElement(surface,
+          gh,
+          item.getText(), 
+          DiagramItemFactory.parseBackgroundColor(item),
+          DiagramItemFactory.parseBorderColor(item),
+          DiagramItemFactory.parseTextColor(item),
+          editable,
+          item);
+      } else {
+        // if (item.getShapeProperties() == null) {
+        // }
+        // could load default shape properties, since this is probably a switch
+        // from awesome => corporate
+        // could restore all except DISABLE_SHAPE_AUTO_RESIZE
+        return new GenericElement(surface,
             gh,
             item.getText(), 
             DiagramItemFactory.parseBackgroundColor(item),
@@ -474,31 +496,6 @@ public interface AbstractDiagramFactory {
             DiagramItemFactory.parseTextColor(item),
             editable,
             item);
-        }
-        case FREEHAND2:
-          return new GenericFreehandElement(surface,
-            gh,
-            item.getText(), 
-            DiagramItemFactory.parseBackgroundColor(item),
-            DiagramItemFactory.parseBorderColor(item),
-            DiagramItemFactory.parseTextColor(item),
-            editable,
-            item);
-        default: {
-          // if (item.getShapeProperties() == null) {
-          // }
-          // could load default shape properties, since this is probably a switch
-          // from awesome => corporate
-          // could restore all except DISABLE_SHAPE_AUTO_RESIZE
-          return new GenericElement(surface,
-              gh,
-              item.getText(), 
-              DiagramItemFactory.parseBackgroundColor(item),
-              DiagramItemFactory.parseBorderColor(item),
-              DiagramItemFactory.parseTextColor(item),
-              editable,
-              item);
-        }
       }
     }
   }
@@ -548,7 +545,7 @@ public interface AbstractDiagramFactory {
 		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       if (Tools.isSketchMode()) {
         Integer props = null;
-        LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.PACKAGE);
+        LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.PACKAGE.getValue());
         if (sh != null) {
           props = sh.shapeProperties;
         }
@@ -582,7 +579,7 @@ public interface AbstractDiagramFactory {
 		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       if (Tools.isSketchMode()) {
         Integer props = null;
-        LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.VERTICAL_PARTITION);
+        LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.VERTICAL_PARTITION.getValue());
         if (sh != null) {
           props = sh.shapeProperties;
         }

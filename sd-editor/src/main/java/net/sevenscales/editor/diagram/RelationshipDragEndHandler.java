@@ -548,7 +548,7 @@ Color borderColor, Color color) {
 	private Diagram createGenericElement(UMLDiagramType type, int x, int y, Color background, 
 Color borderColor, Color color) {
 		Diagram result = null;
-		LibraryShapes.LibraryShape ls = LibraryShapes.get(type.getElementType());
+		LibraryShapes.LibraryShape ls = LibraryShapes.get(type.getElementType().getValue());
 		if (ls != null) {
 			// there might not be generi library shape available
 			// could multiply width and height

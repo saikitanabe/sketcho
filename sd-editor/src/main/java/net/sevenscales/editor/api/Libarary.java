@@ -381,49 +381,49 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
   private void general(List<Diagram> result) {
     LibraryShape[][] shapes = new LibraryShape[][]{
       {
-        LibraryShapes.get(ElementType.STAR4),
-        LibraryShapes.get(ElementType.STAR5),
-        LibraryShapes.get(ElementType.ENVELOPE),
-        LibraryShapes.get(ElementType.TRIANGLE)
+        LibraryShapes.get(ElementType.STAR4.getValue()),
+        LibraryShapes.get(ElementType.STAR5.getValue()),
+        LibraryShapes.get(ElementType.ENVELOPE.getValue()),
+        LibraryShapes.get(ElementType.TRIANGLE.getValue())
       },
       {
-        LibraryShapes.get(ElementType.BUBBLE),
-        LibraryShapes.get(ElementType.BUBBLE_R),
-        LibraryShapes.get(ElementType.RECT),
-        LibraryShapes.get(ElementType.LIGHTBULB)
+        LibraryShapes.get(ElementType.BUBBLE.getValue()),
+        LibraryShapes.get(ElementType.BUBBLE_R.getValue()),
+        LibraryShapes.get(ElementType.RECT.getValue()),
+        LibraryShapes.get(ElementType.LIGHTBULB.getValue())
       },
       {
-        LibraryShapes.get(ElementType.CIRCLE),
-        LibraryShapes.get(ElementType.SMILEY),
-        LibraryShapes.get(ElementType.POLYGON4),
-        LibraryShapes.get(ElementType.POLYGON8)
+        LibraryShapes.get(ElementType.CIRCLE.getValue()),
+        LibraryShapes.get(ElementType.SMILEY.getValue()),
+        LibraryShapes.get(ElementType.POLYGON4.getValue()),
+        LibraryShapes.get(ElementType.POLYGON8.getValue())
       },
       {
-        LibraryShapes.get(ElementType.ARROW_UP),
-        LibraryShapes.get(ElementType.ARROW_DOWN),
-        LibraryShapes.get(ElementType.ARROW_RIGHT),
-        LibraryShapes.get(ElementType.ARROW_LEFT)
+        LibraryShapes.get(ElementType.ARROW_UP.getValue()),
+        LibraryShapes.get(ElementType.ARROW_DOWN.getValue()),
+        LibraryShapes.get(ElementType.ARROW_RIGHT.getValue()),
+        LibraryShapes.get(ElementType.ARROW_LEFT.getValue())
       },
       {
-        LibraryShapes.get(ElementType.CLOUD),
-        LibraryShapes.get(ElementType.FIREWALL),
-        LibraryShapes.get(ElementType.SWITCH),
-        LibraryShapes.get(ElementType.ROUTER)
+        LibraryShapes.get(ElementType.CLOUD.getValue()),
+        LibraryShapes.get(ElementType.FIREWALL.getValue()),
+        LibraryShapes.get(ElementType.SWITCH.getValue()),
+        LibraryShapes.get(ElementType.ROUTER.getValue())
       },
       {
-        LibraryShapes.get(ElementType.IPHONE),
-        LibraryShapes.get(ElementType.WEB_BROWSER),
-        LibraryShapes.get(ElementType.DESKTOP),
-        LibraryShapes.get(ElementType.LAPTOP)
+        LibraryShapes.get(ElementType.IPHONE.getValue()),
+        LibraryShapes.get(ElementType.WEB_BROWSER.getValue()),
+        LibraryShapes.get(ElementType.DESKTOP.getValue()),
+        LibraryShapes.get(ElementType.LAPTOP.getValue())
       },
       {
-        LibraryShapes.get(ElementType.SERVER2),
-        LibraryShapes.get(ElementType.TABLET_UP),
-        LibraryShapes.get(ElementType.TABLET_HORIZONTAL),
-        LibraryShapes.get(ElementType.OLD_PHONE)
+        LibraryShapes.get(ElementType.SERVER2.getValue()),
+        LibraryShapes.get(ElementType.TABLET_UP.getValue()),
+        LibraryShapes.get(ElementType.TABLET_HORIZONTAL.getValue()),
+        LibraryShapes.get(ElementType.OLD_PHONE.getValue())
       },
       {
-        LibraryShapes.get(ElementType.ANDROID)
+        LibraryShapes.get(ElementType.ANDROID.getValue())
       }
     };
 

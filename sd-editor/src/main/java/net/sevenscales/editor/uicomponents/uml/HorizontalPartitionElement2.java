@@ -48,7 +48,7 @@ public class HorizontalPartitionElement2 extends GenericElement implements Suppo
   // private static final int HEADER_HEIGHT = 25;
 
   private static Integer resolveProperties() {
-    LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.HORIZONTAL_PARTITION);
+    LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.HORIZONTAL_PARTITION.getValue());
     if (sh != null) {
       return sh.shapeProperties;
     }

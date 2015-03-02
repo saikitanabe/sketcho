@@ -66,7 +66,7 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
   }
 
   private static Integer resolveProperties() {
-    LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.SEQUENCE);
+    LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.SEQUENCE.getValue());
     if (sh != null) {
       return sh.shapeProperties;
     }

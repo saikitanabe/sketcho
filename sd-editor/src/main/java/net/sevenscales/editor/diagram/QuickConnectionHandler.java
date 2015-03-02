@@ -399,7 +399,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	private IDiagramItem switchToUseCase(Diagram d, IDiagramItem copy) {
 		copy.setType(ElementType.USE_CASE.getValue());
 		copy.setShape(new GenericShape(ElementType.USE_CASE.getValue(), d.getLeft(), d.getTop(), 106, 42).toString());
-		LibraryShapes.LibraryShape shape = LibraryShapes.get(ElementType.USE_CASE);
+		LibraryShapes.LibraryShape shape = LibraryShapes.get(ElementType.USE_CASE.getValue());
 		if (shape != null) {
 			copy.setShapeProperties(shape.shapeProperties);
 		}
@@ -435,7 +435,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	private IDiagramItem setDefaultValues(IDiagramItem item) {
 		DiagramItemConfiguration.setDefaultColors(item);
 
-		LibraryShapes.LibraryShape ls = LibraryShapes.get(ElementType.getEnum(item.getType()));
+		LibraryShapes.LibraryShape ls = LibraryShapes.get(item.getType());
 		if (ls != null) {
 			item.setShapeProperties(ls.shapeProperties);
 		} else {

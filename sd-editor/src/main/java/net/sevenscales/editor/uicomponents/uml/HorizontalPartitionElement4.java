@@ -48,7 +48,7 @@ public class HorizontalPartitionElement4 extends CalculatedPathElement {
   private List<IPathFactory> factories;
 
   private static Integer resolveProperties() {
-    LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.HORIZONTAL_PARTITION);
+    LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.HORIZONTAL_PARTITION.getValue());
     if (sh != null) {
       return sh.shapeProperties;
     }

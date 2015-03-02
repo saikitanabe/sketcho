@@ -23,26 +23,23 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	private IGenericElement parent;
 	private GenericShape shape;
-	private ElementType elementType;
+	private String elementType;
 
 	GenericHasTextElement(IGenericElement parent, GenericShape shape) {
 		super(parent.getDiagram());
 		this.parent = parent;
 		this.shape = shape;
+		this.elementType = shape.getElementType();
 		// possible to customize for each element type
-		elementType = ElementType.getEnum(shape.getElementType());
-		switch (elementType) {
-			case BUBBLE:
-			case BUBBLE_R: {
-				this.marginLeftFactor = 0.09f;
-				if (Tools.isSketchMode()) {
-					this.marginTopFactor = 0.05f;
-				} else {
-					this.marginTopFactor = 0.09f;
-				}
-				this.marginBottomFactor = 0.11f;
-				break;
+		if (elementType.equals(ElementType.BUBBLE.getValue()) || 
+				elementType.equals(ElementType.BUBBLE_R.getValue())) {
+			this.marginLeftFactor = 0.09f;
+			if (Tools.isSketchMode()) {
+				this.marginTopFactor = 0.05f;
+			} else {
+				this.marginTopFactor = 0.09f;
 			}
+			this.marginBottomFactor = 0.11f;
 		}
 	}
 
@@ -157,12 +154,11 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
   public int getTextMargin(int defaultMargin) {
-  	switch (elementType) {
-  		case COMPONENT:
-  			return (int) (defaultMargin * 20f/30f);
-  		case BUBBLE_R:
-  		case BUBBLE:
-  			return getMarginTop();
+  	if (elementType.equals(ElementType.COMPONENT.getValue())) {
+  		return (int) (defaultMargin * 20f/30f);
+  	} else if (elementType.equals(ElementType.BUBBLE_R.getValue()) || 
+  		elementType.equals(ElementType.BUBBLE.getValue())) {
+			return getMarginTop();
   	}
   	return (int) (defaultMargin * 50f/30f);
   }
@@ -209,13 +205,12 @@ class GenericHasTextElement extends AbstractHasTextElement {
 			return marginTop;
 		}
 
-		switch (elementType) {
-			case COMPONENT:
-				return 0;
-			case STORAGE:
-				return 9;
+		if (elementType.equals(ElementType.COMPONENT.getValue())) {
+			return 0;
+		} else if (elementType.equals(ElementType.STORAGE.getValue())) {
+			return 9;
 		}
-		
+
 		return (int) (parent.getHeight() * marginTopFactor);
 	}
 
@@ -224,13 +219,12 @@ class GenericHasTextElement extends AbstractHasTextElement {
 		if (marginBottom > 0) {
 			return marginBottom;
 		}
-	
-		switch (elementType) {
-			case STORAGE:
-				return 15;
-			case BUBBLE:
-			case BUBBLE_R:
-				return (int) (parent.getHeight() * marginBottomFactor);
+
+		if (elementType.equals(ElementType.STORAGE.getValue())) {
+			return 15;
+		} else if (elementType.equals(ElementType.BUBBLE) ||
+							 elementType.equals(ElementType.BUBBLE_R)) {
+			return (int) (parent.getHeight() * marginBottomFactor);
 		}
 		return 0;
 	}

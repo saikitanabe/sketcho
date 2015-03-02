@@ -11,7 +11,7 @@ import net.sevenscales.editor.uicomponents.uml.ShapeCache;
 import net.sevenscales.editor.uicomponents.uml.ShapeGroup;
 
 public class LibraryShapes {
-	public static Map<ElementType, LibraryShape> shapes;
+	public static Map<String, LibraryShape> shapes;
 
   public static final int TOP_CLASS_LIKE_PROPERTIES = ShapeProperty.TEXT_POSITION_TOP.getValue() | 
                                                   ShapeProperty.TEXT_RESIZE_DIR_HORIZONTAL.getValue() |
@@ -30,64 +30,64 @@ public class LibraryShapes {
                                              ShapeProperty.BOLD_TITLE.getValue() |
                                              ShapeProperty.CENTERED_TEXT.getValue();                                                         
 	static {
-		shapes = new HashMap<ElementType, LibraryShape>();
+		shapes = new HashMap<String, LibraryShape>();
 
     // for these shapes only sketch type comes from svg, corporate is coded
     // and properties mapping is needed to be for coded types (also SVGs should be updated with correct e.g. data-text-type='horizontal|top|center')
-    shapes.put(ElementType.ACTOR, new LibraryShape(ElementType.ACTOR, 48, 60, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
-    shapes.put(ElementType.SERVER, new LibraryShape(ElementType.SERVER, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
-    shapes.put(ElementType.STORAGE, new LibraryShape(ElementType.STORAGE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
-    shapes.put(ElementType.NOTE, new LibraryShape(ElementType.NOTE, 150, 40, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3));
-    shapes.put(ElementType.COMPONENT, new LibraryShape(ElementType.COMPONENT, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
-    shapes.put(ElementType.ACTIVITY, new LibraryShape(ElementType.ACTIVITY, 109, 40, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
-    shapes.put(ElementType.CHOICE, new LibraryShape(ElementType.CHOICE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
-    shapes.put(ElementType.ACTIVITY_START2, new LibraryShape(ElementType.ACTIVITY_START2, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
-    shapes.put(ElementType.ACTIVITY_END2, new LibraryShape(ElementType.ACTIVITY_START2, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
-    shapes.put(ElementType.FORK_HORIZONTAL, new LibraryShape(ElementType.FORK_HORIZONTAL, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
-    shapes.put(ElementType.FORK_VERTICAL, new LibraryShape(ElementType.FORK_VERTICAL, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
-    shapes.put(ElementType.PACKAGE, new LibraryShape(ElementType.PACKAGE, 47, 55, TOP_CLASS_LIKE_PROPERTIES, 3, 3));
-    shapes.put(ElementType.MIND_CENTRAL, new LibraryShape(ElementType.MIND_CENTRAL, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3, 18));
+    shapes.put(ElementType.ACTOR.getValue(), new LibraryShape(ElementType.ACTOR, 48, 60, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.SERVER.getValue(), new LibraryShape(ElementType.SERVER, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.STORAGE.getValue(), new LibraryShape(ElementType.STORAGE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.NOTE.getValue(), new LibraryShape(ElementType.NOTE, 150, 40, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3));
+    shapes.put(ElementType.COMPONENT.getValue(), new LibraryShape(ElementType.COMPONENT, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.ACTIVITY.getValue(), new LibraryShape(ElementType.ACTIVITY, 109, 40, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.CHOICE.getValue(), new LibraryShape(ElementType.CHOICE, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.ACTIVITY_START2.getValue(), new LibraryShape(ElementType.ACTIVITY_START2, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.ACTIVITY_END2.getValue(), new LibraryShape(ElementType.ACTIVITY_START2, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.FORK_HORIZONTAL.getValue(), new LibraryShape(ElementType.FORK_HORIZONTAL, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.FORK_VERTICAL.getValue(), new LibraryShape(ElementType.FORK_VERTICAL, 47, 55, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.PACKAGE.getValue(), new LibraryShape(ElementType.PACKAGE, 47, 55, TOP_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.MIND_CENTRAL.getValue(), new LibraryShape(ElementType.MIND_CENTRAL, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3, 18));
 
-    // shapes.put(ElementType.USE_CASE, new LibraryShape(ElementType.USE_CASE, 50, 35, TOP_CLASS_LIKE_PROPERTIES | ShapeProperty.CENTERED_TEXT.getValue(), 2, 2));
-    // shapes.put(ElementType.CLASS, new LibraryShape(ElementType.CLASS, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
+    // shapes.put(ElementType.USE_CASE.getValue(), new LibraryShape(ElementType.USE_CASE, 50, 35, TOP_CLASS_LIKE_PROPERTIES | ShapeProperty.CENTERED_TEXT.getValue(), 2, 2));
+    // shapes.put(ElementType.CLASS.getValue(), new LibraryShape(ElementType.CLASS, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
 
     // ALL GENERIC SHAPES HAS TO BE HERE UNTIL TOOLBAR LIBRARY DOESN'T USE THESE
     // NOTE: all data-text-type on svg to match these needs to be fixed if these are remove!!
-	  shapes.put(ElementType.STAR4, new LibraryShape(ElementType.STAR4, 40, 40, BOTTOM_CLASS_LIKE_PROPERTIES));
-	  shapes.put(ElementType.STAR5, new LibraryShape(ElementType.STAR5, 40, 40, BOTTOM_CLASS_LIKE_PROPERTIES)); 
-	  shapes.put(ElementType.ENVELOPE, new LibraryShape(ElementType.ENVELOPE, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES));
-	  shapes.put(ElementType.TRIANGLE, new LibraryShape(ElementType.TRIANGLE, 40, 40, BOTTOM_CLASS_LIKE_PROPERTIES));
-	  shapes.put(ElementType.CLOUD, new LibraryShape(ElementType.CLOUD, 40, 40, CIRCLE_LIKE_TEXT, 3, 3));
-	  shapes.put(ElementType.FIREWALL, new LibraryShape(ElementType.FIREWALL, 27, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
-	  shapes.put(ElementType.BUBBLE, new LibraryShape(ElementType.BUBBLE, 50, 35, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3));
-	  shapes.put(ElementType.BUBBLE_R, new LibraryShape(ElementType.BUBBLE_R, 50, 35, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3));
-	  shapes.put(ElementType.CIRCLE, new LibraryShape(ElementType.CIRCLE, 40, 40, CIRCLE_LIKE_TEXT, 3, 3));
-	  shapes.put(ElementType.SMILEY, new LibraryShape(ElementType.SMILEY, 40, 40, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
-	  shapes.put(ElementType.POLYGON4, new LibraryShape(ElementType.POLYGON4, 40, 40, CIRCLE_LIKE_TEXT, 3, 3)); 
-	  shapes.put(ElementType.POLYGON8, new LibraryShape(ElementType.POLYGON8, 40, 40, CIRCLE_LIKE_TEXT, 3, 3));
-    shapes.put(ElementType.ARROW_UP, new LibraryShape(ElementType.ARROW_UP, 20, 40, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
-	  shapes.put(ElementType.ARROW_DOWN, new LibraryShape(ElementType.ARROW_DOWN, 20, 40, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
-	  shapes.put(ElementType.ARROW_RIGHT, new LibraryShape(ElementType.ARROW_RIGHT, 40, 20, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
-	  shapes.put(ElementType.ARROW_LEFT, new LibraryShape(ElementType.ARROW_LEFT, 40, 20, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
-    shapes.put(ElementType.IPHONE, new LibraryShape(ElementType.IPHONE, 24, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
-	  shapes.put(ElementType.WEB_BROWSER, new LibraryShape(ElementType.WEB_BROWSER, 50, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 4, 4));
-    shapes.put(ElementType.RECT, new LibraryShape(ElementType.RECT, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.SEQUENCE, new LibraryShape(ElementType.SEQUENCE, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.HORIZONTAL_PARTITION, new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.VERTICAL_PARTITION, new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.SWITCH, new LibraryShape(ElementType.SWITCH, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.ROUTER, new LibraryShape(ElementType.ROUTER, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.DESKTOP, new LibraryShape(ElementType.DESKTOP, 50, 40, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.LAPTOP, new LibraryShape(ElementType.LAPTOP, 50, 28, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.SERVER2, new LibraryShape(ElementType.SERVER2, 25, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.TABLET_UP, new LibraryShape(ElementType.TABLET_UP, 40, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 4, 4));
-    shapes.put(ElementType.TABLET_HORIZONTAL, new LibraryShape(ElementType.TABLET_HORIZONTAL, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 4, 4));
-    shapes.put(ElementType.OLD_PHONE, new LibraryShape(ElementType.OLD_PHONE, 24, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.ANDROID, new LibraryShape(ElementType.ANDROID, 28, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.LIGHTBULB, new LibraryShape(ElementType.LIGHTBULB, 45, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
+	  shapes.put(ElementType.STAR4.getValue(), new LibraryShape(ElementType.STAR4, 40, 40, BOTTOM_CLASS_LIKE_PROPERTIES));
+	  shapes.put(ElementType.STAR5.getValue(), new LibraryShape(ElementType.STAR5, 40, 40, BOTTOM_CLASS_LIKE_PROPERTIES)); 
+	  shapes.put(ElementType.ENVELOPE.getValue(), new LibraryShape(ElementType.ENVELOPE, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES));
+	  shapes.put(ElementType.TRIANGLE.getValue(), new LibraryShape(ElementType.TRIANGLE, 40, 40, BOTTOM_CLASS_LIKE_PROPERTIES));
+	  shapes.put(ElementType.CLOUD.getValue(), new LibraryShape(ElementType.CLOUD, 40, 40, CIRCLE_LIKE_TEXT, 3, 3));
+	  shapes.put(ElementType.FIREWALL.getValue(), new LibraryShape(ElementType.FIREWALL, 27, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+	  shapes.put(ElementType.BUBBLE.getValue(), new LibraryShape(ElementType.BUBBLE, 50, 35, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3));
+	  shapes.put(ElementType.BUBBLE_R.getValue(), new LibraryShape(ElementType.BUBBLE_R, 50, 35, ShapeProperty.TEXT_RESIZE_DIR_VERTICAL.getValue(), 3, 3));
+	  shapes.put(ElementType.CIRCLE.getValue(), new LibraryShape(ElementType.CIRCLE, 40, 40, CIRCLE_LIKE_TEXT, 3, 3));
+	  shapes.put(ElementType.SMILEY.getValue(), new LibraryShape(ElementType.SMILEY, 40, 40, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+	  shapes.put(ElementType.POLYGON4.getValue(), new LibraryShape(ElementType.POLYGON4, 40, 40, CIRCLE_LIKE_TEXT, 3, 3)); 
+	  shapes.put(ElementType.POLYGON8.getValue(), new LibraryShape(ElementType.POLYGON8, 40, 40, CIRCLE_LIKE_TEXT, 3, 3));
+    shapes.put(ElementType.ARROW_UP.getValue(), new LibraryShape(ElementType.ARROW_UP, 20, 40, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+	  shapes.put(ElementType.ARROW_DOWN.getValue(), new LibraryShape(ElementType.ARROW_DOWN, 20, 40, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+	  shapes.put(ElementType.ARROW_RIGHT.getValue(), new LibraryShape(ElementType.ARROW_RIGHT, 40, 20, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+	  shapes.put(ElementType.ARROW_LEFT.getValue(), new LibraryShape(ElementType.ARROW_LEFT, 40, 20, BOTTOM_CLASS_LIKE_PROPERTIES, 3, 3));
+    shapes.put(ElementType.IPHONE.getValue(), new LibraryShape(ElementType.IPHONE, 24, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
+	  shapes.put(ElementType.WEB_BROWSER.getValue(), new LibraryShape(ElementType.WEB_BROWSER, 50, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 4, 4));
+    shapes.put(ElementType.RECT.getValue(), new LibraryShape(ElementType.RECT, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.SEQUENCE.getValue(), new LibraryShape(ElementType.SEQUENCE, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.HORIZONTAL_PARTITION.getValue(), new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.VERTICAL_PARTITION.getValue(), new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.SWITCH.getValue(), new LibraryShape(ElementType.SWITCH, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.ROUTER.getValue(), new LibraryShape(ElementType.ROUTER, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.DESKTOP.getValue(), new LibraryShape(ElementType.DESKTOP, 50, 40, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.LAPTOP.getValue(), new LibraryShape(ElementType.LAPTOP, 50, 28, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.SERVER2.getValue(), new LibraryShape(ElementType.SERVER2, 25, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.TABLET_UP.getValue(), new LibraryShape(ElementType.TABLET_UP, 40, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 4, 4));
+    shapes.put(ElementType.TABLET_HORIZONTAL.getValue(), new LibraryShape(ElementType.TABLET_HORIZONTAL, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 4, 4));
+    shapes.put(ElementType.OLD_PHONE.getValue(), new LibraryShape(ElementType.OLD_PHONE, 24, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.ANDROID.getValue(), new LibraryShape(ElementType.ANDROID, 28, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.LIGHTBULB.getValue(), new LibraryShape(ElementType.LIGHTBULB, 45, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
 	}
 
-	public static LibraryShape get(ElementType type) {
+	public static LibraryShape get(String type) {
 		return shapes.get(type);
 	}
 
@@ -137,7 +137,7 @@ public class LibraryShapes {
   }
   public static DiagramItemDTO createByType(String type) {
     DiagramItemDTO result = new DiagramItemDTO();
-    LibraryShapes.LibraryShape s = LibraryShapes.get(ElementType.getEnum(type));
+    LibraryShapes.LibraryShape s = LibraryShapes.get(type);
     Integer properties = null;
     Integer fontSize = null;
     if (s != null) {
@@ -150,7 +150,7 @@ public class LibraryShapes {
 
       ShapeGroup sg = ShapeCache.get(type, true);
       if (sg != null) {
-        properties = sg.getProperties();
+        properties = sg.properties;
         fontSize = sg.fontSize;
       }
     }
