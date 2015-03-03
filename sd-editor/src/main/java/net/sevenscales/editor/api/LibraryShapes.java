@@ -73,9 +73,14 @@ public class LibraryShapes {
 	  shapes.put(ElementType.WEB_BROWSER.getValue(), new LibraryShape(ElementType.WEB_BROWSER, 50, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 4, 4));
     shapes.put(ElementType.RECT.getValue(), new LibraryShape(ElementType.RECT, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.SEQUENCE.getValue(), new LibraryShape(ElementType.SEQUENCE, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.HORIZONTAL_PARTITION.getValue(), new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.VERTICAL_PARTITION.getValue(), new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
-    shapes.put(ElementType.SWITCH.getValue(), new LibraryShape(ElementType.SWITCH, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.HORIZONTAL_PARTITION.getValue(), new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35, ShapeProperty.TEXT_POSITION_TOP.getValue() |
+      ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue() |
+      ShapeProperty.BOLD_TITLE.getValue(), 2, 2));
+    shapes.put(ElementType.VERTICAL_PARTITION.getValue(), new LibraryShape(ElementType.HORIZONTAL_PARTITION, 50, 35,
+      ShapeProperty.TEXT_POSITION_TOP.getValue() |
+      ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue() |
+      ShapeProperty.BOLD_TITLE.getValue() |
+      ShapeProperty.TEXT_TITLE_CENTER.getValue(), 2, 2));    shapes.put(ElementType.SWITCH.getValue(), new LibraryShape(ElementType.SWITCH, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.ROUTER.getValue(), new LibraryShape(ElementType.ROUTER, 50, 35, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.DESKTOP.getValue(), new LibraryShape(ElementType.DESKTOP, 50, 40, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.LAPTOP.getValue(), new LibraryShape(ElementType.LAPTOP, 50, 28, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
@@ -120,6 +125,11 @@ public class LibraryShapes {
         properties = sg.properties;
         fontSize = sg.fontSize;
       }
+    }
+
+    if (properties == null) {
+      // if configuration failure set default properties
+      properties = BOTTOM_CLASS_LIKE_PROPERTIES;
     }
 
 		return new ShapeProps(properties, fontSize);
