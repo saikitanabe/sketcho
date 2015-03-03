@@ -46,12 +46,25 @@ public class ShapeCache {
 		}
 	}-*/;
 
-	private static void updateShapes(JsArray<JsShape> shapes) {
+	public static void updateShapes(JsArray<JsShape> shapes) {
 		for (int i = 0; i < shapes.length(); ++i) {
 			JsShape shape = shapes.get(i);
-			ShapeGroup sg = extractShapeGroup(shape);
-			addShape(shape, sg);
+			addShape(shape);
 		}
+	}
+
+	public static boolean hasShape(JsShape shape) {
+		if (shape.getShapeType() == 0) {
+			return sketchShapes.get(shape.getElementType()) != null;
+		} else if (shape.getShapeType() == 1) {
+			return shapes.get(shape.getElementType()) != null;
+		}
+		return false;
+	}
+
+	public static void addShape(JsShape shape) {
+		ShapeGroup sg = extractShapeGroup(shape);
+		addShape(shape, sg);
 	}
 
 	private static void addShape(JsShape shape, ShapeGroup shapeGroup) {
@@ -75,21 +88,11 @@ public class ShapeCache {
 		return result;
 	}
 
-	private native static void listen()/*-{
-		if (typeof $wnd.globalStreams.addShapeToCacheStream != 'undefined') {
-			$wnd.globalStreams.addShapeToCacheStream.onValue(function(shapes) {
-				@net.sevenscales.editor.uicomponents.uml.ShapeCache::updateShapes(Lcom/google/gwt/core/client/JsArray;)(shapes)
-			})
-		}
-	}-*/;
-
 	static {
 		SLogger.addFilter(ShapeCache.class);
 
 		shapes = new HashMap<String,ShapeGroup>();
 		sketchShapes = new HashMap<String,ShapeGroup>();
-
-		listen();
 
 		loadLibrary();
 

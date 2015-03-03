@@ -6,8 +6,10 @@ import net.sevenscales.domain.api.IContent;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.dto.ContentDTO;
 import net.sevenscales.domain.utils.DiagramItemList;
+import net.sevenscales.domain.js.JsShape;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.google.gwt.core.client.JsArray;
 
 
 public class DiagramContentDTO extends ContentDTO implements IDiagramContent, IsSerializable {
@@ -16,6 +18,7 @@ public class DiagramContentDTO extends ContentDTO implements IDiagramContent, Is
 	// precision will suffer, but should be enough times to update the board...
   private int version = -1;
   private Long diagramProperties;
+  private JsArray<JsShape> library;
 
   public DiagramContentDTO() {
 	}
@@ -32,6 +35,13 @@ public class DiagramContentDTO extends ContentDTO implements IDiagramContent, Is
 	}
 	public void setDiagramItems(List<IDiagramItemRO> diagramItems) {
 		this.diagramItems = diagramItems;
+	}
+
+	public void setLibrary(JsArray<JsShape> library) {
+		this.library = library;
+	}
+	public JsArray<JsShape> getLibrary() {
+		return library;
 	}
 
 	public void addItem(IDiagramItemRO diagramItem) {
