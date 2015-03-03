@@ -57,7 +57,7 @@ public class SvgPath extends SvgLine {
     for (String pairstr : pairs) {
       String[] pair = pairstr.split(":");
       if (pair.length == 2) {
-        params.put("%" + pair[0] + "%", pair[1]);
+        params.put("%" + pair[0] + "%", pair[1].trim());
       }
     }
 
