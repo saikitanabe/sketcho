@@ -52,7 +52,11 @@ class Path extends Shape implements IPath {
 	}
 	
 	private native void _setShape(JavaScriptObject rawNode, String shape)/*-{
-		rawNode.setShape({path: shape});
+		// skipping dojo set shape since not using dojo features anyway
+		// no dojo segment parsing and this is just plain svg
+		// getting rid of path attribute that dojo maintains => smaller DOM!
+		// rawNode.setShape({path: shape});
+		rawNode.rawNode.setAttribute("d", shape)
 	}-*/;
 
 	public String getRawShape() {
@@ -60,7 +64,7 @@ class Path extends Shape implements IPath {
 	}
 	
 	private native String _getShape(JavaScriptObject rawNode)/*-{
-		return rawNode.getShape().path;
+		return rawNode.rawNode.getAttribute("d")
 	}-*/;
 
 	@Override
