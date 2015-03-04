@@ -105,8 +105,11 @@ public class Shapes {
 	  	}
 
 	  	if ("s".equals(code)) {
-		  	// result += (getX1() * factorX) + "," + (getY1() * factorY) + " ";
 		  	result += (getX2() * factorX) + "," + (getY2() * factorY) + " ";
+	  	}
+
+	  	if ("q".equals(code)) {
+		  	result += (getX1() * factorX) + "," + (getY1() * factorY) + " ";
 	  	}
 
 	  	if ("a".equals(code)) {
