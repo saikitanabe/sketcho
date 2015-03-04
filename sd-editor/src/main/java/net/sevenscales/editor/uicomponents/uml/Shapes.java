@@ -104,6 +104,11 @@ public class Shapes {
 		  	result += (getX2() * factorX) + "," + (getY2() * factorY) + " ";
 	  	}
 
+	  	if ("s".equals(code)) {
+		  	// result += (getX1() * factorX) + "," + (getY1() * factorY) + " ";
+		  	result += (getX2() * factorX) + "," + (getY2() * factorY) + " ";
+	  	}
+
 	  	if ("a".equals(code)) {
 		  	result += (getRX() * factorX) + "," + (getRY() * factorY) + " " +
 		  						getXRotation() + " " + getLargeArc() + " " + getSweep() + " ";
@@ -111,6 +116,9 @@ public class Shapes {
 
 	  	if ("v".equals(code)) {
 		  	result += (getY() * factorY);
+	  	}
+	  	if ("h".equals(code)) {
+		  	result += (getX() * factorY);
 	  	}
 	  	else if (!"z".equals(code)) {
 		  	result += (getX() * factorX) + "," + (getY() * factorY);
@@ -140,6 +148,9 @@ public class Shapes {
 
 	  	if ("v".equals(code)) {
 		  	result += (getY());
+	  	}
+	  	if ("h".equals(code)) {
+		  	result += (getX());
 	  	}
 	  	else if (!"z".equals(code) && !"m".equals(code)) {
 		  	result += (getX()) + "," + (getY());
