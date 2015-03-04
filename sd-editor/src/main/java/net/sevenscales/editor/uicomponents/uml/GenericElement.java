@@ -72,7 +72,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private ShapeGroup theshape;
   private TextElementFormatUtil textUtil;
   private GenericHasTextElement hasTextElement;
-
+  private boolean pathsSetAtLeastOnce;
   private boolean tosvg;
   
   private static final String BOUNDARY_COLOR = "#aaaaaa";
@@ -397,7 +397,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			if (shape.getSvgData() != null) {
 				// freehand and any custom svg case
 		  	subgroup.setScale(factorX, factorY);
-			} else if (width != orgwidth || height != orgheight) {
+			} else if (!pathsSetAtLeastOnce || width != orgwidth || height != orgheight) {
 		  	scalePaths(factorX, factorY);
 			}
 	  	subgroup.setTransform(left, top);
@@ -419,6 +419,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	  		pw.path.setShape(pw.proto.toPath(factorX, factorY, theshape.width));
   		}
   	}
+  	pathsSetAtLeastOnce = true;
 		// for (ShapeProto p : groupData.protos) {
   // 	for (IPath path : paths) {
   // 		result.setShape(proto.toPath());
