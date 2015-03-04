@@ -98,34 +98,33 @@ public class Shapes {
 	  		// still to lower case as in spec if some browser doesn't work like that...
 	  		result = code;
 	  	}
-	  	
-	  	if ("c".equals(code)) {
+
+	  	if ("m".equals(code)) {
+				result += (getX() * factorX) + "," + (getY() * factorY);
+	  	} else if ("l".equals(code)) {
+				result += (getX() * factorX) + "," + (getY() * factorY);
+	  	} else if ("c".equals(code)) {
 		  	result += (getX1() * factorX) + "," + (getY1() * factorY) + " ";
 		  	result += (getX2() * factorX) + "," + (getY2() * factorY) + " ";
-	  	}
-
-	  	if ("s".equals(code)) {
+				result += (getX() * factorX) + "," + (getY() * factorY);
+	  	} else if ("s".equals(code)) {
 		  	result += (getX2() * factorX) + "," + (getY2() * factorY) + " ";
-	  	}
-
-	  	if ("q".equals(code)) {
+				result += (getX() * factorX) + "," + (getY() * factorY);
+	  	} else if ("q".equals(code)) {
 		  	result += (getX1() * factorX) + "," + (getY1() * factorY) + " ";
-	  	}
-
-	  	if ("a".equals(code)) {
+				result += (getX() * factorX) + "," + (getY() * factorY);
+	  	} else if ("a".equals(code)) {
 		  	result += (getRX() * factorX) + "," + (getRY() * factorY) + " " +
 		  						getXRotation() + " " + getLargeArc() + " " + getSweep() + " ";
-	  	}
-
-	  	if ("v".equals(code)) {
+				result += (getX() * factorX) + "," + (getY() * factorY);
+	  	} else if ("v".equals(code)) {
 		  	result += (getY() * factorY);
-	  	}
-	  	if ("h".equals(code)) {
+	  	} else if ("h".equals(code)) {
 		  	result += (getX() * factorY);
 	  	}
-	  	else if (!"z".equals(code)) {
-		  	result += (getX() * factorX) + "," + (getY() * factorY);
-	  	}
+	  	// else if (!"z".equals(code)) {
+		  // 	result += (getX() * factorX) + "," + (getY() * factorY);
+	  	// }
 	  	// if ("m".equals(getCode())) {
 		  // 	result += getX() + "," + getY();
 	  	// } else if ("l".equals(getCode())) {
