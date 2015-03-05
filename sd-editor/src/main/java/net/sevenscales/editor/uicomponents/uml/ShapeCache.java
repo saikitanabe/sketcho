@@ -24,6 +24,37 @@ public class ShapeCache {
 	// 	return get(ElementType.getEnum.getValue()(elementType), sketch);
 	// }
 
+	public static JsArray<JsShape> getScaledContextShapes(double width, double height) {
+		JsArray<JsShape> result = JavaScriptObject.createArray().cast();
+		JsArray<JsShape> shapes = loadLibraryContext();
+
+		for (int i = 0; i < shapes.length(); ++i) {
+			JsShape shape = shapes.get(i);
+			ShapeGroup sg = extractShapeGroup(shape);
+
+			result.push(scaleShape(width, height, sg));
+		}
+
+		return result;
+	}
+
+	public static JsArray<JsShape> getScaledShapes(double width, double height) {
+		JsArray<JsShape> result = JavaScriptObject.createArray().cast();
+		// JavaScriptObject result = JavaScriptObject.createArray();
+		for (String type : sketchShapes.keySet()) {
+			ShapeGroup sg = sketchShapes.get(type);
+
+			// double sw = width / sg.width;
+			// double sh = height / sg.height;
+			// double scale = sw < sh ? sw : sh;
+
+			// JsShape shape = sg.scaleToShape(scale, scale);
+			// result.push(shape);
+			result.push(scaleShape(width, height, sg));
+		}
+		return result;
+	}
+
 	public static ShapeGroup get(String type, boolean sketch) {
 		ShapeGroup result = null;
 		if (sketch) {
@@ -38,13 +69,6 @@ public class ShapeCache {
 	public static ShapeGroup getSketch(String type) {
 		return sketchShapes.get(type);
 	}
-
-	private static native void loadLibrary()/*-{
-		if ($wnd.loadLibraryCommon != 'undefined') {
-			var shapes = $wnd.loadLibraryCommon()
-			@net.sevenscales.editor.uicomponents.uml.ShapeCache::updateShapes(Lcom/google/gwt/core/client/JsArray;)(shapes)
-		}
-	}-*/;
 
 	public static void updateShapes(JsArray<JsShape> shapes) {
 		for (int i = 0; i < shapes.length(); ++i) {
@@ -65,6 +89,24 @@ public class ShapeCache {
 	public static void addShape(JsShape shape) {
 		ShapeGroup sg = extractShapeGroup(shape);
 		addShape(shape, sg);
+	}
+
+	private static native JsArray<JsShape> loadLibraryContext()/*-{
+		return $wnd.loadLibraryContext()
+	}-*/;
+
+	private static native void loadLibrary()/*-{
+		if ($wnd.loadLibraryCommon != 'undefined') {
+			var shapes = $wnd.loadLibraryCommon()
+			@net.sevenscales.editor.uicomponents.uml.ShapeCache::updateShapes(Lcom/google/gwt/core/client/JsArray;)(shapes)
+		}
+	}-*/;
+
+	private static JsShape scaleShape(double width, double height, ShapeGroup sg) {
+		double sw = width / sg.width;
+		double sh = height / sg.height;
+		double scale = sw < sh ? sw : sh;
+		return sg.scaleToShape(scale, scale);
 	}
 
 	private static void addShape(JsShape shape, ShapeGroup shapeGroup) {
