@@ -141,7 +141,7 @@ public class UMLDiagramSelections extends Composite {
 	
 	@UiField VerticalPanel diagramGroups;
 	@UiField FastButton comments;
-	@UiField FastButton _comments;
+	// @UiField FastButton _comments;
 	@UiField HTMLPanel contextMenuArea;
 	@UiField FastButton showDiagrams;
 	@UiField FastButton modifyImages;
@@ -357,10 +357,10 @@ public class UMLDiagramSelections extends Composite {
 	}
 	// <<<<<<<<<<< Commented out 11.11.2014
 
-	@UiHandler("_comments")
-	public void oncommentsMind(ClickEvent event) {
-		fireCommentThread();
-	}
+	// @UiHandler("_comments")
+	// public void oncommentsMind(ClickEvent event) {
+	// 	fireCommentThread();
+	// }
 	
 	private void fireCommentThread() {
 		if (notConfluence()) {

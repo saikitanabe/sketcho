@@ -27,6 +27,7 @@ import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections;
+// import net.sevenscales.editor.content.ui.ShapeContextMenu;
 import net.sevenscales.editor.content.ui.DiagramSelectionHandler;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
@@ -102,6 +103,7 @@ public class RelationshipDragEndHandler implements
 	private Relationship2 currentRel;
 	private boolean startNode;
 	private UMLDiagramSelections diagramSelections;
+	// private ShapeContextMenu diagramSelections;
 	private Diagram switchFrom;
 
 	public RelationshipDragEndHandler(ISurfaceHandler surface) {
@@ -109,6 +111,7 @@ public class RelationshipDragEndHandler implements
 		popup = new PopupPanel();
 		popup.setStyleName("RelationshipDragEndHandler");
 		diagramSelections = new UMLDiagramSelections(surface, this);
+		// diagramSelections = new ShapeContextMenu();
 		popup.setWidget(diagramSelections);
 		popup.setAutoHideEnabled(true);
 		popup.setAnimationEnabled(true);
@@ -153,7 +156,7 @@ public class RelationshipDragEndHandler implements
 
 	@Override
 	public void onNotAttached(RelationshipNotAttachedEvent event) {
-		diagramSelections.showCommentElement();
+		// diagramSelections.showCommentElement();
 	  logger.start("show popoup");
 		// System.out.println("onNotAttached: " + event.getRelationship() +
 		// " anchor: " + event.getAnchor());
@@ -174,11 +177,13 @@ public class RelationshipDragEndHandler implements
 									 event.getRelationship().getStartY() == currentY);
 			
 //			System.out.println("startNode: " + startNode + " currentX: " + currentX + " currentY: " + currentY + " this: " + this);
-			
-			if (!startNode && currentRel.getStartAnchor().getDiagram() != null) {
-				UMLDiagramType diagtype = currentRel.getStartAnchor().getDiagram().getDiagramType();
-				diagramSelections.setGroup(diagtype.getGroup());
-			}
+
+			// >>>>> commented 4.3.2015 when started ShapeContextMenu			
+			// if (!startNode && currentRel.getStartAnchor().getDiagram() != null) {
+			// 	UMLDiagramType diagtype = currentRel.getStartAnchor().getDiagram().getDiagramType();
+			// 	diagramSelections.setGroup(diagtype.getGroup());
+			// }
+			// <<<<> comment end
 	
 			// event.getRelationship();
 	
@@ -204,25 +209,32 @@ public class RelationshipDragEndHandler implements
 	}
 
 	private void showPopup(int x, int y) {
-		popup.setVisible(false);
-		popup.show();
-		int left = x + surface.getAbsoluteLeft() - popup.getOffsetWidth() / 2;
-		int top = y + surface.getAbsoluteTop() - popup.getOffsetHeight() / 2;
-		if (left < 0) {
-			left = 20;
-		}
-		if (top < 0) {
-			top = 20;
-		}
-		popup.setPopupPosition(left, top);
-		popup.setVisible(true);
+		_showShapeContextMenu(x + surface.getAbsoluteLeft(), y + surface.getAbsoluteTop());
+		// popup.setVisible(false);
+		// popup.show();
+		// int left = x + surface.getAbsoluteLeft() - popup.getOffsetWidth() / 2;
+		// int top = y + surface.getAbsoluteTop() - popup.getOffsetHeight() / 2;
+		// if (left < 0) {
+		// 	left = 20;
+		// }
+		// if (top < 0) {
+		// 	top = 20;
+		// }
+		// popup.setPopupPosition(left, top);
+		// popup.setVisible(true);
 	}
+
+	private native void _showShapeContextMenu(int x, int y)/*-{
+		$wnd.globalStreams.shapeContextStream.push({x:x, y:y})
+	}-*/;
 
 	@Override
 	public void on(SwitchElementEvent event) {
 		switchFrom = event.getDiagram();
 		Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(event.getDiagram(), surface);
-		diagramSelections.hideCommentElement();
+		// >>>>>>> Commented out 4.3.2015
+		// diagramSelections.hideCommentElement();
+		// >>>>>>> Commented out 4.3.2015 end
 		showPopup(screenPosition.x, screenPosition.y);
 	}
 
@@ -592,22 +604,25 @@ Color borderColor, Color color) {
 
 	@Override
 	public void on(final SurfaceMouseUpNoHandlingYetEvent event) {
-		popup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
-			@Override
-			public void setPosition(int offsetWidth, int offsetHeight) {
-				ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint(event.getX(), event.getY(), surface);
-				setCurrentPosition(stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y);
-				popup.setPopupPosition(event.getX() + surface.getAbsoluteLeft() - offsetWidth / 2, 
-								event.getY() + surface.getAbsoluteTop() - offsetHeight / 2);
-				// face mouse down to release anything running on background
-	      surface.getMouseDiagramManager().onMouseUp(null, stp.scaledPoint, 0);
-			}
-		});
+		_showShapeContextMenu(event.getX() + surface.getAbsoluteLeft(), event.getY() + surface.getAbsoluteTop());
+		// popup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+		// 	@Override
+		// 	public void setPosition(int offsetWidth, int offsetHeight) {
+		// 		ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint(event.getX(), event.getY(), surface);
+		// 		setCurrentPosition(stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y);
+		// 		popup.setPopupPosition(event.getX() + surface.getAbsoluteLeft() - offsetWidth / 2, 
+		// 						event.getY() + surface.getAbsoluteTop() - offsetHeight / 2);
+		// 		// face mouse down to release anything running on background
+	 //      surface.getMouseDiagramManager().onMouseUp(null, stp.scaledPoint, 0);
+		// 	}
+		// });
 	}
 
 	@Override
 	public void onSelection(LibrarySelectionEvent event) {
-		diagramSelections.sortByGroup(event.getLibrary());
+		// >>>>>>>> Commented out 4.3.2015
+		// diagramSelections.sortByGroup(event.getLibrary());
+		// >>>>>>>> Commented out 4.3.2015 end
 	}
 
 	@Override
@@ -617,7 +632,9 @@ Color borderColor, Color color) {
 
 	@Override
 	public void addScrollHandler(WhenScrolledHandler scrollHandler) {
-		diagramSelections.addScrollHandler(scrollHandler);
+		// >>>>> Commented out 4.3.2015
+		// diagramSelections.addScrollHandler(scrollHandler);
+		// <<<<< Commented out end
 	}
 
 }
