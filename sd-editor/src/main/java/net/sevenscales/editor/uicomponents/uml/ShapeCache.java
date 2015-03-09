@@ -11,6 +11,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.js.JsShape;
 import net.sevenscales.domain.js.JsPath;
+import net.sevenscales.domain.js.JsShapeConfig;
 import net.sevenscales.domain.utils.SLogger;
 
 
@@ -127,6 +128,11 @@ public class ShapeCache {
 		ShapeProto[] prots = new ShapeProto[protos.size()];
 		protos.toArray(prots);
 		ShapeGroup result = new ShapeGroup(shape.getElementType(), prots, shape.getWidth(), shape.getHeight(), shape.getProperties());
+		JsShapeConfig c = shape.getConfig();
+		if (c != null) {
+			result.targetWidth = c.getTargetWidth();
+			result.targetHeight = c.getTargetHeight();
+		}
 		return result;
 	}
 

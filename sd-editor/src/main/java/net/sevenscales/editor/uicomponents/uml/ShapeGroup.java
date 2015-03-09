@@ -19,6 +19,8 @@ public class ShapeGroup {
 	public double height;
 	public Integer properties;
 	public Integer fontSize;
+	public double targetWidth;
+	public double targetHeight;
 
 	public ShapeGroup(String elementType, ShapeProto[] protos, double width, double height, Integer properties) {
 		this.elementType = elementType;
@@ -26,6 +28,13 @@ public class ShapeGroup {
 		this.width = width;
 		this.height = height;
 		this.properties = properties;
+	}
+
+	public boolean isTargetSizeDefined() {
+		if (targetWidth > 0 && targetHeight > 0) {
+			return true;
+		}
+		return false;
 	}
 
 	public JsShape scaleToShape(double factorX, double factorY) {

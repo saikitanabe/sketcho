@@ -131,27 +131,43 @@ public class RelationshipDragEndHandler implements
 		surface.getEditorContext().getEventBus().addHandler(CreateElementEvent.TYPE, new CreateElementEventHandler() {
 			@Override
 			public void on(CreateElementEvent event) {
-				// need to variate if location is given in the event
-				// if not use current location
-				int x = 0;
-				int y = 0;
-				
-				if (event.getX() == 0 && event.getY() == 0) {
-					x = currentX;
-					y = currentY;
-				} else {
-					ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint
-							(event.getX(), event.getY(), RelationshipDragEndHandler.this.surface);
-					x = stp.scaledAndTranslatedPoint.x;
-					y = stp.scaledAndTranslatedPoint.y;
-				}
-				if (switchFrom == null) {
-					itemSelected(event.getElementType(), event.getImageInfo(), x, y);
-				} else {
-					switchElement(event.getElementType(), event.getImageInfo(), x, y);
-				}
+				newShape(event.getElementType().getValue(), event.getImageInfo(), event.getX(), event.getY());
 			}
 		});
+
+		init(this);
+	}
+
+	private native void init(RelationshipDragEndHandler me)/*-{
+		$wnd.globalStreams.newShapeStream.onValue(function(data) {
+			me.@net.sevenscales.editor.diagram.RelationshipDragEndHandler::newShape(Ljava/lang/String;Lnet/sevenscales/domain/js/ImageInfo;II)(data.element_type, data.image_info, data.x, data.y)
+		})
+	}-*/;
+
+	// private void newShape(String elementType, double x, double y) {
+
+	// }
+
+	private void newShape(String elementType, ImageInfo imageInfo, int eventX, int eventY) {
+		// need to variate if location is given in the event
+		// if not use current location
+		int x = 0;
+		int y = 0;
+		
+		if (eventX == 0 && eventY == 0) {
+			x = currentX;
+			y = currentY;
+		} else {
+			ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint
+					(eventX, eventY, RelationshipDragEndHandler.this.surface);
+			x = stp.scaledAndTranslatedPoint.x;
+			y = stp.scaledAndTranslatedPoint.y;
+		}
+		if (switchFrom == null) {
+			itemSelected(elementType, imageInfo, x, y);
+		} else {
+			switchElement(elementType, imageInfo, x, y);
+		}
 	}
 
 	@Override
@@ -258,12 +274,12 @@ public class RelationshipDragEndHandler implements
 		currentY = y;
 	}
 
-	public void itemSelected(UMLDiagramType type, ImageInfo imageInfo, int x, int y) {
-		logger.debug("itemSelected {}", type);
+	public void itemSelected(String elementType, ImageInfo imageInfo, int x, int y) {
+		logger.debug("itemSelected {}", elementType);
 		hide();
 		Diagram diagram = null;
 		if (currentRel != null) {
-			diagram = createDiagramFromRelationShip(type, imageInfo, x, y);
+			diagram = createDiagramFromRelationShip(elementType, imageInfo, x, y);
       if (!(diagram instanceof SequenceElement)) {
         currentRel.asClosestPath();
       }
@@ -274,7 +290,7 @@ public class RelationshipDragEndHandler implements
 			surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(currentRel));
 		} else {
 			// surface empty case
-			diagram = createDiagram(type, imageInfo, x, y);
+			diagram = createDiagram(elementType, imageInfo, x, y);
 			surface.addAsSelected(diagram, true);
 		}
 
@@ -283,7 +299,7 @@ public class RelationshipDragEndHandler implements
 		currentRel = null;
 	}
 
-	public void switchElement(UMLDiagramType type, ImageInfo imageInfo, int x, int y) {
+	public void switchElement(String elementType, ImageInfo imageInfo, int x, int y) {
 		hide();
 		Diagram src = switchFrom;
 		switchFrom = null;
@@ -294,7 +310,7 @@ public class RelationshipDragEndHandler implements
 		// create new element
 		ReattachHelpers reattachHelpers = new ReattachHelpers();
 
-		Diagram to = createDiagram(type, imageInfo, src.getLeft(), src.getTop());
+		Diagram to = createDiagram(elementType, imageInfo, src.getLeft(), src.getTop());
 		to.getDiagramItem().setClientId(null);
 		ClientIdHelpers.generateClientIdIfNotSet(to.getDiagramItem(), 0, surface.getEditorContext().getGraphicalDocumentCache(), surface.getEditorContext());
 		to.setText(src.getText());
@@ -336,8 +352,8 @@ public class RelationshipDragEndHandler implements
 		popup.hide();
 	}
 
-	private Diagram createDiagramFromRelationShip(UMLDiagramType type, ImageInfo imageInfo, int x, int y) {
-		Diagram diagram = createDiagram(type, imageInfo, x, y);
+	private Diagram createDiagramFromRelationShip(String elementType, ImageInfo imageInfo, int x, int y) {
+		Diagram diagram = createDiagram(elementType, imageInfo, x, y);
 		Point p = DiagramAnchorUtils.startCoordinate(
 				currentRel.getStartX(),
 				currentRel.getStartY(),
@@ -353,7 +369,7 @@ public class RelationshipDragEndHandler implements
 		return diagram;
 	}
 
-	private Diagram createDiagram(UMLDiagramType type, ImageInfo imageInfo, int x, int y) {
+	private Diagram createDiagram(String elementType, ImageInfo imageInfo, int x, int y) {
 		Diagram result = null;
 		ElementColor current = selectColor();
 		Color background = current.getBackgroundColor().create();
@@ -363,67 +379,56 @@ public class RelationshipDragEndHandler implements
 		if (Tools.isSketchMode()) {
 			// try first if sketch element is found
 			// at first only some of the elements are supported...
-			result = createGenericElement(type, x, y, background, borderColor, color);
+			result = createGenericElement(elementType, x, y, background, borderColor, color);
 		}
 
 		if (result == null) {
 			// try to create with legacy way
-			result = createLegacyDiagram(type, imageInfo, x, y, background, borderColor, color);
+			result = createLegacyDiagram(elementType, imageInfo, x, y, background, borderColor, color);
 		}
 
 		return result;
 	}
 
-	private Diagram createLegacyDiagram(UMLDiagramType type, ImageInfo imageInfo, int x, int y, Color background, 
+	private Diagram createLegacyDiagram(String elementType, ImageInfo imageInfo, int x, int y, Color background, 
 Color borderColor, Color color) {
 		Diagram result = null;
-		switch (type) {
-		case IMAGE: {
+		if (ElementType.IMAGE.getValue().equals(elementType)) {
 			result = DiagramElementFactory.createImageElement(surface, imageInfo.getFilename(), imageInfo.getUrl(), x, y, imageInfo.getWidth(), imageInfo.getHeight());
-			break;
-		}
-		case CLASS: {
+		} else if (ElementType.CLASS.getValue().equals(elementType)) {
 			Diagram ce = new ClassElement2(surface, new RectShape(x,
 					y, 1, // auto resizes
 					1), // auto resizes
-					type.getValue(), background, borderColor, color, true, new DiagramItemDTO());
+					elementType, background, borderColor, color, true, new DiagramItemDTO());
 			result = ce;
-			break;
-		}
-		case SEQUENCE: {
+		} else if (ElementType.SEQUENCE.getValue().equals(elementType)) {
 			SequenceElement se = new SequenceElement(surface, 
 	        new SequenceShape(x, y, 1, 1, 25),
-	        type.getValue(),
+	        elementType,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = se;
-			break;
-		}
-		case ACTOR: {
+		} else if (ElementType.ACTOR.getValue().equals(elementType)) {
       Actor actor = new Actor(surface,
           new ActorShape(x, 
               y,
               25,
               40),
-              type.getValue(),
+              elementType,
               background, borderColor, color, 
               true,
               new DiagramItemDTO());
 			result = actor;
-			break;
-		}
-		case NOTE: {
+		} else if (ElementType.NOTE.getValue().equals(elementType)) {
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 			NoteElement ne = new NoteElement(surface,
 	        new NoteShape(x, y, 150, 45),
-	        type.getValue(),
+	        elementType,
 	        background, borderColor, color,
 	        true, 
 	        new DiagramItemDTO());
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 			result = ne;
-			break;
-		}
-		case COMMENT_THREAD: {
+		} else if (ElementType.COMMENT_THREAD.getValue().equals(elementType)) {
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 			Tools.setCommentTool(true);
 			CommentThreadElement ne = new CommentThreadElement(surface,
@@ -436,152 +441,144 @@ Color borderColor, Color color) {
 	        new DiagramItemDTO());
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 			result = ne;
-			break;
-		}
-		case TEXT: {
-			result = createTextElement(x, y, type, background, borderColor, color);
-			break;
-			}
-		case MIND_SUB_TOPIC: {
-			result = createTextElement(x, y, type, background, borderColor, color);
-			break;
-			}
-		case CHOICE: {
+		} else if (ElementType.TEXT_ITEM.getValue().equals(elementType)) {
+			result = createTextElement(x, y, "" /*TODO sampleText*/, background, borderColor, color);
+		// } else if (ElementType.MIND_SUB_TOPIC.getValue().equals(elementType)) {
+		// 	result = createTextElement(x, y, elementType, background, borderColor, color);
+		} else if (ElementType.CHOICE.getValue().equals(elementType)) {
 			ActivityChoiceElement ace = new ActivityChoiceElement(surface,
 	        new ActivityChoiceShape(x, y, 32, 32),
-	        type.getValue(),
+	        elementType,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ace;
-			break;
-		}
-		case START: {
+		} else if (ElementType.ACTIVITY_START.getValue().equals(elementType)) {
 			ActivityStart as = new ActivityStart(surface,
 	        new ActivityStartShape(x, y, ActivityStart.ACTIVITY_START_RADIUS), true, new DiagramItemDTO());
 			result = as;
-			break;
-		}
-		case FORK: {
+		} else if (ElementType.FORK_HORIZONTAL.getValue().equals(elementType)) {
 			ForkElement e = new ForkElement(surface, new ForkShape(x, y, 50, 5), Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, new DiagramItemDTO());
 			result = e;
-			break;
-		}
-		case VFORK: {
+		} else if (ElementType.FORK_VERTICAL.getValue().equals(elementType)) {
 			ForkElement e = new ForkElement(surface, new ForkShape(x, y, 5, 50, 1), Theme.createDefaultBackgroundColor(), Theme.createDefaultBorderColor(), Theme.createDefaultTextColor(), true, new DiagramItemDTO());
 			result = e;
-			break;
-		}
-		case END: {
+		} else if (ElementType.ACTIVITY_END.getValue().equals(elementType)) {
 			ActivityEnd ae = new ActivityEnd(surface,
 	        new ActivityEndShape(x, y, ActivityEnd.ACTIVITY_END_RADIUS), true, new DiagramItemDTO());
 			result = ae;
-			break;
-		}
-		case ACTIVITY: {
+		} else if (ElementType.ACTIVITY.getValue().equals(elementType)) {
 			ActivityElement ae = new ActivityElement(surface,
 	        new ActivityShape(x, y, 1, 1),
-	        type.getValue(),
+	        elementType,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ae;
-			break;
-			}
-		case DB: {
+		} else if (ElementType.STORAGE.getValue().equals(elementType)) {
 			StorageElement ae = new StorageElement(surface,
 	        new DbShape(x, y, 1, 1),
-	        type.getValue(),
+	        elementType,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ae;
-			break;
-			}
-		case PACKAGE: {
+		} else if (ElementType.PACKAGE.getValue().equals(elementType)) {
 			UMLPackageElement ce = new UMLPackageElement(surface, new UMLPackageShape(x,
 					y, 100, // package has no auto resizes
 					40), // package has no auto resizes
-					type.getValue(), background, borderColor, color, true, new DiagramItemDTO());
+					elementType, background, borderColor, color, true, new DiagramItemDTO());
 			result = ce;
-			break;
-		}
-		case MIND_CENTRAL_TOPIC: {
+		} else if (ElementType.MIND_CENTRAL.getValue().equals(elementType)) {
 			MindCentralElement ae = new MindCentralElement(surface,
 	        new MindCentralShape(x, y, 1, 1),
-	        type.getValue(),
+	        elementType,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ae;
-			break;
-		}
-		case MIND_MAIN_TOPIC: {
-			ActivityElement ae = new ActivityElement(surface,
-	        new ActivityShape(x, y, 1, 1),
-	        type.getValue(),
-	        background, borderColor, color, true, new DiagramItemDTO());
-			result = ae;
-			break;
-			}
-		case COMPONENT: {
+		// } else if (ElementType.ACTIVITY.getValue().equals(elementType)) {
+		// 	ActivityElement ae = new ActivityElement(surface,
+	 //        new ActivityShape(x, y, 1, 1),
+	 //        elementType,
+	 //        background, borderColor, color, true, new DiagramItemDTO());
+		// 	result = ae;
+		} else if (ElementType.COMPONENT.getValue().equals(elementType)) {
 			ComponentElement element = new ComponentElement(surface,
 	        new ComponentShape(x, y, 1, 1),
-	        type.getValue(),
+	        elementType,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = element;
-			break;
-		}
-		case SERVER: {
+		} else if (ElementType.SERVER.getValue().equals(elementType)) {
 			ServerElement element = new ServerElement(surface,
 	        new ServerShape(x, y, 60, 80),
-	        type.getValue(),
+	        elementType,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = element;
-			break;
-		}
-		case USE_CASE:
-		case SMILEY:
-		case FIREWALL:
-		case POLYGON4:
-		case POLYGON8:
-		case RECT:
-		case TRIANGLE:
-		case CIRCLE:
-		case CLOUD:
-		case WBROWSER:
-		case IPHONE:
-		case STAR5:
-		case STAR4:
-		case ARROW_DOWN:
-		case ARROW_RIGHT:
-		case ARROW_UP:
-		case ARROW_LEFT:
-		case BUBBLE_LEFT:
-		case BUBBLE_RIGHT:
-		case ENVELOPE: {
-			result = createGenericElement(type, x, y, background, borderColor, color);
-			break;
-		}
+		} else {
+		// case USE_CASE:
+		// case SMILEY:
+		// case FIREWALL:
+		// case POLYGON4:
+		// case POLYGON8:
+		// case RECT:
+		// case TRIANGLE:
+		// case CIRCLE:
+		// case CLOUD:
+		// case WBROWSER:
+		// case IPHONE:
+		// case STAR5:
+		// case STAR4:
+		// case ARROW_DOWN:
+		// case ARROW_RIGHT:
+		// case ARROW_UP:
+		// case ARROW_LEFT:
+		// case BUBBLE_LEFT:
+		// case BUBBLE_RIGHT:
+		// case ENVELOPE: {
+			result = createGenericElement(elementType, x, y, background, borderColor, color);
+			// break;
+		// }
 		}
 		return result;
 	}
 
-	private Diagram createGenericElement(UMLDiagramType type, int x, int y, Color background, 
+	private Diagram createGenericElement(String elementType, int x, int y, Color background, 
 Color borderColor, Color color) {
 		Diagram result = null;
-		ShapeGroup shapeGroup = ShapeCache.get(type.getElementType().getValue(), Tools.isSketchMode());
-		// LibraryShapes.LibraryShape ls = LibraryShapes.get(type.getElementType().getValue());
+		ShapeGroup shapeGroup = ShapeCache.get(elementType, Tools.isSketchMode());
 		if (shapeGroup != null) {
 			// there might not be generi library shape available
 			// could multiply width and height
-	    DiagramItemDTO item = LibraryShapes.createByType(type.getElementType().getValue());
-      DiagramItemConfiguration.setColors(item, background, borderColor, color);
-	    item.setText(type.getValue());
-	    item.setShape(createshape(shapeGroup, x, y));
 
-	    result = ShapeParser.createDiagramElement(item, surface);
+			double width = shapeGroup.width;
+			double height = shapeGroup.height;
+
+			if (shapeGroup.isTargetSizeDefined()) {
+				width = shapeGroup.targetWidth;
+				height = shapeGroup.targetHeight;
+			}
+
+			result = _createGenericElement(shapeGroup.elementType, x, y, (int) width, (int) height, shapeGroup.properties, background, borderColor, color);
+		}
+
+		if (shapeGroup == null && Tools.isSketchMode()) {
+			// exception cases that are not drawn using plain svg
+			LibraryShapes.LibraryShape ls = LibraryShapes.getDefaultShape(elementType);
+			if (ls != null) {
+				// try crating through static code element mapping
+				result = _createGenericElement(elementType, x, y, ls.width, ls.height, ls.shapeProperties, background, borderColor, color);
+			}
 		}
 		return result;
 	}
 
-	private String createshape(ShapeGroup shapeGroup, int x, int y) {
-		if (ElementType.SEQUENCE.getValue().equals(shapeGroup.elementType)) {
-			return new SequenceShape(x, y, (int) shapeGroup.width, (int) shapeGroup.height, 20).toString();
+	private Diagram _createGenericElement(String elementType, int x, int y, int width, int height, Integer properties, Color background, Color borderColor, Color color) {
+    DiagramItemDTO item = LibraryShapes.createByType(elementType);
+    DiagramItemConfiguration.setColors(item, background, borderColor, color);
+    item.setText(""); // TODO sampleText all the way from db
+    item.setShape(createshape(elementType, x, y, width, height, properties));
+
+    return ShapeParser.createDiagramElement(item, surface);
+	}
+
+	private String createshape(String elementType, int x, int y, int width, int height, Integer properties) {
+		if (ElementType.SEQUENCE.getValue().equals(elementType)) {
+			return new SequenceShape(x, y, width, height, 20).toString();
 		} else {
-			return new GenericShape(shapeGroup.elementType, x, y, (int) shapeGroup.width, (int) shapeGroup.height, shapeGroup.properties, null).toString();
+			return new GenericShape(elementType, x, y, width, height, properties, null).toString();
 		}
 	}
 
@@ -593,11 +590,11 @@ Color borderColor, Color color) {
 		return Theme.defaultColor(); 
 	}
 
-	private Diagram createTextElement(int x, int y, UMLDiagramType type, Color background, Color borderColor, Color color) {
+	private Diagram createTextElement(int x, int y, String sampleText, Color background, Color borderColor, Color color) {
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 		TextElement result = new TextElement(surface,
         new TextShape(x, y, 100, 34),
-        background, borderColor, color, type.getValue(), true, new DiagramItemDTO());
+        background, borderColor, color, sampleText, true, new DiagramItemDTO());
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 		return result;
 	}

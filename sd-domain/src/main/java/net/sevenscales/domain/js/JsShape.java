@@ -39,6 +39,10 @@ public class JsShape extends JavaScriptObject {
 		return this.f
 	}-*/;
 
+	public final native JsShapeConfig getConfig()/*-{
+		return this.c
+	}-*/;
+
 	private static native int parseInt(Object val)/*-{
     return $wnd.parseInt(val);
   }-*/;
