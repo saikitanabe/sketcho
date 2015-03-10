@@ -557,7 +557,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     //                    new RectContainerShape(10, SOFTWARE_SKETCHING_GROUP, 220, SOFTWARE_SKETCHING_GROUP_HEIGHT).toString()));
     
     result.add(_create(ElementType.NOTE.getValue(),
-                       "*Note* this!",
+                       "**Markdown** _note_!",
                        new NoteShape(40, SOFTWARE_SKETCHING_GROUP + GROUP_HEADING_SPACE, 165, 40).toString()));
 
     if (Tools.isSketchMode()) {
