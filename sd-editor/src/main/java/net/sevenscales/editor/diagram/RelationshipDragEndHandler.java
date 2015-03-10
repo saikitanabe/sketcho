@@ -131,7 +131,7 @@ public class RelationshipDragEndHandler implements
 		surface.getEditorContext().getEventBus().addHandler(CreateElementEvent.TYPE, new CreateElementEventHandler() {
 			@Override
 			public void on(CreateElementEvent event) {
-				newShape(event.getElementType().getValue(), event.getImageInfo(), event.getX(), event.getY());
+				newShape(event.getElementType(), event.getImageInfo(), event.getX(), event.getY());
 			}
 		});
 

@@ -182,7 +182,7 @@ public class ImageSelection extends Composite {
   }-*/;
 
   private void gwtReceiveFileInfo(ImageInfo imageInfo) {
-		surface.getEditorContext().getEventBus().fireEvent(new CreateElementEvent(UMLDiagramType.IMAGE, imageInfo, 0, 0));
+		surface.getEditorContext().getEventBus().fireEvent(new CreateElementEvent(UMLDiagramType.IMAGE.getElementType().getValue(), imageInfo, 0, 0));
   }
 
 }

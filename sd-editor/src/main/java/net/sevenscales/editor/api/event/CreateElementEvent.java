@@ -7,13 +7,13 @@ import com.google.gwt.event.shared.GwtEvent;
 
 public class CreateElementEvent extends GwtEvent<CreateElementEventHandler> {
   public static Type<CreateElementEventHandler> TYPE = new Type<CreateElementEventHandler>();
-	private UMLDiagramType elementType;
+	private String elementType;
 	// in case elementType is image, image info is needed
 	private ImageInfo imageInfo;
 	private int x;
 	private int y;
 
-  public CreateElementEvent(UMLDiagramType elementType, ImageInfo imageInfo, int x, int y) {
+  public CreateElementEvent(String elementType, ImageInfo imageInfo, int x, int y) {
   	this.elementType = elementType;
   	this.imageInfo = imageInfo;
   	this.x = x;
@@ -30,7 +30,7 @@ public class CreateElementEvent extends GwtEvent<CreateElementEventHandler> {
 		return TYPE;
 	}
 	
-	public UMLDiagramType getElementType() {
+	public String getElementType() {
 		return elementType;
 	}
 
