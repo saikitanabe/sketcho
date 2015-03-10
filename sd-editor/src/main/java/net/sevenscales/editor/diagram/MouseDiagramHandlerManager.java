@@ -106,6 +106,10 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 				}
 			})
 		}
+
+		$wnd.globalStreams.spaceKeyStream.onValue(function(value) {
+			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::spaceKey()();
+		})
 	}-*/;
 
 	private void editable(boolean value) {
@@ -470,6 +474,15 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			if (!quickConnectionHandler.handleDoubleTap()) {
 				surface.getEditorContext().getEventBus().fireEvent(new BoardEmptyAreaClickedEvent(x, y));
 			}
+		}
+	}
+
+	private void spaceKey() {
+		Set<Diagram> selected = selectionHandler.getSelectedItems();
+		if (selected.size() == 0) {
+			int x = surface.getCurrentClientX();
+			int y = surface.getCurrentClientY();
+			surface.getEditorContext().getEventBus().fireEvent(new BoardEmptyAreaClickedEvent(x, y));
 		}
 	}
 	
