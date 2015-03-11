@@ -482,8 +482,8 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	private void spaceKey() {
 		Set<Diagram> selected = selectionHandler.getSelectedItems();
 		if (selected.size() == 0) {
-			int x = surface.getCurrentClientX();
-			int y = surface.getCurrentClientY();
+			int x = surface.getCurrentClientMouseMoveX();
+			int y = surface.getCurrentClientMouseMoveY();
 			surface.getEditorContext().getEventBus().fireEvent(new BoardEmptyAreaClickedEvent(x, y));
 		}
 	}
