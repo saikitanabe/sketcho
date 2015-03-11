@@ -114,11 +114,14 @@ public class ShapeParser {
 			}
 		}
 
-		if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
-			debugger();
-		}
+		Info result = new AbstractDiagramFactory.GenericFactory().parseShape(diro, moveX, moveY);
 
-		throw new RuntimeException("Type not found: " + diro.getType());
+		if (result == null && LogConfiguration.loggingIsEnabled(Level.FINEST)) {
+			debugger();
+		} else if (result == null) {
+			throw new RuntimeException("Type not found: " + diro.getType());
+		}
+		return result;
 	}
 
 	public static Diagram createDiagramElement(IDiagramItemRO item, ISurfaceHandler surface) {
