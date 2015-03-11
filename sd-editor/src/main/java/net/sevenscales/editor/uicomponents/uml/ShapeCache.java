@@ -82,13 +82,18 @@ public class ShapeCache {
 		}
 	}
 
-	public static boolean hasShape(JsShape shape) {
-		if (shape.getShapeType() == 0) {
-			return sketchShapes.get(shape.getElementType()) != null;
-		} else if (shape.getShapeType() == 1) {
-			return shapes.get(shape.getElementType()) != null;
+	public static boolean hasShape(String elementType) {
+		boolean sketch = net.sevenscales.editor.api.Tools.isSketchMode();
+		boolean result = false;
+		if (sketch) {
+			result = sketchShapes.get(elementType) != null;
 		}
-		return false;
+
+		if (!result) {
+			// try still corporate shapes
+			result = shapes.get(elementType) != null;
+		}
+		return result;
 	}
 
 	public static void addShape(JsShape shape) {
