@@ -122,10 +122,6 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		
 		addMouseDiagramHandler(this);
 
-		for (PathWrapper path : paths) {
-	    shapes.add(path.path);
-		}
-
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
     hasTextElement = new GenericHasTextElement(this, shape);
     hasTextElement.setMarginLeft(getMarginLeft());
@@ -148,6 +144,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			getDiagramItem().setExtension(new ExtensionDTO(shape.getSvgData().copy(), lineWeight));
   	} else {
 	  	theshape = Shapes.get(getDiagramItem().getType(), Tools.isSketchMode());
+	  	// set initial shape or it will be overridden through getInfo()
+	    background.setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height, 0);
 	  	theshape.fetch(this);
   	}
     // NOTE setShape is called after fetch is ready
@@ -171,8 +169,13 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 
 	public void onSuccess() {
+		// make sure shape is scaled and set
+		pathsSetAtLeastOnce = false;
 		createSubPaths(theshape.getShape());
 		setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
+
+		// needed to make shape visible
+    setBorderColor(borderColor);
 	}
 	public void onError() {
 
@@ -193,9 +196,16 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 
 	private void createSubPaths(ShapeGroup groupData) {
-		for (ShapeProto p : groupData.protos) {
-			IPath path = createSubPath(p);
-			paths.add(new PathWrapper(path, p));
+		if (paths.size() == 0) {
+			// just in case make sure that initialized only once
+			for (ShapeProto p : groupData.protos) {
+				IPath path = createSubPath(p);
+				paths.add(new PathWrapper(path, p));
+			}
+
+			for (PathWrapper path : paths) {
+		    shapes.add(path.path);
+			}
 		}
 	}
 
