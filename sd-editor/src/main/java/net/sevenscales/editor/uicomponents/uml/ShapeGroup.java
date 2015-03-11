@@ -9,6 +9,7 @@ import com.google.gwt.core.client.JsArray;
 
 import net.sevenscales.domain.js.JsShape;
 import net.sevenscales.domain.js.JsPath;
+import net.sevenscales.domain.js.JsShapeConfig;
 
 public class ShapeGroup {
 	public String elementType;
@@ -19,8 +20,7 @@ public class ShapeGroup {
 	public double height;
 	public Integer properties;
 	public Integer fontSize;
-	public double targetWidth;
-	public double targetHeight;
+	private JsShapeConfig config;
 
 	public ShapeGroup(String elementType, ShapeProto[] protos, double width, double height, Integer properties) {
 		this.elementType = elementType;
@@ -30,8 +30,23 @@ public class ShapeGroup {
 		this.properties = properties;
 	}
 
+	public void setShapeConfig(JsShapeConfig config) {
+		this.config = config;
+	}
+
+	public JsShapeConfig getShapeConfig() {
+		return config;
+	}
+
+	public String getDefaultText() {
+		if (config != null && config.getDefaultText() != null) {
+			return config.getDefaultText();
+		}
+		return "";
+	}
+
 	public boolean isTargetSizeDefined() {
-		if (targetWidth > 0 && targetHeight > 0) {
+		if (config != null && config.getTargetWidth() > 0 && config.getTargetHeight() > 0) {
 			return true;
 		}
 		return false;

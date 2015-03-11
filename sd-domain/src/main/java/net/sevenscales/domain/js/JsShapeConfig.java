@@ -15,4 +15,23 @@ public class JsShapeConfig extends JavaScriptObject {
 	public final native double getTargetHeight()/*-{
 		return this.th
 	}-*/;
+	private final native String _getDefaultText()/*-{
+		return this.dt
+	}-*/;
+
+	public final String getDefaultText() {
+		if (isDefaultTextDefined()) {
+			return _getDefaultText();
+		}
+		return "";
+	}
+
+	public final native boolean isDefaultTextDefined()/*-{
+		return this.dt
+	}-*/;
+
+
+	public final native boolean isTargetSizeDefined()/*-{
+		return this.tw && this.th
+	}-*/;
 }

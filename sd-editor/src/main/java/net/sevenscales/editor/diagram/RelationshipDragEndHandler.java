@@ -3,6 +3,7 @@ package net.sevenscales.editor.diagram;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.js.ImageInfo;
+import net.sevenscales.domain.js.JsShapeConfig;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.constants.Constants;
@@ -132,7 +133,7 @@ public class RelationshipDragEndHandler implements
 		surface.getEditorContext().getEventBus().addHandler(CreateElementEvent.TYPE, new CreateElementEventHandler() {
 			@Override
 			public void on(CreateElementEvent event) {
-				newShape(event.getElementType(), event.getImageInfo(), event.getX(), event.getY());
+				newShape(event.getElementType(), event.getShapeConfig(), event.getImageInfo(), event.getX(), event.getY());
 			}
 		});
 
@@ -141,7 +142,7 @@ public class RelationshipDragEndHandler implements
 
 	private native void init(RelationshipDragEndHandler me)/*-{
 		$wnd.globalStreams.newShapeStream.onValue(function(data) {
-			me.@net.sevenscales.editor.diagram.RelationshipDragEndHandler::newShape(Ljava/lang/String;Lnet/sevenscales/domain/js/ImageInfo;II)(data.element_type, data.image_info, data.x, data.y)
+			me.@net.sevenscales.editor.diagram.RelationshipDragEndHandler::newShape(Ljava/lang/String;Lnet/sevenscales/domain/js/JsShapeConfig;Lnet/sevenscales/domain/js/ImageInfo;II)(data.element_type, data.shape_config, data.image_info, data.x, data.y)
 		})
 	}-*/;
 
@@ -149,7 +150,7 @@ public class RelationshipDragEndHandler implements
 
 	// }
 
-	private void newShape(String elementType, ImageInfo imageInfo, int eventX, int eventY) {
+	private void newShape(String elementType, JsShapeConfig shapeConfig, ImageInfo imageInfo, int eventX, int eventY) {
 		// need to variate if location is given in the event
 		// if not use current location
 		int x = 0;
@@ -165,9 +166,9 @@ public class RelationshipDragEndHandler implements
 			y = stp.scaledAndTranslatedPoint.y;
 		}
 		if (switchFrom == null) {
-			itemSelected(elementType, imageInfo, x, y);
+			itemSelected(elementType, shapeConfig, imageInfo, x, y);
 		} else {
-			switchElement(elementType, imageInfo, x, y);
+			switchElement(elementType, shapeConfig, imageInfo, x, y);
 		}
 	}
 
@@ -275,12 +276,12 @@ public class RelationshipDragEndHandler implements
 		currentY = y;
 	}
 
-	public void itemSelected(String elementType, ImageInfo imageInfo, int x, int y) {
+	public void itemSelected(String elementType, JsShapeConfig shapeConfig, ImageInfo imageInfo, int x, int y) {
 		logger.debug("itemSelected {}", elementType);
 		hide();
 		Diagram diagram = null;
 		if (currentRel != null) {
-			diagram = createDiagramFromRelationShip(elementType, imageInfo, x, y);
+			diagram = createDiagramFromRelationShip(elementType, shapeConfig, imageInfo, x, y);
       if (!(diagram instanceof SequenceElement)) {
         currentRel.asClosestPath();
       }
@@ -291,7 +292,7 @@ public class RelationshipDragEndHandler implements
 			surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(currentRel));
 		} else {
 			// surface empty case
-			diagram = createDiagram(elementType, imageInfo, x, y);
+			diagram = createDiagram(elementType, shapeConfig, imageInfo, x, y);
 			surface.addAsSelected(diagram, true);
 		}
 
@@ -300,7 +301,7 @@ public class RelationshipDragEndHandler implements
 		currentRel = null;
 	}
 
-	public void switchElement(String elementType, ImageInfo imageInfo, int x, int y) {
+	public void switchElement(String elementType, JsShapeConfig shapeConfig, ImageInfo imageInfo, int x, int y) {
 		hide();
 		Diagram src = switchFrom;
 		switchFrom = null;
@@ -311,7 +312,7 @@ public class RelationshipDragEndHandler implements
 		// create new element
 		ReattachHelpers reattachHelpers = new ReattachHelpers();
 
-		Diagram to = createDiagram(elementType, imageInfo, src.getLeft(), src.getTop());
+		Diagram to = createDiagram(elementType, shapeConfig, imageInfo, src.getLeft(), src.getTop());
 		to.getDiagramItem().setClientId(null);
 		ClientIdHelpers.generateClientIdIfNotSet(to.getDiagramItem(), 0, surface.getEditorContext().getGraphicalDocumentCache(), surface.getEditorContext());
 		to.setText(src.getText());
@@ -353,8 +354,8 @@ public class RelationshipDragEndHandler implements
 		popup.hide();
 	}
 
-	private Diagram createDiagramFromRelationShip(String elementType, ImageInfo imageInfo, int x, int y) {
-		Diagram diagram = createDiagram(elementType, imageInfo, x, y);
+	private Diagram createDiagramFromRelationShip(String elementType, JsShapeConfig shapeConfig, ImageInfo imageInfo, int x, int y) {
+		Diagram diagram = createDiagram(elementType, shapeConfig, imageInfo, x, y);
 		Point p = DiagramAnchorUtils.startCoordinate(
 				currentRel.getStartX(),
 				currentRel.getStartY(),
@@ -370,7 +371,7 @@ public class RelationshipDragEndHandler implements
 		return diagram;
 	}
 
-	private Diagram createDiagram(String elementType, ImageInfo imageInfo, int x, int y) {
+	private Diagram createDiagram(String elementType, JsShapeConfig shapeConfig, ImageInfo imageInfo, int x, int y) {
 		Diagram result = null;
 		ElementColor current = selectColor();
 		Color background = current.getBackgroundColor().create();
@@ -380,19 +381,18 @@ public class RelationshipDragEndHandler implements
 		if (Tools.isSketchMode()) {
 			// try first if sketch element is found
 			// at first only some of the elements are supported...
-			result = createGenericElement(elementType, x, y, background, borderColor, color);
+			result = createGenericElement(elementType, x, y, background, borderColor, color, shapeConfig);
 		}
 
 		if (result == null) {
 			// try to create with legacy way
-			result = createLegacyDiagram(elementType, imageInfo, x, y, background, borderColor, color);
+			result = createLegacyDiagram(elementType, imageInfo, x, y, background, borderColor, color, shapeConfig);
 		}
 
 		return result;
 	}
 
-	private Diagram createLegacyDiagram(String elementType, ImageInfo imageInfo, int x, int y, Color background, 
-Color borderColor, Color color) {
+	private Diagram createLegacyDiagram(String elementType, ImageInfo imageInfo, int x, int y, Color background, Color borderColor, Color color, JsShapeConfig shapeConfig) {
 		Diagram result = null;
 		if (ElementType.IMAGE.getValue().equals(elementType)) {
 			result = DiagramElementFactory.createImageElement(surface, imageInfo.getFilename(), imageInfo.getUrl(), x, y, imageInfo.getWidth(), imageInfo.getHeight());
@@ -443,7 +443,11 @@ Color borderColor, Color color) {
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 			result = ne;
 		} else if (ElementType.TEXT_ITEM.getValue().equals(elementType)) {
-			result = createTextElement(x, y, "" /*TODO sampleText*/, background, borderColor, color);
+			String defaultText = "";
+			if (shapeConfig != null) {
+				defaultText = shapeConfig.getDefaultText();
+			}
+			result = createTextElement(x, y, defaultText, background, borderColor, color);
 		// } else if (ElementType.MIND_SUB_TOPIC.getValue().equals(elementType)) {
 		// 	result = createTextElement(x, y, elementType, background, borderColor, color);
 		} else if (ElementType.CHOICE.getValue().equals(elementType)) {
@@ -529,7 +533,7 @@ Color borderColor, Color color) {
 		// case BUBBLE_LEFT:
 		// case BUBBLE_RIGHT:
 		// case ENVELOPE: {
-			result = createGenericElement(elementType, x, y, background, borderColor, color);
+			result = createGenericElement(elementType, x, y, background, borderColor, color, shapeConfig);
 			// break;
 		// }
 		}
@@ -537,7 +541,7 @@ Color borderColor, Color color) {
 	}
 
 	private Diagram createGenericElement(String elementType, int x, int y, Color background, 
-Color borderColor, Color color) {
+Color borderColor, Color color, JsShapeConfig shapeConfig) {
 		Diagram result = null;
 		IShapeGroup proxy = ShapeCache.get(elementType, Tools.isSketchMode());
 		ShapeGroup shapeGroup = proxy.getShape();
@@ -547,13 +551,25 @@ Color borderColor, Color color) {
 
 			double width = shapeGroup.width;
 			double height = shapeGroup.height;
+			String defaultText = shapeGroup.getDefaultText();
 
-			if (shapeGroup.isTargetSizeDefined()) {
-				width = shapeGroup.targetWidth;
-				height = shapeGroup.targetHeight;
+			if (shapeConfig != null && shapeConfig.isTargetSizeDefined()) {
+				// menu can have own configuration
+				width = shapeConfig.getTargetWidth();
+				height = shapeConfig.getTargetHeight();
 			}
 
-			result = _createGenericElement(shapeGroup.elementType, x, y, (int) width, (int) height, shapeGroup.properties, background, borderColor, color);
+			if (shapeConfig != null && shapeConfig.isDefaultTextDefined()) {
+				defaultText = shapeConfig.getDefaultText();
+			}
+
+			if (shapeGroup.isTargetSizeDefined()) {
+				// shape can override settings
+				width = shapeGroup.getShapeConfig().getTargetWidth();
+				height = shapeGroup.getShapeConfig().getTargetHeight();
+			}
+
+			result = _createGenericElement(shapeGroup.elementType, x, y, (int) width, (int) height, shapeGroup.properties, background, borderColor, color, defaultText);
 		}
 
 		if (shapeGroup == null && Tools.isSketchMode()) {
@@ -561,16 +577,16 @@ Color borderColor, Color color) {
 			LibraryShapes.LibraryShape ls = LibraryShapes.getDefaultShape(elementType);
 			if (ls != null) {
 				// try crating through static code element mapping
-				result = _createGenericElement(elementType, x, y, ls.width, ls.height, ls.shapeProperties, background, borderColor, color);
+				result = _createGenericElement(elementType, x, y, ls.width, ls.height, ls.shapeProperties, background, borderColor, color, "");
 			}
 		}
 		return result;
 	}
 
-	private Diagram _createGenericElement(String elementType, int x, int y, int width, int height, Integer properties, Color background, Color borderColor, Color color) {
+	private Diagram _createGenericElement(String elementType, int x, int y, int width, int height, Integer properties, Color background, Color borderColor, Color color, String defaultText) {
     DiagramItemDTO item = LibraryShapes.createByType(elementType);
     DiagramItemConfiguration.setColors(item, background, borderColor, color);
-    item.setText(""); // TODO sampleText all the way from db
+    item.setText(defaultText);
     item.setShape(createshape(elementType, x, y, width, height, properties));
 
     return ShapeParser.createDiagramElement(item, surface);

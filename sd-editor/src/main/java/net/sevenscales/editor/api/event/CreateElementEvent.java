@@ -2,6 +2,7 @@ package net.sevenscales.editor.api.event;
 
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.domain.js.ImageInfo;
+import net.sevenscales.domain.js.JsShapeConfig;
 
 import com.google.gwt.event.shared.GwtEvent;
 
@@ -9,6 +10,7 @@ public class CreateElementEvent extends GwtEvent<CreateElementEventHandler> {
   public static Type<CreateElementEventHandler> TYPE = new Type<CreateElementEventHandler>();
 	private String elementType;
 	// in case elementType is image, image info is needed
+	private JsShapeConfig shapeConfig;
 	private ImageInfo imageInfo;
 	private int x;
 	private int y;
@@ -29,7 +31,14 @@ public class CreateElementEvent extends GwtEvent<CreateElementEventHandler> {
 	public com.google.gwt.event.shared.GwtEvent.Type<CreateElementEventHandler> getAssociatedType() {
 		return TYPE;
 	}
-	
+
+	public void setShapeConfig(JsShapeConfig shapeConfig) {
+		this.shapeConfig = shapeConfig;
+	}
+	public JsShapeConfig getShapeConfig() {
+		return shapeConfig;
+	}
+
 	public String getElementType() {
 		return elementType;
 	}

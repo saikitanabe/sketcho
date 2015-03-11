@@ -83,6 +83,11 @@ public class ShapeCache {
 	}
 
 	public static boolean hasShape(String elementType) {
+		if (ElementType.TEXT_ITEM.getValue().equals(elementType)) {
+			// default cases, only legacy shape exists
+			return true;
+		}
+
 		boolean sketch = net.sevenscales.editor.api.Tools.isSketchMode();
 		boolean result = false;
 		if (sketch) {
@@ -139,8 +144,7 @@ public class ShapeCache {
 		ShapeGroup result = new ShapeGroup(shape.getElementType(), prots, shape.getWidth(), shape.getHeight(), shape.getProperties());
 		JsShapeConfig c = shape.getConfig();
 		if (c != null) {
-			result.targetWidth = c.getTargetWidth();
-			result.targetHeight = c.getTargetHeight();
+			result.setShapeConfig(c);
 		}
 		return result;
 	}
