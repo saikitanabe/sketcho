@@ -8,7 +8,7 @@ import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.uicomponents.uml.ShapeCache;
-import net.sevenscales.editor.uicomponents.uml.ShapeGroup;
+import net.sevenscales.editor.uicomponents.uml.IShapeGroup;
 
 public class LibraryShapes {
 	public static Map<String, LibraryShape> shapes;
@@ -106,24 +106,24 @@ public class LibraryShapes {
     }
   }
 
-	public static ShapeProps getShapeProps(String type) {
+	public static ShapeProps getShapeProps(String elementType) {
     Integer properties = null;
     Integer fontSize = null;
 
-    LibraryShapes.LibraryShape s = shapes.get(type);
+    LibraryShapes.LibraryShape s = shapes.get(elementType);
 
     if (s != null) {
       properties = s.shapeProperties;
       fontSize = s.fontSize;
     } else {
       // TODO temporary solution
-      //     LibraryShapes.LibraryShape s = LibraryShapes.get(ElementType.getEnum(type));
+      //     LibraryShapes.LibraryShape s = LibraryShapes.get(ElementType.getEnum(elementType));
       // can be removed
 
-      ShapeGroup sg = ShapeCache.get(type, true);
-      if (sg != null) {
-        properties = sg.properties;
-        fontSize = sg.fontSize;
+      IShapeGroup sg = ShapeCache.get(elementType, true);
+      if (sg.isReady()) {
+        properties = sg.getShape().properties;
+        fontSize = sg.getShape().fontSize;
       }
     }
 
@@ -176,11 +176,11 @@ public class LibraryShapes {
 
   }
 
-  public static DiagramItemDTO createByType(String type) {
+  public static DiagramItemDTO createByType(String elementType) {
     DiagramItemDTO result = new DiagramItemDTO();
-    ShapeProps sp = getShapeProps(type);
+    ShapeProps sp = getShapeProps(elementType);
 
-    result.setType(type);
+    result.setType(elementType);
     result.setShapeProperties(sp.properties);
     result.setFontSize(sp.fontSize);
     return result;

@@ -82,6 +82,7 @@ import net.sevenscales.editor.uicomponents.uml.UMLPackageElement;
 import net.sevenscales.editor.uicomponents.uml.ComponentElement;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
+import net.sevenscales.editor.uicomponents.uml.IShapeGroup;
 import net.sevenscales.editor.uicomponents.uml.ShapeGroup;
 import net.sevenscales.editor.uicomponents.uml.ShapeCache;
 import net.sevenscales.editor.utils.DiagramItemConfiguration;
@@ -538,7 +539,8 @@ Color borderColor, Color color) {
 	private Diagram createGenericElement(String elementType, int x, int y, Color background, 
 Color borderColor, Color color) {
 		Diagram result = null;
-		ShapeGroup shapeGroup = ShapeCache.get(elementType, Tools.isSketchMode());
+		IShapeGroup proxy = ShapeCache.get(elementType, Tools.isSketchMode());
+		ShapeGroup shapeGroup = proxy.getShape();
 		if (shapeGroup != null) {
 			// there might not be generi library shape available
 			// could multiply width and height

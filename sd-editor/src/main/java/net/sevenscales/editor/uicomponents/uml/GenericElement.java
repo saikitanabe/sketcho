@@ -48,7 +48,7 @@ import net.sevenscales.domain.ExtensionDTO;
 import net.sevenscales.domain.constants.Constants;
 
 
-public class GenericElement extends AbstractDiagramItem implements IGenericElement, SupportsRectangleShape {
+public class GenericElement extends AbstractDiagramItem implements IGenericElement, SupportsRectangleShape, IShapeGroup.ShapeLoaded {
 	private static SLogger logger = SLogger.createLogger(GenericElement.class);
 
 	static {
@@ -69,7 +69,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private int top;
   private int width;
   private int height;
-  private ShapeGroup theshape;
+  private IShapeGroup theshape;
   private TextElementFormatUtil textUtil;
   private GenericHasTextElement hasTextElement;
   private boolean pathsSetAtLeastOnce;
@@ -112,21 +112,11 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
     // sub// group.setAttribute("cursor", "default");
 
-  	paths = new ArrayList<PathWrapper>(); // theshape.protos.length
-  	if (shape.getSvgData() != null) {
-  		// this is the freehand drawing or any custom svg case!
-  		createCustomPaths(shape.getSvgData().getPaths());
-  		// diagram item needs to have extionsion data as well for undo/redo calculation
-  		Integer lineWeight = item.getExtension() != null ? item.getExtension().getLineWeight() : null;
-			getDiagramItem().setExtension(new ExtensionDTO(shape.getSvgData().copy(), lineWeight));
-  	} else {
-	  	theshape = Shapes.get(getDiagramItem().getType(), Tools.isSketchMode());
-	    createSubPaths(theshape);
-  	}
-
     background = IShapeFactory.Util.factory(editable).createRectangle(group);
     background.setFill(0, 0 , 0, 0); // transparent
     // background.setStroke("#363636");
+
+  	paths = new ArrayList<PathWrapper>(); // theshape.protos.length
 
 		addEvents(background);
 		
@@ -149,7 +139,24 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
     }
 
     setReadOnly(!editable);
-    setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
+
+  	if (shape.getSvgData() != null) {
+  		// this is the freehand drawing or any custom svg case!
+  		createCustomPaths(shape.getSvgData().getPaths());
+  		// diagram item needs to have extionsion data as well for undo/redo calculation
+  		Integer lineWeight = item.getExtension() != null ? item.getExtension().getLineWeight() : null;
+			getDiagramItem().setExtension(new ExtensionDTO(shape.getSvgData().copy(), lineWeight));
+  	} else {
+	  	theshape = Shapes.get(getDiagramItem().getType(), Tools.isSketchMode());
+	  	theshape.fetch(this);
+  	}
+    // NOTE setShape is called after fetch is ready
+    // - fetch is synchronous on page load and when ever shape is found from cache
+    // - fetch is asynchronous when shape is not found from cache
+    // - in case undo/redo would be implemented in a way that board library shape is deleted
+    // immediately if there are no references, it should be removed from local cache as well
+    // so shape could be readded to board library. But for now going with cleanup on session end.
+    // setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
 
     setBorderColor(borderColor);
 
@@ -161,6 +168,14 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
     }
 
     super.constructorDone();
+	}
+
+	public void onSuccess() {
+		createSubPaths(theshape.getShape());
+		setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
+	}
+	public void onError() {
+
 	}
 
 	protected GenericHasTextElement getHasTextElement() {
@@ -414,12 +429,14 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   }
 
   private void scalePaths(double factorX, double factorY) {
-  	for (PathWrapper pw : paths) {
-  		if (pw.isProto()) {
-	  		pw.path.setShape(pw.proto.toPath(factorX, factorY, theshape.width));
-  		}
+  	if (theshape.isReady()) {
+	  	for (PathWrapper pw : paths) {
+	  		if (pw.isProto()) {
+		  		pw.path.setShape(pw.proto.toPath(factorX, factorY, theshape.getShape().width));
+	  		}
+	  	}
+	  	pathsSetAtLeastOnce = true;
   	}
-  	pathsSetAtLeastOnce = true;
 		// for (ShapeProto p : groupData.protos) {
   // 	for (IPath path : paths) {
   // 		result.setShape(proto.toPath());
@@ -473,10 +490,20 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 
   public double shapeWidth() {
-  	return theshape != null ? theshape.width : shape.getSvgData().getWidth();
+  	if (theshape == null) {
+			return shape.getSvgData().getWidth();
+  	} else if (theshape != null && theshape.isReady()) {
+  		return theshape.getShape().width;
+  	}
+  	return 0;
   }
   public double shapeHeight() {
-  	return theshape != null ? theshape.height : shape.getSvgData().getHeight();
+  	if (theshape == null) {
+  		return shape.getSvgData().getHeight();
+  	} else if (theshape != null && theshape.isReady()) {
+  		return theshape.getShape().height;
+  	}
+  	return 0;
   }
 
   public void setHighlightColor(Color color) {

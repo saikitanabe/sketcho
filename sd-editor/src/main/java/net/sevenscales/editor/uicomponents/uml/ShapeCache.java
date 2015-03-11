@@ -56,15 +56,19 @@ public class ShapeCache {
 		return result;
 	}
 
-	public static ShapeGroup get(String type, boolean sketch) {
+	public static IShapeGroup get(String elementType, boolean sketch) {
 		ShapeGroup result = null;
 		if (sketch) {
-			result = getSketch(type);
+			result = getSketch(elementType);
 		}
 		if (result == null) {
-			result = shapes.get(type);
+			result = shapes.get(elementType);
 		}
-		return result;
+
+		int shapeType = sketch ? 0 : 1;
+		ShapeProxy proxy = new ShapeProxy(elementType, shapeType);
+		proxy.setShape(result);
+		return proxy;
 	}
 
 	public static ShapeGroup getSketch(String type) {

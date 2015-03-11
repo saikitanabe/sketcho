@@ -171,7 +171,7 @@ public class Shapes {
  // </g>
 
 
-	public static ShapeGroup get(String elementType, boolean sketch) {
+	public static IShapeGroup get(String elementType, boolean sketch) {
 		return ShapeCache.get(elementType, sketch);
 	}
 
