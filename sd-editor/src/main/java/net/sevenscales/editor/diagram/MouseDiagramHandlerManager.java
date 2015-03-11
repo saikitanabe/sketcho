@@ -88,7 +88,9 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			handleMouseDoubleClick(surface.getElement(), this);
 		}
 
-		handleOnline(this);
+		if (!surface.isLibrary()) {
+			handleOnline(this);
+		}
 		// addMouseDiagramHandler(sketchDiagramAreaHandler);
 	}
 
