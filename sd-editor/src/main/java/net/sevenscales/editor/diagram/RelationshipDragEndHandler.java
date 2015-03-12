@@ -53,6 +53,7 @@ import net.sevenscales.editor.diagram.shape.TextShape;
 import net.sevenscales.editor.diagram.shape.UMLPackageShape;
 import net.sevenscales.editor.diagram.shape.ComponentShape;
 import net.sevenscales.editor.diagram.shape.ServerShape;
+import net.sevenscales.editor.diagram.shape.HorizontalPartitionShape;
 import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.utils.DiagramAnchorUtils;
 import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
@@ -82,6 +83,7 @@ import net.sevenscales.editor.uicomponents.uml.TextElement;
 import net.sevenscales.editor.uicomponents.uml.UMLPackageElement;
 import net.sevenscales.editor.uicomponents.uml.ComponentElement;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
+import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
 import net.sevenscales.editor.uicomponents.uml.IShapeGroup;
 import net.sevenscales.editor.uicomponents.uml.ShapeGroup;
@@ -394,18 +396,23 @@ public class RelationshipDragEndHandler implements
 
 	private Diagram createLegacyDiagram(String elementType, ImageInfo imageInfo, int x, int y, Color background, Color borderColor, Color color, JsShapeConfig shapeConfig) {
 		Diagram result = null;
+		String defaultText = "";
+		if (shapeConfig != null && shapeConfig.isDefaultTextDefined()) {
+			defaultText = shapeConfig.getDefaultText();
+		}
+
 		if (ElementType.IMAGE.getValue().equals(elementType)) {
 			result = DiagramElementFactory.createImageElement(surface, imageInfo.getFilename(), imageInfo.getUrl(), x, y, imageInfo.getWidth(), imageInfo.getHeight());
 		} else if (ElementType.CLASS.getValue().equals(elementType)) {
 			Diagram ce = new ClassElement2(surface, new RectShape(x,
 					y, 1, // auto resizes
 					1), // auto resizes
-					elementType, background, borderColor, color, true, new DiagramItemDTO());
+					defaultText, background, borderColor, color, true, new DiagramItemDTO());
 			result = ce;
 		} else if (ElementType.SEQUENCE.getValue().equals(elementType)) {
 			SequenceElement se = new SequenceElement(surface, 
 	        new SequenceShape(x, y, 1, 1, 25),
-	        elementType,
+	        defaultText,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = se;
 		} else if (ElementType.ACTOR.getValue().equals(elementType)) {
@@ -414,7 +421,7 @@ public class RelationshipDragEndHandler implements
               y,
               25,
               40),
-              elementType,
+              defaultText,
               background, borderColor, color, 
               true,
               new DiagramItemDTO());
@@ -423,7 +430,7 @@ public class RelationshipDragEndHandler implements
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 			NoteElement ne = new NoteElement(surface,
 	        new NoteShape(x, y, 150, 45),
-	        elementType,
+	        defaultText,
 	        background, borderColor, color,
 	        true, 
 	        new DiagramItemDTO());
@@ -443,17 +450,13 @@ public class RelationshipDragEndHandler implements
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 			result = ne;
 		} else if (ElementType.TEXT_ITEM.getValue().equals(elementType)) {
-			String defaultText = "";
-			if (shapeConfig != null) {
-				defaultText = shapeConfig.getDefaultText();
-			}
 			result = createTextElement(x, y, defaultText, background, borderColor, color);
 		// } else if (ElementType.MIND_SUB_TOPIC.getValue().equals(elementType)) {
 		// 	result = createTextElement(x, y, elementType, background, borderColor, color);
 		} else if (ElementType.CHOICE.getValue().equals(elementType)) {
 			ActivityChoiceElement ace = new ActivityChoiceElement(surface,
 	        new ActivityChoiceShape(x, y, 32, 32),
-	        elementType,
+	        defaultText,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ace;
 		} else if (ElementType.ACTIVITY_START.getValue().equals(elementType)) {
@@ -473,25 +476,34 @@ public class RelationshipDragEndHandler implements
 		} else if (ElementType.ACTIVITY.getValue().equals(elementType)) {
 			ActivityElement ae = new ActivityElement(surface,
 	        new ActivityShape(x, y, 1, 1),
-	        elementType,
+	        defaultText,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ae;
 		} else if (ElementType.STORAGE.getValue().equals(elementType)) {
 			StorageElement ae = new StorageElement(surface,
 	        new DbShape(x, y, 1, 1),
-	        elementType,
+	        defaultText,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ae;
 		} else if (ElementType.PACKAGE.getValue().equals(elementType)) {
 			UMLPackageElement ce = new UMLPackageElement(surface, new UMLPackageShape(x,
 					y, 100, // package has no auto resizes
 					40), // package has no auto resizes
-					elementType, background, borderColor, color, true, new DiagramItemDTO());
+					defaultText, background, borderColor, color, true, new DiagramItemDTO());
 			result = ce;
+		} else if (ElementType.HORIZONTAL_PARTITION.getValue().equals(elementType)) {
+			result = new HorizontalPartitionElement(surface,
+        		new HorizontalPartitionShape(x, y, 170, 70),
+            defaultText,
+            background,
+            borderColor,
+            color,
+        	  true,
+        	  new DiagramItemDTO());			
 		} else if (ElementType.MIND_CENTRAL.getValue().equals(elementType)) {
 			MindCentralElement ae = new MindCentralElement(surface,
 	        new MindCentralShape(x, y, 1, 1),
-	        elementType,
+	        defaultText,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ae;
 		// } else if (ElementType.ACTIVITY.getValue().equals(elementType)) {
@@ -503,13 +515,13 @@ public class RelationshipDragEndHandler implements
 		} else if (ElementType.COMPONENT.getValue().equals(elementType)) {
 			ComponentElement element = new ComponentElement(surface,
 	        new ComponentShape(x, y, 1, 1),
-	        elementType,
+	        defaultText,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = element;
 		} else if (ElementType.SERVER.getValue().equals(elementType)) {
 			ServerElement element = new ServerElement(surface,
 	        new ServerShape(x, y, 60, 80),
-	        elementType,
+	        defaultText,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = element;
 		} else {
