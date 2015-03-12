@@ -83,16 +83,23 @@ public class ShapeCache {
 	}
 
 	public static boolean hasShape(String elementType) {
-		if (ElementType.TEXT_ITEM.getValue().equals(elementType)) {
+		if (ElementType.TEXT_ITEM.getValue().equals(elementType) ||
+				ElementType.COMMENT_THREAD.getValue().equals(elementType) ||
+				ElementType.COMMENT.getValue().equals(elementType) ||
+				ElementType.PACKAGE.getValue().equals(elementType)) {
 			// default cases, only legacy shape exists
 			return true;
 		}
 
 		boolean sketch = net.sevenscales.editor.api.Tools.isSketchMode();
+		// if (!sketch && isLegacyShape(elementType)) {
+		// 	return true;
+		// }
+
 		boolean result = false;
-		if (sketch) {
+		// if (sketch) {
 			result = sketchShapes.get(elementType) != null;
-		}
+		// }
 
 		if (!result) {
 			// try still corporate shapes
@@ -148,6 +155,22 @@ public class ShapeCache {
 		}
 		return result;
 	}
+
+	// private static boolean isLegacyShape(String elementType) {
+	// 	// if default library has only _s.svg then corporate shape is
+	// 	// rendered through legacy shapes
+	// 	if (ElementType.ACTIVITY.getValue().equals(elementType) ||
+	// 			ElementType.ACTOR.getValue().equals(elementType) ||
+	// 			ElementType.MIND_CENTRAL.getValue().equals(elementType) ||
+	// 			ElementType.CHOICE.getValue().equals(elementType) ||
+	// 			ElementType.COMPONENT.getValue().equals(elementType) || 
+	// 			ElementType.NOTE.getValue().equals(elementType) ||
+	// 			ElementType.SEQUENCE.getValue().equals(elementType) ||
+	// 			ElementType.SERVER.getValue().equals(elementType) || 
+	// 			ElementType.STORAGE.getValue().equals(elementType)) {
+	// 		return true
+	// 	}
+	// }
 
 	static {
 		SLogger.addFilter(ShapeCache.class);
