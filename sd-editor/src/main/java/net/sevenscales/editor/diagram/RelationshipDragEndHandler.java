@@ -54,6 +54,7 @@ import net.sevenscales.editor.diagram.shape.UMLPackageShape;
 import net.sevenscales.editor.diagram.shape.ComponentShape;
 import net.sevenscales.editor.diagram.shape.ServerShape;
 import net.sevenscales.editor.diagram.shape.HorizontalPartitionShape;
+import net.sevenscales.editor.diagram.shape.RectContainerShape;
 import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.utils.DiagramAnchorUtils;
 import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
@@ -84,6 +85,7 @@ import net.sevenscales.editor.uicomponents.uml.UMLPackageElement;
 import net.sevenscales.editor.uicomponents.uml.ComponentElement;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
 import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement;
+import net.sevenscales.editor.uicomponents.uml.RectBoundaryElement;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
 import net.sevenscales.editor.uicomponents.uml.IShapeGroup;
 import net.sevenscales.editor.uicomponents.uml.ShapeGroup;
@@ -500,6 +502,15 @@ public class RelationshipDragEndHandler implements
             color,
         	  true,
         	  new DiagramItemDTO());			
+		} else if (ElementType.VERTICAL_PARTITION.getValue().equals(elementType)) {
+			result = new RectBoundaryElement(surface,
+        		new RectContainerShape(x, y, 170, 225),
+            defaultText,
+            background,
+            borderColor,
+            color,
+        	  true,
+        	  new DiagramItemDTO());			
 		} else if (ElementType.MIND_CENTRAL.getValue().equals(elementType)) {
 			MindCentralElement ae = new MindCentralElement(surface,
 	        new MindCentralShape(x, y, 1, 1),
@@ -557,22 +568,30 @@ Color borderColor, Color color, JsShapeConfig shapeConfig) {
 		Diagram result = null;
 		IShapeGroup proxy = ShapeCache.get(elementType, Tools.isSketchMode());
 		ShapeGroup shapeGroup = proxy.getShape();
+
+		double width = 0;
+		double height = 0;
+
+		if (shapeConfig != null && shapeConfig.isTargetSizeDefined()) {
+			// menu can have own configuration
+			width = shapeConfig.getTargetWidth();
+			height = shapeConfig.getTargetHeight();
+		}
+
 		if (shapeGroup != null) {
 			// there might not be generi library shape available
 			// could multiply width and height
 
-			double width = shapeGroup.width;
-			double height = shapeGroup.height;
 			String defaultText = shapeGroup.getDefaultText();
-
-			if (shapeConfig != null && shapeConfig.isTargetSizeDefined()) {
-				// menu can have own configuration
-				width = shapeConfig.getTargetWidth();
-				height = shapeConfig.getTargetHeight();
-			}
 
 			if (shapeConfig != null && shapeConfig.isDefaultTextDefined()) {
 				defaultText = shapeConfig.getDefaultText();
+			}
+
+			if (width == 0 || height == 0) {
+				// if width or height is not set then get size from svg shape directly 
+				width = shapeGroup.width;
+				height = shapeGroup.height;
 			}
 
 			if (shapeGroup.isTargetSizeDefined()) {
@@ -588,8 +607,15 @@ Color borderColor, Color color, JsShapeConfig shapeConfig) {
 			// exception cases that are not drawn using plain svg
 			LibraryShapes.LibraryShape ls = LibraryShapes.getDefaultShape(elementType);
 			if (ls != null) {
+
+				if (width == 0 || height == 0) {
+					// if width or height is not set then get size from svg shape directly 
+					width = ls.width;
+					height = ls.height;
+				}
+
 				// try crating through static code element mapping
-				result = _createGenericElement(elementType, x, y, ls.width, ls.height, ls.shapeProperties, background, borderColor, color, "");
+				result = _createGenericElement(elementType, x, y, (int) width, (int) height, ls.shapeProperties, background, borderColor, color, "");
 			}
 		}
 		return result;

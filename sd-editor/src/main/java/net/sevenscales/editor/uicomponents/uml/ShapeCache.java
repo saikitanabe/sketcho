@@ -86,7 +86,8 @@ public class ShapeCache {
 		if (ElementType.TEXT_ITEM.getValue().equals(elementType) ||
 				ElementType.COMMENT_THREAD.getValue().equals(elementType) ||
 				ElementType.COMMENT.getValue().equals(elementType) ||
-				ElementType.PACKAGE.getValue().equals(elementType)) {
+				ElementType.PACKAGE.getValue().equals(elementType) ||
+				ElementType.VERTICAL_PARTITION.getValue().equals(elementType)) {
 			// default cases, only legacy shape exists
 			return true;
 		}
