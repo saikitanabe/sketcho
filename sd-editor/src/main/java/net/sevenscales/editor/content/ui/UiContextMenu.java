@@ -361,6 +361,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		$wnd.changeFreehandColorStream.onValue(function(e) {
 			me.@net.sevenscales.editor.content.ui.UiContextMenu::colorMenu(Lcom/google/gwt/dom/client/Element;)(e);
 		})
+
+		$wnd.globalStreams.spaceKeyStream.onValue(function(value) {
+			me.@net.sevenscales.editor.content.ui.UiContextMenu::switchElement()();
+		})
 	}-*/;
 
 	private native void tapCurvedArrow(Element e, UiContextMenu me)/*-{
