@@ -142,19 +142,20 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   		// diagram item needs to have extionsion data as well for undo/redo calculation
   		Integer lineWeight = item.getExtension() != null ? item.getExtension().getLineWeight() : null;
 			getDiagramItem().setExtension(new ExtensionDTO(shape.getSvgData().copy(), lineWeight));
+	    setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
   	} else {
 	  	theshape = Shapes.get(getDiagramItem().getType(), Tools.isSketchMode());
 	  	// set initial shape or it will be overridden through getInfo()
 	    background.setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height, 0);
 	  	theshape.fetch(this);
   	}
+
     // NOTE setShape is called after fetch is ready
     // - fetch is synchronous on page load and when ever shape is found from cache
     // - fetch is asynchronous when shape is not found from cache
     // - in case undo/redo would be implemented in a way that board library shape is deleted
     // immediately if there are no references, it should be removed from local cache as well
     // so shape could be readded to board library. But for now going with cleanup on session end.
-    // setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
 
     setBorderColor(borderColor);
 
