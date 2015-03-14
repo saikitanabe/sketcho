@@ -1,10 +1,14 @@
 package net.sevenscales.editor.content.ui;
 
+import java.util.Set;
+
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.event.RelationshipTypeSelectedEvent;
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.ui.LineSelections.SelectionHandler;
+import net.sevenscales.editor.uicomponents.uml.Relationship2;
+import net.sevenscales.editor.diagram.Diagram;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
@@ -36,14 +40,16 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 	PopupPanel popup;
 	private RelationShipType currentRelationshipType = RelationShipType.DIRECTED;
 	private EditorContext editorContext;
+	private net.sevenscales.editor.diagram.SelectionHandler selectionHandler;
 	private boolean popupUp;
 
-	public SelectButtonBox(EditorContext editorContext) {
-		this(editorContext, true);
+	public SelectButtonBox(EditorContext editorContext, net.sevenscales.editor.diagram.SelectionHandler selectionHandler) {
+		this(editorContext, selectionHandler, true);
 	}
 
-	public SelectButtonBox(EditorContext editorContext, boolean popupUp) {
+	public SelectButtonBox(EditorContext editorContext, net.sevenscales.editor.diagram.SelectionHandler selectionHandler, boolean popupUp) {
 		this.editorContext = editorContext;
+		this.selectionHandler = selectionHandler;
 		this.popupUp = popupUp;
 		initWidget(uiBinder.createAndBindUi(this));
 		
@@ -85,10 +91,35 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 						}
 					}
 				});
+		init(this);
+	}
+
+	private native void init(SelectButtonBox me)/*-{
+		$wnd.globalStreams.spaceKeyStream.onValue(function(value) {
+			$wnd.console.log("space... $wnd.globalState.contextMenuOpen", $wnd.globalState.contextMenuOpen, $wnd.isEditorOpen())
+			if (!$wnd.globalState.contextMenuOpen && !$wnd.isEditorOpen()) {
+				// do not allow to show switch if editor is open
+				me.@net.sevenscales.editor.content.ui.SelectButtonBox::showPopup()();
+			}
+		})
+		$wnd.cancelStream.onValue(function() {
+			me.@net.sevenscales.editor.content.ui.SelectButtonBox::hidePopup()();
+		})		
+	}-*/;
+
+	private boolean allSelectionsRelationShips() {
+		Set<Diagram> selected = selectionHandler.getSelectedItems();
+		for (Diagram d : selected) {
+			if (!(d instanceof Relationship2)) {
+				return false;
+			}
+		}
+		// there needs to be at least one shape, and that is relationship
+		return selected.size() > 0;
 	}
 
 	private void showPopup() {
-		if (!popup.isShowing()) {
+		if (!popup.isShowing() && allSelectionsRelationShips()) {
 			int left = SelectButtonBox.this.getAbsoluteLeft() - 60;;
 			int top = SelectButtonBox.this.getAbsoluteTop() + 30;
 			// popup.setWidth(panel.getElement().getStyle().getWidth());
@@ -100,8 +131,12 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 			popup.setPopupPosition(left, top);
 			popup.show();
 		} else {
-			popup.hide();
+			hidePopup();
 		}
+	}
+
+	private void hidePopup() {
+		popup.hide();
 	}
 
 	private void removeLineClassNames() {
@@ -168,7 +203,8 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 
 	private void select(RelationShipType type) {
 		currentRelationshipType = type;
-		popup.hide();
+
+		hidePopup();
 		
 		editorContext.set(EditorProperty.CURRENT_RELATIONSHIP_TYPE, currentRelationshipType);
 		editorContext.getEventBus().fireEvent(new RelationshipTypeSelectedEvent(type));

@@ -184,9 +184,18 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			}
 			@Override
 			public void onSelection(RelationshipTypeSelectedEvent event) {
-				for (Diagram d : Properties.this.selectionHandler.getSelectedItems()) {
+				// Properties.this.surface.beginTransaction();
+
+				// to avoid concurrent modification exception
+				// NOTE this should be refactored in some better way that selection cannot change
+				Set<Diagram> sels = Properties.this.selectionHandler.getSelectedItems();
+				Diagram[] selected = new Diagram[sels.size()];
+				sels.toArray(selected);
+				for (Diagram d : selected) {
 					changeSelected(d, event);
 				}
+
+				// Properties.this.surface.commitTransaction();
 			}
 		});
 		

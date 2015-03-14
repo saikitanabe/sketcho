@@ -176,7 +176,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			}
 		}, TouchStartEvent.getType());
 
-		changeConnection.setWidget(new SelectButtonBox(editorContext, false));
+		changeConnection.setWidget(new SelectButtonBox(editorContext, selectionHandler, false));
 
 		editorContext.getEventBus().addHandler(BoardRemoveDiagramsEvent.TYPE, new BoardRemoveDiagramsEventHandler() {
 			public void on(BoardRemoveDiagramsEvent event) {
@@ -363,7 +363,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		})
 
 		$wnd.globalStreams.spaceKeyStream.onValue(function(value) {
-			me.@net.sevenscales.editor.content.ui.UiContextMenu::switchElement()();
+			if (!$wnd.globalState.contextMenuOpen && !$wnd.isEditorOpen()) {
+				// do not allow to show switch if editor is open
+				me.@net.sevenscales.editor.content.ui.UiContextMenu::switchElement()();
+			}
 		})
 	}-*/;
 
@@ -539,7 +542,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		Set<Diagram> selected = selectionHandler.getSelectedItems();
 		if (selected.size() == 1) {
 			Diagram d = selected.iterator().next();
-			editorContext.getEventBus().fireEvent(new SwitchElementEvent(d));
+			if (!(d instanceof Relationship2)) {
+				// wrong switch for relationship
+				editorContext.getEventBus().fireEvent(new SwitchElementEvent(d));
+			}
 		}
 	}
 	
