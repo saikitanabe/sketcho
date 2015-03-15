@@ -24,12 +24,16 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class SelectButtonBox extends Composite implements SelectionHandler {
+public class SelectButtonBox extends Composite implements SelectionHandler, LineSelections.IParent {
 
 	private static SelectButtonBoxUiBinder uiBinder = GWT
 			.create(SelectButtonBoxUiBinder.class);
 
 	interface SelectButtonBoxUiBinder extends UiBinder<Widget, SelectButtonBox> {
+	}
+
+	public interface IParent {
+		void show();
 	}
 
 	@UiField TableCellElement relationbutton;
@@ -42,12 +46,14 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 	private EditorContext editorContext;
 	private net.sevenscales.editor.diagram.SelectionHandler selectionHandler;
 	private boolean popupUp;
+	private IParent parent;
 
-	public SelectButtonBox(EditorContext editorContext, net.sevenscales.editor.diagram.SelectionHandler selectionHandler) {
-		this(editorContext, selectionHandler, true);
+	public SelectButtonBox(IParent parent, EditorContext editorContext, net.sevenscales.editor.diagram.SelectionHandler selectionHandler) {
+		this(parent, editorContext, selectionHandler, true);
 	}
 
-	public SelectButtonBox(EditorContext editorContext, net.sevenscales.editor.diagram.SelectionHandler selectionHandler, boolean popupUp) {
+	public SelectButtonBox(IParent parent, EditorContext editorContext, net.sevenscales.editor.diagram.SelectionHandler selectionHandler, boolean popupUp) {
+		this.parent = parent;
 		this.editorContext = editorContext;
 		this.selectionHandler = selectionHandler;
 		this.popupUp = popupUp;
@@ -57,7 +63,7 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 		
 		popup = new PopupPanel();
 		popup.setStyleName("RelationshipDragEndHandler");
-		LineSelections ls = new LineSelections();
+		LineSelections ls = new LineSelections(this);
 		ls.setSelectionHandler(SelectButtonBox.this);
 		popup.setWidget(ls);
 		popup.setAutoHideEnabled(true);
@@ -94,10 +100,15 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 		init(this);
 	}
 
+	public boolean isShowing() {
+		return SelectButtonBox.this.popup.isShowing();
+	}
+
 	private native void init(SelectButtonBox me)/*-{
-		$wnd.globalStreams.spaceKeyStream.onValue(function(value) {
+		$wnd.spaceKeyManager.stream.onValue(function(value) {
 			$wnd.console.log("space... $wnd.globalState.contextMenuOpen", $wnd.globalState.contextMenuOpen, $wnd.isEditorOpen())
-			if (!$wnd.globalState.contextMenuOpen && !$wnd.isEditorOpen()) {
+			if (!$wnd.globalState.contextMenuOpen && !$wnd.isEditorOpen() && 
+					!$wnd.spaceKeyManager.isHandled()) {
 				// do not allow to show switch if editor is open
 				me.@net.sevenscales.editor.content.ui.SelectButtonBox::showPopup()();
 			}
@@ -120,7 +131,8 @@ public class SelectButtonBox extends Composite implements SelectionHandler {
 
 	private void showPopup() {
 		if (!popup.isShowing() && allSelectionsRelationShips()) {
-			int left = SelectButtonBox.this.getAbsoluteLeft() - 60;;
+			parent.show();
+			int left = SelectButtonBox.this.getAbsoluteLeft() - 60;
 			int top = SelectButtonBox.this.getAbsoluteTop() + 30;
 			// popup.setWidth(panel.getElement().getStyle().getWidth());
 			if (popupUp) {

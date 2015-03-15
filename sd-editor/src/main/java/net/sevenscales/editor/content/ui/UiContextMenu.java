@@ -176,7 +176,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			}
 		}, TouchStartEvent.getType());
 
-		changeConnection.setWidget(new SelectButtonBox(editorContext, selectionHandler, false));
+		changeConnection.setWidget(new SelectButtonBox(new SelectButtonBox.IParent() {
+			public void show() {
+				showContextMenu();
+			}
+		}, editorContext, selectionHandler, false));
 
 		editorContext.getEventBus().addHandler(BoardRemoveDiagramsEvent.TYPE, new BoardRemoveDiagramsEventHandler() {
 			public void on(BoardRemoveDiagramsEvent event) {
@@ -208,7 +212,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					if (!allMenusHidden) {
 						mainContextPosition.left = screenPosition.x;
 						mainContextPosition.top = screenPosition.y;
-						popup.setPopupPositionAndShow(mainContextPosition);
+						showContextMenu();
 						trigger("shape-context-menu-shown");
 						EffectHelpers.tooltipper();
 					}
@@ -348,6 +352,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		tapCurvedArrow(curvedArrow, this);
 		tapRectifiedArrow(rectifiedArrow, this);
 		tapGroup(group, this);
+	}
+
+	private void showContextMenu() {
+		popup.setPopupPositionAndShow(mainContextPosition);
 	}
 
   private native void trigger(String event)/*-{
