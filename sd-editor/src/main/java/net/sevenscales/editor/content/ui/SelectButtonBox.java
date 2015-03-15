@@ -106,7 +106,6 @@ public class SelectButtonBox extends Composite implements SelectionHandler, Line
 
 	private native void init(SelectButtonBox me)/*-{
 		$wnd.spaceKeyManager.stream.onValue(function(value) {
-			$wnd.console.log("space... $wnd.globalState.contextMenuOpen", $wnd.globalState.contextMenuOpen, $wnd.isEditorOpen())
 			if (!$wnd.globalState.contextMenuOpen && !$wnd.isEditorOpen() && 
 					!$wnd.spaceKeyManager.isHandled()) {
 				// do not allow to show switch if editor is open
