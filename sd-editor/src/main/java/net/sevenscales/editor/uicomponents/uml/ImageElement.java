@@ -119,7 +119,6 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
       // loader is not started for empty image, then this is already handled through
       // fetch
       imageLoader = new Image(UriUtils.fromString(url));
-      RootPanel.get().add(imageLoader);
       // imageLoader.hide();
       imageLoader.addLoadHandler(new LoadHandler() {
         public void onLoad(LoadEvent event) {
@@ -127,6 +126,8 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
           imageLoader.removeFromParent();
         }
       });
+
+      RootPanel.get().add(imageLoader);
     }
   }
 

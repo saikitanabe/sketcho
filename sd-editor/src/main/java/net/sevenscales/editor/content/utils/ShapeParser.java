@@ -89,14 +89,13 @@ public class ShapeParser {
 
 	public static AbstractDiagramFactory factory(IDiagramItemRO diro) {
 		for (ParserMap pm : PARSER_MAP) {
-			ElementType type = ElementType.getEnum(diro.getType());
 			if (Tools.isSketchMode() && 
 					// hacked to use sequence factory always, it creates correct sequence sketch element
-					!type.equals(ElementType.SEQUENCE) &&
-					!type.equals(ElementType.HORIZONTAL_PARTITION) &&
-					!type.equals(ElementType.VERTICAL_PARTITION) &&
-					!type.equals(ElementType.PACKAGE) &&
-					Shapes.getSketch(ElementType.getEnum(diro.getType())) != null) {
+					!diro.getType().equals(ElementType.SEQUENCE.getValue()) &&
+					!diro.getType().equals(ElementType.HORIZONTAL_PARTITION.getValue()) &&
+					!diro.getType().equals(ElementType.VERTICAL_PARTITION.getValue()) &&
+					!diro.getType().equals(ElementType.PACKAGE.getValue()) &&
+					Shapes.getSketch(diro.getType()) != null) {
 				return new AbstractDiagramFactory.GenericFactory();
 			} else {
 				if (pm.elementType.getValue().equals(diro.getType())) {
@@ -115,11 +114,14 @@ public class ShapeParser {
 			}
 		}
 
-		if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
-			debugger();
-		}
+		Info result = new AbstractDiagramFactory.GenericFactory().parseShape(diro, moveX, moveY);
 
-		throw new RuntimeException("Type not found: " + diro.getType());
+		if (result == null && LogConfiguration.loggingIsEnabled(Level.FINEST)) {
+			debugger();
+		} else if (result == null) {
+			throw new RuntimeException("Type not found: " + diro.getType());
+		}
+		return result;
 	}
 
 	public static Diagram createDiagramElement(IDiagramItemRO item, ISurfaceHandler surface) {

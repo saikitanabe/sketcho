@@ -66,9 +66,9 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
   }
 
   private static Integer resolveProperties() {
-    LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.SEQUENCE);
+    LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.SEQUENCE.getValue());
     if (sh != null) {
-      return sh.shapeProperties;
+      return sh.properties;
     }
     return null;
   }
@@ -204,7 +204,7 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
     GenericShape rs = (GenericShape) super.getInfo();
     SequenceShape ss = new SequenceShape(x, y, 
         rs.rectShape.width, rs.rectShape.height, line.getY2() - line.getY1());
-    return new SequenceElement2(surface, ss, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(ElementType.SEQUENCE));
+    return new SequenceElement2(surface, ss, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(ElementType.SEQUENCE.getValue()));
   }
 
 	public void setShape(int left, int top, int width, int height, int lifelineheight) {

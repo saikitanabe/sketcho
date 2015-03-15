@@ -48,9 +48,9 @@ public class HorizontalPartitionElement2 extends GenericElement implements Suppo
   // private static final int HEADER_HEIGHT = 25;
 
   private static Integer resolveProperties() {
-    LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.HORIZONTAL_PARTITION);
+    LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.HORIZONTAL_PARTITION.getValue());
     if (sh != null) {
-      return sh.shapeProperties;
+      return sh.properties;
     }
     return null;
   }
@@ -232,7 +232,7 @@ public class HorizontalPartitionElement2 extends GenericElement implements Suppo
   
   protected Diagram createDiagram(ISurfaceHandler surface, HorizontalPartitionShape newShape,
       String text, boolean editable) {
-    return new HorizontalPartitionElement2(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(ElementType.HORIZONTAL_PARTITION));
+    return new HorizontalPartitionElement2(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(ElementType.HORIZONTAL_PARTITION.getValue()));
   }
   
 

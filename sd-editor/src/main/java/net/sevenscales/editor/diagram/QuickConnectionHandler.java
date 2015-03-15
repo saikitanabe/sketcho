@@ -328,42 +328,33 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 	private IDiagramItem switchType(Diagram d) {
 		IDiagramItem result = null;
-		switch (ElementType.getEnum(d.getDiagramItem().getType())) {
-			case IMAGE:
-			case NOTE:
-			case SEQUENCE:
-			case VERTICAL_PARTITION:
-			case HORIZONTAL_PARTITION:
-			case ACTIVITY_END2:
-			case FREEHAND2: {
-				result = d.getDiagramItem().copy();
-				result = switchToNoteItem(d, result);
-				break;
-			}
-			case MIND_CENTRAL: {
-				result = d.getDiagramItem().copy();
-				result = switchToTopicItem(d, result);
-				break;
-			}
-			case FORK: 
-			case CHOICE:
-			case ACTIVITY_START2:
-			case ACTIVITY_START: {
-				result = d.getDiagramItem().copy();
-				result = switchToActivityItem(d, result);
-				break;
-			}
-			case TEXT_ITEM: {
-				result = d.getDiagramItem().copy();
-				result = switchToTextItem(d, result);
-				break;
-			}
-			case ACTOR: {
-				result = d.getDiagramItem().copy();
-				result = switchToUseCase(d, result);
-				break;
-			}
+		String type = d.getDiagramItem().getType();
+		if (type.equals(ElementType.IMAGE.getValue()) ||
+			type.equals(ElementType.NOTE.getValue()) ||
+			type.equals(ElementType.SEQUENCE.getValue()) ||
+			type.equals(ElementType.VERTICAL_PARTITION.getValue()) ||
+			type.equals(ElementType.HORIZONTAL_PARTITION.getValue()) ||
+			type.equals(ElementType.ACTIVITY_END2.getValue()) ||
+			type.equals(ElementType.FREEHAND2.getValue())) {
+			result = d.getDiagramItem().copy();
+			result = switchToNoteItem(d, result);
+		} else if (type.equals(ElementType.MIND_CENTRAL.getValue())) {
+			result = d.getDiagramItem().copy();
+			result = switchToTopicItem(d, result);
+		} else if (type.equals(ElementType.FORK.getValue()) || 
+			type.equals(ElementType.CHOICE.getValue()) ||
+			type.equals(ElementType.ACTIVITY_START2.getValue()) ||
+			type.equals(ElementType.ACTIVITY_START.getValue())) {
+			result = d.getDiagramItem().copy();
+			result = switchToActivityItem(d, result);
+		} else if (type.equals(ElementType.TEXT_ITEM.getValue())) {
+			result = d.getDiagramItem().copy();
+			result = switchToTextItem(d, result);
+		} else if (type.equals(ElementType.ACTOR.getValue())) {
+			result = d.getDiagramItem().copy();
+			result = switchToUseCase(d, result);
 		}
+
 		return result;
 	}
 
@@ -399,9 +390,9 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	private IDiagramItem switchToUseCase(Diagram d, IDiagramItem copy) {
 		copy.setType(ElementType.USE_CASE.getValue());
 		copy.setShape(new GenericShape(ElementType.USE_CASE.getValue(), d.getLeft(), d.getTop(), 106, 42).toString());
-		LibraryShapes.LibraryShape shape = LibraryShapes.get(ElementType.USE_CASE);
+		LibraryShapes.ShapeProps shape = LibraryShapes.getShapeProps(ElementType.USE_CASE.getValue());
 		if (shape != null) {
-			copy.setShapeProperties(shape.shapeProperties);
+			copy.setShapeProperties(shape.properties);
 		}
 		copy.setText("Use Case");
 		return copy;
@@ -435,9 +426,9 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	private IDiagramItem setDefaultValues(IDiagramItem item) {
 		DiagramItemConfiguration.setDefaultColors(item);
 
-		LibraryShapes.LibraryShape ls = LibraryShapes.get(ElementType.getEnum(item.getType()));
+		LibraryShapes.ShapeProps ls = LibraryShapes.getShapeProps(item.getType());
 		if (ls != null) {
-			item.setShapeProperties(ls.shapeProperties);
+			item.setShapeProperties(ls.properties);
 		} else {
 			// copy values except disabled auto resize
 			item.setShapeProperties(ShapeProperty.clear(item.getShapeProperties(), ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue()));

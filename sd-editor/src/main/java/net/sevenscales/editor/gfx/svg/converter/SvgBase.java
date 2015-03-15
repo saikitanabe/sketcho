@@ -40,7 +40,7 @@ class SvgBase {
 	private static void applyDefaultBorderColors(Map<String,String> params) {
     // params.put("%fill%", fill);
     // params.put("%fill-opacity%", String.valueOf(rect.getFillColor().getOpacity()));
-    if (params.get(STROKE_TEMPLATE) != null) {
+    if (params.get(STROKE_TEMPLATE) != null && !"none".equals(params.get(STROKE_TEMPLATE))) {
 	    // params.put(STROKE_TEMPLATE, "rgb(" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toRgb() + ")");
 	    // batik doesn't support functions in style
 	    params.put(STROKE_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toHexString());

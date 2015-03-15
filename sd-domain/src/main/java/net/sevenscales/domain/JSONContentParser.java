@@ -2,6 +2,7 @@ package net.sevenscales.domain;
 
 import java.util.List;
 
+import net.sevenscales.domain.js.JsShape;
 import net.sevenscales.domain.utils.DiagramItemList;
 import net.sevenscales.domain.utils.SLogger;
 
@@ -9,6 +10,7 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.core.client.JsArray;
 
 
 public class JSONContentParser {
@@ -46,6 +48,11 @@ public class JSONContentParser {
 			content.setDiagramItems(JSONContentParser.parseItems(items));
 		}
 
+		JSONArray library = jsonContent.get("library").isArray();
+		if (library != null) {
+			content.setLibrary(JSONContentParser.parseLibrary(library));
+		}
+
 		// logger.debug("content.getVersion() {} content.getDiagramItems()", content.getVersion(), content.getDiagramItems());
 	}
 
@@ -61,6 +68,10 @@ public class JSONContentParser {
 			}
 		}
 		return result;
+	}
+
+	public static JsArray<JsShape> parseLibrary(JSONArray library) {
+		return library.getJavaScriptObject().cast();
 	}
 
 	public DiagramContentDTO toDTO() {

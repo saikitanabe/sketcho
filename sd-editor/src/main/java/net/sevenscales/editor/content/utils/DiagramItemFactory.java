@@ -336,7 +336,7 @@ public class DiagramItemFactory {
       }
       shapetext += rect2ShapeText(s.rectShape, moveX, moveY);
       // makes sure that type is not manipulated
-      type = ElementType.getEnum(result.getType()).getValue();
+      type = result.getType();
     } else if (shape instanceof ImageShape) {
       ImageShape s = (ImageShape) shape;
       result = getItem(diagram);

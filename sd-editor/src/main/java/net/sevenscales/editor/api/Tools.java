@@ -46,7 +46,20 @@ public class Tools {
 		// 		}
 		// 	}
 		// });
+
+		init(this);
 	}
+
+	private native void init(Tools me)/*-{
+		if (typeof $wnd.globalStreams !== 'undefined') {
+			// preview doesn't have globalStreams
+			$wnd.globalStreams.contextMenuStream.filter(function(e) {
+				return e && e.type === 'switch-mode'
+			}).onValue(function(v) {
+				me.@net.sevenscales.editor.api.Tools::_toggleSketchMode()()
+			})
+		}
+	}-*/;
 
 	public static Tools create(EditorContext editorContext, Boolean superQuickMode) {
 		if (instance == null) {

@@ -260,14 +260,14 @@
 						</g:HTML>
 					</c:child>
 				</c:FastButton>
-				<c:FastButton ui:field="_comments" styleName="{style.focuspanel}">
+<!-- 				<c:FastButton ui:field="_comments" styleName="{style.focuspanel}">
 					<c:child>
 						<g:HTML>
 							<div class="uml-icon-elcomments"></div>
 						</g:HTML>
 					</c:child>
 				</c:FastButton>
-			</g:HorizontalPanel>
+ -->			</g:HorizontalPanel>
 
 			<g:HorizontalPanel styleName="uml-selection-table">
 				<c:FastButton ui:field="umliconcomp" styleName="{style.focuspanel}">

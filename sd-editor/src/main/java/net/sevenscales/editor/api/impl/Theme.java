@@ -3,6 +3,10 @@ package net.sevenscales.editor.api.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
+
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.ElementColor;
 
@@ -75,6 +79,13 @@ public class Theme {
     }
     public Color getBoardBackgroundColor() {
       return themeName.getBoardBackgroundColor();
+    }
+    public JSONObject toJson() {
+      JSONObject result = new JSONObject();
+      result.put("background_color", new JSONString(backgroundColor.toHexStringWithHash()));
+      result.put("border_color", new JSONString(borderColor.toHexStringWithHash()));
+      result.put("text_color", new JSONString(textColor.toHexStringWithHash()));
+      return result;
     }
     
     @Override
@@ -224,8 +235,11 @@ public class Theme {
 		return instance().currentThemeName;
 	}
 	
-	public static ElementColorScheme getCurrentColorScheme() {
-		return instance().currentColorScheme;
+  public static ElementColorScheme getCurrentColorScheme() {
+    return instance().currentColorScheme;
+  }
+	public static JavaScriptObject getCurrentColorSchemeAsJson() {
+		return instance().currentColorScheme.toJson().getJavaScriptObject();
 	}
 
   public static ElementColorScheme getCommentColorScheme() {

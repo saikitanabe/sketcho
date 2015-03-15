@@ -88,7 +88,9 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			handleMouseDoubleClick(surface.getElement(), this);
 		}
 
-		handleOnline(this);
+		if (!surface.isLibrary()) {
+			handleOnline(this);
+		}
 		// addMouseDiagramHandler(sketchDiagramAreaHandler);
 	}
 
@@ -106,6 +108,10 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 				}
 			})
 		}
+
+		$wnd.globalStreams.spaceKeyStream.onValue(function(value) {
+			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::spaceKey()();
+		})
 	}-*/;
 
 	private void editable(boolean value) {
@@ -470,6 +476,15 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			if (!quickConnectionHandler.handleDoubleTap()) {
 				surface.getEditorContext().getEventBus().fireEvent(new BoardEmptyAreaClickedEvent(x, y));
 			}
+		}
+	}
+
+	private void spaceKey() {
+		Set<Diagram> selected = selectionHandler.getSelectedItems();
+		if (selected.size() == 0) {
+			int x = surface.getCurrentClientMouseMoveX();
+			int y = surface.getCurrentClientMouseMoveY();
+			surface.getEditorContext().getEventBus().fireEvent(new BoardEmptyAreaClickedEvent(x, y));
 		}
 	}
 	

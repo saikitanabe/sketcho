@@ -141,7 +141,7 @@ public class UMLDiagramSelections extends Composite {
 	
 	@UiField VerticalPanel diagramGroups;
 	@UiField FastButton comments;
-	@UiField FastButton _comments;
+	// @UiField FastButton _comments;
 	@UiField HTMLPanel contextMenuArea;
 	@UiField FastButton showDiagrams;
 	@UiField FastButton modifyImages;
@@ -324,30 +324,30 @@ public class UMLDiagramSelections extends Composite {
   //   return contextMenuArea.addDomHandler(handler, MouseWheelEvent.getType());
   // }
 
-	private void fire(UMLDiagramType elementType) {
+	private void fire(String elementType) {
 		surface.getEditorContext().getEventBus().fireEvent(new CreateElementEvent(elementType, null, 0, 0));
 	}
 	
 	@UiHandler("classf")
 	public void onclass(ClickEvent event) {
-		fire(UMLDiagramType.CLASS);
+		fire(UMLDiagramType.CLASS.getElementType().getValue());
 	}
 
 	@UiHandler("usecase")
 	public void onusecase(ClickEvent event) {
-		fire(UMLDiagramType.USE_CASE);
+		fire(UMLDiagramType.USE_CASE.getElementType().getValue());
 	}
 	@UiHandler("sequence")
 	public void onsequence(ClickEvent event) {
-		fire(UMLDiagramType.SEQUENCE);
+		fire(UMLDiagramType.SEQUENCE.getElementType().getValue());
 	}
 	@UiHandler("actor")
 	public void onactor(ClickEvent event) {
-		fire(UMLDiagramType.ACTOR);
+		fire(UMLDiagramType.ACTOR.getElementType().getValue());
 	}
 	@UiHandler("note")
 	public void onnote(ClickEvent event) {
-		fire(UMLDiagramType.NOTE);
+		fire(UMLDiagramType.NOTE.getElementType().getValue());
 	}
 
 	// >>>>>>>>>>> Commented out 11.11.2014
@@ -357,162 +357,162 @@ public class UMLDiagramSelections extends Composite {
 	}
 	// <<<<<<<<<<< Commented out 11.11.2014
 
-	@UiHandler("_comments")
-	public void oncommentsMind(ClickEvent event) {
-		fireCommentThread();
-	}
+	// @UiHandler("_comments")
+	// public void oncommentsMind(ClickEvent event) {
+	// 	fireCommentThread();
+	// }
 	
 	private void fireCommentThread() {
 		if (notConfluence()) {
-			fire(UMLDiagramType.COMMENT_THREAD);
+			fire(UMLDiagramType.COMMENT_THREAD.getElementType().getValue());
 		}
 	}
 
 	@UiHandler("choice")
 	public void onchoice(ClickEvent event) {
-		fire(UMLDiagramType.CHOICE);
+		fire(UMLDiagramType.CHOICE.getElementType().getValue());
 	}
 
 	@UiHandler("start")
 	public void onstart(ClickEvent event) {
-		fire(UMLDiagramType.START);
+		fire(UMLDiagramType.START.getElementType().getValue());
 	}
 
 	@UiHandler("hfork")
 	public void onfork(ClickEvent event) {
-		fire(UMLDiagramType.FORK);
+		fire(UMLDiagramType.FORK.getElementType().getValue());
 	}
 
 	@UiHandler("vfork")
 	public void onvfork(ClickEvent event) {
-		fire(UMLDiagramType.VFORK);
+		fire(UMLDiagramType.VFORK.getElementType().getValue());
 	}
 
 	@UiHandler("end")
 	public void onend(ClickEvent event) {
-		fire(UMLDiagramType.END);
+		fire(UMLDiagramType.END.getElementType().getValue());
 	}
 
 	@UiHandler("activity")
 	public void onactivity(ClickEvent event) {
-		fire(UMLDiagramType.ACTIVITY);
+		fire(UMLDiagramType.ACTIVITY.getElementType().getValue());
 	}
 	
 	@UiHandler("storage")
 	public void onstorage(ClickEvent event) {
-		fire(UMLDiagramType.DB);
+		fire(UMLDiagramType.DB.getElementType().getValue());
 	}
 
 	@UiHandler("text")
 	public void ontext(ClickEvent event) {
-		fire(UMLDiagramType.TEXT);
+		fire(UMLDiagramType.TEXT.getElementType().getValue());
 	}
 	
 	@UiHandler("umlpackagef")
 	public void onpackage(ClickEvent event) {
-		fire(UMLDiagramType.PACKAGE);
+		fire(UMLDiagramType.PACKAGE.getElementType().getValue());
 	}
 
 	@UiHandler("_centtopic")
 	public void onCentTopic(ClickEvent event) {
-		fire(UMLDiagramType.MIND_CENTRAL_TOPIC);
+		fire(UMLDiagramType.MIND_CENTRAL_TOPIC.getElementType().getValue());
 	}
 	@UiHandler("_maintopic")
 	public void onMainTopic(ClickEvent event) {
-		fire(UMLDiagramType.MIND_MAIN_TOPIC);
+		fire(UMLDiagramType.MIND_MAIN_TOPIC.getElementType().getValue());
 	}
 	@UiHandler("_subtopic")
 	public void onSubTopic(ClickEvent event) {
-		fire(UMLDiagramType.MIND_SUB_TOPIC);
+		fire(UMLDiagramType.MIND_SUB_TOPIC.getElementType().getValue());
 	}
 	@UiHandler("_mindnote")
 	public void onmindnote(ClickEvent event) {
-		fire(UMLDiagramType.NOTE);
+		fire(UMLDiagramType.NOTE.getElementType().getValue());
 	}
 
 	@UiHandler("umliconcomp")
 	public void onumliconcomp(ClickEvent event) {
-		fire(UMLDiagramType.COMPONENT);
+		fire(UMLDiagramType.COMPONENT.getElementType().getValue());
 	}
 	@UiHandler("umliconserver")
 	public void onumliconserver(ClickEvent event) {
-		fire(UMLDiagramType.SERVER);
+		fire(UMLDiagramType.SERVER.getElementType().getValue());
 	}
 	@UiHandler("umliconsmiley")
 	public void onumliconsmiley(ClickEvent event) {
-		fire(UMLDiagramType.SMILEY);
+		fire(UMLDiagramType.SMILEY.getElementType().getValue());
 	}
 	@UiHandler("umliconfirewall")
 	public void onumliconfirewall(ClickEvent event) {
-		fire(UMLDiagramType.FIREWALL);
+		fire(UMLDiagramType.FIREWALL.getElementType().getValue());
 	}
 	@UiHandler("umliconpolygon5")
 	public void onumliconpolygon5(ClickEvent event) {
-		fire(UMLDiagramType.POLYGON4);
+		fire(UMLDiagramType.POLYGON4.getElementType().getValue());
 	}
 	@UiHandler("umliconpolygon8")
 	public void onumliconpolygon8(ClickEvent event) {
-		fire(UMLDiagramType.POLYGON8);
+		fire(UMLDiagramType.POLYGON8.getElementType().getValue());
 	}
 	@UiHandler("umliconrect")
 	public void onumliconrect(ClickEvent event) {
-		fire(UMLDiagramType.RECT);
+		fire(UMLDiagramType.RECT.getElementType().getValue());
 	}
 	@UiHandler("umlicontriangle")
 	public void onumlicontriangle(ClickEvent event) {
-		fire(UMLDiagramType.TRIANGLE);
+		fire(UMLDiagramType.TRIANGLE.getElementType().getValue());
 	}
 	@UiHandler("umliconcircle")
 	public void onumliconcircle(ClickEvent event) {
-		fire(UMLDiagramType.CIRCLE);
+		fire(UMLDiagramType.CIRCLE.getElementType().getValue());
 	}
 	@UiHandler("umliconcloud")
 	public void onumliconcloud(ClickEvent event) {
-		fire(UMLDiagramType.CLOUD);
+		fire(UMLDiagramType.CLOUD.getElementType().getValue());
 	}
 	@UiHandler("umliconwbrowser")
 	public void onumliconwbrowser(ClickEvent event) {
-		fire(UMLDiagramType.WBROWSER);
+		fire(UMLDiagramType.WBROWSER.getElementType().getValue());
 	}
 	@UiHandler("umliconiphone")
 	public void onumliconiphone(ClickEvent event) {
-		fire(UMLDiagramType.IPHONE);
+		fire(UMLDiagramType.IPHONE.getElementType().getValue());
 	}
 	@UiHandler("umliconstar5")
 	public void onumliconstar5(ClickEvent event) {
-		fire(UMLDiagramType.STAR5);
+		fire(UMLDiagramType.STAR5.getElementType().getValue());
 	}
 	@UiHandler("umliconstar4")
 	public void onumliconstar4(ClickEvent event) {
-		fire(UMLDiagramType.STAR4);
+		fire(UMLDiagramType.STAR4.getElementType().getValue());
 	}
 	@UiHandler("umliconarrowd")
 	public void onumliconarrowd(ClickEvent event) {
-		fire(UMLDiagramType.ARROW_DOWN);
+		fire(UMLDiagramType.ARROW_DOWN.getElementType().getValue());
 	}
 	@UiHandler("umliconarrowr")
 	public void onumliconarrowr(ClickEvent event) {
-		fire(UMLDiagramType.ARROW_RIGHT);
+		fire(UMLDiagramType.ARROW_RIGHT.getElementType().getValue());
 	}
 	@UiHandler("umliconarrowu")
 	public void onumliconarrowu(ClickEvent event) {
-		fire(UMLDiagramType.ARROW_UP);
+		fire(UMLDiagramType.ARROW_UP.getElementType().getValue());
 	}
 	@UiHandler("umliconarrowl")
 	public void onumliconarrowl(ClickEvent event) {
-		fire(UMLDiagramType.ARROW_LEFT);
+		fire(UMLDiagramType.ARROW_LEFT.getElementType().getValue());
 	}
 	@UiHandler("umliconbubblel")
 	public void onumliconbubblel(ClickEvent event) {
-		fire(UMLDiagramType.BUBBLE_LEFT);
+		fire(UMLDiagramType.BUBBLE_LEFT.getElementType().getValue());
 	}
 	@UiHandler("umliconbubbler")
 	public void onumliconbubbler(ClickEvent event) {
-		fire(UMLDiagramType.BUBBLE_RIGHT);
+		fire(UMLDiagramType.BUBBLE_RIGHT.getElementType().getValue());
 	}
 	@UiHandler("umliconletter")
 	public void onumliconletter(ClickEvent event) {
-		fire(UMLDiagramType.ENVELOPE);
+		fire(UMLDiagramType.ENVELOPE.getElementType().getValue());
 	}
 
 	// @UiHandler("contextMenuArea")

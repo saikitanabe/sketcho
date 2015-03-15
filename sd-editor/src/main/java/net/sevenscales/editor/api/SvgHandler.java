@@ -18,6 +18,7 @@ import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.JSONContentParser;
+import net.sevenscales.editor.uicomponents.uml.ShapeCache;
 import net.sevenscales.editor.gfx.domain.ILoadObserver;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.domain.utils.SLogger;
@@ -70,6 +71,7 @@ public class SvgHandler {
     if (obj.isObject() != null) {
 	    JSONContentParser parser = new JSONContentParser(obj);
 	    IDiagramContent content = parser.toDTO();
+			ShapeCache.updateShapes(content.getLibrary());
 	    UiModelContentHandler modelHandler = new UiModelContentHandler(editorContext);
 	    modelHandler.addContentItems(content, surface);
 	    SvgConverter converter = new SvgConverter(false);

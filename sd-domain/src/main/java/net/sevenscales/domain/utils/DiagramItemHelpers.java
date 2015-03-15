@@ -10,18 +10,10 @@ public class DiagramItemHelpers {
 	*/
   public static Dimension parseDimension(IDiagramItem diagramItem) {
 		Dimension result = null;
-		switch (ElementType.getEnum(diagramItem.getType())) {
-			// case ELLIPSE: {
-			// 	result = parseUseCase(diagramItem.getShape());
-			// 	break;
-			// }
-			case ACTIVITY:
-			case NOTE:
-			case TEXT_ITEM: {
-				result = parseRectShape(diagramItem.getShape());
-				break;
-			}
-
+		if (diagramItem.getType().equals(ElementType.ACTIVITY) ||
+				diagramItem.getType().equals(ElementType.NOTE) ||
+				diagramItem.getType().equals(ElementType.TEXT_ITEM)) {
+			result = parseRectShape(diagramItem.getShape());
 		}
 		return result;
 	}

@@ -48,7 +48,7 @@ import net.sevenscales.domain.ExtensionDTO;
 import net.sevenscales.domain.constants.Constants;
 
 
-public class GenericElement extends AbstractDiagramItem implements IGenericElement, SupportsRectangleShape {
+public class GenericElement extends AbstractDiagramItem implements IGenericElement, SupportsRectangleShape, IShapeGroup.ShapeLoaded {
 	private static SLogger logger = SLogger.createLogger(GenericElement.class);
 
 	static {
@@ -69,10 +69,10 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private int top;
   private int width;
   private int height;
-  private Shapes.Group theshape;
+  private IShapeGroup theshape;
   private TextElementFormatUtil textUtil;
   private GenericHasTextElement hasTextElement;
-
+  private boolean pathsSetAtLeastOnce;
   private boolean tosvg;
   
   private static final String BOUNDARY_COLOR = "#aaaaaa";
@@ -85,12 +85,12 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
   private static class PathWrapper {
   	IPath path;
-  	Shapes.Proto proto;
+  	ShapeProto proto;
 
   	PathWrapper(IPath path) {
   		this(path, null);
   	}
-  	PathWrapper(IPath path, Shapes.Proto proto) {
+  	PathWrapper(IPath path, ShapeProto proto) {
   		this.path = path;
   		this.proto = proto;
   	}
@@ -112,29 +112,15 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
     // sub// group.setAttribute("cursor", "default");
 
-  	paths = new ArrayList<PathWrapper>(); // theshape.protos.length
-  	if (shape.getSvgData() != null) {
-  		// this is the freehand drawing or any custom svg case!
-  		createCustomPaths(shape.getSvgData().getPaths());
-  		// diagram item needs to have extionsion data as well for undo/redo calculation
-  		Integer lineWeight = item.getExtension() != null ? item.getExtension().getLineWeight() : null;
-			getDiagramItem().setExtension(new ExtensionDTO(shape.getSvgData().copy(), lineWeight));
-  	} else {
-	  	theshape = Shapes.get(getDiagramItem().getType(), Tools.isSketchMode());
-	    createSubPaths(theshape);
-  	}
-
     background = IShapeFactory.Util.factory(editable).createRectangle(group);
     background.setFill(0, 0 , 0, 0); // transparent
     // background.setStroke("#363636");
 
+  	paths = new ArrayList<PathWrapper>(); // theshape.protos.length
+
 		addEvents(background);
 		
 		addMouseDiagramHandler(this);
-
-		for (PathWrapper path : paths) {
-	    shapes.add(path.path);
-		}
 
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
     hasTextElement = new GenericHasTextElement(this, shape);
@@ -149,7 +135,27 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
     }
 
     setReadOnly(!editable);
-    setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
+
+  	if (shape.getSvgData() != null) {
+  		// this is the freehand drawing or any custom svg case!
+  		createCustomPaths(shape.getSvgData().getPaths());
+  		// diagram item needs to have extionsion data as well for undo/redo calculation
+  		Integer lineWeight = item.getExtension() != null ? item.getExtension().getLineWeight() : null;
+			getDiagramItem().setExtension(new ExtensionDTO(shape.getSvgData().copy(), lineWeight));
+	    setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
+  	} else {
+	  	theshape = Shapes.get(getDiagramItem().getType(), Tools.isSketchMode());
+	  	// set initial shape or it will be overridden through getInfo()
+	    background.setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height, 0);
+	  	theshape.fetch(this);
+  	}
+
+    // NOTE setShape is called after fetch is ready
+    // - fetch is synchronous on page load and when ever shape is found from cache
+    // - fetch is asynchronous when shape is not found from cache
+    // - in case undo/redo would be implemented in a way that board library shape is deleted
+    // immediately if there are no references, it should be removed from local cache as well
+    // so shape could be readded to board library. But for now going with cleanup on session end.
 
     setBorderColor(borderColor);
 
@@ -161,6 +167,19 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
     }
 
     super.constructorDone();
+	}
+
+	public void onSuccess() {
+		// make sure shape is scaled and set
+		pathsSetAtLeastOnce = false;
+		createSubPaths(theshape.getShape());
+		setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
+
+		// needed to make shape visible
+    setBorderColor(borderColor);
+	}
+	public void onError() {
+
 	}
 
 	protected GenericHasTextElement getHasTextElement() {
@@ -177,14 +196,21 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		return 0;
 	}
 
-	private void createSubPaths(Shapes.Group groupData) {
-		for (Shapes.Proto p : groupData.protos) {
-			IPath path = createSubPath(p);
-			paths.add(new PathWrapper(path, p));
+	private void createSubPaths(ShapeGroup groupData) {
+		if (paths.size() == 0) {
+			// just in case make sure that initialized only once
+			for (ShapeProto p : groupData.protos) {
+				IPath path = createSubPath(p);
+				paths.add(new PathWrapper(path, p));
+			}
+
+			for (PathWrapper path : paths) {
+		    shapes.add(path.path);
+			}
 		}
 	}
 
-	private IPath createSubPath(Shapes.Proto proto) {
+	private IPath createSubPath(ShapeProto proto) {
 		return createSubPath(/*proto.toPath(1, 1)*/ null, proto.style);
 	}	
 
@@ -303,7 +329,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   }
 
   protected Diagram createGenericElement(ISurfaceHandler surface, GenericShape newShape) {
- 		return new GenericElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(ElementType.getEnum(getDiagramItem().getType())));
+ 		return new GenericElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(getDiagramItem().getType()));
   }
 	
   public boolean resize(Point diff) {
@@ -397,7 +423,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			if (shape.getSvgData() != null) {
 				// freehand and any custom svg case
 		  	subgroup.setScale(factorX, factorY);
-			} else if (width != orgwidth || height != orgheight) {
+			} else if (!pathsSetAtLeastOnce || width != orgwidth || height != orgheight) {
 		  	scalePaths(factorX, factorY);
 			}
 	  	subgroup.setTransform(left, top);
@@ -414,12 +440,15 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   }
 
   private void scalePaths(double factorX, double factorY) {
-  	for (PathWrapper pw : paths) {
-  		if (pw.isProto()) {
-	  		pw.path.setShape(pw.proto.toPath(factorX, factorY, theshape.width));
-  		}
+  	if (theshape.isReady()) {
+	  	for (PathWrapper pw : paths) {
+	  		if (pw.isProto()) {
+		  		pw.path.setShape(pw.proto.toPath(factorX, factorY, theshape.getShape().width));
+	  		}
+	  	}
+	  	pathsSetAtLeastOnce = true;
   	}
-		// for (Shapes.Proto p : groupData.protos) {
+		// for (ShapeProto p : groupData.protos) {
   // 	for (IPath path : paths) {
   // 		result.setShape(proto.toPath());
 
@@ -472,10 +501,20 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 
   public double shapeWidth() {
-  	return theshape != null ? theshape.width : shape.getSvgData().getWidth();
+  	if (theshape == null) {
+			return shape.getSvgData().getWidth();
+  	} else if (theshape != null && theshape.isReady()) {
+  		return theshape.getShape().width;
+  	}
+  	return 0;
   }
   public double shapeHeight() {
-  	return theshape != null ? theshape.height : shape.getSvgData().getHeight();
+  	if (theshape == null) {
+  		return shape.getSvgData().getHeight();
+  	} else if (theshape != null && theshape.isReady()) {
+  		return theshape.getShape().height;
+  	}
+  	return 0;
   }
 
   public void setHighlightColor(Color color) {

@@ -114,7 +114,7 @@ public class VerticalPartitionElement extends CalculatedPathElement {
   
   protected Diagram createDiagram(ISurfaceHandler surface, GenericShape newShape,
       String text, boolean editable) {
-    return new VerticalPartitionElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(ElementType.VERTICAL_PARTITION));
+    return new VerticalPartitionElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, LibraryShapes.createByType(ElementType.VERTICAL_PARTITION.getValue()));
   }
 
 }

@@ -10,7 +10,7 @@ import net.sevenscales.domain.api.IDiagramItem;
 
 class AbstractDiagramFactoryUtils {
   static void fixUninitializedDiagramItem(IDiagramItemRO item, GenericShape newShape) {
-    LibraryShapes.LibraryShape sh = LibraryShapes.get(ElementType.getEnum(item.getType()));
+    LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(item.getType());
     Integer props = item.getShapeProperties();
     IDiagramItem _item = null;
     if (item instanceof IDiagramItem) {
@@ -26,7 +26,7 @@ class AbstractDiagramFactoryUtils {
       // props = 0;
       if (sh != null) {
         // keep dynamic properties
-        props = sh.shapeProperties | (props & ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue());
+        props = sh.properties | (props & ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue());
         newShape.setShapeProperties(props);
       }
     }

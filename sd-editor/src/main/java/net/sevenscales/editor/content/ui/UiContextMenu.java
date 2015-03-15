@@ -176,7 +176,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			}
 		}, TouchStartEvent.getType());
 
-		changeConnection.setWidget(new SelectButtonBox(editorContext, false));
+		changeConnection.setWidget(new SelectButtonBox(new SelectButtonBox.IParent() {
+			public void show() {
+				showContextMenu();
+			}
+		}, editorContext, selectionHandler, false));
 
 		editorContext.getEventBus().addHandler(BoardRemoveDiagramsEvent.TYPE, new BoardRemoveDiagramsEventHandler() {
 			public void on(BoardRemoveDiagramsEvent event) {
@@ -208,7 +212,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					if (!allMenusHidden) {
 						mainContextPosition.left = screenPosition.x;
 						mainContextPosition.top = screenPosition.y;
-						popup.setPopupPositionAndShow(mainContextPosition);
+						showContextMenu();
 						trigger("shape-context-menu-shown");
 						EffectHelpers.tooltipper();
 					}
@@ -350,6 +354,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		tapGroup(group, this);
 	}
 
+	private void showContextMenu() {
+		popup.setPopupPositionAndShow(mainContextPosition);
+	}
+
   private native void trigger(String event)/*-{
     $wnd.$($doc).trigger(event);
   }-*/;
@@ -360,6 +368,13 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		})
 		$wnd.changeFreehandColorStream.onValue(function(e) {
 			me.@net.sevenscales.editor.content.ui.UiContextMenu::colorMenu(Lcom/google/gwt/dom/client/Element;)(e);
+		})
+
+		$wnd.globalStreams.spaceKeyStream.onValue(function(value) {
+			if (!$wnd.globalState.contextMenuOpen && !$wnd.isEditorOpen()) {
+				// do not allow to show switch if editor is open
+				me.@net.sevenscales.editor.content.ui.UiContextMenu::switchElement()();
+			}
 		})
 	}-*/;
 
@@ -535,7 +550,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		Set<Diagram> selected = selectionHandler.getSelectedItems();
 		if (selected.size() == 1) {
 			Diagram d = selected.iterator().next();
-			editorContext.getEventBus().fireEvent(new SwitchElementEvent(d));
+			if (!(d instanceof Relationship2)) {
+				// wrong switch for relationship
+				editorContext.getEventBus().fireEvent(new SwitchElementEvent(d));
+			}
 		}
 	}
 	

@@ -94,11 +94,25 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 		surface.getEditorContext().getEventBus().addHandler(StartSelectToolEvent.TYPE, new StartSelectToolEventHandler() {
 			@Override
 			public void on(StartSelectToolEvent event) {
-				LassoSelectionHandler.this.surface.getEditorContext().set(EditorProperty.START_SELECTION_TOOL, true);
+				select();
 			}
 		});
+
+		init(this);
 		
 		dimensionContext = new DimensionContext();
+  }
+
+  private native void init(LassoSelectionHandler me)/*-{
+  	$wnd.globalStreams.contextMenuStream.filter(function(e) {
+  		return e && e.type === 'select'
+  	}).onValue(function(e) {
+  		me.@net.sevenscales.editor.diagram.LassoSelectionHandler::select()()
+  	})
+  }-*/;
+
+  private void select() {
+		surface.getEditorContext().set(EditorProperty.START_SELECTION_TOOL, true);
   }
 
   public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
