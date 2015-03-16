@@ -65,6 +65,11 @@ public class ShapeCache {
 			result = shapes.get(elementType);
 		}
 
+		if (result == null) {
+			// no corporate shape available use sketch type
+			result = getSketch(elementType);
+		}
+
 		int shapeType = sketch ? 0 : 1;
 		ShapeProxy proxy = new ShapeProxy(elementType, shapeType);
 		proxy.setShape(result);
