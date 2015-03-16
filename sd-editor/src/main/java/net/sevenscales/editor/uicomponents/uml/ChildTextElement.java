@@ -202,6 +202,7 @@ public class ChildTextElement extends TextElement implements IChildElement {
 					// Deferred auto delete, so empty text modify will be before
 					// delete OT
 					surface.getSelectionHandler().remove(ChildTextElement.this, true);
+					removeFromParent();
 				}
 			});
 		} else {
