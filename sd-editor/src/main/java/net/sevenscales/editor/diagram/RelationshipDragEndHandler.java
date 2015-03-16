@@ -286,9 +286,7 @@ public class RelationshipDragEndHandler implements
 		Diagram diagram = null;
 		if (currentRel != null) {
 			diagram = createDiagramFromRelationShip(elementType, shapeConfig, imageInfo, x, y);
-      if (!(diagram instanceof SequenceElement)) {
-        currentRel.asClosestPath();
-      }
+			applyClosestPath(currentRel);
 			surface.addAsSelected(diagram, true);
 			// this is connect drop element
 			currentRel.anchorEnd(true);
@@ -329,7 +327,8 @@ public class RelationshipDragEndHandler implements
     		reattachHelpers.processDiagram(rel);
       	Diagram start = rel.getStartAnchor().getDiagram();
       	Diagram end = rel.getEndAnchor().getDiagram();
-      	rel.asClosestPath();
+
+      	applyClosestPath(rel);
 
       	String srcClientId = src.getDiagramItem().getClientId();
       	if (start != null && srcClientId.equals(start.getDiagramItem().getClientId())) {
@@ -353,6 +352,12 @@ public class RelationshipDragEndHandler implements
 		boolean selectText = true;
 		surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(to, selectText, markAsDirty));
 	}
+
+	private void applyClosestPath(Relationship2 rel) {
+    if (!rel.isOneOfEndSequenceElement()) {
+      rel.asClosestPath();
+    }
+  }
 
 	private void hide() {
 		popup.hide();

@@ -115,7 +115,7 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
 
     setReadOnly(!editable);
     
-    setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height, shape.lifeLineHeight);
+    setShape(getLeft(), getTop(), getWidth(), getHeight(), shape.lifeLineHeight);
     super.setText(text);
 
     setLineHighlightColor(borderColor);
@@ -454,6 +454,7 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
       makeFixedAnchorPoints();
       AnchorUtils.anchorPoint(x, y, getLeft(), getTop(), getWidth(), getHeight(), tempAnchorProperties, fixedAnchorPoints);
       fixCardinality(tempAnchorProperties, anchor);
+      anchor.setPoint(x, y);
       return true;
     }
   }
