@@ -413,6 +413,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
       // fix anchor points, just in case
       makeFixedAnchorPoints();
       AnchorUtils.anchorPoint(x, y, getLeft(), getTop(), getWidth(), getHeight(), tempAnchorProperties, fixedAnchorPoints);
+      anchor.setPoint(x, y);
       return true;
     }  
   }
