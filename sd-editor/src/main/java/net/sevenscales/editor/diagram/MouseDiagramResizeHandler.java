@@ -1,6 +1,7 @@
 package net.sevenscales.editor.diagram;
 
 import java.util.Set;
+import java.util.Collection;
 import java.util.HashSet;
 
 import net.sevenscales.domain.utils.SLogger;
@@ -9,6 +10,7 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.diagram.utils.GridUtils;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Point;
@@ -175,6 +177,7 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
     
 		if (this.sender != null) {
 			this.sender.resizeEnd();
+			dragEndAnchors(this.sender.getAnchors());
 			resizeHandlerCollection.fireResizeEnd(this.sender);
 			
 			// TODO collect all dependant relationships!!!
@@ -188,6 +191,12 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 		}
 
 		clearResize();
+	}
+
+	private void dragEndAnchors(Collection<AnchorElement> anchors) {
+		for (AnchorElement ae : anchors) {
+			ae.dragEnd();
+		}
 	}
 
 	private void clearResize() {
