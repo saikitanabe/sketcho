@@ -126,6 +126,10 @@ public class ReattachHelpers {
    	 		reattachRelationship(r, clientIdMapping);
    	 		if (closestPath) {
    	 			r.applyClosestPath();
+   	 			// shape might have changed, so need to redraw relationship
+   	 			if (redraw) {
+	   	 			r.redraw();
+   	 			}
    	 		} else if (redraw) {
    	 			r.redraw();
    	 		}

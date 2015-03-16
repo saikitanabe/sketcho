@@ -477,9 +477,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		
 		if (editorIsOpen && selectedDiagram != null) {
 			selectedDiagram.editingEnded(modifiedAtLeastOnce);
+			AnchorElement.dragEndAnchors(selectedDiagram);
 		}
 	}
-	
+
 	public void unselect(Diagram sender) {
 	}
 

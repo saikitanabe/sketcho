@@ -389,6 +389,26 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       curve.c2x = mx;
       curve.c2y = endy;
       result = true;
+    } else {
+      if (d1 != null && d1.isSequenceElement()) {
+        boolean isAttachedOnLine = a1.getPoint().y > (d1.getTop() + d1.getHeight());
+        if (isAttachedOnLine) {
+          curve.c1x = mx;
+          curve.c1y = prevy;
+          curve.c2x = mx;
+          curve.c2y = endy;
+          result = true;
+        }
+      } else if (d2 != null && d2.isSequenceElement()) {
+        boolean isAttachedOnLine = a2.getPoint().y > (d2.getTop() + d2.getHeight());
+        if (isAttachedOnLine) {
+          curve.c1x = mx;
+          curve.c1y = prevy;
+          curve.c2x = mx;
+          curve.c2y = endy;
+          result = true;
+        }
+      }
     }
     return result;
   }
@@ -1958,6 +1978,22 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   public Anchor getEndAnchor() {
 		return endAnchor;
 	}
+
+  public boolean isStartAnchorElementSequence() {
+    return isAnchorElementSequence(getStartAnchor());
+  }
+  public boolean isEndAnchorElementSequence() {
+    return isAnchorElementSequence(getEndAnchor());
+  }
+  public boolean isOneOfEndSequenceElement() {
+    return isStartAnchorElementSequence() || isEndAnchorElementSequence();
+  }
+  private boolean isAnchorElementSequence(Anchor anchor) {
+    if (anchor != null && anchor.getDiagram() != null &&  anchor.getDiagram().isSequenceElement()) {
+      return true;
+    }
+    return false;
+  }
 
   public int getStartPosX() {
     return 0;
