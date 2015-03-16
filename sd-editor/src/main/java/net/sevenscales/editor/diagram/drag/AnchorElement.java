@@ -1,5 +1,7 @@
 package net.sevenscales.editor.diagram.drag;
 
+import java.util.Collection;
+
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.uicomponents.CardinalDirection;
@@ -143,5 +145,17 @@ public class AnchorElement {
   public CardinalDirection getCardinalDirection() {
     return cardinalDirection;
   }
+
+  /**
+  * Causes to redraw and calculate diagram attached relationships.
+  */
+  public static void dragEndAnchors(Diagram diagram) {
+    Collection<AnchorElement> anchors = diagram.getAnchors();
+    for (AnchorElement ae : anchors) {
+      ae.dragEnd();
+    }
+  }
+ 
+
 
 }

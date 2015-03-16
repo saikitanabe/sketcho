@@ -3,7 +3,6 @@ package net.sevenscales.editor.api;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -478,13 +477,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		
 		if (editorIsOpen && selectedDiagram != null) {
 			selectedDiagram.editingEnded(modifiedAtLeastOnce);
-			dragEndAnchors(selectedDiagram.getAnchors());
-		}
-	}
-
-	private void dragEndAnchors(Collection<AnchorElement> anchors) {
-		for (AnchorElement ae : anchors) {
-			ae.dragEnd();
+			AnchorElement.dragEndAnchors(selectedDiagram);
 		}
 	}
 
