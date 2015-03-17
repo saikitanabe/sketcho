@@ -143,6 +143,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   		Integer lineWeight = item.getExtension() != null ? item.getExtension().getLineWeight() : null;
 			getDiagramItem().setExtension(new ExtensionDTO(shape.getSvgData().copy(), lineWeight));
 	    setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
+	    addPaths();
   	} else {
 	  	theshape = Shapes.get(getDiagramItem().getType(), Tools.isSketchMode());
 	  	// set initial shape or it will be overridden through getInfo()
@@ -204,9 +205,13 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 				paths.add(new PathWrapper(path, p));
 			}
 
-			for (PathWrapper path : paths) {
-		    shapes.add(path.path);
-			}
+			addPaths();
+		}
+	}
+
+	private void addPaths() {
+		for (PathWrapper path : paths) {
+	    shapes.add(path.path);
 		}
 	}
 
