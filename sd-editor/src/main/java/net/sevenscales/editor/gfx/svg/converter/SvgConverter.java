@@ -127,60 +127,18 @@ public class SvgConverter {
     return result;
   }
 
-  public SvgData convertToSvg(IDiagramContent content, ISurfaceHandler surfaceHandler, boolean fontToChange, boolean absoluteUrl) {
-  	EditorContext editorContext = surfaceHandler.getEditorContext();
+  public SvgData convertToSvg(int contentWidth, int contentHeight, ISurfaceHandler surfaceHandler , boolean fontToChange, boolean absoluteUrl) {
     Diagram[] diagrams = getDiagrams(surfaceHandler);
+    return convertToSvg(contentWidth, contentHeight, surfaceHandler, diagrams, fontToChange, absoluteUrl);
+  }
+  public SvgData convertToSvg(int contentWidth, int contentHeight, ISurfaceHandler surfaceHandler, Diagram[] diagrams, boolean fontToChange, boolean absoluteUrl) {
     String items = "";
-    
+
     if (surfaceHandler.getEditorContext().isEditable()) {
       ResizeHelpers.createResizeHelpers(surfaceHandler).hideGlobalElement();
     }
-    
-    List<List<IShape>> shapes = new ArrayList<List<IShape>>();
-    for (Diagram d : diagrams) {
-      if (!(d instanceof CircleElement)) {
-        d.toSvgStart();
-        if (surfaceHandler.getEditorContext().isEditable()) {
-          d.unselect();
-        }
-        shapes.clear();
-        shapes.add(d.getElements());
 
-        // whole element can be used as link
-        items += linkStart(d);
-        // all shapes are under group
-        IGroup group = d.getGroup();
-        if (d.getDiagramItem().isComment()) {
-          // comment should move with parent element; only parent group has been moved
-          // NOTE child text element is living it's own life
-          group = ((IChildElement) d).getParent().getGroup();
-        }
-        items += groupStart(group);
-
-        // check if subgroup is started
-        IGroup subgroup = null;
-        if (d instanceof GenericElement) {
-          subgroup = ((GenericElement) d).getSubgroup();
-          items += groupStart(subgroup);
-        }
-
-        items += toSvg(d, shapes, editorContext, fontToChange, absoluteUrl);
-
-        if (subgroup != null) {
-          // close subgroup
-          items += groupEnd();  
-        }
-
-        // text helper elements are not included in getElements
-        List<List<IShape>> textElements = d.getTextElements();
-        if (textElements != null) {
-          items += toSvg(d, textElements, editorContext, fontToChange, absoluteUrl);
-        }
-        items += groupEnd();
-        items += linkEnd(d);
-        d.toSvgEnd();
-      }
-    }
+    items = diagramsToSvg(surfaceHandler, diagrams, fontToChange, absoluteUrl, 0, 0);
 
 		if (diagrams.length > 0) {
 			outerleft -= 15;
@@ -213,10 +171,10 @@ public class SvgConverter {
       int viewBoxWidth = (outerright-outerleft);
       int viewBoxHeight = (outerbottom-outertop);
       double svgWidth = viewBoxWidth;
-      if (content.getWidth() > 0 && viewBoxWidth > content.getWidth()) {
+      if (contentWidth > 0 && viewBoxWidth > contentWidth) {
         // content width 0 disables scaling to a certain width
         // scale according to parent div width
-        svgWidth = content.getWidth();
+        svgWidth = contentWidth;
         double sizeFactorial = svgWidth / viewBoxWidth;
         // scale height according to width factorial
         viewBoxHeight *= sizeFactorial;
@@ -232,6 +190,64 @@ public class SvgConverter {
     // logger.debug("result.svg: {}", result.svg);
     return result;
   }
+
+  public String diagramsToSvg(ISurfaceHandler surfaceHandler, Diagram[] diagrams, boolean fontToChange, boolean absoluteUrl, int zeroLeft, int zeroTop) {
+    EditorContext editorContext = surfaceHandler.getEditorContext();
+
+    String items = "";
+    List<List<IShape>> shapes = new ArrayList<List<IShape>>();
+    for (Diagram d : diagrams) {
+      if (!(d instanceof CircleElement)) {
+        d.toSvgStart();
+        if (surfaceHandler.getEditorContext().isEditable()) {
+          d.unselect();
+        }
+        shapes.clear();
+        shapes.add(d.getElements());
+
+        // whole element can be used as link
+        items += linkStart(d);
+        // all shapes are under group
+        IGroup group = d.getGroup();
+        if (d.getDiagramItem().isComment()) {
+          // comment should move with parent element; only parent group has been moved
+          // NOTE child text element is living it's own life
+          group = ((IChildElement) d).getParent().getGroup();
+        }
+
+        // presentation has new 0,0 for each slide
+        items += groupStart(group, zeroLeft, zeroTop);
+
+        // check if subgroup is started
+        IGroup subgroup = null;
+        if (d instanceof GenericElement) {
+          subgroup = ((GenericElement) d).getSubgroup();
+          items += groupStart(subgroup, 0, 0);
+        }
+
+        // hmm, corporate mode might need this or at least all legacy shapes
+        items += toSvg(d, shapes, editorContext, fontToChange, absoluteUrl, 0, 0);
+
+        if (subgroup != null) {
+          // close subgroup
+          items += groupEnd();  
+        }
+
+        // text helper elements are not included in getElements
+        // should be changed that text shapes are under group as well!!
+        // then only main group needs to be modified!
+        List<List<IShape>> textElements = d.getTextElements();
+        if (textElements != null) {
+          items += toSvg(d, textElements, editorContext, fontToChange, absoluteUrl, zeroLeft, zeroTop);
+        }
+        items += groupEnd();
+        items += linkEnd(d);
+        d.toSvgEnd();
+      }
+    }
+
+    return items;
+  } 
 
   private native String waterMark(int right, int bottom)/*-{
     if (typeof $wnd.waterMark != 'undefined') {
@@ -255,11 +271,13 @@ public class SvgConverter {
 	}
 
   // <g transform="matrix(1.00000000,0.00000000,0.00000000,1.00000000,0.00000000,0.00000000)" style="visibility: visible;"></g>
-  private String groupStart(IGroup group) {
+  private String groupStart(IGroup group, int zeroLeft, int zeroTop) {
     String result = "<g";
-    String matrix = group.getTransformMatrix();
+    String matrix = group.getTransformMatrix(zeroLeft, zeroTop);
     if (matrix != null) {
       result += " transform='" + matrix + "'";
+    } else {
+      result += " transform='translate(" + zeroLeft + "," + zeroTop + ")'";
     }
     result += ">";
     return result;
@@ -288,7 +306,7 @@ public class SvgConverter {
     }
   }
 
-	private String toSvg(Diagram d, List<List<IShape>> shapes, EditorContext editorContext, boolean fontToChange, boolean absoluteUrl) {
+	private String toSvg(Diagram d, List<List<IShape>> shapes, EditorContext editorContext, boolean fontToChange, boolean absoluteUrl, int zeroLeft, int zeroTop) {
   	String result = "";
     if (d.isVisible()) {
   	  // don't set read only state, because might not be visible

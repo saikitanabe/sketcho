@@ -75,6 +75,10 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
     // if shift if pressed then background moving is disabled
     // shift is reserved for lassoing multiple elements
     mouseDown = keys == IGraphics.SHIFT ? false : true;
+    if (mouseDown) {
+      // disable background move if slide mode
+      mouseDown = !GlobalState.isAddSlideMode();
+    }
     if (!surface.isVerticalDrag()) {
     	prevX = point.getScreenX();
     }

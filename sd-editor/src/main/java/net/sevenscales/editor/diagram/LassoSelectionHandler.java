@@ -4,14 +4,18 @@ import java.util.List;
 import java.util.Set;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.StartSelectToolEvent;
 import net.sevenscales.editor.api.event.StartSelectToolEventHandler;
+import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
+import net.sevenscales.editor.content.utils.ShapeParser;
 import net.sevenscales.editor.diagram.utils.GridUtils;
+import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IRectangle;
@@ -140,6 +144,9 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
   	if (surface.getEditorContext().isTrue(EditorProperty.START_SELECTION_TOOL)) {
   		return true;
   	}
+  	if (GlobalState.isAddSlideMode()) {
+  		return true;
+  	}
   	return keys == IGraphics.SHIFT ? true : false;
 	}
 
@@ -237,13 +244,10 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 	@Override
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
 		// logger.debug("onMouseUp isLassoing={}...", isLassoing);
-		if (isLassoing) {
+		if (isLassoing && !GlobalState.isAddSlideMode()) {
 			selectItems(point);
 			
-			isLassoing = false;
 			surface.getEditorContext().set(EditorProperty.START_SELECTION_TOOL, false);
-			
-			hide();
 			
 			if (surface.getSelectionHandler().getLastMultimodeSelectedDiagram() != null) {
 				Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
@@ -264,11 +268,46 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 //        d.saveLastTransform(point.getDX(), point.getDY());
 //      }
 //    }
-    currentSender = null;
-    backgroundMouseDown = true;
-    mouseDown = false;
+
+		if (GlobalState.isAddSlideMode()) {
+			createSlide();
+		}
+
+		if (isLassoing) {
+			hide();
+		}
+
+		GlobalState.disableAddSlideMode();
+		isLassoing = false;
+	  currentSender = null;
+	  backgroundMouseDown = true;
+	  mouseDown = false;
 //    System.out.println("onMouseUp:" + backgroundMouseDown);
   }
+
+  private void createSlide() {
+  	// _createSlide();
+  	String elementType = "o_slide";
+    DiagramItemDTO item = LibraryShapes.createByType(elementType);
+    item.setText("");
+    Integer properties = null;
+
+		ScaleHelpers.ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint
+				(lassoRectangle.getX(), lassoRectangle.getY(), surface);
+
+		String shape = new GenericShape(elementType, stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y, lassoRectangle.getWidth(), lassoRectangle.getHeight(), properties, null).toString();
+
+		item.setShape(shape);
+		Diagram d = ShapeParser.createDiagramElement(item, surface);
+		surface.addAsSelected(d, true);
+  }
+
+  // private native void _createSlide()/*-{
+  // 	$wnd.saveBoardShape({
+  // 		et: 'o_slide'
+  // 		st: 0
+  // 	})
+  // }-*/;
 
 	private void hide() {
 		if (lassoRectangle != null) {

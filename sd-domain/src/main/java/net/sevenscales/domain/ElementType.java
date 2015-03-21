@@ -60,7 +60,8 @@ public enum ElementType {
 	TABLET_HORIZONTAL("tablet_h"),
 	OLD_PHONE("phone"),
 	ANDROID("android"),
-	LIGHTBULB("lightbulb");
+	LIGHTBULB("lightbulb"),
+	SLIDE("o_slide");
 
 	private String value;
 

@@ -35,7 +35,7 @@ public class JSONContentParser {
 	}
 
 	private void parse(JSONObject jsonContent) {
-		logger.debug("jsonContent {}", jsonContent);
+		// logger.debug("jsonContent {}", jsonContent);
 		content.setVersion(JSONParserHelpers.getInt(jsonContent.get("version")));
 		content.setName(JSONParserHelpers.getString(jsonContent.get("name")));
 		content.setCreatedTime(JSONParserHelpers.getLong(jsonContent.get("createdAt")));

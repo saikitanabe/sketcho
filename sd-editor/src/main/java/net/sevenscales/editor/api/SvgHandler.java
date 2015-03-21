@@ -75,7 +75,7 @@ public class SvgHandler {
 	    UiModelContentHandler modelHandler = new UiModelContentHandler(editorContext);
 	    modelHandler.addContentItems(content, surface);
 	    SvgConverter converter = new SvgConverter(false);
-			SvgData data = converter.convertToSvg(content, surface, false, true);
+			SvgData data = converter.convertToSvg(content.getWidth(), content.getHeight(), surface, false, true);
 			this.svg = data.svg;
 			nativeReady(handler, data.svg);
     }

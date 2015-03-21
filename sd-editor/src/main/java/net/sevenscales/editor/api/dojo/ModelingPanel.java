@@ -240,6 +240,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 			public void onMouseDown(MouseDownEvent event) {
 				com.google.gwt.user.client.Event e = Event.as(event.getNativeEvent());
 				int keys = e.getShiftKey() ? IGraphics.SHIFT : 0;
+				keys |= e.getAltKey() ? IGraphics.ALT : 0;
 				if (surface.getElement().isOrHasChild(Element.as(event.getNativeEvent().getEventTarget()))) {
 					surface.onMouseDown((GraphicsEvent) e, keys);
 					event.getNativeEvent().preventDefault();
