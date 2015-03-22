@@ -287,19 +287,21 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 
   private void createSlide() {
   	// _createSlide();
-  	String elementType = "o_slide";
-    DiagramItemDTO item = LibraryShapes.createByType(elementType);
-    item.setText("");
-    Integer properties = null;
+  	if (GlobalState.isAddSlideMode()) {
+	  	String elementType = "o_slide";
+	    DiagramItemDTO item = LibraryShapes.createByType(elementType);
+	    item.setText("");
+	    Integer properties = null;
 
-		ScaleHelpers.ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint
-				(lassoRectangle.getX(), lassoRectangle.getY(), surface);
+			ScaleHelpers.ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint
+					(lassoRectangle.getX(), lassoRectangle.getY(), surface);
 
-		String shape = new GenericShape(elementType, stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y, lassoRectangle.getWidth(), lassoRectangle.getHeight(), properties, null).toString();
+			String shape = new GenericShape(elementType, stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y, lassoRectangle.getWidth(), lassoRectangle.getHeight(), properties, null).toString();
 
-		item.setShape(shape);
-		Diagram d = ShapeParser.createDiagramElement(item, surface);
-		surface.addAsSelected(d, true);
+			item.setShape(shape);
+			Diagram d = ShapeParser.createDiagramElement(item, surface);
+			surface.addAsSelected(d, true);
+  	}
   }
 
   // private native void _createSlide()/*-{
