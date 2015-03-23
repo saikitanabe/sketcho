@@ -2,8 +2,10 @@ package net.sevenscales.editor.api.impl;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 
+import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSearch;
 import net.sevenscales.editor.uicomponents.CircleElement;
@@ -28,6 +30,23 @@ public class SurfaceDiagramSearch implements DiagramSearch {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public List<Diagram> findAllByType(String elementType) {
+		List<Diagram> result = new ArrayList<Diagram>();
+
+		if (elementType == null) {
+			return result;
+		}
+
+		for (Diagram d : diagrams) {
+			IDiagramItem di = d.getDiagramItem();
+			if (di != null && elementType.equals(di.getType())) {
+				result.add(d);
+			}
+		}
+		return result;
 	}
 	
 	@Override

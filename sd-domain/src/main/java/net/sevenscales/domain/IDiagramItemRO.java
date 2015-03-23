@@ -10,6 +10,7 @@ import net.sevenscales.domain.utils.JsonFormat;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.core.client.JavaScriptObject;
 
 public interface IDiagramItemRO extends Serializable, IsSerializable {
 	long getId();
@@ -34,6 +35,7 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	String getCustomData();
 	double getCrc32();
 	String getGroup();
+	JavaScriptObject getData();
 	boolean isGroup();
 	int getAnnotation();
 	int getResolved();

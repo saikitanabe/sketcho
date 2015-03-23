@@ -1,6 +1,10 @@
 package net.sevenscales.editor.diagram;
 
-class GlobalState {
+public class GlobalState {
+
+	public static native void slideCreated()/*-{
+		$wnd.globalStreams.slideCreatedStream.push()
+	}-*/;
 	
   public static native boolean isAddSlideMode()/*-{
     return $wnd.globalState.addSlideMode

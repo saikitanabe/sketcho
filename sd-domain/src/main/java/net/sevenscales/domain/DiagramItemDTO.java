@@ -13,6 +13,7 @@ import net.sevenscales.domain.utils.DiagramItemUtils;
 import net.sf.hibernate4gwt.pojo.java5.LazyPojo;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.google.gwt.core.client.JavaScriptObject;
 
 public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializable, IsSerializable {
 	public static final int DATA_VERSION = 4;
@@ -37,6 +38,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	private int resolved;
 	private List<UrlLinkDTO> links;
 	private String parentId;
+	private JavaScriptObject data;
 
 	public DiagramItemDTO() {
   }
@@ -61,7 +63,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
   
 	public DiagramItemDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer fontSize, Integer shapeProperties, Integer displayOrder, int version, Long id, String clientId, String customData, List<UrlLinkDTO> links, String parentId) {
-    this(text, type, shape, extension, backgroundColor, textColor, fontSize, shapeProperties, displayOrder, version, id, clientId, customData, 0, /*group*/ null, 0, 0, links, parentId);
+    this(text, type, shape, extension, backgroundColor, textColor, fontSize, shapeProperties, displayOrder, version, id, clientId, customData, 0, /*group*/ null, 0, 0, links, parentId, /* data */ null);
   }
 
 //	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
@@ -69,7 +71,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 //		this(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, crc32, 0, 0, null);
 //	}
 
-	public DiagramItemDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer fontSize, Integer shapeProperties, Integer displayOrder, Integer version, Long id, String clientId, String customData, double crc32, String group, int annotation, int resolved, List<UrlLinkDTO> links, String parentId
+	public DiagramItemDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer fontSize, Integer shapeProperties, Integer displayOrder, Integer version, Long id, String clientId, String customData, double crc32, String group, int annotation, int resolved, List<UrlLinkDTO> links, String parentId, JavaScriptObject data
 			) {
 		super();
 		this.text = text;
@@ -91,10 +93,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		this.resolved = resolved;
 		this.links = links;
 		this.parentId = parentId;
+		this.data = data;
 	}
 	
 	public DiagramItemDTO(String clientId) {
-		this("", "", "", /* extension */ null, "", "", null, /* shapeProperties */null, /* displayOrder */ null, 0, 0L, clientId, "", 0, /*group*/ null, 0, 0, null, /* parentId */ null);
+		this("", "", "", /* extension */ null, "", "", null, /* shapeProperties */null, /* displayOrder */ null, 0, 0L, clientId, "", 0, /*group*/ null, 0, 0, null, /* parentId */ null, /* data */null);
 	}
 
 	public DiagramItemDTO(IDiagramItemRO di) {
@@ -280,6 +283,15 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 
 	@Override
+	public JavaScriptObject getData() {
+		return this.data;
+	}
+	@Override
+	public void setData(JavaScriptObject data) {
+		this.data = data;
+	}	
+
+	@Override
 	public int getAnnotation() {
 		return annotation;
 	}
@@ -378,6 +390,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		customData = dit.customData;
 		crc32 = dit.crc32;
 		group = dit.group;
+		data = dit.data;
 		annotation = dit.annotation;
 		resolved = dit.resolved;
 		parentId = dit.parentId;
@@ -469,6 +482,11 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		if (DiagramItemUtils.checkIfNotSame(customData, item.getCustomData())) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.CUSTOM_DATA);
+		}
+		// TODO how to compare! Could use underscore to compare object
+		if (DiagramItemUtils.checkIfNotSame(data, item.getData())) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.DATA);
 		}
 		if (crc32 != item.getCrc32()) {
 			result = false;

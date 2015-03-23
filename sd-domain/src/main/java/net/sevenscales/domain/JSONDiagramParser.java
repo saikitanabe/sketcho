@@ -76,7 +76,8 @@ public class JSONDiagramParser {
 														  JSONParserHelpers.getInt(obj.get("a")),
 														  JSONParserHelpers.getInt(obj.get("r")),
 														  JSONParserHelpers.getListUrl(obj.get("links")),
-														  JSONParserHelpers.getStringOrNull(obj.get("p")));
+														  JSONParserHelpers.getStringOrNull(obj.get("p")),
+														  JSONParserHelpers.getObjectOrNull(obj.get("data")));
 	}
 
 	public CommentDTO isComment() {

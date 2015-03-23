@@ -97,6 +97,10 @@ public class JsonExtraction {
       result.put(DiagramItemField.GROUP.getValue(), new JSONString(item.getGroup()));
     }
 
+    if (item.getData() != null) {
+      result.put(DiagramItemField.DATA.getValue(), new JSONObject(item.getData()));
+    }
+
     if (item.isAnnotation()) {
 	    result.put("a", new JSONNumber(item.getAnnotation()));
     }

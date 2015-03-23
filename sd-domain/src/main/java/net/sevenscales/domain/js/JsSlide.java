@@ -9,6 +9,14 @@ public class JsSlide extends JavaScriptObject {
 	protected JsSlide() {
 	}
 
+	public final native String getClientId()/*-{
+		return this.clientId
+	}-*/;
+
+	public final native JavaScriptObject getData()/*-{
+		return this.data
+	}-*/;
+
 	public final native int getLeft()/*-{
 		return this.left
 	}-*/;
@@ -25,10 +33,11 @@ public class JsSlide extends JavaScriptObject {
 		return this.svg
 	}-*/;
 
-	public static final JsSlide newSlide(String clientId, int left, int top, int width, int height, String svg) {
+	public static final JsSlide newSlide(String clientId, JsSlideData slideData, int left, int top, int width, int height, String svg) {
 		JSONObject result = new JSONObject();
 
 		result.put("clientId", new JSONString(clientId));
+		result.put("data", new JSONObject(slideData));
 		result.put("left", new JSONNumber(left));
 		result.put("top", new JSONNumber(top));
 		result.put("width", new JSONNumber(width));

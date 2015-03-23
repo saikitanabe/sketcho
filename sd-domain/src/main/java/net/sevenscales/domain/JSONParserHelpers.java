@@ -7,6 +7,7 @@ import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.core.client.JavaScriptObject;
 
 import net.sevenscales.domain.api.IExtension;
 
@@ -33,6 +34,10 @@ public class JSONParserHelpers {
 
 	public static String getStringOrNull(JSONValue value) {
 		return value != null && value.isString() != null ? value.isString().stringValue() : null;
+	}
+
+	public static JavaScriptObject getObjectOrNull(JSONValue value) {
+		return value != null && value.isObject() != null ? value.isObject().getJavaScriptObject() : null;
 	}
 
 	public static List<String> getListString(JSONValue value) {

@@ -4,6 +4,8 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ISvgDataRO;
 import net.sevenscales.domain.ShapeProperty;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 
 public interface IDiagramItem extends IDiagramItemRO {
   void setText(String text);
@@ -25,6 +27,7 @@ public interface IDiagramItem extends IDiagramItemRO {
   void setCustomData(String customData);
   void setCrc32(double crc32);
   void setGroup(String group);
+  void setData(JavaScriptObject data);
   void annotate();
   void unannotate();
   void resolve();

@@ -5,6 +5,8 @@ import java.util.Set;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.js.JsSlideData;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
@@ -287,20 +289,22 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 
   private void createSlide() {
   	// _createSlide();
-  	if (GlobalState.isAddSlideMode()) {
-	  	String elementType = "o_slide";
-	    DiagramItemDTO item = LibraryShapes.createByType(elementType);
+  	if (GlobalState.isAddSlideMode() && lassoRectangle.getWidth() > 100 && lassoRectangle.getHeight() > 100) {
+	    DiagramItemDTO item = LibraryShapes.createByType(ElementType.SLIDE.getValue());
 	    item.setText("");
+	    List<Diagram> found = surface.createDiagramSearch().findAllByType(ElementType.SLIDE.getValue());
+	    item.setData(JsSlideData.newSlideData(found.size()+1));
 	    Integer properties = null;
 
 			ScaleHelpers.ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint
 					(lassoRectangle.getX(), lassoRectangle.getY(), surface);
 
-			String shape = new GenericShape(elementType, stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y, lassoRectangle.getWidth(), lassoRectangle.getHeight(), properties, null).toString();
+			String shape = new GenericShape(ElementType.SLIDE.getValue(), stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y, lassoRectangle.getWidth(), lassoRectangle.getHeight(), properties, null).toString();
 
 			item.setShape(shape);
 			Diagram d = ShapeParser.createDiagramElement(item, surface);
 			surface.addAsSelected(d, true);
+			surface.moveSelectedToBack();
   	}
   }
 

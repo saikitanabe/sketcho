@@ -482,6 +482,15 @@ public interface AbstractDiagramFactory {
           DiagramItemFactory.parseTextColor(item),
           editable,
           item);
+      // } else if (item.getType().equals(ElementType.SLIDE.getValue())) {
+      //   return new GenericSlideElement(surface,
+      //     gh,
+      //     item.getText(), 
+      //     DiagramItemFactory.parseBackgroundColor(item),
+      //     DiagramItemFactory.parseBorderColor(item),
+      //     DiagramItemFactory.parseTextColor(item),
+      //     editable,
+      //     item);
       } else {
         // if (item.getShapeProperties() == null) {
         // }

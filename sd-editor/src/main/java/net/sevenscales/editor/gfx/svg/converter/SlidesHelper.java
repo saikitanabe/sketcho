@@ -8,6 +8,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 import net.sevenscales.domain.js.JsPresentation;
 import net.sevenscales.domain.js.JsSlide;
+import net.sevenscales.domain.js.JsSlideData;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.ElementType;
@@ -32,7 +33,8 @@ public class SlidesHelper {
 
 			String svg = sc.diagramsToSvg(surface, diagrams, false, false, -1 * slide.getLeft(), -1 * slide.getTop());
 
-			jsSlides.push(JsSlide.newSlide(slide.getDiagramItem().getClientId(), slide.getLeft(), slide.getTop(), slide.getWidth(), slide.getHeight(), formatSvg(slideWidth, slideHeight, slide.getWidth(), slide.getHeight(), svg)));
+			JsSlideData data = slide.getDiagramItem().getData().cast();
+			jsSlides.push(JsSlide.newSlide(slide.getDiagramItem().getClientId(), data, slide.getLeft(), slide.getTop(), slide.getWidth(), slide.getHeight(), formatSvg(slideWidth, slideHeight, slide.getWidth(), slide.getHeight(), svg)));
 		}
 
 		SvgBase.setThemeBlack(false);

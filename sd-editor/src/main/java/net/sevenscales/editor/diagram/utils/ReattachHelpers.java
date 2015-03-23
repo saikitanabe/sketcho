@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
 
 import com.google.gwt.logging.client.LogConfiguration;
 
@@ -23,6 +24,11 @@ public class ReattachHelpers {
 	private DiagramSearch diagramSearch = new DiagramSearch() {
 		@Override
 		public Diagram findByClientId(String clientId) {
+			return null;
+		}
+
+		@Override
+		public List<Diagram> findAllByType(String elementType) {
 			return null;
 		}
 
