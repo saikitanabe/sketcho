@@ -12,6 +12,7 @@ import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.DiagramItemField;
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
@@ -22,6 +23,7 @@ import net.sevenscales.editor.diagram.utils.CommentFactory;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSearch;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
+import net.sevenscales.editor.diagram.GlobalState;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.utils.ElementTypeComparator;
@@ -112,9 +114,16 @@ public class BoardOTHelpers {
 	}
 	
 	private void deleteDiagrams(Set<Diagram> diagrams) {
+		boolean slideDeleted = false;
 		for (Diagram d : diagrams) {
 			d.removeFromParent();
+			if (ElementType.SLIDE.getValue().equals(d.getDiagramItem().getType())) {
+				slideDeleted = true;
+			}
 		}
+
+		// need to notify slide deletion delayed, or slide deletion is not shown
+		GlobalState.slideCreated();
 	}
 	
 	private void deleteOT(String originator, List<IDiagramItemRO> items, boolean immidiate) throws MappingNotFoundException {
