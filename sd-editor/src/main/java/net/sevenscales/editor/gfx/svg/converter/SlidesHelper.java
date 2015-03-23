@@ -17,12 +17,13 @@ import net.sevenscales.editor.api.BoardDimensions;
 
 public class SlidesHelper {
 
-	public static JsPresentation getPresentation(ISurfaceHandler surface) {
+	public static JsPresentation getPresentation(ISurfaceHandler surface, int slideWidth, int slideHeight, boolean blackBackground) {
 
 		JsArray<JsSlide> jsSlides = JavaScriptObject.createArray().cast();
 
 		List<Diagram> slides = _getSlides(surface);
 
+		SvgBase.setThemeBlack(blackBackground);
 		SvgConverter sc = new SvgConverter(false);
 
 		for (Diagram slide : slides) {
@@ -31,8 +32,10 @@ public class SlidesHelper {
 
 			String svg = sc.diagramsToSvg(surface, diagrams, false, false, -1 * slide.getLeft(), -1 * slide.getTop());
 
-			jsSlides.push(JsSlide.newSlide(slide.getLeft(), slide.getTop(), slide.getWidth(), slide.getHeight(), formatSvg(slide.getWidth(), slide.getHeight(), svg)));
+			jsSlides.push(JsSlide.newSlide(slide.getDiagramItem().getClientId(), slide.getLeft(), slide.getTop(), slide.getWidth(), slide.getHeight(), formatSvg(slideWidth, slideHeight, slide.getWidth(), slide.getHeight(), svg)));
 		}
+
+		SvgBase.setThemeBlack(false);
 
 		BoardDimensions.resolveDimensions(slides);
 
@@ -42,9 +45,19 @@ public class SlidesHelper {
 		return JsPresentation.newPresentation(width, height, jsSlides);
 	}
 
-	private static String formatSvg(int width, int height, String svg) {
-		String svgStart = "<svg width='" + width + "' height='" + height + "'>";
-		return svgStart + svg + "</svg>";
+	private static String formatSvg(int slideWidth, int slideHeight, int width, int height, String svg) {
+		if (slideWidth == 0) {
+			String svgStart = "<svg width='" + width + "' height='" + height + "'>";
+			return svgStart + svg + "</svg>";
+		} else {
+			String xmlDef = "<?xml version='1.0' encoding='UTF-8'?>";
+			String svgStart = "<svg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' width='" + slideWidth + "' height='" + slideHeight + "'>";
+			double sx = slideWidth / (double) width;
+			double sy = slideHeight / (double) height;
+			double scale = sx < sy ? sx : sy;
+			String slideGroup = "<g transform='scale("+scale+")'>" + svg + "</g>";
+			return xmlDef + svgStart + slideGroup + "</svg>";
+		}
 	}
 
 	private static List<Diagram> _getSlides(ISurfaceHandler surface) {

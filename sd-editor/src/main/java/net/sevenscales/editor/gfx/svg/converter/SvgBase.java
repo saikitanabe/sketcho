@@ -15,6 +15,13 @@ class SvgBase {
 	protected static final String FILL_TEMPLATE = "%fill%";
 	protected static final String TEXT_COLOR_TEMPLATE = "%textcolor%";
 
+	// used for extracting svg for slides
+	private static boolean forceThemeBlack = false;
+
+	public static void setThemeBlack(boolean value) {
+		SvgBase.forceThemeBlack = value;
+	}
+
 	/**
 	* Relationships use background color as transparent color to hide line.
 	*/
@@ -38,6 +45,10 @@ class SvgBase {
 	}
 
 	private static void applyDefaultBorderColors(Map<String,String> params) {
+		if (forceThemeBlack) {
+	    params.put(STROKE_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.BLACK).getBorderColor().toHexString());
+	    return;
+		}
     // params.put("%fill%", fill);
     // params.put("%fill-opacity%", String.valueOf(rect.getFillColor().getOpacity()));
     if (params.get(STROKE_TEMPLATE) != null && !"none".equals(params.get(STROKE_TEMPLATE))) {
@@ -56,7 +67,11 @@ class SvgBase {
 		boolean usesSchemeDefaultTextColor = diagram.usesSchemeDefaultTextColor(Theme.getCurrentColorScheme());
     if (usesSchemeDefaultTextColor && params.get(TEXT_COLOR_TEMPLATE)!= null) {
     	// if text background color is transparent then apply paper text color
-    	params.put(TEXT_COLOR_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getTextColor().toHexString());
+    	if (forceThemeBlack) {
+	    	params.put(TEXT_COLOR_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.BLACK).getTextColor().toHexString());
+    	} else {
+	    	params.put(TEXT_COLOR_TEMPLATE, "#" + Theme.getColorScheme(ThemeName.PAPER).getTextColor().toHexString());
+    	}
     }
 
 		if (diagram.usesSchemeDefaultBorderColor(Theme.getCurrentColorScheme()) && !diagram.isAnnotation()) {
@@ -70,7 +85,11 @@ class SvgBase {
 		if (shape.isFillAsBorderColor() && diagram.usesSchemeDefaultBorderColor(Theme.getCurrentColorScheme())) {
 			params.put(FILL_TEMPLATE, Theme.getColorScheme(ThemeName.PAPER).getBorderColor().toHexStringWithHash());
 		} else if (shape.isFillAsBoardBackgroundColor()) {
-			params.put(FILL_TEMPLATE, ThemeName.PAPER.getBoardBackgroundColor().toHexStringWithHash());
+			if (forceThemeBlack) {
+				params.put(FILL_TEMPLATE, "none");
+			} else {
+				params.put(FILL_TEMPLATE, ThemeName.PAPER.getBoardBackgroundColor().toHexStringWithHash());
+			}
 		}
 	}
 

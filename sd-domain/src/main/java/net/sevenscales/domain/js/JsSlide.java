@@ -25,9 +25,10 @@ public class JsSlide extends JavaScriptObject {
 		return this.svg
 	}-*/;
 
-	public static final JsSlide newSlide(int left, int top, int width, int height, String svg) {
+	public static final JsSlide newSlide(String clientId, int left, int top, int width, int height, String svg) {
 		JSONObject result = new JSONObject();
 
+		result.put("clientId", new JSONString(clientId));
 		result.put("left", new JSONNumber(left));
 		result.put("top", new JSONNumber(top));
 		result.put("width", new JSONNumber(width));
