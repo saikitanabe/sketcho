@@ -299,7 +299,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 			ScaleHelpers.ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint
 					(lassoRectangle.getX(), lassoRectangle.getY(), surface);
 
-			String shape = new GenericShape(ElementType.SLIDE.getValue(), stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y, lassoRectangle.getWidth(), lassoRectangle.getHeight(), properties, null).toString();
+			String shape = new GenericShape(ElementType.SLIDE.getValue(), stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y, (int) (lassoRectangle.getWidth() / surface.getScaleFactor()), (int) (lassoRectangle.getHeight() / surface.getScaleFactor()), properties, null).toString();
 
 			item.setShape(shape);
 			Diagram d = ShapeParser.createDiagramElement(item, surface);
