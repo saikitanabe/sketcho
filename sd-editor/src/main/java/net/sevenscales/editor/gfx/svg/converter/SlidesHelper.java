@@ -31,7 +31,7 @@ public class SlidesHelper {
 			Diagram[] diagrams = getDiagramsOnArea(surface, slide.getLeft(), slide.getTop(), slide.getWidth(), slide.getHeight());
 			// SvgData svgdata = sc.diagramsToSvg(surface, diagrams, false, false);
 
-			String svg = sc.diagramsToSvg(surface, diagrams, false, false, -1 * slide.getLeft(), -1 * slide.getTop());
+			String svg = sc.diagramsToSvg(surface, diagrams, false, true, -1 * slide.getLeft(), -1 * slide.getTop());
 
 			JsSlideData data = slide.getDiagramItem().getData().cast();
 			jsSlides.push(JsSlide.newSlide(slide.getDiagramItem().getClientId(), data, slide.getLeft(), slide.getTop(), slide.getWidth(), slide.getHeight(), formatSvg(slideWidth, slideHeight, slide.getWidth(), slide.getHeight(), svg)));
