@@ -57,7 +57,9 @@ public class SlidesHelper {
 			double sx = slideWidth / (double) width;
 			double sy = slideHeight / (double) height;
 			double scale = sx < sy ? sx : sy;
-			String slideGroup = "<g transform='scale("+scale+")'>" + svg + "</g>";
+
+			// center slide with transform
+			String slideGroup = "<g transform='translate("+(slideWidth / 2 - (scale * width) / 2)+","+(slideHeight / 2 - (scale * height) / 2)+") scale("+scale+")'>" + svg + "</g>";
 			return xmlDef + svgStart + slideGroup + "</svg>";
 		}
 	}
