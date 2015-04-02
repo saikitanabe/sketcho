@@ -1,6 +1,7 @@
 package net.sevenscales.domain.json;
 
 import java.util.List;
+import java.util.Arrays;
 
 import com.google.gwt.json.client.*;
 
@@ -67,7 +68,7 @@ public class JsonExtraction {
     String text = safeJsonString(itemText(item, jsonFormat));
     result.put("text", new JSONString(text));
     result.put("elementType", new JSONString(safeJsonString(item.getType())));
-    result.put("shape", new JSONString(safeJsonString(item.getShape())));
+    result.put("shape", new JSONString(safeJsonString(validateShape(item.getShape()))));
     if (item.getExtension() != null) {
       JSONObject ext = decomposeExtension(item);
       result.put(DiagramItemField.EXTENSION.getValue(), ext);
@@ -127,6 +128,17 @@ public class JsonExtraction {
 
     return result;
 	}
+
+  private static String validateShape(String shape) {
+    // sequence shape has bug of having space as separator
+    String[] numbers = shape.replaceAll(" ", ",").split(",");
+    for (String number : numbers) {
+      if (Double.valueOf(number).isNaN()) {
+        throw new RuntimeException("Bad number " + number);
+      }
+    }
+    return shape;
+  }
 
   /**
   * Handle each extension value in here.
