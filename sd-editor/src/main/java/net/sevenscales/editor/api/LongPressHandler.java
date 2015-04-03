@@ -5,6 +5,7 @@ import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.diagram.LassoSelectionHandler;
 
 import com.google.gwt.dom.client.Touch;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -81,7 +82,7 @@ public class LongPressHandler implements MouseDownHandler,
 	
 	@Override
 	public void onMouseDown(MouseDownEvent event) {
-		if (!surface.getEditorContext().isTrue(EditorProperty.START_SELECTION_TOOL)) {
+		if (event.getNativeEvent().getButton() == Event.BUTTON_LEFT && !surface.getEditorContext().isTrue(EditorProperty.START_SELECTION_TOOL)) {
 			startX = event.getClientX();
 			startY = event.getClientY();
 			starScheduler();

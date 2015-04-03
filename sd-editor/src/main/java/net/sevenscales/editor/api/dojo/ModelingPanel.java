@@ -238,6 +238,11 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		RootPanel.get().addDomHandler(new MouseDownHandler() {
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
+				if (!(event.getNativeEvent().getButton() == Event.BUTTON_LEFT)) {
+					// handle only left button events
+					return;
+				}
+
 				com.google.gwt.user.client.Event e = Event.as(event.getNativeEvent());
 				int keys = e.getShiftKey() ? IGraphics.SHIFT : 0;
 				keys |= e.getAltKey() ? IGraphics.ALT : 0;
@@ -252,6 +257,12 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		RootPanel.get().addDomHandler(new MouseUpHandler() {
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
+				if (!(event.getNativeEvent().getButton() == Event.BUTTON_LEFT)) {
+					// handle only left button events
+					
+					return;
+				}
+
 				com.google.gwt.user.client.Event e = Event.as(event.getNativeEvent());
 				int keys = e.getShiftKey() ? IGraphics.SHIFT : 0;
 				if (surface.getElement().isOrHasChild(Element.as(event.getNativeEvent().getEventTarget()))) {
