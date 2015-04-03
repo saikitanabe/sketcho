@@ -37,7 +37,16 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
     this.surface = surface;
     
     listenPinchZoom();
+    init(this);
   }
+
+  private native void init(BackgroundMoveHandler me)/*-{
+    $wnd.globalStreams.contextMenuStream.filter(function(v) {
+      return v && v.type==='context-menu-open'
+    }).onValue(function() {
+      me.@net.sevenscales.editor.diagram.BackgroundMoveHandler::clear()()
+    })
+  }-*/;
 
   private void listenPinchZoom() {
   	surface.getEditorContext().getEventBus().addHandler(PinchZoomStartedEvent.TYPE, new PinchZoomStartedEventHandler() {
@@ -155,6 +164,10 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
 
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
 //  	complexElementHandler.showComplexElements(diagrams);
+    clear();
+  }
+
+  private void clear() {
     currentSender = null;
     backgroundMouseDown = true;
     mouseDown = false;
