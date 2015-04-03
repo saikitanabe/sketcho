@@ -130,6 +130,10 @@ public class JsonExtraction {
 	}
 
   private static String validateShape(String shape) {
+    if (shape == null || (shape != null && "".equals(shape))) {
+      // let's not check empty shape, that is on purpose, like for undo
+      return shape;
+    }
     // sequence shape has bug of having space as separator
     String[] numbers = shape.replaceAll(" ", ",").split(",");
     for (String number : numbers) {
