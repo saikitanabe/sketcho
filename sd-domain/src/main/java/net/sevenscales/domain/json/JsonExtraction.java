@@ -63,9 +63,9 @@ public class JsonExtraction {
 		return result;
 	}
 
-	public static JSONValue decompose(DiagramItemDTO item, JsonFormat jsonFormat) {
+	public static JSONObject decompose(IDiagramItemRO item) {
     JSONObject result = new JSONObject();
-    String text = safeJsonString(itemText(item, jsonFormat));
+    String text = item.getText();
     result.put("text", new JSONString(text));
     result.put("elementType", new JSONString(safeJsonString(item.getType())));
     result.put("shape", new JSONString(safeJsonString(validateShape(item.getShape()))));
@@ -147,7 +147,7 @@ public class JsonExtraction {
   /**
   * Handle each extension value in here.
   */
-  private static JSONObject decomposeExtension(DiagramItemDTO item) {
+  private static JSONObject decomposeExtension(IDiagramItemRO item) {
     JSONObject result = new JSONObject();
     if (item.getExtension().getSvgData() != null) {
       JSONObject jsvgdata = new JSONObject();

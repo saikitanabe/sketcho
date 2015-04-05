@@ -1,10 +1,18 @@
 package net.sevenscales.editor.utils;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 
 public class WebStorage {
-	public static native void set(String key, String jsonStr)/*-{
+	public static native void setJson(String key, JavaScriptObject json)/*-{
 		if (typeof $wnd.webStorage !== 'undefined') {
-			$wnd.webStorage.set(key, jsonStr);
+			$wnd.webStorage.set(key, JSON.stringify(json));
+		}
+	}-*/;
+
+	public static native void setString(String key, String value)/*-{
+		if (typeof $wnd.webStorage !== 'undefined') {
+			$wnd.webStorage.set(key, value);
 		}
 	}-*/;
 

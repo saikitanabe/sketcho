@@ -38,7 +38,7 @@ public class BoardUser {
 	/**
 	* Can use gwt to json since no checksum made out of these
 	*/
-	public JSONValue toJson() {
+	public JSONObject toJson() {
     JSONObject result = new JSONObject();
     result.put("username", new JSONString(username));
     result.put("avatarUrl", new JSONString(username));

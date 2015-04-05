@@ -3,6 +3,11 @@ package net.sevenscales.editor.content.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
+
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
@@ -93,6 +98,19 @@ public class JsonHelpers {
 		return "[" + json + "]";
 	}
 
+	public JSONArray json(List<? extends IDiagramItemRO> items) {
+		JSONArray result = new JSONArray();
+		JsArray<JavaScriptObject> array = result.getJavaScriptObject().cast();
+		for (IDiagramItemRO di : items) {
+		  if (di.getClientId() != null && !"".equals(di.getClientId())) {
+		  	// prevent bugs in the ui to send server ghost elements!!!
+				JSONObject json = JsonExtraction.decompose(di);
+				array.push(json.getJavaScriptObject());
+		  }
+		}
+		return result;
+	}
+
 	public JsonConversion json(Diagram[] diagrams, JsonFormat jsonFormat) {
 		List<Diagram> list = new ArrayList<Diagram>();
 		for (Diagram d : diagrams) {
@@ -105,7 +123,6 @@ public class JsonHelpers {
 		String result = "";
 		for (IDiagramItemRO di : items) {
 			if (di instanceof DiagramItemDTO) {
-				result += JsonExtraction.decompose(di, jsonFormat) + ",";
 			}
 		}
 		result = removeLastComma(result);

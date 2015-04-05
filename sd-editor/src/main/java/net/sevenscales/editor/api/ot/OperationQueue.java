@@ -9,6 +9,7 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.json.JsonExtraction;
 import net.sevenscales.domain.JSONParserHelpers;
+import net.sevenscales.domain.js.JsSendOperation;
 import net.sevenscales.editor.api.IEditor;
 import net.sevenscales.editor.content.utils.JsonHelpers;
 import net.sevenscales.editor.content.ClientIdHelpers;
@@ -22,6 +23,7 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.logging.client.LogConfiguration;
 import java.util.logging.Level;
@@ -55,13 +57,13 @@ public class OperationQueue {
 		}
 
 		private OTOperation operation;
-		private String operationJson;
+		private JSONArray operationJson;
 		private String guid;
 
-		public SendOperation(OTOperation operation, String operationJson) {
+		public SendOperation(OTOperation operation, JSONArray operationJson) {
 			this(operation, operationJson, null);
 		}
-		public SendOperation(OTOperation operation, String operationJson, String guid) {
+		public SendOperation(OTOperation operation, JSONArray operationJson, String guid) {
 			this.operation = operation;
 			this.operationJson = operationJson;
 			this.guid = guid;
@@ -74,36 +76,41 @@ public class OperationQueue {
 				// this is json not string, parse accordingly => then to string
 				// converted to json, so string parsing can use gwt json parser!
 				JSONValue vitems = obj.get("items");
-				String items = "[]";
-				if (vitems != null && vitems.isArray() != null) {
-					items = JsonExtraction.escapeForSending(vitems.toString());
-				}
+				// String items = "[]";
+				// if (vitems != null && vitems.isArray() != null) {
+				// 	items = JsonExtraction.escapeForSending(vitems.toString());
+				// }
 				String guid = null;
 				JSONValue jguid = obj.get("guid");
 				if (jguid != null && jguid.isString() != null && !"".equals(jguid.isString().stringValue())) {
 					guid = jguid.isString().stringValue();
 				}
-				result = new SendOperation(OTOperation.getEnum(operation), items, guid);
+				JSONValue _items = obj.get("items");
+				if (_items.isArray() != null) {
+					result = new SendOperation(OTOperation.getEnum(operation), _items.isArray(), guid);
+				}
 			}
 			return result;
 		}
 
-		public String toJson() {
-			if (guid != null) {
-				return SLogger.format("{\"operation\":\"{}\",\"items\":{},\"guid\":\"{}\"}", 
-						operation.toString(),
-						operationJson,
-						guid);
-			} else {
-				return SLogger.format("{\"operation\":\"{}\",\"items\":{}}", 
-						operation.toString(),
-						operationJson);
-			}
+		public JsSendOperation toJson() {
+			// if (guid != null) {
+			// 	return "{\"operation\":\"" + operation.toString() + 
+			// 					"\",\"items\":" + operationJson + 
+			// 					",\"guid\":\"" + guid + "\"}";
+			// } else {
+			// 	return "{\"operation\":\"" + operation.toString() + 
+			// 				 "\",\"items\":" + operationJson + "\"}";
+			// }
 			// cannot use gwt utilities since already converted from JSONValue
-			// JSONObject result = new JSONObject();
-			// result.put("operation", new JSONString(operation.toString()));
-			// result.put("items", new JSONString(operationJson));
-			// return result;
+			JSONObject result = new JSONObject();
+			result.put("operation", new JSONString(operation.toString()));
+			result.put("items", operationJson);
+			if (guid != null) {
+				// guid is set only when sending, not when storing to local storage
+				result.put("guid", new JSONString(guid));
+			}
+			return result.getJavaScriptObject().cast();
 		}
 
 		public void setGuid(String guid) {
@@ -118,7 +125,7 @@ public class OperationQueue {
 			return operation;
 		}
 		
-		public String getOperationJson() {
+		public JSONArray getOperationJson() {
 			return operationJson;
 		}
 
@@ -138,9 +145,9 @@ public class OperationQueue {
 
 	private void storeQueue() {
 		boolean filterOutUserOperations = true;
-		String json = toJson(queuedOperations, filterOutUserOperations);
+		JsArray<JsSendOperation> json = toJson(queuedOperations, filterOutUserOperations);
 		if (json.length() > 0) {
-			WebStorage.set(queueName(boardName), toJsonArray(json));
+			WebStorage.setJson(queueName(boardName), json);
 		} else {
 			// nothing so remove whole queue
 			WebStorage.remove(queueName(boardName));
@@ -191,20 +198,20 @@ public class OperationQueue {
 	// update itself as well on lo
 
 	public static class QueueData {
-		public String operations;
+		public JsArray<JsSendOperation> operations;
 		// true if queue has been created offline and not from active memory
 		// - user edited board offline
 		// - user got online and board is reloaded and send offline data to server
 		public boolean offline;
 
-		private QueueData(String operations, boolean offline) {
+		private QueueData(JsArray<JsSendOperation> operations, boolean offline) {
 			this.operations = operations;
 			this.offline = offline;
 		}
 	}
 
 	public QueueData toJsonAndClear() {
-		String result = "";
+		JsArray<JsSendOperation> result = null;
 		boolean offline = false;
 		if (!queuedOperations.isEmpty()) {
 			// queuedOperations.clear();
@@ -216,10 +223,10 @@ public class OperationQueue {
 			offline = true;
 		}
 
-		return new QueueData(toJsonArray(result), offline);
+		return new QueueData(result, offline);
 	}
 
-	private String prepareForSending() {
+	private JsArray<JsSendOperation> prepareForSending() {
 		String guid = ClientIdHelpers.guid();
 		// mark sending with guid
 		// List<SendOperation> tosend = new ArrayList<SendOperation>();
@@ -299,8 +306,8 @@ public class OperationQueue {
 		return "[" + result + "]";
 	}
 
-	private static String toJson(List<SendOperation> operations, boolean filterOutUserOperations) {
-		String result = "";
+	private static JsArray<JsSendOperation> toJson(List<SendOperation> operations, boolean filterOutUserOperations) {
+		JsArray<JsSendOperation> result = JavaScriptObject.createArray().cast();
 		for (SendOperation o : operations) {
 			boolean add = false;
 			if (filterOutUserOperations && !OTOperation.USER_MOVE.equals(o.getOperation())) {
@@ -309,11 +316,14 @@ public class OperationQueue {
 				add = true;
 			}
 
+			// if (add) {
+			// 	if (result.length() > 0) {
+			// 		result += ",";
+			// 	}
+			// 	result += o.toJson();
+			// }
 			if (add) {
-				if (result.length() > 0) {
-					result += ",";
-				}
-				result += o.toJson();
+				result.push(o.toJson());
 			}
 		}
 		return result;
@@ -338,7 +348,7 @@ public class OperationQueue {
 
 	public void setServerDocumentChecksum(String checksum) {
 		this.checksum = checksum;
-		WebStorage.set(checksumName(), checksum);
+		WebStorage.setString(checksumName(), checksum);
 	}
 
 	public String getServerDocumentChecksum() {
