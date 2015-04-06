@@ -14,6 +14,7 @@ import net.sevenscales.editor.api.IEditor;
 import net.sevenscales.editor.content.utils.JsonHelpers;
 import net.sevenscales.editor.content.ClientIdHelpers;
 import net.sevenscales.editor.utils.WebStorage;
+import net.sevenscales.editor.diagram.GlobalState;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsonUtils;
@@ -152,6 +153,17 @@ public class OperationQueue {
 			// nothing so remove whole queue
 			WebStorage.remove(queueName(boardName));
 		}
+
+		checkSaveStatus();
+	}
+
+	private void checkSaveStatus() {
+		GlobalState.notifySaveStatusChanged();
+		// if (isEmpty()) {
+		// 	GlobalState.notifySaved();
+		// } else {
+		// 	GlobalState.notifySaving();
+		// }
 	}
 
 	private String queueName(String boardId) {
@@ -336,6 +348,15 @@ public class OperationQueue {
 		} else {
 			return false;
 		}
+	}
+
+	public boolean isSaved() {
+		boolean result = isEmpty();
+		if (!result) {
+			// if contains only user operations then document is saved
+			result = containsOnlyUserMoveOperations();
+		}
+		return result;
 	}
 
 	public boolean flushedAndAcknowledgedFromServer() {

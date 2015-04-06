@@ -15,4 +15,9 @@ public class GlobalState {
 			$wnd.globalStreams.addSlideStream.push()
 		}
 	}-*/;
+
+	public static native void notifySaveStatusChanged()/*-{
+    $wnd.globalStreams.boardSaveStatusChangedStream.push()
+	}-*/;
+
 }
