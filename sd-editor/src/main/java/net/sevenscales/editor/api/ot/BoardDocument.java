@@ -190,7 +190,8 @@ public class BoardDocument implements UniqueChecker {
 	}
 
 	public String toJson(JsonFormat format) {
-		return JsonHelpers.toJson(getDocument(), format);
+		// return JsonHelpers.toJson(getDocument(), format);
+		return JsonHelpers.jsonStringify(getDocument());
 	}
 
 }
