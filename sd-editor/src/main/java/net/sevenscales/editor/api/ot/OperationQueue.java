@@ -305,6 +305,11 @@ public class OperationQueue {
 		return guids.length() > 0 && matched.size() == 0;
 	}
 
+	public void clear() {
+		queuedOperations.clear();
+		storeQueue();			
+	}
+
 	public boolean acknowledgedFromServer() {
 		for (SendOperation op : queuedOperations) {
 			if (op.getGuid() != null) {
