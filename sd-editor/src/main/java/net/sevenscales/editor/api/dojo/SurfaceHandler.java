@@ -128,6 +128,11 @@ class SurfaceHandler extends SimplePanel implements
 	private OTBuffer otBuffer;
 	private OperationTransaction operationTransaction;
 
+	// >>>>>>>>> Debugging
+	// private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+	// private net.sevenscales.editor.gfx.domain.IRectangle tempRect;
+	// <<<<<<<<< Debugging
+
 	public void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
 			EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction) {
 		this.editorContext = editorContext;
@@ -137,7 +142,7 @@ class SurfaceHandler extends SimplePanel implements
 		this.otBuffer = otBuffer;
 		this.operationTransaction = operationTransaction;
 		logger.debug("init {}...", name);
-		
+
 		addStyleName("sd-SurfaceHandler");
 //		ensureDebugId("surfaceFocusPanel");
 //    this.panel = new SimplePanel();
@@ -656,6 +661,20 @@ class SurfaceHandler extends SimplePanel implements
 		connectionLayer3 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
 		interactionLayer4 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
 
+    // >>>>>>>> Debug 
+    // tempCircle = IShapeFactory.Util.factory(editable).createCircle(rootLayer0);
+    // tempCircle.setShape(0, 0, 10);
+    // tempCircle.setStroke(218, 57, 57, 1);
+    // tempCircle.setFill(218, 57, 57, 1);
+
+    // tempRect = IShapeFactory.Util.factory(editable).createRectangle(rootLayer0);
+    // // tempRect.setShape(0, 0, 10);
+    // tempRect.setStroke(218, 57, 57, 1);
+    // tempRect.setStrokeWidth(4);
+    // rectify(rootLayer0.getContainer(), tempRect, tempCircle, this);
+    // <<<<<<<< Debug END
+
+
 //		surface.addGraphicsMouseDownHandler(this);
 //		surface.addGraphicsMouseUpHandler(this);
 //		surface.addGraphicsMouseMoveHandler(this);
@@ -694,6 +713,36 @@ class SurfaceHandler extends SimplePanel implements
 //	   if (surface != null && visible && isAttached())
 //	      onLoad();
 	}
+
+	private native void rectify(JavaScriptObject element, net.sevenscales.editor.gfx.domain.IRectangle rect, net.sevenscales.editor.gfx.domain.ICircle circle, SurfaceHandler me)/*-{
+			// element.rawNode.setAttribute("fill", "brown")
+			// element.rawNode.setAttribute("fill", "url(#img1)")
+
+
+			var timer = null
+
+      function rectify() {
+				var t = element.getTransform()
+      	var width = @com.google.gwt.user.client.Window::getClientWidth()()
+      	var height = @com.google.gwt.user.client.Window::getClientHeight()()
+      	var value = me.@net.sevenscales.editor.api.dojo.SurfaceHandler::getScaleFactor()()
+
+	      timer = timer || setTimeout(function() {
+	      	if (t != null) {
+						var left = t.dx / value
+						var top = t.dy / value
+			      rect.@net.sevenscales.editor.gfx.domain.IRectangle::setShape(IIIII)((-left), (-top), width/value, height/value, 0)
+						circle.@net.sevenscales.editor.gfx.domain.ICircle::setShape(III)(-left + width / value / 2, -top + height / value / 2, 10)
+				    circle.@net.sevenscales.editor.gfx.domain.ICircle::setFill(IIID)(100, 100, 57, 1);
+	      	}
+		      timer = null
+		      rectify()
+	      }, 500)
+      }
+
+      rectify()
+
+	}-*/;
 	
 	public void setSize(Integer width, Integer height) {
 		// for convinience; not needed to parse from string
@@ -961,7 +1010,7 @@ class SurfaceHandler extends SimplePanel implements
 	}
 	
 	public void scale(float value) {
-		scale(rootLayer0.getContainer(), value);
+		scale(rootLayer0.getContainer(), scaleFactor, value, com.google.gwt.user.client.Window.getClientWidth(), com.google.gwt.user.client.Window.getClientHeight());
 		scaleBackground(value);
 		this.scaleFactor = value;
 	}
@@ -1005,16 +1054,31 @@ class SurfaceHandler extends SimplePanel implements
 		}
 	}
 
-	private native void scale(JavaScriptObject element, float value)/*-{
-		var m3 = new $wnd.dojox.gfx.Matrix2D(value);
-		var t = element.getTransform();
+	private native void scale(JavaScriptObject element, float prevScaleFactor, float value, int width, int height)/*-{
+		var m3 = new $wnd.dojox.gfx.Matrix2D(value)
+		var t = element.getTransform()
 		if (t != null) {
-			var newt = $wnd.dojox.gfx.matrix.scale({ x: m3.xx, y: m3.yy});
-			t.xx = newt.xx;
-			t.yy = newt.yy;
-			element.setTransform(t);
+			// calculate currect visible area center point
+			var left = t.dx / prevScaleFactor
+			var top = t.dy / prevScaleFactor
+			var cx = -left + width / 2 / prevScaleFactor
+			var cy = -top + height / 2 / prevScaleFactor
+
+			// debug center point
+   //    rect.@net.sevenscales.editor.gfx.domain.IRectangle::setShape(IIIII)((-left), (-top), width / prevScaleFactor, height / prevScaleFactor, 0)
+   //    circle.@net.sevenscales.editor.gfx.domain.ICircle::setFill(IIID)(218, 57, 57, 1)
+			// circle.@net.sevenscales.editor.gfx.domain.ICircle::setShape(III)(cx, cy, 10)
+
+			// scale at center point to zoom it
+			element.setTransform($wnd.dojox.gfx.matrix.scaleAt(value, value, cx, cy))
+
+			// translate to center point to be visible area center again
+			t = element.getTransform()
+			t.dx = t.dx - cx + width / 2
+			t.dy = t.dy - cy + height / 2
+			element.setTransform(t)
 		} else {
-			element.setTransform($wnd.dojox.gfx.matrix.scale({ x: m3.xx, y: m3.yy}));
+			element.setTransform($wnd.dojox.gfx.matrix.scale({ x: m3.xx, y: m3.yy}))
 		}
 	}-*/;
 	private native void scaleDiagram(JavaScriptObject element, float value, int x, int y)/*-{

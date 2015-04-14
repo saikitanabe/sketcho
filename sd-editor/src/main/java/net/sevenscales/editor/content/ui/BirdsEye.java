@@ -13,6 +13,7 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.BoardDimensions;
+import net.sevenscales.domain.constants.Constants;
 
 
 class BirdsEye {
@@ -69,7 +70,7 @@ class BirdsEye {
 	      if (ne.getCharCode() == '+') { // compare using char code since key code is different on Firefox
 	      	int val = slider.getSliderValue() + 1;
           // logger.debug("zoom ++ {}", val);
-	      	if (val <= IScaleSlider.MAX_INDEX) {
+	      	if (val <= Constants.ZOOM_FACTORS.length) {
 	      	  slider.scaleToIndex(val);
 	      	}
 				}	
@@ -86,6 +87,14 @@ class BirdsEye {
 	      	}
 				}	
 			}
+
+	    if (!birdsEyeDown && (event.getTypeInt() == Event.ONKEYPRESS) && !editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) && UIKeyHelpers.allMenusAreClosed()) {
+	      NativeEvent ne = event.getNativeEvent();
+	      if (ne.getCharCode() == '0') { // compare using char code since key code is different on Firefox
+      	  slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX);
+				}	
+			}
+
 		}
 
 		private native void subscribeMapView(BirdsEye me)/*-{
@@ -172,7 +181,7 @@ class BirdsEye {
 	      // int posx = (int) (Math.abs(mousePosX) + clientWidth/2) * sign;
 	      int posx = -(int) (mousePosX / ratio - clientWidth / 2) - leftmost;
 	      int posy = -(int) (mousePosY / ratio - clientHeight / 2) - topmost;
-	      slider.scaleToIndex(IScaleSlider.DEFAULT_INDEX);
+	      slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX);
 	      // posx /= surface.getScaleFactor();
 	      // posy /= surface.getScaleFactor();
 	      // int posx = leftmost - mousePosX;

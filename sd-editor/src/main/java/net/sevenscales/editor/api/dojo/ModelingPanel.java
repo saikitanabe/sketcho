@@ -3,6 +3,7 @@ package net.sevenscales.editor.api.dojo;
 import java.util.List;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.editor.api.IModelingPanel;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
@@ -26,6 +27,7 @@ import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.ui.ScaleSlider;
 import net.sevenscales.editor.content.ui.UiClickContextMenu;
 import net.sevenscales.editor.content.ui.UiContextMenu;
+import net.sevenscales.editor.content.ui.IScaleSlider;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSelectionHandler;
 import net.sevenscales.editor.diagram.KeyEventListener;
@@ -107,8 +109,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		editorContext.getEventBus().addHandler(SurfaceScaleEvent.TYPE, new SurfaceScaleEventHandler() {
 			@Override
 			public void on(SurfaceScaleEvent event) {
-				final float[] factors = new float[]{0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f, 1.1f, 1.2f, 1.3f, 1.4f};
-				float factor = factors[event.getScaleFactor()];
+				float factor = Constants.ZOOM_FACTORS[event.getScaleFactor()];
 //				surface.invertScale();
 			  surface.scale(factor);
 //			  int dx = 0;

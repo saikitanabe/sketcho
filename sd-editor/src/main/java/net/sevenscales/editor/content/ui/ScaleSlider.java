@@ -1,6 +1,7 @@
 package net.sevenscales.editor.content.ui;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -29,7 +30,7 @@ public class ScaleSlider implements IScaleSlider {
 
 	private EditorContext editorContext;
 	private ISurfaceHandler surface;
-	private int currentIndex = IScaleSlider.DEFAULT_INDEX;
+	private int currentIndex = Constants.ZOOM_DEFAULT_INDEX;
 	private double currentDistance;
 
 	private SimplePanel innerScaleSlider;
@@ -128,12 +129,12 @@ public class ScaleSlider implements IScaleSlider {
 			int index = currentIndex;
 			if (distance <= currentDistance && (index -1 ) >= 0) {
 				currentIndex = index - 1;
-			} else if (distance > currentDistance && (index + 1) <= MAX_INDEX) {
+			} else if (distance > currentDistance && (index + 1) <= Constants.ZOOM_FACTORS.length) {
 				currentIndex = index + 1;
 			}
 			currentDistance = distance;
 			
-			if (currentIndex != index && currentIndex <= MAX_INDEX && currentIndex >= 0) {
+			if (currentIndex != index && currentIndex <= Constants.ZOOM_FACTORS.length && currentIndex >= 0) {
 				logger.debug("set slider to value {}...", currentIndex);
 				_setSliderValue(innerScaleSlider.getElement(), currentIndex);
 				editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(currentIndex));
@@ -176,8 +177,8 @@ public class ScaleSlider implements IScaleSlider {
   	if (typeof $wnd.jq172 == "function") {
 	  	$wnd.jq172(element).slider({ 
 	  		orientation: 'vertical', 
-	  		max: @net.sevenscales.editor.content.ui.IScaleSlider::MAX_INDEX, 
-	  		value: @net.sevenscales.editor.content.ui.IScaleSlider::DEFAULT_INDEX,
+	  		max: @net.sevenscales.domain.constants.Constants::ZOOM_FACTORS.length - 1, 
+	  		value: @net.sevenscales.domain.constants.Constants::ZOOM_DEFAULT_INDEX,
 	  		change: function(e, ui) {
 	  				me.@net.sevenscales.editor.content.ui.ScaleSlider::scale(I)(ui.value);
 	        }
@@ -185,27 +186,27 @@ public class ScaleSlider implements IScaleSlider {
   	} else if (typeof $wnd.jQuery == "function")  {
 	  	$wnd.jQuery(element).slider({ 
 	  		orientation: 'vertical', 
-	  		max: @net.sevenscales.editor.content.ui.IScaleSlider::MAX_INDEX, 
-	  		value: @net.sevenscales.editor.content.ui.IScaleSlider::DEFAULT_INDEX,
+	  		max: @net.sevenscales.domain.constants.Constants::ZOOM_FACTORS.length - 1, 
+	  		value: @net.sevenscales.domain.constants.Constants::ZOOM_DEFAULT_INDEX,
 	  		change: function(e, ui) {
 	  				me.@net.sevenscales.editor.content.ui.ScaleSlider::scale(I)(ui.value);
 	        }
 	  		});
   	}
   	
-  	if (typeof $wnd.jq172 == "function") {
-	  	$wnd.jq172(element).on( "slidechange", function(event, ui) {
-	  		me.@net.sevenscales.editor.content.ui.ScaleSlider::scale(I)
-			    ($wnd.jQuery(element).slider("value"));
-			});
-  	} else if (typeof $wnd.jQuery == "function") $wnd.jQuery(element).on( "slidechange", function(event, ui) {
-  		me.@net.sevenscales.editor.content.ui.ScaleSlider::scale(I)
-		    ($wnd.jQuery(element).slider("value"));
-		});
+  // 	if (typeof $wnd.jq172 == "function") {
+	 //  	$wnd.jq172(element).on( "slidechange", function(event, ui) {
+	 //  		me.@net.sevenscales.editor.content.ui.ScaleSlider::scale(I)
+		// 	    ($wnd.jQuery(element).slider("value"));
+		// 	});
+  // 	} else if (typeof $wnd.jQuery == "function") $wnd.jQuery(element).on( "slidechange", function(event, ui) {
+  // 		me.@net.sevenscales.editor.content.ui.ScaleSlider::scale(I)
+		//     ($wnd.jQuery(element).slider("value"));
+		// });
 	}-*/;
 
   public void reset() {
-    scaleToIndex(DEFAULT_INDEX);
+    scaleToIndex(Constants.ZOOM_DEFAULT_INDEX);
   }
 
 }
