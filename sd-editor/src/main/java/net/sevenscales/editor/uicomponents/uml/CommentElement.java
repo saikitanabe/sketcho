@@ -758,6 +758,14 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   	return super.getOwnerComponent(actionType);
 	}
 
+  @Override
+  public void updateTimestamp(long createdAt, long updatedAt) {
+		CommentDTO cdto = (CommentDTO) getDiagramItem();
+		cdto.setCreatedAt(createdAt);
+		cdto.setUpdatedAt(updatedAt);
+		setTitle();
+  }
+
 	@Override
 	public void copyFrom(IDiagramItemRO diagramItem) {
 		super.copyFrom(diagramItem);

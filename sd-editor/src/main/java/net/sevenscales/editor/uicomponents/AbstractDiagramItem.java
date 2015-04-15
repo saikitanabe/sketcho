@@ -1139,6 +1139,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   // }
 
   @Override
+  public void updateTimestamp(long createdAt, long updatedAt) {
+  }
+
+  @Override
   public void copyFrom(IDiagramItemRO diagramItem) {
     IDiagramItemRO current = getDiagramItem();
 

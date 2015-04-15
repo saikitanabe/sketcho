@@ -192,6 +192,7 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   * simpler.
   */
   void duplicateFrom(IDiagramItemRO diagramItem);
+  void updateTimestamp(long createdAt, long updatedAt);
 	
 	// each element needs to calculate own values based on these
 	void setShape(int[] shape);

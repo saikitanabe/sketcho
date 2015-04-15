@@ -305,6 +305,23 @@ public class OperationQueue {
 		return guids.length() > 0 && matched.size() == 0;
 	}
 
+	public JsArray<JsSendOperation> getOperationsByGuids(JsArrayString guids) {
+		JsArray<JsSendOperation> result = JavaScriptObject.createArray().cast();
+		// remove guided operations from the queue
+    ListIterator<SendOperation> listIterator = queuedOperations.listIterator();
+    while (listIterator.hasNext()) {
+    	SendOperation so = listIterator.next();
+			for (int i = 0; i < guids.length(); ++i) {
+				String guid = guids.get(i);
+				if (guid != null && guid.equals(so.getGuid())) {
+					result.push(so.toJson());
+				}
+    	}
+    }
+
+    return result;
+	}
+
 	public void clear() {
 		queuedOperations.clear();
 		storeQueue();			

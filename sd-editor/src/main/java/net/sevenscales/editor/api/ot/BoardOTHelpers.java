@@ -13,6 +13,7 @@ import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.DiagramItemField;
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.js.JsTimestamp;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
@@ -34,6 +35,7 @@ import net.sevenscales.editor.gfx.domain.Color;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
+import com.google.gwt.core.client.JsArray;
 
 public class BoardOTHelpers {
 	public static final Color HIGHLIGHT_COLOR = new Color(0x00, 0xE0, 0x00, 1);
@@ -53,6 +55,17 @@ public class BoardOTHelpers {
 	public void applyOperationsToGraphicalView(String originator, List<DiagramApplyOperation> operations) throws MappingNotFoundException {
 		for (DiagramApplyOperation ap : operations) {
 			applyOperationToGraphicalView(originator, ap.getOperation(), ap.getItems());
+		}
+	}
+
+	public void updateTimestamps(JsArray<JsTimestamp> timestamps) {
+		DiagramSearch search = surface.createDiagramSearch();
+		for (int i = 0; i < timestamps.length(); ++i) {
+			JsTimestamp stamp = timestamps.get(i);
+			Diagram diagram = search.findByClientId(stamp.getClientId());
+			if (diagram != null) {
+				diagram.updateTimestamp((long) stamp.getCreatedAt(), (long) stamp.getUpdatedAt());
+			}
 		}
 	}
 	

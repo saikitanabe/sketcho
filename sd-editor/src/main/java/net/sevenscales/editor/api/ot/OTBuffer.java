@@ -4,6 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.google.gwt.core.client.JsArray;
+
+import net.sevenscales.domain.js.JsTimestamp;
 import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
@@ -52,6 +55,7 @@ public class OTBuffer {
 		}
 	}
 
+
 	/**
 	* Clears aws image url.
 	*/
@@ -79,6 +83,11 @@ public class OTBuffer {
 		}
 	}
 
+	public void updateTimestamps(JsArray<JsTimestamp> timestamps)	{
+		updateBufferComments(undoBuffer, timestamps);
+		updateBufferComments(redoBuffer, timestamps);
+	}
+
 	private void updateCommentInsertOperationTimeStamps(OTOperation operation, List<IDiagramItemRO> updates) {
 		if (OTOperation.INSERT.equals(operation)) {
 			updateBufferComments(undoBuffer, updates);
@@ -95,6 +104,15 @@ public class OTBuffer {
 		}
 	}
 
+	private void updateBufferComments(LinkedList<List<CompensationModel>> buffer, JsArray<JsTimestamp> timestamps) {
+		for (List<CompensationModel> cms : buffer) {
+			for (CompensationModel cm : cms) {
+				updateTimestamps(cm.undoJson, timestamps);
+				updateTimestamps(cm.redoJson, timestamps);
+			}
+		}
+	}
+
 	private void updateCommentItems(OTOperation bufferoper, List<IDiagramItemRO> items, List<IDiagramItemRO> updates) {
 		if (OTOperation.INSERT.equals(bufferoper)) {
 			for (IDiagramItemRO diro : items) {
@@ -106,6 +124,22 @@ public class OTBuffer {
 							old.setCreatedAt(up.getCreatedAt());
 							old.setUpdatedAt(up.getUpdatedAt());
 						}
+					}
+				}
+			}
+		}
+	}
+
+	private void updateTimestamps(List<IDiagramItemRO> items, JsArray<JsTimestamp> timestamps) {
+		for (IDiagramItemRO diro : items) {
+			for (int i = 0; i < timestamps.length(); ++i) {
+				JsTimestamp timestamp = timestamps.get(i);
+
+				if (diro.getClientId().equals(timestamp.getClientId())) {
+					if (diro instanceof CommentDTO) {
+						CommentDTO old = (CommentDTO) diro;
+						old.setCreatedAt((long)timestamp.getCreatedAt());
+						old.setUpdatedAt((long)timestamp.getUpdatedAt());
 					}
 				}
 			}
