@@ -129,12 +129,12 @@ public class ScaleSlider implements IScaleSlider {
 			int index = currentIndex;
 			if (distance <= currentDistance && (index -1 ) >= 0) {
 				currentIndex = index - 1;
-			} else if (distance > currentDistance && (index + 1) <= Constants.ZOOM_FACTORS.length) {
+			} else if (distance > currentDistance && (index + 1) < Constants.ZOOM_FACTORS.length) {
 				currentIndex = index + 1;
 			}
 			currentDistance = distance;
 			
-			if (currentIndex != index && currentIndex <= Constants.ZOOM_FACTORS.length && currentIndex >= 0) {
+			if (currentIndex != index && currentIndex < Constants.ZOOM_FACTORS.length && currentIndex >= 0) {
 				logger.debug("set slider to value {}...", currentIndex);
 				_setSliderValue(innerScaleSlider.getElement(), currentIndex);
 				editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(currentIndex));
