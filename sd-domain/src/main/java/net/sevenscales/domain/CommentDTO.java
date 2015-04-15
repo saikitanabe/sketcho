@@ -11,24 +11,22 @@ import net.sevenscales.domain.api.IExtension;
 public class CommentDTO extends DiagramItemDTO {
 	private String username;
 	private String userDisplayName;
-	private long createdAt;
-	private long updatedAt;
 
 	public CommentDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer tsize,
 			Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, List<UrlLinkDTO> links, String parentThreadId, String username, String userDisplayName, long createdAt, long updatedAt) {
 		super(text, type, shape, extension, backgroundColor, textColor, tsize, /* shapeProperties */null, /* displayOrder */ null, version, id, clientId, customData, crc32, /*group*/ null, annotation, resolved, links, parentThreadId, /* data */ null);
 		this.username = username;
 		this.userDisplayName = userDisplayName;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
+		setCreatedAt(createdAt);
+		setUpdatedAt(updatedAt);
 	}
 
 	@Override
 	public String toString() {
 		return "CommentDTO=" + "[" + super.toString() + "][username=" + username 
 				+ ", userDisplayName=" + userDisplayName
-				+ ", createdAt=" + createdAt 
-				+ ", updatedAt=" + updatedAt
+				+ ", createdAt=" + getCreatedAt() 
+				+ ", updatedAt=" + getUpdatedAt()
 				+ "]";
 	}
 
@@ -57,22 +55,6 @@ public class CommentDTO extends DiagramItemDTO {
 		return userDisplayName;
 	}
 
-	public long getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(long cat) {
-		this.createdAt = cat;
-	}
-
-	public long getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(long uat) {
-		this.updatedAt = uat;
-	}
-
 	@Override
 	public boolean isComment() {
 		return true;
@@ -90,8 +72,8 @@ public class CommentDTO extends DiagramItemDTO {
 			CommentDTO c = (CommentDTO) di;
 			username = c.username;
 			userDisplayName = c.userDisplayName;
-			createdAt = c.createdAt;
-			updatedAt = c.updatedAt;
+			setCreatedAt(c.getCreatedAt());
+			setUpdatedAt(c.getUpdatedAt());
 		}
 	}
 

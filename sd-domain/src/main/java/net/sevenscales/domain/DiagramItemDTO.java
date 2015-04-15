@@ -39,6 +39,8 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	private List<UrlLinkDTO> links;
 	private String parentId;
 	private JavaScriptObject data;
+	private Long createdAt;
+	private Long updatedAt;
 
 	public DiagramItemDTO() {
   }
@@ -283,6 +285,25 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 
 	@Override
+	public Long getCreatedAt() {
+		return createdAt;
+	}
+	@Override
+	public void setCreatedAt(Long cat) {
+		this.createdAt = cat;
+	}
+
+	@Override
+	public Long getUpdatedAt() {
+		return updatedAt;
+	}
+	@Override
+	public void setUpdatedAt(Long uat) {
+		this.updatedAt = uat;
+	}
+
+
+	@Override
 	public JavaScriptObject getData() {
 		return this.data;
 	}
@@ -394,6 +415,8 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		annotation = dit.annotation;
 		resolved = dit.resolved;
 		parentId = dit.parentId;
+		createdAt = dit.createdAt;
+		updatedAt = dit.updatedAt;
 
 		List<? extends IUrlLinkRO> fromLinks = di.getLinks();
 		if (fromLinks != null) {
@@ -491,6 +514,15 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		if (crc32 != item.getCrc32()) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.CRC);
+		}
+
+		if (DiagramItemUtils.checkIfNotSame(createdAt, item.getCreatedAt())) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.CREATED_AT);
+		}
+		if (DiagramItemUtils.checkIfNotSame(updatedAt, item.getUpdatedAt())) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.UPDATED_AT);
 		}
 
 		if (DiagramItemUtils.checkIfNotSame(group, item.getGroup())) {

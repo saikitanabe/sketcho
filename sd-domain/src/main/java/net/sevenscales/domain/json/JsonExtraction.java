@@ -57,8 +57,6 @@ public class JsonExtraction {
 		if (obj != null) {
     	obj.put("cby", new JSONString(safeJsonString(comment.getUsername())));
     	obj.put("cbyd", new JSONString(safeJsonString(comment.getUserDisplayName())));
-    	obj.put("cat", new JSONNumber(comment.getCreatedAt()));
-    	obj.put("uat", new JSONNumber(comment.getUpdatedAt()));
     }
 		return result;
 	}
@@ -92,6 +90,13 @@ public class JsonExtraction {
     result.put("clientId", new JSONString(safeJsonString(item.getClientId())));
     result.put("cd", new JSONString(safeJsonString(item.getCustomData())));
     result.put("crc", new JSONNumber(item.getCrc32()));
+
+    if (item.getCreatedAt() != null) {
+      result.put(DiagramItemField.CREATED_AT.getValue(), new JSONNumber(item.getCreatedAt()));
+    }
+    if (item.getUpdatedAt() != null) {
+      result.put(DiagramItemField.UPDATED_AT.getValue(), new JSONNumber(item.getUpdatedAt()));
+    }
 
     if (item.isGroup()) {
       // 0 is default and is omitted

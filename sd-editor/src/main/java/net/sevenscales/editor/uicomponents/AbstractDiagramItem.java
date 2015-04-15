@@ -1139,7 +1139,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   // }
 
   @Override
-  public void updateTimestamp(long createdAt, long updatedAt) {
+  public void updateTimestamp(Long createdAt, Long updatedAt) {
+    IDiagramItem di = getDiagramItem();
+    di.setCreatedAt(createdAt);
+    di.setUpdatedAt(updatedAt);
   }
 
   @Override

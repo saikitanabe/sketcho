@@ -37,6 +37,8 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	String getGroup();
 	JavaScriptObject getData();
 	boolean isGroup();
+	Long getCreatedAt();
+	Long getUpdatedAt();
 	int getAnnotation();
 	int getResolved();
 	boolean isAnnotation();

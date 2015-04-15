@@ -3,6 +3,9 @@ package net.sevenscales.editor.api.ot;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.google.gwt.core.client.JsArray;
+
+import net.sevenscales.domain.js.JsTimestamp;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
@@ -35,6 +38,17 @@ public class BoardDocument implements UniqueChecker {
 	public BoardDocument(List<? extends IDiagramItemRO> doc, String boardId, String logicalName) {
 		this(boardId, logicalName);
 		reset(doc);
+	}
+
+	public void updateTimestamps(JsArray<JsTimestamp> timestamps) {
+		for (int i = 0; i < timestamps.length(); ++i) {
+			JsTimestamp timestamp = timestamps.get(i);
+			IDiagramItem di = (IDiagramItem) findItem(timestamp.getClientId());
+			if (di != null) {
+				di.setCreatedAt((long) timestamp.getCreatedAt());
+				di.setUpdatedAt((long) timestamp.getUpdatedAt());
+			}
+		}
 	}
 	
 	public void apply(List<ApplyHelpers.DiagramApplyOperation> operations) {

@@ -34,4 +34,6 @@ public interface IDiagramItem extends IDiagramItemRO {
   void unresolve();
   void addLink(String link);
   void setLink(String link);
+  void setCreatedAt(Long createdAt);
+  void setUpdatedAt(Long updatedAt);
 }
