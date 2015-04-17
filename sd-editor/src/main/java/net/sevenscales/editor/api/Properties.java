@@ -650,6 +650,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		this.editorCommon.fireEditorOpen();
 		popup.selectAll(justCreated);
 		popup.show();
+		popup.getElement().getStyle().setPosition(com.google.gwt.dom.client.Style.Position.FIXED);
 
 		// show element context menu always when showing editor
 		surface.getEditorContext().getEventBus().fireEvent(new SelectionMouseUpEvent(diagram));
