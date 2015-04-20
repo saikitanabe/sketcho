@@ -66,10 +66,9 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import net.sevenscales.editor.content.utils.JQuery;
 
-public class Properties extends SimplePanel implements DiagramSelectionHandler, ClickDiagramHandler, SizeChangedHandler, IEditor {
+public class Properties extends SimplePanel implements DiagramSelectionHandler, ClickDiagramHandler, SizeChangedHandler, IEditor, CodeMirror.TextChanged {
 	private static final SLogger logger = SLogger.createLogger(Properties.class);
 
-	private static final String TAB_AS_SPACES = "    ";
 	private static final String PROPERTIES_EDITOR_STYLE = "properties-TextArea2";
 	
   private Map<ISurfaceHandler,Boolean> surfaces = new HashMap<ISurfaceHandler, Boolean>();
@@ -120,8 +119,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		this.editorContext = editorContext;
 		addStyleName("properties-TextArea");
 		setHeight("100%");
-		VerticalPanel panel = new VerticalPanel();
-		panel.setHeight("100%");
 
 		editorCommon = new EditorCommon(surface, new EditorCommon.HideEditor() {
 			public void hide() {
@@ -129,8 +126,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			}
 		});
 		
-		TextArea textArea = new TextArea();
-		textArea.getElement().setId("markdown");
+		// TextArea textArea = new TextArea();
+		// textArea.getElement().setId("markdown");
 
 		// TODO configure TAB to 4 spaces on CodeMirror
 		// textArea.addKeyDownHandler(new KeyDownHandler() {
@@ -153,7 +150,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 //		this.textArea.setWidth("170px");
 //		this.textArea.setHeight(height + "px");
-		textArea.setStyleName(PROPERTIES_EDITOR_STYLE);
+		// textArea.setStyleName(PROPERTIES_EDITOR_STYLE);
 //		textArea.setVisibleLines(20); 
 //		textArea.setCharacterWidth(30);
 
@@ -231,7 +228,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 		popup = new CustomPopupCodeMirror();
 		popup.setStyleName("propertyPopup");
-		popup.setWidget(textArea);
+		codeMirror =new CodeMirror(this);
+		popup.setWidget(codeMirror);
 		// autohide is not enabled since property editor is closed manually and autohide causes problems
 		popup.setAutoHideEnabled(false);
 //		popup.setAutoHideEnabled(true);
@@ -281,22 +279,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		// >>>>>>>>>>>> SOLU
 		// handleExternalKeyCode(this);
 		// <<<<<<<<<<<< SOLU
-
-		setWidget(panel);
-		codeMirror = new CodeMirror(init(textArea.getElement(), this));
 		popup.setCodeMirror(codeMirror);
 	}
-
-	private native JavaScriptObject init(Element textarea, Properties me)/*-{
-		var codeMirror = $wnd.$(textarea).markdownify()
-
-		codeMirror.on('change', function() {
-			// $(current_element).html(editor.getValue())
-			me.@net.sevenscales.editor.api.Properties::textAreaChanged()()
-		})
-
-		return codeMirror
-	}-*/;
 
 	// private native void onTextAreaChange(Element e, Properties me)/*-{
 	// 	$wnd.$(e).bind('input propertychange', function(){
@@ -305,7 +289,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	// 	});		
 	// }-*/;
 
-	private void textAreaChanged() {
+	@Override
+	public void onTextChanged() {
 		_setTextFromTextArea();
 	}
 
