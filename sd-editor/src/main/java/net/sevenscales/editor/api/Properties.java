@@ -641,6 +641,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 		// textArea.setCursorPos(textArea.getText().length());
 		codeMirror.cursorEnd();
+		codeMirror.setMarkdownMode(selectedDiagram.isMarkdownEditor());
 
 //		setFocus(true);
 

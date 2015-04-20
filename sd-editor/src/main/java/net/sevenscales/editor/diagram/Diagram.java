@@ -269,6 +269,8 @@ public interface Diagram extends SourcesMouseDiagramEvents {
 	
 	boolean isTextColorAccordingToBackgroundColor();
 
+  boolean isMarkdownEditor();
+
   /**
   * Support for cumulative transformations, since Safari doesn't support applyTransformation.
   */

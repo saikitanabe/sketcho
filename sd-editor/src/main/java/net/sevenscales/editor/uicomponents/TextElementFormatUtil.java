@@ -633,4 +633,8 @@ public class TextElementFormatUtil {
     return false;
   }
 
+  public boolean isMarkdownEditor() {
+    return false;
+  }
+
 }

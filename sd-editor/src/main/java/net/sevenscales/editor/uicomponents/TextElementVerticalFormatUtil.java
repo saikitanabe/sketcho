@@ -173,5 +173,9 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
     return result;
   }
 
+  @Override
+  public boolean isMarkdownEditor() {
+    return true;
+  }
 
 }

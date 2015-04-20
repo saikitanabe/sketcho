@@ -197,4 +197,9 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
     // text.setAttribute("style", "text-anchor:" + textAnchor);
   }
 
+  @Override
+  public boolean isMarkdownEditor() {
+    return true;
+  }
+
 }

@@ -4,14 +4,12 @@
 	</ui:style>
 	
 	<g:HTMLPanel>
-		<div class='markdownify-menu' data-target='markdown'>
-      <a class='btn--insert pure-button' data-type='line' data-prefix='# ' href='javascript:void(0)'>H1</a>
+		<div ui:field="menu" class='markdownify-menu' data-target='markdown'>
+      <a class='btn--insert pure-button first' data-type='line' data-prefix='# ' href='javascript:void(0)'>H1</a>
       <a class='btn--insert pure-button' data-type='line' data-prefix='## ' href='javascript:void(0)'>H2</a>
       <a class='btn--insert pure-button' data-prefix='_' data-suffix='_' href='javascript:void(0)'><i class="fa fa-italic"></i></a>
       <a class='btn--insert pure-button' data-prefix='**' data-suffix='**' href='javascript:void(0)'><i class="fa fa-bold"></i></a>
-      <a class='btn--insert pure-button' data-type='line' data-prefix='* ' href='javascript:void(0)'><i class='fa fa-list'></i></a>
-      <a class='btn--insert pure-button' data-prefix='1. ' href='javascript:void(0)'><i class='fa fa-list-ol'></i></a>
-      <a class='btn--insert pure-button' data-type='link' href='javascript:void(0)'><i class='fa fa-anchor'></i></a>
+      <a class='btn--insert pure-button last' data-type='line' data-prefix='* ' href='javascript:void(0)'><i class='fa fa-list'></i></a>
   	</div>
   	<textarea ui:field='textArea'></textarea>
 	</g:HTMLPanel>

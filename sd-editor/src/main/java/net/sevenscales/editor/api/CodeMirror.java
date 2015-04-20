@@ -8,6 +8,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.dom.client.TextAreaElement;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Style;
 
 
 class CodeMirror extends Composite {
@@ -21,7 +23,9 @@ class CodeMirror extends Composite {
 		void onTextChanged();
 	}
 
+	@UiField DivElement menu;
 	@UiField TextAreaElement textArea;
+
 	private TextChanged changeListener;
 	private JavaScriptObject cm;
 
@@ -32,6 +36,22 @@ class CodeMirror extends Composite {
 
 		cm = init(textArea, this);
 	}
+
+	public void setMarkdownMode(boolean markdownMode) {
+		String mode = "";
+		Style.Display menuDisplay = Style.Display.NONE;
+		if (markdownMode) {
+			mode = "markdown";
+			menuDisplay = Style.Display.INLINE_BLOCK;
+		}
+
+		menu.getStyle().setDisplay(menuDisplay);
+		setMarkdownMode(cm, mode);
+	}
+
+	private native void setMarkdownMode(JavaScriptObject cm, String mode)/*-{
+		cm.setOption("mode", mode);
+	}-*/;
 
 	private native JavaScriptObject init(Element textarea, CodeMirror me)/*-{
 		var codeMirror = $wnd.$(textarea).markdownify()

@@ -1713,6 +1713,16 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	  return false;
 	}
 
+  @Override
+  public boolean isMarkdownEditor() {
+    boolean result = false;
+    TextElementFormatUtil formatter = getTextFormatter();
+    if (formatter != null) {
+      result = formatter.isMarkdownEditor();
+    }
+    return result;
+  }
+
   public void snapshotTransformations() {
     transformX = getTransformX();
     transformY = getTransformY();
