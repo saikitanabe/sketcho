@@ -126,55 +126,11 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 				Properties.this.hide();
 			}
 		});
-		
-		// TextArea textArea = new TextArea();
-		// textArea.getElement().setId("markdown");
-
-		// TODO configure TAB to 4 spaces on CodeMirror
-		// textArea.addKeyDownHandler(new KeyDownHandler() {
-		//   @Override
-		//   public void onKeyDown(KeyDownEvent event) {
-		//     if (event.getNativeKeyCode() == KeyCodes.KEY_TAB) {
-		//       event.preventDefault();
-		//       event.stopPropagation();
-		// 			if(event.getSource() instanceof TextArea) {
-		//         TextArea ta = (TextArea) event.getSource();
-		//         int index = ta.getCursorPos();
-		//         String text = ta.getText();
-		//         ta.setText(text.substring(0, index) 
-		//                    + TAB_AS_SPACES + text.substring(index));
-		//         ta.setCursorPos(index + TAB_AS_SPACES.length());
-		//       }		      
-		//     }
-		//   }
-		// });
-
-//		this.textArea.setWidth("170px");
-//		this.textArea.setHeight(height + "px");
-		// textArea.setStyleName(PROPERTIES_EDITOR_STYLE);
-//		textArea.setVisibleLines(20); 
-//		textArea.setCharacterWidth(30);
-
-		// >>>>>>>>>>>> COMMENTED 18.11.2014
-		// - new onTextAreChange event that handles also copy paste + dictionary
-		// textArea.addKeyUpHandler(new KeyUpHandler() {
-		//   public void onKeyUp(KeyUpEvent event) {
-  // 	    if (selectedDiagram != null) {
-  // 	      // enable auto resize if element supports that
-  // 	      // when text is inserted by user.
-  // 	      _setTextFromTextArea();
-  //       }
-		//   }
-		// });
-		// >>>>>>>>>>> COMMENTED 18.11.2014
-
-		// onTextAreaChange(textArea.getElement(), this);
-		
+				
 		editorContext.getEventBus().addHandler(RelationshipTypeSelectedEvent.TYPE, new RelationshipTypeSelectedEventHandler() {
 			private void changeSelected(Diagram diagram, RelationshipTypeSelectedEvent event) {
 				if (diagram instanceof Relationship2) {
 					Relationship2 rel = (Relationship2) diagram;
-//					System.out.println("caps: " + ((Relationship2) selectedDiagram).getRelationshipShape().type + " => " + event.getRelationshipType().getValue());
 					if (event.getRelationshipType().equals(RelationShipType.REVERSE)) {
 						rel.reverse();
 				    Properties.this.editorContext.getEventBus().fireEvent(new PotentialOnChangedEvent(rel));
@@ -234,9 +190,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		popup.setWidget(codeMirror.getUi());
 		// autohide is not enabled since property editor is closed manually and autohide causes problems
 		popup.setAutoHideEnabled(false);
-//		popup.setAutoHideEnabled(true);
 		popup.setAutoHideOnHistoryEventsEnabled(false);
-//		popup.setAnimationEnabled(true);
 		popup.addCloseHandler(new CloseHandler<PopupPanel>() {
 			@Override
 			public void onClose(CloseEvent<PopupPanel> event) {
@@ -252,9 +206,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 					// selection stays if not unselected separately on non touch device
 					selectedDiagram.unselect();
 				}
-//				selectedDiagram.setVisible(true);
-//				Properties.this.surface.scale(currentScale);
-//				Properties.this.surface.scaleDiagram(selectedDiagram);
 				clean();
 				logger.debug("close properties editor... done");
 			}
@@ -283,13 +234,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		// <<<<<<<<<<<< SOLU
 		popup.setCodeMirror(codeMirror);
 	}
-
-	// private native void onTextAreaChange(Element e, Properties me)/*-{
-	// 	$wnd.$(e).bind('input propertychange', function(){
-	// 	  // alert($wnd.$(this).val());
-	// 	  me.@net.sevenscales.editor.api.Properties::textAreaChanged()();
-	// 	});		
-	// }-*/;
 
 	@Override
 	public void onTextChanged() {
@@ -409,13 +353,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		
 	public void addSurface(ISurfaceHandler surfaceHandler, boolean modifiable) {
 	  surfaces.put(surfaceHandler, modifiable);
-	  // surfaceHandler.addSelectionListener(this);
-//	  if (modifiable) {
-	  // currently it is allowed to modify diagram item text, because otherwise 
-	  // would need to implement text area handling
-	  // this might be even good idea that user can try out things without touching the modeling area...
-//	    surfaceHandler.addKeyEventHandler(this);
-//	  }
 	}
 
 	public void selected(List<Diagram> senders) {
@@ -426,13 +363,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			selectedDiagram = senders.get(0);
 		}
 		
-//		textArea.setText(sender.getText());
-//    textArea.setFocus(true);
-//    
-//		Info info = sender.getInfo();
-//		popup.setPopupPosition(surface.getAbsoluteLeft() - 180, surface.getAbsoluteTop() + info.getTop());
-//		popup.show();
-//    
 //    if (editorContext.get(EditorProperty.PROPERTY_EDITOR_SELECT_ALL_ENABLED).equals(true)) {
 //    	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 //				@Override
@@ -454,15 +384,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	   
 	  applyTextToDiagram();
 	  clean();
-//	  if (reset) {
-//	    selectedDiagram = null;
-//	    textArea.setText("");
-//	  }
 	}
 	
 	private void clean() {
     selectedDiagram = null;
-    // textArea.setText("");
     codeMirror.setText("");
 		modifiedAtLeastOnce = false;
 	}
@@ -470,10 +395,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private void applyTextToDiagram() {
 	  boolean editorIsOpen = editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN);
 		if (editorIsOpen && selectedDiagram != null && selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
-			// TODO check later if problems when not hiding/showin any longer; note element doesn't dynamically change size
-//			selectedDiagram.setVisible(true);
-			// textArea.setVisible(false);
-			
 			// reset text edit location
 			textEditX = 0;
 			textEditY = 0;
@@ -489,22 +410,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	public void unselect(Diagram sender) {
 	}
 
-//  private void setFocus(final boolean b) {
-//  	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-//			@Override
-//			public void execute() {
-//		    textArea.setFocus(b);
-//		    textAreaHeight.setCursorPos(textArea.getText().length());
-//			}
-//		});
-//  }
-  
-//  private void setSelectedDiagramText() {
-//		selectedDiagram.setAutoResize(true);
-//		setSelectedDiagramText(textArea.getText());
-//		selectedDiagram.setAutoResize(false);
-//  }
-  
 	private void setSelectedDiagramText(String text) {
 		logger.debug("setSelectedDiagramText {}...", text);
 		if (text.equals(selectedDiagram.getText())) {
@@ -512,21 +417,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			return;
 		}
 
-		// >>>>>>>>>>>> COMMENTED 18.11.2014
-		// setMeasurementPanelText(text);
-		// <<<<<<<<<<<< COMMENTED 18.11.2014
-
-		// if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
-	    // DIV tryouts,
-			// setMeasurementPanelText(text);
-			
-			// TODO is this still needed?
-//			selectedDiagram.setVisible(false);
-		// }
-
     selectedDiagram.setText(codeMirror.getText(), textEditX, textEditY);
     modifiedAtLeastOnce = true;
-//    fireChanged(selectedDiagram);
     sendBuffer();
     // synchronous version, starts to lag with long text
     // editorCommon.fireChangedWithRelatedRelationships(selectedDiagram);
@@ -561,7 +453,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			@Override
 			public boolean execute() {
 				_doSend();		    
-//		    System.out.println("buffer != lastSentText: " + buffer + " " + lastSentText + " " + buffer != lastSentText);
 				boolean doitagain = !bufferTextIsSent();
 				return doitagain;
 			}
@@ -582,7 +473,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 	@Override
 	public void onClick(Diagram sender, int x, int y, int keys) {
-//		selectedDiagram = sender;
 	}
 
 	@Override
@@ -641,20 +531,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		setTextAreaText(text);
 		_setTextAreaSize(diagram);
 
-		// textArea.setCursorPos(textArea.getText().length());
 		codeMirror.cursorEnd();
 		codeMirror.setMarkdownMode(selectedDiagram.isMarkdownEditor());
 
 //		setFocus(true);
-
-//		currentScale = surface.getScaleFactor();
-//		surface.invertScale();
-		
-//		MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
-//		int x = point.getX() + surface.getRootLayer().getTransformX();
-//		int y = point.getY() + surface.getRootLayer().getTransformY();
-//
-//		surface.invertScaleDiagram(diagram, diagram.getTextAreaLeft(), diagram.getTextAreaTop());
 
 		this.editorCommon.fireEditorOpen();
 		popup.selectAll(justCreated);
@@ -663,38 +543,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 		// show element context menu always when showing editor
 		surface.getEditorContext().getEventBus().fireEvent(new SelectionMouseUpEvent(diagram));
-	  
-//	  if (editorContext.get(EditorProperty.PROPERTY_EDITOR_SELECT_ALL_ENABLED).equals(true)) {
-//	  	// property used => need to be reset if needed again
-//			surface.getEditorContext().set(EditorProperty.PROPERTY_EDITOR_SELECT_ALL_ENABLED, false);
-//			textArea.setFocus(true);
-//			textArea.setSelectionRange(0, textArea.getText().length());
-//	  	Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-//				@Override
-//				public void execute() {
-//					if (textArea.getText().length() > 0) {
-//						logger.debug("selected whole text...");
-//						textArea.setFocus(true);
-//						textArea.setSelectionRange(0, textArea.getText().length());
-//					}
-//				}
-//			});
-//	  }
-
-//	  	Scheduler.get().scheduleFixedDelay(new RepeatingCommand() {
-//				@Override
-//				public boolean execute() {
-//					if (textArea.getText().length() > 0) {
-//						logger.debug("selected whole text...");
-//						textArea.setFocus(true);
-//						textArea.selectAll();
-//						textArea.setSelectionRange(0, textArea.getText().length());
-//					}
-//					return !(textArea.getCursorPos() == textArea.getText().length()); 
-//				}
-//			}, 50);
-
-//	  }
 	}
 
 	private void setTextAreaText(String text) {
@@ -702,14 +550,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			return;
 		}
 		
-		// textArea.setText(text);
 		codeMirror.setText(text);
-		
-		// if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
-		// >>>>>>>>>>>> COMMENTED 18.11.2014
-		// setMeasurementPanelText(text);
-		// <<<<<<<<<<<< COMMENTED 18.11.2014
-		// }
 	}
 
 	private void setMeasurementPanelText(String text) {
@@ -724,15 +565,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			@Override
 			public void execute() {
 				codeMirror.setHeight(MeasurementPanel.getOffsetHeight());
-				// textArea.getElement().getStyle().setHeight(MeasurementPanel.getOffsetHeight(), Unit.PX);
 			}
 		});
 	}
-
-	// private void setSelectedDiagramHeight() {
-	// 	selectedDiagram.setHeightAccordingToText();
- //    // selectedDiagram.setHeight(MeasurementPanel.getMeasurementPanel().getOffsetHeight() + TextElementVerticalFormatUtil.DEFAULT_VERTICAL_TEXT_MARGIN);
- //  }
 
 	private void setTextAreaHeight() {
 		if (selectedDiagram != null) {
@@ -745,7 +580,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 				int lheight = lineHeight(dFontSize);
 				int textAreaHeight = lheight * rows;
 				codeMirror.setHeight(textAreaHeight + lheight);
-				// textArea.getElement().getStyle().setHeight(textAreaHeight + lheight, Unit.PX);
 			}
 		}
 	}
@@ -764,53 +598,38 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 		if (diagram.supportsOnlyTextareaDynamicHeight()) {
 			if ("transparent".equals(diagram.getTextAreaBackgroundColor())) {
-				// textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
 				codeMirror.setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
 			} else {
-				// textArea.getElement().getStyle().setBackgroundColor(diagram.getTextAreaBackgroundColor());
 				codeMirror.setBackgroundColor(diagram.getTextAreaBackgroundColor());
 			}
 		} else {
-			// textArea.getElement().getStyle().setBackgroundColor("transparent");
 			codeMirror.setBackgroundColor("transparent");
 		}
 
 		if ("transparent".equals(diagram.getTextAreaBackgroundColor())) {
-			// textArea.getElement().getStyle().setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
-			// textArea.getElement().getStyle().setColor(Theme.getCurrentColorScheme().getTextColor().toHexStringWithHash());
 			codeMirror.setColor(Theme.getCurrentColorScheme().getTextColor().toHexStringWithHash());
 		} else {
-			// textArea.getElement().getStyle().setColor("#" + diagram.getTextColor().toHexString());
 			codeMirror.setColor("#" + diagram.getTextColor().toHexString());
-			// textArea.getElement().getStyle().setBackgroundColor(diagram.getTextAreaBackgroundColor());
 			codeMirror.setBackgroundColor(diagram.getTextAreaBackgroundColor());
 		}
 
 
 		int dFontSize = diagram.getFontSize() != null ? diagram.getFontSize() : 12;
 		int fontSize = ((int) (dFontSize * surface.getScaleFactor()));
-		// textArea.getElement().getStyle().setProperty("fontSize", fontSize + "px");
 		codeMirror.setFontSize(fontSize + "px");
-
-		// textArea.getElement().getStyle().setProperty("lineHeight", lineHeight(fontSize) + "px");
 		codeMirror.setLineHeight(lineHeight(fontSize) + "px");
 
-		// textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth() * surface.getScaleFactor(), Unit.PX);
 		codeMirror.setWidth((int) (diagram.getTextAreaWidth() * surface.getScaleFactor()));
 		setTextAreaHeight();
 		popup.setContentWidth((int) (diagram.getTextAreaWidth() * surface.getScaleFactor()));
 
 		if (surface.getScaleFactor() > 1) {
 			String paddingTop = ((int) (2 * surface.getScaleFactor())) + "";
-			// textArea.getElement().getStyle().setProperty("paddingTop", paddingTop);
 		}
 
-		// textArea.getElement().getStyle().setProperty("textAlign", diagram.getTextAreaAlign());
 		codeMirror.setTextAlign(diagram.getTextAreaAlign());
 		
 		if (surface.getScaleFactor() != 1.0f && !"transparent".equals(diagram.getTextAreaBackgroundColor())) {
-//			diagram.setVisible(false);
-			// textArea.getElement().getStyle().setBackgroundColor("#" + diagram.getBackgroundColor());
 			codeMirror.setBackgroundColor("#" + diagram.getBackgroundColor());
 		}
 	}
