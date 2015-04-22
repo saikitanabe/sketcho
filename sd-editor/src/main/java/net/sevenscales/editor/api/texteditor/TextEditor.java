@@ -37,7 +37,8 @@ class TextEditor extends Composite implements ITextEditor {
 	TextEditor(ITextEditor.TextChanged changeListener) {
 		this.changeListener = changeListener;
 		initWidget(uiBinder.createAndBindUi(this));
-
+		menu.getStyle().setDisplay(Style.Display.NONE);
+		
 		onTextAreaChange(textArea.getElement(), this);
 
 		textArea.addKeyDownHandler(new KeyDownHandler() {
