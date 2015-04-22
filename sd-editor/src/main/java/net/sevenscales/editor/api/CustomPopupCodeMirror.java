@@ -2,6 +2,7 @@ package net.sevenscales.editor.api;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.content.utils.KeyHelpers;
+import net.sevenscales.editor.api.texteditor.ITextEditor;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -13,13 +14,13 @@ public class CustomPopupCodeMirror extends PopupPanel {
 	private static final SLogger logger = SLogger
 			.createLogger(CustomPopupCodeMirror.class);
 	private boolean selectAll;
-	private CodeMirror codeMirror;
+	private ITextEditor codeMirror;
 	
 	public CustomPopupCodeMirror() {
 		super(false);
 	}
 
-	void setCodeMirror(CodeMirror codeMirror) {
+	void setCodeMirror(ITextEditor codeMirror) {
 		this.codeMirror = codeMirror;
 	}
 

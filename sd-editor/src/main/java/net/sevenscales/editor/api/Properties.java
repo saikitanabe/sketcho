@@ -24,6 +24,7 @@ import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.api.ActionType;
+import net.sevenscales.editor.api.texteditor.ITextEditor;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.utils.ColorHelpers;
@@ -66,13 +67,13 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import net.sevenscales.editor.content.utils.JQuery;
 
-public class Properties extends SimplePanel implements DiagramSelectionHandler, ClickDiagramHandler, SizeChangedHandler, IEditor, CodeMirror.TextChanged {
+public class Properties extends SimplePanel implements DiagramSelectionHandler, ClickDiagramHandler, SizeChangedHandler, IEditor, ITextEditor.TextChanged {
 	private static final SLogger logger = SLogger.createLogger(Properties.class);
 
 	private static final String PROPERTIES_EDITOR_STYLE = "properties-TextArea2";
 	
   private Map<ISurfaceHandler,Boolean> surfaces = new HashMap<ISurfaceHandler, Boolean>();
-  private CodeMirror codeMirror;
+  private ITextEditor codeMirror;
 	// private TextArea textArea;
 	private Diagram selectedDiagram;
 	private EditorContext editorContext;
@@ -228,8 +229,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 		popup = new CustomPopupCodeMirror();
 		popup.setStyleName("propertyPopup");
-		codeMirror =new CodeMirror(this);
-		popup.setWidget(codeMirror);
+		codeMirror = ITextEditor.Factory.createEditor(this, true);
+		popup.setWidget(codeMirror.getUi());
 		// autohide is not enabled since property editor is closed manually and autohide causes problems
 		popup.setAutoHideEnabled(false);
 //		popup.setAutoHideEnabled(true);
