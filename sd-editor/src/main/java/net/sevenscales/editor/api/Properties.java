@@ -229,7 +229,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 		popup = new CustomPopupCodeMirror();
 		popup.setStyleName("propertyPopup");
-		codeMirror = ITextEditor.Factory.createEditor(this, true);
+		codeMirror = ITextEditor.Factory.createEditor(this, false);
 		popup.setWidget(codeMirror.getUi());
 		// autohide is not enabled since property editor is closed manually and autohide causes problems
 		popup.setAutoHideEnabled(false);
@@ -719,12 +719,13 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		MeasurementPanel.setPlainTextAsHtml(text, selectedDiagram.getMeasurementAreaWidth());
 		MeasurementPanel.setPosition(selectedDiagram.getLeft() + selectedDiagram.getWidth() + 20, selectedDiagram.getTop());
 
-		// Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-		// 	@Override
-		// 	public void execute() {
-		// 		textArea.getElement().getStyle().setHeight(MeasurementPanel.getOffsetHeight(), Unit.PX);
-		// 	}
-		// });
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+			@Override
+			public void execute() {
+				codeMirror.setHeight(MeasurementPanel.getOffsetHeight());
+				// textArea.getElement().getStyle().setHeight(MeasurementPanel.getOffsetHeight(), Unit.PX);
+			}
+		});
 	}
 
 	// private void setSelectedDiagramHeight() {
@@ -733,18 +734,19 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
  //  }
 
 	private void setTextAreaHeight() {
-		// if (selectedDiagram != null) {
-		// 	if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
-		// 		// in case dynamically resized text should use measurement panel!!!
-		// 		setMeasurementPanelText(textArea.getText());
-		// 	} else {
-		// 		int rows = rows(textArea.getText());
-		// 		int dFontSize = selectedDiagram.getFontSize() != null ? selectedDiagram.getFontSize() : 12;
-		// 		int lheight = lineHeight(dFontSize);
-		// 		int textAreaHeight = lheight * rows;
-		// 		textArea.getElement().getStyle().setHeight(textAreaHeight + lheight, Unit.PX);
-		// 	}
-		// }
+		if (selectedDiagram != null) {
+			if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
+				// in case dynamically resized text should use measurement panel!!!
+				setMeasurementPanelText(codeMirror.getText());
+			} else {
+				int rows = rows(codeMirror.getText());
+				int dFontSize = selectedDiagram.getFontSize() != null ? selectedDiagram.getFontSize() : 12;
+				int lheight = lineHeight(dFontSize);
+				int textAreaHeight = lheight * rows;
+				codeMirror.setHeight(textAreaHeight + lheight);
+				// textArea.getElement().getStyle().setHeight(textAreaHeight + lheight, Unit.PX);
+			}
+		}
 	}
 
 	private void _setTextAreaSize(Diagram diagram) {
@@ -793,7 +795,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		codeMirror.setLineHeight(lineHeight(fontSize) + "px");
 
 		// textArea.getElement().getStyle().setWidth(diagram.getTextAreaWidth() * surface.getScaleFactor(), Unit.PX);
-		// setTextAreaHeight();
+		codeMirror.setWidth((int) (diagram.getTextAreaWidth() * surface.getScaleFactor()));
+		setTextAreaHeight();
 		popup.setContentWidth((int) (diagram.getTextAreaWidth() * surface.getScaleFactor()));
 
 		if (surface.getScaleFactor() > 1) {

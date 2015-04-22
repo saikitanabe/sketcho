@@ -150,4 +150,13 @@ class CodeMirror extends Composite implements ITextEditor {
 	private native void setTextAlign(String textAlign, JavaScriptObject cm)/*-{
 		$wnd.$(cm.getTextArea().parentNode).find(".CodeMirror").css("textAlign", textAlign)
 	}-*/;
+
+
+	@Override
+	public void setWidth(int width) {
+	}
+	@Override
+	public void setHeight(int height) {
+	}
+
 }
