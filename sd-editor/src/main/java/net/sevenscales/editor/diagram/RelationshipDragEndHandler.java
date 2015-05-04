@@ -253,11 +253,13 @@ public class RelationshipDragEndHandler implements
 	@Override
 	public void on(SwitchElementEvent event) {
 		switchFrom = event.getDiagram();
-		Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(event.getDiagram(), surface);
-		// >>>>>>> Commented out 4.3.2015
-		// diagramSelections.hideCommentElement();
-		// >>>>>>> Commented out 4.3.2015 end
-		showPopup(screenPosition.x, screenPosition.y);
+		if (!switchFrom.getDiagramItem().getType().equals(ElementType.CHILD_TEXT.getValue())) {
+			Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(event.getDiagram(), surface);
+			// >>>>>>> Commented out 4.3.2015
+			// diagramSelections.hideCommentElement();
+			// >>>>>>> Commented out 4.3.2015 end
+			showPopup(screenPosition.x, screenPosition.y);
+		}
 	}
 
 	@Override
