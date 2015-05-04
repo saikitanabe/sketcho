@@ -38,6 +38,7 @@ import net.sevenscales.editor.content.utils.EffectHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
+import net.sevenscales.editor.uicomponents.uml.ChildTextElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
@@ -835,7 +836,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			colorMenu = Display.INLINE_BLOCK;
 		}
 
-		if (notConfluence() && selected.length == 1 && !(selected[0] instanceof Relationship2) && !(selected[0] instanceof CircleElement)) {
+		if (notConfluence() && selected.length == 1 && !(selected[0] instanceof Relationship2) && !(selected[0] instanceof CircleElement) && !(selected[0] instanceof ChildTextElement)) {
 			switchElementVisibility = Display.INLINE_BLOCK;
 		}
 
