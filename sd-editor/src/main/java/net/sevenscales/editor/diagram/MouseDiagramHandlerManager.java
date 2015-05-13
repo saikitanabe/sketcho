@@ -125,92 +125,96 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
    //  logger.start("MouseDiagramHandlerManager.onMouseDown SUM");
   	// logger.start("MouseDiagramHandlerManager.onMouseDown 1");
   	// logger.debug("onMouseDown sender={}...", sender);
-    if (!surface.getEditorContext().isEditable()) {
-      // if not editable, background should be still movable
-  		backgroundMoveHandler.onMouseDown(sender, point, keys);
-  	// 	selectionHandler.onMouseDown(sender, point, keys);
-			// lassoSelectionHandler.onMouseDown(sender, point, keys);
-      return false;
-    }
-    
-    // logger.debugTime();
-    // logger.start("MouseDiagramHandlerManager.onMouseDown 2");
-
-    if (sketchDiagramAreaHandler.onMouseDown(sender, point, keys)) {
-      currentMouseHandler = sketchDiagramAreaHandler;
-//      return false;
-    }
-
-    // logger.debugTime();
-    // logger.start("MouseDiagramHandlerManager.onMouseDown 3");
-
-//  	startedConnection = modeManager.isConnectMode();
-//    if (modeManager.isConnectMode()) {
-//    	// priority handler, to make connection helpers more user friendly
-//    	connectionModeMouseHandler.onMouseDown(sender, point, keys);
-//    	startedConnection = true;
-//    	return;
-//    }
-
-    // send only one down click; either diagram or canvas
-//    this.mouseDown = sender != null ? true : false;
-    
-    // exclusive handlers
-    if (freehandDrawHandler != null) {
-	    freehandDrawHandler.onMouseDown(sender, point, keys);
-    }
-
-    // logger.debugTime();
-    // logger.start("MouseDiagramHandlerManager.onMouseDown 4");
-
-    quickConnectionHandler.onMouseDown(sender, point, keys);
-    selectionHandler.onMouseDown(sender, point, keys);
-
-    // logger.debugTime();
-    // logger.start("MouseDiagramHandlerManager.onMouseDown 5");
-
-    if (freehandDrawHandler != null) {
-	    boolean handled = freehandDrawHandler.handling();
-	    // logger.debugTime();
-	    // logger.start("MouseDiagramHandlerManager.onMouseDown 6");
-	    if (handled) {
-	    	return false;
+  	try {
+	    if (!surface.getEditorContext().isEditable()) {
+	      // if not editable, background should be still movable
+	  		backgroundMoveHandler.onMouseDown(sender, point, keys);
+	  	// 	selectionHandler.onMouseDown(sender, point, keys);
+				// lassoSelectionHandler.onMouseDown(sender, point, keys);
+	      return false;
 	    }
-	  }
-    
-		resizeHandler.onMouseDown(sender, point, keys);
-		
-    // logger.debugTime();
-    // logger.start("MouseDiagramHandlerManager.onMouseDown 7");
-    
-    handlers.fireMouseDown(sender, point, keys);
+	    
+	    // logger.debugTime();
+	    // logger.start("MouseDiagramHandlerManager.onMouseDown 2");
 
-    // logger.debugTime();
-    // logger.start("MouseDiagramHandlerManager.onMouseDown 8");
+	    if (sketchDiagramAreaHandler.onMouseDown(sender, point, keys)) {
+	      currentMouseHandler = sketchDiagramAreaHandler;
+	//      return false;
+	    }
 
-    if (sender == null) {
-			// do not send diagram events
-			// diagrams register them selves straight if those are draggable
-			dragHandler.onMouseDown(sender, point, keys);
-		}
-    
-    // logger.debugTime();
-    // logger.start("MouseDiagramHandlerManager.onMouseDown 9");
+	    // logger.debugTime();
+	    // logger.start("MouseDiagramHandlerManager.onMouseDown 3");
 
-//		MatrixPointJS translatedPoint = MatrixPointJS.createScaledPoint
-//			(point.getX() - surface.getRootLayer().getTransformX(), 
-//			 point.getY() - surface.getRootLayer().getTransformY(), surface.getScaleFactor());
-		backgroundMoveHandler.onMouseDown(sender, point, keys);
-		
-    // logger.debugTime();
-    // logger.start("MouseDiagramHandlerManager.onMouseDown 10");
+	//  	startedConnection = modeManager.isConnectMode();
+	//    if (modeManager.isConnectMode()) {
+	//    	// priority handler, to make connection helpers more user friendly
+	//    	connectionModeMouseHandler.onMouseDown(sender, point, keys);
+	//    	startedConnection = true;
+	//    	return;
+	//    }
 
-		lassoSelectionHandler.onMouseDown(sender, point, keys);
+	    // send only one down click; either diagram or canvas
+	//    this.mouseDown = sender != null ? true : false;
+	    
+	    // exclusive handlers
+	    if (freehandDrawHandler != null) {
+		    freehandDrawHandler.onMouseDown(sender, point, keys);
+	    }
 
-    // logger.debugTime();
-    // logger.start("MouseDiagramHandlerManager.onMouseDown 11");
+	    // logger.debugTime();
+	    // logger.start("MouseDiagramHandlerManager.onMouseDown 4");
 
-		surfaceClickHandler.onMouseDown(sender, point, keys);
+	    quickConnectionHandler.onMouseDown(sender, point, keys);
+	    selectionHandler.onMouseDown(sender, point, keys);
+
+	    // logger.debugTime();
+	    // logger.start("MouseDiagramHandlerManager.onMouseDown 5");
+
+	    if (freehandDrawHandler != null) {
+		    boolean handled = freehandDrawHandler.handling();
+		    // logger.debugTime();
+		    // logger.start("MouseDiagramHandlerManager.onMouseDown 6");
+		    if (handled) {
+		    	return false;
+		    }
+		  }
+	    
+			resizeHandler.onMouseDown(sender, point, keys);
+			
+	    // logger.debugTime();
+	    // logger.start("MouseDiagramHandlerManager.onMouseDown 7");
+	    
+	    handlers.fireMouseDown(sender, point, keys);
+
+	    // logger.debugTime();
+	    // logger.start("MouseDiagramHandlerManager.onMouseDown 8");
+
+	    if (sender == null) {
+				// do not send diagram events
+				// diagrams register them selves straight if those are draggable
+				dragHandler.onMouseDown(sender, point, keys);
+			}
+	    
+	    // logger.debugTime();
+	    // logger.start("MouseDiagramHandlerManager.onMouseDown 9");
+
+	//		MatrixPointJS translatedPoint = MatrixPointJS.createScaledPoint
+	//			(point.getX() - surface.getRootLayer().getTransformX(), 
+	//			 point.getY() - surface.getRootLayer().getTransformY(), surface.getScaleFactor());
+			backgroundMoveHandler.onMouseDown(sender, point, keys);
+			
+	    // logger.debugTime();
+	    // logger.start("MouseDiagramHandlerManager.onMouseDown 10");
+
+			lassoSelectionHandler.onMouseDown(sender, point, keys);
+
+	    // logger.debugTime();
+	    // logger.start("MouseDiagramHandlerManager.onMouseDown 11");
+
+			surfaceClickHandler.onMouseDown(sender, point, keys);
+  	} catch (Exception e) {
+			com.google.gwt.user.client.Window.Location.reload();
+  	}
 
   //   logger.debugTime();
 		// logger.debugTime();
@@ -232,78 +236,87 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	}
 	
 	public void onMouseMove(Diagram sender, MatrixPointJS point) {
-    if (!surface.getEditorContext().isEditable()) {
-  		backgroundMoveHandler.onMouseMove(sender, point);
-			// lassoSelectionHandler.onMouseMove(sender, point);
-      return;
-    }
-    
-    if (freehandDrawHandler != null) {
-	    freehandDrawHandler.onMouseMove(sender, point);
-			selectionHandler.onMouseMove(sender, point);
-	    if (freehandDrawHandler.handling()) {
-	    	return;
+		try {
+	    if (!surface.getEditorContext().isEditable()) {
+	  		backgroundMoveHandler.onMouseMove(sender, point);
+				// lassoSelectionHandler.onMouseMove(sender, point);
+	      return;
 	    }
-	  }
-    
-    handlers.fireMouseMove(sender, point);
-    if (currentMouseHandler == sketchDiagramAreaHandler) {
-      sketchDiagramAreaHandler.onMouseMove(sender, point);
-//      dragHandler.onMouseMove(sender, point);
-//      return;
-    }
+	    
+	    if (freehandDrawHandler != null) {
+		    freehandDrawHandler.onMouseMove(sender, point);
+				selectionHandler.onMouseMove(sender, point);
+		    if (freehandDrawHandler.handling()) {
+		    	return;
+		    }
+		  }
+	    
+	    handlers.fireMouseMove(sender, point);
+	    if (currentMouseHandler == sketchDiagramAreaHandler) {
+	      sketchDiagramAreaHandler.onMouseMove(sender, point);
+	//      dragHandler.onMouseMove(sender, point);
+	//      return;
+	    }
 
-		resizeHandler.onMouseMove(sender, point);
-		if (sender == null) {
-			// do not send diagram events
-			// diagrams register them selves straight if those are draggable
-			dragHandler.onMouseMove(sender, point);
+			resizeHandler.onMouseMove(sender, point);
+			if (sender == null) {
+				// do not send diagram events
+				// diagrams register them selves straight if those are draggable
+				dragHandler.onMouseMove(sender, point);
+			}
+			backgroundMoveHandler.onMouseMove(sender, point);
+			lassoSelectionHandler.onMouseMove(sender, point);
+			surface.dispatchDiagram(point);
+
+		} catch (Exception e) {
+			com.google.gwt.user.client.Window.Location.reload();
 		}
-		backgroundMoveHandler.onMouseMove(sender, point);
-		lassoSelectionHandler.onMouseMove(sender, point);
-		surface.dispatchDiagram(point);
 	}
 
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
-		// logger.start("onMouseUp");
-		// logger.debug("onMouseUp...");
-//		startedConnection = false;
-    if (!surface.getEditorContext().isEditable()) {
-  		backgroundMoveHandler.onMouseUp(sender, point, keys);
-			// lassoSelectionHandler.onMouseUp(sender, point, keys);
-			// selectionHandler.onMouseUp(sender, point, keys);
-      return;
-    }
-    
-    if (currentMouseHandler == sketchDiagramAreaHandler) {
-      sketchDiagramAreaHandler.onMouseUp(sender, point, keys);
-    }
-    
-    if (freehandDrawHandler != null) {
-	    freehandDrawHandler.onMouseUp(sender, point, keys);
-			selectionHandler.onMouseUp(sender, point, keys);
-	    if (freehandDrawHandler.handling()) {
-	    	return;
+		try {
+			// logger.start("onMouseUp");
+			// logger.debug("onMouseUp...");
+	//		startedConnection = false;
+	    if (!surface.getEditorContext().isEditable()) {
+	  		backgroundMoveHandler.onMouseUp(sender, point, keys);
+				// lassoSelectionHandler.onMouseUp(sender, point, keys);
+				// selectionHandler.onMouseUp(sender, point, keys);
+	      return;
 	    }
-	  }
-    
-//    	mouseDown = false;
+	    
+	    if (currentMouseHandler == sketchDiagramAreaHandler) {
+	      sketchDiagramAreaHandler.onMouseUp(sender, point, keys);
+	    }
+	    
+	    if (freehandDrawHandler != null) {
+		    freehandDrawHandler.onMouseUp(sender, point, keys);
+				selectionHandler.onMouseUp(sender, point, keys);
+		    if (freehandDrawHandler.handling()) {
+		    	return;
+		    }
+		  }
+	    
+	//    	mouseDown = false;
 
-//    connectionModeMouseHandler.onMouseUp(sender, point, keys);
-		resizeHandler.onMouseUp(sender, point, keys);
-		if (sender == null) {
-			// do not send diagram events
-			// diagrams register them selves straight if those are draggable
-			dragHandler.onMouseUp(sender, point, keys);
+	//    connectionModeMouseHandler.onMouseUp(sender, point, keys);
+			resizeHandler.onMouseUp(sender, point, keys);
+			if (sender == null) {
+				// do not send diagram events
+				// diagrams register them selves straight if those are draggable
+				dragHandler.onMouseUp(sender, point, keys);
+			}
+	    handlers.fireMouseUp(sender, point, keys);
+	//		bendHandler.onMouseUp(sender, x, y, keys);
+			backgroundMoveHandler.onMouseUp(sender, point, keys);
+			lassoSelectionHandler.onMouseUp(sender, point, keys);
+			surfaceClickHandler.onMouseUp(sender, point, keys);
+			quickConnectionHandler.onMouseUp(sender, point, keys);
+			// logger.debugTime();
+	    currentMouseHandler = null;
+		} catch (Exception e) {
+			com.google.gwt.user.client.Window.Location.reload();
 		}
-    handlers.fireMouseUp(sender, point, keys);
-//		bendHandler.onMouseUp(sender, x, y, keys);
-		backgroundMoveHandler.onMouseUp(sender, point, keys);
-		lassoSelectionHandler.onMouseUp(sender, point, keys);
-		surfaceClickHandler.onMouseUp(sender, point, keys);
-		quickConnectionHandler.onMouseUp(sender, point, keys);
-		// logger.debugTime();
-    currentMouseHandler = null;
 	}
 	
 	@Override

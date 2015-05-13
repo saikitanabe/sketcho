@@ -237,28 +237,40 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   public void onMouseDown(GraphicsEvent event, int keys) {
-    int x = event.getElementOffsetX(surface.getElement());
-    int y = event.getElementOffsetY(surface.getElement());
-    MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
-    mouseListeners.fireMouseDown(this, point, keys);
-    mouseDown = true;
+    try {
+      int x = event.getElementOffsetX(surface.getElement());
+      int y = event.getElementOffsetY(surface.getElement());
+      MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
+      mouseListeners.fireMouseDown(this, point, keys);
+      mouseDown = true;
+    } catch (Exception e) {
+      com.google.gwt.user.client.Window.Location.reload();
+    }
   }
   
   @Override
   public void onMouseUp(GraphicsEvent event, int keys) {
-    int x = SurfaceUtil.eventGetElementOffsetX(surface.getElement(), event);
-    int y = SurfaceUtil.eventGetElementOffsetY(surface.getElement(), event);
-    MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
-    mouseListeners.fireMouseUp(this, point, keys);
-    
-    mouseDown = false;
+    try {
+      int x = SurfaceUtil.eventGetElementOffsetX(surface.getElement(), event);
+      int y = SurfaceUtil.eventGetElementOffsetY(surface.getElement(), event);
+      MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
+      mouseListeners.fireMouseUp(this, point, keys);
+      
+      mouseDown = false;
+    } catch (Exception e) {
+      com.google.gwt.user.client.Window.Location.reload();
+    }
   }
   
   public void onMouseMove(GraphicsEvent event) {
-    int x = SurfaceUtil.eventGetElementOffsetX(surface.getElement(), event);
-    int y = SurfaceUtil.eventGetElementOffsetY(surface.getElement(), event);
-    MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
-    mouseListeners.fireMouseMove(this, point);
+    try {
+      int x = SurfaceUtil.eventGetElementOffsetX(surface.getElement(), event);
+      int y = SurfaceUtil.eventGetElementOffsetY(surface.getElement(), event);
+      MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
+      mouseListeners.fireMouseMove(this, point);
+    } catch (Exception e) {
+      com.google.gwt.user.client.Window.Location.reload();
+    }
   }
 
   public void onMouseLeave(GraphicsEvent event) {
