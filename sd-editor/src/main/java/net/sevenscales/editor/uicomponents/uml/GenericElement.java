@@ -567,6 +567,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		return false;
 	}
 
+	@Override
 	public IGroup getSubgroup() {
 		return subgroup;
 	}

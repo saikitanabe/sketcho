@@ -224,7 +224,8 @@ public interface Diagram extends SourcesMouseDiagramEvents {
 	void restoreHighlighColor();
 	// void setBorderColor(String color);
 	void setBorderColor(Color color);
-	IGroup getGroup();
+  IGroup getGroup();
+	IGroup getSubgroup();
 	
 	public interface SizeChangedHandler {
 		void onSizeChanged(Diagram diagram, int width, int height);

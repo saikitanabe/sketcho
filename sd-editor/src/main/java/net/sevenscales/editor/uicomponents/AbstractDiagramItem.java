@@ -12,6 +12,7 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.utils.DiagramItemHelpers;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.js.JsShape;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -61,6 +62,7 @@ import net.sevenscales.editor.uicomponents.AnchorUtils.AnchorProperties;
 import net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.editor.uicomponents.uml.ShapeCache;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -68,7 +70,8 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
-
+import com.google.gwt.safehtml.shared.UriUtils;
+import com.google.gwt.safehtml.shared.SafeUri;
 
 public abstract class AbstractDiagramItem implements Diagram, DiagramProxy, 
                                           MouseDiagramHandler, KeyEventListener, 
@@ -211,8 +214,62 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
 
 	protected void constructorDone() {
+    IGroup g = getSubgroup();
+    if (g == null) {
+      g = getGroup();
+    }
+    if (g != null) {
+      // TODO add link and tooltip of the link
+      JsShape link = ShapeCache.findIcon("link");
+      String linkUrl = getLink();
+      if (link != null && linkUrl != null) {
+        SafeUri url = UriUtils.fromString(linkUrl);
+        String urlString = url.asString().replaceAll("&", "&amp;");
+        _showLink(g.getContainer(), "#linkshape", (int)(getWidth() / 2 - link.getWidth() / 2), getHeight(), urlString);
+      }
+    }
   }
-	
+
+  private native void _showLink(JavaScriptObject group, String linkid, int x, int y, String link)/*-{
+
+    function _createElementNS(ns, nodeType){
+      // summary:
+      //    Internal helper to deal with creating elements that
+      //    are namespaced.  Mainly to get SVG markup output
+      //    working on IE.
+      if($doc.createElementNS){
+        return $doc.createElementNS(ns,nodeType)
+      }else{
+        return $doc.createElement(nodeType)
+      }
+    }
+
+    function _setAttributeNS(node, ns, attr, value){
+     if(node.setAttributeNS){
+       return node.setAttributeNS(ns, attr, value)
+     }else{
+       return node.setAttribute(attr, value)
+     }
+    }
+
+    var svgns = "http://www.w3.org/2000/svg"
+    var use = _createElementNS(svgns, 'use')
+    var xlinkns = 'http://www.w3.org/1999/xlink'
+    _setAttributeNS(use, xlinkns, "xlink:href", linkid)
+    use.setAttribute('x', x)
+    use.setAttribute('y', y)
+    use.setAttribute('title', link)
+    use.addEventListener('click', function(e) {
+      try {
+        $wnd.open(link, "", "")
+      } catch (e) {
+        console.log(e)
+      }
+    }, false)
+
+    group.rawNode.appendChild(use)
+  }-*/;
+
 	@Override
 	public Diagram getDiagram() {
 	  return this;
@@ -1794,6 +1851,14 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     if (anchor.getAnchorElement() != null) {
       anchor.getAnchorElement().setCardinalDirection(aprops.cardinalDirection);
     }
+  }
+
+  public IGroup getGroup() {
+    return null;
+  }
+
+  public IGroup getSubgroup() {
+    return null;
   }
 
 }

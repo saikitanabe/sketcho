@@ -35,8 +35,11 @@ import net.sevenscales.editor.diagram.RelationshipDragEndHandler;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.domain.IGraphics;
+import net.sevenscales.editor.uicomponents.uml.ShapeCache;
+import net.sevenscales.domain.js.JsShape;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -103,6 +106,12 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		surface = GWT.create(SurfaceHandlerImplFirefox.class);
 		surface.setName(SurfaceHandler.DRAWING_AREA);
 		surface.init(width, height, editable, modeManager, true, editorContext, otBuffer, operationTransaction);
+
+		surface.addLoadEventListener(new net.sevenscales.editor.api.SurfaceLoadedEventListener() {
+			public void onLoaded() {
+				surface.addToDefs(ShapeCache.icons());
+			}
+		});
 
 		Tools.create(surface.getEditorContext(), superQuickMode);
 		
