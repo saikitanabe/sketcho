@@ -1371,6 +1371,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       setLineWeight(lineWeight);
     }
 
+    String oldLink = current.getFirstLink();
+    String newLink = diagramItem.getFirstLink();
+    if (newLink != null && !newLink.equals(oldLink)) {
+      setLink(newLink);
+    }
+
     // just copy all fields
     getDiagramItem().copyFrom(diagramItem);
 
