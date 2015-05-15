@@ -123,7 +123,8 @@ public class EditLinkForm extends Composite {
 
 	private void apply() {
 		String url = urlField.getValue();
-		if (!url.startsWith("https://") && 
+		if (!"".equals(url) &&  // do not append when link is removed
+				!url.startsWith("https://") && 
 			  !url.startsWith("http://") && 
 			  !url.startsWith("mailto:") 
 			  // !url.startsWith("file://") &&
