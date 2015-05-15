@@ -1249,8 +1249,8 @@ class SurfaceHandler extends SimplePanel implements
 			rect.setAttribute('height', icon.h)
 			rect.setAttribute('x', 0)
 			rect.setAttribute('y', 0)
-			rect.setAttribute('rx', 4)
-			rect.setAttribute('style', 'fill:#fff;stroke:#009DEC;')
+			rect.setAttribute('rx', 6)
+			rect.setAttribute('style', 'fill:#fff;stroke:none;')
 			group.appendChild(rect)
 
 			for (var x = 0; x < icon.s.length; ++x) {

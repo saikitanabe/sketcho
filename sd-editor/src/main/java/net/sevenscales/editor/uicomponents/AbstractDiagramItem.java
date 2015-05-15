@@ -214,23 +214,37 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
 
 	protected void constructorDone() {
+    applyLink();
+  }
+
+  protected void applyLink() {
     IGroup g = getSubgroup();
     if (g == null) {
       g = getGroup();
     }
     if (g != null) {
-      // TODO add link and tooltip of the link
-      JsShape link = ShapeCache.findIcon("link");
+      // TODO tooltip of the link
       String linkUrl = getLink();
-      if (link != null && linkUrl != null) {
-        SafeUri url = UriUtils.fromString(linkUrl);
-        String urlString = url.asString().replaceAll("&", "&amp;");
-        _showLink(g.getContainer(), "#linkshape", (int)(getWidth() / 2 - link.getWidth() / 2), getHeight(), urlString);
+      if (linkUrl != null && !"".equals(linkUrl)) {
+        JsShape linkicon = ShapeCache.findIcon("link");
+        if (linkicon != null) {
+          SafeUri url = UriUtils.fromString(linkUrl);
+          String urlString = url.asString(); //.replaceAll("&", "&amp;");
+          _applyLink(g.getContainer(), "#linkshape", (int)(getWidth() / 2 - linkicon.getWidth() / 2), getHeight(), urlString);
+        }
+      } else {
+        _deleteLink(g.getContainer());
       }
     }
   }
 
-  private native void _showLink(JavaScriptObject group, String linkid, int x, int y, String link)/*-{
+  private native void _deleteLink(JavaScriptObject group)/*-{
+    if (group.alink) {
+      group.rawNode.removeChild(group.alink);
+    }
+  }-*/;
+
+  private native void _applyLink(JavaScriptObject group, String linkid, int x, int y, String link)/*-{
 
     function _createElementNS(ns, nodeType){
       // summary:
@@ -253,21 +267,46 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     }
 
     var svgns = "http://www.w3.org/2000/svg"
-    var use = _createElementNS(svgns, 'use')
     var xlinkns = 'http://www.w3.org/1999/xlink'
-    _setAttributeNS(use, xlinkns, "xlink:href", linkid)
-    use.setAttribute('x', x)
-    use.setAttribute('y', y)
-    use.setAttribute('title', link)
-    use.addEventListener('click', function(e) {
-      try {
-        $wnd.open(link, "", "")
-      } catch (e) {
-        console.log(e)
-      }
-    }, false)
 
-    group.rawNode.appendChild(use)
+    function createOrFindLink() {
+      function create() {
+        var alink = _createElementNS(svgns, 'a')
+        var use = _createElementNS(svgns, 'use')
+        _setAttributeNS(use, xlinkns, "xlink:href", linkid)
+        alink.appendChild(use)
+        alink.use = use
+        group.rawNode.appendChild(alink)
+        group.alink = alink
+        return alink
+      }
+
+      if (group.alink) {
+        return group.alink
+      }
+
+      return create()
+    }
+
+    var alink = createOrFindLink()
+
+    alink.use.setAttribute('x', x)
+    alink.use.setAttribute('y', -10)
+    alink.setAttribute('title', link)
+    $wnd.$(alink).tooltip()
+    _setAttributeNS(alink, xlinkns, "xlink:href", link)
+
+    // use.removeEventListener('click')
+    // use.thelink = link
+
+    // use.addEventListener('click', function(e) {
+    //   try {
+    //     $wnd.open(this.thelink, "", "")
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // }, false)
+
   }-*/;
 
 	@Override
@@ -883,6 +922,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     
   public void setLink(String link) {
     data.setLink(link);
+    applyLink();
   }
   
   public String getLink() {
@@ -1358,6 +1398,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       textFormatter.setTextShape();
     }
 
+    applyLink();
+
 	}
 
   protected abstract void doSetShape(int[] shape);
@@ -1747,6 +1789,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     if (connectionHelpers != null) {
       connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
     }
+
+    applyLink();
 	}
 
   // too much is processed and most probably gets executed
