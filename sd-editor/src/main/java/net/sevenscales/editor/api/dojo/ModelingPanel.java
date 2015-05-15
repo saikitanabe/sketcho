@@ -248,7 +248,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		RootPanel.get().addDomHandler(new MouseDownHandler() {
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
-				if (!(event.getNativeEvent().getButton() == Event.BUTTON_LEFT)) {
+				if (!(event.getNativeEvent().getButton() == Event.BUTTON_LEFT) || !Element.is(event.getNativeEvent().getEventTarget())) {
 					// handle only left button events
 					return;
 				}
@@ -267,9 +267,8 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		RootPanel.get().addDomHandler(new MouseUpHandler() {
 			@Override
 			public void onMouseUp(MouseUpEvent event) {
-				if (!(event.getNativeEvent().getButton() == Event.BUTTON_LEFT)) {
+				if (!(event.getNativeEvent().getButton() == Event.BUTTON_LEFT) || !Element.is(event.getNativeEvent().getEventTarget())) {
 					// handle only left button events
-					
 					return;
 				}
 
