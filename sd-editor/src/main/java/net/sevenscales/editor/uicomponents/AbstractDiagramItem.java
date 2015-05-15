@@ -239,8 +239,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   private native void _deleteLink(JavaScriptObject group)/*-{
-    if (group.alink) {
+    if (group.alink && group.alink.parentNode == group.rawNode) {
       group.rawNode.removeChild(group.alink);
+      group.alink = null
     }
   }-*/;
 
