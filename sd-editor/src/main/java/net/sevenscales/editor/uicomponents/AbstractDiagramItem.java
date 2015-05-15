@@ -294,18 +294,25 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     alink.use.setAttribute('y', -10)
     alink.setAttribute('title', link)
     $wnd.$(alink).tooltip()
-    _setAttributeNS(alink, xlinkns, "xlink:href", link)
 
-    // use.removeEventListener('click')
-    // use.thelink = link
+    // if (!@net.sevenscales.editor.diagram.utils.UiUtils::isFirefox()()) {
+      // webkit browsers handles properly  a href in svg
+      _setAttributeNS(alink, xlinkns, "xlink:href", link)
+    // } else {
+      // Firefox opens same page when pressing cmd+click on different tab
+      // NOTE doesn't work, still opens also same page on different tab
+      // function openLink(e) {
+      //   try {
+      //     $wnd.open(this.thelink, "", "")
+      //   } catch (e) {
+      //     console.log(e)
+      //   }
+      // }
+      // alink.use.removeEventListener('click', openLink)
+      // alink.use.thelink = link
 
-    // use.addEventListener('click', function(e) {
-    //   try {
-    //     $wnd.open(this.thelink, "", "")
-    //   } catch (e) {
-    //     console.log(e)
-    //   }
-    // }, false)
+      // alink.use.addEventListener('click', openLink, false)
+    // }
 
   }-*/;
 
