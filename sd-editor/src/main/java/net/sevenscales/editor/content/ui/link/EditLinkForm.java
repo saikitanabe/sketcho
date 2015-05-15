@@ -122,7 +122,21 @@ public class EditLinkForm extends Composite {
 	}
 
 	private void apply() {
-		applyCallback.applied(urlField.getValue());
+		String url = urlField.getValue();
+		if (!url.startsWith("https://") && 
+			  !url.startsWith("http://") && 
+			  !url.startsWith("mailto:") 
+			  // !url.startsWith("file://") &&
+			  // !url.startsWith("javascript:")
+			  ) {
+			// 1. Only these protocols are allowed, anything else gets http:// at the beginning
+			// if doens't start with any valid protocol
+			// add automatically http:// in the beginning
+			// NOTE file:// and javascript: are not safe, not adding http:// on beginning
+			// but it is not allowed to be used by safe uri
+			url = "http://" + url;
+		}
+		applyCallback.applied(url);
 		urlField.setValue("");
 	}
 

@@ -9,7 +9,7 @@
       <div class="popover-content">
         <form name="editLinkForm" class="form-inline" onsubmit="return false;">
 		        <input ui:field="urlField" type="text" class="span4"></input>
-		        <a ui:field="apply" class="btn">Apply</a>
+		        <a ui:field="apply" class="pure-button">Apply</a>
 		    </form>
       </div>
     </div>
