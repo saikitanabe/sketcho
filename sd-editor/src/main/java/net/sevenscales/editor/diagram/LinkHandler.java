@@ -47,7 +47,7 @@ class LinkHandler {
 
 	private void openLink() {
 		Diagram selected = surface.getSelectionHandler().getOnlyOneSelected();
-		if (selected != null && selected.getLink() != null) {
+		if (selected != null && selected.hasLink()) {
 			logger.debug("openLink");
 			SafeUri uri = UriUtils.fromString(selected.getLink());
 			Window.open(uri.asString(), "_blank", "");
