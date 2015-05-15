@@ -73,6 +73,9 @@ abstract class Graphics extends GraphicsBase {
 //    @net.sevenscales.domain.utils.Debug::println(Ljava/lang/String;)("shift:"+e.shiftKey);
 //		  var keys = Keyboard.Modifiers;
      var keys = e.shiftKey ? @net.sevenscales.editor.gfx.domain.IGraphics::SHIFT : 0;
+     keys |= e.altKey ? @net.sevenscales.editor.gfx.domain.IGraphics::ALT : 0;
+     keys |= e.ctrlKey ? @net.sevenscales.editor.gfx.domain.IGraphics::CTRL : 0;
+     keys |= e.metaKey ? @net.sevenscales.editor.gfx.domain.IGraphics::META : 0;
 		 self.@net.sevenscales.editor.gfx.dojosvg.Graphics::onMouseDown(Lnet/sevenscales/editor/gfx/base/GraphicsEvent;I)(e,keys);
 		}
 		object.connect("onmousedown", onMouseDown);
@@ -82,6 +85,9 @@ abstract class Graphics extends GraphicsBase {
 		function onMouseUp(e) {
 			e.preventDefault();
 	    var keys = e.shiftKey ? @net.sevenscales.editor.gfx.domain.IGraphics::SHIFT : 0;
+	    keys |= e.altKey ? @net.sevenscales.editor.gfx.domain.IGraphics::ALT : 0;
+	    keys |= e.ctrlKey ? @net.sevenscales.editor.gfx.domain.IGraphics::CTRL : 0;
+	    keys |= e.metaKey ? @net.sevenscales.editor.gfx.domain.IGraphics::META : 0;
 			self.@net.sevenscales.editor.gfx.dojosvg.Graphics::onMouseUp(Lnet/sevenscales/editor/gfx/base/GraphicsEvent;I)(e,keys);
 		}
 		object.connect(eventType, onMouseUp);

@@ -22,8 +22,10 @@ public interface IGraphics {
   public static final String ON_TOUCH_START = "ontouchstart";
   public static final String ON_TOUCH_MOVE = "ontouchmove";
   public static final String ON_TOUCH_END = "ontouchend";
-  public static final int SHIFT = 0x00000001;
-  public static final int ALT   = 0x00000002;
+  public static final int SHIFT       = 0x00000001;
+  public static final int ALT         = 0x00000002;
+  public static final int CTRL        = 0x00000004; // Ctrl
+  public static final int META        = 0x00000008; // Cmd
 
   public <H extends GraphicsEventHandler> void addGraphicsHandler(H handler, GraphicsEventBase.Type<H> type);
   void addGraphicsDoubleClickHandler(GraphicsDoubleClickHandler handler);
