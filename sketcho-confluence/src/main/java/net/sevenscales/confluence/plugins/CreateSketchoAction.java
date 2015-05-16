@@ -114,7 +114,7 @@ public class CreateSketchoAction extends ConfluenceActionSupport implements Page
 				throw new RuntimeException(e1);
 			}
     	
-    	page.setContent(content+"\n{sketcho:name="+diagramName+"}");
+    	//page.setContent(content+"\n{sketcho:name="+diagramName+"}");
     }
     
 //    SaveContext saveContext = new DefaultSaveContext();
