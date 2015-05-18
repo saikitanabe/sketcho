@@ -268,12 +268,13 @@ class Text extends Shape implements IText {
   
   public void addText(JavaScriptObject tokens, int x, int width) {
 	  Element r = getRawNode(rawNode);
-	  addText(r, tokens, x, width, baselineBottom);
+	  addText(r, tokens, x, width, baselineBottom, UiUtils.isFirefox(), UiUtils.isIE());
 	  tspanMode = true;
   }
   
-  private native void addText(JavaScriptObject parent,JavaScriptObject tokens, int x, int width, boolean baselineBottom)/*-{
-		var svgText = $wnd.svgTextArea(parent, x, width, baselineBottom);
+  private native void addText(JavaScriptObject parent,JavaScriptObject tokens, int x, int width, boolean baselineBottom, boolean firefox, boolean ie)/*-{
+  	var computeLength = null
+		var svgText = $wnd.svgTextArea(parent, x, width, baselineBottom, computeLength, firefox, ie);
     var elements = svgText.addTokens(tokens);
   }-*/;
   
