@@ -9,7 +9,8 @@
       <a class='btn--insert pure-button' data-type='line' data-prefix='## ' href='javascript:void(0)'>H2</a>
       <a class='btn--insert pure-button' data-prefix='_' data-suffix='_' href='javascript:void(0)'><i class="fa fa-italic"></i></a>
       <a class='btn--insert pure-button' data-prefix='**' data-suffix='**' href='javascript:void(0)'><i class="fa fa-bold"></i></a>
-      <a class='btn--insert pure-button last' data-type='line' data-prefix='* ' href='javascript:void(0)'><i class='fa fa-list'></i></a>
+      <a class='btn--insert pure-button' data-type='line' data-prefix='* ' href='javascript:void(0)'><i class='fa fa-list'></i></a>
+      <a class='btn--insert pure-button last' data-type='link' data-prefix='* ' href='javascript:void(0)'><i class='fa fa-link'></i></a>
   	</div>
   	<textarea ui:field='textArea'></textarea>
 	</g:HTMLPanel>

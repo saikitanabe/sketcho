@@ -39,6 +39,10 @@ public class ColorHelpers {
 		return (((parseInt(rgb[1]) + parseInt(rgb[2]) + parseInt(rgb[3])) / 3) > 128) ? true : false;
 	}-*/;
 
+	public static native boolean isRgbBlack(int r, int g, int b)/*-{
+		return (((r + g + b) / 3) > 128) ? true : false;
+	}-*/;
+
 
 	public static Rgb toRgb(String hexColor) {
 		if (hexColor.equals("transparent")) {
