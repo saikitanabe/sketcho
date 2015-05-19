@@ -299,35 +299,42 @@ class Text extends Shape implements IText {
   }
   
 	private String getChildElementsEscaped(int dx) {
-		String result = "";
 		Element raw = getRawNode(rawNode);
+		return formatNodes(raw, dx);
+	}
+
+	private String formatNodes(Node raw, int dx) {
+		String result = "";
 		for (int count = 0; count < raw.getChildCount(); ++count) {
 			Node node = raw.getChild(count);
-			if (node.getNodeName().equals("tspan")) { //   tag.tagName
+			// recursive node formatting until a text node
+			if (node.getNodeType() == 3) {
+				result += SafeHtmlUtils.htmlEscape(node.getNodeValue());
+			} else {
 				JsArray<Node> attributes = getAttributes(node);
+				String attrsStr = "";
 				if (attributes != null) {
-					String attrsStr = "";
 					for (int i = 0; i < attributes.length(); ++i) {
 						Node attr = attributes.get(i);
 						String attributeName = attr.getNodeName();
 						String attributeValue = attr.getNodeValue();
 
+						// TODO text should be relative to group and moved along with the group
+						// then no extra calculation would not be needed
 						if ("x".equals(attributeName)) {
 							attributeValue = String.valueOf(Integer.valueOf(attributeValue) + dx);
 						}
 						attrsStr += attributeName + "='" + attributeValue + "' ";
 					}
-					result += '<' + node.getNodeName() + ' ' + attrsStr +'>' + SafeHtmlUtils.htmlEscape(getTextContent(node)) + "</" + node.getNodeName() + '>';
 				}
+
+				result += '<' + node.getNodeName() + ' ' + attrsStr +'>' + 
+									formatNodes(node, dx) + 
+									"</" + node.getNodeName() + '>';
 			}
 		}
-		
 		return result;
-	};
-
-	public static native String getTextContent(Node elem) /*-{
-	  return elem.textContent;
-	}-*/;
+	}
 
 	public static native JsArray<Node> getAttributes(Node elem) /*-{
 	  return elem.attributes;
