@@ -295,7 +295,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     alink.use.setAttribute('x', x)
     alink.use.setAttribute('y', -10)
     alink.setAttribute('title', link)
-    $wnd.$(alink).tooltip()
+
+    // TODO tooltip doesn't work on SvgHandler (preview handler)
+    // bootstrap is not available
+    // $wnd.$(alink).tooltip()
 
     // if (!@net.sevenscales.editor.diagram.utils.UiUtils::isFirefox()()) {
       // webkit browsers handles properly  a href in svg

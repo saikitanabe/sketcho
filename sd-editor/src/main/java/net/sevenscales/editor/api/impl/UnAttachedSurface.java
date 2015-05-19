@@ -106,7 +106,7 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public void hide() {
 	}
 	public ISurface getSurface() {
-		return null;
+		return surface;
 	}
 	public List<Diagram> getDiagrams() {
 		return diagrams;

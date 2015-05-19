@@ -67,6 +67,8 @@ public class SvgHandler {
 	private void handleLoaded() {
 		logger.debug("handleLoaded...");
 
+		SurfaceDefs.addToDefs(surface.getSurface().getContainer(), ShapeCache.icons());
+
     JSONObject obj = new JSONObject(json);
     if (obj.isObject() != null) {
 	    JSONContentParser parser = new JSONContentParser(obj);
@@ -106,4 +108,5 @@ public class SvgHandler {
 	private native void nativeReady(JavaScriptObject handler, String svg)/*-{
 		handler(svg)
 	}-*/;
+	
 }
