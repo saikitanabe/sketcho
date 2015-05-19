@@ -324,6 +324,13 @@ class Text extends Shape implements IText {
 						if ("x".equals(attributeName)) {
 							attributeValue = String.valueOf(Integer.valueOf(attributeValue) + dx);
 						}
+
+						if (attributeName.equals("xlink:href") && 
+							 !attributeValue.startsWith("http://") &&
+							 !attributeValue.startsWith("https://") &&
+							 !attributeValue.startsWith("mailto:")) {
+							attributeValue = "";
+						}
 						attrsStr += attributeName + "='" + attributeValue + "' ";
 					}
 				}
