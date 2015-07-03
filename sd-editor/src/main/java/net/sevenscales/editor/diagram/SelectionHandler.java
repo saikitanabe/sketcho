@@ -47,6 +47,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.core.client.JsArrayString;
 
 
 public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
@@ -683,7 +684,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 //  }
 
   public void selectAll() {
-    for (Diagram d : surface.getDiagrams()) {      
+    for (Diagram d : surface.getDiagrams()) {
       // select diagram
       d.select();
 //      selectedItems.add(d);
@@ -701,6 +702,18 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
       }
     }
     return tmpSelectedItems;
+  }
+
+  public void selectShapes(JsArrayString shapeIds) {
+    unselectAll();
+    DiagramSearch search = surface.createDiagramSearch();
+    for (int i = 0; i < shapeIds.length(); ++i) {
+      String shapeId = shapeIds.get(i);
+      Diagram d = search.findByClientId(shapeId);
+      if (d != null) {
+        d.select();
+      }
+    }
   }
 
   /**
