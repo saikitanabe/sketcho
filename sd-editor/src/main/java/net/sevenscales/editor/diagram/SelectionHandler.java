@@ -34,6 +34,7 @@ import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ActionType;
+import net.sevenscales.editor.api.BoardDimensions;
 import net.sevenscales.editor.content.ui.UIKeyHelpers;
 
 import com.google.gwt.dom.client.NativeEvent;
@@ -707,13 +708,53 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   public void selectShapes(JsArrayString shapeIds) {
     unselectAll();
     DiagramSearch search = surface.createDiagramSearch();
+    List<Diagram> selected = new ArrayList<Diagram>();
     for (int i = 0; i < shapeIds.length(); ++i) {
       String shapeId = shapeIds.get(i);
       Diagram d = search.findByClientId(shapeId);
       if (d != null) {
         d.select();
+        selected.add(d);
       }
     }
+
+    BoardDimensions.resolveDimensions(selected);
+
+    int left = BoardDimensions.getLeftmost();
+    int top = BoardDimensions.getTopmost();
+    // int right = left + BoardDimensions.getWidth();
+    // int bottom = top + BoardDimensions.getHeight();
+
+    int width = BoardDimensions.getWidth();
+    int height = BoardDimensions.getHeight();
+
+    // from 0,0
+    int centerX = width / 2;
+    int centerY = height / 2;
+
+    // from 0,0
+    int clientWidth = com.google.gwt.user.client.Window.getClientWidth();
+    int cliehtHeight = com.google.gwt.user.client.Window.getClientHeight();
+    int clientCenterX = clientWidth / 2;
+    int clientCenterY = cliehtHeight / 2;
+
+    int centerDiffX = clientCenterX - centerX;
+    int centerDiffY = clientCenterY - centerY;
+
+    // NOTE this logic should not really be here, or 
+    // it could be a param to method or a separate method
+    // that can be called from comments part
+    int commentsSectionWidth = 460;
+    int visibleSpace = clientWidth - commentsSectionWidth;
+    int extrax = 0;
+
+    if (width < visibleSpace) {
+      // in case selection can fit to visible area after comments
+      // move to center of visible space
+      extrax = visibleSpace / 2 - width / 2;
+    }
+
+    surface.getRootLayer().setTransform(extrax + -left + centerDiffX, -top + centerDiffY - 40);
   }
 
   /**
