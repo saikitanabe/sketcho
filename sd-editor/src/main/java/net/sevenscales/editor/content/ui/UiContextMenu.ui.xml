@@ -64,6 +64,9 @@
 			<a ui:field="fileLink" title="Download file" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-download"></i>
 			</a>
+			<a ui:field="comment" title="Comment" class="btn btn-custom btn-context-menu tooltipper">
+				<i class="context-icon-comment"></i>
+			</a>
 			<a ui:field="delete" title="Delete" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-trash2"></i>
 			</a>

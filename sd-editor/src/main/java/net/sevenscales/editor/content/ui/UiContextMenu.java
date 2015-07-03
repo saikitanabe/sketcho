@@ -99,6 +99,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement switchElement;
 	@UiField AnchorElement colorize;
 	@UiField AnchorElement delete;
+	@UiField AnchorElement comment;
 	// @UiField AnchorElement annotate;
 	// @UiField AnchorElement unannotate;
 	@UiField AnchorElement addlink;
@@ -275,6 +276,14 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			public void onClick(ClickEvent event) {
 				stopEvent(event);
 				delete();
+			}
+		});
+
+		new FastElementButton(comment).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				stopEvent(event);
+				comment();
 			}
 		});
 
@@ -774,6 +783,14 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		UiContextMenu.this.selectionHandler.removeSelected();
 		hide();
 	}
+
+	private void comment() {
+		_comment();
+		hide();
+	}
+	private native void _comment()/*-{
+		$wnd.globalStreams.contextMenuStream.push({type:'comment.create'})
+	}-*/;
 	
 	private void stopEvent(ClickEvent event) {
 		event.stopPropagation();
