@@ -754,7 +754,29 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
       extrax = visibleSpace / 2 - width / 2;
     }
 
-    surface.getRootLayer().setTransform(extrax + -left + centerDiffX, -top + centerDiffY - 40);
+    int stx = surface.getRootLayer().getTransformX();
+    int sty = surface.getRootLayer().getTransformY();
+    int tx = extrax + (int) ((-left + centerDiffX) * surface.getScaleFactor());
+    int ty = (int) ((-top + centerDiffY - 40) * surface.getScaleFactor());
+
+    animate(surface.getRootLayer().getContainer(), stx, sty, tx, ty, this);
+  }
+
+  private native void animate(com.google.gwt.core.client.JavaScriptObject el, int stx, int sty, int tx, int ty, SelectionHandler me)/*-{
+    $wnd.animate({
+      el: el.rawNode,
+      translateX: [stx, tx],
+      translateY: [sty, ty],
+      easing: 'easeOutQuad',
+      complete: function() {
+        el.rawNode.style.transform = ''
+        me.@net.sevenscales.editor.diagram.SelectionHandler::setRootTransform(II)(tx,ty)
+      }
+    })
+  }-*/;
+
+  private void setRootTransform(int tx, int ty) {
+    surface.getRootLayer().setTransform(tx, ty);
   }
 
   /**
