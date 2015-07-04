@@ -77,7 +77,15 @@ public class ScaleSlider implements IScaleSlider {
 		
 //		new ShowHideHelpers(scaleSlider, innerScaleSlider, 6000);
 		new BirdsEye(surface, editorContext, this);
+
+		listen(this);
 	}
+
+	private native void listen(ScaleSlider me)/*-{
+		$wnd.globalStreams.scaleResetStream.onValue(function() {
+			me.@net.sevenscales.editor.content.ui.ScaleSlider::scaleToIndex(I)(@net.sevenscales.domain.constants.Constants::ZOOM_DEFAULT_INDEX)
+		})
+	}-*/;
 
 	private boolean freehandMode() {
 		return surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE);		
