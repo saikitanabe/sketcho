@@ -6,6 +6,7 @@ import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayString;
 
 import com.google.gwt.event.dom.client.HasTouchStartHandlers;
 
@@ -38,6 +39,7 @@ import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.api.ot.OperationTransaction;
+import net.sevenscales.domain.js.JsDimension;
 
 
 public interface ISurfaceHandler extends OperationTransaction {
@@ -56,6 +58,7 @@ public interface ISurfaceHandler extends OperationTransaction {
 	ISurface getSurface();
 	List<Diagram> getDiagrams();
 	List<Diagram> getVisualItems();
+	JsDimension getDimension(JsArrayString shapeIds);
 	void addLoadEventListener(SurfaceLoadedEventListener listener);
 	EditorContext getEditorContext();
 	MouseDiagramHandlerManager getMouseDiagramManager();

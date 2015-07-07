@@ -9,6 +9,7 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.BoardDimensions;
 import net.sevenscales.editor.api.LoadEventListenerCollection;
 import net.sevenscales.editor.api.Properties;
 import net.sevenscales.editor.api.EditorContext;
@@ -56,6 +57,7 @@ import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.domain.js.JsShape;
+import net.sevenscales.domain.js.JsDimension;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.HasTouchEndHandlers;
@@ -78,6 +80,7 @@ import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JsArrayString;
 
 
 class SurfaceHandler extends SimplePanel implements 
@@ -132,8 +135,8 @@ class SurfaceHandler extends SimplePanel implements
 	private OperationTransaction operationTransaction;
 
 	// >>>>>>>>> Debugging
-	// private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
-	// private net.sevenscales.editor.gfx.domain.IRectangle tempRect;
+	private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+	private net.sevenscales.editor.gfx.domain.IRectangle tempRect;
 	// <<<<<<<<< Debugging
 
 	public void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
@@ -538,6 +541,27 @@ class SurfaceHandler extends SimplePanel implements
 		return result;
 	}
 
+	public JsDimension getDimension(JsArrayString shapeIds) {
+    DiagramSearch search = createDiagramSearch();
+    List<Diagram> selected = new ArrayList<Diagram>();
+    for (int i = 0; i < shapeIds.length(); ++i) {
+      String shapeId = shapeIds.get(i);
+      Diagram d = search.findByClientId(shapeId);
+      if (d != null) {
+        selected.add(d);
+      }
+    }
+
+    BoardDimensions.resolveDimensions(selected);
+
+    int left = BoardDimensions.getLeftmost();
+    int top = BoardDimensions.getTopmost();
+    int width = BoardDimensions.getWidth();
+    int height = BoardDimensions.getHeight();
+
+    return JsDimension.create(left, top, width, height);
+	}
+
   public void addKeyEventHandler(KeyEventListener keyEventHandler) {
     this.keyEventHandler.add(keyEventHandler);
   }
@@ -665,15 +689,15 @@ class SurfaceHandler extends SimplePanel implements
 		interactionLayer4 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
 
     // >>>>>>>> Debug 
-    // tempCircle = IShapeFactory.Util.factory(editable).createCircle(rootLayer0);
-    // tempCircle.setShape(0, 0, 10);
-    // tempCircle.setStroke(218, 57, 57, 1);
-    // tempCircle.setFill(218, 57, 57, 1);
+    tempCircle = IShapeFactory.Util.factory(editable).createCircle(rootLayer0);
+    tempCircle.setShape(0, 0, 10);
+    tempCircle.setStroke(218, 57, 57, 1);
+    tempCircle.setFill(218, 57, 57, 1);
 
-    // tempRect = IShapeFactory.Util.factory(editable).createRectangle(rootLayer0);
-    // // tempRect.setShape(0, 0, 10);
-    // tempRect.setStroke(218, 57, 57, 1);
-    // tempRect.setStrokeWidth(4);
+    tempRect = IShapeFactory.Util.factory(editable).createRectangle(rootLayer0);
+    // tempRect.setShape(0, 0, 10);
+    tempRect.setStroke(218, 57, 57, 1);
+    tempRect.setStrokeWidth(4);
     // rectify(rootLayer0.getContainer(), tempRect, tempCircle, this);
     // <<<<<<<< Debug END
 
@@ -1013,9 +1037,13 @@ class SurfaceHandler extends SimplePanel implements
 	}
 	
 	public void scale(float value) {
-		scale(rootLayer0.getContainer(), scaleFactor, value, com.google.gwt.user.client.Window.getClientWidth(), com.google.gwt.user.client.Window.getClientHeight());
+		scale(rootLayer0.getContainer(), scaleFactor, value, com.google.gwt.user.client.Window.getClientWidth(), com.google.gwt.user.client.Window.getClientHeight(), tempCircle, tempRect);
 		scaleBackground(value);
 		this.scaleFactor = value;
+
+		if (!isLibrary()) {
+			// _notifyScale(value);
+		}
 	}
 
 	private native void scaleBackground(float value)/*-{
@@ -1023,6 +1051,10 @@ class SurfaceHandler extends SimplePanel implements
 		var size = 141.73 * value
 		var sizeValue = size + "px " + size + "px"
 		$wnd.$('#sketchboard-editor').css("background-size", sizeValue)
+	}-*/;
+
+	private native void _notifyScale(float factor)/*-{
+		$wnd.globalStreams.scaleStream.push(factor)
 	}-*/;
 	
 	public void invertScaleDiagram(Diagram diagram, int x, int y) {

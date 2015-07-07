@@ -16,6 +16,7 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.event.dom.client.HasTouchStartHandlers;
+import com.google.gwt.core.client.JsArrayString;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.OTBuffer;
@@ -42,6 +43,7 @@ import net.sevenscales.editor.diagram.DiagramSearch;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.js.JsDimension;
 
 
 public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
@@ -114,6 +116,10 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public List<Diagram> getVisualItems() {
 		return null;
 	}
+	public JsDimension getDimension(JsArrayString shapeIds) {
+		return null;		
+	}
+
 	public void addLoadEventListener(SurfaceLoadedEventListener listener) {
 
 	}
