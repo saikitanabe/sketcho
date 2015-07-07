@@ -1089,29 +1089,46 @@ class SurfaceHandler extends SimplePanel implements
 		}
 	}
 
-	private native void scale(JavaScriptObject element, float prevScaleFactor, float value, int width, int height)/*-{
+	private native void scale(JavaScriptObject element, float prevScaleFactor, float value, int width, int height, net.sevenscales.editor.gfx.domain.ICircle circle, net.sevenscales.editor.gfx.domain.IRectangle rect)/*-{
 		var m3 = new $wnd.dojox.gfx.Matrix2D(value)
 		var t = element.getTransform()
 		if (t != null) {
-			// calculate currect visible area center point
+			// calculate visible area center point that is visible on screen
+			// calculation is done with current scale factor (previous)
 			var left = t.dx / prevScaleFactor
 			var top = t.dy / prevScaleFactor
 			var cx = -left + width / 2 / prevScaleFactor
 			var cy = -top + height / 2 / prevScaleFactor
 
 			// debug center point
-   //    rect.@net.sevenscales.editor.gfx.domain.IRectangle::setShape(IIIII)((-left), (-top), width / prevScaleFactor, height / prevScaleFactor, 0)
-   //    circle.@net.sevenscales.editor.gfx.domain.ICircle::setFill(IIID)(218, 57, 57, 1)
-			// circle.@net.sevenscales.editor.gfx.domain.ICircle::setShape(III)(cx, cy, 10)
+      rect.@net.sevenscales.editor.gfx.domain.IRectangle::setShape(IIIII)((-left), (-top), width / prevScaleFactor, height / prevScaleFactor, 0)
+      circle.@net.sevenscales.editor.gfx.domain.ICircle::setFill(IIID)(218, 57, 57, 1)
+			circle.@net.sevenscales.editor.gfx.domain.ICircle::setShape(III)(cx, cy, 10)
+
+			$wnd.globalStreams.scaleAtStream.push({
+				prevScaleFactor: prevScaleFactor,
+				factor: value,
+				cx: cx,
+				cy: cy
+			})
 
 			// scale at center point to zoom it
 			element.setTransform($wnd.dojox.gfx.matrix.scaleAt(value, value, cx, cy))
 
-			// translate to center point to be visible area center again
+			// // translate to center point to be visible area center again
 			t = element.getTransform()
+      // rect.@net.sevenscales.editor.gfx.domain.IRectangle::setShape(IIIII)((t.dx), (t.dy), width, height, 0)
 			t.dx = t.dx - cx + width / 2
 			t.dy = t.dy - cy + height / 2
+
+
 			element.setTransform(t)
+			// $wnd.globalStreams.surfaceTransformStream.push({
+			// 	prevScaleFactor: prevScaleFactor,
+			// 	factor: value,
+			// 	translateX: t.dx,
+			// 	translateY: t.dy,
+			// })
 		} else {
 			element.setTransform($wnd.dojox.gfx.matrix.scale({ x: m3.xx, y: m3.yy}))
 		}
