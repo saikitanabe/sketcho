@@ -134,6 +134,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
       }
       
       surface.getRootLayer().setTransform(dx, dy);
+      _notifyBackgroundMoveStream("end");
       if (cachedEditor == null) {
         cachedEditor = getEditor();
       }
