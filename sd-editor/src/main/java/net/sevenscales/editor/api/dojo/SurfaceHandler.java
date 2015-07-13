@@ -135,8 +135,8 @@ class SurfaceHandler extends SimplePanel implements
 	private OperationTransaction operationTransaction;
 
 	// >>>>>>>>> Debugging
-	private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
-	private net.sevenscales.editor.gfx.domain.IRectangle tempRect;
+	// private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+	// private net.sevenscales.editor.gfx.domain.IRectangle tempRect;
 	// <<<<<<<<< Debugging
 
 	public void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
@@ -689,15 +689,15 @@ class SurfaceHandler extends SimplePanel implements
 		interactionLayer4 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
 
     // >>>>>>>> Debug 
-    tempCircle = IShapeFactory.Util.factory(editable).createCircle(rootLayer0);
-    tempCircle.setShape(0, 0, 10);
-    tempCircle.setStroke(218, 57, 57, 1);
-    tempCircle.setFill(218, 57, 57, 1);
+    // tempCircle = IShapeFactory.Util.factory(editable).createCircle(rootLayer0);
+    // tempCircle.setShape(0, 0, 10);
+    // tempCircle.setStroke(218, 57, 57, 1);
+    // tempCircle.setFill(218, 57, 57, 1);
 
-    tempRect = IShapeFactory.Util.factory(editable).createRectangle(rootLayer0);
+    // tempRect = IShapeFactory.Util.factory(editable).createRectangle(rootLayer0);
     // tempRect.setShape(0, 0, 10);
-    tempRect.setStroke(218, 57, 57, 1);
-    tempRect.setStrokeWidth(4);
+    // tempRect.setStroke(218, 57, 57, 1);
+    // tempRect.setStrokeWidth(4);
     // rectify(rootLayer0.getContainer(), tempRect, tempCircle, this);
     // <<<<<<<< Debug END
 
@@ -1037,7 +1037,7 @@ class SurfaceHandler extends SimplePanel implements
 	}
 	
 	public void scale(float value) {
-		scale(rootLayer0.getContainer(), scaleFactor, value, com.google.gwt.user.client.Window.getClientWidth(), com.google.gwt.user.client.Window.getClientHeight(), tempCircle, tempRect);
+		scale(rootLayer0.getContainer(), scaleFactor, value, com.google.gwt.user.client.Window.getClientWidth(), com.google.gwt.user.client.Window.getClientHeight()/*, tempCircle, tempRect*/);
 		scaleBackground(value);
 		this.scaleFactor = value;
 
@@ -1089,7 +1089,7 @@ class SurfaceHandler extends SimplePanel implements
 		}
 	}
 
-	private native void scale(JavaScriptObject element, float prevScaleFactor, float value, int width, int height, net.sevenscales.editor.gfx.domain.ICircle circle, net.sevenscales.editor.gfx.domain.IRectangle rect)/*-{
+	private native void scale(JavaScriptObject element, float prevScaleFactor, float value, int width, int height/*, net.sevenscales.editor.gfx.domain.ICircle circle, net.sevenscales.editor.gfx.domain.IRectangle rect*/)/*-{
 		var m3 = new $wnd.dojox.gfx.Matrix2D(value)
 		var t = element.getTransform()
 		if (t != null) {
@@ -1100,37 +1100,25 @@ class SurfaceHandler extends SimplePanel implements
 			var cx = -left + width / 2 / prevScaleFactor
 			var cy = -top + height / 2 / prevScaleFactor
 
-			// debug center point
-      rect.@net.sevenscales.editor.gfx.domain.IRectangle::setShape(IIIII)((-left), (-top), width / prevScaleFactor, height / prevScaleFactor, 0)
-      circle.@net.sevenscales.editor.gfx.domain.ICircle::setFill(IIID)(218, 57, 57, 1)
-			circle.@net.sevenscales.editor.gfx.domain.ICircle::setShape(III)(cx, cy, 10)
+			// >>>>>>> debug center point
+   //    rect.@net.sevenscales.editor.gfx.domain.IRectangle::setShape(IIIII)((-left), (-top), width / prevScaleFactor, height / prevScaleFactor, 0)
+   //    circle.@net.sevenscales.editor.gfx.domain.ICircle::setFill(IIID)(218, 57, 57, 1)
+			// circle.@net.sevenscales.editor.gfx.domain.ICircle::setShape(III)(cx, cy, 10)
+			// <<<<<<< debug center point
 
 			// scale at center point to zoom it
 			element.setTransform($wnd.dojox.gfx.matrix.scaleAt(value, value, cx, cy))
 
-			$wnd.globalStreams.scaleAtStream.push({
-				prevScaleFactor: prevScaleFactor,
-				factor: value,
-				cx: cx,
-				cy: cy,
-				matrix: element.getTransform()
-			})
+			$wnd.globalStreams.scaleAtStream.push()
 
 			// // translate to center point to be visible area center again
 			t = element.getTransform()
-      // rect.@net.sevenscales.editor.gfx.domain.IRectangle::setShape(IIIII)((t.dx), (t.dy), width, height, 0)
 			t.dx = t.dx - cx + width / 2
 			t.dy = t.dy - cy + height / 2
 
 
 			element.setTransform(t)
-			$wnd.globalStreams.surfaceTransformStream.push({
-				prevScaleFactor: prevScaleFactor,
-				factor: value,
-				translateX: t.dx,
-				translateY: t.dy,
-				matrix: element.getTransform()
-			})
+			$wnd.globalStreams.surfaceTransformStream.push()
 		} else {
 			element.setTransform($wnd.dojox.gfx.matrix.scale({ x: m3.xx, y: m3.yy}))
 		}
