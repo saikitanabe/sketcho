@@ -1052,10 +1052,6 @@ class SurfaceHandler extends SimplePanel implements
 		var sizeValue = size + "px " + size + "px"
 		$wnd.$('#sketchboard-editor').css("background-size", sizeValue)
 	}-*/;
-
-	private native void _notifyScale(float factor)/*-{
-		$wnd.globalStreams.scaleStream.push(factor)
-	}-*/;
 	
 	public void invertScaleDiagram(Diagram diagram, int x, int y) {
 		// TODO need to reposition to keep diagram in same place

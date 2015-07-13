@@ -505,6 +505,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		// safari doesn't support cumulative transformations
 			snapshotTransformations();
 		// }
+		_notifyDrag("start");
   }
 
   /**
@@ -662,7 +663,15 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		} else {
 			MouseDiagramEventHelpers.fireDiagramsChangedEvenet(selectedItems, surface, ActionType.DRAGGING);
 		}
+
+		_notifyDrag("end");
 	}
+
+	private native void _notifyDrag(String type)/*-{
+		$wnd.globalStreams.shapeDragStream.push({
+			type: type
+		})
+	}-*/;
 		
 // 	public void attach(Relationship2 relationship, AnchorElement anchorElement) {
 // 		ConnectionMoveHandler moveHandler = moveHandlers.get(relationship);
