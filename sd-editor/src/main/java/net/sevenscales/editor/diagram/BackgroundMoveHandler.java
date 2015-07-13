@@ -134,7 +134,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
       }
       
       surface.getRootLayer().setTransform(dx, dy);
-      _notifyBackgroundMoveStream("end");
+      _notifyBackgroundMoveStream("end", surface.getRootLayer().getContainer());
       if (cachedEditor == null) {
         cachedEditor = getEditor();
       }
@@ -153,11 +153,12 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
 
   private void startBackgroundMove() {
     surface.getEditorContext().getEventBus().fireEvent(new BackgroundMoveStartedEvent());
-    _notifyBackgroundMoveStream("start");
+    _notifyBackgroundMoveStream("start", surface.getRootLayer().getContainer());
   }
-  private native void _notifyBackgroundMoveStream(String type)/*-{
+  private native void _notifyBackgroundMoveStream(String type, JavaScriptObject group)/*-{
     $wnd.globalStreams.backgroundMoveStream.push({
-      type:type
+      type:type,
+      matrix: group.getTransform()
     })
   }-*/;
 
@@ -172,7 +173,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
 //  	complexElementHandler.showComplexElements(diagrams);
     if (backgroundMoving) {
-      _notifyBackgroundMoveStream("end");
+      _notifyBackgroundMoveStream("end", surface.getRootLayer().getContainer());
     }
     clear();
   }

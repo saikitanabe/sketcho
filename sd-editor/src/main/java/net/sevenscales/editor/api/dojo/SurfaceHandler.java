@@ -1105,15 +1105,16 @@ class SurfaceHandler extends SimplePanel implements
       circle.@net.sevenscales.editor.gfx.domain.ICircle::setFill(IIID)(218, 57, 57, 1)
 			circle.@net.sevenscales.editor.gfx.domain.ICircle::setShape(III)(cx, cy, 10)
 
+			// scale at center point to zoom it
+			element.setTransform($wnd.dojox.gfx.matrix.scaleAt(value, value, cx, cy))
+
 			$wnd.globalStreams.scaleAtStream.push({
 				prevScaleFactor: prevScaleFactor,
 				factor: value,
 				cx: cx,
-				cy: cy
+				cy: cy,
+				matrix: element.getTransform()
 			})
-
-			// scale at center point to zoom it
-			element.setTransform($wnd.dojox.gfx.matrix.scaleAt(value, value, cx, cy))
 
 			// // translate to center point to be visible area center again
 			t = element.getTransform()
@@ -1123,12 +1124,13 @@ class SurfaceHandler extends SimplePanel implements
 
 
 			element.setTransform(t)
-			// $wnd.globalStreams.surfaceTransformStream.push({
-			// 	prevScaleFactor: prevScaleFactor,
-			// 	factor: value,
-			// 	translateX: t.dx,
-			// 	translateY: t.dy,
-			// })
+			$wnd.globalStreams.surfaceTransformStream.push({
+				prevScaleFactor: prevScaleFactor,
+				factor: value,
+				translateX: t.dx,
+				translateY: t.dy,
+				matrix: element.getTransform()
+			})
 		} else {
 			element.setTransform($wnd.dojox.gfx.matrix.scale({ x: m3.xx, y: m3.yy}))
 		}

@@ -15,12 +15,16 @@ public class JsTransform extends JavaScriptObject {
 	public final native int getTransformY()/*-{
 		return this.transformY
 	}-*/;
+	public final native JavaScriptObject getMatrix()/*-{
+		return this.matrix
+	}-*/;
 
-	public static JsTransform create(int transformX, int transformY) {
+	public static JsTransform create(int transformX, int transformY, JavaScriptObject matrix) {
 		JSONObject result = new JSONObject();
 
 		result.put("transformX", new JSONNumber(transformX));
 		result.put("transformY", new JSONNumber(transformY));
+		result.put("matrix", new JSONObject(matrix));
 
 		return result.getJavaScriptObject().cast();
 	}

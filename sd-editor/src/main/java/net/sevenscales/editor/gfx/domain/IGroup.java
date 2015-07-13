@@ -1,5 +1,7 @@
 package net.sevenscales.editor.gfx.domain;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 public interface IGroup extends IContainer, IGraphics {
 
 	public void transform(int dx, int dy);
@@ -28,4 +30,5 @@ public interface IGroup extends IContainer, IGraphics {
   * Returns null if on root layer.
   */
   IGroup getLayer();
+  JavaScriptObject getMatrix();
 }

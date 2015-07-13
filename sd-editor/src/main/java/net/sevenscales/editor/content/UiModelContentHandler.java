@@ -317,8 +317,16 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 
 	  	// surface.getRootLayer().setTransform(-(left - width / 2), -(top - height / 2));
 	  	surface.getRootLayer().setTransform(-left + centerDiffX, -top + centerDiffY - 40); // toolbar
+	  	notifyBackgroundMove(surface.getRootLayer().getContainer());
   	}
   }
+
+  private native void notifyBackgroundMove(com.google.gwt.core.client.JavaScriptObject group)/*-{
+    $wnd.globalStreams.backgroundMoveStream.push({
+      type:'end',
+      matrix: group.getTransform()
+    })
+  }-*/;
 
   private void _addDiagram(Diagram diagram, ISurfaceHandler surface, ReattachHelpers reattachHelpers, CommentFactory commentFactory, boolean asSelected) {
  		// diagram is saved always using PAPER theme colors, so compare to that

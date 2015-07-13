@@ -117,6 +117,13 @@ class Group extends Graphics implements IContainer, IGroup {
     return _getTransformMatrix(group, dx, dy);
   }
 
+  public JavaScriptObject getMatrix() {
+    return _getMatrix(group);
+  }
+  private native JavaScriptObject _getMatrix(JavaScriptObject group)/*-{
+    return group.getTransform()
+  }-*/;
+
   private native String _getTransformMatrix(JavaScriptObject rawNode, int dx, int dy)/*-{
     var t = rawNode.getTransform();
     if (t) {
