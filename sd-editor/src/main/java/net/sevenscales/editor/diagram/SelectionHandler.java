@@ -784,7 +784,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   }-*/;
 
   private void setRootTransform(int tx, int ty) {
-    surface.getRootLayer().setTransform(tx, ty);
+    surface.setTransform(tx, ty);
   }
 
   /**

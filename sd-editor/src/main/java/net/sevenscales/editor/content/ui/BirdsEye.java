@@ -158,7 +158,7 @@ class BirdsEye {
 
 	    // int leftPosition = 40;
 	    // surface.getRootLayer().setTransform((int)-(leftmost * ratio) + leftPosition, (int)-(topmost * ratio));
-	    surface.getRootLayer().setTransform((int)((-leftmost * ratio) + 10 * ratio), 
+	    surface.setTransform((int)((-leftmost * ratio) + 10 * ratio), 
 	    																		(int)((-topmost * ratio) + 10 * ratio));
 
 	  	birdsEyeDown = true;
@@ -188,7 +188,7 @@ class BirdsEye {
 
 	    	// logger.debug("posx {} posy {} ratio {} mousePosX {} mousePosY {} leftmost {} topmost {}", posx, posy, ratio, mousePosX, mousePosY, leftmost, topmost);
 
-	      surface.getRootLayer().setTransform(posx, posy);
+	      surface.setTransform(posx, posy);
 
 	      moveRegistration.removeHandler();
 	      moveRegistration = null;

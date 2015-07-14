@@ -376,7 +376,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 
   public void reset() {
     surface.reset();
-    surface.getRootLayer().setTransform(0, 0);
+    surface.setTransform(0, 0);
 
 		// >>>>>>>>>>> SOLU 14.11.2014 -- commented
     // scaleSlider.reset();

@@ -88,6 +88,10 @@ public interface ISurfaceHandler extends OperationTransaction {
 	IGroup getContainerLayer();
 	IGroup getRootLayer();
 	IGroup getInteractionLayer();
+	/**
+	* This should be used always when transforming root layer. Notifies automatically HTML Layer.
+	*/
+	void setTransform(int tx, int ty);
 	void scale(float value);
 	float getScaleFactor();
 	int scaleClientX(int clientX);

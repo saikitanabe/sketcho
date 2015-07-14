@@ -512,6 +512,17 @@ class SurfaceHandler extends SimplePanel implements
 		return interactionLayer4;
 	}
 
+	public void setTransform(int tx, int ty) {
+		getRootLayer().setTransform(tx, ty);
+		_notifyTrasform();
+	}
+
+	private native void _notifyTrasform()/*-{
+    $wnd.globalStreams.backgroundMoveStream.push({
+      type: 'move'
+    })
+	}-*/;
+
 	public void addLoadEventListener(SurfaceLoadedEventListener listener) {
 	  if (!loadEventListenerCollection.contains(listener)) {
 	    loadEventListenerCollection.add(listener);
