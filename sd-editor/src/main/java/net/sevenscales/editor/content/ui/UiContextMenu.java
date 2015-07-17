@@ -785,11 +785,14 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}
 
 	private void comment() {
-		_comment();
-		hide();
+		_comment(comment);
+		// hide();
 	}
-	private native void _comment()/*-{
-		$wnd.globalStreams.contextMenuStream.push({type:'comment.create'})
+	private native void _comment(Element comment)/*-{
+		$wnd.globalStreams.contextMenuStream.push({
+			type:'comment.create',
+			element: comment
+		})
 	}-*/;
 	
 	private void stopEvent(ClickEvent event) {

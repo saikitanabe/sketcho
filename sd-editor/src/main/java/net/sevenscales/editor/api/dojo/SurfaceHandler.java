@@ -563,14 +563,18 @@ class SurfaceHandler extends SimplePanel implements
       }
     }
 
-    BoardDimensions.resolveDimensions(selected);
+    if (selected.size() > 0) {
+    	// could be deleted already
+	    BoardDimensions.resolveDimensions(selected);
 
-    int left = BoardDimensions.getLeftmost();
-    int top = BoardDimensions.getTopmost();
-    int width = BoardDimensions.getWidth();
-    int height = BoardDimensions.getHeight();
+	    int left = BoardDimensions.getLeftmost();
+	    int top = BoardDimensions.getTopmost();
+	    int width = BoardDimensions.getWidth();
+	    int height = BoardDimensions.getHeight();
 
-    return JsDimension.create(left, top, width, height);
+	    return JsDimension.create(left, top, width, height);
+    }
+    return null;
 	}
 
   public void addKeyEventHandler(KeyEventListener keyEventHandler) {
