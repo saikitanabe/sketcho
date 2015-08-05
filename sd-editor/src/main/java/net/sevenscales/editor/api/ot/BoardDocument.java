@@ -14,6 +14,7 @@ import net.sevenscales.editor.content.ClientIdHelpers.UniqueChecker;
 import net.sevenscales.editor.content.utils.JsonHelpers;
 import net.sevenscales.domain.utils.JsonFormat;
 import net.sevenscales.domain.constants.Constants;
+import net.sevenscales.domain.json.JsonExtraction;
 
 
 public class BoardDocument implements UniqueChecker {
@@ -204,7 +205,7 @@ public class BoardDocument implements UniqueChecker {
 	}
 
 	public String toJson(JsonFormat format) {
-		return JsonHelpers.jsonStringify(getDocument());
+		return JsonExtraction.jsonStringify(getDocument());
 	}
 
 }

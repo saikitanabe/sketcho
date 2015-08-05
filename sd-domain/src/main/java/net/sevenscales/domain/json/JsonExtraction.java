@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Arrays;
 
 import com.google.gwt.json.client.*;
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JavaScriptObject;
 
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.IUrlLinkRO;
@@ -133,6 +135,27 @@ public class JsonExtraction {
 
     return result;
 	}
+
+  public static JSONArray decompose(List<? extends IDiagramItemRO> items) {
+    JSONArray result = new JSONArray();
+    JsArray<JavaScriptObject> array = result.getJavaScriptObject().cast();
+    for (IDiagramItemRO di : items) {
+      if (di.getClientId() != null && !"".equals(di.getClientId())) {
+        // prevent bugs in the ui to send server ghost elements!!!
+        JSONObject json = JsonExtraction.decompose(di);
+        array.push(json.getJavaScriptObject());
+      }
+    }
+    return result;
+  }
+
+  public static String jsonStringify(List<? extends IDiagramItemRO> items) {
+    return stringify(JsonExtraction.decompose(items).getJavaScriptObject());
+  }
+
+  private static native String stringify(JavaScriptObject json)/*-{
+    return JSON.stringify(json)
+  }-*/;
 
   private static String validateShape(String shape) {
     if (shape == null || (shape != null && "".equals(shape))) {

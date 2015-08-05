@@ -49,7 +49,7 @@ public class JsonHelpers {
 	}
 
 	public void verify(String logicalName, List<? extends IDiagramItemRO> list, double checksum, JsonFormat jsonFormat) throws MisMatchException {
-		String json = jsonStringify(list);
+		String json = JsonExtraction.jsonStringify(list);
 		double boardChecksum = ChecksumHelpers.crc32(json);
 		if (boardChecksum != checksum) {
 			logger.error("Logical name {}, CLIENT JSON: {}", logicalName, json);
@@ -57,27 +57,6 @@ public class JsonHelpers {
 		}
 	}
 	
-	public static String jsonStringify(List<? extends IDiagramItemRO> items) {
-		return stringify(json(items).getJavaScriptObject());
-	}
-
-	private static native String stringify(JavaScriptObject json)/*-{
-		return JSON.stringify(json)
-	}-*/;
-
-	public static JSONArray json(List<? extends IDiagramItemRO> items) {
-		JSONArray result = new JSONArray();
-		JsArray<JavaScriptObject> array = result.getJavaScriptObject().cast();
-		for (IDiagramItemRO di : items) {
-		  if (di.getClientId() != null && !"".equals(di.getClientId())) {
-		  	// prevent bugs in the ui to send server ghost elements!!!
-				JSONObject json = JsonExtraction.decompose(di);
-				array.push(json.getJavaScriptObject());
-		  }
-		}
-		return result;
-	}
-
 	public static String removeLastComma(String json) {
 		if (json.length() > 0) {
 			// send doesn't allow last comma in the end => remove 
