@@ -189,18 +189,19 @@ public class ToolBar extends Composite {
 			// 	editorContext.set(EditorProperty.FREEHAND_MODE_TYPE, event.getModeType());
 			// }
 			surface.getEditorContext().set(EditorProperty.FREEHAND_MODE, true);
-			trigger("freehand-on");
+			freehandStream(true);
 		}
 	}
 
-  private native void trigger(String event)/*-{
-    $wnd.$($doc).trigger(event);
+  private native void freehandStream(boolean on)/*-{
+    $wnd.globalStreams.freehandStream.push(on)
   }-*/;
 
 	private void disabled() {
 		if (surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE))  {
 			surface.getEditorContext().set(EditorProperty.FREEHAND_MODE, false);
 			toggleButton(freehand, "freehand");
+			freehandStream(false);
 		}
 	}
 
