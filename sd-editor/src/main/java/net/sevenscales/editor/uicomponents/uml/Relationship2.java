@@ -255,7 +255,14 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       if (isStraight()) {
         shape = calcTwoPointsCurvePath(drawPoints);
       } else {
-        shape = BezierHelpers.smooth(segments);
+        try {
+          shape = BezierHelpers.smooth(segments);
+        } catch (Exception e) {
+          shape = calcTwoPointsCurvePath(drawPoints);
+
+          // debug which client id causes this problem
+          // net.sevenscales.domain.utils.Debug.log("applyPoints", getDiagramItem());
+        }
       }
 
       // logger.debug("RelLine.setShape {}", shape);
