@@ -518,9 +518,11 @@ class SurfaceHandler extends SimplePanel implements
 	}
 
 	private native void _notifyTrasform()/*-{
-    $wnd.globalStreams.backgroundMoveStream.push({
-      type: 'move'
-    })
+		if (typeof $wnd.globalStreams !== 'undefined') {
+	    $wnd.globalStreams.backgroundMoveStream.push({
+	      type: 'move'
+	    })
+		}
 	}-*/;
 
 	public void addLoadEventListener(SurfaceLoadedEventListener listener) {

@@ -322,10 +322,12 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
   }
 
   private native void notifyBackgroundMove(com.google.gwt.core.client.JavaScriptObject group)/*-{
-    $wnd.globalStreams.backgroundMoveStream.push({
-      type:'end',
-      matrix: group.getTransform()
-    })
+		if (typeof $wnd.globalStreams !== 'undefined') {
+	    $wnd.globalStreams.backgroundMoveStream.push({
+	      type:'end',
+	      matrix: group.getTransform()
+	    })
+  	}
   }-*/;
 
   private void _addDiagram(Diagram diagram, ISurfaceHandler surface, ReattachHelpers reattachHelpers, CommentFactory commentFactory, boolean asSelected) {
