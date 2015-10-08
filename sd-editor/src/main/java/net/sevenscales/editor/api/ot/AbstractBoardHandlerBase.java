@@ -146,8 +146,12 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
 	};
 
 	private void trackInsertEvent(Iterable<Diagram> diagrams) {
-		String elements = mkString(diagrams);
-		GoogleAnalyticsHelper.trackEvent("Board", "INSERT", elements);
+		// >>>> ST 8.10.2015 element types are no longer checked
+		// it is enough to know if shapes are inserted
+		// String elements = mkString(diagrams);
+		// <<<< ST 8.10.2015
+
+		GoogleAnalyticsHelper.trackEvent("Board", "INSERT", "");
 	}
 
 	private String mkString(Iterable<Diagram> diagrams) {
