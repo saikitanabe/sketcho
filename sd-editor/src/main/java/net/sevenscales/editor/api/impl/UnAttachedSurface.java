@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.event.dom.client.HasTouchStartHandlers;
 import com.google.gwt.core.client.JsArrayString;
 
+import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.api.ot.OperationTransaction;
@@ -95,7 +96,7 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	}
 
 	public void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
-			EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction) {
+			EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction, IBirdsEyeView birdsEyeView) {
 	}
 	public void setId(String id) {
 		

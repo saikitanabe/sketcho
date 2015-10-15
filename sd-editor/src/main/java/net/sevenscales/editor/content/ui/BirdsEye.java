@@ -9,6 +9,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Touch;
 
+import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
@@ -16,7 +17,7 @@ import net.sevenscales.editor.api.BoardDimensions;
 import net.sevenscales.domain.constants.Constants;
 
 
-class BirdsEye {
+class BirdsEye implements IBirdsEyeView {
 		private int transformX = 0;
 		private int transformY = 0;
 		private int mousePosX;
@@ -24,6 +25,7 @@ class BirdsEye {
 		private double ratio = 0;
 	
 		private boolean birdsEyeDown = false;
+		private boolean zDown = false;
 		private HandlerRegistration moveRegistration;
 		private ISurfaceHandler surface;
 		private EditorContext editorContext;
@@ -40,15 +42,23 @@ class BirdsEye {
 			  @Override
 			  public void onPreviewNativeEvent(NativePreviewEvent event) {
           NativeEvent ne = event.getNativeEvent();
-			    if (!birdsEyeDown && event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.noMetaKeys(ne) && !BirdsEye.this.editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
+			    if (!zDown && event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.noMetaKeys(ne) && !BirdsEye.this.editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
 			      if (ne.getKeyCode() == 'Z' && UIKeyHelpers.allMenusAreClosed()) {
-			      	birdsEyeViewOn();
+			      	// keeping z key down would cause fast on/off toggling
+			      	zDown = true;
+
+			      	if (birdsEyeDown) {
+								birdsEyeViewOff();
+			      	} else {
+				      	birdsEyeViewOn();
+			      	}
 			      }
 			    }
 
-			    if (birdsEyeDown && event.getTypeInt() == Event.ONKEYUP && !BirdsEye.this.editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
+			    if (event.getTypeInt() == Event.ONKEYUP && !BirdsEye.this.editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
 			      if (ne.getKeyCode() == 'Z') {
-			      	birdsEyeViewOff();
+			      	zDown = false;
+			      	// birdsEyeViewOff();
 			      }
 			    }
 			  }
@@ -62,6 +72,14 @@ class BirdsEye {
 			});
 
 			subscribeMapView(this);
+		}
+
+		public boolean isBirdsEyeViewOn() {
+			return birdsEyeDown;
+		}
+
+		public void off() {
+			birdsEyeViewOff();
 		}
 
 		private void handlePreview(NativePreviewEvent event) {
@@ -163,6 +181,7 @@ class BirdsEye {
 
 	  	birdsEyeDown = true;
 	  	followMouse();
+	  	notifyMapView(true);
 		}
 
 		private void birdsEyeViewOff() {
@@ -192,8 +211,13 @@ class BirdsEye {
 
 	      moveRegistration.removeHandler();
 	      moveRegistration = null;
+	      notifyMapView(false);
 			}
 		}
+
+		private native void notifyMapView(boolean on)/*-{
+			$wnd.globalStreams.mapViewStateStream.push(on)
+		}-*/;
 
 		private void followMouse() {
 			// logger.debug("followMouse...");

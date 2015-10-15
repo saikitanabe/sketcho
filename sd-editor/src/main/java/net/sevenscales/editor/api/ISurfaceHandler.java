@@ -28,6 +28,7 @@ import net.sevenscales.editor.diagram.DiagramDragHandler;
 import net.sevenscales.editor.diagram.DiagramSelectionHandler;
 import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.diagram.DiagramSearch;
+import net.sevenscales.editor.api.IBirdsEyeView;
 
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
@@ -49,7 +50,8 @@ public interface ISurfaceHandler extends OperationTransaction {
 	public static final String LIBRARY_AREA = "libraryarea";
 
 	void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
-			EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction);
+			EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction, IBirdsEyeView birdsEyeView);
+	IBirdsEyeView getBirdsEyeView();
 	void setId(String id);
 
 	boolean isLibrary();

@@ -53,7 +53,7 @@ public class ToolBar extends Composite {
 
 		handleButtons(this, freehand, undo, redo);
 		map.setTitle("Map View<br>Start: keep mouse down<br>Drag to reposition board<br>Center: release mouse<br>Shortcut: Z key");
-		handleMapView(map);
+		handleMapView(this, map);
 
 		handleUndoRedoShortcuts();
 		handleUndoRedoStreams(this);
@@ -153,25 +153,37 @@ public class ToolBar extends Composite {
 		}
 	}-*/;
 
-	private native void handleMapView(Element map)/*-{
+	private native void handleMapView(ToolBar me, Element map)/*-{
 		var elem = $wnd.$(map)
 		if (!$wnd.isTouch()) {
 			elem.tooltip({html: true, placement: 'top', container:'body'})
 		}
 
-		$wnd.Hammer(elem[0], {holdTimeout: 100, preventDefault: true}).on('hold', function(event) {
+		// $wnd.Hammer(elem[0], {holdTimeout: 100, preventDefault: true}).on('hold', function(event) {
+		$wnd.Hammer(elem[0], {preventDefault: true}).on('tap', function(event) {
 			// elem.find('i').attr('class', 'menu-icon-map-view-dark')
 			$wnd.$($doc).trigger('map-view', 'start')
 		})
-		$wnd.Hammer(elem[0], {preventDefault: true}).on('release', function(event) {
-			// elem.find('i').attr('class', 'menu-icon-map-view')
-			$wnd.$($doc).trigger('map-view', 'end')
+
+
+		$wnd.globalStreams.mapViewStateStream.onValue(function(value) {
+			me.@net.sevenscales.editor.api.ToolBar::onMap(Z)(value)
 		})
+
+		// $wnd.Hammer(elem[0], {preventDefault: true}).on('release', function(event) {
+			// elem.find('i').attr('class', 'menu-icon-map-view')
+		// 	$wnd.$($doc).trigger('map-view', 'end')
+		// })
 
 	}-*/;
 
-	private void onMap() {
-
+	private void onMap(boolean on) {
+		toggleButton(map, "world");
+		// if (on) {
+		// }
+		// if (surface.getBirdsEyeView().isBirdsEyeViewOn()) {
+			
+		// }
 	}
 	private void onFreehand() {
 		surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE)));

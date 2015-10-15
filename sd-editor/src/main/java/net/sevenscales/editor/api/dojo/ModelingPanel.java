@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.constants.Constants;
+import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.IModelingPanel;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
@@ -57,7 +58,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
-class ModelingPanel extends HorizontalPanel implements IModelingPanel {
+class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEyeView {
 	private static final SLogger logger = SLogger.createLogger(ModelingPanel.class);
 
 	static {
@@ -105,7 +106,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 		// now default implementation is in firefox impl.
 		surface = GWT.create(SurfaceHandlerImplFirefox.class);
 		surface.setName(SurfaceHandler.DRAWING_AREA);
-		surface.init(width, height, editable, modeManager, true, editorContext, otBuffer, operationTransaction);
+		surface.init(width, height, editable, modeManager, true, editorContext, otBuffer, operationTransaction, this);
 
 		surface.addLoadEventListener(new net.sevenscales.editor.api.SurfaceLoadedEventListener() {
 			public void onLoaded() {
@@ -327,6 +328,14 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel {
 
 	private boolean isEditorOpen() {
 		return surface.getEditorContext().isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN);
+	}
+
+	public boolean isBirdsEyeViewOn() {
+		return scaleSlider.getBirdsEyeView().isBirdsEyeViewOn();
+	}
+
+	public void off() {
+		scaleSlider.getBirdsEyeView().off();
 	}
 	
 	public ISurfaceHandler getSurface() {
