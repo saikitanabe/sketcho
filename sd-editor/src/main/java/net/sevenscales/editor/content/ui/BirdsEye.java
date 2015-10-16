@@ -141,6 +141,7 @@ class BirdsEye implements IBirdsEyeView {
 		    		}
 		    		break;
 		    	}
+		      case Event.ONMOUSEDOWN:
 		      case Event.ONMOUSEMOVE:
 		        mousePosX = event.getNativeEvent().getClientX();
 		        mousePosY = event.getNativeEvent().getClientY();
