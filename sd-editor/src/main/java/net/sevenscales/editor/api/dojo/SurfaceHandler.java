@@ -23,6 +23,7 @@ import net.sevenscales.editor.api.SurfaceDefs;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.api.ot.OperationTransaction;
+import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
@@ -133,6 +134,7 @@ class SurfaceHandler extends SimplePanel implements
 	protected boolean cancelSurfaceClickEvent;
 	private OTBuffer otBuffer;
 	private OperationTransaction operationTransaction;
+	private IBirdsEyeView birdsEyeView;
 
 	// >>>>>>>>> Debugging
 	// private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
@@ -140,13 +142,14 @@ class SurfaceHandler extends SimplePanel implements
 	// <<<<<<<<< Debugging
 
 	public void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
-			EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction) {
+			EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction, IBirdsEyeView birdsEyeView) {
 		this.editorContext = editorContext;
 		this.modeManager = modeManager;
 		this.editable = editable;
 		this.deleteSupported = deleteSupported;
 		this.otBuffer = otBuffer;
 		this.operationTransaction = operationTransaction;
+		this.birdsEyeView = birdsEyeView;
 		logger.debug("init {}...", name);
 
 		addStyleName("sd-SurfaceHandler");
@@ -164,7 +167,7 @@ class SurfaceHandler extends SimplePanel implements
 		// these are not needed if surface is not editable but to clarify code
 		// these are allocated as well and only mouse and key events are not
 		// observed
-		mouseDiagramManager = new MouseDiagramHandlerManager(this, diagrams, editable, modeManager);
+		mouseDiagramManager = new MouseDiagramHandlerManager(this, diagrams, editable, modeManager, birdsEyeView);
 
 		keyEventHandler = new KeyEventHandler(editable);
 		
@@ -251,6 +254,11 @@ class SurfaceHandler extends SimplePanel implements
 //    add(panel);
 //    setWidget(panel);
 		logger.debug("init {}... done", name);
+	}
+
+	@Override
+	public IBirdsEyeView getBirdsEyeView() {
+		return birdsEyeView;
 	}
 
 	@Override

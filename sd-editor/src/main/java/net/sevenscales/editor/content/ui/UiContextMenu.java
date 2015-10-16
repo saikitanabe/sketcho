@@ -228,6 +228,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				freehandOnOff(UiContextMenu.this.editorContext.isTrue(EditorProperty.FREEHAND_MODE));
 			}
 		});
+
+		handleBirdsEyeOnOff(this);
 		
 		new FastElementButton(freehandOff).addClickHandler(new ClickHandler() {
 			@Override
@@ -367,6 +369,12 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	private void showContextMenu() {
 		popup.setPopupPositionAndShow(mainContextPosition);
 	}
+
+	private native void handleBirdsEyeOnOff(UiContextMenu me)/*-{
+		$wnd.globalStreams.mapViewStateStream.onValue(function(value) {
+			me.@net.sevenscales.editor.content.ui.UiContextMenu::birdsEyeViewOn(Z)(value);
+		})
+	}-*/;
 
   private native void trigger(String event)/*-{
     $wnd.$($doc).trigger(event);
@@ -736,6 +744,14 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			freehandOff.removeClassName("btn-success");
 			freehandOff.addClassName("btn-custom");
 			surface.getElement().removeClassName("freehand-on");
+		}
+	}
+
+	private void birdsEyeViewOn(boolean on) {
+		if (on) {
+			surface.getElement().addClassName("birds-eye-on");
+		} else {
+			surface.getElement().removeClassName("birds-eye-on");
 		}
 	}
 	

@@ -2,6 +2,7 @@ package net.sevenscales.editor.content.ui;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.constants.Constants;
+import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -34,6 +35,7 @@ public class ScaleSlider implements IScaleSlider {
 	private double currentDistance;
 
 	private SimplePanel innerScaleSlider;
+	private BirdsEye birdsEye;
 
 	public ScaleSlider(ISurfaceHandler surface) {
 		this.surface = surface;
@@ -76,9 +78,13 @@ public class ScaleSlider implements IScaleSlider {
 		});
 		
 //		new ShowHideHelpers(scaleSlider, innerScaleSlider, 6000);
-		new BirdsEye(surface, editorContext, this);
+		birdsEye = new BirdsEye(surface, editorContext, this);
 
 		listen(this);
+	}
+
+	public IBirdsEyeView getBirdsEyeView() {
+		return birdsEye;
 	}
 
 	private native void listen(ScaleSlider me)/*-{

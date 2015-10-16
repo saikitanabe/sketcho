@@ -614,14 +614,16 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		}
 
 
+		double scaleFactor = surface.getScaleFactor();
+		
 		int dFontSize = diagram.getFontSize() != null ? diagram.getFontSize() : 12;
-		int fontSize = ((int) (dFontSize * surface.getScaleFactor()));
+		int fontSize = ((int) (dFontSize * scaleFactor));
 		codeMirror.setFontSize(fontSize + "px");
 		codeMirror.setLineHeight(lineHeight(fontSize) + "px");
 
-		codeMirror.setWidth((int) (diagram.getTextAreaWidth() * surface.getScaleFactor()));
+		codeMirror.setWidth((int) (diagram.getTextAreaWidth() * scaleFactor ));
 		setTextAreaHeight();
-		popup.setContentWidth((int) (diagram.getTextAreaWidth() * surface.getScaleFactor()));
+		popup.setContentWidth((int) (diagram.getTextAreaWidth() * scaleFactor));
 
 		if (surface.getScaleFactor() > 1) {
 			String paddingTop = ((int) (2 * surface.getScaleFactor())) + "";

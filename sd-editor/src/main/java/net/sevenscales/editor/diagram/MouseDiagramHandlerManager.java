@@ -16,6 +16,8 @@ import net.sevenscales.editor.diagram.drag.MouseDiagramDragHandler;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.api.IBirdsEyeView;
+
 
 public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDiagramHandler, MouseState {
 	private static final SLogger logger = SLogger.createLogger(MouseDiagramHandlerManager.class);
@@ -42,13 +44,16 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	private ISurfaceHandler surface;
 	// current handler gets events after mouse down if registered
 	private MouseDiagramHandler currentMouseHandler;
+	private IBirdsEyeView birdsEyeView;
 //	private MouseDiagramHandler connectionModeMouseHandler;
 
 	public MouseDiagramHandlerManager(ISurfaceHandler surface, List<Diagram> diagrams, boolean editable, 
-	    IModeManager modeManager) {
+	    IModeManager modeManager, IBirdsEyeView birdsEyeView) {
 		this.surface = surface;
 	  this.editable = editable;
 	  this.modeManager = modeManager;
+	  this.birdsEyeView = birdsEyeView;
+
 //    bendHandler = new MouseDiagramBendHandler(this);
     dragHandler = new MouseDiagramDragHandler(surface, this, new ISelectionHandler() {
       public void moveSelected(int x, int y) {
@@ -469,6 +474,11 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	}
 
 	private void _fireLongPress(int x, int y, boolean shiftKey) {
+		if (birdsEyeView != null && birdsEyeView.isBirdsEyeViewOn()) {
+			birdsEyeView.off();
+			return;
+		}
+
 		if (isResizing() || !surface.getEditorContext().isEditable()) {
 			// prevent handling if on resize area
 			// double click or long press disabled if not editable
