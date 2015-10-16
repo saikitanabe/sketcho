@@ -98,6 +98,9 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
 			EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction, IBirdsEyeView birdsEyeView) {
 	}
+	public IBirdsEyeView getBirdsEyeView() {
+		return null;
+	}
 	public void setId(String id) {
 		
 	}

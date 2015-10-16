@@ -122,10 +122,10 @@ class BirdsEye implements IBirdsEyeView {
 		}-*/;
 
 		private void mapView(boolean value) {
-			if (value) {
-				birdsEyeViewOn();
-			} else {
+			if (birdsEyeDown) {
 				birdsEyeViewOff();
+			} else {
+				birdsEyeViewOn();
 			}
 		}
 
@@ -133,7 +133,7 @@ class BirdsEye implements IBirdsEyeView {
 		  public void onPreviewNativeEvent(final NativePreviewEvent event) {
 		    final int eventType = event.getTypeInt();
 		    switch (eventType) {
-		    	case Event.ONTOUCHMOVE: {
+		    	case Event.ONTOUCHSTART: {
 		    		JsArray<Touch> touches = event.getNativeEvent().getTouches();
 		    		if (touches != null && touches.length() > 0) {
 			        mousePosX = touches.get(0).getClientX();

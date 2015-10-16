@@ -39,6 +39,7 @@ public class ToolBar extends Composite {
 
 		setStyleName("toolbar2");
 		freehand.setId("tip-freehand");
+		map.setId("tip-map");
 
 		surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
 			@Override
@@ -52,7 +53,7 @@ public class ToolBar extends Composite {
 		});
 
 		handleButtons(this, freehand, undo, redo);
-		map.setTitle("Map View<br>Start: keep mouse down<br>Drag to reposition board<br>Center: release mouse<br>Shortcut: Z key");
+		map.setTitle("Map View");
 		handleMapView(this, map);
 
 		handleUndoRedoShortcuts();
