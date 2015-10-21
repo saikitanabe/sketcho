@@ -169,6 +169,7 @@ public class ScaleSlider implements IScaleSlider {
   private native void _unfocusEverything()/*-{
 		if ("activeElement" in $wnd.document) {
     	$wnd.document.activeElement.blur()
+    	$wnd.globalStreams.closeEditorStream.push()
 		}
   }-*/;
 
