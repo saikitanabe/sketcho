@@ -159,7 +159,19 @@ public class ScaleSlider implements IScaleSlider {
 	@Override
   public void scale(int index) {
 		editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(index));
+		// unfocus everything, or otherwise shortcuts are not working
+		// that use key press events, focus steals press events and should
+		// handle keydown, but e.g. +, - signs have different keycodes on 
+		// different browsers
+		_unfocusEverything();
   }
+
+  private native void _unfocusEverything()/*-{
+		if ("activeElement" in $wnd.document) {
+    	$wnd.document.activeElement.blur()
+    	$wnd.globalStreams.closeEditorStream.push()
+		}
+  }-*/;
 
 	@Override
   public int getSliderValue() {
@@ -188,7 +200,10 @@ public class ScaleSlider implements IScaleSlider {
   }-*/;
 
   private native void _slideElement(JavaScriptObject element, ScaleSlider me)/*-{
+  	var _jquery = null
   	if (typeof $wnd.jq172 == "function") {
+  		_jquery = $wnd.jq172
+
 	  	$wnd.jq172(element).slider({ 
 	  		orientation: 'vertical', 
 	  		max: @net.sevenscales.domain.constants.Constants::ZOOM_FACTORS.length - 1, 
@@ -198,6 +213,7 @@ public class ScaleSlider implements IScaleSlider {
 	        }
 	  		});
   	} else if (typeof $wnd.jQuery == "function")  {
+  		_jquery = $wnd.jQuery
 	  	$wnd.jQuery(element).slider({ 
 	  		orientation: 'vertical', 
 	  		max: @net.sevenscales.domain.constants.Constants::ZOOM_FACTORS.length - 1, 
@@ -206,6 +222,13 @@ public class ScaleSlider implements IScaleSlider {
 	  				me.@net.sevenscales.editor.content.ui.ScaleSlider::scale(I)(ui.value);
 	        }
 	  		});
+  	}
+
+		var $e = _jquery(element)
+  	var $a = $e.find('a')
+  	if ($a) {
+  		$e.attr('tabIndex', '-1')
+  		$a.attr('tabIndex', '-1')
   	}
   	
   // 	if (typeof $wnd.jq172 == "function") {

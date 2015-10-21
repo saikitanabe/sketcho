@@ -71,6 +71,7 @@ class BirdsEye implements IBirdsEyeView {
 				}
 			});
 
+			// handleZoomShortcuts(this);
 			subscribeMapView(this);
 		}
 
@@ -82,35 +83,43 @@ class BirdsEye implements IBirdsEyeView {
 			birdsEyeViewOff();
 		}
 
-		private void handlePreview(NativePreviewEvent event) {
-	    if (!birdsEyeDown && (event.getTypeInt() == Event.ONKEYPRESS) && !editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) && UIKeyHelpers.allMenusAreClosed()) {
-	      NativeEvent ne = event.getNativeEvent();
-	      if (ne.getCharCode() == '+') { // compare using char code since key code is different on Firefox
+		private void handleZoom(NativePreviewEvent event) {
+			NativeEvent ne = event.getNativeEvent();
+			switch (ne.getCharCode()) {
+				case '+': {
 	      	int val = slider.getSliderValue() + 1;
           // logger.debug("zoom ++ {}", val);
 	      	if (val <= Constants.ZOOM_FACTORS.length) {
 	      	  slider.scaleToIndex(val);
 	      	}
-				}	
-			}
-
-			if (!birdsEyeDown && event.getTypeInt() == Event.ONKEYPRESS && !editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) && UIKeyHelpers.allMenusAreClosed()) {
-	      NativeEvent ne = event.getNativeEvent();
-	      if (ne.getCharCode() == '-') { // compare using char code since key code is different on Firefox
-	      	// logger.debug("zoom --");
+					break;
+				}
+				case '-': {
 	      	int val = slider.getSliderValue() - 1;
           // logger.debug("zoom -- {}", val);
 	      	if (val >= 0) {
             slider.scaleToIndex(val);
 	      	}
-				}	
-			}
-
-	    if (!birdsEyeDown && (event.getTypeInt() == Event.ONKEYPRESS) && !editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) && UIKeyHelpers.allMenusAreClosed()) {
-	      NativeEvent ne = event.getNativeEvent();
-	      if (ne.getCharCode() == '0') { // compare using char code since key code is different on Firefox
+					break;
+				}
+				case '0': {
       	  slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX);
-				}	
+	      	break;
+				}
+			}
+		}
+
+		private void handlePreview(NativePreviewEvent event) {
+			if (!birdsEyeDown) {
+				switch (event.getTypeInt()) {
+					case Event.ONKEYPRESS: {
+						if (!editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) &&
+								UIKeyHelpers.allMenusAreClosed()) {
+							handleZoom(event);
+						}
+						break;
+					}
+				}
 			}
 
 		}
@@ -136,15 +145,17 @@ class BirdsEye implements IBirdsEyeView {
 		    	case Event.ONTOUCHSTART: {
 		    		JsArray<Touch> touches = event.getNativeEvent().getTouches();
 		    		if (touches != null && touches.length() > 0) {
-			        mousePosX = touches.get(0).getClientX();
-			        mousePosY = touches.get(0).getClientY();
+			        mousePosX = touches.get(0).getClientX() - surface.getRootLayer().getTransformX() + 30;
+			        mousePosY = touches.get(0).getClientY() - surface.getRootLayer().getTransformY() + 50;
 		    		}
 		    		break;
 		    	}
 		      case Event.ONMOUSEDOWN:
 		      case Event.ONMOUSEMOVE:
-		        mousePosX = event.getNativeEvent().getClientX();
-		        mousePosY = event.getNativeEvent().getClientY();
+		      	// take into account background move as well
+		      	// some magic numbers to be more centered
+		        mousePosX = event.getNativeEvent().getClientX() - surface.getRootLayer().getTransformX() + 30;
+		        mousePosY = event.getNativeEvent().getClientY() - surface.getRootLayer().getTransformY() + 50;
 		        break;
 		      default:
 		        // not interested in other events

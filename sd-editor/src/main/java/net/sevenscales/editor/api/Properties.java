@@ -227,6 +227,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		});
 				
 		editorContext.getEventBus().addHandler(ShowDiagramPropertyTextEditorEvent.TYPE, showDiagramText);
+
+		handleEditorCloseStream(this);
 		handleItemRealTimeModify(this);
 
 		// >>>>>>>>>>>> SOLU
@@ -281,6 +283,12 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	// }-*/;
 
 	// <<<<<<<<<<<<<< SOLU
+
+	private native void handleEditorCloseStream(Properties me)/*-{
+		$wnd.globalStreams.closeEditorStream.onValue(function() {
+			me.@net.sevenscales.editor.api.Properties::unselectAll()()
+		})
+	}-*/;
 
 	private native void handleItemRealTimeModify(Properties me)/*-{
 		$wnd.globalStreams.dataItemModifyStream.onValue(function(dataItem) {
@@ -374,16 +382,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 	
 	public void unselectAll() {
-	  boolean reset = true;
-	  for (ISurfaceHandler s : surfaces.keySet()) {
-	    if (s.getSelectionHandler().getSelectedItems().size() > 0) {
-	      reset = false;
-	      break;
-	    }
-	  }
-	   
 	  applyTextToDiagram();
 	  clean();
+	  Properties.this.editorCommon.fireEditorClosed();
 	}
 	
 	private void clean() {
