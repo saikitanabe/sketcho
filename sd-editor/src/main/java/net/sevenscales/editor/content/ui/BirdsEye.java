@@ -71,6 +71,7 @@ class BirdsEye implements IBirdsEyeView {
 				}
 			});
 
+			// handleZoomShortcuts(this);
 			subscribeMapView(this);
 		}
 
@@ -82,35 +83,43 @@ class BirdsEye implements IBirdsEyeView {
 			birdsEyeViewOff();
 		}
 
-		private void handlePreview(NativePreviewEvent event) {
-	    if (!birdsEyeDown && (event.getTypeInt() == Event.ONKEYPRESS) && !editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) && UIKeyHelpers.allMenusAreClosed()) {
-	      NativeEvent ne = event.getNativeEvent();
-	      if (ne.getCharCode() == '+') { // compare using char code since key code is different on Firefox
+		private void handleZoom(NativePreviewEvent event) {
+			NativeEvent ne = event.getNativeEvent();
+			switch (ne.getCharCode()) {
+				case '+': {
 	      	int val = slider.getSliderValue() + 1;
           // logger.debug("zoom ++ {}", val);
 	      	if (val <= Constants.ZOOM_FACTORS.length) {
 	      	  slider.scaleToIndex(val);
 	      	}
-				}	
-			}
-
-			if (!birdsEyeDown && event.getTypeInt() == Event.ONKEYPRESS && !editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) && UIKeyHelpers.allMenusAreClosed()) {
-	      NativeEvent ne = event.getNativeEvent();
-	      if (ne.getCharCode() == '-') { // compare using char code since key code is different on Firefox
-	      	// logger.debug("zoom --");
+					break;
+				}
+				case '-': {
 	      	int val = slider.getSliderValue() - 1;
           // logger.debug("zoom -- {}", val);
 	      	if (val >= 0) {
             slider.scaleToIndex(val);
 	      	}
-				}	
-			}
-
-	    if (!birdsEyeDown && (event.getTypeInt() == Event.ONKEYPRESS) && !editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) && UIKeyHelpers.allMenusAreClosed()) {
-	      NativeEvent ne = event.getNativeEvent();
-	      if (ne.getCharCode() == '0') { // compare using char code since key code is different on Firefox
+					break;
+				}
+				case '0': {
       	  slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX);
-				}	
+	      	break;
+				}
+			}
+		}
+
+		private void handlePreview(NativePreviewEvent event) {
+			if (!birdsEyeDown) {
+				switch (event.getTypeInt()) {
+					case Event.ONKEYPRESS: {
+						if (!editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) &&
+								UIKeyHelpers.allMenusAreClosed()) {
+							handleZoom(event);
+						}
+						break;
+					}
+				}
 			}
 
 		}
