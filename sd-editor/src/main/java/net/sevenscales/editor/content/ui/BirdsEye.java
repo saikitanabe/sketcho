@@ -30,6 +30,8 @@ class BirdsEye implements IBirdsEyeView {
 		private ISurfaceHandler surface;
 		private EditorContext editorContext;
 		private IScaleSlider slider;
+		private int transformInitX;
+		private int transformInitY;
 
 
 		BirdsEye(ISurfaceHandler surface, EditorContext editorContext, IScaleSlider slider) {
@@ -145,8 +147,10 @@ class BirdsEye implements IBirdsEyeView {
 		    	case Event.ONTOUCHSTART: {
 		    		JsArray<Touch> touches = event.getNativeEvent().getTouches();
 		    		if (touches != null && touches.length() > 0) {
-			        mousePosX = touches.get(0).getClientX() - surface.getRootLayer().getTransformX() + 30;
-			        mousePosY = touches.get(0).getClientY() - surface.getRootLayer().getTransformY() + 50;
+			        int diffx = transformInitX - surface.getRootLayer().getTransformX();
+			        int diffy = transformInitY - surface.getRootLayer().getTransformY();
+			        mousePosX = touches.get(0).getClientX() + diffx;
+			        mousePosY = touches.get(0).getClientY() + diffy;
 		    		}
 		    		break;
 		    	}
@@ -154,8 +158,10 @@ class BirdsEye implements IBirdsEyeView {
 		      case Event.ONMOUSEMOVE:
 		      	// take into account background move as well
 		      	// some magic numbers to be more centered
-		        mousePosX = event.getNativeEvent().getClientX() - surface.getRootLayer().getTransformX() + 30;
-		        mousePosY = event.getNativeEvent().getClientY() - surface.getRootLayer().getTransformY() + 50;
+		        int diffx = transformInitX - surface.getRootLayer().getTransformX();
+		        int diffy = transformInitY - surface.getRootLayer().getTransformY();
+		        mousePosX = event.getNativeEvent().getClientX() + diffx;
+		        mousePosY = event.getNativeEvent().getClientY() + diffy;
 		        break;
 		      default:
 		        // not interested in other events
@@ -190,6 +196,9 @@ class BirdsEye implements IBirdsEyeView {
 	    // surface.getRootLayer().setTransform((int)-(leftmost * ratio) + leftPosition, (int)-(topmost * ratio));
 	    surface.setTransform((int)((-leftmost * ratio) + 10 * ratio), 
 	    																		(int)((-topmost * ratio) + 10 * ratio));
+
+	    transformInitX = surface.getRootLayer().getTransformX();
+	    transformInitY = surface.getRootLayer().getTransformY();
 
 	  	birdsEyeDown = true;
 	  	followMouse();
