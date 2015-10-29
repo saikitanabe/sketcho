@@ -23,6 +23,8 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.UndoEvent;
+// import net.sevenscales.editor.api.event.UnselectAllEvent;
+// import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.api.event.SelectionEvent;
 import net.sevenscales.editor.api.event.SelectionEventHandler;
 import net.sevenscales.editor.api.LibraryShapes;
@@ -81,7 +83,8 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		// 	@Override
 		// 	public void onUnselectAll(UnselectAllEvent event) {
 		// 		logger.debug("onUnselectAll...");
-		// 		// previouslySelected = null;
+		// unselect comes always :(
+		// 		previouslySelected = null;
 		// 	}
 		// });
 
@@ -93,7 +96,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		// });
 
 		// ESC key handler deletes created elements
-		handleEscKey(this);
+		handleStreams(this);
 	}
 
 	private void checkSelection() {
@@ -111,9 +114,16 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		}
 	}
 
-  private native void handleEscKey(QuickConnectionHandler me)/*-{
+  private native void handleStreams(QuickConnectionHandler me)/*-{
     $wnd.cancelStream.onValue(function(v) {
       me.@net.sevenscales.editor.diagram.QuickConnectionHandler::onEsc()();
+    })
+
+    $wnd.globalStreams.handToolStream.onValue(function(value) {
+    	if (value) {
+    		// cancel any pending quick connections when hand tool is activated
+	    	me.@net.sevenscales.editor.diagram.QuickConnectionHandler::onEsc()();
+    	}
     })
   }-*/;
 

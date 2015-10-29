@@ -12,6 +12,7 @@ import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import com.google.gwt.core.client.JavaScriptObject;
+import net.sevenscales.editor.api.Tools;
 
 
 public class BackgroundMoveHandler implements MouseDiagramHandler {
@@ -76,8 +77,11 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
 //    }
     this.currentSender = sender;
     if (backgroundMouseDown) {
-      // by default it is assumed to be true and changed only if sender is real diagram element
-      this.backgroundMouseDown = sender != null ? false : true;
+      if (!Tools.isHandTool()) {
+        // by default it is assumed to be true and changed only if sender is real diagram element
+        // and if hand tool is not enabled
+        this.backgroundMouseDown = sender != null ? false : true;
+      }
 //      System.out.println("backgroundMouseDown:" + backgroundMouseDown);
     }
     
@@ -152,6 +156,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
 
   private void startBackgroundMove() {
     surface.getEditorContext().getEventBus().fireEvent(new BackgroundMoveStartedEvent());
+    surface.getElement().addClassName("grabbing");
   }
 
   public boolean backgroundMoveInitialContitionOk() {
@@ -172,6 +177,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
     backgroundMouseDown = true;
     mouseDown = false;
     backgroundMoving = false;
+    surface.getElement().removeClassName("grabbing");
   }
   
   @Override
