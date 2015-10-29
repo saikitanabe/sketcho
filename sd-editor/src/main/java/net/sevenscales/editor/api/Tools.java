@@ -119,6 +119,40 @@ public class Tools {
 			return (currentTools & Tool.QUICK_MODE.getValue()) == Tool.QUICK_MODE.getValue();
 		}
 	}
+	public static void setHandTool(boolean enabled) {
+		instance._setHandTool(enabled);
+	}
+	public void _setHandTool(boolean enabled) {
+		if (enabled) {
+			currentTools |= Tool.HAND_TOOL.getValue();
+		} else {
+			currentTools &= ~Tool.HAND_TOOL.getValue();
+		}
+	}
+	public static boolean isHandTool() {
+		return instance._isHandTool();
+	}
+	private boolean _isHandTool() {
+		if (confluence()) {
+			return false;
+		} else {
+			return (currentTools & Tool.HAND_TOOL.getValue()) == Tool.HAND_TOOL.getValue();
+		}
+	}
+	public static void toggleHandTool() {
+		instance._toggleHandTool();
+	}
+	private void _toggleHandTool() {
+    setHandTool(!isHandTool());
+    _fireHandTool(isHandTool());
+	}
+	private native void _fireHandTool(boolean enabled)/*-{
+		if (typeof $wnd.globalStreams.handToolStream !== 'undefined') {
+			$wnd.globalStreams.handToolStream.push(enabled);
+		}
+	}-*/;
+
+
 	private boolean confluence() {
 		return editorContext.isTrue(EditorProperty.CONFLUENCE_MODE);
 	}	

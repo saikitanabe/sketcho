@@ -26,6 +26,7 @@ public class ToolBar extends Composite {
 	}
 
 	@UiField Element map;
+	@UiField Element handtool;
 	@UiField Element freehand;
 	@UiField Element undo;
 	@UiField Element redo;
@@ -39,6 +40,7 @@ public class ToolBar extends Composite {
 
 		setStyleName("toolbar2");
 		freehand.setId("tip-freehand");
+		handtool.setId("tip-handtool");
 		map.setId("tip-map");
 
 		surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
@@ -52,7 +54,7 @@ public class ToolBar extends Composite {
 			}
 		});
 
-		handleButtons(this, freehand, undo, redo);
+		handleButtons(this, handtool, freehand, undo, redo);
 		map.setTitle("Map View");
 		handleMapView(this, map);
 
@@ -131,26 +133,38 @@ public class ToolBar extends Composite {
     }
   }
 
-	private native void handleButtons(ToolBar me, Element freehand, Element undo, Element redo)/*-{
+	private native void handleButtons(ToolBar me, Element handtool, Element freehand, Element undo, Element redo)/*-{
+		$wnd.Hammer(handtool).on('tap', function() {
+			me.@net.sevenscales.editor.api.ToolBar::onHandTool()()
+		})
+		if (typeof $wnd.globalStreams.handToolStream !== 'undefined') {
+			$wnd.globalStreams.handToolStream.onValue(function(enabled) {
+				me.@net.sevenscales.editor.api.ToolBar::handToolChanged()()	
+			})
+			$wnd.globalStreams.freehandStream.onValue(function(on) {
+				me.@net.sevenscales.editor.api.ToolBar::freeHandStateChanged(Z)(on)	
+			})
+		}
+
 		$wnd.Hammer(freehand).on('tap', function() {
 			me.@net.sevenscales.editor.api.ToolBar::onFreehand()()
 		})
 		if (!$wnd.isTouch()) {
-			$wnd.$(freehand).tooltip()
+			$wnd.$(freehand).tooltip({'container':'body'})
 		}
 
 		$wnd.Hammer(undo).on('tap', function() {
 			me.@net.sevenscales.editor.api.ToolBar::onUndo()()
 		})
 		if (!$wnd.isTouch()) {
-			$wnd.$(undo).tooltip()
+			$wnd.$(undo).tooltip({'container':'body'})
 		}
 
 		$wnd.Hammer(redo).on('tap', function() {
 			me.@net.sevenscales.editor.api.ToolBar::onRedo()()
 		})
 		if (!$wnd.isTouch()) {
-			$wnd.$(redo).tooltip()
+			$wnd.$(redo).tooltip({'container':'body'})
 		}
 	}-*/;
 
@@ -178,6 +192,17 @@ public class ToolBar extends Composite {
 
 	}-*/;
 
+	private void handToolChanged() {
+		toggleButton(handtool, "hand");
+	}
+
+	private void freeHandStateChanged(boolean on) {
+		if (on && Tools.isHandTool()) {
+			// disable hand tool if starting freehand drawing
+			onHandTool();
+		}
+	}
+
 	private void onMap(boolean on) {
 		toggleButton(map, "world");
 		// if (on) {
@@ -185,6 +210,19 @@ public class ToolBar extends Composite {
 		// if (surface.getBirdsEyeView().isBirdsEyeViewOn()) {
 			
 		// }
+	}
+	private void onHandTool() {
+		if (!Tools.isHandTool() && surface.getEditorContext().isFreehandMode()) {
+			// disable freehand
+			onFreehand();
+		}
+		Tools.toggleHandTool();
+
+		if (Tools.isHandTool()) {
+			surface.getElement().addClassName("handtool-on");
+		} else {
+			surface.getElement().removeClassName("handtool-on");
+		}
 	}
 	private void onFreehand() {
 		surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE)));

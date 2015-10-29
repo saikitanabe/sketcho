@@ -17,6 +17,7 @@ import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.api.IBirdsEyeView;
+import net.sevenscales.editor.api.Tools;
 
 
 public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDiagramHandler, MouseState {
@@ -131,7 +132,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
   	// logger.start("MouseDiagramHandlerManager.onMouseDown 1");
   	// logger.debug("onMouseDown sender={}...", sender);
   	try {
-	    if (!surface.getEditorContext().isEditable()) {
+	    if (Tools.isHandTool() || !surface.getEditorContext().isEditable()) {
 	      // if not editable, background should be still movable
 	  		backgroundMoveHandler.onMouseDown(sender, point, keys);
 	  	// 	selectionHandler.onMouseDown(sender, point, keys);
@@ -242,7 +243,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	
 	public void onMouseMove(Diagram sender, MatrixPointJS point) {
 		try {
-	    if (!surface.getEditorContext().isEditable()) {
+	    if (Tools.isHandTool() || !surface.getEditorContext().isEditable()) {
 	  		backgroundMoveHandler.onMouseMove(sender, point);
 				// lassoSelectionHandler.onMouseMove(sender, point);
 	      return;
@@ -283,7 +284,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			// logger.start("onMouseUp");
 			// logger.debug("onMouseUp...");
 	//		startedConnection = false;
-	    if (!surface.getEditorContext().isEditable()) {
+	    if (Tools.isHandTool() || !surface.getEditorContext().isEditable()) {
 	  		backgroundMoveHandler.onMouseUp(sender, point, keys);
 				// lassoSelectionHandler.onMouseUp(sender, point, keys);
 				// selectionHandler.onMouseUp(sender, point, keys);
