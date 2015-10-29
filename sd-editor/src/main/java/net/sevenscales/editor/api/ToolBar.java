@@ -40,7 +40,9 @@ public class ToolBar extends Composite {
 
 		setStyleName("toolbar2");
 		freehand.setId("tip-freehand");
+		freehand.setTitle("Freehand | F");
 		handtool.setId("tip-handtool");
+		handtool.setTitle("Hand tool | H");
 		map.setId("tip-map");
 
 		surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
@@ -55,7 +57,7 @@ public class ToolBar extends Composite {
 		});
 
 		handleButtons(this, handtool, freehand, undo, redo);
-		map.setTitle("Map View");
+		map.setTitle("Map View | Z");
 		handleMapView(this, map);
 
 		handleUndoRedoShortcuts();
@@ -144,6 +146,9 @@ public class ToolBar extends Composite {
 			$wnd.globalStreams.freehandStream.onValue(function(on) {
 				me.@net.sevenscales.editor.api.ToolBar::freeHandStateChanged(Z)(on)	
 			})
+		}
+		if (!$wnd.isTouch()) {
+			$wnd.$(handtool).tooltip({'container':'body'})
 		}
 
 		$wnd.Hammer(freehand).on('tap', function() {

@@ -39,42 +39,24 @@ class BirdsEye implements IBirdsEyeView {
 			this.editorContext = editorContext;
 			this.slider = slider;
 
-			// do not handle undo/redo if property editor is open
-			Event.addNativePreviewHandler(new NativePreviewHandler() {
-			  @Override
-			  public void onPreviewNativeEvent(NativePreviewEvent event) {
-          NativeEvent ne = event.getNativeEvent();
-			    if (!zDown && event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.noMetaKeys(ne) && !BirdsEye.this.editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
-			      if (ne.getKeyCode() == 'Z' && UIKeyHelpers.allMenusAreClosed()) {
-			      	// keeping z key down would cause fast on/off toggling
-			      	zDown = true;
-
-			      	if (birdsEyeDown) {
-								birdsEyeViewOff();
-			      	} else {
-				      	birdsEyeViewOn();
-			      	}
-			      }
-			    }
-
-			    if (event.getTypeInt() == Event.ONKEYUP && !BirdsEye.this.editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
-			      if (ne.getKeyCode() == 'Z') {
-			      	zDown = false;
-			      	// birdsEyeViewOff();
-			      }
-			    }
-			  }
-			});
-
-			Event.addNativePreviewHandler(new NativePreviewHandler() {
-			  @Override
-			  public void onPreviewNativeEvent(NativePreviewEvent event) {
-			  	handlePreview(event);
-				}
-			});
-
-			// handleZoomShortcuts(this);
 			subscribeMapView(this);
+		}
+
+		private void mapViewShortcutDown() {
+			if (!zDown) {
+	    	// keeping z key down would cause fast on/off toggling
+	    	zDown = true;
+
+	    	if (birdsEyeDown) {
+					birdsEyeViewOff();
+	    	} else {
+	      	birdsEyeViewOn();
+	    	}
+			}
+		}
+
+		private void mapViewShortcutUp() {
+    	zDown = false;
 		}
 
 		public boolean isBirdsEyeViewOn() {
@@ -85,51 +67,60 @@ class BirdsEye implements IBirdsEyeView {
 			birdsEyeViewOff();
 		}
 
-		private void handleZoom(NativePreviewEvent event) {
-			NativeEvent ne = event.getNativeEvent();
-			switch (ne.getCharCode()) {
-				case '+': {
-	      	int val = slider.getSliderValue() + 1;
-          // logger.debug("zoom ++ {}", val);
-	      	if (val <= Constants.ZOOM_FACTORS.length) {
-	      	  slider.scaleToIndex(val);
-	      	}
-					break;
-				}
-				case '-': {
-	      	int val = slider.getSliderValue() - 1;
-          // logger.debug("zoom -- {}", val);
-	      	if (val >= 0) {
-            slider.scaleToIndex(val);
-	      	}
-					break;
-				}
-				case '0': {
-      	  slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX);
-	      	break;
-				}
-			}
-		}
-
-		private void handlePreview(NativePreviewEvent event) {
-			if (!birdsEyeDown) {
-				switch (event.getTypeInt()) {
-					case Event.ONKEYPRESS: {
-						if (!editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) &&
-								UIKeyHelpers.allMenusAreClosed()) {
-							handleZoom(event);
-						}
-						break;
-					}
-				}
+		private void zoomInShortcut() {
+			if (birdsEyeDown) {
+				return;
 			}
 
+    	int val = slider.getSliderValue() + 1;
+      // logger.debug("zoom ++ {}", val);
+    	if (val <= Constants.ZOOM_FACTORS.length) {
+    	  slider.scaleToIndex(val);
+    	}
 		}
+
+		private void zoomOutShortcut() {
+			if (birdsEyeDown) {
+				return;
+			}
+
+    	int val = slider.getSliderValue() - 1;
+      // logger.debug("zoom -- {}", val);
+    	if (val >= 0) {
+        slider.scaleToIndex(val);
+    	}
+    }
+
+    private void zoomResetShortcut() {
+			if (birdsEyeDown) {
+				return;
+			}
+
+  	  slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX);
+    }
 
 		private native void subscribeMapView(BirdsEye me)/*-{
 			$wnd.mapViewStream.onValue(function(value) {
 				me.@net.sevenscales.editor.content.ui.BirdsEye::mapView(Z)(value);
 			})
+
+			$wnd.globalStreams.birdsEyeShortcutDownStream.onValue(function() {
+				me.@net.sevenscales.editor.content.ui.BirdsEye::mapViewShortcutDown()();
+			})
+			$wnd.globalStreams.birdsEyeShortcutUpStream.onValue(function() {
+				me.@net.sevenscales.editor.content.ui.BirdsEye::mapViewShortcutUp()();
+			})
+
+			$wnd.globalStreams.zoomInShortcutStream.onValue(function() {
+				me.@net.sevenscales.editor.content.ui.BirdsEye::zoomInShortcut()();
+			})
+			$wnd.globalStreams.zoomOutShortcutStream.onValue(function() {
+				me.@net.sevenscales.editor.content.ui.BirdsEye::zoomOutShortcut()();
+			})
+			$wnd.globalStreams.zoomResetShortcutStream.onValue(function() {
+				me.@net.sevenscales.editor.content.ui.BirdsEye::zoomResetShortcut()();
+			})
+
 		}-*/;
 
 		private void mapView(boolean value) {
