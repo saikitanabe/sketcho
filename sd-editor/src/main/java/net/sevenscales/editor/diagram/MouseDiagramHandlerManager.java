@@ -487,6 +487,8 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		}
 		resizeHandler.onLongPress(x, y);
 
+		Tools.setHandTool(false);
+
 		if (!shiftKey) {
 			surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(false));		
 		}

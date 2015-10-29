@@ -127,11 +127,21 @@ public class Tools {
 		instance._setHandTool(enabled);
 	}
 	public void _setHandTool(boolean enabled) {
+		// check that state is changed
+		if (enabled && isHandTool()) {
+			return;
+		}
+		if (!enabled && !isHandTool()) {
+			return;
+		}
+
 		if (enabled) {
 			currentTools |= Tool.HAND_TOOL.getValue();
 		} else {
 			currentTools &= ~Tool.HAND_TOOL.getValue();
 		}
+
+    _fireHandTool(isHandTool());
 	}
 	public static boolean isHandTool() {
 		return instance._isHandTool();
@@ -147,8 +157,8 @@ public class Tools {
 		instance._toggleHandTool();
 	}
 	private void _toggleHandTool() {
+		boolean prevValue = isHandTool();
     setHandTool(!isHandTool());
-    _fireHandTool(isHandTool());
 	}
 	private native void _fireHandTool(boolean enabled)/*-{
 		if (typeof $wnd.globalStreams.handToolStream !== 'undefined') {
