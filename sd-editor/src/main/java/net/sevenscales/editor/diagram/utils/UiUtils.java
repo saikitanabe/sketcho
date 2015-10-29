@@ -8,6 +8,7 @@ public class UiUtils {
   // private static Boolean msie = null;
   private static Boolean firefox = null;
   private static Boolean chrome = null;
+  private static Boolean mobile = null;
   private static Boolean safari = null;
   private static Boolean opera = null;
 
@@ -37,6 +38,17 @@ public class UiUtils {
         dav = n.appVersion;
     var index = Math.max(dav.indexOf('WebKit'), dav.indexOf('Safari'), 0);
     return index > 0 ? true : false;
+  }-*/;
+
+  public static boolean isMobile() {
+    if (mobile == null) {
+      mobile = _Mobile();
+    }
+    return mobile.booleanValue();
+  }
+  public native static boolean _Mobile()/*-{
+    var ua = $wnd.navigator.userAgent
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile/i.test(ua);
   }-*/;
   
   public static boolean isChrome() {
