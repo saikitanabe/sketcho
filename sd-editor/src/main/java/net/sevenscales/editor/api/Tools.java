@@ -58,6 +58,10 @@ public class Tools {
 			}).onValue(function(v) {
 				me.@net.sevenscales.editor.api.Tools::_toggleSketchMode()()
 			})
+
+			$wnd.globalStreams.handToolShortcutStream.onValue(function() {
+				me.@net.sevenscales.editor.api.Tools::_toggleHandTool()()
+			})
 		}
 	}-*/;
 

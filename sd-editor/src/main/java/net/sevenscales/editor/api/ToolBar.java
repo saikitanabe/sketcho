@@ -194,6 +194,17 @@ public class ToolBar extends Composite {
 
 	private void handToolChanged() {
 		toggleButton(handtool, "hand");
+
+		if (Tools.isHandTool() && surface.getEditorContext().isFreehandMode()) {
+			// disable freehand
+			onFreehand();
+		}
+
+		if (Tools.isHandTool()) {
+			surface.getElement().addClassName("handtool-on");
+		} else {
+			surface.getElement().removeClassName("handtool-on");
+		}
 	}
 
 	private void freeHandStateChanged(boolean on) {
@@ -212,17 +223,7 @@ public class ToolBar extends Composite {
 		// }
 	}
 	private void onHandTool() {
-		if (!Tools.isHandTool() && surface.getEditorContext().isFreehandMode()) {
-			// disable freehand
-			onFreehand();
-		}
 		Tools.toggleHandTool();
-
-		if (Tools.isHandTool()) {
-			surface.getElement().addClassName("handtool-on");
-		} else {
-			surface.getElement().removeClassName("handtool-on");
-		}
 	}
 	private void onFreehand() {
 		surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE)));
