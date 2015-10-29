@@ -2,6 +2,7 @@ package net.sevenscales.editor.api.texteditor;
 
 import com.google.gwt.user.client.ui.Composite;
 
+import net.sevenscales.editor.diagram.utils.UiUtils;
 
 public interface ITextEditor {
 
@@ -10,11 +11,11 @@ public interface ITextEditor {
 	}
 
 	static class Factory {
-		public static ITextEditor createEditor(TextChanged changeListener, boolean codeMirror) {
-			if (codeMirror) {
-				return new CodeMirror(changeListener);
+		public static ITextEditor createEditor(TextChanged changeListener) {
+			if (UiUtils.isMobile()) {
+				return new TextEditor(changeListener);
 			}
-			return new TextEditor(changeListener);
+			return new CodeMirror(changeListener);
 		}
 	}
 

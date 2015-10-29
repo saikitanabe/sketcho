@@ -186,7 +186,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		popup = new CustomPopupCodeMirror();
 		popup.setStyleName("propertyPopup");
 		// iPad uses legacy text area editor
-		codeMirror = ITextEditor.Factory.createEditor(this, !TouchHelpers.isSupportsTouch());
+		codeMirror = ITextEditor.Factory.createEditor(this);
 		popup.setWidget(codeMirror.getUi());
 		// autohide is not enabled since property editor is closed manually and autohide causes problems
 		popup.setAutoHideEnabled(false);
