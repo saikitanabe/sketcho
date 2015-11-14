@@ -93,6 +93,12 @@ public class ShowHideHelpers {
 		$wnd.globalStreams.closeLibraryStram.onValue(function(value) {
 			me.@net.sevenscales.editor.content.utils.ShowHideHelpers::onLibraryStream(Z)(value);
 		})
+
+		$wnd.globalStreams.handToolStream.onValue(function(value) {
+			if (value) {
+				me.@net.sevenscales.editor.content.utils.ShowHideHelpers::onLibraryStream(Z)(value);
+			}
+		})
 	}-*/;
 
 	private void onLibraryStream(boolean value) {
