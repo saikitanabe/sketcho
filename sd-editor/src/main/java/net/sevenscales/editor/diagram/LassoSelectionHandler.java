@@ -289,7 +289,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 
   private void createSlide() {
   	// _createSlide();
-  	if (GlobalState.isAddSlideMode() && lassoRectangle != null && lassoRectangle.getWidth() > 100 && lassoRectangle.getHeight() > 100) {
+  	if (GlobalState.isAddSlideMode() && lassoRectangle != null && lassoRectangle.getWidth() /surface.getScaleFactor() > 100 && lassoRectangle.getHeight() / surface.getScaleFactor()> 100 ) {
 	    DiagramItemDTO item = LibraryShapes.createByType(ElementType.SLIDE.getValue());
 	    item.setText("");
 	    List<Diagram> found = surface.createDiagramSearch().findAllByType(ElementType.SLIDE.getValue());
