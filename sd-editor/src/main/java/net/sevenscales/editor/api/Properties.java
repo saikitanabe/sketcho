@@ -196,7 +196,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			public void onClose(CloseEvent<PopupPanel> event) {
 				logger.info("close properties editor...");
 				_doSend();
-				applyTextToDiagram();
+				boolean forceApplyAlways = true;
+				applyTextToDiagram(forceApplyAlways);
 				Properties.this.editorCommon.fireEditorClosed();
 				if (selectedDiagram == null) {
 					return;
@@ -367,7 +368,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		if (senders.size() == 1) {
 			// apply text first to current diagram, otherwise on close
 			// tries to apply text to new diagram and old ref is gone
-			applyTextToDiagram();
+			applyTextToDiagram(false);
 			selectedDiagram = senders.get(0);
 		}
 		
@@ -382,7 +383,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 	
 	public void unselectAll() {
-	  applyTextToDiagram();
+	  applyTextToDiagram(false);
 	  clean();
 	  Properties.this.editorCommon.fireEditorClosed();
 	}
@@ -393,7 +394,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		modifiedAtLeastOnce = false;
 	}
 
-	private void applyTextToDiagram() {
+	private void applyTextToDiagram(boolean forceApplyAlways) {
 	  boolean editorIsOpen = editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN);
 		if (editorIsOpen && selectedDiagram != null && selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
 			// reset text edit location
@@ -402,7 +403,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 //			selectedDiagram.endTextEdit();
 		}
 		
-		if (editorIsOpen && selectedDiagram != null) {
+		if ((editorIsOpen && selectedDiagram != null) || forceApplyAlways) {
 			selectedDiagram.editingEnded(modifiedAtLeastOnce);
 			AnchorElement.dragEndAnchors(selectedDiagram);
 		}
