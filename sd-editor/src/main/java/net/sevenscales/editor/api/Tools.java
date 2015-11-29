@@ -62,6 +62,15 @@ public class Tools {
 			$wnd.globalStreams.handToolShortcutStream.onValue(function() {
 				me.@net.sevenscales.editor.api.Tools::_toggleHandTool()()
 			})
+
+	    $wnd.cancelStream.onValue(function(v) {
+	      me.@net.sevenscales.editor.api.Tools::_setHandTool(Z)(false)
+	    })
+
+	    $wnd.globalStreams.addSlideStream.onValue(function() {
+	    	me.@net.sevenscales.editor.api.Tools::_setHandTool(Z)(false)
+	    })
+
 		}
 	}-*/;
 
