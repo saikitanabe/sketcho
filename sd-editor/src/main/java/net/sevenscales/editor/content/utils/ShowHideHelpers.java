@@ -58,13 +58,15 @@ public class ShowHideHelpers {
 		outer.addDomHandler(new MouseOverHandler() {
 			@Override
 			public void onMouseOver(MouseOverEvent event) {
-				show();
+				if (!ngIsShowLibraryOnClick()) {
+					show();
+				}
 			}
 		}, MouseOverEvent.getType());
 		outer.addDomHandler(new MouseOutHandler() {
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
-				System.out.println(Element.as(event.getNativeEvent().getEventTarget()).getId());
+				// System.out.println(Element.as(event.getNativeEvent().getEventTarget()).getId());
 //				if (!Element.as(event.getNativeEvent().getEventTarget()).isOrHasChild(inner.getElement())) {
 					onOuterElement = false;
 					// Scheduler.get().scheduleFixedDelay(hideslider, 2000);
@@ -151,6 +153,13 @@ public class ShowHideHelpers {
 	private boolean notConfluence() {
 		return !editorContext.isTrue(EditorProperty.CONFLUENCE_MODE);
 	}
+
+	private native boolean ngIsShowLibraryOnClick()/*-{
+		if (typeof $wnd.ngIsShowLibraryOnClick !== 'underfined') {
+			return $wnd.ngIsShowLibraryOnClick()
+		}
+		return false
+	}-*/;
 
 	private native void trigger(String event)/*-{
 		$wnd.$($doc).trigger(event)

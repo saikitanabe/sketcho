@@ -4,8 +4,10 @@
 	<ui:style>
 	</ui:style>
 	<g:HTMLPanel>
+
 		<div ui:field="btnGroup" class="library-selection library-selection-no-touch">
 			<ul class="ul-none ul-horizontal">
+				<li ui:field='settings'><i class='fa fa-gear'></i></li>
 				<li ui:field="software">Software</li>
 				<li ui:field="mindmap">Mind Map</li>
 		  	<li ui:field="roadmap">Roadmap</li>
@@ -15,5 +17,6 @@
 		  	<li ui:field="extra">Extras</li>
 		  </ul>
 		</div>
+
 	</g:HTMLPanel>
 </ui:UiBinder> 

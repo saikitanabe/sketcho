@@ -26,7 +26,7 @@ public class LibrarySelections extends Composite {
 	}
 
 	public enum Library {
-		SOFTWARE, MINDMAP, ROADMAP, GENERAL, IMAGES, TEAM, EXTRA
+		SOFTWARE, MINDMAP, ROADMAP, GENERAL, IMAGES, TEAM, EXTRA, LIBRARY_SETTINGS
 	}
 
 	public interface LibrarySelectedHandler {
@@ -35,6 +35,7 @@ public class LibrarySelections extends Composite {
 	
 	private LibrarySelectedHandler librarySelectedHandler;
 
+	@UiField Element settings;
 	@UiField Element software;
 	@UiField Element mindmap;
 	@UiField Element roadmap;
@@ -59,6 +60,22 @@ public class LibrarySelections extends Composite {
 
 		applyActive(software);
 		
+		DOM.sinkEvents((com.google.gwt.user.client.Element) settings.cast(),
+				Event.ONMOUSEDOWN);
+		DOM.setEventListener(
+				(com.google.gwt.user.client.Element) settings.cast(),
+				new EventListener() {
+					@Override
+					public void onBrowserEvent(Event event) {
+						switch (DOM.eventGetType(event)) {
+						case Event.ONMOUSEDOWN:
+							LibrarySelections.this.librarySelectedHandler.onSelected(Library.LIBRARY_SETTINGS);
+							applyActive(settings);
+							break;
+						}
+					}
+				});
+
 		DOM.sinkEvents((com.google.gwt.user.client.Element) mindmap.cast(),
 				Event.ONMOUSEDOWN);
 		DOM.setEventListener(

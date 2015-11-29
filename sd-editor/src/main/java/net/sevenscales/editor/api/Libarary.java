@@ -123,10 +123,16 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
       toolpool.show();
       panel.getElement().getStyle().setOverflowY(Style.Overflow.SCROLL);
       ngHideImageLibrary();
+      ngHideLibrarySettings();
       ngHideLibrary("team");
       ngHideLibrary("extra");
 			
 			switch (library) {
+      case LIBRARY_SETTINGS:
+        ngShowLibrarySettings();
+        panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+        toolpool.hide();
+        break;
 			case SOFTWARE:
 				break;
 			case MINDMAP:
@@ -252,6 +258,17 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     }
     toolpool.scale(factor);
   }
+
+  private native void ngShowLibrarySettings()/*-{
+    if (typeof $wnd.ngShowLibrarySettings != 'undefined') {
+      $wnd.ngShowLibrarySettings();
+    }
+  }-*/;
+  private native void ngHideLibrarySettings()/*-{
+    if (typeof $wnd.ngHideLibrarySettings != 'undefined') {
+      $wnd.ngHideLibrarySettings();
+    }
+  }-*/;
 
   private native void ngShowImageLibrary()/*-{
     if (typeof $wnd.ngShowImageLibrary != 'undefined') {
