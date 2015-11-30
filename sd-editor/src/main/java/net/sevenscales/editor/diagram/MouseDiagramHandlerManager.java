@@ -167,6 +167,15 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		    freehandDrawHandler.onMouseDown(sender, point, keys);
 	    }
 
+	    if (freehandDrawHandler != null) {
+		    boolean handled = freehandDrawHandler.handling();
+		    // logger.debugTime();
+		    // logger.start("MouseDiagramHandlerManager.onMouseDown 6");
+		    if (handled) {
+		    	return false;
+		    }
+		  }
+
 			lassoSelectionHandler.onMouseDown(sender, point, keys);
 	    if (lassoSelectionHandler.isLassoOn()) {
 				return true;
@@ -180,15 +189,6 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 5");
-
-	    if (freehandDrawHandler != null) {
-		    boolean handled = freehandDrawHandler.handling();
-		    // logger.debugTime();
-		    // logger.start("MouseDiagramHandlerManager.onMouseDown 6");
-		    if (handled) {
-		    	return false;
-		    }
-		  }
 	    
 			resizeHandler.onMouseDown(sender, point, keys);
 			
