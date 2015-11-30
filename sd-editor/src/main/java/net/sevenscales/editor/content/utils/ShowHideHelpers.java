@@ -58,7 +58,7 @@ public class ShowHideHelpers {
 		outer.addDomHandler(new MouseOverHandler() {
 			@Override
 			public void onMouseOver(MouseOverEvent event) {
-				if (!ngIsShowLibraryOnClick()) {
+				if (!ngIsLibraryManualShowHide()) {
 					show();
 				}
 			}
@@ -135,7 +135,9 @@ public class ShowHideHelpers {
 	}
 
 	public void forceFadeOut() {
-		hide();
+		if (!ngIsLibraryManualShowHide()) {
+			hide();
+		}
 	}
 	
 	private void hide() {
@@ -154,9 +156,9 @@ public class ShowHideHelpers {
 		return !editorContext.isTrue(EditorProperty.CONFLUENCE_MODE);
 	}
 
-	private native boolean ngIsShowLibraryOnClick()/*-{
-		if (typeof $wnd.ngIsShowLibraryOnClick !== 'underfined') {
-			return $wnd.ngIsShowLibraryOnClick()
+	private native boolean ngIsLibraryManualShowHide()/*-{
+		if (typeof $wnd.ngIsLibraryManualShowHide !== 'underfined') {
+			return $wnd.ngIsLibraryManualShowHide()
 		}
 		return false
 	}-*/;
