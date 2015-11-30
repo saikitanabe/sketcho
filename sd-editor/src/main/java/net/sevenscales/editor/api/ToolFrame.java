@@ -43,7 +43,7 @@ public class ToolFrame extends SimplePanel {
 		
 		justBacgkround = new SimplePanel();
 //		justBacgkround.getElement().setId("sketchboardme-toolframe");
-		justBacgkround.setWidget(new HTML("&nbsp;"));
+		justBacgkround.setWidget(new HTML("<img src='/static/images/menu_open_white.svg' class='library-show-ide-button'>"));
 		justBacgkround.setStyleName("library-showhide-area");
 		
 		// justBacgkround.setWidget(panel);
