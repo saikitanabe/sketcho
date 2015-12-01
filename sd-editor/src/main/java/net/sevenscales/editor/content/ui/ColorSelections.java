@@ -58,6 +58,7 @@ public class ColorSelections extends Composite {
 	@UiField Element header;
 	@UiField Element defaultColor;
 	@UiField Element transparent;
+	// private int currentRememberIndex = 0;
 	
 	public static native String rgb2hex(int r, int g, int b)/*-{
 		function hex(x) {
@@ -116,6 +117,8 @@ public class ColorSelections extends Composite {
 		int g = green(selectedRgb);
 		int b = blue(selectedRgb);
 
+		rememberColor(color);
+
 		switch (colorTarget) {
 			case BACKGROUND:
 				selectedBackgroundColor(color, selectedRgb, r, g, b);
@@ -131,6 +134,38 @@ public class ColorSelections extends Composite {
 		// colorValue.setText(color);
 		// colorValue.getElement().getStyle().setBackgroundColor("#" + color);
 		// colorValue.getElement().getStyle().setColor(currentColor.getTextColor().toHexStringWithHash());
+	}
+
+	private void rememberColor(String color) {
+		String hexcolor = ("#"+color).toUpperCase();
+		if (!isRemembered(hexcolor)) {
+			pushRememberColors();
+			// int index = currentRememberIndex++ % colortable.getRowCount();
+			Widget w = colortable.getWidget(0, 0);
+
+			w.getElement().setAttribute("data-hexcolor", hexcolor);
+			w.getElement().getStyle().setBackgroundColor(hexcolor);
+		}
+	}
+
+	private void pushRememberColors() {
+		for (int row = colortable.getRowCount() - 2; row >= 0 ; --row) {
+			Widget w = colortable.getWidget(row, 0);
+			Widget w2 = colortable.getWidget(row + 1, 0);
+			String hexcolor = w.getElement().getAttribute("data-hexcolor");
+			w2.getElement().setAttribute("data-hexcolor", hexcolor);
+			w2.getElement().getStyle().setBackgroundColor(hexcolor);
+		}
+	}
+
+	private boolean isRemembered(String color) {
+		for (int row = 0; row < colortable.getRowCount(); ++row) {
+			Widget w = colortable.getWidget(row, 0);
+			if (w.getElement().getAttribute("data-hexcolor").equals(color)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void selectedBackgroundColor(String color, String selectedRgb, int r, int g, int b) {
@@ -210,32 +245,32 @@ public class ColorSelections extends Composite {
 		// colorValue.getElement().getStyle().setBackgroundColor(currentColor.getBackgroundColor().toHexStringWithHash());
 		// colorValue.getElement().getStyle().setColor(currentColor.getTextColor().toHexStringWithHash());
 
-		colortable.setWidget(0, 0, createColorButton("#000000"));
-		colortable.setWidget(1, 0, createColorButton("#333333"));
-		colortable.setWidget(2, 0, createColorButton("#666666"));
-		colortable.setWidget(3, 0, createColorButton("#999999"));
-		colortable.setWidget(4, 0, createColorButton("#CCCCCC"));
+		colortable.setWidget(0, 0, createColorButton("#FFFFFF"));
+		colortable.setWidget(1, 0, createColorButton("#FFFFFF"));
+		colortable.setWidget(2, 0, createColorButton("#FFFFFF"));
+		colortable.setWidget(3, 0, createColorButton("#FFFFFF"));
+		colortable.setWidget(4, 0, createColorButton("#FFFFFF"));
 		colortable.setWidget(5, 0, createColorButton("#FFFFFF"));
-		colortable.setWidget(6, 0, createColorButton("#FF0000"));
-		colortable.setWidget(7, 0, createColorButton("#00FF00"));
-		colortable.setWidget(8, 0, createColorButton("#0000FF"));
-		colortable.setWidget(9, 0, createColorButton("#FFFF00"));
-		colortable.setWidget(10, 0, createColorButton("#00FFFF"));
-		colortable.setWidget(11, 0, createColorButton("#FF00FF"));
-		
+		colortable.setWidget(6, 0, createColorButton("#FFFFFF"));
+		colortable.setWidget(7, 0, createColorButton("#FFFFFF"));
+		colortable.setWidget(8, 0, createColorButton("#FFFFFF"));
+		colortable.setWidget(9, 0, createColorButton("#FFFFFF"));
+		colortable.setWidget(10, 0, createColorButton("#FFFFFF"));
+		colortable.setWidget(11, 0, createColorButton("#FFFFFF"));
+
 		colortable.setWidget(0, 1, createColorButton("#000000"));
-		colortable.setWidget(1, 1, createColorButton("#000000"));
-		colortable.setWidget(2, 1, createColorButton("#000000"));
-		colortable.setWidget(3, 1, createColorButton("#000000"));
-		colortable.setWidget(4, 1, createColorButton("#000000"));
-		colortable.setWidget(5, 1, createColorButton("#000000"));
-		colortable.setWidget(6, 1, createColorButton("#000000"));
-		colortable.setWidget(7, 1, createColorButton("#000000"));
-		colortable.setWidget(8, 1, createColorButton("#000000"));
-		colortable.setWidget(9, 1, createColorButton("#000000"));
-		colortable.setWidget(10, 1, createColorButton("#000000"));
-		colortable.setWidget(11, 1, createColorButton("#000000"));
-		
+		colortable.setWidget(1, 1, createColorButton("#333333"));
+		colortable.setWidget(2, 1, createColorButton("#666666"));
+		colortable.setWidget(3, 1, createColorButton("#999999"));
+		colortable.setWidget(4, 1, createColorButton("#CCCCCC"));
+		colortable.setWidget(5, 1, createColorButton("#FFFFFF"));
+		colortable.setWidget(6, 1, createColorButton("#FF0000"));
+		colortable.setWidget(7, 1, createColorButton("#00FF00"));
+		colortable.setWidget(8, 1, createColorButton("#0000FF"));
+		colortable.setWidget(9, 1, createColorButton("#FFFF00"));
+		colortable.setWidget(10, 1, createColorButton("#00FFFF"));
+		colortable.setWidget(11, 1, createColorButton("#FF00FF"));
+				
 		colorBox(0, 0, 0x000000);
 		colorBox(0, 6, 0x330000);
 		colorBox(0, 12, 0x660000);
@@ -402,6 +437,8 @@ public class ColorSelections extends Composite {
 		currentColor.setBorderColor(borderColor.create());
 		currentColor.setBackgroundColor(backgroundColor.create());
 
+		// Color color = pickColorByTab(currentColor.getTextColor(), currentColor.getBackgroundColor(), currentColor.getBorderColor());
+
 		updateColorCheckMark();
 	}
 
@@ -428,6 +465,8 @@ public class ColorSelections extends Composite {
 
 	private void updateColorCheckMark() {
 		Color color = pickColorByTab(currentColor.getTextColor(), currentColor.getBackgroundColor(), currentColor.getBorderColor());
+
+		rememberColor(color.toHexString());
 		updateColorCheckMark(color);
 	}
 
