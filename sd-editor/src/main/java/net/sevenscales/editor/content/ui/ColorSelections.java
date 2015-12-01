@@ -44,7 +44,6 @@ public class ColorSelections extends Composite {
 	}
 
 	public interface Style extends CssResource {
-		String focuspanel();
 	}
 	
 	public interface SelectionHandler {
@@ -55,7 +54,7 @@ public class ColorSelections extends Composite {
 	@UiField FlexTable colortable;
 	// @UiField
 	// SimplePanel sampleColor;
-	@UiField TextBox colorValue;
+	// @UiField TextBox colorValue;
 	@UiField Element header;
 	@UiField Element defaultColor;
 	@UiField Element transparent;
@@ -110,12 +109,7 @@ public class ColorSelections extends Composite {
 		String selectedRgb = widget.getElement().getStyle().getBackgroundColor();
 		if (selectedRgb.startsWith("#")) {
 			// in hex format IE8 at least
-			String hexnumber = selectedRgb.substring(1, selectedRgb.length());
-			assert(hexnumber.length() == 6);
-			int rc = Integer.valueOf(hexnumber.substring(0, 2), 16);
-			int gc = Integer.valueOf(hexnumber.substring(2, 4), 16);
-			int bc = Integer.valueOf(hexnumber.substring(4, 6), 16);
-			selectedRgb = "rgb(" + rc + "," + gc + "," + bc + ")";
+			selectedRgb = ColorHelpers.toRgb(selectedRgb).toString();
 		}
 		String color = rgb2hex(selectedRgb).toUpperCase();
 		int r = red(selectedRgb);
@@ -134,30 +128,39 @@ public class ColorSelections extends Composite {
 				break;
 		}
 
-		colorValue.setText(color);
-		colorValue.getElement().getStyle().setBackgroundColor("#" + color);
-		colorValue.getElement().getStyle().setColor(currentColor.getTextColor().toHexStringWithHash());
+		// colorValue.setText(color);
+		// colorValue.getElement().getStyle().setBackgroundColor("#" + color);
+		// colorValue.getElement().getStyle().setColor(currentColor.getTextColor().toHexStringWithHash());
 	}
 
 	private void selectedBackgroundColor(String color, String selectedRgb, int r, int g, int b) {
 		currentColor.setBackgroundColor(new Color(r, g, b, 0.85));
-		String textcolor = "ffffff";
-		if (ColorHelpers.isRgbBlack(selectedRgb)) {
-			textcolor = "444444";
-		}
+		String textcolor = textColorByBackgroundColor(selectedRgb);
 		int tr = Integer.valueOf(textcolor.substring(0, 2), 16);
 		int tg = Integer.valueOf(textcolor.substring(2, 4), 16);
 		int tb = Integer.valueOf(textcolor.substring(4, 6), 16);
 
 		currentColor.setTextColor(new Color(tr, tg, tb, 1));
+
+		updateColorCheckMark(currentColor.getBackgroundColor());
+	}
+
+	private String textColorByBackgroundColor(String bgcolor) {
+		String textcolor = "ffffff";
+		if (ColorHelpers.isRgbBlack(bgcolor)) {
+			textcolor = "444444";
+		}
+		return textcolor;
 	}
 
 	private void selectedBorderColor(String color, int r, int g, int b) {
 		currentColor.setBorderColor(new Color(r, g, b, 1));
+		updateColorCheckMark(currentColor.getBorderColor());
 	}
 
 	private void selectedTextColor(String color, int r, int g, int b) {
 		currentColor.setTextColor(new Color(r, g, b, 1));
+		updateColorCheckMark(currentColor.getTextColor());
 	}
 	
 	private ClickHandler clickHandler = new ClickHandler() {
@@ -204,8 +207,8 @@ public class ColorSelections extends Composite {
 		this.editorContext = editorContext;
 		initWidget(uiBinder.createAndBindUi(this));
 		
-		colorValue.getElement().getStyle().setBackgroundColor(currentColor.getBackgroundColor().toHexStringWithHash());
-		colorValue.getElement().getStyle().setColor(currentColor.getTextColor().toHexStringWithHash());
+		// colorValue.getElement().getStyle().setBackgroundColor(currentColor.getBackgroundColor().toHexStringWithHash());
+		// colorValue.getElement().getStyle().setColor(currentColor.getTextColor().toHexStringWithHash());
 
 		colortable.setWidget(0, 0, createColorButton("#000000"));
 		colortable.setWidget(1, 0, createColorButton("#333333"));
@@ -247,22 +250,6 @@ public class ColorSelections extends Composite {
 			}
 		});
 		
-//		DOM.sinkEvents((com.google.gwt.user.client.Element) border.cast(),
-//				Event.ONCLICK);
-//		DOM.setEventListener(
-//				(com.google.gwt.user.client.Element) border.cast(),
-//				new EventListener() {
-//					@Override
-//					public void onBrowserEvent(Event event) {
-//						switch (DOM.eventGetType(event)) {
-//						case Event.ONCLICK:
-//							colorTarget = ColorTarget.BORDER;
-////							showTab(border);
-//							break;
-//						}
-//					}
-//				});
-		
 		new FastElementButton(background).addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -295,28 +282,31 @@ public class ColorSelections extends Composite {
 
 	public void backgroundMode() {
 		colorTarget = ColorTarget.BACKGROUND;
+		updateColorCheckMark();
 		JQuery.tab(background, "show");
 	}
 
 	public void borderMode() {
 		colorTarget = ColorTarget.BORDER;
+		updateColorCheckMark();
 		JQuery.tab(border, "show");
 	}
 
 	public void textMode() {
 		colorTarget = ColorTarget.TEXT;
+		updateColorCheckMark();
 		JQuery.tab(textColor, "show");
 	}
 
 	public void hideHeader() {
 		borderMode();
-		colorValue.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
+		// colorValue.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
 		transparent.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
 		header.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.NONE);
 	}
 	public void showHeader() {
 		// backgroundMode();
-		colorValue.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE);
+		// colorValue.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE);
 		transparent.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
 		header.getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE);
 	}
@@ -334,7 +324,7 @@ public class ColorSelections extends Composite {
 		FastButton color = new FastButton(focus);
 //		color.addMouseOverHandler(mouseOverHandler);
 		color.addClickHandler(clickHandler);
-		color.setStyleName(style.focuspanel());
+		color.setStyleName("focuspanel");
 		
 		
 		int width = 10;
@@ -346,6 +336,7 @@ public class ColorSelections extends Composite {
 		color.setPixelSize(width, height);
 //		String hex = colorHex(row, col, basecolor);
 //		System.out.println(hex);
+		color.getElement().setAttribute("data-hexcolor", hexcolor);
 		color.getElement().getStyle().setBackgroundColor(hexcolor);
 		return color;
 	}
@@ -379,6 +370,8 @@ public class ColorSelections extends Composite {
 		currentColor.setTextColor(Theme.getCurrentColorScheme().getTextColor().create());
 		currentColor.setBorderColor(Theme.getCurrentColorScheme().getBorderColor().create());
 
+		updateColorCheckMark();
+
 		selectionHandler.itemSelected(currentColor, ColorTarget.ALL);
 	}
 	
@@ -396,13 +389,62 @@ public class ColorSelections extends Composite {
 				break;
 		}
 		
+		updateColorCheckMark();
 		selectionHandler.itemSelected(currentColor, colorTarget);
 	}
 	
-	public void setCurrentDiagramColor(String textColor, String backgroundColor) {
-		System.out.println("setCurrentDiagramColor: " + textColor + " " + backgroundColor);
-		colorValue.setText(backgroundColor.toUpperCase());
-		colorValue.getElement().getStyle().setColor("#" + textColor);
-		colorValue.getElement().getStyle().setBackgroundColor("#" + backgroundColor);
+	public void setCurrentDiagramColor(Color textColor, Color backgroundColor, Color borderColor) {
+		// colorValue.setText(backgroundColor.toHexStringWithHash().toUpperCase());
+		// colorValue.getElement().getStyle().setColor(textColor.toHexStringWithHash());
+		// colorValue.getElement().getStyle().setBackgroundColor(backgroundColor.toHexStringWithHash());
+
+		currentColor.setTextColor(textColor.create());
+		currentColor.setBorderColor(borderColor.create());
+		currentColor.setBackgroundColor(backgroundColor.create());
+
+		updateColorCheckMark();
+	}
+
+	private Color pickColorByTab(Color textColor, Color backgroundColor, Color borderColor) {
+		Color result = null;
+
+		switch (colorTarget) {
+			case TEXT:
+				result = textColor;
+				break;
+			case BORDER:
+				result = borderColor;
+				break;
+			case BACKGROUND:
+				result = backgroundColor;
+				break;
+			default:
+				result = backgroundColor;
+				break;
+		}
+
+		return result;
+	}
+
+	private void updateColorCheckMark() {
+		Color color = pickColorByTab(currentColor.getTextColor(), currentColor.getBackgroundColor(), currentColor.getBorderColor());
+		updateColorCheckMark(color);
+	}
+
+	private void updateColorCheckMark(Color color) {
+		for (int row = 0; row < colortable.getRowCount(); ++row) {
+			for (int col = 0; col < colortable.getCellCount(row); ++col) {
+				Widget w = colortable.getWidget(row, col);
+
+				if (color != null && color.getOpacity() > 0.0 && w.getElement().getAttribute("data-hexcolor").equals(color.toHexStringWithHash().toUpperCase())) {
+					w.getElement().setInnerText("✓");
+
+					String tc = textColorByBackgroundColor(ColorHelpers.toRgb(color.toHexStringWithHash()).toString());
+					w.getElement().getStyle().setColor("#"+tc.toUpperCase());
+				} else {
+					w.getElement().setInnerText("");
+				}
+			}
+		}
 	}
 }
