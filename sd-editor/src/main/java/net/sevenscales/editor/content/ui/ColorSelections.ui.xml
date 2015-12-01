@@ -53,8 +53,8 @@
 					<!-- <g:TextBox ui:field="colorValue" width="211px" styleName="color-colorfield"></g:TextBox> -->
 					<!-- </g:HorizontalPanel> -->
 					<g:HTMLPanel styleName="color-default-color">
-						<a ui:field="defaultColor" class="btn btn-mini">Restore Defaults</a>
-						<a ui:field="transparent" class="btn btn-mini">Transparent</a>
+						<a ui:field="defaultColor" class="pure-button p-font-smaller">Restore Defaults</a>
+						<a ui:field="transparent" class="pure-button p-font-smaller">Transparent</a>
 					</g:HTMLPanel>
 					<g:FlexTable ui:field="colortable" styleName="{style.colortable}"
 						cellPadding="0" cellSpacing="0"></g:FlexTable>

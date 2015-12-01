@@ -117,8 +117,6 @@ public class ColorSelections extends Composite {
 		int g = green(selectedRgb);
 		int b = blue(selectedRgb);
 
-		rememberColor(color);
-
 		switch (colorTarget) {
 			case BACKGROUND:
 				selectedBackgroundColor(color, selectedRgb, r, g, b);
@@ -136,9 +134,9 @@ public class ColorSelections extends Composite {
 		// colorValue.getElement().getStyle().setColor(currentColor.getTextColor().toHexStringWithHash());
 	}
 
-	private void rememberColor(String color) {
-		String hexcolor = ("#"+color).toUpperCase();
-		if (!isRemembered(hexcolor)) {
+	private void rememberColor(Color color) {
+		String hexcolor = color.toHexStringWithHash().toUpperCase();
+		if (color.getOpacity() > 0 && !isRemembered(hexcolor)) {
 			pushRememberColors();
 			// int index = currentRememberIndex++ % colortable.getRowCount();
 			Widget w = colortable.getWidget(0, 0);
@@ -177,6 +175,7 @@ public class ColorSelections extends Composite {
 
 		currentColor.setTextColor(new Color(tr, tg, tb, 1));
 
+		rememberColor(currentColor.getBackgroundColor());
 		updateColorCheckMark(currentColor.getBackgroundColor());
 	}
 
@@ -190,11 +189,13 @@ public class ColorSelections extends Composite {
 
 	private void selectedBorderColor(String color, int r, int g, int b) {
 		currentColor.setBorderColor(new Color(r, g, b, 1));
+		rememberColor(currentColor.getBorderColor());
 		updateColorCheckMark(currentColor.getBorderColor());
 	}
 
 	private void selectedTextColor(String color, int r, int g, int b) {
 		currentColor.setTextColor(new Color(r, g, b, 1));
+		rememberColor(currentColor.getTextColor());
 		updateColorCheckMark(currentColor.getTextColor());
 	}
 	
@@ -466,7 +467,7 @@ public class ColorSelections extends Composite {
 	private void updateColorCheckMark() {
 		Color color = pickColorByTab(currentColor.getTextColor(), currentColor.getBackgroundColor(), currentColor.getBorderColor());
 
-		rememberColor(color.toHexString());
+		rememberColor(color);
 		updateColorCheckMark(color);
 	}
 
