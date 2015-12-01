@@ -152,6 +152,10 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 		
 ////////////////////////////////////
 	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+    if (mouseState.isResizing()) {
+      return false;
+    }
+
 		// logger.debug("onMouseDown sender={}, currentHandler={}...", sender, currentHandler);
     potentialClearSelection = false;
 		if (sender == null && currentHandler == null) {

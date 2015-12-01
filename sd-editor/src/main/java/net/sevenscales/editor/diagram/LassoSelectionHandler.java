@@ -40,6 +40,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 	private IGroup group;
 	private boolean isLassoing;
 	private DimensionContext dimensionContext;
+	private MouseState mouseState;
 	
 	private class DimensionContext {
 		int x;
@@ -91,8 +92,9 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 		}
 	}
 
-  public LassoSelectionHandler(ISurfaceHandler surface) {
+  public LassoSelectionHandler(ISurfaceHandler surface, MouseState mouseState) {
     this.surface = surface;
+    this.mouseState = mouseState;
     
 	  gridUtils = new GridUtils();
     
@@ -121,7 +123,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
   }
 
   public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
-    if (!surface.isDragEnabled()) {
+    if (!surface.isDragEnabled() || mouseState.isResizing()) {
       return false;
     }
     this.currentSender = sender;

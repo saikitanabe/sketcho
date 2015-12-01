@@ -75,7 +75,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		selectionHandler = new SelectionHandler(surface, diagrams, dragHandler.getDragHandlers(), this);
 		resizeHandler = new MouseDiagramResizeHandler(this, surface, modeManager);
 		backgroundMoveHandler = new BackgroundMoveHandler(diagrams, surface);
-		lassoSelectionHandler = new LassoSelectionHandler(surface);
+		lassoSelectionHandler = new LassoSelectionHandler(surface, this);
 		if (ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
 			// free hand drawing is not possible on library area
 			freehandDrawHandler = new FreehandDrawerHandler(surface);
@@ -176,6 +176,8 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		    }
 		  }
 
+			resizeHandler.onMouseDown(sender, point, keys);
+
 			lassoSelectionHandler.onMouseDown(sender, point, keys);
 	    if (lassoSelectionHandler.isLassoOn()) {
 				return true;
@@ -189,9 +191,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 5");
-	    
-			resizeHandler.onMouseDown(sender, point, keys);
-			
+	    			
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 7");
 	    
