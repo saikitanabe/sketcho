@@ -257,7 +257,15 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
       factor = 0.7f;
     }
     toolpool.scale(factor);
+
   }
+
+  private native boolean ngIsLibraryManualShowHide()/*-{
+    if (typeof $wnd.ngIsLibraryManualShowHide !== 'underfined') {
+      return $wnd.ngIsLibraryManualShowHide()
+    }
+    return false
+  }-*/;
 
   private native void ngShowLibrarySettings()/*-{
     if (typeof $wnd.ngShowLibrarySettings != 'undefined') {
