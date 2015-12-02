@@ -152,6 +152,10 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 		
 ////////////////////////////////////
 	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+    if (mouseState.isResizing()) {
+      return false;
+    }
+
 		// logger.debug("onMouseDown sender={}, currentHandler={}...", sender, currentHandler);
     potentialClearSelection = false;
 		if (sender == null && currentHandler == null) {
@@ -187,10 +191,18 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 	}
 
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
-    if (potentialClearSelection && !mouseState.isMovingBackground() && !mouseState.isLassoing() && !mouseState.isDragging()) {
+    if (!(keys == IGraphics.SHIFT) && potentialClearSelection && !mouseState.isMovingBackground() && !mouseState.isDragging()) {
       // plain canvas click
       handleCanvasMouseDown();
     }
+
+    if (sender != null && mouseState.isLassoOn() && !mouseState.isLassoing()) {
+      // lasso selection is on, mouse up just selects more
+      shiftOn = true;
+      select(sender);
+      shiftOn = false;
+    }
+
 		// logger.debug("onMouseUp sender={}...", sender);
 		if (sender != null && 
 				getSelectedItems().size() > 0 && 
@@ -207,6 +219,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
         // if cursor is on top of a circle
         lastSelected = selected.iterator().next();
       }
+
 			surface.getEditorContext().getEventBus().fireEvent(new SelectionMouseUpEvent(selected.toArray(diagrams), lastSelected));
 		}
 		currentHandler = null;
@@ -594,7 +607,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     removeGroups();
 
     String group = diagram.getDiagramItem().getGroup();
-    if (group != null) {
+    if (group != null && !"".equals(group)) {
       for (Diagram d : surface.getDiagrams()) {
         if (d.getDiagramItem() != null && group.equals(d.getDiagramItem().getGroup())) {
           d.unselect();

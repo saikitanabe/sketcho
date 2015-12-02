@@ -75,7 +75,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		selectionHandler = new SelectionHandler(surface, diagrams, dragHandler.getDragHandlers(), this);
 		resizeHandler = new MouseDiagramResizeHandler(this, surface, modeManager);
 		backgroundMoveHandler = new BackgroundMoveHandler(diagrams, surface);
-		lassoSelectionHandler = new LassoSelectionHandler(surface);
+		lassoSelectionHandler = new LassoSelectionHandler(surface, this);
 		if (ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
 			// free hand drawing is not possible on library area
 			freehandDrawHandler = new FreehandDrawerHandler(surface);
@@ -167,15 +167,6 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		    freehandDrawHandler.onMouseDown(sender, point, keys);
 	    }
 
-	    // logger.debugTime();
-	    // logger.start("MouseDiagramHandlerManager.onMouseDown 4");
-
-	    quickConnectionHandler.onMouseDown(sender, point, keys);
-	    selectionHandler.onMouseDown(sender, point, keys);
-
-	    // logger.debugTime();
-	    // logger.start("MouseDiagramHandlerManager.onMouseDown 5");
-
 	    if (freehandDrawHandler != null) {
 		    boolean handled = freehandDrawHandler.handling();
 		    // logger.debugTime();
@@ -184,9 +175,23 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		    	return false;
 		    }
 		  }
-	    
+
 			resizeHandler.onMouseDown(sender, point, keys);
-			
+
+			lassoSelectionHandler.onMouseDown(sender, point, keys);
+	    if (lassoSelectionHandler.isLassoOn()) {
+				return true;
+	    }
+
+	    // logger.debugTime();
+	    // logger.start("MouseDiagramHandlerManager.onMouseDown 4");
+
+	    quickConnectionHandler.onMouseDown(sender, point, keys);
+	    selectionHandler.onMouseDown(sender, point, keys);
+
+	    // logger.debugTime();
+	    // logger.start("MouseDiagramHandlerManager.onMouseDown 5");
+	    			
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 7");
 	    
@@ -211,8 +216,6 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 10");
-
-			lassoSelectionHandler.onMouseDown(sender, point, keys);
 
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 11");
@@ -256,6 +259,11 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		    	return;
 		    }
 		  }
+
+		  if (lassoSelectionHandler.isLassoOn()) {
+		  	lassoSelectionHandler.onMouseMove(sender, point);
+		  	return;
+		  }
 	    
 	    handlers.fireMouseMove(sender, point);
 	    if (currentMouseHandler == sketchDiagramAreaHandler) {
@@ -271,7 +279,6 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 				dragHandler.onMouseMove(sender, point);
 			}
 			backgroundMoveHandler.onMouseMove(sender, point);
-			lassoSelectionHandler.onMouseMove(sender, point);
 			surface.dispatchDiagram(point);
 
 		} catch (Exception e) {
@@ -430,6 +437,11 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	@Override	
 	public boolean isMovingBackground() {
 		return backgroundMoveHandler.backgroundMoveIsOn();
+	}
+
+	@Override
+	public boolean isLassoOn() {
+		return lassoSelectionHandler.isLassoOn();
 	}
 
 	@Override	

@@ -33,7 +33,6 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
   private GridUtils gridUtils;
   private int downX;
   private int downY;
-  private boolean backgroundMouseDown = true;
   private Diagram currentSender;
   private boolean mouseDown = false;
   private ISurfaceHandler surface;
@@ -41,6 +40,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 	private IGroup group;
 	private boolean isLassoing;
 	private DimensionContext dimensionContext;
+	private MouseState mouseState;
 	
 	private class DimensionContext {
 		int x;
@@ -92,8 +92,9 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 		}
 	}
 
-  public LassoSelectionHandler(ISurfaceHandler surface) {
+  public LassoSelectionHandler(ISurfaceHandler surface, MouseState mouseState) {
     this.surface = surface;
+    this.mouseState = mouseState;
     
 	  gridUtils = new GridUtils();
     
@@ -122,15 +123,10 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
   }
 
   public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
-    if (!surface.isDragEnabled()) {
+    if (!surface.isDragEnabled() || mouseState.isResizing()) {
       return false;
     }
     this.currentSender = sender;
-    if (backgroundMouseDown) {
-      // by default it is assumed to be true and changed only if sender is real diagram element
-      this.backgroundMouseDown = sender != null ? false : true;
-//      System.out.println("backgroundMouseDown:" + backgroundMouseDown);
-    }
     
     // if shift if pressed then background moving is disabled
     // shift is reserved for lassoing multiple elements
@@ -186,8 +182,12 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
     }
   }
 
+  public boolean isLassoOn() {
+  	return mouseDown;
+  }
+
   private boolean lassoIsOn(MatrixPointJS point) {
-  	return currentSender == null && mouseDown && backgroundMouseDown && gridUtils.passTreshold(point);
+  	return mouseDown && gridUtils.passTreshold(point);
   }
 
 	private void startToDrawLasso(MatrixPointJS point) {
@@ -282,7 +282,6 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 		GlobalState.disableAddSlideMode();
 		isLassoing = false;
 	  currentSender = null;
-	  backgroundMouseDown = true;
 	  mouseDown = false;
 //    System.out.println("onMouseUp:" + backgroundMouseDown);
   }

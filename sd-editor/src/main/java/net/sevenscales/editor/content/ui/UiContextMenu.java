@@ -730,6 +730,13 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				int top = colorize.getAbsoluteTop() + popup.getOffsetHeight();
 				colorpopup.setPopupPosition(left, top);
 				colorSelections.showHeader();
+
+				Diagram selected = selectionHandler.getOnlyOneSelected();
+				if (selected != null) {
+					colorSelections.setCurrentDiagramColor(selected.getTextColor(), selected.getBackgroundColorAsColor(), selected.getBorderColor());
+				} else {
+					// TODO clear API
+				}
 			}
 		});
 	}

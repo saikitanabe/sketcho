@@ -105,7 +105,18 @@ public class ShowHideHelpers {
 		$wnd.cancelStream.onValue(function() {
 			me.@net.sevenscales.editor.content.utils.ShowHideHelpers::onLibraryStream(Z)(true);
 		})
+
+    $wnd.boardReadyStream.onValue(function() {
+      me.@net.sevenscales.editor.content.utils.ShowHideHelpers::autoHideLibrary()();
+    })
+
 	}-*/;
+
+  private void autoHideLibrary() {
+    if (ngIsLibraryManualShowHide()) {
+   		hide();
+    }
+  }
 
 	private void onLibraryStream(boolean value) {
 		if (value) {
