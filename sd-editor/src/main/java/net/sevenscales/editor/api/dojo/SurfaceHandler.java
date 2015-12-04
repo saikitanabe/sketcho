@@ -279,6 +279,7 @@ class SurfaceHandler extends SimplePanel implements
   // new Surface();
 //  		surface.init(this.panel);
   		surface.init(this, this);
+  		surface.setAttribute("id", name);
 			surface.setAttribute("class", svgClassName);
       mouseDiagramManager.reset();
       surface.load();

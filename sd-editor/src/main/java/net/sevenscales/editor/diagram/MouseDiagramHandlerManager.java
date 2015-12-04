@@ -453,21 +453,21 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		$wnd.Hammer(e, {preventDefault: true}).on('doubletap', function(event) {
 			// console.log('handleDoubleTap', event)
 			if (event.gesture.center.clientX && event.gesture.center.clientY) {
-				me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZ)(event.gesture.center.clientX, event.gesture.center.clientY, event.gesture.srcEvent.shiftKey);
+				me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZLjava/lang/String;)(event.gesture.center.clientX, event.gesture.center.clientY, event.gesture.srcEvent.shiftKey, event.target.id);
 			}
 		})
 	}-*/;
 
 	private native void handleMouseDoubleClick(Element e, MouseDiagramHandlerManager me)/*-{
 		$wnd.$(e).on('dblclick', function(e) {
-			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZ)(e.clientX, e.clientY, false);
+			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZLjava/lang/String;)(e.clientX, e.clientY, false, "");
 		})
 	}-*/;
 
-	private void doubleTap(int x, int y, boolean shiftKey) {
+	private void doubleTap(int x, int y, boolean shiftKey, String targetId) {
 		logger.debug("doubleTap...");
 		// cannot check connect mode, or will not show property editor
-		_fireLongPress(x, y, shiftKey);
+		_fireLongPress(x, y, shiftKey, targetId);
 	}
 
 	/**
@@ -483,10 +483,10 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			// User is probably trying to draw connection. 
 			return;
 		}
-		_fireLongPress(x, y, false);
+		_fireLongPress(x, y, false, "");
 	}
 
-	private void _fireLongPress(int x, int y, boolean shiftKey) {
+	private void _fireLongPress(int x, int y, boolean shiftKey, String targetId) {
 		if (birdsEyeView != null && birdsEyeView.isBirdsEyeViewOn()) {
 			birdsEyeView.off();
 			return;
@@ -506,6 +506,13 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		}
 		
 		Set<Diagram> selected = selectionHandler.getSelectedItems();
+
+		if (selected.size() == 1 && targetId.equals(ISurfaceHandler.DRAWING_AREA) && quickConnectionHandler.handleSurfaceDoubleTap()) {
+			// it is double tap on surface not on a shape, so check if shoudl create quick connection
+			// target is always the original root of the event target
+			return;
+		}
+
 		if (selected.size() == 1) {
 			Diagram s = selected.iterator().next().getOwnerComponent();
 	    MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
