@@ -467,7 +467,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	private void doubleTap(int x, int y, boolean shiftKey, String targetId) {
 		logger.debug("doubleTap...");
 		// cannot check connect mode, or will not show property editor
-		_fireLongPress(x, y, shiftKey, targetId);
+		handleDoubleTap(x, y, shiftKey, targetId);
 	}
 
 	/**
@@ -478,15 +478,21 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	 * @param y
 	 */
 	public void fireLongPress(int x, int y) {
-		if (modeManager.isConnectMode()) {
+		if (modeManager.isConnectMode() || surface.getEditorContext().isFreehandMode()) {
 			// do not handle long press when connection mode is on. 
 			// User is probably trying to draw connection. 
 			return;
 		}
-		_fireLongPress(x, y, false, "");
+
+		startLassoSelection();
+		// handleDoubleTap(x, y, false, "");
 	}
 
-	private void _fireLongPress(int x, int y, boolean shiftKey, String targetId) {
+	private native void startLassoSelection()/*-{
+		$wnd.globalStreams.contextMenuStream.push({type:'select'})
+	}-*/;
+
+	private void handleDoubleTap(int x, int y, boolean shiftKey, String targetId) {
 		if (birdsEyeView != null && birdsEyeView.isBirdsEyeViewOn()) {
 			birdsEyeView.off();
 			return;
