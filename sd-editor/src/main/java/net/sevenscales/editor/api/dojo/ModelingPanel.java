@@ -297,7 +297,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
 		// click menu is not used at the moment...
 		if (editable) {
 			// >>>>> long press disabled - 29.10.2015 Saiki T. 
-			// new LongPressHandler(surface);
+			new LongPressHandler(surface);
 			// <<<<< long press disabled - 29.10.2015 Saiki T. 
 			new UiContextMenu(surface, editorContext, surface.getSelectionHandler());
 			new UiClickContextMenu(surface);

@@ -120,6 +120,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 
   private void select() {
 		surface.getEditorContext().set(EditorProperty.START_SELECTION_TOOL, true);
+		mouseDown = enableLassoMouseDown(0);
   }
 
   public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {

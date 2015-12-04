@@ -191,6 +191,15 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		return maybeStartSuperFlow();
 	}
 
+	public boolean handleSurfaceDoubleTap() {
+		boolean result = false;
+		if (mouseUpPoint != null) {
+			boolean fromPreviousIfAny = this.mouseUpKeys == IGraphics.SHIFT;
+			result = createQuickConnection(mouseUpPoint.getScreenX(), mouseUpPoint.getScreenY(), fromPreviousIfAny);
+		}
+		return result;
+	}
+
 	private boolean maybeStartSuperFlow() {
 		boolean result = false;
 		// if (Tools.isQuickMode()) {
@@ -236,20 +245,24 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			  selected.size() == 0 && 
 				previouslySelected != null && 
 				exists(previouslySelected)) {
-			ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint(screenX, screenY, surface);
-			int x = stp.scaledAndTranslatedPoint.x;
-			int y = stp.scaledAndTranslatedPoint.y;
-
-			Diagram from = previouslySelected;
-			if (fromPreviousIfAny) {
-				from = findPrevious(previouslySelected);
-			}
-			result = createConnectedDiagram(from, previouslySelected.getDiagramItem(), x, y);
+			result = createQuickConnection(screenX, screenY, fromPreviousIfAny);
 		}
 		// makes sure that plain drag & drop doesn't create quick connection, but still
 		// remembers what has been dragged and dropped
 		notAddedFromLibrary = true;
 		return result;
+	}
+
+	private boolean createQuickConnection(int screenX, int screenY, boolean fromPreviousIfAny) {
+		ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint(screenX, screenY, surface);
+		int x = stp.scaledAndTranslatedPoint.x;
+		int y = stp.scaledAndTranslatedPoint.y;
+
+		Diagram from = previouslySelected;
+		if (fromPreviousIfAny) {
+			from = findPrevious(previouslySelected);
+		}
+		return createConnectedDiagram(from, previouslySelected.getDiagramItem(), x, y);
 	}
 
 	private boolean createConnectedDiagram(Diagram d, IDiagramItem prevSelectedItem, int x, int y) {
