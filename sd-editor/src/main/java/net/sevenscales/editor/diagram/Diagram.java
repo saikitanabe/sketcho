@@ -222,6 +222,10 @@ public interface Diagram extends SourcesMouseDiagramEvents {
 	// simple border color changes
 	void setHighlightColor(Color color);
 	void restoreHighlighColor();
+
+  void setHighlightBackgroundBorder(Color color);
+  void clearHighlightBackgroundBorder();
+
 	// void setBorderColor(String color);
 	void setBorderColor(Color color);
   IGroup getGroup();

@@ -1458,6 +1458,13 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
 
   @Override
+  public void setHighlightBackgroundBorder(Color color) {
+  }
+  @Override
+  public void clearHighlightBackgroundBorder() {
+  }
+
+  @Override
 	public void setHighlightColor(Color color) {
 	}
 

@@ -714,6 +714,16 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   }
 
   @Override
+  public void setHighlightBackgroundBorder(Color color) {
+  	background.setStroke(color);
+  }
+
+  @Override
+  public void clearHighlightBackgroundBorder() {
+  	background.setStroke(0x33, 0x33, 0x33, 0);
+  }
+
+  @Override
   public boolean isSketchiness() {
     return getDiagramItem().isSketchiness();
   }
