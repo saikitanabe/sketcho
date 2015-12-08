@@ -317,6 +317,17 @@ public class TextElement extends AbstractDiagramItem implements
 
 		attachBoundary.setStroke(color);
 	}
+
+  @Override
+  public void setHighlightBackgroundBorder(Color color) {
+  	attachBoundary.setStroke(color);
+  }
+
+  @Override
+  public void clearHighlightBackgroundBorder() {
+  	attachBoundary.setStroke(0x33, 0x33, 0x33, 0);
+  }
+	
 	
 	@Override
 	public void saveLastTransform(int dx, int dy) {

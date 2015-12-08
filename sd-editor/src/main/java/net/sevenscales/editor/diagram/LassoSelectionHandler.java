@@ -25,6 +25,8 @@ import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.uicomponents.CircleElement;
+import net.sevenscales.editor.gfx.domain.Color;
+
 
 
 public class LassoSelectionHandler implements MouseDiagramHandler {
@@ -41,7 +43,8 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 	private boolean isLassoing;
 	private DimensionContext dimensionContext;
 	private MouseState mouseState;
-	
+	private static final Color HIGHLIGHT_COLOR = new Color(0x6B, 0x66, 0x54, 0.8);
+
 	private class DimensionContext {
 		int x;
 		int y;
@@ -119,11 +122,22 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
   }-*/;
 
   private void select() {
+  	if (surface.isLibrary()) {
+  		return;
+  	}
+  	
 		surface.getEditorContext().set(EditorProperty.START_SELECTION_TOOL, true);
 		mouseDown = enableLassoMouseDown(0);
+		if (mouseDown) {
+			highlightShapeDimensions();
+		}
   }
 
   public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+  	if (surface.isLibrary()) {
+  		return false;
+  	}
+
     if (!surface.isDragEnabled() || mouseState.isResizing()) {
       return false;
     }
@@ -132,6 +146,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
     // if shift if pressed then background moving is disabled
     // shift is reserved for lassoing multiple elements
     mouseDown = enableLassoMouseDown(keys);
+
     downX = point.getScreenX();
     downY = point.getScreenY();
 //    System.out.println("onMouseDown: x("+x+") y("+y+") prevX("+prevX+") prevY("+prevY+")");
@@ -140,6 +155,10 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
   }
 
   private boolean enableLassoMouseDown(int keys) {
+  	if (surface.isLibrary()) {
+  		return false;
+  	}
+
   	if (surface.getEditorContext().isTrue(EditorProperty.START_SELECTION_TOOL)) {
   		return true;
   	}
@@ -166,6 +185,11 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
     
     
     if (lassoIsOn(point)) {
+	    if (!isLassoing) {
+	  		// start lassoing
+	  		highlightShapeDimensions();
+	    }
+
     	// start lassoing
     	isLassoing = true;
     }
@@ -181,6 +205,13 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
       startToDrawLasso(point);
 //      moveAll(dx, dy);
     }
+  }
+
+  private void highlightShapeDimensions() {
+		for (Diagram d : surface.getDiagrams()) {
+			d.setHighlightBackgroundBorder(HIGHLIGHT_COLOR);
+		}
+		// Scheduler.get().scheduleFixedDelay(repeating, 300);
   }
 
   public boolean isLassoOn() {
@@ -280,12 +311,22 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 			hide();
 		}
 
+		clearHighlight();
+
 		GlobalState.disableAddSlideMode();
 		isLassoing = false;
 	  currentSender = null;
 	  mouseDown = false;
 //    System.out.println("onMouseUp:" + backgroundMouseDown);
   }
+
+  private void clearHighlight() {
+		for (Diagram d : surface.getDiagrams()) {
+			if (!d.isSelected()) {
+				d.clearHighlightBackgroundBorder();
+			}
+		}
+	}
 
   private void createSlide() {
   	// _createSlide();
