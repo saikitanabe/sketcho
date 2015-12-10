@@ -297,10 +297,24 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 				right = Math.max(right, d.getLeft() + d.getWidth());
   		}
   	}
+
+		int width = right - left;
+		int height = bottom - top;
+		if (width <= Window.getClientWidth() && height <= Window.getClientHeight()) {
+			center(surface, left, top, width, height, bottom, right);
+		} else {
+			// birds eye view
+			mapView();
+		}
+  }
+
+  private native void mapView()/*-{
+  	$wnd.$($doc).trigger("map-view");
+  }-*/;
+
+  private void center(ISurfaceHandler surface, int left, int top, int width, int height, int bottom, int right) {
   	if (left != Integer.MAX_VALUE && top != Integer.MAX_VALUE &&
   			bottom != Integer.MIN_VALUE && right != Integer.MIN_VALUE) {
-  		int width = right - left;
-  		int height = bottom - top;
 
   		// from 0,0
   		int centerX = width / 2;
