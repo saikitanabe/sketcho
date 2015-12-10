@@ -94,8 +94,8 @@ public interface ISurfaceHandler extends OperationTransaction {
 	* This should be used always when transforming root layer. Notifies automatically HTML Layer.
 	*/
 	void setTransform(int tx, int ty);
-	void scale(float value);
-	float getScaleFactor();
+	void scale(double value);
+	double getScaleFactor();
 	int scaleClientX(int clientX);
 	int scaleClientY(int clientY);
 	void setBackground(String color);

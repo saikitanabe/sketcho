@@ -19,7 +19,7 @@ public class GridUtils {
 	private int sumX = 0;
 	private int sumY = 0;
 	private int gridSize = GRID_SIZE;
-	private float scaleFactor;
+	private double scaleFactor;
 	/**
 	* If value is passed once during this mouse event chaing (down, move)
 	* do not start to restrict again. Annoying stopping if trying to
@@ -34,7 +34,7 @@ public class GridUtils {
 		this.gridSize = gridSize;
 	}
 	
-  public void init(int x, int y, float scaleFactor) {
+  public void init(int x, int y, double scaleFactor) {
   	this.scaleFactor = scaleFactor;
     prevMovePoint.x = x;
     prevMovePoint.y = y;

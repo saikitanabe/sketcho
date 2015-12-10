@@ -169,8 +169,19 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
 
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
 //  	complexElementHandler.showComplexElements(diagrams);
+    if (backgroundMoving) {
+      notifyBackgroundMoveEnd(surface.getRootLayer().getContainer());
+    }
+
     clear();
   }
+
+  private native void notifyBackgroundMoveEnd(com.google.gwt.core.client.JavaScriptObject group)/*-{
+    $wnd.globalStreams.backgroundMoveStream.push({
+      type:'move-end',
+      matrix: group.getTransform()
+    })
+  }-*/;
 
   private void clear() {
     currentSender = null;
