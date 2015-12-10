@@ -180,12 +180,13 @@ class BirdsEye implements IBirdsEyeView {
 	    double ratioH = clientHeight / height;
 	    ratio = (ratioW < ratioH) ? ratioW : ratioH;
 	    surface.scale((float)ratio);
-	    // logger.debug("clientWidth {} clientHeight {} width {} height {}", clientWidth, clientHeight, width, height);
-	    // logger.debug("ratio {} transformX {} transformY {} leftmost {} topmost {}", ratio, transformX, transformY, leftmost, topmost);
 
-	    // int leftPosition = 40;
-	    // surface.getRootLayer().setTransform((int)-(leftmost * ratio) + leftPosition, (int)-(topmost * ratio));
-	    surface.setTransform((int)((-leftmost * ratio) + 10 * ratio), 
+	    // how much space (width) board takes when zoomed, visible for eye
+	    double boardWidthSameUnitWithClientWindow = width * ratio;
+	    // move board to left by half of its width => board center is in the middle
+	    // move board right to half of cliend window width => move whole thing towards center
+	    double moveToCenter = (clientWidth - boardWidthSameUnitWithClientWindow) / 2;
+	    surface.setTransform((int)((-leftmost * ratio) + 10 * ratio + moveToCenter), 
 	    																		(int)((-topmost * ratio) + 10 * ratio));
 
 	    transformInitX = surface.getRootLayer().getTransformX();
