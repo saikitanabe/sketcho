@@ -91,6 +91,10 @@ public class ScaleSlider implements IScaleSlider {
 		$wnd.globalStreams.scaleResetStream.onValue(function() {
 			me.@net.sevenscales.editor.content.ui.ScaleSlider::scaleToIndex(I)(@net.sevenscales.domain.constants.Constants::ZOOM_DEFAULT_INDEX)
 		})
+
+		$wnd.globalStreams.scaleRestoreStream.onValue(function(value) {
+			me.@net.sevenscales.editor.content.ui.ScaleSlider::scaleToFactor(D)(value)
+		})
 	}-*/;
 
 	private boolean freehandMode() {
@@ -100,6 +104,23 @@ public class ScaleSlider implements IScaleSlider {
   public void scaleToIndex(int index) {
     currentIndex = index;
     _setSliderValue(innerScaleSlider.getElement(), currentIndex);
+  }
+
+  public void scaleToFactor(double value) {
+  	scaleToIndex(findFactorIndex(value));
+  }
+
+  private int findFactorIndex(double value) {
+		int i = 0;
+
+		for (double f : Constants.ZOOM_FACTORS) {
+			if (f == value) {
+				return i;
+			}
+			++i;
+		}
+
+		return Constants.ZOOM_DEFAULT_INDEX;
   }
 
 	private void createVisibleSlider() {

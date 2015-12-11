@@ -9,20 +9,20 @@ import net.sevenscales.editor.diagram.Diagram;
 import com.google.gwt.core.client.JavaScriptObject;
 
 public class ScaleHelpers {
-	public static native int scaleValue(int value, float scalefactor)/*-{
+	public static native int scaleValue(int value, double scalefactor)/*-{
 		var m = $wnd.dojox.gfx.matrix;
 		var i = m.invert(m.scale(scalefactor));
 		return parseInt(i.xx * value);
 	}-*/;
 	
-	public static native int unscaleValue(int value, float scalefactor)/*-{
+	public static native int unscaleValue(int value, double scalefactor)/*-{
 		var m = $wnd.dojox.gfx.matrix;
 		var i = m.scale(scalefactor);
 		return parseInt(i.xx * value);
 	}-*/;
 
 
-	public static native JavaScriptObject scaleCoordinate(int x, int y, float scalefactor)/*-{
+	public static native JavaScriptObject scaleCoordinate(int x, int y, double scalefactor)/*-{
 		var m = $wnd.dojox.gfx.matrix;
 		var i = m.invert(m.scale(scalefactor));
 		return {
@@ -31,7 +31,7 @@ public class ScaleHelpers {
 		};
 	}-*/;
 
-	public static native JavaScriptObject unscaleCoordinate(int x, int y, float scalefactor)/*-{
+	public static native JavaScriptObject unscaleCoordinate(int x, int y, double scalefactor)/*-{
 		var m = $wnd.dojox.gfx.matrix;
 		var i = m.scale(scalefactor);
 		return {

@@ -17,11 +17,11 @@ public class Constants {
 
 	public static int ZOOM_DEFAULT_INDEX;
 	// 0.2f, 0.25f, 
-	public static final float[] ZOOM_FACTORS = new float[]{0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f, 1.1f, 1.2f, 1.3f, 1.4f};
+	public static final double[] ZOOM_FACTORS = new double[]{0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4};
 
 	static {
 		int i = 0;
-		for (float f : ZOOM_FACTORS) {
+		for (double f : ZOOM_FACTORS) {
 			if (f == 1.0f) {
 				ZOOM_DEFAULT_INDEX = i;
 				break;

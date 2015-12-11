@@ -15,7 +15,7 @@ public class MatrixPointJS extends JavaScriptObject {
 	  public final native int getScreenX() /*-{ return this.sx; }-*/;
 	  public final native int getScreenY() /*-{ return this.sy; }-*/;
 	  
-	  public final native float getScaleFactor() /*-{ return this.scaleFactor; }-*/;
+	  public final native double getScaleFactor() /*-{ return this.scaleFactor; }-*/;
 	  
 	  
 	  public final native int getDX() /*-{ return this.dx; }-*/;
@@ -24,13 +24,13 @@ public class MatrixPointJS extends JavaScriptObject {
 	  public final native int getScreenDY() /*-{ return this.sdy; }-*/;
 	  
 	  // guarantees that using only scaled points...
-	  public static MatrixPointJS createScaledPoint(int x, int y, float scaleFactor) {
+	  public static MatrixPointJS createScaledPoint(int x, int y, double scaleFactor) {
 			JavaScriptObject norm = ScaleHelpers.scaleCoordinate(x, y, scaleFactor);
 	  	MatrixPointJS result = _create(x(norm), y(norm), x, y, 0, 0, 0, 0, scaleFactor);
 	  	return result;
 	  }
 	  
-	  public static MatrixPointJS createUnscaledPoint(int x, int y, float scaleFactor) {
+	  public static MatrixPointJS createUnscaledPoint(int x, int y, double scaleFactor) {
 			JavaScriptObject norm = ScaleHelpers.unscaleCoordinate(x, y, scaleFactor);
 	  	MatrixPointJS result = _create(x(norm), y(norm), x, y, 0, 0, 0, 0, scaleFactor);
 	  	return result;
@@ -43,7 +43,7 @@ public class MatrixPointJS extends JavaScriptObject {
 	   * @param scaleFactor
 	   * @return
 	   */
-	  public static MatrixPointJS createScaledTransform(int dx, int dy, float scaleFactor) {
+	  public static MatrixPointJS createScaledTransform(int dx, int dy, double scaleFactor) {
 			JavaScriptObject scaled = ScaleHelpers.scaleCoordinate(dx, dy, scaleFactor);
 	  	MatrixPointJS result = _create(0, 0, 0, 0, x(scaled), y(scaled), dx, dy, scaleFactor);
 	  	return result;
@@ -55,7 +55,7 @@ public class MatrixPointJS extends JavaScriptObject {
 	  	return result;
 	  }
 	  
-	  private native static MatrixPointJS _create(int x, int y, int sx, int sy, int dx, int dy, int sdx, int sdy, float scaleFactor)/*-{
+	  private native static MatrixPointJS _create(int x, int y, int sx, int sy, int dx, int dy, int sdx, int sdy, double scaleFactor)/*-{
 	  	return {x: x, y: y, sx: sx, sy: sy, dx: dx, dy: dy, sdx: sdx, sdy: sdy, scaleFactor: scaleFactor};
 	  }-*/;
 	  

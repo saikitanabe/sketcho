@@ -34,6 +34,7 @@ import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.diagram.utils.CommentFactory;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
+import net.sevenscales.domain.js.JsBoardPosition;
 
 public class UiModelContentHandler implements SurfaceLoadedEventListener {
 	private static final SLogger logger = SLogger.createLogger(UiModelContentHandler.class);
@@ -246,7 +247,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 
 		trigger("board-rendered");
 
-    setInitialBoardPosition(surface);
+		setBoardPosition(surface);
    // small hack to send package elements to background on load
    // could be replaced with static layering values for container elements
    // e.g. package element should be on background always
@@ -283,6 +284,36 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 		}
   }
 
+  private void setBoardPosition(ISurfaceHandler surface) {
+  	JsBoardPosition pos = JsBoardPosition.get();
+
+  	if (pos.isMap()) {
+  		// map view is on, nothing else is not restored
+  		setMapView(pos.isMap());
+  		return;
+  	}
+
+  	if (pos.isZoomed()) {
+  		scaleTo(pos.getZoom());	
+  	}
+  	if (pos.isPositioned()) {
+  		surface.setTransform(pos.getDx(), pos.getDy());
+  	} else {
+  		// first time loaded or no values on localstorage
+  		// set initial state
+	    setInitialBoardPosition(surface);
+  	}
+  }
+
+  private native void setMapView(boolean on)/*-{
+		var value = on ? 'start' : null
+  	$wnd.$($doc).trigger('map-view', value)	
+  }-*/;
+
+  private native void scaleTo(float value)/*-{
+		$wnd.globalStreams.scaleRestoreStream.push(value)
+  }-*/;
+
   private void setInitialBoardPosition(ISurfaceHandler surface) {
     int left = Integer.MAX_VALUE;
     int top = Integer.MAX_VALUE;
@@ -297,10 +328,24 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 				right = Math.max(right, d.getLeft() + d.getWidth());
   		}
   	}
+
+		int width = right - left;
+		int height = bottom - top;
+		if (width <= Window.getClientWidth() && height <= Window.getClientHeight()) {
+			center(surface, left, top, width, height, bottom, right);
+		} else {
+			// birds eye view
+			mapView();
+		}
+  }
+
+  private native void mapView()/*-{
+  	$wnd.$($doc).trigger("map-view");
+  }-*/;
+
+  private void center(ISurfaceHandler surface, int left, int top, int width, int height, int bottom, int right) {
   	if (left != Integer.MAX_VALUE && top != Integer.MAX_VALUE &&
   			bottom != Integer.MIN_VALUE && right != Integer.MIN_VALUE) {
-  		int width = right - left;
-  		int height = bottom - top;
 
   		// from 0,0
   		int centerX = width / 2;

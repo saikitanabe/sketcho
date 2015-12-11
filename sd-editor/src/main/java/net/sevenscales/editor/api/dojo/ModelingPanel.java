@@ -119,7 +119,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
 		editorContext.getEventBus().addHandler(SurfaceScaleEvent.TYPE, new SurfaceScaleEventHandler() {
 			@Override
 			public void on(SurfaceScaleEvent event) {
-				float factor = Constants.ZOOM_FACTORS[event.getScaleFactor()];
+				double factor = Constants.ZOOM_FACTORS[event.getScaleFactor()];
 //				surface.invertScale();
 			  surface.scale(factor);
 //			  int dx = 0;

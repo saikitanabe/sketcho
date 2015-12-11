@@ -113,7 +113,7 @@ class SurfaceHandler extends SimplePanel implements
 	private EditorContext editorContext;
 	private IModeManager modeManager;
 	private boolean disabedOnAreaCheck;
-	private float scaleFactor = 1.0f;
+	private double scaleFactor = 1.0f;
 	private IGroup connectionLayer3;
 	private IGroup interactionLayer4;
 	private IGroup elementLayer2;
@@ -1055,24 +1055,29 @@ class SurfaceHandler extends SimplePanel implements
 	}
 	
 	public void invertScale() {
-		if (scaleFactor != 1.0f) {
+		if (scaleFactor != 1.0) {
 			invertScale(rootLayer0.getContainer(), scaleFactor);
 		}
 
-		this.scaleFactor = 1.0f;
+		this.scaleFactor = 1.0;
 	}
 	
-	public void scale(float value) {
+	@Override
+	public void scale(double value) {
 		scale(rootLayer0.getContainer(), scaleFactor, value, com.google.gwt.user.client.Window.getClientWidth(), com.google.gwt.user.client.Window.getClientHeight()/*, tempCircle, tempRect*/);
 		scaleBackground(value);
 		this.scaleFactor = value;
 
 		if (!isLibrary()) {
-			// _notifyScale(value);
+			_notifyScale(value);
 		}
 	}
 
-	private native void scaleBackground(float value)/*-{
+	private native void _notifyScale(double value)/*-{
+		$wnd.globalStreams.boardScaledStream.push(value);
+	}-*/;
+
+	private native void scaleBackground(double value)/*-{
 		// 399
 		var size = 141.73 * value
 		var sizeValue = size + "px " + size + "px"
@@ -1086,7 +1091,7 @@ class SurfaceHandler extends SimplePanel implements
 //		scaleDiagram(diagram, 1 + 1 - scaleFactor, x, y);
 	}
 	
-	private void invertScaleDiagram(Diagram diagram, int x, int y, float value) {
+	private void invertScaleDiagram(Diagram diagram, int x, int y, double value) {
 		IGroup group = diagram.getGroup();
 		if (group != null) {
 			// supports group
@@ -1103,7 +1108,7 @@ class SurfaceHandler extends SimplePanel implements
 		scaleDiagram(diagram, scaleFactor, 0, 0);
 	}
 	
-	private void scaleDiagram(Diagram diagram, float value, int x, int y) {
+	private void scaleDiagram(Diagram diagram, double value, int x, int y) {
 		IGroup group = diagram.getGroup();
 		if (group != null) {
 			// supports group
@@ -1111,7 +1116,7 @@ class SurfaceHandler extends SimplePanel implements
 		}
 	}
 
-	private native void scale(JavaScriptObject element, float prevScaleFactor, float value, int width, int height/*, net.sevenscales.editor.gfx.domain.ICircle circle, net.sevenscales.editor.gfx.domain.IRectangle rect*/)/*-{
+	private native void scale(JavaScriptObject element, double prevScaleFactor, double value, int width, int height/*, net.sevenscales.editor.gfx.domain.ICircle circle, net.sevenscales.editor.gfx.domain.IRectangle rect*/)/*-{
 		var m3 = new $wnd.dojox.gfx.Matrix2D(value)
 		var t = element.getTransform()
 		if (t != null) {
@@ -1145,7 +1150,7 @@ class SurfaceHandler extends SimplePanel implements
 			element.setTransform($wnd.dojox.gfx.matrix.scale({ x: m3.xx, y: m3.yy}))
 		}
 	}-*/;
-	private native void scaleDiagram(JavaScriptObject element, float value, int x, int y)/*-{
+	private native void scaleDiagram(JavaScriptObject element, double value, int x, int y)/*-{
 		var m3 = new $wnd.dojox.gfx.Matrix2D(value);
 		var m = $wnd.dojox.gfx.matrix;
 		var s = m.scale({ x: m3.xx, y: m3.yy});
@@ -1154,13 +1159,13 @@ class SurfaceHandler extends SimplePanel implements
 		element.applyTransform(s);
 	}-*/;
 	
-	public static native JavaScriptObject invertScale(JavaScriptObject element, float value)/*-{
+	public static native JavaScriptObject invertScale(JavaScriptObject element, double value)/*-{
 		var m3 = new $wnd.dojox.gfx.Matrix2D(value);
 		var m = $wnd.dojox.gfx.matrix;
 		element.applyTransform(m.invert(m.scale({ x: m3.xx, y: m3.yy})));
 	}-*/;
 	
-	public static native JavaScriptObject invertScaleDiagram(JavaScriptObject element, int x, int y, float value)/*-{
+	public static native JavaScriptObject invertScaleDiagram(JavaScriptObject element, int x, int y, double value)/*-{
 		var m3 = new $wnd.dojox.gfx.Matrix2D(value);
 		var m = $wnd.dojox.gfx.matrix;
 		var s = m.invert(m.scale({ x: m3.xx, y: m3.yy}));
@@ -1189,7 +1194,7 @@ class SurfaceHandler extends SimplePanel implements
 		disabedOnAreaCheck = value;
 	}
 	
-	public float getScaleFactor() {
+	public double getScaleFactor() {
 		return scaleFactor;
 	}
 	
