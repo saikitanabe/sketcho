@@ -3,6 +3,7 @@ package net.sevenscales.editor.api;
 import java.util.List;
 
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.uicomponents.CircleElement;
 
 public class BoardDimensions {
 	private int leftmost = Integer.MAX_VALUE;
@@ -42,6 +43,11 @@ public class BoardDimensions {
 	}
 
 	private void _resolveDimensions(Diagram diagram) {
+		if (diagram instanceof CircleElement) {
+			// this is not a real shape
+			return;
+		}
+
   	int left = diagram.getLeft();
   	if (left < leftmost) {
   		leftmost = left;

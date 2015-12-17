@@ -20,8 +20,6 @@ import net.sevenscales.domain.constants.Constants;
 
 
 class BirdsEye implements IBirdsEyeView {
-		private int transformX = 0;
-		private int transformY = 0;
 		private int mousePosX;
 		private int mousePosY;
 		private double ratio = 0;
@@ -32,8 +30,6 @@ class BirdsEye implements IBirdsEyeView {
 		private ISurfaceHandler surface;
 		private EditorContext editorContext;
 		private IScaleSlider slider;
-		private int transformInitX;
-		private int transformInitY;
 
 	// >>>>>>>>> Debugging
 		// private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
@@ -205,9 +201,6 @@ class BirdsEye implements IBirdsEyeView {
 	    // 	return;
 	    // }
 
-	    transformX = surface.getRootLayer().getTransformX();
-	    transformY = surface.getRootLayer().getTransformY();
-
 	    // int clientLeftMargin = 100;
 	    // double clientWidth = Window.getClientWidth() - clientLeftMargin;
 	    double clientWidth = Window.getClientWidth() - 20;
@@ -225,9 +218,6 @@ class BirdsEye implements IBirdsEyeView {
 	    double moveToCenter = (clientWidth - boardWidthSameUnitWithClientWindow) / 2;
 	    surface.setTransform((int)((-leftmost * ratio) + 10 * ratio + moveToCenter), 
 	    																		(int)((-topmost * ratio) + 10 * ratio));
-
-	    transformInitX = surface.getRootLayer().getTransformX();
-	    transformInitY = surface.getRootLayer().getTransformY();
 
 	  	birdsEyeDown = true;
 	  	followMouse();
