@@ -104,7 +104,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 		surface.getEditorContext().getEventBus().addHandler(StartSelectToolEvent.TYPE, new StartSelectToolEventHandler() {
 			@Override
 			public void on(StartSelectToolEvent event) {
-				select();
+				select(false);
 			}
 		});
 
@@ -117,17 +117,26 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
   	$wnd.globalStreams.contextMenuStream.filter(function(e) {
   		return e && e.type === 'select'
   	}).onValue(function(e) {
-  		me.@net.sevenscales.editor.diagram.LassoSelectionHandler::select()()
+  		me.@net.sevenscales.editor.diagram.LassoSelectionHandler::select(Z)(true)
+  	})
+
+  	$wnd.globalStreams.contextMenuStream.filter(function(e) {
+  		return e && e.type === 'select-button'
+  	}).onValue(function(e) {
+  		me.@net.sevenscales.editor.diagram.LassoSelectionHandler::select(Z)(false)
   	})
   }-*/;
 
-  private void select() {
+  private void select(boolean immediately) {
   	if (surface.isLibrary()) {
   		return;
   	}
   	
 		surface.getEditorContext().set(EditorProperty.START_SELECTION_TOOL, true);
-		mouseDown = enableLassoMouseDown(0);
+		if (immediately) {
+			mouseDown = enableLassoMouseDown(0);
+		}
+
 		if (mouseDown) {
 			highlightShapeDimensions();
 		}

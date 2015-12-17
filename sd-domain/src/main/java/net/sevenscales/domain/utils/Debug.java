@@ -20,4 +20,8 @@ public class Debug {
   	if (typeof $wnd.console != "undefined") $wnd.console.log(msg, obj);
   }-*/;
 
+  public static native void log(String msg, Object... objs)/*-{
+  	if (typeof $wnd.console != "undefined") $wnd.console.log(msg, objs);
+  }-*/;
+
 }
