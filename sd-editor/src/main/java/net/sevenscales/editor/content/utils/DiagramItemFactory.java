@@ -103,6 +103,33 @@ public class DiagramItemFactory {
     try {
       AbstractDiagramFactory factory = ShapeParser.factory(item);
       Info shape = factory.parseShape(item, moveX, moveY);
+
+      // FIX: 15.12.2015 ST
+      // broken items are moved to zero so user can remove those by himself
+      // this is just a virtual operation (on client side) not saved to server
+      // user can also move shapes and shapes are stored on correct position
+      // this means that board is not infinite any longer and there could 
+      // broke some diagrams that are position away from center
+      // boolean fixed = false;
+      // commented out, but can be used to fix boards.
+      // possibly could throw so user could fix the board them selves.
+
+      // if (shape.getLeft() > 60000) {
+      //   shape.setLeft(0);
+      //   fixed = true;
+      // }
+
+      // if (shape.getTop() > 60000) {
+      //   shape.setTop(0);
+      //   fixed = true;
+      // }
+      // if (fixed) {
+        // net.sevenscales.domain.utils.Debug.log("FIXED", "left", shape.getLeft(), "top", shape.getTop());
+      // } 
+      // else {
+      //   net.sevenscales.domain.utils.Debug.log("shape", item.getShape());
+      // }
+
       Diagram result = factory.parseDiagram(surface, shape, editable, item, parent);
       return applyDiagramItem(result, item);
     } catch (Exception e) {
