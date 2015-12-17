@@ -36,9 +36,7 @@ class BirdsEye implements IBirdsEyeView {
 		private int transformInitY;
 
 	// >>>>>>>>> Debugging
-		private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
-		private net.sevenscales.editor.gfx.domain.ICircle tempOrigoCircle;
-	// private net.sevenscales.editor.gfx.domain.IRectangle tempRect;
+		// private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
 	// <<<<<<<<< Debugging
 
 		BirdsEye(ISurfaceHandler surface, EditorContext editorContext, IScaleSlider slider) {
@@ -145,27 +143,48 @@ class BirdsEye implements IBirdsEyeView {
 		    	case Event.ONTOUCHSTART: {
 		    		JsArray<Touch> touches = event.getNativeEvent().getTouches();
 		    		if (touches != null && touches.length() > 0) {
-			        int diffx = transformInitX - surface.getRootLayer().getTransformX();
-			        int diffy = transformInitY - surface.getRootLayer().getTransformY();
-			        mousePosX = touches.get(0).getClientX() + diffx;
-			        mousePosY = touches.get(0).getClientY() + diffy;
+  		      	setMousePosition(
+  		      		touches.get(0).getClientX(),
+  		      		touches.get(0).getClientY()
+  		      	);
 		    		}
 		    		break;
 		    	}
 		      case Event.ONMOUSEDOWN:
 		      case Event.ONMOUSEMOVE:
-		      	// take into account background move as well
-		      	// some magic numbers to be more centered
-		        int diffx = transformInitX - surface.getRootLayer().getTransformX();
-		        int diffy = transformInitY - surface.getRootLayer().getTransformY();
-		        mousePosX = event.getNativeEvent().getClientX() + diffx;
-		        mousePosY = event.getNativeEvent().getClientY() + diffy;
+		      	setMousePosition(
+		      		event.getNativeEvent().getClientX(),
+		      		event.getNativeEvent().getClientY()
+		      	);
 		        break;
 		      default:
 		        // not interested in other events
 		    }
 		  }
 		};
+
+		private void setMousePosition(int x, int y) {
+	    // >>>>>>>> Debug 
+	   //  if (tempCircle == null) {
+		  //   tempCircle = net.sevenscales.editor.gfx.domain.IShapeFactory.Util.factory(true).createCircle(
+		  //   	surface.getRootLayer()
+		  //   );
+		  //   tempCircle.setShape(0, 0, 10);
+		  //   tempCircle.setStroke(218, 57, 57, 1);
+		  //   tempCircle.setFill(218, 57, 57, 1);
+		  // }
+			// <<<<<<<< Debug
+
+    	int tx = surface.getRootLayer().getTransformX();
+    	int ty = surface.getRootLayer().getTransformY();
+
+      mousePosX = (int) (x / ratio - tx / ratio);
+      mousePosY = (int) (y / ratio - ty / ratio);
+
+      // >>>>>>>>> DEBUGGING
+			// tempCircle.setShape(mousePosX - 5, mousePosY - 5, 10);
+			// <<<<<<<<< DEBUGGING
+		}
 
 		private void birdsEyeViewOn() {
 	    // logger.debug("show birds eye view...");
@@ -217,76 +236,22 @@ class BirdsEye implements IBirdsEyeView {
 
 		private void birdsEyeViewOff() {
 			if (birdsEyeDown) {
-
-		    // >>>>>>>> Debug 
-		    if (tempCircle == null) {
-			    tempCircle = net.sevenscales.editor.gfx.domain.IShapeFactory.Util.factory(true).createCircle(
-			    	surface.getRootLayer()
-			    );
-			    tempCircle.setShape(0, 0, 10);
-			    tempCircle.setStroke(218, 57, 57, 1);
-			    tempCircle.setFill(218, 57, 57, 1);
-
-			    tempOrigoCircle = net.sevenscales.editor.gfx.domain.IShapeFactory.Util.factory(true).createCircle(
-			    	surface.getRootLayer()
-			    );
-			    tempOrigoCircle.setShape(0, 0, 10);
-			    tempOrigoCircle.setStroke(0x35, 0x5C, 0xAD, 1);
-			    tempOrigoCircle.setFill(0x35, 0x5C, 0xAD, 1);
-			  }
-				// <<<<<<<< Debug
-
-
 	    	slider.scale(slider.getSliderValue());
 	    	birdsEyeDown = false;
-	      // surface.getRootLayer().setTransform(mousePosX - BoardDimensions.getLeftmost(), mousePosY - BoardDimensions.getTopmost());
+
+	      // 1. zero transform to make calculations easy
+	      surface.setTransform(0, 0);
+
+	      // 2. scale at 0,0
+	      slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX);
+
+	      // 3. move mouse point to 0,0 then move half the screen size to right
+	      // 		to center the mouse point
 	      double clientWidth = Window.getClientWidth();
 	      double clientHeight = Window.getClientHeight();
 
-				BoardDimensions.resolveDimensions(surface.getDiagrams());
-
-	      int leftmost = BoardDimensions.getLeftmost();
-	      int topmost = BoardDimensions.getTopmost();
-	      int width = BoardDimensions.getWidth();
-	      int height = BoardDimensions.getHeight();
-
-		    // double mx = mousePosX / ratio;
-		    // double my = mousePosY / ratio;
-		    // double moveToCenter = (clientWidth - boardWidthSameUnitWithClientWindow) / 2;
-		    // surface.setTransform((int)((-leftmost * ratio) + 10 * ratio + moveToCenter), 
-	    	// 																	(int)((-topmost * ratio) + 10 * ratio));
-
-	      // int sign = mousePosX > 0 ? 1 : -1;
-	      // int posx = (int) (Math.abs(mousePosX) + clientWidth/2) * sign;
-
-	      // mouse board position
-	    	int x = (int) ((mousePosX) / ratio + leftmost);
-	    	int y = (int) ((mousePosY) / ratio + topmost);
-
-				// net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoint stp = net.sevenscales.editor.content.utils.ScaleHelpers.scaleAndTranslateScreenpoint
-				// 	(mousePosX, mousePosY, surface);
-				// int x = stp.scaledAndTranslatedPoint.x;
-				// int y = stp.scaledAndTranslatedPoint.y;
-
-	    	tempCircle.setShape(x - 5, y - 5, 10);
-	    	// int orgx = (int) (clientWidth / 2) + leftmost;
-	    	// int orgy = (int) (clientHeight / 2) + topmost;
-	    	// tempOrigoCircle.setShape(orgx, orgy, 10);
-
-	    	// legacy calculation
-	      // int posx = -(int) (mousePosX / ratio - clientWidth / 2) - leftmost;
-	      // int posy = -(int) (mousePosY / ratio - clientHeight / 2) - topmost;
-
-	      // zero transform to make calculations easy
-	      surface.setTransform(0, 0);
-
-	      // scale at 0,0
-	      slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX);
-
-	      // move mouse point to be new 0,0 then move half the screen size to right
-	      // to center mouse point
-	      int posx = (int) (-x + clientWidth / 2);
-	      int posy = (int) (-y + clientHeight / 2);
+	      int posx = (int) (-mousePosX + clientWidth / 2);
+	      int posy = (int) (-mousePosY + clientHeight / 2);
 	      surface.setTransform(posx, posy);
 
 	      moveRegistration.removeHandler();
