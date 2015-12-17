@@ -244,7 +244,7 @@ public class UiClickContextMenu extends Composite {
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 			public void execute() {
 				popup.hide();
-				EffectHelpers.tooltipperHide();
+				// EffectHelpers.tooltipperHide();
 			}
 		});
 	}

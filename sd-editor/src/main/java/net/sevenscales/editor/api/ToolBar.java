@@ -174,19 +174,39 @@ public class ToolBar extends Composite {
 	}-*/;
 
 	private native void handleMapView(ToolBar me, Element map)/*-{
-		var elem = $wnd.$(map)
-		if (!$wnd.isTouch()) {
-			elem.tooltip({html: true, placement: 'top', container:'body'})
-		}
+		var $elem = $wnd.$(map)
+		var options = {html: true, placement: 'top', container:'body', trigger: 'manual'}
+		$elem.tooltip(options)
+		var eventIn = 'mouseenter'
+		var eventOut = 'mouseleave'
+		var autohide = true
+
+		$elem.on(eventIn, function() {
+			$elem.tooltip('show')
+		})
+		$elem.on(eventOut, function() {
+			if (autohide) {
+				$elem.tooltip('destroy')
+			}
+		})
 
 		// $wnd.Hammer(elem[0], {holdTimeout: 100, preventDefault: true}).on('hold', function(event) {
-		$wnd.Hammer(elem[0], {preventDefault: true}).on('tap', function(event) {
+		$wnd.Hammer($elem[0], {preventDefault: true}).on('tap', function(event) {
 			// elem.find('i').attr('class', 'menu-icon-map-view-dark')
 			$wnd.$($doc).trigger('map-view', 'start')
 		})
 
 
 		$wnd.globalStreams.mapViewStateStream.onValue(function(value) {
+			if (value) {
+				$elem.attr('data-original-title', 'Double tap board to zoom in')
+          	.tooltip('show');
+        autohide = false
+			} else {
+				autohide = true
+				$elem.attr('data-original-title', 'Map View | Z')
+				$elem.tooltip('destroy')
+			}
 			me.@net.sevenscales.editor.api.ToolBar::onMap(Z)(value)
 		})
 
@@ -221,11 +241,6 @@ public class ToolBar extends Composite {
 
 	private void onMap(boolean on) {
 		toggleButton(map, "world");
-		// if (on) {
-		// }
-		// if (surface.getBirdsEyeView().isBirdsEyeViewOn()) {
-			
-		// }
 	}
 	private void onHandTool() {
 		Tools.toggleHandTool();
