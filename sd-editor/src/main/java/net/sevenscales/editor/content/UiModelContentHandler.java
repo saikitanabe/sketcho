@@ -285,6 +285,25 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
   }
 
   private void setBoardPosition(ISurfaceHandler surface) {
+    int left = Integer.MAX_VALUE;
+    int top = Integer.MAX_VALUE;
+    int bottom = Integer.MIN_VALUE;
+    int right = Integer.MIN_VALUE;
+
+  	for (Diagram d : surface.getDiagrams()) {
+  		if (!(d instanceof CircleElement)) {
+  			left = Math.min(left, d.getLeft());
+  			top = Math.min(top, d.getTop());
+  			bottom = Math.max(bottom, d.getTop() + d.getHeight());
+				right = Math.max(right, d.getLeft() + d.getWidth());
+  		}
+  	}
+
+  	if (left > 60000 || top > 60000 || bottom > 60000 || right > 60000) {
+  		// some shapes are broken
+  		return;
+  	} 
+
   	JsBoardPosition pos = JsBoardPosition.get();
 
   	if (pos.isMap()) {
@@ -301,7 +320,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
   	} else {
   		// first time loaded or no values on localstorage
   		// set initial state
-	    setInitialBoardPosition(surface);
+	    setInitialBoardPosition(surface, left, top, bottom, right);
   	}
   }
 
@@ -314,21 +333,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 		$wnd.globalStreams.scaleRestoreStream.push(value)
   }-*/;
 
-  private void setInitialBoardPosition(ISurfaceHandler surface) {
-    int left = Integer.MAX_VALUE;
-    int top = Integer.MAX_VALUE;
-    int bottom = Integer.MIN_VALUE;
-    int right = Integer.MIN_VALUE;
-
-  	for (Diagram d : surface.getDiagrams()) {
-  		if (!(d instanceof CircleElement)) {
-  			left = Math.min(left, d.getLeft());
-  			top = Math.min(top, d.getTop());
-  			bottom = Math.max(bottom, d.getTop() + d.getHeight());
-				right = Math.max(right, d.getLeft() + d.getWidth());
-  		}
-  	}
-
+  private void setInitialBoardPosition(ISurfaceHandler surface, int left, int top, int bottom, int right) {
 		int width = right - left;
 		int height = bottom - top;
 		if (width <= Window.getClientWidth() && height <= Window.getClientHeight()) {
