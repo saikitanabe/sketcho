@@ -250,6 +250,7 @@ public class ScaleSlider implements IScaleSlider {
   	if ($a) {
   		$e.attr('tabIndex', '-1')
   		$a.attr('tabIndex', '-1')
+  		$a.attr('href', '')
   	}
   	
   // 	if (typeof $wnd.jq172 == "function") {
