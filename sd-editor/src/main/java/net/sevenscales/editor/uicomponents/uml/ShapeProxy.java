@@ -43,10 +43,10 @@ class ShapeProxy implements IShapeGroup {
 			element_type: elementType,
 			shape_type: shapeType
 		}).then(function(response) {
-			if (response.ok) {
+			if (response.ok && response.shapes.length > 0) {
 				me.@net.sevenscales.editor.uicomponents.uml.ShapeProxy::loaded(Lcom/google/gwt/core/client/JsArray;)(response.shapes)
 			} else {
-				console.log("_fetch failed...")
+				console.error("_fetch failed for...", elementType, shapeType)
 			}
 		})
 	}-*/;
