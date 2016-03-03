@@ -306,6 +306,13 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 
   	JsBoardPosition pos = JsBoardPosition.get();
 
+  	if (pos == null) {
+  		// e.g. preview generation
+  		// setMapView(true);
+  		setInitialBoardPosition(surface, left, top, bottom, right);
+  		return;
+  	}
+
   	if (pos.isMap()) {
   		// map view is on, nothing else is not restored
   		setMapView(pos.isMap());
