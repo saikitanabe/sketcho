@@ -37,18 +37,20 @@ class ShapeProxy implements IShapeGroup {
 	}
 
 	private native void _fetch(String elementType, int shapeType, ShapeProxy me)/*-{
-		var boardId = $wnd.currentBoard().boardId
-		$wnd.libraryService.loadBoardShape({
-			board_id: boardId,
-			element_type: elementType,
-			shape_type: shapeType
-		}).then(function(response) {
-			if (response.ok && response.shapes.length > 0) {
-				me.@net.sevenscales.editor.uicomponents.uml.ShapeProxy::loaded(Lcom/google/gwt/core/client/JsArray;)(response.shapes)
-			} else {
-				console.error("_fetch failed for...", elementType, shapeType)
-			}
-		})
+		if (typeof $wnd.currentBoard !== 'undefined') {
+			var boardId = $wnd.currentBoard().boardId
+			$wnd.libraryService.loadBoardShape({
+				board_id: boardId,
+				element_type: elementType,
+				shape_type: shapeType
+			}).then(function(response) {
+				if (response.ok && response.shapes.length > 0) {
+					me.@net.sevenscales.editor.uicomponents.uml.ShapeProxy::loaded(Lcom/google/gwt/core/client/JsArray;)(response.shapes)
+				} else {
+					console.error("_fetch failed for...", elementType, shapeType)
+				}
+			})
+		}
 	}-*/;
 
 	private void loaded(JsArray<JsShape> shapes) {

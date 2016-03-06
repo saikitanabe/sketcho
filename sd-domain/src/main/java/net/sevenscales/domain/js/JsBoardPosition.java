@@ -28,7 +28,10 @@ public class JsBoardPosition extends JavaScriptObject {
 	}-*/;
 
 	public final static native JsBoardPosition get()/*-{
-		return $wnd.ngGetBoardPositionFactory().getCurrent()
+		if (typeof $wnd.ngGetBoardPositionFactory !== 'undefined') {
+			return $wnd.ngGetBoardPositionFactory().getCurrent()
+		}
+		return null
 	}-*/;
 
 }
