@@ -323,7 +323,7 @@ public class TextElementFormatUtil {
     createRows(newText, editable);
 
     if ((changed || hasTextElement.forceAutoResize()) && 
-  		 editorContext.get(EditorProperty.AUTO_RESIZE_ENABLED).equals(true)) {
+  		 editorContext.isTrue(EditorProperty.AUTO_RESIZE_ENABLED)) {
       if (hasTextElement.forceAutoResize() || hasTextElement.isAutoResize()) {
         resizeElement();
       }
