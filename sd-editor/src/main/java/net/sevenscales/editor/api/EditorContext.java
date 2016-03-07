@@ -32,6 +32,14 @@ public class EditorContext implements ClockValueFactory {
 	private BoardDocument graphicalDocumentCache;
 	private String siteId;
 	private Integer currentClock;
+
+	private static class BooleanValue {
+		BooleanValue(Integer count) {
+			this.count = count;
+		}
+
+		Integer count;
+	}
 	
 	public EditorContext() {
 		registeredComponents = new ArrayList<Widget>();
@@ -71,23 +79,52 @@ public class EditorContext implements ClockValueFactory {
 	}
 
 	public <T> T getAs(EditorProperty key) {
-		return (T) get(key);
+		return (T) properties.get(key);
 	}
 	
 	public boolean isTrue(EditorProperty key) {
-		if (properties.get(key) != null) {
+		Object value = properties.get(key);
+		if (value != null && value instanceof BooleanValue) {
+			return getBooleanValue((BooleanValue) value);
+		} else if (value != null) {
 			return Boolean.valueOf(properties.get(key).toString());
 		}
 		return false;
 	}
+
+	private boolean getBooleanValue(BooleanValue value) {
+		return value.count > 0;
+	}
 	
 	public void set(EditorProperty key, Object value) {
-		properties.put(key, value);
+		if (value instanceof Boolean) {
+			setBooleanProperty(key, (Boolean) value);
+		} else {
+			properties.put(key, value);
+		}
+	}
+
+	/**
+	* Boolean values are calculated, if set multiple times, need to pop as many times.
+	*/
+	private void setBooleanProperty(EditorProperty key, Boolean value) {
+		BooleanValue booleanValue = getAs(key);
+
+
+		if (booleanValue == null) {
+			// if first value is false, then start from 0
+			booleanValue = new BooleanValue(new Integer(value ? 1 : 0));
+		} else {
+			int enableOrDisableCount = value ? 1 : -1;
+			booleanValue.count += enableOrDisableCount;
+		}
+
+		properties.put(key, booleanValue);
 	}
 	
-	public boolean hasProperty(EditorProperty key) {
-		return properties.get(key) != null;
-	}
+	// public boolean hasProperty(EditorProperty key) {
+	// 	return properties.get(key) != null;
+	// }
 
 	public void setPropertiesArea(Properties propertiesArea) {
 		this.propertiesArea = propertiesArea;
