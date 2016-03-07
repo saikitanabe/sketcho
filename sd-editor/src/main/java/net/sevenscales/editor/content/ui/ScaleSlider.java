@@ -22,9 +22,11 @@ import com.google.gwt.event.dom.client.TouchMoveEvent;
 import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class ScaleSlider implements IScaleSlider {
+public class ScaleSlider implements IScaleSlider, MouseWheelHandler {
 	private static SLogger logger = SLogger.createLogger(ScaleSlider.class);
 
 	private static final double TRESHOLD = 40;
@@ -36,6 +38,7 @@ public class ScaleSlider implements IScaleSlider {
 
 	private SimplePanel innerScaleSlider;
 	private BirdsEye birdsEye;
+	private int deltaSum;
 
 	public ScaleSlider(ISurfaceHandler surface) {
 		this.surface = surface;
@@ -57,7 +60,7 @@ public class ScaleSlider implements IScaleSlider {
 			}
 		});
 		
-		surface .addTouchMoveHandler(new TouchMoveHandler() {
+		surface.addTouchMoveHandler(new TouchMoveHandler() {
 			@Override
 			public void onTouchMove(TouchMoveEvent event) {
 				if (freehandMode() || 
@@ -76,12 +79,61 @@ public class ScaleSlider implements IScaleSlider {
 				endPinch();
 			}
 		});
+
+		// surface.addMouseWheelHandler(this);
+		_initMouseWheel(surface.getElement(), this);
 		
 //		new ShowHideHelpers(scaleSlider, innerScaleSlider, 6000);
 		birdsEye = new BirdsEye(surface, editorContext, this);
 
 		listen(this);
 	}
+
+	@Override
+	public void onMouseWheel(MouseWheelEvent event) {
+		net.sevenscales.domain.utils.Debug.log("onMouseWheel...", event.getDeltaY()+"", event.isNorth()+"", event.isSouth()+"");
+	}
+
+	private void handlMouseWheel(int delta) {
+
+		boolean up = delta < 0;
+		boolean down = delta > 0;
+		boolean change = false;
+
+		deltaSum += delta;
+		boolean update = deltaSum % 4 == 0;
+
+		int index = currentIndex;
+		if (update && up && (index -1 ) >= 0) {
+			currentIndex = index - 1;
+		} else if (update && down && (index + 1) < Constants.ZOOM_FACTORS.length) {
+			currentIndex = index + 1;
+		}
+
+		scaleAndSlide(currentIndex, index);
+	}
+
+	private native void _initMouseWheel(com.google.gwt.user.client.Element el, ScaleSlider me)/*-{
+
+		function mouseWheelHandler(e) {
+			// old IE support
+			var e = window.event || e;
+			var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)))
+
+			me.@net.sevenscales.editor.content.ui.ScaleSlider::handlMouseWheel(I)(delta)
+		}
+
+		if (el.addEventListener) {
+			// IE9, Chrome, Safari, Opera
+			el.addEventListener("mousewheel", mouseWheelHandler, false)
+			// Firefox
+			el.addEventListener("DOMMouseScroll", mouseWheelHandler, false)
+		}	else {
+			// IE 6/7/8
+			el.attachEvent("onmousewheel", mouseWheelHandler)
+		}
+	}-*/;
+
 
 	public IBirdsEyeView getBirdsEyeView() {
 		return birdsEye;
@@ -168,12 +220,18 @@ public class ScaleSlider implements IScaleSlider {
 				currentIndex = index + 1;
 			}
 			currentDistance = distance;
-			
-			if (currentIndex != index && currentIndex < Constants.ZOOM_FACTORS.length && currentIndex >= 0) {
-				logger.debug("set slider to value {}...", currentIndex);
-				_setSliderValue(innerScaleSlider.getElement(), currentIndex);
-				editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(currentIndex));
-			}
+
+			scaleAndSlide(currentIndex, index);
+		}
+	}
+
+	private void scaleAndSlide(int currentIndex, int index) {
+		net.sevenscales.domain.utils.Debug.log("scaleAndSlide...", currentIndex, index);
+
+		if (currentIndex != index && currentIndex < Constants.ZOOM_FACTORS.length && currentIndex >= 0) {
+			logger.debug("set slider to value {}...", currentIndex);
+			_setSliderValue(innerScaleSlider.getElement(), currentIndex);
+			editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(currentIndex));
 		}
 	}
 	

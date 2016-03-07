@@ -40,6 +40,7 @@ import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.diagram.MouseDiagramHandlerManager;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.utils.DiagramDisplayOrderList;
+import net.sevenscales.editor.diagram.ProxyDragHandler;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.base.GraphicsMouseDownHandler;
 import net.sevenscales.editor.gfx.base.GraphicsMouseEnterHandler;
@@ -64,6 +65,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.dom.client.HasTouchEndHandlers;
 import com.google.gwt.event.dom.client.HasTouchMoveHandlers;
 import com.google.gwt.event.dom.client.HasTouchStartHandlers;
+import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
@@ -73,6 +75,8 @@ import com.google.gwt.event.dom.client.TouchMoveEvent;
 import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.dom.client.NativeEvent;
@@ -95,6 +99,7 @@ class SurfaceHandler extends SimplePanel implements
               HasTouchStartHandlers,
               HasTouchMoveHandlers,
               HasTouchEndHandlers,
+              HasMouseWheelHandlers,
               ISurfaceHandler {
 	private static final SLogger logger = SLogger.createLogger(SurfaceHandler.class);
 		
@@ -316,6 +321,11 @@ class SurfaceHandler extends SimplePanel implements
 	public void addResizeHandler(DiagramResizeHandler resizeHandler) {
 		mouseDiagramManager.addResizeHandler(resizeHandler);
 	}
+
+	@Override
+  public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
+    return addDomHandler(handler, MouseWheelEvent.getType());
+  }
 	
 	public void add(Diagram diagram, boolean ownerComponent) {
 		add(diagram, ownerComponent, false);
@@ -814,6 +824,7 @@ class SurfaceHandler extends SimplePanel implements
   @Override
   public void addProxyDragHandler(ProxyDragHandler proxyDragHandler) {
   	mouseDiagramManager.addProxyDragHandler(proxyDragHandler);
+  }
   
   public SelectionHandler getSelectionHandler() {
     return mouseDiagramManager.getSelectionHandler();

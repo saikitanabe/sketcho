@@ -15,9 +15,12 @@ import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.event.dom.client.TouchEndHandler;
 
+import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
+
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
 
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.MouseDiagramHandlerManager;
@@ -44,7 +47,7 @@ import net.sevenscales.editor.api.ot.OperationTransaction;
 import net.sevenscales.domain.js.JsDimension;
 
 
-public interface ISurfaceHandler extends OperationTransaction {
+public interface ISurfaceHandler extends OperationTransaction, HasMouseWheelHandlers {
 
 	public static final String DRAWING_AREA_ID = "drawingareaid";
 	public static final String DRAWING_AREA = "drawingarea";
