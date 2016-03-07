@@ -28,6 +28,7 @@ import net.sevenscales.editor.diagram.DiagramDragHandler;
 import net.sevenscales.editor.diagram.DiagramSelectionHandler;
 import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.diagram.DiagramSearch;
+import net.sevenscales.editor.diagram.ProxyDragHandler;
 import net.sevenscales.editor.api.IBirdsEyeView;
 
 import net.sevenscales.editor.gfx.domain.IGroup;
@@ -118,7 +119,7 @@ public interface ISurfaceHandler extends OperationTransaction {
 	void addDragHandler(DiagramDragHandler handler);
 	void addSelectionListener(DiagramSelectionHandler handler);
 	void addMouseDiagramHandler(MouseDiagramHandler mouseDiagramHandler);
-
+	void addProxyDragHandler(ProxyDragHandler proxyDragHandler);
 	HandlerRegistration addTouchStartHandler(TouchStartHandler handler);
 	HandlerRegistration addTouchEndHandler(TouchEndHandler handler);
 	HandlerRegistration addTouchMoveHandler(TouchMoveHandler handler);

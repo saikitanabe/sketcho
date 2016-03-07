@@ -283,6 +283,9 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public void addMouseDiagramHandler(MouseDiagramHandler mouseDiagramHandler) {
 
 	}
+	@Override public void addProxyDragHandler(ProxyDragHandler proxyDragHandler) {
+
+	}
 	public HandlerRegistration addTouchStartHandler(TouchStartHandler handler) {
 		return null;
 	}

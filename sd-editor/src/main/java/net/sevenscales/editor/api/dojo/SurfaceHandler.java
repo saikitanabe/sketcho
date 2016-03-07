@@ -810,6 +810,10 @@ class SurfaceHandler extends SimplePanel implements
   public void addMouseDiagramHandler(MouseDiagramHandler mouseDiagramHandler) {
     mouseDiagramManager.addMouseDiagramHandler(mouseDiagramHandler);
   }
+
+  @Override
+  public void addProxyDragHandler(ProxyDragHandler proxyDragHandler) {
+  	mouseDiagramManager.addProxyDragHandler(proxyDragHandler);
   
   public SelectionHandler getSelectionHandler() {
     return mouseDiagramManager.getSelectionHandler();
