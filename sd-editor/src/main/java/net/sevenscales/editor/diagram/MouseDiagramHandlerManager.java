@@ -233,7 +233,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 
 			surfaceClickHandler.onMouseDown(sender, point, keys);
   	} catch (Exception e) {
-			com.google.gwt.user.client.Window.Location.reload();
+  		net.sevenscales.domain.utils.Error.reload(e);
   	}
 
   //   logger.debugTime();
@@ -304,7 +304,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			surface.dispatchDiagram(point);
 
 		} catch (Exception e) {
-			com.google.gwt.user.client.Window.Location.reload();
+			net.sevenscales.domain.utils.Error.reload(e);
 		}
 	}
 
@@ -354,7 +354,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			// logger.debugTime();
 	    currentMouseHandler = null;
 		} catch (Exception e) {
-			com.google.gwt.user.client.Window.Location.reload();
+			net.sevenscales.domain.utils.Error.reload(e);
 		}
 	}
 	

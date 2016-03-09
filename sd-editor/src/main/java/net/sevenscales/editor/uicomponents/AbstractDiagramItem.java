@@ -352,7 +352,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       mouseListeners.fireMouseDown(this, point, keys);
       mouseDown = true;
     } catch (Exception e) {
-      com.google.gwt.user.client.Window.Location.reload();
+      net.sevenscales.domain.utils.Error.reload(e);
     }
   }
   
@@ -366,7 +366,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       
       mouseDown = false;
     } catch (Exception e) {
-      com.google.gwt.user.client.Window.Location.reload();
+      net.sevenscales.domain.utils.Error.reload(e);
     }
   }
   
@@ -377,7 +377,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
       mouseListeners.fireMouseMove(this, point);
     } catch (Exception e) {
-      com.google.gwt.user.client.Window.Location.reload();
+      net.sevenscales.domain.utils.Error.reload(e);
     }
   }
 

@@ -21,7 +21,13 @@ public class Debug {
   }-*/;
 
   public static native void log(String msg, Object... objs)/*-{
-  	if (typeof $wnd.console != "undefined") $wnd.console.log(msg, objs);
+    if (typeof $wnd.console != "undefined") $wnd.console.log(msg, objs);
+  }-*/;
+
+  public static native void logString(String msg, Object... objs)/*-{
+  	if (typeof $wnd.console != "undefined") $wnd.console.log(msg, objs.map(function(o) {
+      return o + ""
+    }));
   }-*/;
 
 }
