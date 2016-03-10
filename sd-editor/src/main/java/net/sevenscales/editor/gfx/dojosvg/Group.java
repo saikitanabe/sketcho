@@ -100,6 +100,27 @@ class Group extends Graphics implements IContainer, IGroup {
     return parseInt(element.getTransform().dy);
   }-*/;
 
+  public double getTransformDoubleX() {
+    return getTransformDoubleX(group);
+  }
+
+  public native double getTransformDoubleX(JavaScriptObject element)/*-{
+    if (element.getTransform() == null) {
+      return 0;
+    }
+    return element.getTransform().dx;
+  }-*/;
+
+  public double getTransformDoubleY() {
+    return getTransformDoubleY(group);
+  }
+  public native double getTransformDoubleY(JavaScriptObject element)/*-{
+    if (element.getTransform() == null) {
+      return 0;
+    }
+    return element.getTransform().dy;
+  }-*/;
+
   public String getTransformMatrix() {
     return _getTransformMatrix(group);
   }
@@ -148,6 +169,11 @@ class Group extends Graphics implements IContainer, IGroup {
   
   @Override
   public void setTransform(int dx, int dy) {
+    _setTransform(group, dx, dy);
+  }
+
+  @Override
+  public void setTransform(double dx, double dy) {
   	_setTransform(group, dx, dy);
   }
 
@@ -161,6 +187,17 @@ class Group extends Graphics implements IContainer, IGroup {
 
 
   private native void _setTransform(JavaScriptObject rawNode, int dx, int dy)/*-{
+    var t = rawNode.getTransform();
+    if (t != null) {
+      t.dx = dx;
+      t.dy = dy;
+      rawNode.setTransform(t);
+    } else {
+      rawNode.setTransform({dx: dx, dy: dy});
+    }
+  }-*/;
+
+  private native void _setTransform(JavaScriptObject rawNode, double dx, double dy)/*-{
   	var t = rawNode.getTransform();
   	if (t != null) {
   		t.dx = dx;
@@ -190,6 +227,22 @@ class Group extends Graphics implements IContainer, IGroup {
     // }
     
   }-*/;
+
+  public void translate(double dx, double dy) {  
+    _translate(group, dx, dy);
+  }
+  private native void _translate(JavaScriptObject rawNode, double dx, double dy)/*-{
+    var m = $wnd.dojox.gfx.matrix;
+    rawNode.applyTransform(m.translate(dx, dy));
+  }-*/; 
+
+  public void scale(double xx, double yy) {  
+    _scale(group, xx, yy);
+  }
+  private native void _scale(JavaScriptObject rawNode, double xx, double yy)/*-{
+    var m = $wnd.dojox.gfx.matrix;
+    rawNode.applyTransform(m.scale(xx, yy));
+  }-*/; 
 
 	@Override
   public void setAttribute(String name, String value) {

@@ -226,7 +226,7 @@ class BirdsEye implements IBirdsEyeView {
 
 		private void birdsEyeViewOff() {
 			if (birdsEyeDown) {
-	    	slider.scale(slider.getSliderValue());
+	    	// slider.scale(slider.getSliderValue());
 	    	birdsEyeDown = false;
 
 	      // 1. zero transform to make calculations easy
