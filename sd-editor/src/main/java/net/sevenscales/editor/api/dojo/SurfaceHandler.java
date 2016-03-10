@@ -143,9 +143,9 @@ class SurfaceHandler extends SimplePanel implements
   private IBirdsEyeView birdsEyeView;
 
   // >>>>>>>>> Debugging
-  private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
-  private net.sevenscales.editor.gfx.domain.ICircle tempCircle2;
-  private net.sevenscales.editor.gfx.domain.IRectangle tempRect;
+  // private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  // private net.sevenscales.editor.gfx.domain.ICircle tempCircle2;
+  // private net.sevenscales.editor.gfx.domain.IRectangle tempRect;
   // <<<<<<<<< Debugging
 
   public void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
@@ -732,19 +732,19 @@ class SurfaceHandler extends SimplePanel implements
     interactionLayer4 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
 
     // >>>>>>>> Debug 
-    tempCircle = IShapeFactory.Util.factory(editable).createCircle(rootLayer0);
-    tempCircle.setShape(0, 0, 10);
-    tempCircle.setStroke(218, 57, 57, 1);
-    tempCircle.setFill(218, 57, 57, 1);
+    // tempCircle = IShapeFactory.Util.factory(editable).createCircle(rootLayer0);
+    // tempCircle.setShape(0, 0, 10);
+    // tempCircle.setStroke(218, 57, 57, 1);
+    // tempCircle.setFill(218, 57, 57, 1);
 
-    tempCircle2 = IShapeFactory.Util.factory(editable).createCircle(rootLayer0);
-    tempCircle2.setShape(0, 0, 10);
-    tempCircle2.setStroke(100, 57, 57, 1);
-    tempCircle2.setFill(100, 57, 57, 1);
+    // tempCircle2 = IShapeFactory.Util.factory(editable).createCircle(rootLayer0);
+    // tempCircle2.setShape(0, 0, 10);
+    // tempCircle2.setStroke(100, 57, 57, 1);
+    // tempCircle2.setFill(100, 57, 57, 1);
 
-    tempRect = IShapeFactory.Util.factory(editable).createRectangle(rootLayer0);
-    tempRect.setStroke(218, 57, 57, 1);
-    tempRect.setStrokeWidth(4);
+    // tempRect = IShapeFactory.Util.factory(editable).createRectangle(rootLayer0);
+    // tempRect.setStroke(218, 57, 57, 1);
+    // tempRect.setStrokeWidth(4);
     // rectify(rootLayer0.getContainer(), tempRect, tempCircle, this);
     // <<<<<<<< Debug END
 
@@ -1092,17 +1092,6 @@ class SurfaceHandler extends SimplePanel implements
   public void scale(double value) {
     scaleAtPoint(value);
 
-    // scaleAtPoint(
-    //  rootLayer0.getContainer(),
-    //  scaleFactor,
-    //  value,
-    //  com.google.gwt.user.client.Window.getClientWidth(),
-    //  com.google.gwt.user.client.Window.getClientHeight(),
-    //  currentClientMouseMoveX,
-    //  currentClientMouseMoveY
-    //  , tempCircle, tempRect
-    // );
-
     // scaleAtCenter(
     //  rootLayer0.getContainer(),
     //  scaleFactor,
@@ -1134,29 +1123,29 @@ class SurfaceHandler extends SimplePanel implements
     double mousePosX = currentClientMouseMoveX / prevScale - tx0 / prevScale;
     double mousePosY = currentClientMouseMoveY / prevScale - ty0 / prevScale;
 
-    net.sevenscales.domain.utils.Debug.logString("scaleAtPoint...", 
-      "scale", value,
-      "mx", currentClientMouseMoveX,
-      "my", currentClientMouseMoveY,
-      "tx0", tx0,
-      "ty0", ty0,
-      "prevScale", prevScale,
-      "mousePosX", mousePosX,
-      "mousePosY", mousePosY);
+    // net.sevenscales.domain.utils.Debug.logString("scaleAtPoint...", 
+    //   "scale", value,
+    //   "mx", currentClientMouseMoveX,
+    //   "my", currentClientMouseMoveY,
+    //   "tx0", tx0,
+    //   "ty0", ty0,
+    //   "prevScale", prevScale,
+    //   "mousePosX", mousePosX,
+    //   "mousePosY", mousePosY);
 
-    net.sevenscales.domain.utils.Debug.debugBox(
-      currentClientMouseMoveX,
-      currentClientMouseMoveY);
+    // net.sevenscales.domain.utils.Debug.debugBox(
+    //   currentClientMouseMoveX,
+    //   currentClientMouseMoveY);
 
-    tempCircle.setShape((int) mousePosX, (int) mousePosY, 10);
+    // tempCircle.setShape((int) mousePosX, (int) mousePosY, 10);
 
-    rootLayer0.resetAllTransforms();
+    // these are the steps that _scaleAt does at once using matrix multiply
+    // rootLayer0.resetAllTransforms();
+    // rootLayer0.translate(mousePosX, mousePosY);
+    // rootLayer0.scale(value, value);
+    // rootLayer0.translate(-mousePosX, -mousePosY);
 
-    rootLayer0.translate(mousePosX, mousePosY);
-    rootLayer0.scale(value, value);
-    rootLayer0.translate(-mousePosX, -mousePosY);
-
-    // this._scaleAt(rootLayer0.getContainer(), value, mousePosX, mousePosY);
+    this._scaleAt(rootLayer0.getContainer(), value, mousePosX, mousePosY);
 
     // NOTE: transition is always with scale(1)
     double tx = this.getRootLayer().getTransformDoubleX();
@@ -1166,7 +1155,7 @@ class SurfaceHandler extends SimplePanel implements
     double mousePosX2 = currentClientMouseMoveX / value - tx / value;
     double mousePosY2 = currentClientMouseMoveY / value - ty / value;
 
-    tempCircle2.setShape((int) mousePosX2, (int) mousePosY2, 5);
+    // tempCircle2.setShape((int) mousePosX2, (int) mousePosY2, 5);
 
     // mouse point diff is on scale 1 => scale with current zoom value
     double diffx = (mousePosX2 - mousePosX) * value;
@@ -1231,41 +1220,6 @@ class SurfaceHandler extends SimplePanel implements
       scaleDiagram(group.getContainer(), value, x, y);
     }
   }
-
-  private native void scaleAtPoint(JavaScriptObject element, double prevScaleFactor, double value, int width, int height, int mx, int my, net.sevenscales.editor.gfx.domain.ICircle circle, net.sevenscales.editor.gfx.domain.IRectangle rect)/*-{
-    var m3 = new $wnd.dojox.gfx.Matrix2D(value)
-    var t = element.getTransform()
-    if (t != null) {
-      // calculate visible area center point that is visible on screen
-      // calculation is done with current scale factor (previous)
-      var left = t.dx / prevScaleFactor
-      var top = t.dy / prevScaleFactor
-      var cx = -left + mx / prevScaleFactor
-      var cy = -top + my / prevScaleFactor
-
-      // >>>>>>> debug center point
-       rect.@net.sevenscales.editor.gfx.domain.IRectangle::setShape(IIIII)((-left), (-top), width / prevScaleFactor, height / prevScaleFactor, 0)
-       circle.@net.sevenscales.editor.gfx.domain.ICircle::setFill(IIID)(218, 57, 57, 1)
-       circle.@net.sevenscales.editor.gfx.domain.ICircle::setShape(III)(cx, cy, 10)
-      // <<<<<<< debug center point
-
-      // scale at center point to zoom it
-      element.setTransform($wnd.dojox.gfx.matrix.scaleAt(value, value, cx, cy))
-
-      $wnd.globalStreams.scaleAtStream.push()
-
-      // // translate to center point to be visible area center again
-//      t = element.getTransform()
-//      t.dx = t.dx - cx + width / 2
-//      t.dy = t.dy - cy + height / 2
-
-
-//      element.setTransform(t)
-//      $wnd.globalStreams.surfaceTransformStream.push()
-    } else {
-      element.setTransform($wnd.dojox.gfx.matrix.scale({ x: m3.xx, y: m3.yy}))
-    }
-  }-*/;
 
   private native void scaleAtCenter(JavaScriptObject element, double prevScaleFactor, double value, int width, int height/*, net.sevenscales.editor.gfx.domain.ICircle circle, net.sevenscales.editor.gfx.domain.IRectangle rect*/)/*-{
     var m3 = new $wnd.dojox.gfx.Matrix2D(value)
