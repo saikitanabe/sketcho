@@ -18,6 +18,7 @@ import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.impl.SurfaceDiagramSearch;
+import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.SurfaceDefs;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
@@ -1090,15 +1091,19 @@ class SurfaceHandler extends SimplePanel implements
   
   @Override
   public void scale(double value) {
-    scaleAtPoint(value);
-
-    // scaleAtCenter(
-    //  rootLayer0.getContainer(),
-    //  scaleFactor,
-    //  value,
-    //  com.google.gwt.user.client.Window.getClientWidth(),
-    //  com.google.gwt.user.client.Window.getClientHeight()
-    // );
+    if (TouchHelpers.isSupportsTouch()) {
+      // NOTE touch device should calculate center point between fingers
+      scaleAtCenter(
+       rootLayer0.getContainer(),
+       scaleFactor,
+       value,
+       com.google.gwt.user.client.Window.getClientWidth(),
+       com.google.gwt.user.client.Window.getClientHeight()
+      );
+    } else {
+      // desktop uses mouse position
+      scaleAtPoint(value, currentClientMouseMoveX, currentClientMouseMoveY);
+    }
 
     scaleBackground(value);
     this.scaleFactor = value;
@@ -1108,25 +1113,26 @@ class SurfaceHandler extends SimplePanel implements
     }
   }
 
-  private void scaleAtPoint(double value) {
+  private void scaleAtPoint(double value, double px, double py) {
     if (value != 1 && value == getScaleFactor()) {
       return;
     }
 
+    // first make calculations with previous (current) scale
     double prevScale = getScaleFactor();
 
     // NOTE: transition is always with scale(1)
-    double tx0 = this.getRootLayer().getTransformDoubleX();
-    double ty0 = this.getRootLayer().getTransformDoubleY();
+    double tx0 = rootLayer0.getTransformDoubleX();
+    double ty0 = rootLayer0.getTransformDoubleY();
 
-    // NOTE: transition is always with scale(1)
-    double mousePosX = currentClientMouseMoveX / prevScale - tx0 / prevScale;
-    double mousePosY = currentClientMouseMoveY / prevScale - ty0 / prevScale;
+    // calculate mouse position in prev zoom coordinate system
+    double mousePosX = px / prevScale - tx0 / prevScale;
+    double mousePosY = py / prevScale - ty0 / prevScale;
 
     // net.sevenscales.domain.utils.Debug.logString("scaleAtPoint...", 
     //   "scale", value,
-    //   "mx", currentClientMouseMoveX,
-    //   "my", currentClientMouseMoveY,
+    //   "mx", px,
+    //   "my", py,
     //   "tx0", tx0,
     //   "ty0", ty0,
     //   "prevScale", prevScale,
@@ -1134,8 +1140,8 @@ class SurfaceHandler extends SimplePanel implements
     //   "mousePosY", mousePosY);
 
     // net.sevenscales.domain.utils.Debug.debugBox(
-    //   currentClientMouseMoveX,
-    //   currentClientMouseMoveY);
+    //   px,
+    //   py);
 
     // tempCircle.setShape((int) mousePosX, (int) mousePosY, 10);
 
@@ -1145,15 +1151,15 @@ class SurfaceHandler extends SimplePanel implements
     // rootLayer0.scale(value, value);
     // rootLayer0.translate(-mousePosX, -mousePosY);
 
-    this._scaleAt(rootLayer0.getContainer(), value, mousePosX, mousePosY);
+    rootLayer0.scaleAt(value, mousePosX, mousePosY);
 
     // NOTE: transition is always with scale(1)
-    double tx = this.getRootLayer().getTransformDoubleX();
-    double ty = this.getRootLayer().getTransformDoubleY();
+    double tx = rootLayer0.getTransformDoubleX();
+    double ty = rootLayer0.getTransformDoubleY();
 
     // what is the mouse point with new zoom value
-    double mousePosX2 = currentClientMouseMoveX / value - tx / value;
-    double mousePosY2 = currentClientMouseMoveY / value - ty / value;
+    double mousePosX2 = px / value - tx / value;
+    double mousePosY2 = py / value - ty / value;
 
     // tempCircle2.setShape((int) mousePosX2, (int) mousePosY2, 5);
 
@@ -1161,22 +1167,9 @@ class SurfaceHandler extends SimplePanel implements
     double diffx = (mousePosX2 - mousePosX) * value;
     double diffy = (mousePosY2 - mousePosY) * value;
 
-    rootLayer0.setTransform(tx + diffx, ty + diffy);
+    // to notify transform as well
+    this.setTransform(tx + diffx, ty + diffy);
   }
-
-  private native void _scale(JavaScriptObject element, double value)/*-{
-    var t = element.getTransform()
-    t.xx = value
-    t.yy = value
-    // element.setTransform($wnd.dojox.gfx.matrix.scale({ x: value, y: value}))
-    element.setTransform(t)
-  }-*/;
-
-  private native void _scaleAt(JavaScriptObject element, double value, double cx, double cy)/*-{
-    // scale at center point to zoom it
-    element.setTransform($wnd.dojox.gfx.matrix.scaleAt(value, value, cx, cy))
-  }-*/;
-
 
   private native void _notifyScale(double value)/*-{
     $wnd.globalStreams.boardScaledStream.push(value);

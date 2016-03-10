@@ -21,6 +21,7 @@ public interface IGroup extends IContainer, IGraphics {
 
   void translate(double dx, double dy);
   void scale(double xx, double yy);
+  void scaleAt(double z, double px, double py);
 
   void setAttribute(String name, String value);
   void moveToBack();
