@@ -3,6 +3,7 @@ package net.sevenscales.domain.utils;
 import com.google.gwt.logging.client.LogConfiguration;
 import com.google.gwt.user.client.Window;
 import java.util.logging.Level;
+import com.google.gwt.core.shared.GWT;
 
 public class Error {
 	public static void reload(Exception e) {
@@ -13,10 +14,16 @@ public class Error {
     // TODO in future report to server so problem can be fixed!
     Debug.log("Error", msg);
 
-    if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
-      Window.alert(msg);
+    if (LogConfiguration.loggingIsEnabled()) {
+      GWT.debugger();
+      if (Window.confirm(msg)) {
+        // possible to reload page as in production
+        Window.Location.reload();  
+      }
+    } else {
+      // production reloads page
+      Window.Location.reload();
     }
 
-    Window.Location.reload();
 	}
 }

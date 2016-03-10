@@ -54,7 +54,10 @@ public class Constants {
 		1.25,
 		1.3,
 		1.35,
-		1.4
+		1.4,
+		1.45,
+		1.5,
+		1.55
 	};
 
 	static {

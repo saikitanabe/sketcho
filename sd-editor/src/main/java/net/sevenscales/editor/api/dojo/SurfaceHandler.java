@@ -536,18 +536,19 @@ class SurfaceHandler extends SimplePanel implements
 
   public void setTransform(int tx, int ty) {
     getRootLayer().setTransform(tx, ty);
-    _notifyTrasform();
+    _notifyTrasform(rootLayer0.getContainer());
   }
 
   public void setTransform(double tx, double ty) {
     getRootLayer().setTransform(tx, ty);
-    _notifyTrasform();
+    _notifyTrasform(rootLayer0.getContainer());
   }
 
-  private native void _notifyTrasform()/*-{
+  private native void _notifyTrasform(JavaScriptObject group)/*-{
     if (typeof $wnd.globalStreams !== 'undefined') {
       $wnd.globalStreams.backgroundMoveStream.push({
-        type: 'move'
+        type: 'move',
+        matrix: group.getTransform()
       })
     }
   }-*/;

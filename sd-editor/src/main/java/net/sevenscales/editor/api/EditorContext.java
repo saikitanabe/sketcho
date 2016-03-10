@@ -70,7 +70,15 @@ public class EditorContext implements ClockValueFactory {
 	public HandlerManager getEventBus() {
 		return eventBus;
 	}
-	
+
+
+	public Object getObject(EditorProperty key) {
+		if (properties.get(key) != null) {
+			return properties.get(key);
+		}
+		return null;
+	}
+
 	public Object get(EditorProperty key) {
 		if (properties.get(key) != null) {
 			return properties.get(key);
