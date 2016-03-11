@@ -121,7 +121,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
 			public void on(SurfaceScaleEvent event) {
 				double factor = Constants.ZOOM_FACTORS[event.getScaleFactor()];
 //				surface.invertScale();
-			  surface.scale(factor);
+			  surface.scale(factor, event.isWheel());
 //			  int dx = 0;
 //			  int dy = 0;
 //		  	double val = ScaleHelpers.scaleValue(1, factor);
@@ -318,7 +318,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
   }-*/;
 
   private void onBoardReady() {
-  	surface.scale(2f);
+  	surface.scale(2f, false);
   }
 	// <<<<<<<<<< SOLU
 

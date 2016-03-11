@@ -256,7 +256,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     if (TouchHelpers.isSupportsTouch()) {
       factor = 0.7f;
     }
-    toolpool.scale(factor);
+    toolpool.scale(factor, false);
 
   }
 

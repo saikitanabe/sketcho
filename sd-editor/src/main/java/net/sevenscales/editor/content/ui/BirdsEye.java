@@ -209,7 +209,7 @@ class BirdsEye implements IBirdsEyeView {
 	    double ratioW = clientWidth / width;
 	    double ratioH = clientHeight / height;
 	    ratio = (ratioW < ratioH) ? ratioW : ratioH;
-	    surface.scale((float)ratio);
+	    surface.scale(ratio, false);	
 
 	    // how much space (width) board takes when zoomed, visible for eye
 	    double boardWidthSameUnitWithClientWindow = width * ratio;

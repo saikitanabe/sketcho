@@ -98,7 +98,7 @@ public interface ISurfaceHandler extends OperationTransaction, HasMouseWheelHand
 	* This should be used always when transforming root layer. Notifies automatically HTML Layer.
 	*/
 	void setTransform(int tx, int ty);
-	void scale(double value);
+	void scale(double value, boolean wheel);
 	double getScaleFactor();
 	int scaleClientX(int clientX);
 	int scaleClientY(int clientY);

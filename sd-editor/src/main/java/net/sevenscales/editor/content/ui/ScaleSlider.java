@@ -110,7 +110,7 @@ public class ScaleSlider implements IScaleSlider, MouseWheelHandler {
 			currentIndex = index + 1;
 		}
 
-		scaleAndSlide(currentIndex, index);
+		scaleAndSlide(currentIndex, index, true);
 	}
 
 	private native void _initMouseWheel(com.google.gwt.user.client.Element el, ScaleSlider me)/*-{
@@ -221,15 +221,18 @@ public class ScaleSlider implements IScaleSlider, MouseWheelHandler {
 			}
 			currentDistance = distance;
 
-			scaleAndSlide(currentIndex, index);
+			scaleAndSlide(currentIndex, index, false);
 		}
 	}
 
-	private void scaleAndSlide(int currentIndex, int index) {
+	private void scaleAndSlide(int currentIndex, int index, boolean wheel) {
 		if (currentIndex != index && currentIndex < Constants.ZOOM_FACTORS.length && currentIndex >= 0) {
 			logger.debug("set slider to value {}...", currentIndex);
+			this.wheel = wheel;
 			_setSliderValue(innerScaleSlider.getElement(), currentIndex);
-			editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(currentIndex));
+			this.wheel = false;
+
+			// editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(currentIndex, wheel));
 		}
 	}
 	

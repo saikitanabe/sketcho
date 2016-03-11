@@ -1079,7 +1079,7 @@ class SurfaceHandler extends SimplePanel implements
 //  }
   
   public void scale() {
-    scale(scaleFactor);
+    scale(scaleFactor, false);
   }
   
   public void invertScale() {
@@ -1091,9 +1091,14 @@ class SurfaceHandler extends SimplePanel implements
   }
   
   @Override
-  public void scale(double value) {
-    if (TouchHelpers.isSupportsTouch()) {
-      // NOTE touch device should calculate center point between fingers
+  public void scale(double value, boolean wheel) {
+    if (wheel) {
+      // wheel zoom zooms to mouse point
+      scaleAtPoint(value, currentClientMouseMoveX, currentClientMouseMoveY);
+    } else {
+      // NOTE
+      // - e.g. touch device should calculate center point between fingers
+      // - clicking slider or using short cuts zooms to center
       scaleAtCenter(
        rootLayer0.getContainer(),
        scaleFactor,
@@ -1101,9 +1106,6 @@ class SurfaceHandler extends SimplePanel implements
        com.google.gwt.user.client.Window.getClientWidth(),
        com.google.gwt.user.client.Window.getClientHeight()
       );
-    } else {
-      // desktop uses mouse position
-      scaleAtPoint(value, currentClientMouseMoveX, currentClientMouseMoveY);
     }
 
     scaleBackground(value);
