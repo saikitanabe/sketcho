@@ -83,9 +83,21 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
     return !surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE);
   }
 
-  public boolean onMouseDown(Diagram sender, MatrixPointJS point, final int keys) {
+  public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
     boolean result = false;
-  	// logger.debug("onMouseDown...");
+    try {
+      // potentially problematic place, so reloading page if fails
+      result = mouseDown(sender, point, keys);
+    } catch (Exception e) {
+      net.sevenscales.domain.utils.Error.reload(e);
+    }
+    return result;
+  }
+
+  private boolean mouseDown(Diagram sender, MatrixPointJS point, int keys) {
+
+    boolean result = false;
+    // logger.debug("onMouseDown...");
     this.downX = point.getX();
     this.downY = point.getY();
     
@@ -96,9 +108,9 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
     // doesn't support Relationship2 yet
     // removed shift key down
     boolean connectionMode = modeManager.isConnectMode();
-  	// logger.debug("onMouseDown connectionMode({}), sender({}) ... 1", connectionMode, sender);
+    // logger.debug("onMouseDown connectionMode({}), sender({}) ... 1", connectionMode, sender);
     if ( sender != null && !(sender instanceof Relationship2) && connectionMode && notFreehandMode() && createdRelationship == null) {
-    	logger.debug("Starting to create quick connection sender({})... 2", sender);
+      logger.debug("Starting to create quick connection sender({})... 2", sender);
       // set connection mode on automatically as long as shift key is down
       modeManager.setConnectionMode(true);
       
@@ -108,9 +120,9 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       int yy = GridUtils.align(point.getY() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor()));
 
       if (modeManager.isForceConnectionPoint()) {
-      	// force connection point to earlier specified location => currently connection helpers sets this
-      	xx = modeManager.getConnectionPointX();
-      	yy = modeManager.getConnectionPointY();
+        // force connection point to earlier specified location => currently connection helpers sets this
+        xx = modeManager.getConnectionPointX();
+        yy = modeManager.getConnectionPointY();
       }
 
       xx = xx - sender.getTransformX();
@@ -169,6 +181,7 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       }
     }
     return result;
+
   }
 
   public void onMouseEnter(Diagram sender, MatrixPointJS point) {
@@ -182,14 +195,22 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
   }
 
   public void onMouseMove(Diagram sender, MatrixPointJS point) {
-  	// with connection helpers, it is not necessary to have a threshold
-   	// if (Math.abs(downX - point.getX()) < 5 && Math.abs(downY - point.getY()) < 5) {
-   	// 	return;
-   	// }
-  	
+    try {
+      mouseMove(sender, point);
+    } catch (Exception e) {
+      net.sevenscales.domain.utils.Error.reload(e);
+    }
+  }
+
+  private void mouseMove(Diagram sender, MatrixPointJS point) {
+    // with connection helpers, it is not necessary to have a threshold
+    // if (Math.abs(downX - point.getX()) < 5 && Math.abs(downY - point.getY()) < 5) {
+    //  return;
+    // }
+    
     if (createdRelationship != null && currentAnchorElement != null) {
       logger.debug("SketchDiagramAreaHandler.onMouseMove createdRelationship {}...", createdRelationship);
-    	// make surface think that handle is clicked...
+      // make surface think that handle is clicked...
       surface.getMouseDiagramManager().getDragHandler().onMouseDown(currentHandle, point, IGraphics.SHIFT);
       surface.getSelectionHandler().onMouseDown(currentHandle, point, 0);
       createdRelationship.setVisible(true);
@@ -242,6 +263,14 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
   }
 
   public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
+    try {
+      mouseUp(sender, point, keys);
+    } catch (Exception e) {
+      net.sevenscales.domain.utils.Error.reload(e);
+    }
+  }
+
+  private void mouseUp(Diagram sender, MatrixPointJS point, int keys) {
     if (createdRelationship != null) {
       // this was a just select for item not creating a relationship
       removeAutoRelation();

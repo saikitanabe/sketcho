@@ -10,6 +10,7 @@ import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.event.dom.client.TouchEndHandler;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
@@ -41,6 +42,7 @@ import net.sevenscales.editor.diagram.DiagramDragHandler;
 import net.sevenscales.editor.diagram.DiagramSelectionHandler;
 import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.diagram.DiagramSearch;
+import net.sevenscales.editor.diagram.ProxyDragHandler;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
@@ -214,7 +216,7 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public void setTransform(int tx, int ty) {
 		
 	}
-	public void scale(double value) {
+	public void scale(double value, boolean wheel) {
 
 	}
 	public double getScaleFactor() {
@@ -283,6 +285,9 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public void addMouseDiagramHandler(MouseDiagramHandler mouseDiagramHandler) {
 
 	}
+	@Override public void addProxyDragHandler(ProxyDragHandler proxyDragHandler) {
+
+	}
 	public HandlerRegistration addTouchStartHandler(TouchStartHandler handler) {
 		return null;
 	}
@@ -290,6 +295,9 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 		return null;
 	}
 	public HandlerRegistration addTouchMoveHandler(TouchMoveHandler handler) {
+		return null;
+	}
+	public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
 		return null;
 	}
 	public void onMouseDown(GraphicsEvent event, int keys) {

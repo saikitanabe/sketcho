@@ -255,9 +255,13 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	}
 	
 	public void show(AbstractDiagramItem parent) {
-		show(parent, parent.getLeft(), parent.getTop(), parent.getWidth(), parent.getHeight());
+		try {
+			show(parent, parent.getLeft(), parent.getTop(), parent.getWidth(), parent.getHeight());
+		} catch (Exception e) {
+			net.sevenscales.domain.utils.Error.reload(e);
+		}
 	}
-	public void show(AbstractDiagramItem parent, int left, int top, int width, int height) {
+	private void show(AbstractDiagramItem parent, int left, int top, int width, int height) {
 		if (propertyEditorShown || resizeOn || freehandModeOn || someElementIsDragged) {
 			// do not show connection helpers if property editor is shown
 			// do not show if resize is on going
@@ -298,7 +302,11 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	
 	@Override
 	public void hideForce() {
-		hide();
+		try {
+			hide();
+		} catch (Exception e) {
+			net.sevenscales.domain.utils.Error.reload(e);
+		}
 	}
 	
 	private void hide() {
@@ -354,8 +362,13 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	}
 
 	private ConnectionHandle createConnectionHandle() {
-		ICircle visibleHandle = createVisibleHandle();
-		return createCombinedConnectionHandle(visibleHandle);
+		try {
+			ICircle visibleHandle = createVisibleHandle();
+			return createCombinedConnectionHandle(visibleHandle);
+		} catch (Exception e) {
+			net.sevenscales.domain.utils.Error.reload(e);
+		}
+		return null;
 	}
 
 	private ConnectionHandle createCombinedConnectionHandle(ICircle visibleHandle) {
@@ -634,12 +647,16 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 
   @Override
   public void release() {
-    removeHandles(extraConnectionHandles);
-    removeHandles(connectionHandles);
+  	try {
+	    removeHandles(extraConnectionHandles);
+	    removeHandles(connectionHandles);
 
-    group.remove();
-    group = null;
-    instances.clear();
+	    group.remove();
+	    group = null;
+	    instances.clear();
+  	} catch (Exception e) {
+			net.sevenscales.domain.utils.Error.reload(e);
+  	}
   }
 
 }

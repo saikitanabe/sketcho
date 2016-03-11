@@ -15,9 +15,12 @@ import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.event.dom.client.TouchEndHandler;
 
+import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
+
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
 
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.MouseDiagramHandlerManager;
@@ -28,6 +31,7 @@ import net.sevenscales.editor.diagram.DiagramDragHandler;
 import net.sevenscales.editor.diagram.DiagramSelectionHandler;
 import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.diagram.DiagramSearch;
+import net.sevenscales.editor.diagram.ProxyDragHandler;
 import net.sevenscales.editor.api.IBirdsEyeView;
 
 import net.sevenscales.editor.gfx.domain.IGroup;
@@ -43,7 +47,7 @@ import net.sevenscales.editor.api.ot.OperationTransaction;
 import net.sevenscales.domain.js.JsDimension;
 
 
-public interface ISurfaceHandler extends OperationTransaction {
+public interface ISurfaceHandler extends OperationTransaction, HasMouseWheelHandlers {
 
 	public static final String DRAWING_AREA_ID = "drawingareaid";
 	public static final String DRAWING_AREA = "drawingarea";
@@ -94,7 +98,7 @@ public interface ISurfaceHandler extends OperationTransaction {
 	* This should be used always when transforming root layer. Notifies automatically HTML Layer.
 	*/
 	void setTransform(int tx, int ty);
-	void scale(double value);
+	void scale(double value, boolean wheel);
 	double getScaleFactor();
 	int scaleClientX(int clientX);
 	int scaleClientY(int clientY);
@@ -118,7 +122,7 @@ public interface ISurfaceHandler extends OperationTransaction {
 	void addDragHandler(DiagramDragHandler handler);
 	void addSelectionListener(DiagramSelectionHandler handler);
 	void addMouseDiagramHandler(MouseDiagramHandler mouseDiagramHandler);
-
+	void addProxyDragHandler(ProxyDragHandler proxyDragHandler);
 	HandlerRegistration addTouchStartHandler(TouchStartHandler handler);
 	HandlerRegistration addTouchEndHandler(TouchEndHandler handler);
 	HandlerRegistration addTouchMoveHandler(TouchMoveHandler handler);

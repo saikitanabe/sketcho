@@ -17,9 +17,11 @@ import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.BoardDimensions;
 import net.sevenscales.domain.constants.Constants;
+import net.sevenscales.editor.api.event.SurfaceScaleEvent;
+import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
 
 
-class BirdsEye implements IBirdsEyeView {
+class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
 		private int mousePosX;
 		private int mousePosY;
 		private double ratio = 0;
@@ -40,7 +42,14 @@ class BirdsEye implements IBirdsEyeView {
 			this.editorContext = editorContext;
 			this.slider = slider;
 
+			surface.getEditorContext().getEventBus().addHandler(SurfaceScaleEvent.TYPE, this);
+
 			subscribeMapView(this);
+		}
+
+		@Override
+		public void on(SurfaceScaleEvent event) {
+			disable();
 		}
 
 		private void mapViewShortcutDown() {
@@ -73,9 +82,9 @@ class BirdsEye implements IBirdsEyeView {
 				return;
 			}
 
-    	int val = slider.getSliderValue() + 1;
+    	int val = slider.getSliderValue() + 3;
       // logger.debug("zoom ++ {}", val);
-    	if (val <= Constants.ZOOM_FACTORS.length) {
+    	if (val < Constants.ZOOM_FACTORS.length) {
     	  slider.scaleToIndex(val);
     	}
 		}
@@ -85,7 +94,7 @@ class BirdsEye implements IBirdsEyeView {
 				return;
 			}
 
-    	int val = slider.getSliderValue() - 1;
+    	int val = slider.getSliderValue() - 3;
       // logger.debug("zoom -- {}", val);
     	if (val >= 0) {
         slider.scaleToIndex(val);
@@ -191,6 +200,12 @@ class BirdsEye implements IBirdsEyeView {
 	    	return;
 	    }
 
+	    // first reset scale slider to zoom where it would return when
+	    // coming back from birds eye view
+	    // fixes problem when in birds eye view and then starting directly
+	    // to zoom, then starts from scale(1)
+      slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX);
+
 	    int leftmost = BoardDimensions.getLeftmost();
 	    int topmost = BoardDimensions.getTopmost();
 	    int width = BoardDimensions.getWidth();
@@ -209,7 +224,7 @@ class BirdsEye implements IBirdsEyeView {
 	    double ratioW = clientWidth / width;
 	    double ratioH = clientHeight / height;
 	    ratio = (ratioW < ratioH) ? ratioW : ratioH;
-	    surface.scale((float)ratio);
+	    surface.scale(ratio, false);	
 
 	    // how much space (width) board takes when zoomed, visible for eye
 	    double boardWidthSameUnitWithClientWindow = width * ratio;
@@ -224,11 +239,22 @@ class BirdsEye implements IBirdsEyeView {
 	  	notifyMapView(true);
 		}
 
+		public void disable() {
+			if (birdsEyeDown) {
+	    	birdsEyeDown = false;
+	    	if (moveRegistration != null) {
+		      moveRegistration.removeHandler();
+	    	}
+	      moveRegistration = null;
+		  	notifyMapView(false);
+			}
+		}
+
 		private void birdsEyeViewOff() {
 			if (birdsEyeDown) {
-	    	slider.scale(slider.getSliderValue());
-	    	birdsEyeDown = false;
+	      disable();
 
+	    	// slider.scale(slider.getSliderValue());
 	      // 1. zero transform to make calculations easy
 	      surface.setTransform(0, 0);
 
@@ -243,10 +269,6 @@ class BirdsEye implements IBirdsEyeView {
 	      int posx = (int) (-mousePosX + clientWidth / 2);
 	      int posy = (int) (-mousePosY + clientHeight / 2);
 	      surface.setTransform(posx, posy);
-
-	      moveRegistration.removeHandler();
-	      moveRegistration = null;
-	      notifyMapView(false);
 			}
 		}
 

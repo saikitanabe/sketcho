@@ -34,6 +34,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
   private boolean editable;
   private BackgroundMoveHandler backgroundMoveHandler;
   private MouseDiagramHandlerCollection handlers = new MouseDiagramHandlerCollection();
+  private ProxyDragHandler proxyDragHandler;
 	private SketchDiagramAreaHandler sketchDiagramAreaHandler;
 //private Diagram mouseDownSender;
 //private boolean mouseDown;
@@ -135,6 +136,13 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	    if (Tools.isHandTool() || !surface.getEditorContext().isEditable()) {
 	      // if not editable, background should be still movable
 	  		backgroundMoveHandler.onMouseDown(sender, point, keys);
+
+		    if (proxyDragHandler != null) {
+		    	// possibility to disable modes like hand tool when 
+		    	// starting to drag shapes from library
+			    proxyDragHandler.onMouseDown(sender, point, keys);
+			  }
+
 	  	// 	selectionHandler.onMouseDown(sender, point, keys);
 				// lassoSelectionHandler.onMouseDown(sender, point, keys);
 	      return false;
@@ -196,6 +204,9 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 7");
 	    
 	    handlers.fireMouseDown(sender, point, keys);
+	    if (proxyDragHandler != null) {
+		    proxyDragHandler.onMouseDown(sender, point, keys);
+		  }
 
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 8");
@@ -222,7 +233,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 
 			surfaceClickHandler.onMouseDown(sender, point, keys);
   	} catch (Exception e) {
-			com.google.gwt.user.client.Window.Location.reload();
+  		net.sevenscales.domain.utils.Error.reload(e);
   	}
 
   //   logger.debugTime();
@@ -232,6 +243,9 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 
 	public void onMouseEnter(Diagram sender, MatrixPointJS point) {
     handlers.fireMouseEnter(sender, point);
+    if (proxyDragHandler != null) {
+	    proxyDragHandler.onMouseEnter(sender, point);
+	  }
 		resizeHandler.onMouseEnter(sender, point);
 		backgroundMoveHandler.onMouseEnter(sender, point);
 		lassoSelectionHandler.onMouseEnter(sender, point);
@@ -239,6 +253,10 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 
 	public void onMouseLeave(Diagram sender, MatrixPointJS point) {
     handlers.fireMouseLeave(sender, point);
+    if (proxyDragHandler != null) {
+	    proxyDragHandler.onMouseLeave(sender, point);
+	  }
+
 		resizeHandler.onMouseLeave(sender, point);
 		backgroundMoveHandler.onMouseLeave(sender, point);
 		lassoSelectionHandler.onMouseLeave(sender, point);
@@ -266,6 +284,10 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		  }
 	    
 	    handlers.fireMouseMove(sender, point);
+	    if (proxyDragHandler != null) {
+		    proxyDragHandler.onMouseMove(sender, point);
+		  }
+
 	    if (currentMouseHandler == sketchDiagramAreaHandler) {
 	      sketchDiagramAreaHandler.onMouseMove(sender, point);
 	//      dragHandler.onMouseMove(sender, point);
@@ -282,7 +304,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			surface.dispatchDiagram(point);
 
 		} catch (Exception e) {
-			com.google.gwt.user.client.Window.Location.reload();
+			net.sevenscales.domain.utils.Error.reload(e);
 		}
 	}
 
@@ -320,6 +342,10 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 				dragHandler.onMouseUp(sender, point, keys);
 			}
 	    handlers.fireMouseUp(sender, point, keys);
+      if (proxyDragHandler != null) {
+		    proxyDragHandler.onMouseUp(sender, point, keys);
+		  }
+
 	//		bendHandler.onMouseUp(sender, x, y, keys);
 			backgroundMoveHandler.onMouseUp(sender, point, keys);
 			lassoSelectionHandler.onMouseUp(sender, point, keys);
@@ -328,7 +354,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			// logger.debugTime();
 	    currentMouseHandler = null;
 		} catch (Exception e) {
-			com.google.gwt.user.client.Window.Location.reload();
+			net.sevenscales.domain.utils.Error.reload(e);
 		}
 	}
 	
@@ -391,6 +417,10 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
   public void addMouseDiagramHandler(MouseDiagramHandler mouseDiagramHandler) {
     handlers.addMouseDiagramHandler(mouseDiagramHandler);
   }
+
+	public void addProxyDragHandler(ProxyDragHandler proxyDragHandler) {
+		this.proxyDragHandler = proxyDragHandler;
+	}
 
   public void diagramRemoved(Diagram diagram) {
 //    selectionHandler.diagramRemoved(diagram);
@@ -478,7 +508,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	 * @param y
 	 */
 	public void fireLongPress(int x, int y) {
-		if (modeManager.isConnectMode() || surface.getEditorContext().isFreehandMode()) {
+		if (modeManager.isConnectMode() || surface.getEditorContext().isFreehandMode() || Tools.isHandTool()) {
 			// do not handle long press when connection mode is on. 
 			// User is probably trying to draw connection. 
 			return;

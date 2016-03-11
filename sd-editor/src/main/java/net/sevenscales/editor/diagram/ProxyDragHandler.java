@@ -10,6 +10,7 @@ import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.impl.TouchDragAndDrop;
 import net.sevenscales.editor.api.impl.TouchDragAndDrop.ITouchToMouseHandler;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.Color;
@@ -42,7 +43,8 @@ public class ProxyDragHandler implements MouseDiagramHandler {
     
 //    touchManager = new TouchManager(this); 
     
-    source.addMouseDiagramHandler(this);
+    // source.addMouseDiagramHandler(this);
+    source.addProxyDragHandler(this);
     target.addMouseDiagramHandler(new MouseDiagramHandler() {
       @Override
       public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
@@ -141,6 +143,9 @@ public class ProxyDragHandler implements MouseDiagramHandler {
 	  target.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, true);
 
     target.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(false));
+
+    // hand tool is always disabled when starting to drag shapes from the library
+    Tools.setHandTool(false);
 	}
 
 	public void onMouseMove(Diagram sender, MatrixPointJS point) {

@@ -8,6 +8,7 @@ import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.PinchZoomStartedEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEvent;
+import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.content.utils.EffectHelpers;
 
@@ -24,7 +25,7 @@ import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class ScaleSlider implements IScaleSlider {
+public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private static SLogger logger = SLogger.createLogger(ScaleSlider.class);
 
 	private static final double TRESHOLD = 40;
@@ -36,6 +37,9 @@ public class ScaleSlider implements IScaleSlider {
 
 	private SimplePanel innerScaleSlider;
 	private BirdsEye birdsEye;
+	private int deltaSum;
+	private boolean wheel;
+	private boolean fireEvent = true;
 
 	public ScaleSlider(ISurfaceHandler surface) {
 		this.surface = surface;
@@ -57,7 +61,7 @@ public class ScaleSlider implements IScaleSlider {
 			}
 		});
 		
-		surface .addTouchMoveHandler(new TouchMoveHandler() {
+		surface.addTouchMoveHandler(new TouchMoveHandler() {
 			@Override
 			public void onTouchMove(TouchMoveEvent event) {
 				if (freehandMode() || 
@@ -76,12 +80,67 @@ public class ScaleSlider implements IScaleSlider {
 				endPinch();
 			}
 		});
+
+		_initMouseWheel(surface.getElement(), this);
 		
 //		new ShowHideHelpers(scaleSlider, innerScaleSlider, 6000);
 		birdsEye = new BirdsEye(surface, editorContext, this);
 
+		surface.getEditorContext().getEventBus().addHandler(SurfaceScaleEvent.TYPE, this);
+
 		listen(this);
 	}
+
+	@Override
+	public void on(SurfaceScaleEvent event) {
+		updateSliderState(event.getScaleFactor());
+	}
+
+	private void updateSliderState(int index) {
+		// this is just to set slider to correct zoom value
+		fireEvent = false;
+		scaleToIndex(index);
+	}
+
+	private void handlMouseWheel(int delta) {
+
+		boolean up = delta < 0;
+		boolean down = delta > 0;
+		boolean change = false;
+
+		deltaSum += delta;
+		boolean update = deltaSum % 2 == 0;
+
+		int index = currentIndex;
+		if (update && up && (index -1 ) >= 0) {
+			currentIndex = index - 1;
+		} else if (update && down && (index + 1) < Constants.ZOOM_FACTORS.length) {
+			currentIndex = index + 1;
+		}
+
+		scaleAndSlide(currentIndex, index, true);
+	}
+
+	private native void _initMouseWheel(com.google.gwt.user.client.Element el, ScaleSlider me)/*-{
+
+		function mouseWheelHandler(e) {
+			// old IE support
+			var e = window.event || e;
+			var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail || -e.deltaY)))
+
+			me.@net.sevenscales.editor.content.ui.ScaleSlider::handlMouseWheel(I)(delta)
+		}
+
+		if (el.addEventListener) {
+			// IE9, Chrome, Safari, Opera, Firefox
+			// Standard event
+			el.addEventListener("wheel", mouseWheelHandler, false)
+		}	else {
+			// IE 6/7/8
+			el.attachEvent("onmousewheel", mouseWheelHandler)
+		}
+	}-*/;
+
 
 	public IBirdsEyeView getBirdsEyeView() {
 		return birdsEye;
@@ -168,23 +227,33 @@ public class ScaleSlider implements IScaleSlider {
 				currentIndex = index + 1;
 			}
 			currentDistance = distance;
-			
-			if (currentIndex != index && currentIndex < Constants.ZOOM_FACTORS.length && currentIndex >= 0) {
-				logger.debug("set slider to value {}...", currentIndex);
-				_setSliderValue(innerScaleSlider.getElement(), currentIndex);
-				editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(currentIndex));
-			}
+
+			scaleAndSlide(currentIndex, index, false);
+		}
+	}
+
+	private void scaleAndSlide(int currentIndex, int index, boolean wheel) {
+		if (currentIndex != index && currentIndex < Constants.ZOOM_FACTORS.length && currentIndex >= 0) {
+			logger.debug("set slider to value {}...", currentIndex);
+			this.wheel = wheel;
+			_setSliderValue(innerScaleSlider.getElement(), currentIndex);
+			this.wheel = false;
+
+			// editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(currentIndex, wheel));
 		}
 	}
 	
 	@Override
   public void scale(int index) {
-		editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(index));
-		// unfocus everything, or otherwise shortcuts are not working
-		// that use key press events, focus steals press events and should
-		// handle keydown, but e.g. +, - signs have different keycodes on 
-		// different browsers
-		_unfocusEverything();
+  	if (fireEvent) {
+			editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(index, wheel));
+			// unfocus everything, or otherwise shortcuts are not working
+			// that use key press events, focus steals press events and should
+			// handle keydown, but e.g. +, - signs have different keycodes on 
+			// different browsers
+			_unfocusEverything();
+  	}
+  	fireEvent = true;
   }
 
   private native void _unfocusEverything()/*-{

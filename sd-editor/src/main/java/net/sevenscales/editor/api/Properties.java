@@ -8,6 +8,7 @@ import java.util.Set;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.editor.api.event.ColorSelectedEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEventHandler;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
@@ -21,6 +22,7 @@ import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEventHandle
 import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
 import net.sevenscales.editor.api.event.ChangeTextSizeEventHandler;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
+import net.sevenscales.editor.api.event.SurfaceScaleEvent;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.api.ActionType;
@@ -403,7 +405,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 //			selectedDiagram.endTextEdit();
 		}
 		
-		if ((editorIsOpen && selectedDiagram != null) || forceApplyAlways) {
+		if ((editorIsOpen && selectedDiagram != null) || (forceApplyAlways && selectedDiagram != null)) {
 			selectedDiagram.editingEnded(modifiedAtLeastOnce);
 			AnchorElement.dragEndAnchors(selectedDiagram);
 		}
@@ -518,6 +520,13 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		if (selectedDiagram instanceof CommentThreadElement) {
 			commentEditor.showEditor(selectedDiagram);
 			return;
+		}
+
+		if (surface.getScaleFactor() < 0.7) {
+			// zoom to mouse position
+			editorContext.getEventBus().fireEvent(
+				new SurfaceScaleEvent(Constants.ZOOM_DEFAULT_INDEX, true)
+			);
 		}
 		
 		selectedDiagram.hideConnectionHelpers();

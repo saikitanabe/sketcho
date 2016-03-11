@@ -193,27 +193,38 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 	public boolean handleSurfaceDoubleTap() {
 		boolean result = false;
-		if (mouseUpPoint != null) {
-			boolean fromPreviousIfAny = this.mouseUpKeys == IGraphics.SHIFT;
-			result = createQuickConnection(mouseUpPoint.getScreenX(), mouseUpPoint.getScreenY(), fromPreviousIfAny);
+		try {
+			if (mouseUpPoint != null) {
+				boolean fromPreviousIfAny = this.mouseUpKeys == IGraphics.SHIFT;
+				result = createQuickConnection(mouseUpPoint.getScreenX(), mouseUpPoint.getScreenY(), fromPreviousIfAny);
+			}
+			return result;
+		} catch (Exception e) {
+			net.sevenscales.domain.utils.Error.reload(e);
 		}
 		return result;
 	}
 
 	private boolean maybeStartSuperFlow() {
 		boolean result = false;
-		// if (Tools.isQuickMode()) {
-			// cancelLastOperationIfLastQuickConnection();
-			// TODO how to check if just board is double clicked?
-			// if (sender == null) {
-				// let's check only board sent mouse up event;
-				// since library drop would be reseted otherwise
-				// anyway better to have some optimization
-			if (mouseUpPoint != null) {
-				boolean fromPreviousIfAny = this.mouseUpKeys == IGraphics.SHIFT;
-				result = checkToCreateQuickConnection(mouseUpPoint.getScreenX(), mouseUpPoint.getScreenY(), fromPreviousIfAny);
-			}
-		// }
+		try {
+			// if (Tools.isQuickMode()) {
+				// cancelLastOperationIfLastQuickConnection();
+				// TODO how to check if just board is double clicked?
+				// if (sender == null) {
+					// let's check only board sent mouse up event;
+					// since library drop would be reseted otherwise
+					// anyway better to have some optimization
+				if (mouseUpPoint != null) {
+					boolean fromPreviousIfAny = this.mouseUpKeys == IGraphics.SHIFT;
+					result = checkToCreateQuickConnection(mouseUpPoint.getScreenX(), mouseUpPoint.getScreenY(), fromPreviousIfAny);
+				}
+			// }
+
+		} catch (Exception e) {
+			net.sevenscales.domain.utils.Error.reload(e);
+		}
+
 		return result;
 	}
 
