@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Position;
 
+// net.sevenscales.domain.utils.Debug.log()
 public class Debug {
 
   // private static Element dbox;

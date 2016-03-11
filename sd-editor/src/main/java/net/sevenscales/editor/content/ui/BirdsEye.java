@@ -82,9 +82,9 @@ class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
 				return;
 			}
 
-    	int val = slider.getSliderValue() + 1;
+    	int val = slider.getSliderValue() + 3;
       // logger.debug("zoom ++ {}", val);
-    	if (val <= Constants.ZOOM_FACTORS.length) {
+    	if (val < Constants.ZOOM_FACTORS.length) {
     	  slider.scaleToIndex(val);
     	}
 		}
@@ -94,7 +94,7 @@ class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
 				return;
 			}
 
-    	int val = slider.getSliderValue() - 1;
+    	int val = slider.getSliderValue() - 3;
       // logger.debug("zoom -- {}", val);
     	if (val >= 0) {
         slider.scaleToIndex(val);
