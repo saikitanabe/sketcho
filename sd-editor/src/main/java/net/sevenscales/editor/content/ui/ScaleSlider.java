@@ -8,6 +8,7 @@ import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.PinchZoomStartedEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEvent;
+import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.content.utils.EffectHelpers;
 
@@ -22,11 +23,9 @@ import com.google.gwt.event.dom.client.TouchMoveEvent;
 import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
-import com.google.gwt.event.dom.client.MouseWheelHandler;
-import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class ScaleSlider implements IScaleSlider, MouseWheelHandler {
+public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private static SLogger logger = SLogger.createLogger(ScaleSlider.class);
 
 	private static final double TRESHOLD = 40;
@@ -39,6 +38,8 @@ public class ScaleSlider implements IScaleSlider, MouseWheelHandler {
 	private SimplePanel innerScaleSlider;
 	private BirdsEye birdsEye;
 	private int deltaSum;
+	private boolean wheel;
+	private boolean fireEvent;
 
 	public ScaleSlider(ISurfaceHandler surface) {
 		this.surface = surface;
@@ -80,18 +81,25 @@ public class ScaleSlider implements IScaleSlider, MouseWheelHandler {
 			}
 		});
 
-		// surface.addMouseWheelHandler(this);
 		_initMouseWheel(surface.getElement(), this);
 		
 //		new ShowHideHelpers(scaleSlider, innerScaleSlider, 6000);
 		birdsEye = new BirdsEye(surface, editorContext, this);
 
+		surface.getEditorContext().getEventBus().addHandler(SurfaceScaleEvent.TYPE, this);
+
 		listen(this);
 	}
 
 	@Override
-	public void onMouseWheel(MouseWheelEvent event) {
-		net.sevenscales.domain.utils.Debug.log("onMouseWheel...", event.getDeltaY()+"", event.isNorth()+"", event.isSouth()+"");
+	public void on(SurfaceScaleEvent event) {
+		updateSliderState(event.getScaleFactor());
+	}
+
+	private void updateSliderState(int index) {
+		// this is just to set slider to correct zoom value
+		fireEvent = false;
+		scaleToIndex(index);
 	}
 
 	private void handlMouseWheel(int delta) {
@@ -101,7 +109,7 @@ public class ScaleSlider implements IScaleSlider, MouseWheelHandler {
 		boolean change = false;
 
 		deltaSum += delta;
-		boolean update = deltaSum % 4 == 0;
+		boolean update = deltaSum % 2 == 0;
 
 		int index = currentIndex;
 		if (update && up && (index -1 ) >= 0) {
@@ -238,12 +246,15 @@ public class ScaleSlider implements IScaleSlider, MouseWheelHandler {
 	
 	@Override
   public void scale(int index) {
-		editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(index));
-		// unfocus everything, or otherwise shortcuts are not working
-		// that use key press events, focus steals press events and should
-		// handle keydown, but e.g. +, - signs have different keycodes on 
-		// different browsers
-		_unfocusEverything();
+  	if (fireEvent) {
+			editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(index, wheel));
+			// unfocus everything, or otherwise shortcuts are not working
+			// that use key press events, focus steals press events and should
+			// handle keydown, but e.g. +, - signs have different keycodes on 
+			// different browsers
+			_unfocusEverything();
+  	}
+  	fireEvent = true;
   }
 
   private native void _unfocusEverything()/*-{
