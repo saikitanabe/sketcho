@@ -126,16 +126,15 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 		function mouseWheelHandler(e) {
 			// old IE support
 			var e = window.event || e;
-			var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)))
+			var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail || -e.deltaY)))
 
 			me.@net.sevenscales.editor.content.ui.ScaleSlider::handlMouseWheel(I)(delta)
 		}
 
 		if (el.addEventListener) {
-			// IE9, Chrome, Safari, Opera
-			el.addEventListener("mousewheel", mouseWheelHandler, false)
-			// Firefox
-			el.addEventListener("DOMMouseScroll", mouseWheelHandler, false)
+			// IE9, Chrome, Safari, Opera, Firefox
+			// Standard event
+			el.addEventListener("wheel", mouseWheelHandler, false)
 		}	else {
 			// IE 6/7/8
 			el.attachEvent("onmousewheel", mouseWheelHandler)
