@@ -39,7 +39,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private BirdsEye birdsEye;
 	private int deltaSum;
 	private boolean wheel;
-	private boolean fireEvent;
+	private boolean fireEvent = true;
 
 	public ScaleSlider(ISurfaceHandler surface) {
 		this.surface = surface;
