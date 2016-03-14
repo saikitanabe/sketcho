@@ -523,6 +523,11 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	}-*/;
 
 	private void handleDoubleTap(int x, int y, boolean shiftKey, String targetId) {
+		if (surface.getEditorContext().isFreehandMode()) {
+			// double click is disabled on freehand
+			return;
+		}
+
 		if (birdsEyeView != null && birdsEyeView.isBirdsEyeViewOn()) {
 			birdsEyeView.off();
 			return;
