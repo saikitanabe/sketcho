@@ -292,6 +292,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		$wnd.globalStreams.closeEditorStream.onValue(function() {
 			me.@net.sevenscales.editor.api.Properties::unselectAll()()
 		})
+
+		$wnd.globalStreams.enterCmdShortcutStream.onValue(function() {
+			me.@net.sevenscales.editor.api.Properties::closeIfOpen()()
+		})
 	}-*/;
 
 	private native void handleItemRealTimeModify(Properties me)/*-{
@@ -356,6 +360,12 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 				d.setBorderColor(color.getBorderColor());
 			}
 			break;
+		}
+	}
+
+	private void closeIfOpen() {
+		if (popup.isShowing()) {
+			hide();
 		}
 	}
 	
