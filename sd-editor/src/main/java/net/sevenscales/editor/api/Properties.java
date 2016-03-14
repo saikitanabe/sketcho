@@ -46,6 +46,7 @@ import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.EditorCommon;
 import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
+import net.sevenscales.editor.diagram.utils.UiUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
@@ -522,8 +523,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			return;
 		}
 
-		if (surface.getScaleFactor() < 0.7) {
+		if (surface.getScaleFactor() < 0.7 && !UiUtils.isMobile()) {
 			// zoom to mouse position
+			// not when using iPad (mobile) focus goes wrong
 			editorContext.getEventBus().fireEvent(
 				new SurfaceScaleEvent(Constants.ZOOM_DEFAULT_INDEX, true)
 			);
