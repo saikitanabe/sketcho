@@ -245,9 +245,9 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
   }
 
   private void createLibrary() {
-    editorContext.set(EditorProperty.ON_SURFACE_LOAD, true);
+    editorContext.set(EditorProperty.ON_LIBRARY_LOAD, true);
     List<Diagram> items = createToolbarItems();
-    editorContext.set(EditorProperty.ON_SURFACE_LOAD, false);
+    editorContext.set(EditorProperty.ON_LIBRARY_LOAD, false);
     for (Diagram item : items) {
       toolpool.add(item, true); 
     }

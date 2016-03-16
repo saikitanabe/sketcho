@@ -433,6 +433,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		}
 
     selectedDiagram.setText(codeMirror.getText(), textEditX, textEditY);
+
     modifiedAtLeastOnce = true;
     sendBuffer();
     // synchronous version, starts to lag with long text
