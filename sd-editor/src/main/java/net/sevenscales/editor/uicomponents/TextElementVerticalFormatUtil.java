@@ -104,7 +104,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
     // if (force || editorContext.isTrue(EditorProperty.ON_SURFACE_LOAD) || editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
     if (!editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) || force) {
   	  calculateLines2();
-      if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION) && !editorContext.isTrue(EditorProperty.ON_SURFACE_LOAD)) {
+      if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION) && !editorContext.isTrue(EditorProperty.ON_SURFACE_LOAD) && !editorContext.isTrue(EditorProperty.ON_LIBRARY_LOAD)) {
         // during OT operation element is NOT resized and everything is 
         // copied as is, element size and text
         // though in vertical case text needs to be recalculated based on element size
