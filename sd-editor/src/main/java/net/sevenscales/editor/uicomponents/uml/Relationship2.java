@@ -2160,8 +2160,12 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	}
 	
 	@Override
-	public void restoreHighlighColor() {
-		setBorderColor(getBorderColor());
+	public void restoreHighlighColor(Color color) {
+    if (color != null) {
+      setHighlightColor(color);
+    } else {
+      setBorderColor(getBorderColor());
+    }
     // applyAnnotationColors();
 	}
   

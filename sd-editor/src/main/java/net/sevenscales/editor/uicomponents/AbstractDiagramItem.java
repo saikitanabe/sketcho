@@ -557,7 +557,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     // logger.debugTime();
     // logger.start("AbstractDiagramItem.unselect 3");
     
-    restoreHighlighColor();
+    restoreHighlighColor(null);
 
     // logger.debugTime();
     // logger.start("AbstractDiagramItem.unselect 4");
@@ -1449,9 +1449,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
 	
 	@Override
-	public void restoreHighlighColor() {
-    if (selected) {
+	public void restoreHighlighColor(Color color) {
+    if (selected && color == null) {
       setHighlightColor(DEFAULT_SELECTION_COLOR);
+    } else if (color != null) {
+      setHighlightColor(color);
     } else {
       setBorderColor(getBorderColor());
     }

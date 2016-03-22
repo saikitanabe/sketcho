@@ -43,6 +43,8 @@ public class BoardOTHelpers {
 	private DiagramSearch diagramSearch;
 	private CommentFactory commentFactory;
 	private String clientIdentifier;
+	private IBoardUserHandler boardUserHandler;
+
 	private static final SLogger logger = SLogger.createLogger(BoardOTHelpers.class);
 
 	public BoardOTHelpers(ISurfaceHandler surface, String clientIdentifier) {
@@ -50,6 +52,10 @@ public class BoardOTHelpers {
 		this.clientIdentifier = clientIdentifier;
 		this.diagramSearch = surface.createDiagramSearch();
 		this.commentFactory = new CommentFactory(surface, true);
+	}
+
+	public void setBoardUserHandler(IBoardUserHandler boardUserHandler) {
+		this.boardUserHandler = boardUserHandler;
 	}
 	
 	public void applyOperationsToGraphicalView(String originator, List<DiagramApplyOperation> operations) throws MappingNotFoundException {
@@ -231,7 +237,7 @@ public class BoardOTHelpers {
 		  throw new MappingNotFoundException(SLogger.format("insertOT failed for\ndiagrams {}\nitems {}", diagrams.toString(), items.toString()));
 		}
 		
-		highlightChanges(originator, diagrams, new OTHighlight(diagrams));
+		highlightChanges(originator, diagrams, new OTHighlight(diagrams, boardUserHandler));
 	}
 
 	private Diagram createAndAddElement(IDiagramItemRO diro) {
@@ -295,7 +301,7 @@ public class BoardOTHelpers {
 		if (diagrams.size() != items.size()) {
 		  throw new MappingNotFoundException(SLogger.format("modifyOT failed for {}", items.toString()));
 		}
-  	highlightChanges(originator, diagrams, new OTHighlight(diagrams));
+  	highlightChanges(originator, diagrams, new OTHighlight(diagrams, boardUserHandler));
 	}
 
 	private void diagramRealTimeModified(Diagram diagram) {
@@ -324,16 +330,24 @@ public class BoardOTHelpers {
 
   private static class OTHighlight implements RepeatingCommand {
 		private Set<Diagram> diagrams;
-		public OTHighlight(Set<Diagram> diagrams) {
+		private IBoardUserHandler boardUserHandler;
+
+		public OTHighlight(Set<Diagram> diagrams, IBoardUserHandler boardUserHandler) {
 			this.diagrams = diagrams;
+			this.boardUserHandler = boardUserHandler;
 		}
 		@Override
 		public boolean execute() {
 			for (Diagram d : diagrams) {
-				d.restoreHighlighColor();
+				Color color = null;
+				if (boardUserHandler != null) {
+					color = boardUserHandler.getColor(d);
+				}
+				d.restoreHighlighColor(color);
 			}
 			return false;
 		}
+
 	}
 	
 	private void highlightChanges(String originator, Set<Diagram> diagrams, RepeatingCommand repeating) {

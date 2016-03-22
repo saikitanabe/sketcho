@@ -181,7 +181,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
     
     // setBorderColor(borderWebColor);
     
-		restoreHighlighColor();
+		restoreHighlighColor(null);
 
     super.constructorDone();
 	}
@@ -525,7 +525,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
   }
 
   @Override
-	public void restoreHighlighColor() {
+	public void restoreHighlighColor(Color color) {
 		// need to override since default border color restoration
 		// doesn't handle transparent border!
 		boundary.setStroke(0, 0, 0, 0);
@@ -535,7 +535,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
   public void setHighlight(boolean highlight) {
   	super.setHighlight(highlight);
   	if (!highlight) {
-  		restoreHighlighColor();
+  		restoreHighlighColor(null);
   	}
   }
 

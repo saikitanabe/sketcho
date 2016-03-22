@@ -221,7 +221,11 @@ public interface Diagram extends SourcesMouseDiagramEvents {
 	// special cases for highlight, in case some diagram items don't support
 	// simple border color changes
 	void setHighlightColor(Color color);
-	void restoreHighlighColor();
+  /**
+  * Highlights color if defined.
+  * Otherwise restores border color according to diagram shape.
+  */
+	void restoreHighlighColor(Color color);
 
   void setHighlightBackgroundBorder(Color color);
   void clearHighlightBackgroundBorder();
