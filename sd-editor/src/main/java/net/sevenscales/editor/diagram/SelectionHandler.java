@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
@@ -22,6 +23,7 @@ import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.UnselectAllEvent;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.auth.AuthHelpers;
+import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.IChildElement;
@@ -49,6 +51,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.core.client.JsArrayString;
+import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
@@ -720,6 +723,29 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
       }
     }
     return tmpSelectedItems;
+  }
+
+  public List<String> getSeletedShapeIdsJavaVersion() {
+    List<String> result = new ArrayList<String>();
+
+    for (Diagram diagram : getSelectedItems()) {
+      IDiagramItemRO di = diagram.getDiagramItem();
+      if (di != null && di.getClientId() != null) {
+        result.add(di.getClientId());
+      }
+    }
+    return result;
+  }
+
+  public JsArrayString getSeletedShapeIds() {
+    List<? extends IDiagramItemRO> items = BoardDocumentHelpers.diagramsToItems(
+      getSelectedItems()
+    );
+    JsArrayString result = JavaScriptObject.createArray().cast();
+    for (IDiagramItemRO diro : items) {
+      result.push(diro.getClientId());
+    }
+    return result;
   }
 
   public void selectShapes(JsArrayString shapeIds) {
