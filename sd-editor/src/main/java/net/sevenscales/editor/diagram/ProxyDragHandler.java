@@ -92,6 +92,7 @@ public class ProxyDragHandler implements MouseDiagramHandler {
           Diagram d = owner.duplicate(ProxyDragHandler.this.target, 
           		point.getX() - ScaleHelpers.scaleValue(ProxyDragHandler.this.target.getRootLayer().getTransformX(), ProxyDragHandler.this.target.getScaleFactor()), 
           		point.getY() - ScaleHelpers.scaleValue(ProxyDragHandler.this.target.getRootLayer().getTransformY(), ProxyDragHandler.this.target.getScaleFactor()));
+
           ProxyDragHandler.this.target.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
           
           // for now color is taken from library, usability:

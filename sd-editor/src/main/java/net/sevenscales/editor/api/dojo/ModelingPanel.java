@@ -44,6 +44,7 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.dom.client.NativeEvent;
@@ -245,7 +246,10 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
 		// and can recognize when mouse enters drawing area
 		
 		// add dom handler on the root panel, then drag and drop works safely
+		RootPanel.get().addDomHandler(dragAndDropHandler, MouseDownEvent.getType());
+		RootPanel.get().addDomHandler(dragAndDropHandler, MouseUpEvent.getType());
 		RootPanel.get().addDomHandler(dragAndDropHandler, MouseMoveEvent.getType());
+
 		RootPanel.get().addDomHandler(new MouseDownHandler() {
 			@Override
 			public void onMouseDown(MouseDownEvent event) {

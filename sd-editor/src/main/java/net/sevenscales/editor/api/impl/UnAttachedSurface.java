@@ -219,7 +219,7 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public IGroup getInteractionLayer() {
 		return interactionLayer4;
 	}
-	public void setTransform(int tx, int ty) {
+	public void setTransform(double tx, double ty) {
 		
 	}
 	public void scale(double value, boolean wheel) {

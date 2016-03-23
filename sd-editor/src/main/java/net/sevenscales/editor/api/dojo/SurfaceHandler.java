@@ -536,10 +536,10 @@ class SurfaceHandler extends SimplePanel implements
     return interactionLayer4;
   }
 
-  public void setTransform(int tx, int ty) {
-    getRootLayer().setTransform(tx, ty);
-    _notifyTrasform(rootLayer0.getContainer());
-  }
+  // public void setTransform(int tx, int ty) {
+  //   getRootLayer().setTransform(tx, ty);
+  //   _notifyTrasform(rootLayer0.getContainer());
+  // }
 
   public void setTransform(double tx, double ty) {
     getRootLayer().setTransform(tx, ty);
