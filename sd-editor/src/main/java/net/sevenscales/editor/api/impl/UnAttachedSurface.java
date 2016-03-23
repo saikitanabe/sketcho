@@ -23,6 +23,7 @@ import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.api.ot.OperationTransaction;
+import net.sevenscales.editor.api.ot.IBoardUserHandler;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.SurfaceLoadedEventListener;
@@ -115,6 +116,11 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	}
 	public ISurface getSurface() {
 		return surface;
+	}
+	public void setBoardUserHandler(IBoardUserHandler boardUserHandler) {
+	}
+	public IBoardUserHandler getBoardUserHandler() {
+		return null;
 	}
 	public List<Diagram> getDiagrams() {
 		return diagrams;

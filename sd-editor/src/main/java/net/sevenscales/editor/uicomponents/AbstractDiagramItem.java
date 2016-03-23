@@ -556,8 +556,13 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     
     // logger.debugTime();
     // logger.start("AbstractDiagramItem.unselect 3");
+
+    Color color = null;
+    if (surface.getBoardUserHandler() != null) {
+      color = surface.getBoardUserHandler().getColor(this);
+    }
     
-    restoreHighlighColor(null);
+    restoreHighlighColor(color);
 
     // logger.debugTime();
     // logger.start("AbstractDiagramItem.unselect 4");

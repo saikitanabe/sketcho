@@ -24,6 +24,7 @@ import net.sevenscales.editor.api.SurfaceDefs;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.api.ot.OperationTransaction;
+import net.sevenscales.editor.api.ot.IBoardUserHandler;
 import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
@@ -142,6 +143,7 @@ class SurfaceHandler extends SimplePanel implements
   private OTBuffer otBuffer;
   private OperationTransaction operationTransaction;
   private IBirdsEyeView birdsEyeView;
+  private IBoardUserHandler boardUserHandler;
 
   // >>>>>>>>> Debugging
   // private net.sevenscales.editor.gfx.domain.ICircle tempCircle;
@@ -566,6 +568,15 @@ class SurfaceHandler extends SimplePanel implements
     if (surface != null) {
       listener.onLoaded();
     }
+  }
+
+  @Override
+  public void setBoardUserHandler(IBoardUserHandler boardUserHandler) {
+    this.boardUserHandler = boardUserHandler;
+  }
+
+  public IBoardUserHandler getBoardUserHandler() {
+    return boardUserHandler;
   }
 
   public List<Diagram> getDiagrams() {
