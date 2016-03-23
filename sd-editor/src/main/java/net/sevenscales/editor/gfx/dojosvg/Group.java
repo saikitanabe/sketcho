@@ -174,7 +174,7 @@ class Group extends Graphics implements IContainer, IGroup {
 
   @Override
   public void setTransform(double dx, double dy) {
-  	_setTransform(group, dx, dy);
+  	_setTransform(group, (int) dx, (int) dy);
   }
 
   public void setScale(double xx, double yy) {
@@ -197,16 +197,16 @@ class Group extends Graphics implements IContainer, IGroup {
     }
   }-*/;
 
-  private native void _setTransform(JavaScriptObject rawNode, double dx, double dy)/*-{
-  	var t = rawNode.getTransform();
-  	if (t != null) {
-  		t.dx = dx;
-  		t.dy = dy;
-  		rawNode.setTransform(t);
-  	} else {
-  		rawNode.setTransform({dx: dx, dy: dy});
-  	}
-	}-*/;
+ //  private native void _setTransform(JavaScriptObject rawNode, double dx, double dy)/*-{
+ //  	var t = rawNode.getTransform();
+ //  	if (t != null) {
+ //  		t.dx = dx;
+ //  		t.dy = dy;
+ //  		rawNode.setTransform(t);
+ //  	} else {
+ //  		rawNode.setTransform({dx: dx, dy: dy});
+ //  	}
+	// }-*/;
 
   @Override
   public void setTransform(int x, int y, float scaleX, float scaleY) {
