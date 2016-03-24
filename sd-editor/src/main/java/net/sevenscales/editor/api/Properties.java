@@ -403,12 +403,18 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	
 	private void clean() {
     selectedDiagram = null;
-    codeMirror.setText("");
+    if (isEditorOpen()) {
+	    codeMirror.setText("");
+    }
 		modifiedAtLeastOnce = false;
 	}
 
+	private boolean isEditorOpen() {
+		return editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN);
+	}
+
 	private void applyTextToDiagram(boolean forceApplyAlways) {
-	  boolean editorIsOpen = editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN);
+	  boolean editorIsOpen = isEditorOpen();
 		if (editorIsOpen && selectedDiagram != null && selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
 			// reset text edit location
 			textEditX = 0;

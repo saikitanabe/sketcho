@@ -282,7 +282,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	private void restoreHighlightColors() {
     for (Diagram d : surface.getDiagrams()) {
     	if ( !(d instanceof CircleElement) && !(d instanceof Relationship2) && d != oneSelected) {
-  			d.restoreHighlighColor();
+  			d.restoreHighlighColor(null);
     	}
     }
 	}
@@ -455,7 +455,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		if (diagrams != null) {
 			for (Diagram d : diagrams) {
 				if (d != oneSelected && !d.isSelected()) {
-					d.restoreHighlighColor();
+					d.restoreHighlighColor(null);
 				}
 			}
 		}

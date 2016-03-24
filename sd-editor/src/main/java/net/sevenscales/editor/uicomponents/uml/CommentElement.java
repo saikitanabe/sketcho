@@ -172,7 +172,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
     // setBorderColor(borderWebColor);
 
     // HACK! need to set border as transparent
-    restoreHighlighColor();
+    restoreHighlighColor(null);
     
     parentThread.accept(this);
     super.constructorDone();
@@ -517,7 +517,7 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   }
 
 	@Override
-	public void restoreHighlighColor() {
+	public void restoreHighlighColor(Color color) {
 		// need to override since default border color restoration
 		// doesn't handle transparent border!
 		boundary.setStroke(0, 0, 0, 0);

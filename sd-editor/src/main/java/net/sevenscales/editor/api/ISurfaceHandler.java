@@ -44,6 +44,7 @@ import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.api.ot.OperationTransaction;
+import net.sevenscales.editor.api.ot.IBoardUserHandler;
 import net.sevenscales.domain.js.JsDimension;
 
 
@@ -62,6 +63,8 @@ public interface ISurfaceHandler extends OperationTransaction, HasMouseWheelHand
 	void show();
 	void hide();
 	ISurface getSurface();
+	void setBoardUserHandler(IBoardUserHandler boardUserHandler);
+	IBoardUserHandler getBoardUserHandler();
 	List<Diagram> getDiagrams();
 	List<Diagram> getVisualItems();
 	JsDimension getDimension(JsArrayString shapeIds);
@@ -97,7 +100,7 @@ public interface ISurfaceHandler extends OperationTransaction, HasMouseWheelHand
 	/**
 	* This should be used always when transforming root layer. Notifies automatically HTML Layer.
 	*/
-	void setTransform(int tx, int ty);
+	void setTransform(double tx, double ty);
 	void scale(double value, boolean wheel);
 	double getScaleFactor();
 	int scaleClientX(int clientX);

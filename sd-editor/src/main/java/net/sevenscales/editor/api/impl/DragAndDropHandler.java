@@ -9,9 +9,11 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 
-public class DragAndDropHandler implements MouseMoveHandler, ITouchToMouseHandler {
+public class DragAndDropHandler implements MouseDownHandler, MouseUpHandler, MouseMoveHandler, ITouchToMouseHandler {
 	private static final SLogger logger = SLogger.createLogger(DragAndDropHandler.class);
 	
 	private ISurfaceHandler surface;
@@ -20,10 +22,25 @@ public class DragAndDropHandler implements MouseMoveHandler, ITouchToMouseHandle
 	private Boolean onentersurface = false;
 
 	private boolean libraryHandling;
+	private boolean overToolBar;
 
 	public DragAndDropHandler(ISurfaceHandler surface, ISurfaceHandler toolFrame) {
 		this.surface = surface;
 		this.toolFrame = toolFrame;
+	}
+
+	private void proxyCreatedShape() {
+		overToolBar = false;
+	}
+
+	@Override
+	public void onMouseDown(MouseDownEvent event) {
+		overToolBar = _isOverToolbar(event);
+	}
+
+	@Override
+	public void onMouseUp(MouseUpEvent event) {
+		overToolBar = false;
 	}
 
 	@Override
@@ -59,8 +76,15 @@ public class DragAndDropHandler implements MouseMoveHandler, ITouchToMouseHandle
 			sh.fireMouseMove(event, toolbar);
 		}
 	}
-	
+
 	private boolean isOverToolbar(MouseEvent event) {
+		if (overToolBar) {
+			overToolBar = _isOverToolbar(event);
+		}
+		return overToolBar;
+	}
+	
+	private boolean _isOverToolbar(MouseEvent event) {
 		Element over = elementFromPoint(event.getClientX(), event.getClientY());
 		if (over != null && toolFrame.getElement().isOrHasChild(over)) {
 			return true;
@@ -90,6 +114,8 @@ public class DragAndDropHandler implements MouseMoveHandler, ITouchToMouseHandle
 	
 	@Override
 	public void onTouchToMouseDown(MouseDownEvent event) {
+		overToolBar = _isOverToolbar(event);
+
 		if (isOverToolbar(event)) {
 			onentersurface = false;
 			libraryHandling = true;

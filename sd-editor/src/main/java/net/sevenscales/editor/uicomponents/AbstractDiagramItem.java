@@ -556,8 +556,13 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     
     // logger.debugTime();
     // logger.start("AbstractDiagramItem.unselect 3");
+
+    Color color = null;
+    if (surface.getBoardUserHandler() != null) {
+      color = surface.getBoardUserHandler().getColor(this);
+    }
     
-    restoreHighlighColor();
+    restoreHighlighColor(color);
 
     // logger.debugTime();
     // logger.start("AbstractDiagramItem.unselect 4");
@@ -1449,9 +1454,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
 	
 	@Override
-	public void restoreHighlighColor() {
-    if (selected) {
+	public void restoreHighlighColor(Color color) {
+    if (selected && color == null) {
       setHighlightColor(DEFAULT_SELECTION_COLOR);
+    } else if (color != null) {
+      setHighlightColor(color);
     } else {
       setBorderColor(getBorderColor());
     }
