@@ -14,6 +14,7 @@ import net.sevenscales.editor.api.IEditor;
 import net.sevenscales.editor.content.utils.JsonHelpers;
 import net.sevenscales.editor.content.ClientIdHelpers;
 import net.sevenscales.editor.utils.WebStorage;
+import net.sevenscales.editor.utils.IWebStorageListener;
 import net.sevenscales.editor.diagram.GlobalState;
 
 import com.google.gwt.core.client.JsArray;
@@ -130,6 +131,10 @@ public class OperationQueue {
 			return operationJson;
 		}
 
+	}
+
+	public void listen(IWebStorageListener listener) {
+	 	WebStorage.listen(queueName(boardName), listener);
 	}
 
 	public void push(SendOperation item) {
@@ -390,6 +395,11 @@ public class OperationQueue {
 	}
 
 	public void setServerDocumentChecksum(String checksum) {
+		if ("".equals(checksum)) {
+			// special case when synchronizing from another tab
+			return;
+		}
+
 		this.checksum = checksum;
 		WebStorage.setString(checksumName(), checksum);
 	}
