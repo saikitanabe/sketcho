@@ -4,6 +4,12 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class WebStorage {
+	public static native void listen(String key, IWebStorageListener listener)/*-{
+		$wnd.webStorage.listen(key, function(e) {
+			listener.@net.sevenscales.editor.utils.IWebStorageListener::onStorageEvent(Ljava/lang/String;Ljava/lang/String;)(e.key, e.newValue)
+		})
+	}-*/;
+
 	public static native void setJson(String key, JavaScriptObject json)/*-{
 		if (typeof $wnd.webStorage !== 'undefined') {
 			$wnd.webStorage.set(key, JSON.stringify(json));
