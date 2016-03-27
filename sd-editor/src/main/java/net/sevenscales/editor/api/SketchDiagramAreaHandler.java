@@ -199,6 +199,9 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       mouseMove(sender, point);
     } catch (Exception e) {
       net.sevenscales.domain.utils.Error.reload(e);
+    } finally {
+      // always restore state to store to server
+      surface.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, true);
     }
   }
 
@@ -267,6 +270,9 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       mouseUp(sender, point, keys);
     } catch (Exception e) {
       net.sevenscales.domain.utils.Error.reload(e);
+    } finally {
+      // in debug mode can be checked if still is able to save to server
+      surface.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, true);
     }
   }
 
