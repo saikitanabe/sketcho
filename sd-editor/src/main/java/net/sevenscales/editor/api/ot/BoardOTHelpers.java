@@ -11,6 +11,7 @@ import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.utils.Error;
 import net.sevenscales.domain.DiagramItemField;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.js.JsTimestamp;
@@ -77,9 +78,23 @@ public class BoardOTHelpers {
 	
 	private void applyOperationToGraphicalView(String originator, OTOperation operation, List<IDiagramItemRO> items) throws MappingNotFoundException {
 		// logger.debug2("applyOperationToGraphicalView: originator({}), clientIdentifier({})", originator, clientIdentifier);
-		surface.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, false);
-		surface.getEditorContext().set(EditorProperty.ON_OT_OPERATION, true);
 		
+		try {
+			surface.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, false);
+			surface.getEditorContext().set(EditorProperty.ON_OT_OPERATION, true);
+
+			_applyOperationToGraphicalView(originator, operation, items);
+		} catch (Exception e) {
+			Error.reload("applyOperationToGraphicalView failed:" + e);
+		} finally {
+			// always need to reverse, not to leav app in invalid state
+			// it would mean that nothing gets sent to server if these wrong!
+			surface.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, true);
+			surface.getEditorContext().set(EditorProperty.ON_OT_OPERATION, false);
+		}
+	}
+
+	private void _applyOperationToGraphicalView(String originator, OTOperation operation, List<IDiagramItemRO> items) throws MappingNotFoundException {
 		switch (operation) {
 		case MODIFY:
 			safeModifyOT(originator, items);
@@ -104,9 +119,6 @@ public class BoardOTHelpers {
 			modifyOT(originator, items);
 			break;
 		}
-		
-		surface.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, true);
-		surface.getEditorContext().set(EditorProperty.ON_OT_OPERATION, false);
 	}
 
 	private void safeDeleteOT(String originator, List<IDiagramItemRO> items) throws MappingNotFoundException {

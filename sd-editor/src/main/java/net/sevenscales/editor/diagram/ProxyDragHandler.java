@@ -4,6 +4,7 @@ import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.utils.Error;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
@@ -116,7 +117,14 @@ public class ProxyDragHandler implements MouseDiagramHandler {
 
   public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
     if (sender != null && source.isProxyOnDrag() && sourceproxy == null) {
-    	createProxy(sender, point);
+      try {
+        createProxy(sender, point);
+      } catch (Exception e) {
+        Error.reload("createProxy: " + e);
+      } finally {
+        // restore server saving state
+        target.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, true);
+      }
     }
     return false;
   }
