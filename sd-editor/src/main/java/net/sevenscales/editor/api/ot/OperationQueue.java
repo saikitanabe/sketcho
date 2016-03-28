@@ -23,6 +23,7 @@ import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -33,6 +34,8 @@ import java.util.logging.Level;
 
 public class OperationQueue {
   private static SLogger logger = SLogger.createLogger(OperationQueue.class);
+
+  private static long SEND_RETRY_TIMEOUT = 15000;
   
 	private LinkedList<SendOperation> queuedOperations;
 	private Acknowledged acknowledged;
@@ -48,7 +51,7 @@ public class OperationQueue {
 	}
 	
 	public interface Acknowledged {
-		boolean acknowledgedFromServer();
+		boolean acknowledgedFromServerOrShouldRetry();
 	}
 
 	public static class SendOperation {
@@ -61,6 +64,7 @@ public class OperationQueue {
 		private OTOperation operation;
 		private JSONArray operationJson;
 		private String guid;
+		private long gtime;
 
 		public SendOperation(OTOperation operation, JSONArray operationJson) {
 			this(operation, operationJson, null);
@@ -69,6 +73,8 @@ public class OperationQueue {
 			this.operation = operation;
 			this.operationJson = operationJson;
 			this.guid = guid;
+			// when guid is added
+			this.gtime = System.currentTimeMillis();
 		}
 
 		public static SendOperation fromJson(JSONObject obj) {
@@ -115,11 +121,12 @@ public class OperationQueue {
 			return result.getJavaScriptObject().cast();
 		}
 
-		public void setGuid(String guid) {
+		private void setGuid(String guid) {
 			this.guid = guid;
+			this.gtime = System.currentTimeMillis();
 		}
 
-		public String getGuid() {
+		private String getGuid() {
 			return guid;
 		}
 
@@ -145,7 +152,7 @@ public class OperationQueue {
 		} else if (!item.operation.equals(OTOperation.USER_MOVE) && LogConfiguration.loggingIsEnabled(Level.FINEST)) {
 			// not checkint user move operations
 			Window.alert("push failed");
-			debugger();
+			com.google.gwt.core.shared.GWT.debugger();
 		}
 	}
 
@@ -174,10 +181,6 @@ public class OperationQueue {
 	private String queueName(String boardId) {
 		return "q_" + boardId;
 	}
-
-	private native void debugger()/*-{
-		debugger;
-	}-*/;
 
 	private boolean contains(SendOperation item) {
 		for (SendOperation o : queuedOperations) {
@@ -332,9 +335,14 @@ public class OperationQueue {
 		storeQueue();			
 	}
 
-	public boolean acknowledgedFromServer() {
+	public boolean acknowledgedFromServerOrShouldRetry() {
+		long now = System.currentTimeMillis();
+
 		for (SendOperation op : queuedOperations) {
-			if (op.getGuid() != null) {
+			long diffSinceCreated = now - op.gtime;
+
+			if (op.getGuid() != null && diffSinceCreated <= SEND_RETRY_TIMEOUT) {
+				// needs to be less than the timeout or should retry sending the guid
 				return false;
 			}
 		}
@@ -390,8 +398,8 @@ public class OperationQueue {
 		// need to check that server has ack last change, queue must be empty 
 		// and editor doesn't have any pending changes
 	  logger.debug("acknowledged.acknowledgedFromServer({}) && isEmpty({}) && !editor.hasPendingChanges({})", 
-	      acknowledged.acknowledgedFromServer(), isEmpty(), !editor.hasPendingChanges());
-		return acknowledged.acknowledgedFromServer() && isEmpty() && !editor.hasPendingChanges();
+	      acknowledged.acknowledgedFromServerOrShouldRetry(), isEmpty(), !editor.hasPendingChanges());
+		return acknowledged.acknowledgedFromServerOrShouldRetry() && isEmpty() && !editor.hasPendingChanges();
 	}
 
 	public void setServerDocumentChecksum(String checksum) {

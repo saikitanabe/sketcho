@@ -397,7 +397,7 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
 	}
 	
 	@Override
-	public boolean acknowledgedFromServer() {
+	public boolean acknowledgedFromServerOrShouldRetry() {
 		return true;
 	}
 
