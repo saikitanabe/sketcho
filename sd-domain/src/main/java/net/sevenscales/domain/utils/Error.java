@@ -7,18 +7,18 @@ import com.google.gwt.core.shared.GWT;
 
 public class Error {
 	public static void reload(Exception e) {
-		Error.reload("Exception: " + e);
+		Error._reload("Exception: " + e);
 	}
 
   public static void reload(String msg, Exception e) {
-    Error.reload("Error msg: " + msg + "\nException: " + e);
+    Error._reload("Error msg: " + msg + "\nException: " + e);
   }
 
   public static void reload(String msg) {
-    Error.reload("Error: " + msg);
+    Error._reload("Error: " + msg);
   }
 
-	public static void _reload(String msg) {
+	private static void _reload(String msg) {
     // TODO in future report to server so problem can be fixed!
     Debug.log(msg);
 
