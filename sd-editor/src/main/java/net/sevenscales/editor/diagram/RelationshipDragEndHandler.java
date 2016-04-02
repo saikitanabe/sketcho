@@ -286,6 +286,8 @@ public class RelationshipDragEndHandler implements
 		logger.debug("itemSelected {}", elementType);
 		hide();
 		Diagram diagram = null;
+		checkCurrentRelationshipexists();
+
 		if (currentRel != null) {
 			diagram = createDiagramFromRelationShip(elementType, shapeConfig, imageInfo, x, y);
 			applyClosestPath(currentRel);
@@ -303,6 +305,16 @@ public class RelationshipDragEndHandler implements
 		// fire event show property text editor
 		surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(diagram).setJustCreated(true));
 		currentRel = null;
+	}
+
+	private void checkCurrentRelationshipexists() {
+		if (currentRel != null) {
+			Diagram d = surface.createDiagramSearch().findByClientId(currentRel.getDiagramItem().getClientId());
+			if (d == null) {
+				// relationship has been deleted through undo or just deleted
+				currentRel = null;
+			}
+		}
 	}
 
 	public void switchElement(String elementType, JsShapeConfig shapeConfig, ImageInfo imageInfo, int x, int y) {
