@@ -318,6 +318,7 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
     } catch (MappingNotFoundException e) {
       // something is seriously wrong if this happens during local operations; what should be done...
       // save the board (on confluence and reload...) now just ignored :)
+      net.sevenscales.domain.utils.Error.reload("compensateLocalChangeOperation", e);
     }
 	}
 
