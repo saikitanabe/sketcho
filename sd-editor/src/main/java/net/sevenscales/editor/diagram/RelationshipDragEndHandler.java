@@ -98,7 +98,8 @@ import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 public class RelationshipDragEndHandler implements
-		RelationshipNotAttachedEventHandler, DiagramSelectionHandler, SurfaceMouseUpNoHandlingYetEventHandler, LibrarySelectionEventHandler, SwitchElementEventHandler, SwitchElementToEventHandler {
+		RelationshipNotAttachedEventHandler, DiagramSelectionHandler, SurfaceMouseUpNoHandlingYetEventHandler, LibrarySelectionEventHandler, SwitchElementEventHandler, SwitchElementToEventHandler
+		 {
   private static SLogger logger = SLogger.createLogger(RelationshipDragEndHandler.class);
   
 	private PopupPanel popup;
@@ -148,7 +149,20 @@ public class RelationshipDragEndHandler implements
 		$wnd.globalStreams.newShapeStream.onValue(function(data) {
 			me.@net.sevenscales.editor.diagram.RelationshipDragEndHandler::newShape(Ljava/lang/String;Lnet/sevenscales/domain/js/JsShapeConfig;Lnet/sevenscales/domain/js/ImageInfo;II)(data.element_type, data.shape_config, data.image_info, data.x, data.y)
 		})
+
+	  $wnd.globalStreams.contextMenuStream.filter(function(v) {
+	    return v && v.type==='context-menu-hide'
+	  }).onValue(function(v) {
+	    me.@net.sevenscales.editor.diagram.RelationshipDragEndHandler::hideContextMenu()()
+	  })
+
 	}-*/;
+
+	private void hideContextMenu() {
+		// reset always current relationship when popup is hidden
+		// otherwise might create shape to previous connection
+		currentRel = null;
+	}	
 
 	// private void newShape(String elementType, double x, double y) {
 
