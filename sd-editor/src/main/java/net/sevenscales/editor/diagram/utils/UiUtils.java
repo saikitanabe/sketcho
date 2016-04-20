@@ -5,6 +5,7 @@ public class UiUtils {
 // var ie11 = navigator !== 'undefined' ? navigator.userAgent.toLowerCase().indexOf('trident') > -1 : false
 // var msie = navigator !== 'undefined' ? navigator.userAgent.toLowerCase().indexOf('msie') > -1 : false
   private static Boolean ie = null;
+  private static Boolean ie11 = null;
   // private static Boolean msie = null;
   private static Boolean firefox = null;
   private static Boolean chrome = null;
@@ -16,7 +17,7 @@ public class UiUtils {
 		return navigator.userAgent.toLowerCase();
 	}-*/;
 	
-	public static boolean isIE() {
+  public static boolean isIE() {
     if (ie == null) {
       if (getUserAgent().contains("msie") || getUserAgent().contains("trident")) {
         ie = true;
@@ -25,7 +26,21 @@ public class UiUtils {
       }
     }
     return ie.booleanValue();
+  }
+
+	public static boolean isIE11() {
+    if (ie11 == null) {
+      if (_isIE11()) {
+        ie11 = true;
+      } else {
+        ie11 = false;
+      }
+    }
+    return ie11.booleanValue();
 	}
+  private native static boolean _isIE11()/*-{
+    return !(window.ActiveXObject) && "ActiveXObject" in window
+  }-*/;
 
   public static boolean isSafari() {
     if (safari == null) {
