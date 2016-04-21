@@ -39,7 +39,7 @@ public class UiUtils {
     return ie11.booleanValue();
 	}
   private native static boolean _isIE11()/*-{
-    return !(window.ActiveXObject) && "ActiveXObject" in window
+    return !($wnd.ActiveXObject) && "ActiveXObject" in $wnd
   }-*/;
 
   public static boolean isSafari() {
