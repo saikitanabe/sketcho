@@ -130,9 +130,9 @@ public class SLogger {
 		String errormsg = format("{} {}\n{}", msg, e.toString(), statcktrace);
 		logger.severe(errormsg);
 		
-		if (LogConfiguration.loggingIsEnabled() && customErrorHandler != null) {
-			customErrorHandler.handleError(errormsg);
-		}
+		// if (LogConfiguration.loggingIsEnabled() && customErrorHandler != null) {
+		// 	customErrorHandler.handleError(errormsg);
+		// }
 	}
 	
 	public void error(String format, String... values) {
