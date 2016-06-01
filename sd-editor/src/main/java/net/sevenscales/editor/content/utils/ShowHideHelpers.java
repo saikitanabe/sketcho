@@ -79,9 +79,9 @@ public class ShowHideHelpers {
 			public void onMouseDown(MouseDownEvent event) {
 				event.preventDefault();
 				event.stopPropagation();
-				if (!TouchHelpers.isSupportsTouch()) {
+				// if (!TouchHelpers.isSupportsTouch()) {
 					show();
-				}
+				// }
 //				if (!Element.as(event.getNativeEvent().getEventTarget()).isOrHasChild(inner.getElement())) {
 //					Scheduler.get().scheduleFixedDelay(hideslider, 2000);
 //				}
