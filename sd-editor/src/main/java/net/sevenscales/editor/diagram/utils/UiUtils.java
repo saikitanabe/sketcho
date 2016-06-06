@@ -13,13 +13,19 @@ public class UiUtils {
   private static Boolean safari = null;
   private static Boolean opera = null;
 
-	public static native String getUserAgent() /*-{
-		return navigator.userAgent.toLowerCase();
+  public static native String getUserAgent() /*-{
+    return navigator.userAgent.toLowerCase();
+  }-*/;
+
+	public static native String getAppName() /*-{
+    console.log('navigator.appName', navigator.appName)
+		return navigator.appName.toLowerCase();
 	}-*/;
 	
   public static boolean isIE() {
     if (ie == null) {
-      if (getUserAgent().contains("msie") || getUserAgent().contains("trident")) {
+      if (getUserAgent().contains("msie") || getUserAgent().contains("trident") || 
+        getUserAgent().contains("edge")) {
         ie = true;
       } else {
         ie = false;

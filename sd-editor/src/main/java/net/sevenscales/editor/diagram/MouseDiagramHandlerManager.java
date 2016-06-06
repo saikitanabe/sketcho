@@ -483,6 +483,9 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		$wnd.Hammer(e, {preventDefault: true}).on('doubletap', function(event) {
 			// console.log('handleDoubleTap', event)
 			if (event.gesture.center.clientX && event.gesture.center.clientY) {
+				event.stopPropagation()
+				event.preventDefault()
+
 				me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZLjava/lang/String;)(event.gesture.center.clientX, event.gesture.center.clientY, event.gesture.srcEvent.shiftKey, event.target.id);
 			}
 		})
@@ -490,7 +493,10 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 
 	private native void handleMouseDoubleClick(Element e, MouseDiagramHandlerManager me)/*-{
 		$wnd.$(e).on('dblclick', function(e) {
-			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZLjava/lang/String;)(e.clientX, e.clientY, false, "");
+			e.stopPropagation()
+			e.preventDefault()
+
+			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZLjava/lang/String;)(e.clientX, e.clientY, false, e.target.id);
 		})
 	}-*/;
 
