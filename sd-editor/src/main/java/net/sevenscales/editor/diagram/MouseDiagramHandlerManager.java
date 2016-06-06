@@ -491,6 +491,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	private native void handleMouseDoubleClick(Element e, MouseDiagramHandlerManager me)/*-{
 		$wnd.$(e).on('dblclick', function(e) {
 			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZLjava/lang/String;)(e.clientX, e.clientY, false, "");
+			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZLjava/lang/String;)(e.clientX, e.clientY, false, e.target.id);
 		})
 	}-*/;
 
