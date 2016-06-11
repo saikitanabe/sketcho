@@ -852,6 +852,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		Display switchElementVisibility = Display.NONE;
 		Display lineWeightVisibility = Display.NONE;
 		Display groupVisibility = Display.NONE;
+		Display commentVisibility = Display.NONE;
+
+		if (isCommentsAvailable()) {
+			commentVisibility = Display.INLINE_BLOCK;
+		}
 
 		if (diagram.supportsMenu(ContextMenuItem.FREEHAND_MENU)) {
 			freehandMenu = Display.INLINE_BLOCK;
@@ -952,6 +957,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		switchElement.getStyle().setDisplay(switchElementVisibility);
 		lineWeight.getStyle().setDisplay(lineWeightVisibility);
 		group.getStyle().setDisplay(groupVisibility);
+		comment.getStyle().setDisplay(commentVisibility);
 
 		if (freehandMenu == Display.NONE && 
 				reverseMenu == Display.NONE &&
@@ -984,6 +990,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		}
 		return false;
 	}
+
+	private native boolean isCommentsAvailable()/*-{
+		return (typeof $wnd.backendComments != 'undefined')
+	}-*/;
 
 	private boolean onlyComments(Diagram[] selected) {
 		boolean result = true;
