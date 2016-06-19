@@ -593,6 +593,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}
 
 	private void colorMenu(final Element e) {
+		// remove before adding, so array doesn't grow too much
+		colorpopup.removeAutoHidePartner(e);
 		colorpopup.addAutoHidePartner(e);
 
 		if (colorpopup.isShowing()) {

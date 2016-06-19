@@ -19,6 +19,7 @@ public class LineWeightPopup extends PopupPanel {
 
 	// public void show(final int left, final int top, final boolean reduceHeight) {
 	public void show(Element element, final boolean reduceHeight) {
+		removeAutoHidePartner(element);
 		addAutoHidePartner(element);
 		final int left = element.getAbsoluteLeft();
 		final int top = element.getAbsoluteTop();
