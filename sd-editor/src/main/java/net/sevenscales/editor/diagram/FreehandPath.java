@@ -72,6 +72,10 @@ class FreehandPath {
     polyline.setStroke(color);
   }
 
+  void changeLineWeight(int lineWeight) {
+    polyline.setStrokeWidth(lineWeight);
+  }
+
   private Diagram plotOld() {
     List<Integer> filteredPoints = filterPoints();
     
@@ -143,6 +147,8 @@ class FreehandPath {
       Theme.createDefaultTextColor(),
       surface.getEditorContext().isEditable(), 
       LibraryShapes.createByType(ElementType.FREEHAND2.getValue()));
+
+    diagram.setLineWeight((int)polyline.getStrokeWidth());
     // surface.add(diagram, true);
     polyline.setVisibility(false);
     points.clear();

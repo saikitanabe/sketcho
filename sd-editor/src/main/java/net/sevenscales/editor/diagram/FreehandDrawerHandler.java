@@ -62,6 +62,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   private List<FreehandPath> freehandPahts = new ArrayList<FreehandPath>();
   private FreehandPath currentFreehandPath;
   private Color currentColor;
+  private int currentLineWeight;
   private boolean staticMovement = false;
 
   private static class PaperPoint extends JavaScriptObject {
@@ -92,6 +93,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     
     gridUtils = new GridUtils(1);
     currentColor = Theme.getCurrentColorScheme().getBorderColor();
+    currentLineWeight = FreehandElement.FREEHAND_STROKE_WIDTH;
     
     Event.addNativePreviewHandler(new NativePreviewHandler() {
       @Override
@@ -145,18 +147,28 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       }
     });
 
-    handleEscKey(this);
+    handleStreams(this);
   }
 
-  private native void handleEscKey(FreehandDrawerHandler me)/*-{
+  private native void handleStreams(FreehandDrawerHandler me)/*-{
     $wnd.cancelStream.onValue(function(v) {
       me.@net.sevenscales.editor.diagram.FreehandDrawerHandler::onEsc()();
+    })
+
+    $wnd.globalStreams.updatedFreehandLineWeightStream.onValue(function(weight) {
+      me.@net.sevenscales.editor.diagram.FreehandDrawerHandler::onLineWeight(I)(weight);
     })
   }-*/;
 
   private void onEsc() {
     if (freehandMode()) {
       fireToggleFreehandMode();
+    }
+  }
+
+  private void onLineWeight(int lineWeight) {
+    if (freehandMode()) {
+      currentLineWeight = lineWeight;
     }
   }
 
@@ -256,6 +268,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   private void createNewPath() {
     currentFreehandPath = new FreehandPath(surface);
     currentFreehandPath.changeColor(currentColor);
+    currentFreehandPath.changeLineWeight(currentLineWeight);
     freehandPahts.add(currentFreehandPath);
   }
 
