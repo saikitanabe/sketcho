@@ -37,6 +37,7 @@ public class TopButtons extends Composite {
 	
 	// @UiField ButtonElement freehandOn;
 	@UiField Element colorize;
+	@UiField Element lineWeight;
 	// @UiField ButtonElement commentModeOn;
 
 	public TopButtons(EditorContext editorContext) {
@@ -77,6 +78,7 @@ public class TopButtons extends Composite {
 		// 		});
 
 		tapColor(colorize);
+		tapLineWeight(lineWeight);
 
 		// DOM.sinkEvents((com.google.gwt.user.client.Element) commentModeOn.cast(),
 		// 		Event.ONCLICK);
@@ -104,6 +106,13 @@ public class TopButtons extends Composite {
 		$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
 			$wnd.$('.tooltip').hide()
 			$wnd.$($doc).trigger('showFreehandColorMenu', e)
+		})
+	}-*/;
+
+	private native void tapLineWeight(Element e)/*-{
+		$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
+			$wnd.$('.tooltip').hide()
+			$wnd.globalStreams.showFreehandLineWeightStream.push(e)
 		})
 	}-*/;
 

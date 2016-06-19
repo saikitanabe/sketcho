@@ -10,7 +10,9 @@
 			<a ui:field="colorize" title="Change freehand drawing color" class="btn tooltipper" data-placement="bottom">
 				<i class="context-icon-colorize2-black"></i>
 			</a>
-			<button ui:field="commentModeOn" class="btn btn-danger" style="display: none;" title="Hide Commments | Toggle comments, press C key">Comments</button>
+			<a ui:field="lineWeight" title="Change freehand line weight" class="btn tooltipper" data-placement="bottom">
+				<i class="context-icon-line-width"></i>
+			</a>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder> 
