@@ -111,8 +111,17 @@ public class LineWeightMenu extends Composite {
 			}
 		}
 
-		surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(changed));
+		if (changed.size() > 0) {
+			surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(changed));
+		} else {
+			// not changing anything just notify selected weight
+			notifyLineWeight(weight);
+		}
 	}
+
+	private native void notifyLineWeight(int weight)/*-{
+		$wnd.globalStreams.updatedFreehandLineWeightStream.push(weight)
+	}-*/;
 
 	private void weight1() {
 		setWeight(1);

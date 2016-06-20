@@ -341,7 +341,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			@Override
 			public void onClick(ClickEvent event) {
 				stopEvent(event);
-				showLineWeightMenu();
+				showLineWeightMenu(lineWeight, false);
 			}
 		});
 
@@ -386,6 +386,9 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		})
 		$wnd.changeFreehandColorStream.onValue(function(e) {
 			me.@net.sevenscales.editor.content.ui.UiContextMenu::colorMenu(Lcom/google/gwt/dom/client/Element;)(e);
+		})
+		$wnd.globalStreams.showFreehandLineWeightStream.onValue(function(elem) {
+			me.@net.sevenscales.editor.content.ui.UiContextMenu::showLineWeightMenu(Lcom/google/gwt/dom/client/Element;Z)(elem, true);
 		})
 
 		$wnd.globalStreams.spaceKeyStream.onValue(function(value) {
@@ -590,17 +593,25 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}
 
 	private void colorMenu(final Element e) {
-		colorSelections.hideHeader();
-		colorpopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
-			@Override
-			public void setPosition(int offsetWidth, int offsetHeight) {
-				int left = e.getAbsoluteLeft() + e.getOffsetWidth() / 2 - offsetWidth / 2;
-				int top = e.getAbsoluteTop() - offsetHeight;
-				colorpopup.setPopupPosition(left, top);
-			}
-		});
-	}
+		// remove before adding, so array doesn't grow too much
+		colorpopup.removeAutoHidePartner(e);
+		colorpopup.addAutoHidePartner(e);
 
+		if (colorpopup.isShowing()) {
+			colorpopup.hide();
+		} else {
+			colorSelections.hideHeader();
+			colorpopup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+				@Override
+				public void setPosition(int offsetWidth, int offsetHeight) {
+					int left = e.getAbsoluteLeft() + e.getOffsetWidth() / 2 - offsetWidth / 2;
+					int top = e.getAbsoluteTop() - offsetHeight;
+					colorpopup.setPopupPosition(left, top);
+				}
+			});
+		}
+	}
+	
 	private void applyLink(String url) {
 		Diagram selected = selectionHandler.getOnlyOneSelected();
 		if (selected != null) {
@@ -656,11 +667,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			layersPopup.show(layersMenuButton.getAbsoluteLeft(), layersMenuButton.getAbsoluteTop() + popup.getOffsetHeight());
 		}
 	}
-	private void showLineWeightMenu() {
+	private void showLineWeightMenu(Element element, boolean reduceHeight) {
 		if (lineWeightPopup.isShowing()) {
 			lineWeightPopup.hide();
 		} else {
-			lineWeightPopup.show(lineWeight.getAbsoluteLeft(), lineWeight.getAbsoluteTop() + popup.getOffsetHeight());
+			lineWeightPopup.show(element, reduceHeight);
 		}
 	}
 

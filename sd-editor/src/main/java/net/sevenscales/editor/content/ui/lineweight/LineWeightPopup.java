@@ -17,11 +17,22 @@ public class LineWeightPopup extends PopupPanel {
 		setWidget(lineWeightMenu);
 	}
 
-	public void show(final int left, final int top) {
+	// public void show(final int left, final int top, final boolean reduceHeight) {
+	public void show(Element element, final boolean reduceHeight) {
+		// remove before adding, so array doesn't grow too much
+		removeAutoHidePartner(element);
+		addAutoHidePartner(element);
+		final int left = element.getAbsoluteLeft();
+		final int top = element.getAbsoluteTop();
+
 		setPopupPositionAndShow(new PopupPanel.PositionCallback() {
 			@Override
 			public void setPosition(int offsetWidth, int offsetHeight) {
-				setPopupPosition(left, top);
+				int t = top;
+				if (reduceHeight) {
+					t -= offsetHeight;
+				}
+				setPopupPosition(left, t);
 			}
 		});
 	}
