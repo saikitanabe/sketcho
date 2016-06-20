@@ -7,10 +7,10 @@
 	<g:HTMLPanel styleName="topButtons">
 		<div>
 			<!-- <button ui:field="freehandOn" class="btn btn-success tooltipper" style="display: none;" title="Exit Freehand mode | Shortcut F key" data-placement="bottom">Freehand</button> -->
-			<a ui:field="colorize" title="Change freehand drawing color" class="btn tooltipper" data-placement="bottom">
+			<a ui:field="colorize" title="Change freehand drawing color" class="btn-top" data-placement="bottom">
 				<i class="context-icon-colorize2-black"></i>
 			</a>
-			<a ui:field="lineWeight" title="Change freehand line weight" class="btn tooltipper" data-placement="bottom">
+			<a ui:field="lineWeight" title="Change freehand line weight" class="btn-top" data-placement="bottom">
 				<i class="context-icon-line-width"></i>
 			</a>
 		</div>
