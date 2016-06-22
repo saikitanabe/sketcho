@@ -14,6 +14,20 @@ public class LineWeightPopup extends PopupPanel {
 		addAutoHidePartner(launcher);
 		lineWeightMenu = new LineWeightMenu(surface, this);
 		setWidget(lineWeightMenu);
+		
+		handleStreams(this);
+	}
+
+	private native void handleStreams(LineWeightPopup me)/*-{
+    $wnd.cancelStream.onValue(function(v) {
+      me.@net.sevenscales.editor.content.ui.lineweight.LineWeightPopup::onEsc()();
+    })
+	}-*/;
+
+	private void onEsc() {
+		if (isShowing()) {
+			hide();
+		}
 	}
 
 	// public void show(final int left, final int top, final boolean reduceHeight) {
