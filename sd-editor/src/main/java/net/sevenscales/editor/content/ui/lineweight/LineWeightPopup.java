@@ -10,7 +10,6 @@ public class LineWeightPopup extends PopupPanel {
 	private LineWeightMenu lineWeightMenu;
 
 	public LineWeightPopup(ISurfaceHandler surface, Element launcher) {
-		setStyleName("text-size-popup");
 		setAutoHideEnabled(true);
 		addAutoHidePartner(launcher);
 		lineWeightMenu = new LineWeightMenu(surface, this);
@@ -18,7 +17,12 @@ public class LineWeightPopup extends PopupPanel {
 	}
 
 	// public void show(final int left, final int top, final boolean reduceHeight) {
-	public void show(Element element, final boolean reduceHeight) {
+	public void show(Element element, final int parentHeight, final boolean reduceHeight, boolean black) {
+		if (black) {
+			setStyleName("text-size-popup");
+		} else {
+			setStyleName("popup-white");
+		}
 		// remove before adding, so array doesn't grow too much
 		removeAutoHidePartner(element);
 		addAutoHidePartner(element);
@@ -31,6 +35,8 @@ public class LineWeightPopup extends PopupPanel {
 				int t = top;
 				if (reduceHeight) {
 					t -= offsetHeight;
+				} else {
+					t += parentHeight;
 				}
 				setPopupPosition(left, t);
 			}
