@@ -341,7 +341,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			@Override
 			public void onClick(ClickEvent event) {
 				stopEvent(event);
-				showLineWeightMenu(lineWeight, false);
+				showLineWeightMenu(lineWeight, false, true);
 			}
 		});
 
@@ -388,7 +388,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			me.@net.sevenscales.editor.content.ui.UiContextMenu::colorMenu(Lcom/google/gwt/dom/client/Element;)(e);
 		})
 		$wnd.globalStreams.showFreehandLineWeightStream.onValue(function(elem) {
-			me.@net.sevenscales.editor.content.ui.UiContextMenu::showLineWeightMenu(Lcom/google/gwt/dom/client/Element;Z)(elem, true);
+			me.@net.sevenscales.editor.content.ui.UiContextMenu::showLineWeightMenu(Lcom/google/gwt/dom/client/Element;ZZ)(elem, true, false);
 		})
 
 		$wnd.globalStreams.spaceKeyStream.onValue(function(value) {
@@ -667,11 +667,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			layersPopup.show(layersMenuButton.getAbsoluteLeft(), layersMenuButton.getAbsoluteTop() + popup.getOffsetHeight());
 		}
 	}
-	private void showLineWeightMenu(Element element, boolean reduceHeight) {
+	private void showLineWeightMenu(Element element, boolean reduceHeight, boolean black) {
 		if (lineWeightPopup.isShowing()) {
 			lineWeightPopup.hide();
 		} else {
-			lineWeightPopup.show(element, reduceHeight);
+			lineWeightPopup.show(element, popup.getOffsetHeight(), reduceHeight, black);
 		}
 	}
 
