@@ -883,6 +883,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		Display layersMenuVisibility = Display.NONE;
 		Display switchElementVisibility = Display.NONE;
 		Display lineWeightVisibility = Display.NONE;
+		Display textAlignVisibility = Display.NONE;
 		Display groupVisibility = Display.NONE;
 		Display commentVisibility = Display.NONE;
 
@@ -914,6 +915,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 		if (anySupports(selected, ContextMenuItem.COLOR_MENU)) {
 			colorMenu = Display.INLINE_BLOCK;
+		}
+
+		if (anySupports(selected, ContextMenuItem.TEXT_ALIGN)) {
+			textAlignVisibility = Display.INLINE_BLOCK;
 		}
 
 		if (notConfluence() && selected.length == 1 && !(selected[0] instanceof Relationship2) && !(selected[0] instanceof CircleElement) && !(selected[0] instanceof ChildTextElement)) {
@@ -988,6 +993,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		layersMenuButton.getStyle().setDisplay(layersMenuVisibility);
 		switchElement.getStyle().setDisplay(switchElementVisibility);
 		lineWeight.getStyle().setDisplay(lineWeightVisibility);
+		textAlign.getStyle().setDisplay(textAlignVisibility);
 		group.getStyle().setDisplay(groupVisibility);
 		comment.getStyle().setDisplay(commentVisibility);
 

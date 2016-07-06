@@ -63,7 +63,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
       
       IText text = createText(true);
 
-      applyTextAlignment(text);
+      applyTextAlignment(text, hasTextElement.getX());
 
       currentline.add(text);
       text.addText(

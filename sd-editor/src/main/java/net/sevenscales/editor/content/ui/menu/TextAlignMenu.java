@@ -21,6 +21,7 @@ import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.GenericFreehandElement;
 import net.sevenscales.editor.api.impl.FastElementButton;
+import net.sevenscales.editor.content.ui.ContextMenuItem;
 
 
 public class TextAlignMenu extends Composite {
@@ -74,10 +75,7 @@ public class TextAlignMenu extends Composite {
 		for (Diagram d : surface.getSelectionHandler().getSelectedItems()) {
 			boolean set = false;
 
-			if (ElementType.NOTE.getValue().equals(d.getDiagramItem().getType())) {
-				d.setTextAlign(shapeProperty);
-				set = true;
-			} else if (ElementType.TEXT_ITEM.getValue().equals(d.getDiagramItem().getType())) {
+			if (ContextMenuItem.supported(d.supportedMenuItems(), ContextMenuItem.TEXT_ALIGN)) {
 				d.setTextAlign(shapeProperty);
 				set = true;
 			}

@@ -375,14 +375,6 @@ public class TextElement extends AbstractDiagramItem implements
 	}
 
 	@Override
-	public String getTextAreaAlign() {
-		if (ShapeProperty.isTextAlignCenter(getDiagramItem().getShapeProperties())) {
-			return "center";
-		}
-		return super.getTextAreaAlign();
-	}
-
-	@Override
 	public boolean supportsOnlyTextareaDynamicHeight() {
 		return true;
 	}
@@ -450,7 +442,8 @@ public class TextElement extends AbstractDiagramItem implements
   @Override
   public int supportedMenuItems() {
   	return super.supportedMenuItems() |
-           ContextMenuItem.LAYERS.getValue();
+           ContextMenuItem.LAYERS.getValue() |
+           ContextMenuItem.TEXT_ALIGN.getValue();
   }
 
   protected IRectangle getAttachBoundary() {

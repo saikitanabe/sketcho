@@ -1616,6 +1616,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	
 	@Override
 	public String getTextAreaAlign() {
+    if (ShapeProperty.isTextAlignCenter(getDiagramItem().getShapeProperties())) {
+      return "center";
+    } else if (ShapeProperty.isTextAlignRight(getDiagramItem().getShapeProperties())) {
+      return "right";
+    }
 		return "left";
 	}
 	

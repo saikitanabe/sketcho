@@ -23,6 +23,7 @@ public interface IText extends IShape {
   void setTextTspanAlignRight();
 	public void setText(String text);
 	public String getText();
+	void updateTspanX(int x);
 	public void setShape(int x, int y);
 	public double getTextWidth();
 	public double getLastSpanWidth();

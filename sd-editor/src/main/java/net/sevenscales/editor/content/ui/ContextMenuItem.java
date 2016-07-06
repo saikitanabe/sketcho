@@ -11,7 +11,8 @@ public enum ContextMenuItem {
 	LAYERS										(0x0040),
 	URL_LINK									(0x0080),
 	DELETE										(0x0100),
-	LINE_WEIGHT								(0x0200);
+	LINE_WEIGHT								(0x0200),
+	TEXT_ALIGN								(0x0400);
 
 	private int value;
 

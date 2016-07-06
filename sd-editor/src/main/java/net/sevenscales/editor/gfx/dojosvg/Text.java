@@ -136,7 +136,8 @@ class Text extends Shape implements IText {
 		rawNode.setShape( {x:x, y:y} );
 	}-*/;
 
-	private void updateTspanX(int x) {
+	@Override
+	public void updateTspanX(int x) {
 		Element raw = getRawNode(rawNode);
 		for (int count = 0; count < raw.getChildCount(); ++count) {
 			Node node = raw.getChild(count);
