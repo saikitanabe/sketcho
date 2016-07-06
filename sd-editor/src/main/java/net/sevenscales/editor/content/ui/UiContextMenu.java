@@ -9,6 +9,7 @@ import net.sevenscales.editor.content.ui.textsize.TextSizePopup;
 import net.sevenscales.editor.content.ui.textsize.TextSizeHandler;
 import net.sevenscales.editor.content.ui.layers.LayersPopup;
 import net.sevenscales.editor.content.ui.lineweight.LineWeightPopup;
+import net.sevenscales.editor.content.ui.menu.TextAlignPopup;
 import net.sevenscales.editor.content.ui.link.EditLinkForm;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
@@ -107,6 +108,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement textSize;
 	@UiField AnchorElement layersMenuButton;
 	@UiField AnchorElement lineWeight;
+	@UiField AnchorElement textAlign;
 	@UiField AnchorElement fileLink;
 	@UiField AnchorElement group;
 
@@ -115,6 +117,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	private LayersPopup layersPopup;
 	private LineWeightPopup lineWeightPopup;
 	private TextSizePopup fontSizePopup;
+	private TextAlignPopup textAlignPopup;
 	private Point popupPosition;
 
 	private ElementColor color = new ElementColor();
@@ -168,6 +171,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		fontSizePopup = new TextSizePopup(this);
 		layersPopup = new LayersPopup(surface, layersMenuButton);
 		lineWeightPopup = new LineWeightPopup(surface, lineWeight);
+		textAlignPopup = new TextAlignPopup(surface, textAlign);
 
 		surface.addDomHandler(new TouchStartHandler() {
 			@Override
@@ -342,6 +346,14 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			public void onClick(ClickEvent event) {
 				stopEvent(event);
 				showLineWeightMenu(lineWeight, false, true);
+			}
+		});
+
+		new FastElementButton(textAlign).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				stopEvent(event);
+				showTextAlign(textAlign);
 			}
 		});
 
@@ -674,6 +686,15 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			lineWeightPopup.show(element, popup.getOffsetHeight(), reduceHeight, black);
 		}
 	}
+
+	private void showTextAlign(Element element) {
+		if (textAlignPopup.isShowing()) {
+			textAlignPopup.hide();
+		} else {
+			textAlignPopup.show(element.getAbsoluteLeft(), element.getAbsoluteTop() + popup.getOffsetHeight());
+		}
+	}
+
 
 	/**
 	* 0 means that there are multiple sizes.

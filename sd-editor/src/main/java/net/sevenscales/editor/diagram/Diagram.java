@@ -6,6 +6,7 @@ import java.util.List;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
@@ -172,6 +173,10 @@ public interface Diagram extends SourcesMouseDiagramEvents {
 	public void setTextColor(int red, int green, int blue);
 	void setTextColor(Color color);
   void setFontSize(Integer fontSize);
+  void setTextAlign(ShapeProperty textAlign);
+  boolean isTextAlignLeft();
+  boolean isTextAlignCenter();
+  boolean isTextAlignRight();
   Integer getFontSize();
   void setLineWeight(Integer lineWeight);
   Integer getLineWeight();

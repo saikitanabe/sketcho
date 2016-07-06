@@ -95,7 +95,7 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
   @Override
   public boolean centeredText() {
-  	return ShapeProperty.isCenteredText(parent.getDiagramItem().getShapeProperties());
+  	return ShapeProperty.isTextAlignCenter(parent.getDiagramItem().getShapeProperties());
   }
 
 	@Override

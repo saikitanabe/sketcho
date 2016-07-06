@@ -19,6 +19,8 @@ public interface IText extends IShape {
 	public void setFontWeight(String weight);
 	public void setAlignment(String alignment);
   public String getAlignment();
+  void setTextTspanAlignCenter();
+  void setTextTspanAlignRight();
 	public void setText(String text);
 	public String getText();
 	public void setShape(int x, int y);
@@ -27,6 +29,6 @@ public interface IText extends IShape {
 	public double getTextHeight();
 	public void setFontFamily(String family);
 	public String getFontFamily();
-	void addText(JavaScriptObject tokens, int x, int width);
+	void addText(JavaScriptObject tokens, int x, int width, boolean textAlignCenter, boolean textAlignRight);
 	String getChildElements(int dx);
 }

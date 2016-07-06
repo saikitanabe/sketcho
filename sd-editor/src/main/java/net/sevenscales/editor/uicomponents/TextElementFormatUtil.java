@@ -239,6 +239,14 @@ public class TextElementFormatUtil {
   		}
   	}
   }
+
+  protected void applyTextAlignment(IText text) {
+    if (ShapeProperty.isTextAlignCenter(parent.getDiagramItem().getShapeProperties())) {
+      text.setTextTspanAlignCenter();
+    } else if (ShapeProperty.isTextAlignRight(parent.getDiagramItem().getShapeProperties())) {
+      text.setTextTspanAlignRight();
+    }
+  }
   
   public void setMarginTop(int marginTop) {
     marginTopDefined = true;
@@ -619,6 +627,10 @@ public class TextElementFormatUtil {
     // marginBottom = (int) (rowHeight * MARGIN_HEIGHT_FACTORIAL);
     // margin = (int) rowHeight;
 	}
+
+  public void setTextAlign(Integer textAlign) {
+
+  }
 
   public void remove() {
     clearLines();

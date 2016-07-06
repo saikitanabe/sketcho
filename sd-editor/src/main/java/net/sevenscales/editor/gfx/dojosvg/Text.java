@@ -101,6 +101,15 @@ class Text extends Shape implements IText {
     return rawNode.getShape().align;
   }-*/;
 
+  @Override
+  public void setTextTspanAlignCenter() {
+		setAttribute("class", "svg-txt-center");
+  }
+  @Override  
+  public void setTextTspanAlignRight() {
+		setAttribute("class", "svg-txt-right");
+  }
+
 	public void setText(String text) {
 		setText(rawNode, text);
 	}
@@ -120,7 +129,7 @@ class Text extends Shape implements IText {
 		// if (justTextNoTspan(rawNode)) {
 			setShape(rawNode, x, y);
 		// } else {
-			updateTspanX(x);
+			// updateTspanX(x);
 		// }
 	}
 	public native void setShape(JavaScriptObject rawNode, int x, int y)/*-{
@@ -266,8 +275,15 @@ class Text extends Shape implements IText {
   	return rawNode.getFont().family;
   }-*/;
   
-  public void addText(JavaScriptObject tokens, int x, int width) {
+  public void addText(JavaScriptObject tokens, int x, int width, boolean textAlignCenter, boolean textAlignRight) {
 	  Element r = getRawNode(rawNode);
+
+	  if (textAlignCenter) {
+	  	x += width / 2;
+	  } else if (textAlignRight) {
+	  	x += width;
+	  }
+
 	  addText(r, tokens, x, width, baselineBottom, UiUtils.isFirefox(), UiUtils.isIE());
 	  tspanMode = true;
   }

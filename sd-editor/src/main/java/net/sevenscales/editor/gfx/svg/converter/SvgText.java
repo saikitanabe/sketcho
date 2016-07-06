@@ -37,6 +37,7 @@ public class SvgText extends SvgBase {
     params.put("%size", t.getFontSize().replaceFirst("px", ""));
 //    params.put("%size", "11");
     params.put("%anchor", t.getAlignment());
+    params.put("%class%", SvgText.getTextStyleClass(diagram));
 //    params.put("%font-family", t.getFontFamily());
     
     // sans-serif doesn't work on batik 1.6, need to test again with 1.7
@@ -70,10 +71,22 @@ public class SvgText extends SvgBase {
     	encoded = escapeAmp(t.getChildElements(transformX));
     }
     params.put("%text", encoded);
-    String template = "<text x='%x' y='%y' style='font-weight:%weight; font-size: %sizepx; text-anchor: %anchor; font-family: %font-family; fill: %textcolor%;' %transform%>%text</text>";
+    String template = "<text x='%x' y='%y' class='%class%' style='font-weight:%weight; font-size: %sizepx; text-anchor: %anchor; font-family: %font-family; fill: %textcolor%;' %transform%>%text</text>";
 //    String result = "<text x='"++"' y='"+t.getY()+"' style='font-weight:bold; font-size: 12px; text-anchor: middle; font-family: Arial;'>"+t.getText()+"</text>";
     
     return parse(t, template, params, diagram);
+  }
+
+  private static String getTextStyleClass(Diagram diagram) {
+    if (diagram.isTextAlignCenter()) {
+      return "svg-txt-center";
+    }
+
+    if (diagram.isTextAlignRight()) {
+      return "svg-txt-right";
+    }
+
+    return "";
   }
 
 }

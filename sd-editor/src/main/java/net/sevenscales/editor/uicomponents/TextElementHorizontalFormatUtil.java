@@ -62,8 +62,17 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
       lines.add(currentline);
 
       text = createText(true);
+
+      applyTextAlignment(text);
+
       currentline.add(text);
-      text.addText(tokens, hasTextElement.getX(), 0);
+      text.addText(
+        tokens,
+        hasTextElement.getX(),
+        0,
+        parent.isTextAlignCenter(),
+        parent.isTextAlignRight()
+      );
     } catch (Exception e) {
       logger.error("tokens: " + tokens, e);
     }

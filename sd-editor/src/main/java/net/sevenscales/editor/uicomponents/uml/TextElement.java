@@ -29,6 +29,7 @@ import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.ShapeProperty;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -115,6 +116,10 @@ public class TextElement extends AbstractDiagramItem implements
 					group.remove(shape);
 					shapes.remove(shape);
 				}
+
+			  public boolean centeredText() {
+			  	return ShapeProperty.isTextAlignCenter(getDiagramItem().getShapeProperties());
+			  }
 
 				public String getLink() {
 					return TextElement.this.getLink();
@@ -367,6 +372,14 @@ public class TextElement extends AbstractDiagramItem implements
 	@Override
 	public int getTextAreaTop() {
 		return getTop() + 5;
+	}
+
+	@Override
+	public String getTextAreaAlign() {
+		if (ShapeProperty.isTextAlignCenter(getDiagramItem().getShapeProperties())) {
+			return "center";
+		}
+		return super.getTextAreaAlign();
 	}
 
 	@Override

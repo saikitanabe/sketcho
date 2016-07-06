@@ -5,23 +5,25 @@ package net.sevenscales.domain;
 * Those cannot overlap, so properties can be combined!!
 */
 public enum ShapeProperty {
-	TEXT_TITLE_CENTER									(0x000001),
-	TEXT_POSITION_TOP 								(0x000002),
-	TEXT_POSITION_RIGHT 							(0x000004),
-	TEXT_POSITION_BOTTOM							(0x000008),
-	TEXT_POSITION_LEFT  							(0x000010),
-	TEXT_POSITION_MIDDLE							(0x000400),
-	TEXT_RESIZE_DIR_HORIZONTAL				(0x000100),
-	TEXT_RESIZE_DIR_VERTICAL					(0x000200),
-	DEGREES_0 												(0x001000),
-	DEGREES_90 												(0x002000),
-	DISABLE_SHAPE_AUTO_RESIZE					(0x010000),
-	CURVED_ARROW										  (0x100000),
-	CLOSEST_PATH										  (0x200000),
-	CENTERED_PATH											(0x400000),
-	NO_TEXT_AUTO_ALIGN								(0x000020),
-	BOLD_TITLE												(0x000040),
-	CENTERED_TEXT											(0x000080);
+	TEXT_TITLE_CENTER									(0x0000001),
+	TEXT_POSITION_TOP 								(0x0000002),
+	TEXT_POSITION_RIGHT 							(0x0000004),
+	TEXT_POSITION_BOTTOM							(0x0000008),
+	TEXT_POSITION_LEFT  							(0x0000010),
+	TEXT_POSITION_MIDDLE							(0x0000400),
+	TEXT_RESIZE_DIR_HORIZONTAL				(0x0000100),
+	TEXT_RESIZE_DIR_VERTICAL					(0x0000200),
+	DEGREES_0 												(0x0001000),
+	DEGREES_90 												(0x0002000),
+	DISABLE_SHAPE_AUTO_RESIZE					(0x0010000),
+	CURVED_ARROW										  (0x0100000),
+	CLOSEST_PATH										  (0x0200000),
+	CENTERED_PATH											(0x0400000),
+	NO_TEXT_AUTO_ALIGN								(0x0000020),
+	BOLD_TITLE												(0x0000040),
+	TXT_ALIGN_CENTER									(0x0000080),
+	TXT_ALIGN_LEFT										(0x1000000),
+	TXT_ALIGN_RIGHT										(0x2000000);
 
 	private int value;
 
@@ -103,8 +105,15 @@ public enum ShapeProperty {
 		return value != null && (value & BOLD_TITLE.getValue()) == BOLD_TITLE.getValue();	
 	}
 
-	public static boolean isCenteredText(Integer value) {
-		return value != null && (value & CENTERED_TEXT.getValue()) == CENTERED_TEXT.getValue();	
+	public static boolean isTextAlignLeft(Integer value) {
+		// text alignment is not right or center
+		return !(isTextAlignCenter(value) || isTextAlignRight(value));
+	}
+	public static boolean isTextAlignCenter(Integer value) {
+		return value != null && (value & TXT_ALIGN_CENTER.getValue()) == TXT_ALIGN_CENTER.getValue();	
+	}
+	public static boolean isTextAlignRight(Integer value) {
+		return value != null && (value & TXT_ALIGN_RIGHT.getValue()) == TXT_ALIGN_RIGHT.getValue();	
 	}
 
 	public static Integer clear(Integer current, Integer toclear) {
