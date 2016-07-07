@@ -184,11 +184,26 @@ public class SvgConverter {
     }
 //    result.svg = SafeHtmlUtils.htmlEscape(result.svg);
 //    String result = svgStart + " width='100%' height='100%'"+svgStartClose;
+
+    result.svg += defs();
     result.svg += items;
     result.svg += svgEnd;
 
     // logger.debug("result.svg: {}", result.svg);
     return result;
+  }
+
+  private String defs() {
+    return "<defs>" +
+              "<style type='text/css'><![CDATA[" + 
+                ".svg-txt-center tspan {" + 
+                  "text-anchor: middle;" + 
+                "}" + 
+                ".svg-txt-right tspan {" + 
+                  "text-anchor: end;" + 
+                "}" +
+              "]]></style>" +
+            "</defs>";
   }
 
   public String diagramsToSvg(ISurfaceHandler surfaceHandler, Diagram[] diagrams, boolean fontToChange, boolean absoluteUrl, int zeroLeft, int zeroTop) {

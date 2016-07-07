@@ -52,7 +52,8 @@ public class GenericNoteElement extends GenericElement {
            ContextMenuItem.COLOR_MENU.getValue() |
            ContextMenuItem.URL_LINK.getValue() | 
            ContextMenuItem.LAYERS.getValue() |
-           ContextMenuItem.DELETE.getValue();
+           ContextMenuItem.DELETE.getValue() |
+           ContextMenuItem.TEXT_ALIGN.getValue();
   }
 
 }

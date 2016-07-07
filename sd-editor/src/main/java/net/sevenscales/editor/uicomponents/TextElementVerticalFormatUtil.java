@@ -62,8 +62,17 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
       lines.add(currentline);
       
       IText text = createText(true);
+
+      applyTextAlignment(text, hasTextElement.getX());
+
       currentline.add(text);
-      text.addText(tokens, hasTextElement.getX(), hasTextElement.getWidth());
+      text.addText(
+        tokens,
+        hasTextElement.getX(),
+        hasTextElement.getWidth(),
+        parent.isTextAlignCenter(),
+        parent.isTextAlignRight()
+      );
     } catch (Exception e) {
       logger.error("tokens: " + tokens, e);
     }
@@ -93,6 +102,12 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
     // MeasurementHelpers.setMeasurementPanelTextAndResizeDiagram(parent, getText());
   }
 
+  @Override
+  public void reapplyText() {
+    calculateLines2();
+    cleanupAndApplyShape();
+  }
+
   public void setText(String newText, boolean editable, boolean force) {
   	// convert json text line (\\n) breaks to line breaks
 //  	newText = newText.replaceAll("\\\\n", "\n");
@@ -110,8 +125,7 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
         // though in vertical case text needs to be recalculated based on element size
         calculateAndNotifyHeight(hasTextElement.getWidth());
       }
-      this.tokens = null; // cleanup some memory
-  	  setTextShape();
+      cleanupAndApplyShape();
     }
     // }
 
@@ -133,6 +147,11 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
 //	    newest = new ScheduledText(getText());
 //	    Scheduler.get().scheduleIncremental(newest);
 //    }
+  }
+
+  private void cleanupAndApplyShape() {
+    this.tokens = null; // cleanup some memory
+    setTextShape();
   }
 
 	private IText createText(boolean editable) {

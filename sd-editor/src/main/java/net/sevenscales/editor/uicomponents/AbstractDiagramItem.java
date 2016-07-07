@@ -1178,6 +1178,15 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   @Override
+  public void setTextAlign(ShapeProperty textAlign) {
+    getDiagramItem().setTextAlign(textAlign);
+    TextElementFormatUtil formatter = getTextFormatter();
+    if (formatter != null) {
+      formatter.reapplyText();
+    }
+  }
+
+  @Override
   public Integer getFontSize() {
     return getDiagramItem().getFontSize();
   }
@@ -1417,7 +1426,47 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
 
   protected void setShapeProperties(Integer shapeProperties) {
+    Integer old = getDiagramItem().getShapeProperties();
     getDiagramItem().setShapeProperties(shapeProperties);
+
+    if (isTextAlignChanged(old, shapeProperties)) {
+      TextElementFormatUtil formatter = getTextFormatter();
+      if (formatter != null) {
+        formatter.reapplyText();
+      }
+    }
+  }
+
+  private boolean isTextAlignChanged(Integer oldValue, Integer newValue) {
+    boolean oldLeftNewDiffers = 
+      ShapeProperty.isTextAlignLeft(oldValue)
+        && (ShapeProperty.isTextAlignCenter(newValue) 
+          || ShapeProperty.isTextAlignRight(newValue));
+
+    boolean oldCenterNewDiffers =
+      ShapeProperty.isTextAlignCenter(oldValue)
+        && (ShapeProperty.isTextAlignLeft(newValue) 
+          || ShapeProperty.isTextAlignRight(newValue));
+
+    boolean oldRightNewDiffers = 
+      ShapeProperty.isTextAlignRight(oldValue)
+        && (ShapeProperty.isTextAlignLeft(newValue)
+          || ShapeProperty.isTextAlignCenter(newValue));
+
+    return oldLeftNewDiffers || oldCenterNewDiffers || oldRightNewDiffers;
+  }
+
+  @Override
+  public boolean isTextAlignLeft() {
+    return ShapeProperty.isTextAlignLeft(getDiagramItem().getShapeProperties());
+  }
+  @Override
+  public boolean isTextAlignCenter() {
+    return ShapeProperty.isTextAlignCenter(getDiagramItem().getShapeProperties());
+  }
+  @Override
+  public boolean isTextAlignRight() {
+    return ShapeProperty.isTextAlignRight(getDiagramItem().getShapeProperties());
   }
 
   // private void setDisplayOrder(int displayOrder) {
@@ -1567,6 +1616,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	
 	@Override
 	public String getTextAreaAlign() {
+    if (ShapeProperty.isTextAlignCenter(getDiagramItem().getShapeProperties())) {
+      return "center";
+    } else if (ShapeProperty.isTextAlignRight(getDiagramItem().getShapeProperties())) {
+      return "right";
+    }
 		return "left";
 	}
 	

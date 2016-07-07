@@ -177,6 +177,18 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 	}
 
 	@Override
+	public void setTextAlign(ShapeProperty textAlign) {
+		clearShapeProperty(ShapeProperty.TXT_ALIGN_CENTER);
+		clearShapeProperty(ShapeProperty.TXT_ALIGN_RIGHT);
+		// clearShapeProperty(ShapeProperty.TXT_ALIGN_LEFT);
+		if (textAlign == null) {
+			// just clear text alignment and default legacy is left align
+		} else {
+			addShapeProperty(textAlign);
+		}
+	}
+
+	@Override
 	public Integer getLineWeight() {
 		if (extension != null) {
 			return extension.getLineWeight();

@@ -641,7 +641,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
 	@Override
 	public String getTextAreaAlign() {
-		if (ShapeProperty.isCenteredText(shape.getShapeProperties())) {
+		if (ShapeProperty.isTextAlignCenter(shape.getShapeProperties())) {
 			return "center";
 		}
 		return super.getTextAreaAlign();

@@ -183,6 +183,7 @@ public class ChildTextElement extends TextElement implements IChildElement {
   	// potential code ends
 
     setShape(new int[]{roundedLeft, roundedTop, getWidth(), getHeight()});
+		// applyTextAlignment(text, hasTextElement.getX());
   	// // setShape((int) left, (int) top, getWidth(), getTop());
   }
 
@@ -323,7 +324,8 @@ public class ChildTextElement extends TextElement implements IChildElement {
   				 ContextMenuItem.DUPLICATE.getValue() |
            ContextMenuItem.COLOR_MENU.getValue() |
            ContextMenuItem.URL_LINK.getValue() | 
-           ContextMenuItem.DELETE.getValue();
+           ContextMenuItem.DELETE.getValue() |
+           ContextMenuItem.TEXT_ALIGN.getValue();
   }
 
   @Override

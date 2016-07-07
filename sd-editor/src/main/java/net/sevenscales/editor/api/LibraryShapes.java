@@ -17,18 +17,18 @@ public class LibraryShapes {
                                                   ShapeProperty.TEXT_RESIZE_DIR_HORIZONTAL.getValue() |
                                                   ShapeProperty.TEXT_TITLE_CENTER.getValue();
   public static final int MIDDLE_CLASS_LIKE_PROPERTIES = ShapeProperty.TEXT_RESIZE_DIR_HORIZONTAL.getValue() | 
-                                                         ShapeProperty.CENTERED_TEXT.getValue() |
+                                                         ShapeProperty.TXT_ALIGN_CENTER.getValue() |
                                                          ShapeProperty.TEXT_TITLE_CENTER.getValue();
 
   public static final int BOTTOM_CLASS_LIKE_PROPERTIES = ShapeProperty.TEXT_POSITION_BOTTOM.getValue() | 
-                                                         ShapeProperty.CENTERED_TEXT.getValue() |
+                                                         ShapeProperty.TXT_ALIGN_CENTER.getValue() |
                                                          ShapeProperty.BOLD_TITLE.getValue() |
                                                          ShapeProperty.TEXT_TITLE_CENTER.getValue();
 
   public static final int CIRCLE_LIKE_TEXT = ShapeProperty.TEXT_POSITION_MIDDLE.getValue() |
                                              ShapeProperty.TEXT_TITLE_CENTER.getValue() | 
                                              ShapeProperty.BOLD_TITLE.getValue() |
-                                             ShapeProperty.CENTERED_TEXT.getValue();                                                         
+                                             ShapeProperty.TXT_ALIGN_CENTER.getValue();                                                         
 	static {
 		shapes = new HashMap<String, LibraryShape>();
 
@@ -48,7 +48,7 @@ public class LibraryShapes {
     shapes.put(ElementType.PACKAGE.getValue(), new LibraryShape(ElementType.PACKAGE, 47, 55, TOP_CLASS_LIKE_PROPERTIES, 3, 3));
     shapes.put(ElementType.MIND_CENTRAL.getValue(), new LibraryShape(ElementType.MIND_CENTRAL, 47, 55, MIDDLE_CLASS_LIKE_PROPERTIES, 3, 3, 18));
 
-    // shapes.put(ElementType.USE_CASE.getValue(), new LibraryShape(ElementType.USE_CASE, 50, 35, TOP_CLASS_LIKE_PROPERTIES | ShapeProperty.CENTERED_TEXT.getValue(), 2, 2));
+    // shapes.put(ElementType.USE_CASE.getValue(), new LibraryShape(ElementType.USE_CASE, 50, 35, TOP_CLASS_LIKE_PROPERTIES | ShapeProperty.TXT_ALIGN_CENTER.getValue(), 2, 2));
     // shapes.put(ElementType.CLASS.getValue(), new LibraryShape(ElementType.CLASS, 50, 35, TOP_CLASS_LIKE_PROPERTIES, 2, 2));
 
     // ALL GENERIC SHAPES HAS TO BE HERE UNTIL TOOLBAR LIBRARY DOESN'T USE THESE

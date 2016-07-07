@@ -239,6 +239,24 @@ public class TextElementFormatUtil {
   		}
   	}
   }
+
+  protected void applyTextAlignment(IText text, int x) {
+    ShapeProperty textAlign = null;
+    if (ShapeProperty.isTextAlignCenter(parent.getDiagramItem().getShapeProperties())) {
+      text.setTextTspanAlignCenter();
+      textAlign = ShapeProperty.TXT_ALIGN_CENTER;
+    } else if (ShapeProperty.isTextAlignRight(parent.getDiagramItem().getShapeProperties())) {
+      text.setTextTspanAlignRight();
+      textAlign = ShapeProperty.TXT_ALIGN_RIGHT;
+    }
+
+    if (textAlign != null) {
+      updateXPosition(text, textAlign, x, (int) text.getTextWidth());
+    }
+  }
+
+  protected void updateXPosition(IText text, ShapeProperty textAlign, int x, int width) {
+  }
   
   public void setMarginTop(int marginTop) {
     marginTopDefined = true;
@@ -619,6 +637,10 @@ public class TextElementFormatUtil {
     // marginBottom = (int) (rowHeight * MARGIN_HEIGHT_FACTORIAL);
     // margin = (int) rowHeight;
 	}
+
+  public void setTextAlign(Integer textAlign) {
+
+  }
 
   public void remove() {
     clearLines();

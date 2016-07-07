@@ -1,0 +1,21 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+						 xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+	</ui:style>
+	
+	<g:HTMLPanel>
+		<div class="">
+			<a ui:field="alignLeft" title="Align text left" class="btn btn-custom btn-context-menu tooltipper block-link">
+				<i class="context-icon-align-left"></i>
+			</a>
+			<a ui:field="alignCenter" title="Align text center" class="btn btn-custom btn-context-menu tooltipper block-link">
+				<i class="context-icon-align-center"></i>
+			</a>
+			<a ui:field="alignRight" title="Align text right" class="btn btn-custom btn-context-menu tooltipper block-link">
+				<i class="context-icon-align-right"></i>
+			</a>			
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder>
+

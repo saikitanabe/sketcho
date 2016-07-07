@@ -23,6 +23,7 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
+import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.domain.utils.SLogger;
 
 
@@ -54,6 +55,12 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
     // calculateAndNotifyHeight(hasTextElement.getWidth());
   }
 
+  @Override
+  public void reapplyText() {
+    calculateLines2();
+    cleanupAndApplyShape();
+  }
+
   private void calculateLines2() {
     try {
       this.tokens = TokenParser.parse2(getText());
@@ -62,10 +69,34 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
       lines.add(currentline);
 
       text = createText(true);
+
       currentline.add(text);
-      text.addText(tokens, hasTextElement.getX(), 0);
+      text.addText(
+        tokens,
+        hasTextElement.getX(),
+        0,
+        parent.isTextAlignCenter(),
+        parent.isTextAlignRight()
+      );
     } catch (Exception e) {
       logger.error("tokens: " + tokens, e);
+    }
+  }
+
+  @Override
+  public void setTextShape() {
+    super.setTextShape();
+    if (text != null) {
+      applyTextAlignment(text, hasTextElement.getX());
+    }
+  }
+
+  @Override
+  protected void updateXPosition(IText text, ShapeProperty textAlign, int x, int width) {
+    if (ShapeProperty.TXT_ALIGN_CENTER.equals(textAlign)) {
+      text.updateTspanX(x + width / 2);
+    } else if (ShapeProperty.TXT_ALIGN_RIGHT.equals(textAlign)) {
+      text.updateTspanX(x + width);
     }
   }
 
@@ -108,8 +139,7 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
         // calculateAndNotifyHeight(hasTextElement.getWidth());
         resizeElement();
       }
-      this.tokens = null; // cleanup some memory
-  	  setTextShape();
+      cleanupAndApplyShape();
     }
     // }
 
@@ -131,6 +161,11 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
 //	    newest = new ScheduledText(getText());
 //	    Scheduler.get().scheduleIncremental(newest);
 //    }
+  }
+
+  private void cleanupAndApplyShape() {
+    this.tokens = null; // cleanup some memory
+    setTextShape();
   }
 
 	private IText createText(boolean editable) {
