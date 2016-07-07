@@ -116,6 +116,15 @@ public enum ShapeProperty {
 		return value != null && (value & TXT_ALIGN_RIGHT.getValue()) == TXT_ALIGN_RIGHT.getValue();	
 	}
 
+	public static ShapeProperty textAlignProperty(Integer value) {
+		if (ShapeProperty.isTextAlignCenter(value)) {
+			return ShapeProperty.TXT_ALIGN_CENTER;
+		} else if (ShapeProperty.isTextAlignRight(value)) {
+			return ShapeProperty.TXT_ALIGN_RIGHT;
+		}
+		return null;
+	}
+
 	public static Integer clear(Integer current, Integer toclear) {
 		if (current != null) {
 	    return current & ~toclear;

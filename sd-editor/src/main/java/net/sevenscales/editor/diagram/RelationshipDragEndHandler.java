@@ -660,7 +660,22 @@ Color borderColor, Color color, JsShapeConfig shapeConfig) {
     item.setText(defaultText);
     item.setShape(createshape(elementType, x, y, width, height, properties));
 
+    item.setShapeProperties(combineDynamicProperties(item.getShapeProperties(), properties));
+
     return ShapeParser.createDiagramElement(item, surface);
+	}
+
+	private Integer combineDynamicProperties(Integer oldProps, Integer newProps) {
+		ShapeProperty textAlign = ShapeProperty.textAlignProperty(newProps);
+		if (oldProps == null) {
+			return newProps;
+		}
+
+		if (textAlign != null) {
+			return oldProps | textAlign.getValue();
+		}
+
+		return oldProps;
 	}
 
 	private String createshape(String elementType, int x, int y, int width, int height, Integer properties) {
