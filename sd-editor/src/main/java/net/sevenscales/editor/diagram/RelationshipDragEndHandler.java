@@ -312,7 +312,7 @@ public class RelationshipDragEndHandler implements
 			surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(currentRel));
 		} else {
 			// surface empty case
-			diagram = createDiagram(elementType, shapeConfig, imageInfo, x, y);
+			diagram = createDiagram(elementType, shapeConfig, imageInfo, x, y, null, null, 0);
 			surface.addAsSelected(diagram, true);
 		}
 
@@ -342,7 +342,9 @@ public class RelationshipDragEndHandler implements
 		// create new element
 		ReattachHelpers reattachHelpers = new ReattachHelpers();
 
-		Diagram to = createDiagram(elementType, shapeConfig, imageInfo, src.getLeft(), src.getTop());
+		int initialShapeProperties = src.getDiagramItem().getShapeProperties() != null ? src.getDiagramItem().getShapeProperties() : 0;
+
+		Diagram to = createDiagram(elementType, shapeConfig, imageInfo, src.getLeft(), src.getTop(), src.getWidth(), src.getHeight(), initialShapeProperties);
 		to.getDiagramItem().setClientId(null);
 		ClientIdHelpers.generateClientIdIfNotSet(to.getDiagramItem(), 0, surface.getEditorContext().getGraphicalDocumentCache(), surface.getEditorContext());
 		to.setText(src.getText());
@@ -392,7 +394,7 @@ public class RelationshipDragEndHandler implements
 	}
 
 	private Diagram createDiagramFromRelationShip(String elementType, JsShapeConfig shapeConfig, ImageInfo imageInfo, int x, int y) {
-		Diagram diagram = createDiagram(elementType, shapeConfig, imageInfo, x, y);
+		Diagram diagram = createDiagram(elementType, shapeConfig, imageInfo, x, y, null, null, 0);
 		Point p = DiagramAnchorUtils.startCoordinate(
 				currentRel.getStartX(),
 				currentRel.getStartY(),
@@ -408,7 +410,7 @@ public class RelationshipDragEndHandler implements
 		return diagram;
 	}
 
-	private Diagram createDiagram(String elementType, JsShapeConfig shapeConfig, ImageInfo imageInfo, int x, int y) {
+	private Diagram createDiagram(String elementType, JsShapeConfig shapeConfig, ImageInfo imageInfo, int x, int y, Integer width, Integer height, int initialProperties) {
 		Diagram result = null;
 		ElementColor current = selectColor();
 		Color background = current.getBackgroundColor().create();
@@ -418,18 +420,18 @@ public class RelationshipDragEndHandler implements
 		if (Tools.isSketchMode()) {
 			// try first if sketch element is found
 			// at first only some of the elements are supported...
-			result = createGenericElement(elementType, x, y, background, borderColor, color, shapeConfig);
+			result = createGenericElement(elementType, x, y, width, height, background, borderColor, color, shapeConfig, initialProperties);
 		}
 
 		if (result == null) {
 			// try to create with legacy way
-			result = createLegacyDiagram(elementType, imageInfo, x, y, background, borderColor, color, shapeConfig);
+			result = createLegacyDiagram(elementType, imageInfo, x, y, width, height, background, borderColor, color, shapeConfig, initialProperties);
 		}
 
 		return result;
 	}
 
-	private Diagram createLegacyDiagram(String elementType, ImageInfo imageInfo, int x, int y, Color background, Color borderColor, Color color, JsShapeConfig shapeConfig) {
+	private Diagram createLegacyDiagram(String elementType, ImageInfo imageInfo, int x, int y, Integer width, Integer height, Color background, Color borderColor, Color color, JsShapeConfig shapeConfig, int initialProperties) {
 		Diagram result = null;
 		String defaultText = "";
 		if (shapeConfig != null && shapeConfig.isDefaultTextDefined()) {
@@ -462,9 +464,19 @@ public class RelationshipDragEndHandler implements
               new DiagramItemDTO());
 			result = actor;
 		} else if (ElementType.NOTE.getValue().equals(elementType)) {
+			int cwidth = 150;
+			int cheight = 45;
+
+			if (width != null) {
+				cwidth = width;
+			}
+			if (height != null) {
+				cheight = height;
+			}
+
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 			NoteElement ne = new NoteElement(surface,
-	        new NoteShape(x, y, 150, 45),
+	        new NoteShape(x, y, cwidth, cheight),
 	        defaultText,
 	        background, borderColor, color,
 	        true, 
@@ -485,7 +497,7 @@ public class RelationshipDragEndHandler implements
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 			result = ne;
 		} else if (ElementType.TEXT_ITEM.getValue().equals(elementType)) {
-			result = createTextElement(x, y, defaultText, background, borderColor, color);
+			result = createTextElement(x, y, width, height, defaultText, background, borderColor, color, initialProperties);
 		// } else if (ElementType.MIND_SUB_TOPIC.getValue().equals(elementType)) {
 		// 	result = createTextElement(x, y, elementType, background, borderColor, color);
 		} else if (ElementType.CHOICE.getValue().equals(elementType)) {
@@ -589,26 +601,40 @@ public class RelationshipDragEndHandler implements
 		// case BUBBLE_LEFT:
 		// case BUBBLE_RIGHT:
 		// case ENVELOPE: {
-			result = createGenericElement(elementType, x, y, background, borderColor, color, shapeConfig);
+			result = createGenericElement(elementType, x, y, null, null, background, borderColor, color, shapeConfig, 0);
 			// break;
 		// }
 		}
 		return result;
 	}
 
-	private Diagram createGenericElement(String elementType, int x, int y, Color background, 
-Color borderColor, Color color, JsShapeConfig shapeConfig) {
+	/**
+	* @width optionally give width that overrides default width
+	* @height optionally give height that overrides default height
+	*/
+	private Diagram createGenericElement(
+		String elementType,
+		int x,
+		int y,
+		Integer width,
+		Integer height,
+		Color background, 
+		Color borderColor,
+		Color color,
+		JsShapeConfig shapeConfig,
+		int initialProperties) {
+
 		Diagram result = null;
 		IShapeGroup proxy = ShapeCache.get(elementType, Tools.isSketchMode());
 		ShapeGroup shapeGroup = proxy.getShape();
 
-		double width = 0;
-		double height = 0;
+		double cwidth = 0;
+		double cheight = 0;
 
 		if (shapeConfig != null && shapeConfig.isTargetSizeDefined()) {
 			// menu can have own configuration
-			width = shapeConfig.getTargetWidth();
-			height = shapeConfig.getTargetHeight();
+			cwidth = shapeConfig.getTargetWidth();
+			cheight = shapeConfig.getTargetHeight();
 		}
 
 		if (shapeGroup != null) {
@@ -621,19 +647,26 @@ Color borderColor, Color color, JsShapeConfig shapeConfig) {
 				defaultText = shapeConfig.getDefaultText();
 			}
 
-			if (width == 0 || height == 0) {
+			if (cwidth == 0 || cheight == 0) {
 				// if width or height is not set then get size from svg shape directly 
-				width = shapeGroup.width;
-				height = shapeGroup.height;
+				cwidth = shapeGroup.width;
+				cheight = shapeGroup.height;
 			}
 
 			if (shapeGroup.isTargetSizeDefined()) {
 				// shape can override settings
-				width = shapeGroup.getShapeConfig().getTargetWidth();
-				height = shapeGroup.getShapeConfig().getTargetHeight();
+				cwidth = shapeGroup.getShapeConfig().getTargetWidth();
+				cheight = shapeGroup.getShapeConfig().getTargetHeight();
 			}
 
-			result = _createGenericElement(shapeGroup.elementType, x, y, (int) width, (int) height, shapeGroup.properties, background, borderColor, color, defaultText);
+			if (width != null) {
+				cwidth = width;
+			}
+			if (height != null) {
+				cheight = height;
+			}
+
+			result = _createGenericElement(shapeGroup.elementType, x, y, (int) cwidth, (int) cheight, initialProperties, background, borderColor, color, defaultText);
 		}
 
 		if (shapeGroup == null && Tools.isSketchMode()) {
@@ -648,7 +681,7 @@ Color borderColor, Color color, JsShapeConfig shapeConfig) {
 				}
 
 				// try crating through static code element mapping
-				result = _createGenericElement(elementType, x, y, (int) width, (int) height, ls.shapeProperties, background, borderColor, color, "");
+				result = _createGenericElement(elementType, x, y, (int) width, (int) height, initialProperties, background, borderColor, color, "");
 			}
 		}
 		return result;
@@ -694,11 +727,23 @@ Color borderColor, Color color, JsShapeConfig shapeConfig) {
 		return Theme.defaultColor(); 
 	}
 
-	private Diagram createTextElement(int x, int y, String sampleText, Color background, Color borderColor, Color color) {
+	private Diagram createTextElement(int x, int y, Integer width, Integer height, String sampleText, Color background, Color borderColor, Color color, int initialProperties) {
+		int cwidth = 100;
+		int cheight = 34;
+
+		if (width != null) {
+			cwidth = width;
+		}
+		if (height != null) {
+			cheight = height;
+		}
+
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
+		DiagramItemDTO item = new DiagramItemDTO();
+		item.setShapeProperties(initialProperties);
 		TextElement result = new TextElement(surface,
-        new TextShape(x, y, 100, 34),
-        background, borderColor, color, sampleText, true, new DiagramItemDTO());
+        new TextShape(x, y, cwidth, cheight),
+        background, borderColor, color, sampleText, true, item);
 		surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 		return result;
 	}
