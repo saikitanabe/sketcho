@@ -263,7 +263,7 @@ public class RelationshipDragEndHandler implements
 		}
 
 		// fire event show property text editor
-		if (shapeConfig.isOpenEditor()) {
+		if (shapeConfig != null && shapeConfig.isOpenEditor()) {
 			surface.getEditorContext().getEventBus().fireEvent(
 				new ShowDiagramPropertyTextEditorEvent(diagram).setJustCreated(true)
 			);
