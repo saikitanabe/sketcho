@@ -55,7 +55,10 @@ public class JsShapeConfig extends JavaScriptObject {
 		JSONObject result = new JSONObject();
 
 		result.put("dt", new JSONString(text));
-		result.put("tw", new JSONNumber(width));
+
+		if (width > 0) {
+			result.put("tw", new JSONNumber(width));
+		}
 
 		if (height > 0) {
 			result.put("th", new JSONNumber(height));

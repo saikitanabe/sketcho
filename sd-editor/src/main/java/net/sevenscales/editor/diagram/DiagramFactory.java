@@ -2,6 +2,7 @@ package net.sevenscales.editor.diagram;
 
 import net.sevenscales.domain.js.ImageInfo;
 import net.sevenscales.domain.js.JsShapeConfig;
+import net.sevenscales.domain.js.JsShape;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.ElementColor;
 import net.sevenscales.editor.api.Tools;
@@ -49,6 +50,7 @@ import net.sevenscales.editor.diagram.shape.RectContainerShape;
 import net.sevenscales.editor.diagram.shape.NoteShape;
 import net.sevenscales.editor.diagram.shape.CommentThreadShape;
 
+import net.sevenscales.editor.uicomponents.uml.ShapeCache;
 import net.sevenscales.editor.uicomponents.uml.ActivityChoiceElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityEnd;
@@ -96,7 +98,9 @@ public class DiagramFactory {
 		ElementColor current = selectColor();
 		Diagram result = createDiagram(elementType, shapeConfig, imageInfo, x, y, width, height, initialProperties, current);
 
-		surface.addAsSelected(result, true);
+		if (result != null) {
+			surface.addAsSelected(result, true);
+		}
 
 		return result;
 	}
@@ -105,7 +109,9 @@ public class DiagramFactory {
 		ElementColor current = selectColor();
 		Diagram result = createDiagram(elementType, shapeConfig, /*imageInfo*/ null, x, y, width, height, initialProperties, current);
 
-		surface.add(result, true);
+		if (result != null) {
+			surface.add(result, true);
+		}
 
 		return result;
 	}
@@ -114,7 +120,9 @@ public class DiagramFactory {
 		ElementColor current = selectColor();
 		Diagram result = createDiagram(elementType, shapeConfig, imageInfo, x, y, width, height, initialProperties, current);
 
-		surface.add(result, true);
+		if (result != null) {
+			surface.add(result, true);
+		}
 
 		return result;
 	}
@@ -464,5 +472,36 @@ public class DiagramFactory {
 
 		return Theme.defaultColor(); 
 	}
+
+	public void saveBoardShape(String elementType, IBoardSaved callback) {
+  	if (ShapeCache.hasShape(elementType)) {
+  		callback.saved(elementType);
+  	} else {
+  		// save shape on board
+  		_saveBoardShape(this, elementType, JsShape.SHAPE_TYPE_SKETCH, callback);
+  	}
+	}
+
+  private native void _saveBoardShape(DiagramFactory me, String elementType, int shapeType, IBoardSaved callback)/*-{
+  	if (typeof $wnd.libraryService.saveBoardShape != 'undefined') {
+  		$wnd.libraryService.saveBoardShape({
+  			board_id: $wnd.currentBoard().boardId,
+  			element_type: elementType,
+  			shape_type: shapeType
+  		}).then(function(data) {
+  			if (data.ok == 0) {
+	  			me.@net.sevenscales.editor.diagram.DiagramFactory::shapeSavedToBoard(Lnet/sevenscales/domain/js/JsShape;Lnet/sevenscales/editor/diagram/IBoardSaved;)(data.shape, callback)
+  			} else {
+  				console.error("Failed save board shape...", shape.et)
+  			}
+  		})
+  	}
+  }-*/;
+
+  private void shapeSavedToBoard(JsShape shape, IBoardSaved callback) {
+		ShapeCache.addShape(shape);
+		callback.saved(shape.getElementType());
+  }
+
 
 }
