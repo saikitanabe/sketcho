@@ -221,6 +221,7 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   int getSvgHeightWithText();
 	int getCenterX();
 	int getCenterY();
+  void setWidth(int width);
 	void setHeight(int height);
   // void setHeightAccordingToText();
 	// special cases for highlight, in case some diagram items don't support

@@ -1,10 +1,11 @@
 package net.sevenscales.domain.js;
 
 import com.google.gwt.core.client.JavaScriptObject;
-
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONNumber;
+import com.google.gwt.json.client.JSONString;
 
 public class JsShapeConfig extends JavaScriptObject {
-
 	protected JsShapeConfig() {
 
 	}
@@ -34,4 +35,33 @@ public class JsShapeConfig extends JavaScriptObject {
 	public final native boolean isTargetSizeDefined()/*-{
 		return this.tw && this.th
 	}-*/;
+
+	/**
+	* NOTE THIS IS NOT PART OF SHAPE CONFIGURATION FROM THE APP
+	* THIS IS DYNAMIC PROPERTIES AND CAN HAVE LONG NAMES.
+	*/
+	public final native boolean isOpenEditor()/*-{
+		if (typeof this.openEditor !== 'undefined') {
+			return this.openEditor
+		}
+		// default value is true if not defined
+		return true
+	}-*/;
+	public final native void setOpenEditor(boolean open)/*-{
+		this.openEditor = open
+	}-*/;
+
+	public static final JsShapeConfig create(String text, int width, int height) {
+		JSONObject result = new JSONObject();
+
+		result.put("dt", new JSONString(text));
+		result.put("tw", new JSONNumber(width));
+
+		if (height > 0) {
+			result.put("th", new JSONNumber(height));
+		}
+
+		return result.getJavaScriptObject().cast();
+	}
+
 }

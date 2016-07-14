@@ -1279,8 +1279,15 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	public int getCenterY() {
 		return getTop() + getHeight() / 2;
 	}
-	public void setHeight(int height) {
-	}
+
+  @Override 
+  public void setHeight(int height) {
+  }
+
+  @Override 
+  public void setWidth(int width) {
+  }
+
 
   // public void setHeightAccordingToText() {
   // }
