@@ -1,5 +1,11 @@
 package net.sevenscales.editor.diagram;
 
+import java.util.List;
+import java.util.ArrayList;
+
+import com.google.gwt.core.client.JsArrayString;
+import com.google.gwt.core.client.JavaScriptObject;
+
 import net.sevenscales.domain.js.ImageInfo;
 import net.sevenscales.domain.js.JsShapeConfig;
 import net.sevenscales.domain.js.JsShape;
@@ -11,6 +17,7 @@ import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.content.utils.DiagramElementFactory;
 import net.sevenscales.editor.diagram.shape.RectShape;
 import net.sevenscales.editor.utils.DiagramItemConfiguration;
@@ -481,6 +488,54 @@ public class DiagramFactory {
   		_saveBoardShape(this, elementType, JsShape.SHAPE_TYPE_SKETCH, callback);
   	}
 	}
+
+	public void saveBoardShapes(List<IDiagramItemRO> items, IBoardSaved callback) {
+		List<String> elementTypes = missingShapes(items);
+		if (elementTypes.size() > 0) {
+			_saveBoardShapes(this, toJsArrayString(elementTypes), JsShape.SHAPE_TYPE_SKETCH, callback);
+		} else {
+			callback.savedAll();
+		}
+	}
+
+	private List<String> missingShapes(List<IDiagramItemRO> items) {
+		List<String> result = new ArrayList<String>();
+
+		for (IDiagramItemRO item : items) {
+			if (!ShapeCache.hasShape(item.getType())) {
+				result.add(item.getType());
+			}
+		}
+		return result;
+	}
+
+	private JsArrayString toJsArrayString(List<String> list) {
+		JsArrayString result = JavaScriptObject.createArray().cast();
+		for (String i : list) {
+			result.push(i);
+		}
+		return result;
+	}
+
+  private native void _saveBoardShapes(DiagramFactory me, JsArrayString elementTypes, int shapeType, IBoardSaved callback)/*-{
+  	if (typeof $wnd.libraryService.saveBoardShapes != 'undefined') {
+  		$wnd.libraryService.saveBoardShapes({
+  			board_id: $wnd.currentBoard().boardId,
+  			element_types: elementTypes,
+  			shape_type: shapeType
+  		}).then(function(data) {
+  			if (data.ok == 0) {
+	  			me.@net.sevenscales.editor.diagram.DiagramFactory::shapesSavedToBoard(Lnet/sevenscales/editor/diagram/IBoardSaved;)(callback)
+  			} else {
+  				console.error("Failed save board shape...", elementTypes)
+  			}
+  		})
+  	}
+  }-*/;
+
+  private void shapesSavedToBoard(IBoardSaved callback) {
+		callback.savedAll();
+  }
 
   private native void _saveBoardShape(DiagramFactory me, String elementType, int shapeType, IBoardSaved callback)/*-{
   	if (typeof $wnd.libraryService.saveBoardShape != 'undefined') {
