@@ -28,6 +28,8 @@ import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
 import net.sevenscales.editor.api.event.SwitchElementEvent;
+import net.sevenscales.editor.api.event.UnselectAllEvent;
+import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.impl.EditorCommon;
@@ -190,6 +192,12 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 		editorContext.getEventBus().addHandler(BoardRemoveDiagramsEvent.TYPE, new BoardRemoveDiagramsEventHandler() {
 			public void on(BoardRemoveDiagramsEvent event) {
+				hide();
+			}
+		});
+
+		editorContext.getEventBus().addHandler(UnselectAllEvent.TYPE, new UnselecteAllEventHandler() {
+			public void onUnselectAll(UnselectAllEvent event) {
 				hide();
 			}
 		});
