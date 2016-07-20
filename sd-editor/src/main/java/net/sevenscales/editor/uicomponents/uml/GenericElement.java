@@ -74,6 +74,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private GenericHasTextElement hasTextElement;
   private boolean pathsSetAtLeastOnce;
   private boolean tosvg;
+  private boolean forceTextRendering;
   
   private static final String BOUNDARY_COLOR = "#aaaaaa";
 
@@ -162,7 +163,13 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
     if (!"".equals(text)) {
     	// do not set empty initial text, to keep shape dimensions as defined
+
+    	// force to render text even if property editor is open on 
+    	// shape creation always, case: onboarding new shape property editor
+    	// is open when inserting shapes in delay
+    	this.forceTextRendering = true;
 	    setText(text);
+	    this.forceTextRendering = false;
     } else {
     	textUtil.setStoreText("");
     }
@@ -303,7 +310,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
 	public void doSetText(String newText) {
 		if (textUtil instanceof TextElementVerticalFormatUtil) {
-			((TextElementVerticalFormatUtil) textUtil).setText(newText, editable, false);
+			((TextElementVerticalFormatUtil) textUtil).setText(newText, editable, forceTextRendering);
 		} else {
 	    textUtil.setText(newText, editable);
 		}
