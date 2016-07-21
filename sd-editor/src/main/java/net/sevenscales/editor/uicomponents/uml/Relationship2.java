@@ -227,6 +227,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       
       elements.add(path);
       elements.add(lineBackground);
+
+      // fix: just to initialize so no access without being initialized
+      segments = JsArray.createArray().cast();
 //      setShape(points);
     }
     
@@ -724,6 +727,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
           // Relationship2.fixLegacyTextColor(textColor, item), 
           item);
     this.points = points.points;
+
+    // fix: getInfo might get called as uninitialized info
+    this.info = new RelationshipShape2();
 
     handler = new ConnectionMoveHandler();
     children = new ArrayList<IChildElement>();
