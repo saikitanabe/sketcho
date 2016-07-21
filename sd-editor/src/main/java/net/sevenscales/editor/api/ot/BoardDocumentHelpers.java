@@ -72,13 +72,22 @@ public class BoardDocumentHelpers {
 		return operationItems;
 	}
 
-  public static JsArrayString getDiagramClientIds(Iterable<Diagram> diagrams) {
+  public static JsArrayString getDiagramClientIdsOrdered(Iterable<Diagram> diagrams) {
     List<? extends IDiagramItemRO> items = BoardDocumentHelpers.diagramsToItems(
       diagrams
     );
+
     JsArrayString result = JavaScriptObject.createArray().cast();
     for (IDiagramItemRO diro : items) {
       result.push(diro.getClientId());
+    }
+    return result;
+  }
+
+  public static JsArrayString getDiagramClientIds(Iterable<Diagram> diagrams) {
+    JsArrayString result = JavaScriptObject.createArray().cast();
+    for (Diagram d : diagrams) {
+      result.push(d.getDiagramItem().getClientId());
     }
     return result;
   }

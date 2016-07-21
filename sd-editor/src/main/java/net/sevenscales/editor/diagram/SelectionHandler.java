@@ -738,7 +738,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   }
 
   public JsArrayString getSeletedShapeIds() {
-    return BoardDocumentHelpers.getDiagramClientIds(
+    return BoardDocumentHelpers.getDiagramClientIdsOrdered(
       getSelectedItems()
     );
   }
