@@ -87,7 +87,11 @@ public class BoardDocumentHelpers {
   public static JsArrayString getDiagramClientIds(Iterable<Diagram> diagrams) {
     JsArrayString result = JavaScriptObject.createArray().cast();
     for (Diagram d : diagrams) {
-    	if (d.getDiagramItem().getClientId() != null) {
+    	// if (d.getDiagramItem().getClientId() != null) {
+    	if (!(d instanceof CircleElement)) {
+    		// now constantly using circle element... though client id would
+    		// be more generic even in future, but is it possible that it is missing
+    		// in some cases?!?
 	      result.push(d.getDiagramItem().getClientId());
     	}
     }
