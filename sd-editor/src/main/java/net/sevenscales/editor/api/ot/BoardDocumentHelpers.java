@@ -87,7 +87,9 @@ public class BoardDocumentHelpers {
   public static JsArrayString getDiagramClientIds(Iterable<Diagram> diagrams) {
     JsArrayString result = JavaScriptObject.createArray().cast();
     for (Diagram d : diagrams) {
-      result.push(d.getDiagramItem().getClientId());
+    	if (d.getDiagramItem().getClientId() != null) {
+	      result.push(d.getDiagramItem().getClientId());
+    	}
     }
     return result;
   }

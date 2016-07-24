@@ -362,7 +362,10 @@ class SurfaceHandler extends SimplePanel implements
     if (editorContext.isTrue(EditorProperty.ON_CHANGE_ENABLED)) {
       editorContext.getEventBus().fireEvent(new DiagramElementAddedEvent(toAddDiagrams, duplicate));
 
-      notifyShapesAdded(BoardDocumentHelpers.getDiagramClientIds(toAddDiagrams));
+      JsArrayString ids = BoardDocumentHelpers.getDiagramClientIds(toAddDiagrams);
+      if (ids.length() > 0) {
+        notifyShapesAdded(BoardDocumentHelpers.getDiagramClientIds(toAddDiagrams));
+      }
     }
   }
 
