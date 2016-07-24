@@ -1,14 +1,17 @@
 package net.sevenscales.editor.api;
 
 import java.util.List;
+import java.util.ArrayList;
+
+import com.google.gwt.core.client.JsArrayString;
 
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
+import net.sevenscales.editor.diagram.DiagramSearch;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.content.utils.DuplicateHelpers;
 import net.sevenscales.editor.content.utils.ShapeParser;
-
 
 public class BoardDimensions {
 	private int leftmost = Integer.MAX_VALUE;
@@ -17,6 +20,20 @@ public class BoardDimensions {
 	private int bottommost = Integer.MIN_VALUE;
 	
 	private static BoardDimensions instance = null;
+
+	public static class DiagramsDimension {
+		public int x;
+		public int y;
+		public int right;
+		public int bottom;
+
+		public DiagramsDimension(int x, int y, int right, int bottom) {
+			this.x = x;
+			this.y = y;
+			this.right = right;
+			this.bottom = bottom;
+		}
+	}
 	
 	private BoardDimensions() {
 	}
@@ -33,6 +50,33 @@ public class BoardDimensions {
 			instance = new BoardDimensions();
 		}
 		return instance;
+	}
+
+	public static DiagramsDimension snapshot() {
+		return new DiagramsDimension(
+			getLeftmost(),
+			getTopmost(),
+			getRightmost(),
+			getBottommost()
+		);
+	}
+
+	public static void resolveDimensions(JsArrayString clientIds, ISurfaceHandler surface) {
+		instance().reset();
+
+		DiagramSearch search = surface.createDiagramSearch();
+
+		List<Diagram> diagrams = new ArrayList<Diagram>();
+		for (int i = 0; i < clientIds.length(); ++i) {
+			Diagram added = search.findByClientId(clientIds.get(i));
+			if (added != null) {
+				diagrams.add(added);
+			}
+		}
+
+		for (Diagram diagram : diagrams) {
+			instance()._resolveDimensions(diagram);
+		}
 	}
 
 	public static void resolveDimensions(List<Diagram> diagrams) {
