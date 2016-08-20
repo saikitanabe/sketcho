@@ -248,6 +248,8 @@ public class TextElementFormatUtil {
     } else if (ShapeProperty.isTextAlignRight(parent.getDiagramItem().getShapeProperties())) {
       text.setTextTspanAlignRight();
       textAlign = ShapeProperty.TXT_ALIGN_RIGHT;
+    } else {
+      textAlign = ShapeProperty.TXT_ALIGN_LEFT;
     }
 
     if (textAlign != null) {
