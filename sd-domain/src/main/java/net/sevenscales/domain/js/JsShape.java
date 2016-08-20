@@ -5,6 +5,9 @@ import com.google.gwt.core.client.JsArray;
 
 
 public class JsShape extends JavaScriptObject {
+	public final static int SHAPE_TYPE_SKETCH = 0;
+	public final static int SHAPE_TYPE_FORMAL = 1;
+
 	protected JsShape() {
 	}
 

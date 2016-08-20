@@ -74,6 +74,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private GenericHasTextElement hasTextElement;
   private boolean pathsSetAtLeastOnce;
   private boolean tosvg;
+  private boolean forceTextRendering;
   
   private static final String BOUNDARY_COLOR = "#aaaaaa";
 
@@ -162,7 +163,13 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
     if (!"".equals(text)) {
     	// do not set empty initial text, to keep shape dimensions as defined
+
+    	// force to render text even if property editor is open on 
+    	// shape creation always, case: onboarding new shape property editor
+    	// is open when inserting shapes in delay
+    	this.forceTextRendering = true;
 	    setText(text);
+	    this.forceTextRendering = false;
     } else {
     	textUtil.setStoreText("");
     }
@@ -188,9 +195,16 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 
 	protected int getMarginLeft() {
+		if (ShapeProperty.isTextResizeDimVerticalResize(getDiagramItem().getShapeProperties())) {
+			return 10;
+		}
+
 		return 0;
 	}
 	protected int getMarginBottom() {
+		if (ShapeProperty.isTextResizeDimVerticalResize(getDiagramItem().getShapeProperties())) {
+			return 7;
+		}
 		return 0;
 	}
 	protected int getMarginTop() {
@@ -296,7 +310,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
 	public void doSetText(String newText) {
 		if (textUtil instanceof TextElementVerticalFormatUtil) {
-			((TextElementVerticalFormatUtil) textUtil).setText(newText, editable, false);
+			((TextElementVerticalFormatUtil) textUtil).setText(newText, editable, forceTextRendering);
 		} else {
 	    textUtil.setText(newText, editable);
 		}
@@ -348,9 +362,14 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
     return true;
   }
 
-	@Override	
+	@Override
 	public void setHeight(int height) {
 		resize(getRelativeLeft(), getRelativeTop(), getWidth(), height);
+	}
+
+	@Override
+	public void setWidth(int width) {
+		resize(getRelativeLeft(), getRelativeTop(), width, getHeight());
 	}
 
 	public void resizeEnd() {
@@ -730,8 +749,11 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
   @Override
   public int supportedMenuItems() {
-    return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue() |
-           ContextMenuItem.LAYERS.getValue();
+    int result = super.supportedMenuItems() |
+			ContextMenuItem.FONT_SIZE.getValue() |
+			ContextMenuItem.LAYERS.getValue();
+		result |= extraSupportedMenuItemsByType();
+		return result;
   }
 
   public AbstractDiagramItem getDiagram() {
@@ -740,6 +762,13 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
   protected GenericShape getGenericShape() {
     return shape;
+  }
+
+  private int extraSupportedMenuItemsByType() {
+		if (textUtil instanceof TextElementVerticalFormatUtil) {
+			return ContextMenuItem.TEXT_ALIGN.getValue();
+		}
+		return 0;
   }
 
 }

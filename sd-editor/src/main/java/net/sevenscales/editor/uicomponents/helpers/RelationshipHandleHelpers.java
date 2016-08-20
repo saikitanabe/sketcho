@@ -78,6 +78,9 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     });
 
     initDefaults();
+
+    // fix: sometimes handle helpers are shown after initialization
+    forceHide();
   }
 
   public static RelationshipHandleHelpers createConnectionHelpers(ISurfaceHandler surface, Relationship2 

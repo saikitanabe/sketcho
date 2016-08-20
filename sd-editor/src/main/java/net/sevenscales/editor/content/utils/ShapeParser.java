@@ -107,7 +107,7 @@ public class ShapeParser {
 		// throw new RuntimeException("Factory not found for " + diro.getType());
 	}
 
-	static Info parse(IDiagramItemRO diro, int moveX, int moveY) {
+	public static Info parse(IDiagramItemRO diro, int moveX, int moveY) {
 		for (ParserMap pm : PARSER_MAP) {
 			if (pm.elementType.getValue().equals(diro.getType())) {
 				return pm.factory.parseShape(diro, moveX, moveY);

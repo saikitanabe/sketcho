@@ -95,7 +95,7 @@ public class DuplicateHelpers {
 			for (IDiagramItemRO diro : items) {
 				copies.add(diro.copy());
 			}
-			paste(left + 20, top + 35, copies, boardDocument, true);
+			paste(left + 20, top + 35, copies, boardDocument, true, true);
 		} else if (toduplicate.size() == 1) {
 			// special one item duplicate, e.g. sequence or horizontal bar
 			Diagram duplicated = toduplicate.get(0).duplicate();
@@ -103,7 +103,7 @@ public class DuplicateHelpers {
 		}
 	}
 
-	private void addItemsToTheBoard(State state) {
+	private void addItemsToTheBoard(State state, boolean asSelected) {
 		// check if something was really duplicated; item might not support duplication like comment element.
 		if (state.newItems.size() > 0) {
 			// replace old connections with new client ids
@@ -111,11 +111,15 @@ public class DuplicateHelpers {
 
 			state.reattachHelpers.reattachRelationshipsAndDraw();
 
-			surface.addAsSelected(state.newItems, true, true);
+			if (asSelected) {
+				surface.addAsSelected(state.newItems, true, true);
+			} else {
+				surface.add(state.newItems, true, true);
+			}
 		}
 	}
 
-	public void paste(int x, int y, List<? extends IDiagramItemRO> items, BoardDocument boardDocument, boolean editable) {
+	public void paste(int x, int y, List<? extends IDiagramItemRO> items, BoardDocument boardDocument, boolean editable, boolean asSelected) {
 		// TODO check if editable, should be checked already before copy!!
 		// TODO what do to with comments!! is it allowed to copy those!!!???
 		if (editable) {
@@ -124,7 +128,7 @@ public class DuplicateHelpers {
 
 			State state = copyAndMapClientIds(x, y, items, boardDocument);
 
-			addItemsToTheBoard(state);
+			addItemsToTheBoard(state, asSelected);
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 		}
 	}
@@ -135,12 +139,15 @@ public class DuplicateHelpers {
 
 		int left = Integer.MAX_VALUE;
 		int top = Integer.MAX_VALUE;
+
 		for (IDiagramItemRO di : items) {
-			if (allowedToPasteType(di)) {
+			if (DuplicateHelpers.allowedToPasteType(di)) {
 				Info shape = ShapeParser.parse(di, 0, 0);
 				// Info shape = di.parseShape();
 				int l = shape.getLeft();
 				int t = shape.getTop();
+				int r = l + shape.getWidth();
+
 				left = l < left ? l : left;
 				top = t < top ? t : top;
 			}
@@ -211,7 +218,7 @@ public class DuplicateHelpers {
 		}
 	}
 
-	private boolean allowedToPasteType(IDiagramItemRO diro) {
+	public static boolean allowedToPasteType(IDiagramItemRO diro) {
 		return !ElementType.COMMENT.getValue().equals(diro.getType())	&&
 					 !ElementType.COMMENT_THREAD.getValue().equals(diro.getType());
 	}

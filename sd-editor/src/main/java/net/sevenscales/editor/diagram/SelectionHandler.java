@@ -387,10 +387,11 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     this.shiftOn = keyCode == 4 ? true : false;
     
     switch (keyCode) {
-      case KeyCodeMap.DELETE: { // delete key 
-        removeSelected();
-        return true;
-      }
+      // Delete key doesn't check
+      // case KeyCodeMap.DELETE: { // delete key 
+      //   removeSelected();
+      //   return true;
+      // }
       case KeyCodeMap.LEFT: { // TODO: test constant from gwt, down arrow
         moveSelected(-1 * multiplier, 0);
         return true;
@@ -738,25 +739,27 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   }
 
   public JsArrayString getSeletedShapeIds() {
-    List<? extends IDiagramItemRO> items = BoardDocumentHelpers.diagramsToItems(
+    return BoardDocumentHelpers.getDiagramClientIdsOrdered(
       getSelectedItems()
     );
-    JsArrayString result = JavaScriptObject.createArray().cast();
-    for (IDiagramItemRO diro : items) {
-      result.push(diro.getClientId());
-    }
-    return result;
   }
 
-  public void selectShapes(JsArrayString shapeIds) {
-    unselectAll();
+  public void focusShapes(JsArrayString shapeIds, boolean select) {
+    if (select) {
+      unselectAll();
+    }
+
     DiagramSearch search = surface.createDiagramSearch();
     List<Diagram> selected = new ArrayList<Diagram>();
     for (int i = 0; i < shapeIds.length(); ++i) {
       String shapeId = shapeIds.get(i);
       Diagram d = search.findByClientId(shapeId);
       if (d != null) {
-        d.select();
+
+        if (select) {
+          d.select();
+        }
+
         selected.add(d);
       }
     }
@@ -787,7 +790,13 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     // NOTE this logic should not really be here, or 
     // it could be a param to method or a separate method
     // that can be called from comments part
-    int commentsSectionWidth = 460;
+
+    // needed to center shapes
+    int commentsSectionWidth = clientWidth;
+    if (select) {
+      commentsSectionWidth = 460;
+    }
+
     int visibleSpace = clientWidth - commentsSectionWidth;
     int extrax = 0;
 

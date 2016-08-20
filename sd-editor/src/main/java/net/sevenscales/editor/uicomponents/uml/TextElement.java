@@ -295,9 +295,15 @@ public class TextElement extends AbstractDiagramItem implements
 	public int getHeight() {
 		return attachBoundary.getHeight();
 	}
-	
+
+	@Override	
 	public void setHeight(int height) {
 		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height);
+	}
+
+	@Override	
+	public void setWidth(int width) {
+		setShape(getRelativeLeft(), getRelativeTop(), width, getHeight());
 	}
 
 	public void setShape(int left, int top, int width, int height) {

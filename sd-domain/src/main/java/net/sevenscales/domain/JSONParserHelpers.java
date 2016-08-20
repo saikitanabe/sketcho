@@ -16,6 +16,10 @@ public class JSONParserHelpers {
 		return value != null && value.isNumber() != null ? (int) value.isNumber().doubleValue() : 0;
 	}
 
+	public static boolean getBoolean(JSONValue value) {
+		return value != null && value.isBoolean() != null ? value.isBoolean().booleanValue() : false;
+	}
+
 	public static Integer getInteger(JSONValue value) {
 		return value != null && value.isNumber() != null ? (int) value.isNumber().doubleValue() : null;
 	}

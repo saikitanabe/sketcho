@@ -6,6 +6,11 @@ import java.util.logging.Level;
 import com.google.gwt.core.shared.GWT;
 
 public class Error {
+
+  public static native void error(String msg, Object obj)/*-{
+    if (typeof $wnd.console != "undefined") $wnd.console.error(msg, obj);
+  }-*/;
+
 	public static void reload(Exception e) {
 		Error._reload("Exception: " + e);
 	}

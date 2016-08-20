@@ -22,6 +22,8 @@ import net.sevenscales.editor.gfx.domain.IChildElement;
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsonUtils;
+import com.google.gwt.core.client.JsArrayString;
+import com.google.gwt.core.client.JavaScriptObject;
 
 public class BoardDocumentHelpers {
 	private static final SLogger logger = SLogger.createLogger(BoardDocumentHelpers.class);
@@ -69,6 +71,32 @@ public class BoardDocumentHelpers {
 		List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.getDiagramsAsDTOKeepOrder(filteredDiagrams, true);
 		return operationItems;
 	}
+
+  public static JsArrayString getDiagramClientIdsOrdered(Iterable<Diagram> diagrams) {
+    List<? extends IDiagramItemRO> items = BoardDocumentHelpers.diagramsToItems(
+      diagrams
+    );
+
+    JsArrayString result = JavaScriptObject.createArray().cast();
+    for (IDiagramItemRO diro : items) {
+      result.push(diro.getClientId());
+    }
+    return result;
+  }
+
+  public static JsArrayString getDiagramClientIds(Iterable<Diagram> diagrams) {
+    JsArrayString result = JavaScriptObject.createArray().cast();
+    for (Diagram d : diagrams) {
+    	// if (d.getDiagramItem().getClientId() != null) {
+    	if (!(d instanceof CircleElement)) {
+    		// now constantly using circle element... though client id would
+    		// be more generic even in future, but is it possible that it is missing
+    		// in some cases?!?
+	      result.push(d.getDiagramItem().getClientId());
+    	}
+    }
+    return result;
+  }
 
 	public static List<IDiagramItem> getDiagramsAsDTO(List<Diagram> diagrams, boolean updateDiagramItem) {
 		Collections.sort(diagrams, DIAGRAM_IDENTIFIER_COMPARATOR);
