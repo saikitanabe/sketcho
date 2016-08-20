@@ -93,7 +93,9 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
 
   @Override
   protected void updateXPosition(IText text, ShapeProperty textAlign, int x, int width) {
-    if (ShapeProperty.TXT_ALIGN_CENTER.equals(textAlign)) {
+    if (ShapeProperty.TXT_ALIGN_LEFT.equals(textAlign)) {
+      text.updateTspanX(x);
+    } else if (ShapeProperty.TXT_ALIGN_CENTER.equals(textAlign)) {
       text.updateTspanX(x + width / 2);
     } else if (ShapeProperty.TXT_ALIGN_RIGHT.equals(textAlign)) {
       text.updateTspanX(x + width);
