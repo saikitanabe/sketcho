@@ -387,10 +387,11 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     this.shiftOn = keyCode == 4 ? true : false;
     
     switch (keyCode) {
-      case KeyCodeMap.DELETE: { // delete key 
-        removeSelected();
-        return true;
-      }
+      // Delete key doesn't check
+      // case KeyCodeMap.DELETE: { // delete key 
+      //   removeSelected();
+      //   return true;
+      // }
       case KeyCodeMap.LEFT: { // TODO: test constant from gwt, down arrow
         moveSelected(-1 * multiplier, 0);
         return true;

@@ -146,7 +146,7 @@ public class BoardDimensions {
 		return bottom - top;
 	}
 
-	public static int itemsWidth(List<IDiagramItemRO> items) {
+	public static int itemsWidth(List<? extends IDiagramItemRO> items) {
 		int left = Integer.MAX_VALUE;
 		int top = Integer.MAX_VALUE;
 		int right = Integer.MIN_VALUE;
@@ -168,7 +168,7 @@ public class BoardDimensions {
 		return right - left;
 	}
 
-	public static int itemsHeight(List<IDiagramItemRO> items) {
+	public static int itemsHeight(List<? extends IDiagramItemRO> items) {
 		int left = Integer.MAX_VALUE;
 		int top = Integer.MAX_VALUE;
 		int bottom = Integer.MIN_VALUE;

@@ -4,7 +4,9 @@ import java.util.List;
 
 import net.sevenscales.domain.js.JsShape;
 import net.sevenscales.domain.utils.DiagramItemList;
+import net.sevenscales.domain.utils.DiagramItemRWList;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.api.IDiagramItem;
 
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
@@ -58,6 +60,20 @@ public class JSONContentParser {
 
 	public static List<IDiagramItemRO> parseItems(JSONArray items) {
 		DiagramItemList result = new DiagramItemList();
+		for (int i = 0; i < items.size(); ++i) {
+			JSONObject obj = items.get(i).isObject();
+			if (obj != null) {
+				JSONDiagramParser dp = new JSONDiagramParser(obj);
+				if (dp.isItem() != null) {
+					result.add(dp.isItem());
+				}
+			}
+		}
+		return result;
+	}
+
+	public static List<IDiagramItem> parseItemsRW(JSONArray items) {
+		DiagramItemRWList result = new DiagramItemRWList();
 		for (int i = 0; i < items.size(); ++i) {
 			JSONObject obj = items.get(i).isObject();
 			if (obj != null) {

@@ -489,7 +489,7 @@ public class DiagramFactory {
   	}
 	}
 
-	public void saveBoardShapes(List<IDiagramItemRO> items, IBoardSaved callback) {
+	public void saveBoardShapes(List<? extends IDiagramItemRO> items, IBoardSaved callback) {
 		List<String> elementTypes = missingShapes(items);
 		if (elementTypes.size() > 0) {
 			_saveBoardShapes(this, toJsArrayString(elementTypes), JsShape.SHAPE_TYPE_SKETCH, callback);
@@ -498,7 +498,7 @@ public class DiagramFactory {
 		}
 	}
 
-	private List<String> missingShapes(List<IDiagramItemRO> items) {
+	private List<String> missingShapes(List<? extends IDiagramItemRO> items) {
 		List<String> result = new ArrayList<String>();
 
 		for (IDiagramItemRO item : items) {
