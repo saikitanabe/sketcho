@@ -110,7 +110,7 @@ public class ColorSelections extends Composite {
 		String selectedRgb = widget.getElement().getStyle().getBackgroundColor();
 		if (selectedRgb.startsWith("#")) {
 			// in hex format IE8 at least
-			selectedRgb = ColorHelpers.toRgb(selectedRgb).toString();
+			selectedRgb = Rgb.toRgb(selectedRgb).toString();
 		}
 		String color = rgb2hex(selectedRgb).toUpperCase();
 		int r = red(selectedRgb);
@@ -479,7 +479,7 @@ public class ColorSelections extends Composite {
 				if (color != null && color.getOpacity() > 0.0 && w.getElement().getAttribute("data-hexcolor").equals(color.toHexStringWithHash().toUpperCase())) {
 					w.getElement().setInnerText("✓");
 
-					String tc = textColorByBackgroundColor(ColorHelpers.toRgb(color.toHexStringWithHash()).toString());
+					String tc = textColorByBackgroundColor(Rgb.toRgb(color.toHexStringWithHash()).toString());
 					w.getElement().getStyle().setColor("#"+tc.toUpperCase());
 				} else {
 					w.getElement().setInnerText("");
