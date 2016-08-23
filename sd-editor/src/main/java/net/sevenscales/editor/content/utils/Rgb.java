@@ -28,6 +28,12 @@ public class Rgb {
 		int r = Integer.valueOf(hexColor.substring(0, 2), 16);
 		int g = Integer.valueOf(hexColor.substring(2, 4), 16);
 		int b = Integer.valueOf(hexColor.substring(4, 6), 16);
+
+		if (hexColor.length() == 8) {
+			int a = Integer.valueOf(hexColor.substring(6, 8), 16);
+			return new Rgb(r, g, b, a);
+		}
+
 		return new Rgb(r, g, b);
 	}
 

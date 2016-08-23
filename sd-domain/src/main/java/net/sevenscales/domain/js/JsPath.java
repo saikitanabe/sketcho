@@ -12,6 +12,9 @@ public class JsPath extends JavaScriptObject {
 	public final native String getStyle()/*-{
 		return this.s || ""
 	}-*/;
+	public final native String getStyleLib()/*-{
+		return this.sl
+	}-*/;
 	public final native boolean getNoScaling()/*-{
 		return this.noscaling || false
 	}-*/;
