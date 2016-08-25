@@ -42,13 +42,17 @@ import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
+import net.sevenscales.editor.uicomponents.uml.IShapeGroup;
+import net.sevenscales.editor.uicomponents.uml.ShapeCache;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.IGraphics;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.js.JsShapeConfig;
 
 
 class QuickConnectionHandler implements MouseDiagramHandler {
@@ -293,7 +297,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 			// do not duplicate child or relationships, since rel e.g. cannot be connected
 			// if child then e.g. create a note
-			IDiagramItem item = createQuickNext(d, prevSelectedItem);			
+			IDiagramItem item = createQuickNext(d, prevSelectedItem);
 
 			Dimension dimension = DiagramItemHelpers.parseDimension(item);
 			if (dimension != null) {
@@ -346,6 +350,29 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			result = true;
 		}
 		return result;
+	}
+
+	private void modifyDefaultColors(IDiagramItem di) {
+		// first just set default colors
+		DiagramItemConfiguration.setDefaultColors(di);
+
+		// update colors based on shape configuration
+		IShapeGroup sg = ShapeCache.get(di.getType(), Tools.isSketchMode());
+
+		if (sg.isReady()) {
+			JsShapeConfig config = sg.getShape().getShapeConfig();
+
+			// default colors are based on theme, and those are overridden based on shape config, if any changes
+
+			Color bg = Theme.createDefaultBackgroundColor();
+			bg = DiagramFactory.defaultBgColor(bg, config);
+
+			Color border = Theme.createDefaultBorderColor();
+			border = DiagramFactory.defaultBorderColor(border, config);
+
+			// text color is not used at the moment
+			DiagramItemConfiguration.setColors(di, bg, border, null);
+		}
 	}
 
 	private IDiagramItem createQuickNext(Diagram d, IDiagramItem prevSelectedItem) {
@@ -458,7 +485,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	}
 
 	private IDiagramItem setDefaultValues(IDiagramItem item) {
-		DiagramItemConfiguration.setDefaultColors(item);
+		modifyDefaultColors(item);
 
 		LibraryShapes.ShapeProps ls = LibraryShapes.getShapeProps(item.getType());
 		if (ls != null) {

@@ -180,8 +180,8 @@ public class DiagramFactory {
 			defaultText = shapeConfig.getDefaultText();
 		}
 
-		background = defaultBgColor(background, shapeConfig);
-		borderColor = defaultBorderColor(borderColor, shapeConfig);
+		background = DiagramFactory.defaultBgColor(background, shapeConfig);
+		borderColor = DiagramFactory.defaultBorderColor(borderColor, shapeConfig);
 
 		if (width == null && height == null && shapeConfig.isTargetSizeDefined()) {
 			width = (int) shapeConfig.getTargetWidth();
@@ -391,8 +391,8 @@ public class DiagramFactory {
 				defaultText = shapeConfig.getDefaultText();
 			}
 
-			background = defaultBgColor(background, shapeConfig);
-			borderColor = defaultBorderColor(borderColor, shapeConfig);
+			background = DiagramFactory.defaultBgColor(background, shapeConfig);
+			borderColor = DiagramFactory.defaultBorderColor(borderColor, shapeConfig);
 
 			if (cwidth == 0 || cheight == 0) {
 				// if width or height is not set then get size from svg shape directly 
@@ -579,7 +579,7 @@ public class DiagramFactory {
 		callback.saved(shape.getElementType());
   }
 
-  private Color defaultBgColor(Color background, JsShapeConfig shapeConfig) {
+  public static Color defaultBgColor(Color background, JsShapeConfig shapeConfig) {
 		if (background.opacity == 0 && shapeConfig != null && shapeConfig.isDefaultBgColor()) {
 			Rgb rgb = Rgb.toRgb(shapeConfig.getDefaultBgColor());
 			Color bg = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
@@ -589,7 +589,7 @@ public class DiagramFactory {
 		return background;
   }
 
-  private Color defaultBorderColor(Color color, JsShapeConfig shapeConfig) {
+  public static Color defaultBorderColor(Color color, JsShapeConfig shapeConfig) {
 		if (shapeConfig != null && shapeConfig.isDefaultBorderColor()) {
 			Rgb rgb = Rgb.toRgb(shapeConfig.getDefaultBorderColor());
 			Color c = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
