@@ -47,6 +47,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	// current handler gets events after mouse down if registered
 	private MouseDiagramHandler currentMouseHandler;
 	private IBirdsEyeView birdsEyeView;
+	private boolean itsDoubleTap;
 //	private MouseDiagramHandler connectionModeMouseHandler;
 
 	public MouseDiagramHandlerManager(ISurfaceHandler surface, List<Diagram> diagrams, boolean editable, 
@@ -85,15 +86,22 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		sketchDiagramAreaHandler = new SketchDiagramAreaHandler(surface, modeManager);
 		new LinkHandler(surface);
 		quickConnectionHandler = new QuickConnectionHandler(surface);
-		
-		if (!UiUtils.isIE()) {
-			handleDoubleTap(surface.getElement(), this);
-		} else {
-			// IE looses all mouse events if Hammer is used for double click
-			// so handling through jquery on, this solution will not work on
-			// Microsoft Surface
-			handleMouseDoubleClick(surface.getElement(), this);
-		}
+
+		// legacy code uses hammer for double tap and double click, but has performance problems		
+		// if (!UiUtils.isIE()) {
+		// 	handleDoubleTap(surface.getElement(), this);
+		// } else {
+		// 	IE looses all mouse events if Hammer is used for double click
+		// 	so handling through jquery on, this solution will not work on
+		// 	Microsoft Surface
+		// 	handleMouseDoubleClick(surface.getElement(), this);
+		// }
+
+		// new code handles both separately and doesn't use hammer
+		// due to performance problems
+		// always handling both double tap and double click
+		handleDoubleTap(surface.getElement(), this);
+		handleMouseDoubleClick(surface.getElement(), this);
 
 		if (!surface.isLibrary()) {
 			handleOnline(this);
@@ -309,6 +317,13 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	}
 
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
+		if (itsDoubleTap) {
+			// double tap is handling this currently
+			// reset the state
+			itsDoubleTap = false;
+			return;
+		}
+
 		try {
 			// logger.start("onMouseUp");
 			// logger.debug("onMouseUp...");
@@ -368,7 +383,13 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
   }
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
-		onMouseUp(sender, point, 0);
+  	if (!itsDoubleTap) {
+  		// double tap is handling touch end already
+	  	net.sevenscales.domain.utils.Debug.log("onTouchEnd", itsDoubleTap);
+			onMouseUp(sender, point, 0);
+  	}
+  	// reset the state
+  	itsDoubleTap = true;
   }
 
 	public void makeDraggable(Diagram diagram) {
@@ -479,15 +500,48 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		return lassoSelectionHandler.isLassoing();
 	}
 
-	private native void handleDoubleTap(Element e, MouseDiagramHandlerManager me)/*-{
-		$wnd.Hammer(e, {preventDefault: true}).on('doubletap', function(event) {
-			// console.log('handleDoubleTap', event)
-			if (event.gesture.center.clientX && event.gesture.center.clientY) {
-				event.stopPropagation()
-				event.preventDefault()
+	private native void handleDoubleTap(Element elem, MouseDiagramHandlerManager me)/*-{
+		// Hammer has performance problems on big boards
+		// e.g. Macbook Air doesn't fire double tap at all
+		// user reported bug
 
-				me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZLjava/lang/String;)(event.gesture.center.clientX, event.gesture.center.clientY, event.gesture.srcEvent.shiftKey, event.target.id);
-			}
+		// $wnd.Hammer(elem, {
+		// 	preventDefault: true
+		// }).on('doubletap', function(event) {
+		// 	// console.log('handleDoubleTap', event)
+		// 	if (event.gesture.center.clientX && event.gesture.center.clientY) {
+		// 		event.stopPropagation()
+		// 		event.preventDefault()
+		// 		console.info('doubletap...')
+
+		// 		me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZLjava/lang/String;)(event.gesture.center.clientX, event.gesture.center.clientY, event.gesture.srcEvent.shiftKey, event.target.id);
+		// 	}
+		// })
+
+		var tapped = null
+
+		$wnd.$(elem).on("touchstart",function(e){
+	    if (!tapped){ //if tap is not set, set up single tap
+	      tapped = setTimeout(function(){
+	        tapped = null
+	        //insert things you want to do when single tapped
+	      }, 300)   //wait 300ms then run single click code
+	    } else {    //tapped within 300ms of last tap. double tap
+	      clearTimeout(tapped) //stop single tap callback
+	      tapped = null
+	      //insert things you want to do when double tapped
+	      // console.log('double tap', e)
+
+				var touches = e.originalEvent.touches
+				if (touches && touches.length > 0) {
+		      me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZLjava/lang/String;)(touches[0].clientX, touches[0].clientY, false, e.target.id);
+				} else {
+					console.error("Failed to get touch point on double tap", e)
+				}
+
+	    }
+	    e.preventDefault()
+	    e.stopPropagation()
 		})
 	}-*/;
 
@@ -502,6 +556,8 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 
 	private void doubleTap(int x, int y, boolean shiftKey, String targetId) {
 		logger.debug("doubleTap...");
+		itsDoubleTap = true;
+		net.sevenscales.domain.utils.Debug.log("doubleTap", itsDoubleTap);
 		// cannot check connect mode, or will not show property editor
 		handleDoubleTap(x, y, shiftKey, targetId);
 	}
