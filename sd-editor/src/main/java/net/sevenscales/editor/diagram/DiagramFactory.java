@@ -422,12 +422,19 @@ public class DiagramFactory {
 			result = _createGenericElement(shapeGroup.elementType, x, y, (int) cwidth, (int) cheight, initialProperties, background, borderColor, color, defaultText);
 		}
 
-		if (shapeGroup == null && Tools.isSketchMode()) {
+		if (result == null && shapeGroup == null && Tools.isSketchMode()) {
 			// exception cases that are not drawn using plain svg
 			LibraryShapes.LibraryShape ls = LibraryShapes.getDefaultShape(elementType);
 			if (ls != null) {
 
-				if (width == 0 || height == 0) {
+				if (shapeConfig != null && shapeConfig.isTargetSizeDefined()) {
+					// menu can have own configuration
+					width = (int) shapeConfig.getTargetWidth();
+					height = (int) shapeConfig.getTargetHeight();
+				}
+
+
+				if (width == null || height == null) {
 					// if width or height is not set then get size from svg shape directly 
 					width = ls.width;
 					height = ls.height;
