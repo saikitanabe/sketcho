@@ -550,14 +550,22 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			e.stopPropagation()
 			e.preventDefault()
 
-			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZLjava/lang/String;)(e.clientX, e.clientY, false, e.target.id);
+			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleClick(IIZLjava/lang/String;)(e.clientX, e.clientY, false, e.target.id);
 		})
 	}-*/;
 
 	private void doubleTap(int x, int y, boolean shiftKey, String targetId) {
 		logger.debug("doubleTap...");
 		itsDoubleTap = true;
-		net.sevenscales.domain.utils.Debug.log("doubleTap", itsDoubleTap);
+		// cannot check connect mode, or will not show property editor
+		handleDoubleTap(x, y, shiftKey, targetId);
+	}
+
+	/**
+	* doubleClick should not prevent next mouse up! Thats' why separated.
+	*/
+	private void doubleClick(int x, int y, boolean shiftKey, String targetId) {
+		logger.debug("doubleClick...");
 		// cannot check connect mode, or will not show property editor
 		handleDoubleTap(x, y, shiftKey, targetId);
 	}
