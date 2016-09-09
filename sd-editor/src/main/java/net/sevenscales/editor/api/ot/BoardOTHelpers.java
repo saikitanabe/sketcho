@@ -148,6 +148,8 @@ public class BoardOTHelpers {
 		boolean slideDeleted = false;
 		for (Diagram d : diagrams) {
 			d.removeFromParent();
+			diagramRealTimeDelete(d);
+
 			if (ElementType.SLIDE.getValue().equals(d.getDiagramItem().getType())) {
 				slideDeleted = true;
 			}
@@ -319,8 +321,14 @@ public class BoardOTHelpers {
 	private void diagramRealTimeModified(Diagram diagram) {
 		_diagramRealTimeModified(diagram.getDiagramItem());
 	}
+	private void diagramRealTimeDelete(Diagram diagram) {
+		_diagramRealTimeDelete(diagram.getDiagramItem());
+	}
 	private native void _diagramRealTimeModified(IDiagramItemRO item)/*-{
 		$wnd.globalStreams.dataItemModifyStream.push(item)
+	}-*/;
+	private native void _diagramRealTimeDelete(IDiagramItemRO item)/*-{
+		$wnd.globalStreams.dataItemDeleteStream.push(item)
 	}-*/;
 
 	private void applyThemeColors(Diagram diagram) {
