@@ -9,6 +9,7 @@ import net.sevenscales.editor.gfx.base.GraphicsEventBase.Type;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.Event;
 
 public abstract class GraphicsBase implements IGraphics {
 	private static final SLogger logger = SLogger.createLogger(GraphicsBase.class); 
@@ -73,6 +74,11 @@ public abstract class GraphicsBase implements IGraphics {
 	}
 
 	protected void onMouseDown(GraphicsEvent event, int keys) {
+		if (event.getButton() != Event.BUTTON_LEFT) {
+			// handle only left button events
+			return;
+		}
+
 		eventHandlerCollection.fireOnMouseDown(this, event, keys);
 		ArrayList<GraphicsMouseDownHandler> handlers = (ArrayList<GraphicsMouseDownHandler>) map
 				.get(GraphicsMouseDownEvent.getType());
