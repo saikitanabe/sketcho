@@ -31,6 +31,20 @@ public class JsShapeConfig extends JavaScriptObject {
 		return this.dt
 	}-*/;
 
+	public final native String getDefaultBgColor()/*-{
+		return this.dbc
+	}-*/;
+	public final native boolean isDefaultBgColor()/*-{
+		return this.dbc
+	}-*/;
+
+	public final native String getDefaultBorderColor()/*-{
+		return this.dboc
+	}-*/;
+	public final native boolean isDefaultBorderColor()/*-{
+		return this.dboc
+	}-*/;
+
 
 	public final native boolean isTargetSizeDefined()/*-{
 		return this.tw && this.th

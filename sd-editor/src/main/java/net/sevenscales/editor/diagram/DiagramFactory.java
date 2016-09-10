@@ -22,6 +22,7 @@ import net.sevenscales.editor.content.utils.DiagramElementFactory;
 import net.sevenscales.editor.diagram.shape.RectShape;
 import net.sevenscales.editor.utils.DiagramItemConfiguration;
 import net.sevenscales.editor.content.utils.ShapeParser;
+import net.sevenscales.editor.content.utils.Rgb;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ShapeProperty;
 
@@ -134,6 +135,19 @@ public class DiagramFactory {
 		return result;
 	}
 
+	public Diagram createDiagram(
+		String elementType,
+		JsShapeConfig shapeConfig, 
+		int x,
+		int y,
+		Integer width,
+		Integer height,
+		int initialProperties
+	) {
+		ElementColor current = selectColor();
+		return createDiagram(elementType, shapeConfig, /*imageInfo*/ null, x, y, width, height, initialProperties, current);
+	}
+
 	public Diagram createDiagram(String elementType, JsShapeConfig shapeConfig, ImageInfo imageInfo, int x, int y, Integer width, Integer height, int initialProperties) {
 		ElementColor current = selectColor();
 		return createDiagram(elementType, shapeConfig, imageInfo, x, y, width, height, initialProperties, current);
@@ -165,6 +179,10 @@ public class DiagramFactory {
 		if (shapeConfig != null && shapeConfig.isDefaultTextDefined()) {
 			defaultText = shapeConfig.getDefaultText();
 		}
+
+		background = DiagramFactory.defaultBgColor(background, shapeConfig);
+		borderColor = DiagramFactory.defaultBorderColor(borderColor, shapeConfig);
+
 		if (width == null && height == null && shapeConfig.isTargetSizeDefined()) {
 			width = (int) shapeConfig.getTargetWidth();
 			height = (int) shapeConfig.getTargetHeight();
@@ -373,6 +391,9 @@ public class DiagramFactory {
 				defaultText = shapeConfig.getDefaultText();
 			}
 
+			background = DiagramFactory.defaultBgColor(background, shapeConfig);
+			borderColor = DiagramFactory.defaultBorderColor(borderColor, shapeConfig);
+
 			if (cwidth == 0 || cheight == 0) {
 				// if width or height is not set then get size from svg shape directly 
 				cwidth = shapeGroup.width;
@@ -401,12 +422,19 @@ public class DiagramFactory {
 			result = _createGenericElement(shapeGroup.elementType, x, y, (int) cwidth, (int) cheight, initialProperties, background, borderColor, color, defaultText);
 		}
 
-		if (shapeGroup == null && Tools.isSketchMode()) {
+		if (result == null && shapeGroup == null && Tools.isSketchMode()) {
 			// exception cases that are not drawn using plain svg
 			LibraryShapes.LibraryShape ls = LibraryShapes.getDefaultShape(elementType);
 			if (ls != null) {
 
-				if (width == 0 || height == 0) {
+				if (shapeConfig != null && shapeConfig.isTargetSizeDefined()) {
+					// menu can have own configuration
+					width = (int) shapeConfig.getTargetWidth();
+					height = (int) shapeConfig.getTargetHeight();
+				}
+
+
+				if (width == null || height == null) {
 					// if width or height is not set then get size from svg shape directly 
 					width = ls.width;
 					height = ls.height;
@@ -556,6 +584,26 @@ public class DiagramFactory {
   private void shapeSavedToBoard(JsShape shape, IBoardSaved callback) {
 		ShapeCache.addShape(shape);
 		callback.saved(shape.getElementType());
+  }
+
+  public static Color defaultBgColor(Color background, JsShapeConfig shapeConfig) {
+		if (background.opacity == 0 && shapeConfig != null && shapeConfig.isDefaultBgColor()) {
+			Rgb rgb = Rgb.toRgb(shapeConfig.getDefaultBgColor());
+			Color bg = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
+			background = bg;
+		}
+
+		return background;
+  }
+
+  public static Color defaultBorderColor(Color color, JsShapeConfig shapeConfig) {
+		if (shapeConfig != null && shapeConfig.isDefaultBorderColor()) {
+			Rgb rgb = Rgb.toRgb(shapeConfig.getDefaultBorderColor());
+			Color c = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
+			color = c;
+		}
+
+		return color;
   }
 
 

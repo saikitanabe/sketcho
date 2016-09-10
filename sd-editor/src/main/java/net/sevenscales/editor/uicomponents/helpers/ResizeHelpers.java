@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramDragHandler;
@@ -128,8 +129,22 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 //    shapes.add(line6);
     
 //    setShape(parent.getLeft(), parent.getTop(), parent.getWidth(), parent.getHeight());
+		listen(this);
 	}
-	
+
+	private native void listen(ResizeHelpers me)/*-{
+		$wnd.globalStreams.dataItemDeleteStream.onValue(function(dataItem) {
+			me.@net.sevenscales.editor.uicomponents.helpers.ResizeHelpers::onItemRealTimeDelete(Lnet/sevenscales/domain/IDiagramItemRO;)(dataItem)
+		})
+	}-*/;
+
+	private void onItemRealTimeDelete(IDiagramItemRO item) {
+		if (parent != null && parent.getDiagramItem().getClientId().equals(item.getClientId())) {
+			parent = null;
+			hide();
+		}
+	}
+
 	private void resizeDragHandling() {
 		surface.getMouseDiagramManager().addDragHandler(new DiagramDragHandler() {
 			@Override

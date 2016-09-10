@@ -23,6 +23,8 @@ import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
 import net.sevenscales.editor.api.event.ChangeTextSizeEventHandler;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEvent;
+import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
+import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.api.ActionType;
@@ -229,7 +231,19 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 				}
 			}
 		});
-				
+
+		editorContext.getEventBus().addHandler(BoardRemoveDiagramsEvent.TYPE, new BoardRemoveDiagramsEventHandler() {
+			@Override
+			public void on(BoardRemoveDiagramsEvent event) {
+				for (Diagram d : event.getRemoved()) {
+					if (d == selectedDiagram) {
+						closeIfOpen();
+						selectedDiagram = null;
+					}
+				}
+			}
+		});
+
 		editorContext.getEventBus().addHandler(ShowDiagramPropertyTextEditorEvent.TYPE, showDiagramText);
 
 		handleEditorCloseStream(this);
@@ -302,6 +316,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		$wnd.globalStreams.dataItemModifyStream.onValue(function(dataItem) {
 			me.@net.sevenscales.editor.api.Properties::onItemRealTimeModify(Lnet/sevenscales/domain/IDiagramItemRO;)(dataItem)
 		})
+
+		$wnd.globalStreams.dataItemDeleteStream.onValue(function(dataItem) {
+			me.@net.sevenscales.editor.api.Properties::onItemRealTimeDelete(Lnet/sevenscales/domain/IDiagramItemRO;)(dataItem)
+		})
 	}-*/;
 
 	private void onItemRealTimeModify(IDiagramItemRO item) {
@@ -310,6 +328,13 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			setTextAreaText(text);
 			// this is state in the server, so kept as sent
 			buffer.text = text;
+		}
+	}
+
+	private void onItemRealTimeDelete(IDiagramItemRO item) {
+		if (selectedDiagram != null && item.getClientId().equals(selectedDiagram.getDiagramItem().getClientId())) {
+			closeIfOpen();
+			selectedDiagram = null;
 		}
 	}
 
@@ -371,6 +396,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	
 	private void hide() {
 		popup.hide();
+		selectedDiagram = null;
 	}
 		
 	public void addSurface(ISurfaceHandler surfaceHandler, boolean modifiable) {

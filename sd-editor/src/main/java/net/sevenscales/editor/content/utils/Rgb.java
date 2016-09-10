@@ -20,6 +20,30 @@ public class Rgb {
 		a = a;
 	}
 
+	public static Rgb toRgb(String hexColor) {
+		if (hexColor.equals("transparent")) {
+			return new Rgb(0xff, 0xff, 0xff);
+		}
+		hexColor = parserHexColor(hexColor);
+		int r = Integer.valueOf(hexColor.substring(0, 2), 16);
+		int g = Integer.valueOf(hexColor.substring(2, 4), 16);
+		int b = Integer.valueOf(hexColor.substring(4, 6), 16);
+
+		if (hexColor.length() == 8) {
+			int a = Integer.valueOf(hexColor.substring(6, 8), 16);
+			return new Rgb(r, g, b, a);
+		}
+
+		return new Rgb(r, g, b);
+	}
+
+	public static String parserHexColor(String color) {
+		if (color.startsWith("#")) {
+			color = color.substring(1);
+		}
+		return color;
+	}
+
 	public static String makeRgba(int r, int g, int b, double a) {
 		return "rgba(" + r + "," + g + "," + b + "," + a + ")";
 	}

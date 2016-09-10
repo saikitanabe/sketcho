@@ -40,7 +40,8 @@ public class SvgPath extends SvgLine {
 
     params.put("%stroke%", rgb(String.valueOf(path.getStrokeColor().toRgb())));
     
-    // params.put("%style%", path.getStyle());
+    // default style that has been defined in inscape svg file data-hint-style
+    params.put("%default-style%", path.getStyle());
 
     
     String fill = "none";
@@ -62,11 +63,11 @@ public class SvgPath extends SvgLine {
     }
 
 
-    String template = "<path d='%d%' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width%;%vectoreffect%' />";
+    String template = "<path d='%d%' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width%;%vectoreffect%;%default-style%' />";
 
     if (path.getStrokeStyle() != null && path.getStrokeStyle().equals(ILine.DASH)) {
-      template = "<path d='%d%' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width%;stroke-dasharray:%style%;%vectoreffect%' />";
-      params.put("%style%", "4,3");
+      template = "<path d='%d%' style='fill:%fill%;stroke:%stroke%;stroke-width:%stroke-width%;stroke-dasharray:%stroke-dasharray%;%vectoreffect%;%default-style%' />";
+      params.put("%stroke-dasharray%", "4,3");
     }
 
     // for now vector-effect is disabled

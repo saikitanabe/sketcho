@@ -96,12 +96,30 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
 		public void on(PotentialOnChangedEvent event) {
 //			Diagram diagram = event.getDiagrams()[0];
 //			System.out.println("PotentialOnChangedEvent number of elements: " + event.getDiagrams().length + " " + event.getDiagrams());
+			removeDeletedDiagrams(event.getDiagrams());
+
 			if (event.getDiagrams().size() > 0) {
 				// check that diagrams are not null
 				sendOperation(boardName, clientIdentifier, "modify", event.getDiagrams());
 			}
 		}
 	};
+
+	/**
+	* Some shapes might have been removed on realtime and this is the last
+	* block before going to make any changes on client model.
+	* To prevent crash and client reload.
+	*/
+	private void removeDeletedDiagrams(List<Diagram> diagrams) {
+		for (int i = diagrams.size() - 1; i >= 0; --i) {
+			Diagram d = diagrams.get(i);
+
+			if (d.isRemoved()) {
+				// remove from end so doesn't affect next items
+				diagrams.remove(i);
+			}
+		}
+	}
 	
 	private DiagramElementAddedEventHandler addDiagramElementHandler = new DiagramElementAddedEventHandler() {
 		@Override

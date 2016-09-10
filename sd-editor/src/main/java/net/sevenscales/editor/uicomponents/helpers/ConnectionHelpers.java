@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesEndedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesEndedEventHandler;
@@ -158,6 +159,21 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 			public void onResize(Diagram sender, Point diff) {
 			}
 		});
+
+		listen(this);
+	}
+
+	private native void listen(ConnectionHelpers me)/*-{
+		$wnd.globalStreams.dataItemDeleteStream.onValue(function(dataItem) {
+			me.@net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers::onItemRealTimeDelete(Lnet/sevenscales/domain/IDiagramItemRO;)(dataItem)
+		})
+	}-*/;
+
+	private void onItemRealTimeDelete(IDiagramItemRO item) {
+		if (parent != null && parent.getDiagramItem().getClientId().equals(item.getClientId())) {
+			parent = null;
+			hide();
+		}
 	}
 
 	private static IConnectionHelpers emptyConnectionHelpers = new IConnectionHelpers() {

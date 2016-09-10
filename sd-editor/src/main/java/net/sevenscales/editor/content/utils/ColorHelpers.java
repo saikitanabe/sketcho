@@ -21,12 +21,12 @@ public class ColorHelpers {
 		if (color.equals("transparent")) {
 			return new Color(0x55, 0x55, 0x55, 1);
 		}
-		Rgb rgb = toRgb(color);
+		Rgb rgb = Rgb.toRgb(color);
 		return borderColorByBackground(rgb.red, rgb.green, rgb.blue);
 	}
 	
 	public static String createOppositeColor(String color) {
-		Rgb rgb = toRgb(color);
+		Rgb rgb = Rgb.toRgb(color);
 		String result = "#444444";
 		if (!"transparent".equals(color) && isRgbBlack(rgb.toString())) {
 			result = "#dddddd";
@@ -42,18 +42,6 @@ public class ColorHelpers {
 	public static native boolean isRgbBlack(int r, int g, int b)/*-{
 		return (((r + g + b) / 3) > 128) ? true : false;
 	}-*/;
-
-
-	public static Rgb toRgb(String hexColor) {
-		if (hexColor.equals("transparent")) {
-			return new Rgb(0xff, 0xff, 0xff);
-		}
-		hexColor = parserHexColor(hexColor);
-		int r = Integer.valueOf(hexColor.substring(0, 2), 16);
-		int g = Integer.valueOf(hexColor.substring(2, 4), 16);
-		int b = Integer.valueOf(hexColor.substring(4, 6), 16);
-		return new Rgb(r, g, b);
-	}
 
 	public static Color borderColorByBackground(int red, int green, int blue) {
 		JavaScriptObject hsv = rgbToHsv(red, green, blue);
@@ -183,12 +171,5 @@ public class ColorHelpers {
 		}
 		return 0;
 	}-*/;
-
-	public static String parserHexColor(String color) {
-		if (color.startsWith("#")) {
-			color = color.substring(1);
-		}
-		return color;
-	}
 
 }

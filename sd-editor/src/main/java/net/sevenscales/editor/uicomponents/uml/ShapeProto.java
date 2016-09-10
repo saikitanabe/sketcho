@@ -1,24 +1,36 @@
 package net.sevenscales.editor.uicomponents.uml;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import com.google.gwt.core.client.JsArray;
 
 
 public class ShapeProto {
 	public JsArray<Shapes.JsPathData> pathDatas;
 	public String style;
+	public String styleLib;
 	private boolean noscaling;
 	private double width;
+	public Map<String, String> defaultData;
 
 	ShapeProto(String path) {
-		this(path, null, false);
+		this(path, null, null, false, null);
 	}
 
-	ShapeProto(String path, String style) {
-		this(path, style, false);
+	ShapeProto(String path, String style, String styleLib) {
+		this(path, style, styleLib, false, null);
 	}
 
-	ShapeProto(String path, String style, boolean noscaling) {
+	ShapeProto(String path, String style, String styleLib, boolean noscaling) {
+		this(path, style, styleLib, noscaling, null);
+	}
+
+	// defaultData is not used at the moment, but it is once tested
+	ShapeProto(String path, String style, String styleLib, boolean noscaling, String defaultData) {
 		this.style = style;
+		this.styleLib = styleLib;
+		importDefaultData(defaultData);
 		this.noscaling = noscaling;
 		pathDatas = parse(path);
 
@@ -72,4 +84,26 @@ public class ShapeProto {
 			// logger.debug("toPath factorX {}, factorY {} {}", factorX, factorY, result);
 		return result;
 	}
+
+	public void importDefaultData(String defaultData) {
+		if (defaultData != null && defaultData.length() > 0) {
+			parseDefaultData(defaultData);
+		}
+	}
+
+	// parses format var1:val1;var2:val2; and makes a map out of it
+	private void parseDefaultData(String dd) {
+		if (this.defaultData == null) {
+			this.defaultData = new HashMap<String, String>();
+		}
+
+		String[] pairs = dd.split(";");
+		for (int i = 0; i < pairs.length; ++i) {
+			String[] pair = pairs[i].split(":");
+			if (pair.length == 2) {
+				this.defaultData.put(pair[0], pair[1]);
+			}
+		}
+	}
+
 }

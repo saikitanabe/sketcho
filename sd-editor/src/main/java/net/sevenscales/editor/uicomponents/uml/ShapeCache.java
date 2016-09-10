@@ -150,7 +150,7 @@ public class ShapeCache {
 		for (int i = 0; i < shape.getShape().length(); ++i) {
 			JsPath path = shape.getShape().get(i);
 			// logger.debug("shape {}", shape.getElementType());
-			protos.add(new ShapeProto(path.getPath(), path.getStyle(), path.getNoScaling()));
+			protos.add(new ShapeProto(path.getPath(), path.getStyle(), path.getStyleLib(), path.getNoScaling()));
 		}
 		ShapeProto[] prots = new ShapeProto[protos.size()];
 		protos.toArray(prots);

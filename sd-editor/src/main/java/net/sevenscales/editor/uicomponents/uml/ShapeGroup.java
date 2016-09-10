@@ -62,6 +62,11 @@ public class ShapeGroup {
 			JSONObject path = new JSONObject();
 			path.put("p", new JSONString(sp.toPath(factorX, factorY, width)));
 			path.put("s", new JSONString(sp.style));
+			
+			if (sp.styleLib != null) {
+				path.put("sl", new JSONString(sp.styleLib));
+			}
+
 			JsPath p = path.getJavaScriptObject().cast();
 			paths.push(p);
 		}
@@ -69,6 +74,10 @@ public class ShapeGroup {
 		result.put("s", new JSONArray(paths));
 		result.put("w", new JSONNumber(width));
 		result.put("h", new JSONNumber(height));
+
+		if (config != null) {
+			result.put("c", new JSONObject(config));
+		}
 
 		return result.getJavaScriptObject().cast();
 	}
