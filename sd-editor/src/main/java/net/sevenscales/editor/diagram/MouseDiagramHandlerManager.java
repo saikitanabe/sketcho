@@ -533,15 +533,12 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	      // console.log('double tap', e)
 
 				var touches = e.originalEvent.touches
-				if (touches && touches.length > 0) {
+				if (touches && touches.length == 1) {
 		      me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZLjava/lang/String;)(touches[0].clientX, touches[0].clientY, false, e.target.id);
-				} else {
-					console.error("Failed to get touch point on double tap", e)
 				}
-
 	    }
+
 	    e.preventDefault()
-	    e.stopPropagation()
 		})
 	}-*/;
 
