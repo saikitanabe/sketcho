@@ -744,6 +744,17 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     );
   }
 
+  public void selectShapes(JsArrayString shapeIds) {
+    DiagramSearch search = surface.createDiagramSearch();
+    for (int i = 0; i < shapeIds.length(); ++i) {
+      String shapeId = shapeIds.get(i);
+      Diagram d = search.findByClientId(shapeId);
+      if (d != null) {
+        d.select();
+      }
+    }
+  }
+
   public void focusShapes(JsArrayString shapeIds, boolean select) {
     if (select) {
       unselectAll();
