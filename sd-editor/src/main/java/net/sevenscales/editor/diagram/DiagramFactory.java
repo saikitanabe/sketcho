@@ -530,7 +530,10 @@ public class DiagramFactory {
 		List<String> result = new ArrayList<String>();
 
 		for (IDiagramItemRO item : items) {
-			if (!ShapeCache.hasShape(item.getType())) {
+			if (!ElementType.RELATIONSHIP.getValue().equals(item.getType()) 
+					&& !ElementType.CHILD_TEXT.getValue().equals(item.getType())
+					&& !ElementType.FREEHAND2.getValue().equals(item.getType())
+					&& !ShapeCache.hasShape(item.getType())) {
 				result.add(item.getType());
 			}
 		}
