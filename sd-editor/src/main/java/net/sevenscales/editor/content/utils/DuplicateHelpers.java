@@ -119,9 +119,12 @@ public class DuplicateHelpers {
 		}
 	}
 
-	public void paste(int x, int y, List<? extends IDiagramItemRO> items, BoardDocument boardDocument, boolean editable, boolean asSelected) {
+	public Map<String, String> paste(int x, int y, List<? extends IDiagramItemRO> items, BoardDocument boardDocument, boolean editable, boolean asSelected) {
 		// TODO check if editable, should be checked already before copy!!
 		// TODO what do to with comments!! is it allowed to copy those!!!???
+
+		Map<String, String> result = null;
+
 		if (editable) {
 			logger.debug("paste... {}", items);
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
@@ -130,7 +133,10 @@ public class DuplicateHelpers {
 
 			addItemsToTheBoard(state, asSelected);
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
+
+			result = state.clientIdMapping;
 		}
+		return result;
 	}
 
 	private State copyAndMapClientIds(int x, int y, List<? extends IDiagramItemRO> items, BoardDocument boardDocument) {
