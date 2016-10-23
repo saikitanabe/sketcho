@@ -35,7 +35,7 @@ import java.util.logging.Level;
 public class OperationQueue {
   private static SLogger logger = SLogger.createLogger(OperationQueue.class);
 
-  private static long SEND_RETRY_TIMEOUT = 15000;
+  private static long SEND_RETRY_TIMEOUT = 7000;
   
 	private LinkedList<SendOperation> queuedOperations;
 	private Acknowledged acknowledged;

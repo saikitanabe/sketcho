@@ -23,8 +23,8 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.api.event.UndoEvent;
-// import net.sevenscales.editor.api.event.UnselectAllEvent;
-// import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
+import net.sevenscales.editor.api.event.UnselectAllEvent;
+import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.api.event.SelectionEvent;
 import net.sevenscales.editor.api.event.SelectionEventHandler;
 import net.sevenscales.editor.api.LibraryShapes;
@@ -83,14 +83,31 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			}
 		});
 
-		// surface.getEditorContext().getEventBus().addHandler(UnselectAllEvent.TYPE, new UnselecteAllEventHandler() {
-		// 	@Override
-		// 	public void onUnselectAll(UnselectAllEvent event) {
-		// 		logger.debug("onUnselectAll...");
-		// unselect comes always :(
-		// 		previouslySelected = null;
-		// 	}
-		// });
+		surface.getEditorContext().getEventBus().addHandler(UnselectAllEvent.TYPE, new UnselecteAllEventHandler() {
+			@Override
+			public void onUnselectAll(UnselectAllEvent event) {
+				logger.debug("onUnselectAll...");
+				// unselect comes always :(
+				// previouslySelected = null;
+
+				Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
+					public boolean execute() {
+						// logger.debug("up 500...");
+						if (itWasDoubleTap) {
+							// keep selection
+							itWasDoubleTap = false;
+						} else {
+							// remove previous selection after the timeout
+							previouslySelected = null;
+							// between unselect and timeout there could have been a selection
+							// check that, if no selection, then previousSelected stays null
+							checkSelection();
+						}
+						return false;
+					}
+				}, 450); // needs to be fast enought or otherwise, might not even select before double click				
+			}
+		});
 
 		// surface.getEditorContext().getEventBus().addHandler(SwitchElementToEvent.TYPE, new SwitchElementToEventHandler() {
 		// 	@Override
@@ -113,9 +130,12 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		if (selected.size() == 1) {
 			previouslySelected = selected.iterator().next();
 			notAddedFromLibrary = !surface.isProxyDragAdding();
-		} else {
+		} else if (selected.size() > 1) {
 			previouslySelected = null;
 		}
+		// else {
+		// 	previouslySelected = null;
+		// }
 	}
 
   private native void handleStreams(QuickConnectionHandler me)/*-{
@@ -162,18 +182,21 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 			// cancelLastOperationIfLastQuickConnection();
 			// checkSelection();
 
-			Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
-				public boolean execute() {
-					// logger.debug("up 500...");
-					if (itWasDoubleTap) {
-						// keep selection
-						itWasDoubleTap = false;
-					} else {
-						checkSelection();
-					}
-					return false;
-				}
-			}, 200); // needs to be fast enought or otherwise, might not even select before double click
+		checkSelection();
+
+		// Scheduler.get().scheduleFixedDelay(new Scheduler.RepeatingCommand() {
+		// 	public boolean execute() {
+		// 		// logger.debug("up 500...");
+		// 		if (itWasDoubleTap) {
+		// 			// keep selection
+		// 			itWasDoubleTap = false;
+		// 		} else {
+		// 			// checkSelection();
+		// 			previouslySelected = null;
+		// 		}
+		// 		return false;
+		// 	}
+		// }, 450); // needs to be fast enought or otherwise, might not even select before double click
 		// }
 	}
 

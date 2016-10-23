@@ -303,6 +303,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     // if (!@net.sevenscales.editor.diagram.utils.UiUtils::isFirefox()()) {
       // webkit browsers handles properly  a href in svg
       _setAttributeNS(alink, xlinkns, "xlink:href", link)
+
+    if (typeof $wnd.linkOutside === 'function' &&
+        $wnd.linkOutside(link)) {
+      _setAttributeNS(alink, null, "target", "_blank")
+      _setAttributeNS(alink, null, "rel", "noreferrer")
+    }
     // } else {
       // Firefox opens same page when pressing cmd+click on different tab
       // NOTE doesn't work, still opens also same page on different tab
