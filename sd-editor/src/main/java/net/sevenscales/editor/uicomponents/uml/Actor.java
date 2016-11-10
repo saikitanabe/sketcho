@@ -241,6 +241,20 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 	}
 	
 	@Override
+	public int getLeftWithText() {
+		int twidth = (int) textUtil.getTextWidth();
+		int width = getWidth();
+		if (twidth > width) {
+			return getLeftText();
+		}
+
+		return getLeft();
+	}
+	private int getLeftText() {
+		return (int) (getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2);
+	}
+
+	@Override
 	public int getRelativeLeft() {
 		return background.getX();
 	}
@@ -252,6 +266,15 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
 	public int getWidth() {
 		return background.getWidth();
 	}
+	@Override
+	public int getWidthWithText() {
+		int twidth = (int) textUtil.getTextWidth();
+		int width = getWidth();
+		if (twidth > width) {
+			return twidth;
+		}
+    return width;
+  }
 	@Override
 	public int getHeight() {
 		return background.getHeight();
