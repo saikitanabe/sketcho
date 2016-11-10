@@ -31,13 +31,15 @@ public class BoardDocumentTest extends TestCase {
 															 /*links*/null,
 															 /*parentId*/null));
 
-		return new BoardDocument(original1Item, "Test 1 Item Document");
+		//return new BoardDocument(original1Item, "Test 1 Item Document");
+		return null;
 	}
 	
 	private BoardDocument createNItemBaseDoc(int n) {
 		this.original1Item = TestUtils.generateDiagramItems(n);
 
-		return new BoardDocument(original1Item, "Test N Item Document");
+		//return new BoardDocument(original1Item, "Test N Item Document");
+		return null;
 	}
 	
 	public void testCopied() {

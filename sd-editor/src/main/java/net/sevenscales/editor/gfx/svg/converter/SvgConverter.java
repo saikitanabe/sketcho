@@ -338,11 +338,11 @@ public class SvgConverter {
   	  // and in the end it would come visible
       d.setReadOnly(true);
 
-    	int left = d.getLeft();
+     	int left = d.getLeftWithText();
     	if (left < outerleft) {
     		outerleft = left;
     	}
-    	int right = left + d.getWidth();
+     	int right = left + d.getWidthWithText();
     	if (right > outerright) {
     		outerright = right;
     	}

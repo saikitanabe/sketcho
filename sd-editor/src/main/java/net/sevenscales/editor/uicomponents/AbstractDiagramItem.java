@@ -1254,6 +1254,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	public final int getLeft() {
 		return getRelativeLeft() + getTransformX();
 	}
+  public int getLeftWithText() {
+    return getLeft();
+  }
 	public final int getTop() {
 		return getRelativeTop() + getTransformY();
 	}
@@ -1261,6 +1264,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	public int getWidth() {
 		return 0;
 	}
+  public int getWidthWithText() {
+    return getWidth();
+  }
 	public int getHeight() {
 		return 0;
 	}

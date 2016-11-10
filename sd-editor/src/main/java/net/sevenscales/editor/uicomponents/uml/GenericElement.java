@@ -296,9 +296,31 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		return background.getY();
 	}
 	@Override
+	public int getLeftWithText() {
+		int twidth = (int) textUtil.getTextWidth();
+		int width = getWidth();
+		if (twidth > width) {
+			return getLeftText();
+		}
+
+		return getLeft();
+	}
+	private int getLeftText() {
+		return (int) (getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2);
+	}
+	@Override
 	public int getWidth() {
 		return background.getWidth();
 	}
+	@Override
+	public int getWidthWithText() {
+		int twidth = (int) textUtil.getTextWidth();
+		int width = getWidth();
+		if (twidth > width) {
+			return twidth;
+		}
+    return width;
+  }
 	@Override
 	public int getHeight() {
 		return background.getHeight();
@@ -621,7 +643,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	@Override
 	public int getTextAreaLeft() {
   	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-			return (int) (getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2);
+			return getLeftText();
 		} else {
 			return super.getTextAreaLeft();
 		}
