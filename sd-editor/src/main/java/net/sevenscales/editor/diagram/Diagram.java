@@ -211,8 +211,10 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   */
   int getRelativeTop();
 	int getLeft();
+  int getLeftWithText();
 	int getTop();
-	int getWidth();
+  int getWidth();
+  int getWidthWithText();
 	int getHeight();
   int getHeightWithText();
   /**
