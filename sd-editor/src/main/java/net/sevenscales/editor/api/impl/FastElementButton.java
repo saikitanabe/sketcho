@@ -54,17 +54,21 @@ public class FastElementButton extends CustomClickManager {
 	
 	private void onClick(Event event) {
 		event.stopPropagation();
-		if (touchHandled) {
-			touchHandled = false;
-			clickHandled = true;
-		} else {
-			if (clickHandled) {
-				event.preventDefault();
-			} else {
-				clickHandled = false;
-				fireClick(event);
-			}
-		}
+		// if (touchHandled) {
+		// 	touchHandled = false;
+		// 	clickHandled = true;
+		// } else {
+		// 	if (clickHandled) {
+		// 		event.preventDefault();
+		// 	} else {
+		// 		clickHandled = false;
+		// 		fireClick(event);
+		// 	}
+		// }
+
+		event.preventDefault();
+		fireClick(event);
+
 	}
 	
 	private void touchStart(Event event) {
