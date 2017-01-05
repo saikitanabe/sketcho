@@ -603,6 +603,16 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			colorpopup.hide();
 		} else {
 			if (TouchHelpers.isSupportsTouch()) {
+
+				Diagram selected = selectionHandler.getOnlyOneSelected();
+				if (selected != null) {
+					colorSelections.setCurrentDiagramColor(
+						selected.getTextColor(),
+						selected.getBackgroundColorAsColor(),
+						selected.getBorderColor()
+					);
+				}
+
 				colorSelections.showHeader();
 				colorpopup.center();
 			} else {
