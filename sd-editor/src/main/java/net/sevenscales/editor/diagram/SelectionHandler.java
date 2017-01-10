@@ -82,42 +82,45 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 		tmpSelectedItems = new HashSet<Diagram>();
     tobeRemovedInCycle = new HashSet<Diagram>();
     groupSelections = new ArrayList<GroupSelection>();
-		
-		if (surface.isDeleteSupported()) {
-			surface.getEditorContext().getEventBus().addHandler(DeleteSelectedEvent.TYPE, new DeleteSelectedEventHandler() {
-				@Override
-				public void onSelection(DeleteSelectedEvent event) {
-					removeSelected();
-				}
-			});
-		}
-		
-		surface.getEditorContext().getEventBus().addHandler(EditDiagramPropertiesStartedEvent.TYPE, new EditDiagramPropertiesStartedEventHandler() {
-			@Override
-			public void on(EditDiagramPropertiesStartedEvent event) {
-				// long press will hide mouse up and current handler is not nulled.
-				// Need to listen property editor open and use that to set currentHandler to null.
-				currentHandler = null;
-			}
-		});
 
-    surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
-      public void on(FreehandModeChangedEvent event) {
-        freehandModeOn = event.isEnabled();
-        if (freehandModeOn) {
-          unselectAll();
+    if (!surface.isLibrary()) {
+      if (surface.isDeleteSupported()) {
+        surface.getEditorContext().getEventBus().addHandler(DeleteSelectedEvent.TYPE, new DeleteSelectedEventHandler() {
+          @Override
+          public void onSelection(DeleteSelectedEvent event) {
+            removeSelected();
+          }
+        });
+      }
+      
+      surface.getEditorContext().getEventBus().addHandler(EditDiagramPropertiesStartedEvent.TYPE, new EditDiagramPropertiesStartedEventHandler() {
+        @Override
+        public void on(EditDiagramPropertiesStartedEvent event) {
+          // long press will hide mouse up and current handler is not nulled.
+          // Need to listen property editor open and use that to set currentHandler to null.
+          currentHandler = null;
         }
-      }
-    });
+      });
 
-    Event.addNativePreviewHandler(new NativePreviewHandler() {
-      @Override
-      public void onPreviewNativeEvent(NativePreviewEvent event) {
-        handleBackspaceDelete(event);
-      }
-    });
+      surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
+        public void on(FreehandModeChangedEvent event) {
+          freehandModeOn = event.isEnabled();
+          if (freehandModeOn) {
+            unselectAll();
+          }
+        }
+      });
 
-    handleStreams(this);
+      Event.addNativePreviewHandler(new NativePreviewHandler() {
+        @Override
+        public void onPreviewNativeEvent(NativePreviewEvent event) {
+          handleBackspaceDelete(event);
+        }
+      });
+
+      handleStreams(this);
+    }
+		
 	}
 
   private native void handleStreams(SelectionHandler me)/*-{
