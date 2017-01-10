@@ -33,4 +33,5 @@ public interface ITextEditor {
 	void setTextAlign(String textAlign);
 	void setWidth(int width);
 	void setHeight(int height);
+	boolean isCodeMirror();
 }

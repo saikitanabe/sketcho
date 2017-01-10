@@ -626,6 +626,11 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 
 	private void setTextAreaHeight() {
+		if (codeMirror.isCodeMirror()) {
+			// code mirror manages height by it self
+			return;
+		}
+
 		if (selectedDiagram != null) {
 			if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
 				// in case dynamically resized text should use measurement panel!!!

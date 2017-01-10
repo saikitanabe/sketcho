@@ -139,4 +139,9 @@ class TextEditor extends Composite implements ITextEditor {
 	public void setHeight(int height) {
 		textArea.getElement().getStyle().setHeight(height, Style.Unit.PX);
 	}
+
+	@Override
+	public boolean isCodeMirror() {
+		return false;
+	}
 }
