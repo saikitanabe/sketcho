@@ -1,0 +1,9 @@
+{
+	"folders":
+	[
+		{
+			"path": "C:\\Users\\Saiki\\Documents\\sources\\codingarena",
+			"folder_exclude_patterns": ["target", "src\/main\/webapp\/static\/dist"],
+		}
+	]
+}
