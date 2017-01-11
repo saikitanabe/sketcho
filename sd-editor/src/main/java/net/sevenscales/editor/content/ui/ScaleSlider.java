@@ -37,7 +37,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 
 	private SimplePanel innerScaleSlider;
 	private BirdsEye birdsEye;
-	private int deltaSum;
+	private int deltaSum = 0;
 	private boolean wheel;
 	private boolean fireEvent = true;
 
@@ -127,6 +127,14 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 			// old IE support
 			var e = window.event || e;
 			var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail || -e.deltaY)))
+
+			// ST 11.1.2017: win10 firefox has smaller than 1 or bigger than -1 values
+			// make sure those are exact 1 or -1
+			if (delta < 0) {
+				delta = -1
+			} else if (delta > 0) {
+				delta = 1
+			}
 
 			me.@net.sevenscales.editor.content.ui.ScaleSlider::handlMouseWheel(I)(delta)
 		}
