@@ -11,6 +11,7 @@ import net.sevenscales.editor.api.event.SurfaceScaleEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.content.utils.EffectHelpers;
+import net.sevenscales.editor.diagram.utils.UiUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
@@ -47,7 +48,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 		
 		// just pinch is used
 		createVisibleSlider();
-		innerScaleSlider.setVisible(!TouchHelpers.isSupportsTouch());
+		innerScaleSlider.setVisible(!UiUtils.isMobile());
 		
 		surface.addTouchStartHandler(new TouchStartHandler() {
 			@Override
