@@ -11,6 +11,7 @@ import net.sevenscales.editor.api.event.SurfaceScaleEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.content.utils.EffectHelpers;
+import net.sevenscales.editor.diagram.utils.UiUtils;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
@@ -37,7 +38,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 
 	private SimplePanel innerScaleSlider;
 	private BirdsEye birdsEye;
-	private int deltaSum;
+	private int deltaSum = 0;
 	private boolean wheel;
 	private boolean fireEvent = true;
 
@@ -47,7 +48,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 		
 		// just pinch is used
 		createVisibleSlider();
-		innerScaleSlider.setVisible(!TouchHelpers.isSupportsTouch());
+		innerScaleSlider.setVisible(!UiUtils.isMobile());
 		
 		surface.addTouchStartHandler(new TouchStartHandler() {
 			@Override
@@ -127,6 +128,14 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 			// old IE support
 			var e = window.event || e;
 			var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail || -e.deltaY)))
+
+			// ST 11.1.2017: win10 firefox has smaller than 1 or bigger than -1 values
+			// make sure those are exact 1 or -1
+			if (delta < 0) {
+				delta = -1
+			} else if (delta > 0) {
+				delta = 1
+			}
 
 			me.@net.sevenscales.editor.content.ui.ScaleSlider::handlMouseWheel(I)(delta)
 		}

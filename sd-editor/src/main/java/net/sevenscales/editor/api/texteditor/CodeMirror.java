@@ -158,5 +158,9 @@ class CodeMirror extends Composite implements ITextEditor {
 	@Override
 	public void setHeight(int height) {
 	}
+	@Override
+	public boolean isCodeMirror() {
+		return true;
+	}
 
 }
