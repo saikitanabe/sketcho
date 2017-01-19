@@ -2621,6 +2621,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
                   centerEndPoint.y};
       setAnchorElementPosition(centerEndPoint.x, centerEndPoint.y, endAnchor.getAnchorElement());
       doSetShape(newpoints);
+
+      if (AnchorUtils.isClosestPathBetweenDiagrams(startAnchor, endAnchor, newpoints)) {
+        asClosestPath();
+      }
       return true;
     }
     return false;

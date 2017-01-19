@@ -5,6 +5,8 @@ import java.util.List;
 import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
+import net.sevenscales.editor.diagram.drag.Anchor;
+import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.utils.SLogger;
 
 public class AnchorUtils {
@@ -276,7 +278,7 @@ public class AnchorUtils {
     public Point end = new Point();
   }
 
-  private static int distance(int x, int y, int x1, int y1) {
+  public static int distance(int x, int y, int x1, int y1) {
     int dx = Math.abs(x - x1);
     int dy = Math.abs(y - y1);
     return (int) Math.sqrt(dx * dx + dy * dy);
@@ -304,6 +306,45 @@ public class AnchorUtils {
       result.x = left + width / 2;
     }
     return result;
+  }
+
+  /**
+  * Finds closest segment and compares to start and end end points.
+  */
+  public static boolean isClosestPathBetweenDiagrams(Anchor startAnchor, Anchor endAnchor, int[] points) {
+    boolean result = false;
+    Diagram start = null;
+    Diagram end = null;
+
+    // get 
+    if (startAnchor != null && endAnchor != null) {
+      start = startAnchor.getDiagram();
+      end = endAnchor.getDiagram();
+    }
+
+    if (start != null && end != null) {
+      ClosestSegment cs = AnchorUtils.closestSegment(
+        start.getLeft(),
+        start.getTop(),
+        start.getWidth(),
+        start.getHeight(),
+        end.getLeft(),
+        end.getTop(),
+        end.getWidth(),
+        end.getHeight());
+
+        int startx = points[0];
+        int starty = points[1];
+        int endx = points[points.length - 2];
+        int endy = points[points.length - 1];
+
+      if (cs.start.x == startx && cs.start.y == starty &&
+          cs.end.x == endx && cs.end.y == endy) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public static ClosestSegment closestSegment(int left, int top, int width, int height, int left2, int top2, int width2, int height2) {

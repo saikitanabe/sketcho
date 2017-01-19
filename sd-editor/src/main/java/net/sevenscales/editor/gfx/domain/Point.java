@@ -14,6 +14,10 @@ public class Point {
 		this.y = y;
 	}
 
+	public boolean equals(Point other) {
+		return this.x == other.x && this.y == other.y;
+	}
+
 	public native JavaScriptObject getNativePoint()/*-{
 		return {x: this.@net.sevenscales.editor.gfx.domain.Point::x, 
 		        y: this.@net.sevenscales.editor.gfx.domain.Point::y};
