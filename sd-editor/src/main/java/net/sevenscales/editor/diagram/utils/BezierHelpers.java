@@ -132,6 +132,15 @@ public class BezierHelpers {
 		return result;
 	}
 
+	public static Segment middleSegment(JsArray<Segment> segments) {
+		Segment result = null;
+		int midIndex = segments.length() / 2;
+		if (midIndex >= 0 && midIndex < segments.length()) {
+			result = segments.get(midIndex);
+		}
+		return result;
+	}
+
 	public static Segment firstSegment(JsArray<Segment> segments) {
 		Segment result = null;
 		if (segments.length() > 0) {

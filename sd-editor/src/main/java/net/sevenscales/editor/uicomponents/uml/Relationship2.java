@@ -1374,12 +1374,32 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   private ChildTextElement createChildLabel(int screenX, int screenY) {
-    ScaleHelpers.ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint(screenX, screenY, surface);
+
+    int theX = 0;
+    int theY = 0;
+
+    if (screenX == 0 && screenY == 0) {
+      // if screen point has not been defined
+      // use middle point of the relationship
+      PointDouble middle = getMiddlePoint();
+      if (middle != null) {
+        theX = (int) middle.x;
+        theY = (int) middle.y;
+      }
+    } 
+
+    if (theX == 0 && theY == 0) {
+      // translate actual screen point
+      ScaleHelpers.ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint(screenX, screenY, surface);
+      theX = stp.scaledAndTranslatedPoint.x;
+      theY = stp.scaledAndTranslatedPoint.y;
+    }
+
     // TODO 
     // - if close to middle => calculate above and center
     // - if seq diagram either of the ends, start and end closer to top => above 
     // - if two points and relative straight arrow horizontally => above relationship
-    ChildTextShape ts = new ChildTextShape(stp.scaledAndTranslatedPoint.x, stp.scaledAndTranslatedPoint.y, 100, 30);
+    ChildTextShape ts = new ChildTextShape(theX, theY, 100, 30);
     SegmentPoint sp = findClosestSegmentPointIndex(ts.rectShape.left, ts.rectShape.top);
     PointDouble point = getPoint(sp);
 
@@ -1404,6 +1424,36 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
                                           this);
     surface.addAsSelected(result, true);
     return result;
+  }
+
+  private PointDouble getMiddlePoint() {
+    // PointDouble point = BezierHelpers.bezierMiddlePoint(i, parentRelationship.getSegments());
+    // BezierHelpers.Segment midSegment = BezierHelpers.middleSegment(getSegments());
+
+    // return new PointDouble(midSegment.getPoint1().getX(), midSegment.getPoint1().getY());
+    // if odd number of points => take middle point directly
+    // int numberOfPairs = points.size() / 2;
+
+    // if (numberOfPairs % 2 == 1) {
+    //   int middIndex = numberOfPairs / 2;
+    //   if (middIndex > 0 && middIndex < points.size()) {
+    //     return new PointDouble(points.get(middIndex), points.get(middIndex) + 1);
+    //   }
+    // }
+
+    // if even number points => middle segment bezier middle
+    int size = getSegments().length();
+    BezierHelpers.Segment midSegment = BezierHelpers.middleSegment(getSegments());
+    if (midSegment == null) {
+      // could not resolve middle segment
+      return null;
+    }
+
+    if (size % 2 == 1) {
+      return BezierHelpers.bezierMiddlePoint(midSegment);
+    }
+
+    return new PointDouble(midSegment.getPoint1().getX(), midSegment.getPoint1().getY());
   }
 
   public boolean isCurved() {
@@ -2571,6 +2621,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
                   centerEndPoint.y};
       setAnchorElementPosition(centerEndPoint.x, centerEndPoint.y, endAnchor.getAnchorElement());
       doSetShape(newpoints);
+
+      if (AnchorUtils.isClosestPathBetweenDiagrams(startAnchor, endAnchor, newpoints)) {
+        asClosestPath();
+      }
       return true;
     }
     return false;

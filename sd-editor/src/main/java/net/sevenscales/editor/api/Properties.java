@@ -310,6 +310,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		$wnd.globalStreams.enterCmdShortcutStream.onValue(function() {
 			me.@net.sevenscales.editor.api.Properties::closeIfOpen()()
 		})
+
+		$wnd.globalStreams.editShapeStream.onValue(function() {
+			me.@net.sevenscales.editor.api.Properties::editOneSelected()()
+		})
 	}-*/;
 
 	private native void handleItemRealTimeModify(Properties me)/*-{
@@ -542,6 +546,15 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 					}
 				});
 			}
+		}
+	}
+
+	private void editOneSelected() {
+		Diagram selected = selectionHandler.getOnlyOneSelected();
+		if (selected != null) {
+			// selectedDiagram = selected;
+			// showEditor(selectedDiagram, selectedDiagram.getText(0, 0), 0, 0, false);
+			onDoubleClick(selected, MatrixPointJS.createScaledPoint(0, 0, 0));
 		}
 	}
 
