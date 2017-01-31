@@ -55,10 +55,11 @@ public class UiUtils {
     return safari.booleanValue();
   }
   public native static boolean _isSafari()/*-{
-    var n = $wnd.navigator,
-        dav = n.appVersion;
-    var index = Math.max(dav.indexOf('WebKit'), dav.indexOf('Safari'), 0);
-    return index > 0 ? true : false;
+    // var n = $wnd.navigator,
+    //     dav = n.appVersion;
+    // var index = Math.max(dav.indexOf('WebKit'), dav.indexOf('Safari'), 0);
+    // return index > 0 ? true : false;
+    return $wnd.navigator.userAgent.toLowerCase().indexOf('safari') > -1;
   }-*/;
 
   public static boolean isMobile() {
