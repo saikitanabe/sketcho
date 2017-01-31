@@ -14,6 +14,11 @@ import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.domain.utils.SLogger;
 
 
+/**
+* DO NOT USE any longer, using computer clipboard that browser allows to access.
+* See SketchboardClipboard
+* @deprecated
+*/
 public class Clipboard {
 	private static final SLogger logger = SLogger.createLogger(Clipboard.class);
 
