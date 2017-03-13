@@ -185,7 +185,12 @@ public class Actor extends AbstractDiagramItem implements IEventHandler, Support
   };
 
 	
-	public void setShape(int x, int y, int width, int height) {
+	public void setShape(int left, int top, int width, int height) {
+		group.setTransform(left, top);
+
+		int x = 0;
+		int y = 0;
+
     background.setShape(x, y, width, height, 0);
     head.setShape(x+width/2, y+width/5+1, width/5);
     
