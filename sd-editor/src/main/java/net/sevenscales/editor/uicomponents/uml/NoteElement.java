@@ -166,8 +166,8 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 //        left, top};
 
 
-		group.setTransform(left, top);
-		boundary.setShape(0, 0, width, height, 0);
+		// group.setTransform(left, top);
+		boundary.setShape(left, top, width, height, 0);
 		
 //		leftShadow.setShape(left - LEFT_SHADOW_LEFT, top + height - LEFT_SHADOW_HEIGHT, 50, 50);
 //		rightShadow.setShape(left + width - RIGHT_SHADOW_LEFT, top + height - RIGHT_SHADOW_HEIGHT, 50, 50);
@@ -176,7 +176,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
     
 		// tape.resetAllTransforms();
 		// tape.setShape(left + width / 2 - 15, top - 4, 30, 15, 0);
-    tape.setShape(calcShape(0, 0, width, height));
+    tape.setShape(calcShape(left, top, width, height));
     // tape.rotate(-3, getCenterX(), getLeft() + (getWidth() / 2));
     
     textUtil.setTextShape();
