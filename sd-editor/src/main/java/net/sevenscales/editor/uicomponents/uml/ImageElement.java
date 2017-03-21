@@ -61,6 +61,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 	private Point coords = new Point();
   private IRectangle background;
   private IGroup group;
+  private IGroup subgroup;
   private IImage image;
   private Image imageLoader;
   private boolean loaded;
@@ -73,6 +74,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
     fetchSignedUrlIfMissing();
 
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
+    subgroup = IShapeFactory.Util.factory(editable).createGroup(group);    
     // group.setAttribute("cursor", "default");
 
     createImage();
@@ -99,7 +101,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 	}
 
   private void createImage() {
-    image = IShapeFactory.Util.factory(true).createImage(group, 
+    image = IShapeFactory.Util.factory(true).createImage(subgroup, 
       shape.rectShape.left, 
       shape.rectShape.top,
       // cannot center loader icon since it might not be visible for the user
@@ -132,8 +134,8 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   }
 
   private void applyImageShape(String url) {
-    image.setShape(shape.rectShape.left, 
-                   shape.rectShape.top, 
+    image.setShape(0,
+                   0,
                    getWidth(), 
                    getHeight(),
                    url);
@@ -252,8 +254,12 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
       if (loaded) {
         // cannot set real size until image is fully loaded
         // place holder is smaller
-        image.setShape(left, top, width, height);
+        image.setShape(0, 0, width, height);
       }
+
+      // group.setTransform(left, top);
+      subgroup.setTransform(left, top);
+
       background.setShape(left, top, width, height, 0);
 			super.applyHelpersShape();
   	}
@@ -267,6 +273,11 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 	public IGroup getGroup() {
 		return group;
 	}
+
+  @Override
+  public IGroup getSubgroup() {
+    return subgroup;
+  }
 
 	@Override
   public boolean supportsTextEditing() {

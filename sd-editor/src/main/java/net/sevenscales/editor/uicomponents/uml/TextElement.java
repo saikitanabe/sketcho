@@ -310,6 +310,7 @@ public class TextElement extends AbstractDiagramItem implements
 		// if (textUtil.isAlignMiddle()) {
 		// 	left -= width / 2.0;
 		// }
+		// group.setTransform(left, top);
 		attachBoundary.setShape(left, top, width, height, 4);
 		textUtil.setTextShape();
     super.applyHelpersShape();

@@ -85,6 +85,7 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
 	}
 
 	private void setDimensions(int left, int top, int width, int height) {
+    // group.setTransform(left, top);
     boundary.setShape(left, top, width, height, 9);
 	}
 

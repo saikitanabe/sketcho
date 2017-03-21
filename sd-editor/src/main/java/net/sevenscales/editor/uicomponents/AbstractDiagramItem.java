@@ -293,7 +293,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     var alink = createOrFindLink()
 
     alink.use.setAttribute('x', x)
-    alink.use.setAttribute('y', -10)
+    alink.use.setAttribute('y', -15)
     alink.setAttribute('title', link)
 
     // TODO tooltip doesn't work on SvgHandler (preview handler)

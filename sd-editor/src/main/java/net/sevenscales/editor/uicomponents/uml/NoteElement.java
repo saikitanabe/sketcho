@@ -165,6 +165,8 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 //        left, top+height,
 //        left, top};
 
+
+		// group.setTransform(left, top);
 		boundary.setShape(left, top, width, height, 0);
 		
 //		leftShadow.setShape(left - LEFT_SHADOW_LEFT, top + height - LEFT_SHADOW_HEIGHT, 50, 50);
