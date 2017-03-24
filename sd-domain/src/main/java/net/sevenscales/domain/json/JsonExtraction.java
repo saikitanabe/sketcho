@@ -153,7 +153,11 @@ public class JsonExtraction {
     return stringify(JsonExtraction.decompose(items).getJavaScriptObject());
   }
 
-  private static native String stringify(JavaScriptObject json)/*-{
+  public static String stringify(JSONObject jobject) {
+    return JsonExtraction.stringify(jobject.getJavaScriptObject());
+  }
+
+  public static native String stringify(JavaScriptObject json)/*-{
     return JSON.stringify(json)
   }-*/;
 
