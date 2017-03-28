@@ -1,17 +1,13 @@
 package net.sevenscales.editor.content.ui;
 
-import java.util.List;
-
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
-import com.google.gwt.json.client.*;
 
-import net.sevenscales.editor.content.ui.UIKeyHelpers;
-import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.EditorContext;
+import net.sevenscales.editor.api.EditorProperty;
 
 
 /**
