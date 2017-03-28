@@ -1,10 +1,9 @@
 package net.sevenscales.editor.api.event;
 
-import net.sevenscales.editor.content.ui.UMLDiagramType;
+import com.google.gwt.event.shared.GwtEvent;
+
 import net.sevenscales.domain.js.ImageInfo;
 import net.sevenscales.domain.js.JsShapeConfig;
-
-import com.google.gwt.event.shared.GwtEvent;
 
 public class CreateElementEvent extends GwtEvent<CreateElementEventHandler> {
   public static Type<CreateElementEventHandler> TYPE = new Type<CreateElementEventHandler>();

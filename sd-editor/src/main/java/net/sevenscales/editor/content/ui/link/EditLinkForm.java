@@ -2,26 +2,24 @@ package net.sevenscales.editor.content.ui.link;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventListener;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.dom.client.InputElement;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates.Template;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventListener;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Widget;
 
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.EditorContext;
-import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.impl.FastElementButton;
 
 

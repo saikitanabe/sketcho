@@ -1,55 +1,45 @@
 package net.sevenscales.editor.api;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.dom.client.Style.*;
-import com.google.gwt.dom.client.AnchorElement;
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.Widget;
 
-import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.impl.EditorCommon;
-import net.sevenscales.editor.api.impl.Theme;
-import net.sevenscales.editor.api.impl.FastElementButton;
-import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
-import net.sevenscales.editor.api.event.SelectionMouseUpEventHandler;
+import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.event.CommentDeletedEvent;
 import net.sevenscales.editor.api.event.CommentDeletedEventHandler;
 import net.sevenscales.editor.api.event.CommentThreadDeletedEvent;
 import net.sevenscales.editor.api.event.CommentThreadDeletedEventHandler;
 import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEvent;
 import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEventHandler;
-import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
-import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler;
-import net.sevenscales.editor.content.utils.ScaleHelpers;
+import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
+import net.sevenscales.editor.api.event.SelectionMouseUpEventHandler;
+import net.sevenscales.editor.api.impl.EditorCommon;
+import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.content.ui.CustomPopupPanel;
-
+import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.Diagram;
-
-import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
-import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
-
-import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.uicomponents.uml.CommentElement;
+import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 
 
 class CommentEditor  extends Composite {

@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import com.google.gwt.logging.client.LogConfiguration;
+import com.google.gwt.user.client.Window;
+
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.domain.api.IDiagramContent;
-import net.sevenscales.domain.utils.JsonConversion;
-import net.sevenscales.domain.utils.JsonFormat;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
@@ -29,7 +29,6 @@ import net.sevenscales.editor.api.ot.OperationQueue.Acknowledged;
 import net.sevenscales.editor.content.ClientIdHelpers;
 import net.sevenscales.editor.content.Context;
 import net.sevenscales.editor.content.UiSketchoBoardEditContent;
-import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.content.utils.JsonHelpers;
 import net.sevenscales.editor.diagram.Diagram;
@@ -40,9 +39,6 @@ import net.sevenscales.editor.uicomponents.helpers.LifeLineEditorHelper;
 import net.sevenscales.editor.uicomponents.helpers.RelationshipHandleHelpers;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.utils.GoogleAnalyticsHelper;
-
-import com.google.gwt.logging.client.LogConfiguration;
-import com.google.gwt.user.client.Window;
 
 public abstract class AbstractBoardHandlerBase implements Acknowledged, OperationTransaction {
 	private static final SLogger logger = SLogger.createLogger(AbstractBoardHandlerBase.class);

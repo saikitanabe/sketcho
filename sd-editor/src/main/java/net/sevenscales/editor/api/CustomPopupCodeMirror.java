@@ -1,14 +1,13 @@
 package net.sevenscales.editor.api;
 
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.content.utils.KeyHelpers;
-import net.sevenscales.editor.api.texteditor.ITextEditor;
-
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.ui.PopupPanel;
+
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.texteditor.ITextEditor;
+import net.sevenscales.editor.content.utils.KeyHelpers;
 
 public class CustomPopupCodeMirror extends PopupPanel {
 	private static final SLogger logger = SLogger

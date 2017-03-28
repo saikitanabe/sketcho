@@ -1,6 +1,5 @@
 package net.sevenscales.editor.api;
 
-import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;

@@ -1,22 +1,12 @@
 package net.sevenscales.editor.content.utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.JsArray;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-
-import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.api.IDiagramItem;
-import net.sevenscales.domain.utils.JsonConversion;
+import net.sevenscales.domain.json.JsonExtraction;
 import net.sevenscales.domain.utils.JsonFormat;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.domain.json.JsonExtraction;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.diagram.Diagram;
 
 public class JsonHelpers {
 	private static final SLogger logger = SLogger.createLogger(JsonHelpers.class);

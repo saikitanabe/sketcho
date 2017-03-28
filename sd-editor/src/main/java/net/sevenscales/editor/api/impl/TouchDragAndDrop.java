@@ -2,13 +2,8 @@ package net.sevenscales.editor.api.impl;
 
 import java.util.Date;
 
-import net.sevenscales.domain.utils.SLogger;
-
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Touch;
 import com.google.gwt.event.dom.client.HasTouchStartHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -24,6 +19,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+
+import net.sevenscales.domain.utils.SLogger;
 
 public class TouchDragAndDrop implements TouchStartHandler, TouchMoveHandler, TouchEndHandler {
 	private static final SLogger logger = SLogger.createLogger(TouchDragAndDrop.class);

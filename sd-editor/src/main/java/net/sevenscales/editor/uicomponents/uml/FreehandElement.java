@@ -1,32 +1,25 @@
 package net.sevenscales.editor.uicomponents.uml;
 
 
+import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramType;
-import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.content.utils.ContainerAttachHelpers;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
-import net.sevenscales.editor.content.utils.IntegerHelpers;
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.drag.Anchor;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.shape.FreehandShape;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IGroup;
-import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IPath;
-import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
-import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
-import net.sevenscales.editor.silver.SilverUtils;
-import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
-import net.sevenscales.editor.diagram.drag.Anchor;
-import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.gfx.domain.Point;
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 
 public class FreehandElement extends AbstractDiagramItem {
 	private static SLogger logger = SLogger.createLogger(FreehandElement.class);

@@ -1,6 +1,5 @@
 package net.sevenscales.editor.diagram.shape;
 
-import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.domain.ISvgDataRO;
 import net.sevenscales.domain.ShapeProperty;
 

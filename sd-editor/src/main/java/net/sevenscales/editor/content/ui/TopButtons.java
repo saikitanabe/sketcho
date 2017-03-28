@@ -1,29 +1,20 @@
 package net.sevenscales.editor.content.ui;
 
-import net.sevenscales.editor.api.EditorContext;
-import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.Tools;
-import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
-import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
-import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
-import net.sevenscales.editor.api.event.CommentModeEvent;
-import net.sevenscales.editor.api.event.CommentModeEventHandler;
-import net.sevenscales.editor.api.event.RelationshipTypeSelectedEvent;
-import net.sevenscales.editor.content.utils.EffectHelpers;
-
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.ButtonElement;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+
+import net.sevenscales.editor.api.EditorContext;
+import net.sevenscales.editor.api.Tools;
+import net.sevenscales.editor.api.event.CommentModeEvent;
+import net.sevenscales.editor.api.event.CommentModeEventHandler;
+import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
+import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
+import net.sevenscales.editor.content.utils.EffectHelpers;
 
 public class TopButtons extends Composite {
 

@@ -1,9 +1,13 @@
 package net.sevenscales.editor.diagram;
 
-import net.sevenscales.domain.utils.SLogger;
+import com.google.gwt.event.dom.client.TouchStartEvent;
+import com.google.gwt.event.dom.client.TouchStartHandler;
+import com.google.gwt.user.client.ui.PopupPanel;
+
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.js.ImageInfo;
 import net.sevenscales.domain.js.JsShapeConfig;
-import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.CreateElementEvent;
 import net.sevenscales.editor.api.event.CreateElementEventHandler;
@@ -19,29 +23,21 @@ import net.sevenscales.editor.api.event.SwitchElementEvent;
 import net.sevenscales.editor.api.event.SwitchElementEventHandler;
 import net.sevenscales.editor.api.event.SwitchElementToEvent;
 import net.sevenscales.editor.api.event.SwitchElementToEventHandler;
-import net.sevenscales.editor.api.event.SwitchElementToEvent;
+import net.sevenscales.editor.content.ClientIdHelpers;
 // import net.sevenscales.editor.content.ui.UMLDiagramSelections;
 // import net.sevenscales.editor.content.ui.ShapeContextMenu;
 import net.sevenscales.editor.content.ui.DiagramSelectionHandler;
-import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoint;
-import net.sevenscales.editor.content.utils.DiagramElementFactory;
-import net.sevenscales.editor.content.ClientIdHelpers;
-import net.sevenscales.editor.diagram.utils.DiagramAnchorUtils;
-import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
-import net.sevenscales.editor.diagram.utils.ReattachHelpers;
-import net.sevenscales.editor.gfx.domain.MatrixPointJS;
-import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
+import net.sevenscales.editor.diagram.utils.DiagramAnchorUtils;
+import net.sevenscales.editor.diagram.utils.ReattachHelpers;
+import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
+import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Point;
+import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
-
-import com.google.gwt.event.dom.client.TouchStartEvent;
-import com.google.gwt.event.dom.client.TouchStartHandler;
-import com.google.gwt.event.dom.client.ScrollHandler;
-import com.google.gwt.user.client.ui.PopupPanel;
 
 public class RelationshipDragEndHandler implements
 		RelationshipNotAttachedEventHandler, DiagramSelectionHandler, SurfaceMouseUpNoHandlingYetEventHandler, LibrarySelectionEventHandler, SwitchElementEventHandler, SwitchElementToEventHandler

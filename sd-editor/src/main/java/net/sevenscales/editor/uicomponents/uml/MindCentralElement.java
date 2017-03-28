@@ -1,18 +1,16 @@
 package net.sevenscales.editor.uicomponents.uml;
 
 
+import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.MindCentralShape;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
-import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.DiagramItemDTO;
-import net.sevenscales.domain.api.IDiagramItem;
-import net.sevenscales.domain.ElementType;
-import net.sevenscales.editor.content.ui.ContextMenuItem;
 
 
 public class MindCentralElement extends ActivityElement implements SupportsRectangleShape {

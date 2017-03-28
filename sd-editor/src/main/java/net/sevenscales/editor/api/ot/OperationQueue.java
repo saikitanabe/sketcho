@@ -1,35 +1,30 @@
 package net.sevenscales.editor.api.ot;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.logging.Level;
 
-import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.domain.json.JsonExtraction;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JsArrayString;
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.logging.client.LogConfiguration;
+import com.google.gwt.user.client.Window;
+
 import net.sevenscales.domain.JSONParserHelpers;
 import net.sevenscales.domain.js.JsSendOperation;
+import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.IEditor;
-import net.sevenscales.editor.content.utils.JsonHelpers;
 import net.sevenscales.editor.content.ClientIdHelpers;
-import net.sevenscales.editor.utils.WebStorage;
-import net.sevenscales.editor.utils.IWebStorageListener;
 import net.sevenscales.editor.diagram.GlobalState;
-
-import com.google.gwt.core.client.JsArray;
-import com.google.gwt.core.client.JsonUtils;
-import com.google.gwt.core.client.JsArrayString;
-import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONNumber;
-import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.logging.client.LogConfiguration;
-import java.util.logging.Level;
+import net.sevenscales.editor.utils.IWebStorageListener;
+import net.sevenscales.editor.utils.WebStorage;
 
 
 public class OperationQueue {

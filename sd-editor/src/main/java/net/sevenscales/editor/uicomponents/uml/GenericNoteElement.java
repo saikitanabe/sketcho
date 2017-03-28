@@ -1,16 +1,14 @@
 package net.sevenscales.editor.uicomponents.uml;
 
-import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.LibraryShapes;
-import net.sevenscales.editor.diagram.shape.GenericShape;
-import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.editor.gfx.domain.Color;
 // import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.ElementType;
-import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.LibraryShapes;
 // import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
+import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.shape.GenericShape;
+import net.sevenscales.editor.gfx.domain.Color;
 
 
 public class GenericNoteElement extends GenericElement {

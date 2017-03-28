@@ -2,18 +2,9 @@ package net.sevenscales.editor.content.ui;
 
 import java.util.Set;
 
-import net.sevenscales.editor.api.EditorContext;
-import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.event.RelationshipTypeSelectedEvent;
-import net.sevenscales.editor.content.RelationShipType;
-import net.sevenscales.editor.content.ui.LineSelections.SelectionHandler;
-import net.sevenscales.editor.uicomponents.uml.Relationship2;
-import net.sevenscales.editor.diagram.Diagram;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.TableCellElement;
-import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
@@ -23,6 +14,14 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import net.sevenscales.editor.api.EditorContext;
+import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.event.RelationshipTypeSelectedEvent;
+import net.sevenscales.editor.content.RelationShipType;
+import net.sevenscales.editor.content.ui.LineSelections.SelectionHandler;
+import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
 public class SelectButtonBox extends Composite implements SelectionHandler, LineSelections.IParent {
 

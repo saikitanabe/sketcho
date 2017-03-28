@@ -1,42 +1,40 @@
 package net.sevenscales.editor.api.ot;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.Collections;
+import java.util.Set;
 
-import net.sevenscales.domain.IDiagramItemRO;
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.RepeatingCommand;
+
 import net.sevenscales.domain.CommentDTO;
-import net.sevenscales.domain.utils.Debug;
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.domain.utils.Error;
 import net.sevenscales.domain.DiagramItemField;
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.js.JsTimestamp;
+import net.sevenscales.domain.utils.Debug;
+import net.sevenscales.domain.utils.Error;
+import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ThemeName;
 import net.sevenscales.editor.api.ot.ApplyHelpers.DiagramApplyOperation;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
-import net.sevenscales.editor.diagram.utils.CommentFactory;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSearch;
-import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.diagram.GlobalState;
+import net.sevenscales.editor.diagram.utils.CommentFactory;
+import net.sevenscales.editor.diagram.utils.ReattachHelpers;
+import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;
 import net.sevenscales.editor.utils.ElementTypeComparator;
-import net.sevenscales.editor.gfx.domain.IParentElement;
-import net.sevenscales.editor.gfx.domain.IChildElement;
-import net.sevenscales.editor.gfx.domain.IRelationship;
-import net.sevenscales.editor.gfx.domain.Color;
-
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.RepeatingCommand;
-import com.google.gwt.core.client.JsArray;
 
 public class BoardOTHelpers {
 	public static final Color HIGHLIGHT_COLOR = new Color(0x00, 0xE0, 0x00, 1);

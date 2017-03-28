@@ -1,53 +1,29 @@
 package net.sevenscales.editor.uicomponents.uml;
 
-import java.util.List;
-import java.util.ArrayList;
-
-import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.safehtml.shared.UriUtils;
 
+import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramType;
-import net.sevenscales.editor.content.utils.AreaUtils;
-import net.sevenscales.editor.content.utils.ContainerAttachHelpers;
-import net.sevenscales.editor.content.utils.DiagramHelpers;
-import net.sevenscales.editor.content.utils.IntegerHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.ImageShape;
 import net.sevenscales.editor.diagram.shape.Info;
-import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.gfx.domain.Color;
-import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IGroup;
-import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IImage;
 import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
-import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
-import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
-import net.sevenscales.editor.silver.SilverUtils;
-import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
-import net.sevenscales.editor.diagram.drag.Anchor;
-import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.gfx.domain.Point;
-import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
-import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
-import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
-import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
+import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
+import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.domain.ElementType;
-import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.DiagramItemDTO;
-import net.sevenscales.domain.ShapeProperty;
-import net.sevenscales.domain.IPathRO;
-import net.sevenscales.domain.ExtensionDTO;
-import net.sevenscales.domain.js.ImageInfo;
 
 
 public class ImageElement extends AbstractDiagramItem implements SupportsRectangleShape {

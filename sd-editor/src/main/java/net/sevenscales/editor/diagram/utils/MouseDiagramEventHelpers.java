@@ -1,22 +1,21 @@
 package net.sevenscales.editor.diagram.utils;
 
 
-import java.util.Set;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.diagram.drag.AnchorElement;
-import net.sevenscales.editor.content.utils.DiagramHelpers;
-import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
-import net.sevenscales.editor.gfx.domain.IParentElement;
-import net.sevenscales.editor.gfx.domain.IRelationship;
+import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
+import net.sevenscales.editor.content.utils.DiagramHelpers;
+import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.gfx.domain.IChildElement;
+import net.sevenscales.editor.gfx.domain.IRelationship;
 import net.sevenscales.editor.uicomponents.CircleElement;
 
 public class MouseDiagramEventHelpers {

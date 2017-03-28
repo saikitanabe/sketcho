@@ -7,17 +7,16 @@ import java.util.Set;
 import com.google.gwt.dom.client.Element;
 
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.SketchDiagramAreaHandler;
-import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
-import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
-import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
-import net.sevenscales.editor.diagram.drag.MouseDiagramDragHandler;
-import net.sevenscales.editor.diagram.utils.UiUtils;
-import net.sevenscales.editor.content.ui.IModeManager;
-import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.api.IBirdsEyeView;
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.SketchDiagramAreaHandler;
 import net.sevenscales.editor.api.Tools;
+import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
+import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
+import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
+import net.sevenscales.editor.content.ui.IModeManager;
+import net.sevenscales.editor.diagram.drag.MouseDiagramDragHandler;
+import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 
 
 public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDiagramHandler, MouseState {

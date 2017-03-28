@@ -1,10 +1,9 @@
 package net.sevenscales.editor.api.ot;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONNumber;
 
 public class BoardUser {
 	private String username = "";

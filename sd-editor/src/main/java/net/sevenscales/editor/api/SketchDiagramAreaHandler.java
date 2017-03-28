@@ -2,26 +2,25 @@ package net.sevenscales.editor.api;
 
 import java.util.ArrayList;
 
+import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
+import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler;
+import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.diagram.SelectionHandler;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
+import net.sevenscales.editor.diagram.shape.RelationshipShape2;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
-import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
-import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
-import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler;
-import net.sevenscales.editor.api.impl.Theme;
-import net.sevenscales.domain.DiagramItemDTO;
-import net.sevenscales.domain.ShapeProperty;
-import net.sevenscales.domain.constants.Constants;
-import net.sevenscales.editor.diagram.shape.RelationshipShape2;
 
 
 public class SketchDiagramAreaHandler implements MouseDiagramHandler {

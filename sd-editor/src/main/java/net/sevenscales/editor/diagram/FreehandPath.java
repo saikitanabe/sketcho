@@ -3,33 +3,28 @@ package net.sevenscales.editor.diagram;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.JsArray;
-import com.google.gwt.core.client.JsArrayInteger;
-
-import net.sevenscales.domain.SvgDataDTO;
-import net.sevenscales.domain.PathDTO;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.PathDTO;
 import net.sevenscales.domain.ShapeProperty;
-import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
-import net.sevenscales.editor.gfx.domain.IGroup;
+import net.sevenscales.domain.SvgDataDTO;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.gfx.domain.IPolyline;
-import net.sevenscales.editor.uicomponents.uml.GenericFreehandElement;
-import net.sevenscales.editor.uicomponents.uml.FreehandElement;
-import net.sevenscales.editor.diagram.shape.GenericShape;
-import net.sevenscales.editor.diagram.shape.FreehandShape;
-import net.sevenscales.editor.gfx.domain.MatrixPointJS;
-import net.sevenscales.editor.gfx.domain.IShapeFactory;
-import net.sevenscales.editor.gfx.domain.Color;
-import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.LibraryShapes;
+import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
+import net.sevenscales.editor.content.utils.IntegerHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoint;
-import net.sevenscales.editor.content.utils.IntegerHelpers;
+import net.sevenscales.editor.diagram.shape.FreehandShape;
+import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.utils.PathFitter;
+import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.IGroup;
+import net.sevenscales.editor.gfx.domain.IPolyline;
+import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.uicomponents.uml.FreehandElement;
+import net.sevenscales.editor.uicomponents.uml.GenericFreehandElement;
 
 
 class FreehandPath {

@@ -1,28 +1,5 @@
 package net.sevenscales.editor.content;
 
-import net.sevenscales.domain.DiagramContentDTO;
-import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.api.IContent;
-import net.sevenscales.domain.api.IDiagramContent;
-import net.sevenscales.domain.api.IDiagramItem;
-import net.sevenscales.editor.api.EditorContext;
-import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.IModelingPanel;
-import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.impl.CommentHandler;
-import net.sevenscales.editor.content.ui.TopButtons;
-
-import net.sevenscales.editor.api.dojo.FactoryDoJo;
-import net.sevenscales.editor.api.ot.OTBuffer;
-import net.sevenscales.editor.api.ot.OperationTransaction;
-
-import net.sevenscales.editor.content.UiModelContentHandler.IUiDiagramContent;
-import net.sevenscales.editor.content.utils.DiagramItemFactory;
-import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.editor.diagram.KeyEventListener;
-import net.sevenscales.editor.diagram.SelectionHandler;
-import net.sevenscales.editor.uicomponents.impl.BrowserStyleImpl;
-
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -33,6 +10,27 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.VerticalPanel;
+
+import net.sevenscales.domain.DiagramContentDTO;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.api.IContent;
+import net.sevenscales.domain.api.IDiagramContent;
+import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.editor.api.EditorContext;
+import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.IModelingPanel;
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.dojo.FactoryDoJo;
+import net.sevenscales.editor.api.impl.CommentHandler;
+import net.sevenscales.editor.api.ot.OTBuffer;
+import net.sevenscales.editor.api.ot.OperationTransaction;
+import net.sevenscales.editor.content.UiModelContentHandler.IUiDiagramContent;
+import net.sevenscales.editor.content.ui.TopButtons;
+import net.sevenscales.editor.content.utils.DiagramItemFactory;
+import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.KeyEventListener;
+import net.sevenscales.editor.diagram.SelectionHandler;
+import net.sevenscales.editor.uicomponents.impl.BrowserStyleImpl;
 
 public class UiSketchoBoardEditContent extends UiEditBoardContent implements KeyEventListener, IUiDiagramContent {
   private UiModelContentHandler modelHandler;

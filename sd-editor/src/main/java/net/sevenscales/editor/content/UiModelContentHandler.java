@@ -1,40 +1,38 @@
 package net.sevenscales.editor.content;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import com.google.gwt.user.client.Window;
 
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IContent;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
-import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.js.JsBoardPosition;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.IModelingPanel;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.SurfaceLoadedEventListener;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 import net.sevenscales.editor.api.event.DiagramsLoadedEvent;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ThemeName;
-import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.editor.content.ui.IModeManager;
-import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.content.utils.DiagramDisplaySorter;
+import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.utils.CommentFactory;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
+import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
-import net.sevenscales.editor.diagram.utils.CommentFactory;
-import net.sevenscales.editor.uicomponents.uml.CommentElement;
-import net.sevenscales.editor.uicomponents.CircleElement;
-import net.sevenscales.domain.js.JsBoardPosition;
 
 public class UiModelContentHandler implements SurfaceLoadedEventListener {
 	private static final SLogger logger = SLogger.createLogger(UiModelContentHandler.class);

@@ -1,16 +1,15 @@
 package net.sevenscales.editor.api;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.Visibility;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.core.client.JavaScriptObject;
 
 import net.sevenscales.editor.content.utils.TokenParser;
-import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 
 public class MeasurementPanel {
 	private static SimplePanel measurementPanel;

@@ -1,21 +1,7 @@
 package net.sevenscales.editor.content.ui;
 
-import net.sevenscales.editor.api.EditorContext;
-import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
-import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
-import net.sevenscales.editor.api.event.CancelButtonClickedEvent;
-import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
-import net.sevenscales.editor.api.event.PotentialOnChangedEventHandler;
-import net.sevenscales.editor.api.event.SaveButtonClickedEvent;
-import net.sevenscales.editor.api.impl.FastButton;
-import net.sevenscales.editor.content.utils.JQuery;
-import net.sevenscales.editor.content.utils.KeyHelpers;
-import net.sevenscales.editor.diagram.Diagram;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -25,6 +11,16 @@ import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+
+import net.sevenscales.editor.api.EditorContext;
+import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
+import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
+import net.sevenscales.editor.api.event.CancelButtonClickedEvent;
+import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
+import net.sevenscales.editor.api.event.PotentialOnChangedEventHandler;
+import net.sevenscales.editor.api.event.SaveButtonClickedEvent;
+import net.sevenscales.editor.api.impl.FastButton;
+import net.sevenscales.editor.content.utils.KeyHelpers;
 
 public class ConfluenceMenu extends Composite {
 

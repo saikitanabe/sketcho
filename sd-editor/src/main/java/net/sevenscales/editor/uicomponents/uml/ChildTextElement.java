@@ -2,31 +2,25 @@ package net.sevenscales.editor.uicomponents.uml;
 
 import com.google.gwt.core.client.Scheduler;
 
-import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.impl.Theme;
-import net.sevenscales.editor.api.ActionType;
-import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.editor.diagram.shape.Info;
-import net.sevenscales.editor.diagram.shape.ChildTextShape;
-import net.sevenscales.editor.diagram.drag.Anchor;
-import net.sevenscales.editor.diagram.drag.AnchorElement;
-import net.sevenscales.editor.gfx.domain.Color;
-import net.sevenscales.editor.gfx.domain.IShape;
-import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
+import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ShapeProperty;
-import net.sevenscales.domain.DiagramItemDTO;
-import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
-import net.sevenscales.editor.uicomponents.TextElementHorizontalFormatUtil;
-import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
-import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
-import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
-import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers;
-import net.sevenscales.editor.gfx.domain.IParentElement;
-import net.sevenscales.editor.gfx.domain.IChildElement;
-import net.sevenscales.editor.gfx.domain.SegmentPoint;
-import net.sevenscales.editor.gfx.domain.PointDouble;
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
+import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.drag.Anchor;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
+import net.sevenscales.editor.diagram.shape.ChildTextShape;
+import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.IChildElement;
+import net.sevenscales.editor.gfx.domain.IParentElement;
+import net.sevenscales.editor.gfx.domain.PointDouble;
+import net.sevenscales.editor.gfx.domain.SegmentPoint;
+import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
+import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
+import net.sevenscales.editor.uicomponents.TextElementHorizontalFormatUtil;
+import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 
 
 public class ChildTextElement extends TextElement implements IChildElement {

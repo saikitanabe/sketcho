@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
-import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.content.utils.DiagramDisplaySorter;
+import net.sevenscales.editor.diagram.Diagram;
 
 /**
  * Ordered diagram list.

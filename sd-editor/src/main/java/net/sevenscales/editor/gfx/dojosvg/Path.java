@@ -3,14 +3,13 @@ package net.sevenscales.editor.gfx.dojosvg;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.content.utils.DiagramHelpers;
-import net.sevenscales.editor.gfx.domain.IContainer;
-import net.sevenscales.editor.gfx.domain.IPath;
-
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
+
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.gfx.domain.IContainer;
+import net.sevenscales.editor.gfx.domain.IPath;
 
 class Path extends Shape implements IPath {
 	private static SLogger logger = SLogger.createLogger(Path.class);

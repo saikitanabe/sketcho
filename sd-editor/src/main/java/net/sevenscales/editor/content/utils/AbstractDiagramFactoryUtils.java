@@ -1,11 +1,10 @@
 package net.sevenscales.editor.content.utils;
 
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.diagram.shape.GenericShape;
-import net.sevenscales.domain.ElementType;
-import net.sevenscales.domain.ShapeProperty;
-import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.api.IDiagramItem;
 
 
 class AbstractDiagramFactoryUtils {

@@ -1,16 +1,10 @@
 package net.sevenscales.editor.api;
 
-import net.sevenscales.editor.api.EditorContext;
-import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
-import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
-import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
-import net.sevenscales.editor.api.event.CommentModeEvent;
-import net.sevenscales.editor.api.event.CommentModeEventHandler;
-import net.sevenscales.editor.api.event.SuperQuickModeEvent;
-import net.sevenscales.editor.api.event.SketchModeEvent;
-import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.event.CommentModeEvent;
+import net.sevenscales.editor.api.event.SketchModeEvent;
+import net.sevenscales.editor.api.event.SuperQuickModeEvent;
+import net.sevenscales.editor.diagram.Diagram;
 
 
 public class Tools {

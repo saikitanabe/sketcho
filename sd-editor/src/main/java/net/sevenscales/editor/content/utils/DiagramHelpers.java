@@ -1,20 +1,18 @@
 package net.sevenscales.editor.content.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.Collections;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.editor.diagram.utils.DiagramList;
 import net.sevenscales.editor.diagram.utils.DiagramDisplayOrderList;
-import net.sevenscales.editor.gfx.domain.IPath;
-import net.sevenscales.editor.gfx.domain.IPath.PathTransformer;
+import net.sevenscales.editor.diagram.utils.DiagramList;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
 import net.sevenscales.editor.utils.ElementTypeComparator;
-import net.sevenscales.editor.api.ActionType;
 
 
 public class DiagramHelpers {

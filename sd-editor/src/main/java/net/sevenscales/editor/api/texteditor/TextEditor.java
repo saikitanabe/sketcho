@@ -1,20 +1,18 @@
 package net.sevenscales.editor.api.texteditor;
 
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.dom.client.TextAreaElement;
-import com.google.gwt.core.shared.GWT;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.Widget;
 
 
 class TextEditor extends Composite implements ITextEditor {

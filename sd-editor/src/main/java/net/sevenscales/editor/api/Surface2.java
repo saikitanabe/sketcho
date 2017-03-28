@@ -1,10 +1,10 @@
 package net.sevenscales.editor.api;
 
-import net.sevenscales.editor.diagram.ClickDiagramHandler;
-
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.SimplePanel;
+
+import net.sevenscales.editor.diagram.ClickDiagramHandler;
 
 public class Surface2 extends SimplePanel {
 	private JavaScriptObject surface;

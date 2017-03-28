@@ -1,14 +1,14 @@
 package net.sevenscales.editor.gfx.dojosvg;
 
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.UIObject;
+
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.domain.IContainer;
 import net.sevenscales.editor.gfx.domain.IKeyEventHandler;
 import net.sevenscales.editor.gfx.domain.ILoadObserver;
 import net.sevenscales.editor.gfx.domain.ISurface;
-
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.UIObject;
 
 class Surface extends Graphics implements IContainer, ISurface {
 	protected UIObject uiObject;

@@ -4,23 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.safehtml.shared.SafeUri;
+import com.google.gwt.safehtml.shared.UriUtils;
 
-import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.utils.SortHelpers;
 import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.editor.uicomponents.uml.GenericElement;
-import net.sevenscales.editor.gfx.domain.IShape;
-import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IChildElement;
-import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.editor.gfx.domain.IGroup;
+import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.uicomponents.CircleElement;
-import net.sevenscales.editor.api.impl.Theme;
-import net.sevenscales.editor.api.impl.Theme.ThemeName;
+import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.editor.uicomponents.uml.GenericElement;
 
 
 public class SvgConverter {

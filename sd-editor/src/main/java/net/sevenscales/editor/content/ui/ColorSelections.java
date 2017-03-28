@@ -1,20 +1,5 @@
 package net.sevenscales.editor.content.ui;
 
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.EditorContext;
-import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
-import net.sevenscales.editor.api.impl.FastButton;
-import net.sevenscales.editor.api.impl.FastElementButton;
-import net.sevenscales.editor.api.impl.TouchHelpers;
-import net.sevenscales.editor.api.impl.Theme;
-import net.sevenscales.editor.content.utils.ColorHelpers;
-import net.sevenscales.editor.content.utils.JQuery;
-import net.sevenscales.editor.content.utils.Rgb;
-import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
-import net.sevenscales.editor.gfx.domain.ElementColor;
-import net.sevenscales.editor.gfx.domain.Color;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Element;
@@ -27,12 +12,24 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.EditorContext;
+import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
+import net.sevenscales.editor.api.impl.FastButton;
+import net.sevenscales.editor.api.impl.FastElementButton;
+import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.api.impl.TouchHelpers;
+import net.sevenscales.editor.content.utils.ColorHelpers;
+import net.sevenscales.editor.content.utils.JQuery;
+import net.sevenscales.editor.content.utils.Rgb;
+import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.ElementColor;
 
 public class ColorSelections extends Composite {
 	private static final SLogger logger = SLogger.createLogger(ColorSelections.class);

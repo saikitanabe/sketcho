@@ -1,19 +1,17 @@
 package net.sevenscales.editor.content.utils;
 
 import java.util.logging.Level;
-import java.lang.reflect.Constructor;
 
 import com.google.gwt.logging.client.LogConfiguration;
 
-import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ElementType;
-import net.sevenscales.editor.diagram.shape.Info;
-import net.sevenscales.editor.diagram.shape.*;
-import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.editor.api.Tools;
-import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.uicomponents.uml.Shapes;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.Tools;
+import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.shape.Info;
+import net.sevenscales.editor.uicomponents.uml.Shapes;
 
 
 public class ShapeParser {

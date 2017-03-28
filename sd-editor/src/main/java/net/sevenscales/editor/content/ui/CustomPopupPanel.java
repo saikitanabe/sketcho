@@ -1,13 +1,12 @@
 package net.sevenscales.editor.content.ui;
 
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.content.utils.KeyHelpers;
-
-import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextArea;
+
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.content.utils.KeyHelpers;
 
 public class CustomPopupPanel extends PopupPanel {
 	private static final SLogger logger = SLogger

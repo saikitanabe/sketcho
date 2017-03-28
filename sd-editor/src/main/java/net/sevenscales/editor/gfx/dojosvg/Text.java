@@ -1,16 +1,14 @@
 package net.sevenscales.editor.gfx.dojosvg;
 
-import net.sevenscales.editor.api.MeasurementPanel;
-import net.sevenscales.editor.diagram.utils.UiUtils;
-import net.sevenscales.editor.gfx.domain.IContainer;
-import net.sevenscales.editor.gfx.domain.IText;
-
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+
+import net.sevenscales.editor.diagram.utils.UiUtils;
+import net.sevenscales.editor.gfx.domain.IContainer;
+import net.sevenscales.editor.gfx.domain.IText;
 
 class Text extends Shape implements IText {
   public static final String ALIGN_LEFT = "start";

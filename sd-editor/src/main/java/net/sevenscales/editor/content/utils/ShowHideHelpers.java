@@ -2,7 +2,6 @@ package net.sevenscales.editor.content.utils;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -13,12 +12,10 @@ import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.ui.Widget;
 
+import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.Library;
-import net.sevenscales.editor.api.LibrarySelections;
-import net.sevenscales.editor.api.impl.TouchHelpers;
-import net.sevenscales.domain.utils.SLogger;
 
 
 public class ShowHideHelpers {

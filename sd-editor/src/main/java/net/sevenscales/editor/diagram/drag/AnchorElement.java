@@ -3,7 +3,6 @@ package net.sevenscales.editor.diagram.drag;
 import java.util.Collection;
 
 import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.uicomponents.CardinalDirection;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 

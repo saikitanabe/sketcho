@@ -1,40 +1,36 @@
 package net.sevenscales.editor.content.ui;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.HashSet;
-
-import net.sevenscales.editor.api.EditorContext;
-import net.sevenscales.editor.api.Library;
-import net.sevenscales.editor.api.event.CreateElementEvent;
-import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.impl.FastButton;
-import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.Tools;
-import net.sevenscales.domain.ElementType;
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
-import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
-import net.sevenscales.editor.api.event.StartSelectToolEvent;
-import net.sevenscales.editor.content.ui.image.ImageSelection;
+import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.dom.client.ScrollEvent;
+import com.google.gwt.event.dom.client.ScrollHandler;
 // import com.google.gwt.event.dom.client.MouseWheelEvent;
 // import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.event.shared.HandlerRegistration;
+
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.Library;
+import net.sevenscales.editor.api.Tools;
+import net.sevenscales.editor.api.event.CreateElementEvent;
+import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
+import net.sevenscales.editor.api.event.StartSelectToolEvent;
+import net.sevenscales.editor.api.impl.FastButton;
+import net.sevenscales.editor.content.ui.image.ImageSelection;
 
 
 public class UMLDiagramSelections extends Composite {

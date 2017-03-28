@@ -1,14 +1,12 @@
 package net.sevenscales.editor.content.utils;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
-import net.sevenscales.editor.diagram.ContainerType;
-import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.diagram.Diagram;
 
 public class SortHelpers {
 	private static final SLogger logger = SLogger.createLogger(SortHelpers.class);
