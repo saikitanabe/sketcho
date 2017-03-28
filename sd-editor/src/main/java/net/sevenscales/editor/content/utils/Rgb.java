@@ -17,7 +17,7 @@ public class Rgb {
 		red = r;
 		green = g;
 		blue = b;
-		a = a;
+		this.a = a;
 	}
 
 	public static Rgb toRgb(String hexColor) {
