@@ -4,13 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.api.IExtension;
-import net.sevenscales.domain.utils.JsonFormat;
-
-import com.google.gwt.user.client.rpc.IsSerializable;
-import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.core.client.JavaScriptObject;
 
 public interface IDiagramItemRO extends Serializable, IsSerializable {
 	long getId();

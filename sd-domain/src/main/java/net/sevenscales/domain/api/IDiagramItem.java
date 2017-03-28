@@ -1,10 +1,9 @@
 package net.sevenscales.domain.api;
 
-import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.ISvgDataRO;
-import net.sevenscales.domain.ShapeProperty;
-
 import com.google.gwt.core.client.JavaScriptObject;
+
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.ShapeProperty;
 
 
 public interface IDiagramItem extends IDiagramItemRO {

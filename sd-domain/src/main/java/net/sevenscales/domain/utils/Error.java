@@ -1,9 +1,8 @@
 package net.sevenscales.domain.utils;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.logging.client.LogConfiguration;
 import com.google.gwt.user.client.Window;
-import java.util.logging.Level;
-import com.google.gwt.core.shared.GWT;
 
 public class Error {
 

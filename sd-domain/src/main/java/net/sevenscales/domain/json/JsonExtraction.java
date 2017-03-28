@@ -1,21 +1,24 @@
 package net.sevenscales.domain.json;
 
 import java.util.List;
-import java.util.Arrays;
 
-import com.google.gwt.json.client.*;
-import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONNumber;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
 
-import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.IUrlLinkRO;
-import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.CommentDTO;
+import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.DiagramItemField;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.IPathRO;
+import net.sevenscales.domain.ISvgDataRO;
+import net.sevenscales.domain.IUrlLinkRO;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.utils.JsonFormat;
-import net.sevenscales.domain.DiagramItemField;
-import net.sevenscales.domain.ISvgDataRO;
-import net.sevenscales.domain.IPathRO;
 
 
 public class JsonExtraction {

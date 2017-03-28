@@ -1,19 +1,18 @@
 package net.sevenscales.domain;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.api.IExtension;
-import net.sevenscales.domain.utils.JsonFormat;
 import net.sevenscales.domain.utils.DiagramItemUtils;
 import net.sf.hibernate4gwt.pojo.java5.LazyPojo;
-
-import com.google.gwt.user.client.rpc.IsSerializable;
-import com.google.gwt.core.client.JavaScriptObject;
 
 public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializable, IsSerializable {
 	public static final int DATA_VERSION = 4;
