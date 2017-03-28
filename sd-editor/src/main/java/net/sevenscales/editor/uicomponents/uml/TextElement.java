@@ -3,7 +3,7 @@ package net.sevenscales.editor.uicomponents.uml;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.BoardOTHelpers;
 import net.sevenscales.editor.api.ActionType;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;

@@ -9,7 +9,7 @@ import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.content.utils.ContainerAttachHelpers;
 import net.sevenscales.editor.content.utils.DiagramHelpers;

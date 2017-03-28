@@ -20,10 +20,10 @@ import net.sevenscales.editor.api.event.SwitchElementEventHandler;
 import net.sevenscales.editor.api.event.SwitchElementToEvent;
 import net.sevenscales.editor.api.event.SwitchElementToEventHandler;
 import net.sevenscales.editor.api.event.SwitchElementToEvent;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections;
+// import net.sevenscales.editor.content.ui.UMLDiagramSelections;
 // import net.sevenscales.editor.content.ui.ShapeContextMenu;
 import net.sevenscales.editor.content.ui.DiagramSelectionHandler;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers.ScaledAndTranslatedPoint;
 import net.sevenscales.editor.content.utils.DiagramElementFactory;
@@ -55,7 +55,7 @@ public class RelationshipDragEndHandler implements
 	private Anchor currentAnchor;
 	private Relationship2 currentRel;
 	private boolean startNode;
-	private UMLDiagramSelections diagramSelections;
+	// private UMLDiagramSelections diagramSelections;
 	// private ShapeContextMenu diagramSelections;
 	private Diagram switchFrom;
 
@@ -63,9 +63,9 @@ public class RelationshipDragEndHandler implements
 		this.surface = surface;
 		popup = new PopupPanel();
 		popup.setStyleName("RelationshipDragEndHandler");
-		diagramSelections = new UMLDiagramSelections(surface, this);
+		// diagramSelections = new UMLDiagramSelections(surface, this);
 		// diagramSelections = new ShapeContextMenu();
-		popup.setWidget(diagramSelections);
+		// popup.setWidget(diagramSelections);
 		popup.setAutoHideEnabled(true);
 		popup.setAnimationEnabled(true);
 

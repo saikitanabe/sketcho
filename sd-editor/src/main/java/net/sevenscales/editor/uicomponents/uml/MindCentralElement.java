@@ -2,7 +2,7 @@ package net.sevenscales.editor.uicomponents.uml;
 
 
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.MindCentralShape;
 import net.sevenscales.editor.gfx.domain.Color;

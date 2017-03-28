@@ -10,7 +10,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;

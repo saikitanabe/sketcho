@@ -24,7 +24,7 @@ import net.sevenscales.editor.api.impl.Theme.ThemeName;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.content.ui.ColorSelections;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.utils.ColorHelpers;
 import net.sevenscales.editor.content.utils.Rgb;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;

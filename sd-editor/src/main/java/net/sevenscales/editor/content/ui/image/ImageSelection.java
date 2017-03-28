@@ -28,7 +28,7 @@ import net.sevenscales.editor.api.event.ImageAddedEventHandler;
 import net.sevenscales.editor.api.event.CreateElementEvent;
 import net.sevenscales.domain.js.ImageInfo;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 
 
 public class ImageSelection extends Composite {

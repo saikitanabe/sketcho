@@ -13,7 +13,7 @@ import net.sevenscales.editor.api.event.SaveButtonClickedEvent;
 import net.sevenscales.editor.api.event.SaveButtonClickedEventHandler;
 import net.sevenscales.editor.api.event.StartSelectToolEvent;
 import net.sevenscales.editor.api.event.SurfaceMouseUpNoHandlingYetEvent;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.utils.EffectHelpers;
 import net.sevenscales.editor.uicomponents.helpers.ElementHelpers;
 import net.sevenscales.editor.api.impl.FastButton;

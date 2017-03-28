@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.sevenscales.editor.api.dojo.FactoryDoJo;
 
-import net.sevenscales.editor.api.LibrarySelections.Library;
+import net.sevenscales.editor.api.Library;
 import net.sevenscales.editor.api.LibrarySelections.LibrarySelectedHandler;
 import net.sevenscales.editor.api.LibraryShapes.LibraryShape;
 import net.sevenscales.editor.api.event.LibrarySelectionEvent;

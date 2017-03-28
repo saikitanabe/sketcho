@@ -15,7 +15,7 @@ import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEvent;
 import net.sevenscales.editor.api.event.CommentThreadDeletedEvent;
 import net.sevenscales.editor.api.auth.AuthHelpers;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;

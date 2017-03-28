@@ -1,6 +1,6 @@
 package net.sevenscales.editor.api.event;
 
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.domain.js.ImageInfo;
 import net.sevenscales.domain.js.JsShapeConfig;
 

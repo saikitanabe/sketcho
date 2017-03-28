@@ -9,7 +9,7 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.gfx.domain.Color;

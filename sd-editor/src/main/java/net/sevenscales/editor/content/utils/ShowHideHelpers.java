@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.Library;
 import net.sevenscales.editor.api.LibrarySelections;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.domain.utils.SLogger;
@@ -138,7 +139,7 @@ public class ShowHideHelpers {
 	private void show() {
 		// logger.debug("show...");
 		Object value = editorContext.get(EditorProperty.CURRENT_LIBRARY);
-		if (value != null && value instanceof LibrarySelections.Library && notConfluence()) {
+		if (value != null && value instanceof Library && notConfluence()) {
 			trigger("library-show-" + value.toString().toLowerCase());
 		}
 
