@@ -1,12 +1,11 @@
 package net.sevenscales.editor.content.utils;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.content.ui.UiContextMenu;
+import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Point;
-import net.sevenscales.editor.diagram.Diagram;
-
-import com.google.gwt.core.client.JavaScriptObject;
 
 public class ScaleHelpers {
 	public static native int scaleValue(int value, double scalefactor)/*-{

@@ -1,25 +1,24 @@
 package net.sevenscales.editor.content.ui.lineweight;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
-import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.domain.ElementType;
-import net.sevenscales.editor.uicomponents.uml.Relationship2;
-import net.sevenscales.editor.uicomponents.uml.GenericFreehandElement;
 import net.sevenscales.editor.api.impl.FastElementButton;
+import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.uicomponents.uml.GenericFreehandElement;
+import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
 
 public class LineWeightMenu extends Composite {

@@ -4,14 +4,19 @@ package net.sevenscales.editor.uicomponents.uml;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
+import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.impl.Theme;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.editor.diagram.ISequenceElement;
 import net.sevenscales.editor.diagram.DiagramDragHandler;
+import net.sevenscales.editor.diagram.ISequenceElement;
+import net.sevenscales.editor.diagram.drag.Anchor;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.RectShape;
 import net.sevenscales.editor.diagram.shape.SequenceShape;
@@ -21,20 +26,13 @@ import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.silver.SilverUtils;
-import net.sevenscales.editor.diagram.drag.Anchor;
-import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.AnchorUtils;
-import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers.IExtraConnectionHandler;
 import net.sevenscales.editor.uicomponents.helpers.ILifeLineEditor;
 import net.sevenscales.editor.uicomponents.helpers.LifeLineEditorHelper;
-import net.sevenscales.editor.uicomponents.CardinalDirection;
-import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.DiagramItemDTO;
-
-import com.google.gwt.core.client.JavaScriptObject;
 
 public class SequenceElement extends ClassElement2 implements DiagramDragHandler, SupportsRectangleShape, IExtraConnectionHandler, ISequenceElement {
 	private static SLogger logger = SLogger.createLogger(SequenceElement.class);

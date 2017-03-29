@@ -1,11 +1,6 @@
 package net.sevenscales.editor.api;
 
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.impl.TouchHelpers;
-import net.sevenscales.editor.diagram.LassoSelectionHandler;
-
 import com.google.gwt.dom.client.Touch;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -18,7 +13,11 @@ import com.google.gwt.event.dom.client.TouchMoveEvent;
 import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
+
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.impl.TouchHelpers;
 
 public class LongPressHandler implements MouseDownHandler, 
 																				 MouseMoveHandler, 

@@ -1,23 +1,6 @@
 package net.sevenscales.editor.content.ui;
 
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.domain.constants.Constants;
-import net.sevenscales.editor.api.IBirdsEyeView;
-import net.sevenscales.editor.api.EditorContext;
-import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.event.PinchZoomStartedEvent;
-import net.sevenscales.editor.api.event.SurfaceScaleEvent;
-import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
-import net.sevenscales.editor.api.impl.TouchHelpers;
-import net.sevenscales.editor.content.utils.EffectHelpers;
-import net.sevenscales.editor.diagram.utils.UiUtils;
-
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.event.dom.client.MouseEvent;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.TouchEndEvent;
 import com.google.gwt.event.dom.client.TouchEndHandler;
 import com.google.gwt.event.dom.client.TouchMoveEvent;
@@ -25,6 +8,19 @@ import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
+
+import net.sevenscales.domain.constants.Constants;
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.EditorContext;
+import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.IBirdsEyeView;
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.event.PinchZoomStartedEvent;
+import net.sevenscales.editor.api.event.SurfaceScaleEvent;
+import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
+import net.sevenscales.editor.api.impl.TouchHelpers;
+import net.sevenscales.editor.content.utils.EffectHelpers;
+import net.sevenscales.editor.diagram.utils.UiUtils;
 
 public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private static SLogger logger = SLogger.createLogger(ScaleSlider.class);

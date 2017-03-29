@@ -1,7 +1,5 @@
 package net.sevenscales.editor.utils;
 
-import net.sevenscales.domain.utils.SLogger;
-
 public class GoogleAnalyticsHelper {
 	public static native void trackEvent(String category, String action)/*-{
 		// check for confluence

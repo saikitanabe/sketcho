@@ -1,15 +1,16 @@
 package net.sevenscales.editor.uicomponents.uml;
 
+import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.BoardOTHelpers;
-import net.sevenscales.editor.api.ActionType;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
-import net.sevenscales.editor.content.utils.AreaUtils;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.shape.TextShape;
-import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 import net.sevenscales.editor.gfx.domain.Color;
@@ -18,21 +19,14 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
-import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
-import net.sevenscales.editor.silver.SilverUtils;
-import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.gfx.domain.Point;
+import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
+import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
-import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.DiagramItemDTO;
-import net.sevenscales.domain.ShapeProperty;
-
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 
 
 public class TextElement extends AbstractDiagramItem implements

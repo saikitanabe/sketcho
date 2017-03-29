@@ -4,9 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.domain.utils.StringUtil;
-import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.IRectangle;
 
 public class SvgRect extends SvgBase {
 

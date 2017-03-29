@@ -1,9 +1,7 @@
 package net.sevenscales.editor.diagram.utils;
 
-import java.util.TreeSet;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
+import java.util.TreeSet;
 
 import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.editor.uicomponents.uml.CommentElement;

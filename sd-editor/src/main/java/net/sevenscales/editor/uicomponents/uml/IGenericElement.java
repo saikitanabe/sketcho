@@ -1,6 +1,5 @@
 package net.sevenscales.editor.uicomponents.uml;
 
-import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 

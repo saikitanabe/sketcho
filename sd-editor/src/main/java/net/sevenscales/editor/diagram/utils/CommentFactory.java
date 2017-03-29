@@ -5,24 +5,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.domain.IDiagramItemRO;
-
 import net.sevenscales.domain.CommentDTO;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEvent;
+import net.sevenscales.editor.content.utils.AbstractDiagramFactory;
+import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSearch;
-import net.sevenscales.editor.api.event.CommentThreadModifiedOutsideEvent;
-import net.sevenscales.editor.uicomponents.uml.CommentElement;
-import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
-import net.sevenscales.editor.uicomponents.uml.ChildTextElement;
-import net.sevenscales.editor.content.utils.DiagramItemFactory;
-import net.sevenscales.editor.content.utils.AbstractDiagramFactory;
-import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.diagram.shape.CommentShape;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.gfx.domain.IParentElement;
+import net.sevenscales.editor.uicomponents.uml.CommentElement;
+import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 
 
 public class CommentFactory {

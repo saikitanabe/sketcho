@@ -4,31 +4,23 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.ScrollHandler;
-import com.google.gwt.event.dom.client.ScrollEvent;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.dom.client.AnchorElement;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.core.client.JsArray;
-import com.google.gwt.safehtml.shared.UriUtils;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.impl.FastElementButton;
-import net.sevenscales.editor.content.ui.DiagramSelectionHandler;
-import net.sevenscales.editor.content.utils.DiagramElementFactory;
-import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.editor.api.event.ImageAddedEvent;
-import net.sevenscales.editor.api.event.ImageAddedEventHandler;
-import net.sevenscales.editor.api.event.CreateElementEvent;
 import net.sevenscales.domain.js.ImageInfo;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.event.CreateElementEvent;
+import net.sevenscales.editor.api.event.ImageAddedEvent;
+import net.sevenscales.editor.api.event.ImageAddedEventHandler;
+import net.sevenscales.editor.content.ui.DiagramSelectionHandler;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 
 
 public class ImageSelection extends Composite {

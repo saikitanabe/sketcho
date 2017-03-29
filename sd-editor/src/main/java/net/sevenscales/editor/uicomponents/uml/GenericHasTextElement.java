@@ -1,16 +1,14 @@
 package net.sevenscales.editor.uicomponents.uml;  
 
-import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.editor.api.Tools;
+import net.sevenscales.editor.diagram.shape.GenericShape;
+import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
-import net.sevenscales.editor.diagram.shape.GenericShape;
-import net.sevenscales.domain.ElementType;
-import net.sevenscales.domain.ShapeProperty;
-import net.sevenscales.editor.gfx.domain.IShape;
-import net.sevenscales.editor.gfx.domain.Color;
-import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
-import net.sevenscales.editor.api.Tools;
 
 
 class GenericHasTextElement extends AbstractHasTextElement {

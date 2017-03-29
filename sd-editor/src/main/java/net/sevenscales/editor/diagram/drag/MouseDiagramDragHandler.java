@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gwt.user.client.Window;
+
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ActionType;
-import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
@@ -20,38 +21,29 @@ import net.sevenscales.editor.api.event.DiagramsLoadedEvent;
 import net.sevenscales.editor.api.event.DiagramsLoadedEventHandler;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler;
-import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.event.SelectionEvent;
 import net.sevenscales.editor.api.event.SelectionEventHandler;
 import net.sevenscales.editor.api.event.UnselectAllEvent;
 import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
-import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
-
-import net.sevenscales.editor.diagram.MouseDiagramHandler;
-import net.sevenscales.editor.diagram.DragState;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramDragHandler;
-import net.sevenscales.editor.diagram.MouseDiagramHandlerManager;
+import net.sevenscales.editor.diagram.DragState;
 import net.sevenscales.editor.diagram.ISelectionHandler;
-
+import net.sevenscales.editor.diagram.MouseDiagramHandler;
+import net.sevenscales.editor.diagram.MouseDiagramHandlerManager;
 import net.sevenscales.editor.diagram.utils.GridUtils;
-import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
+import net.sevenscales.editor.diagram.utils.ReattachHelpers;
+import net.sevenscales.editor.gfx.domain.Color;
 // import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
-import net.sevenscales.editor.gfx.domain.IParentElement;
-import net.sevenscales.editor.gfx.domain.IChildElement;
-import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
-import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
-
-import com.google.gwt.user.client.Window;
 
 /**
  * NOTE: not used for toolbar proxy dragging. See ProxyDragHandler for this. 

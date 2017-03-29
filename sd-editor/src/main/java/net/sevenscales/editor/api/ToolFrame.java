@@ -1,11 +1,5 @@
 package net.sevenscales.editor.api;
 
-import net.sevenscales.editor.content.ui.IModeManager;
-import net.sevenscales.editor.content.utils.ShowHideHelpers;
-import net.sevenscales.editor.diagram.DiagramSelectionHandler;
-import net.sevenscales.editor.api.ot.OTBuffer;
-import net.sevenscales.editor.api.ot.OperationTransaction;
-
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -13,7 +7,12 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+
+import net.sevenscales.editor.api.ot.OTBuffer;
+import net.sevenscales.editor.api.ot.OperationTransaction;
+import net.sevenscales.editor.content.ui.IModeManager;
+import net.sevenscales.editor.content.utils.ShowHideHelpers;
+import net.sevenscales.editor.diagram.DiagramSelectionHandler;
 
 public class ToolFrame extends SimplePanel {
 	private Properties properties;

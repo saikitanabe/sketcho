@@ -3,46 +3,31 @@ package net.sevenscales.editor.diagram;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
-import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
-import net.sevenscales.editor.api.event.ColorSelectedEventHandler;
-import net.sevenscales.editor.api.event.ColorSelectedEvent;
-import net.sevenscales.editor.api.impl.Theme;
-import net.sevenscales.editor.content.utils.IntegerHelpers;
-import net.sevenscales.editor.content.utils.ScaleHelpers;
-import net.sevenscales.editor.content.utils.DiagramHelpers;
-import net.sevenscales.editor.diagram.utils.GridUtils;
-import net.sevenscales.editor.gfx.domain.IGroup;
-import net.sevenscales.editor.gfx.domain.IPolyline;
-import net.sevenscales.editor.gfx.domain.IShapeFactory;
-import net.sevenscales.editor.gfx.domain.MatrixPointJS;
-import net.sevenscales.editor.gfx.domain.Point;
-import net.sevenscales.editor.gfx.domain.Color;
-import net.sevenscales.editor.uicomponents.uml.GenericElement;
-import net.sevenscales.editor.uicomponents.uml.FreehandElement;
-import net.sevenscales.editor.uicomponents.AngleUtil2;
-import net.sevenscales.editor.content.ui.UIKeyHelpers;
-import net.sevenscales.domain.DiagramItemDTO;
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.domain.SvgDataDTO;
-import net.sevenscales.domain.IPathRO;
-import net.sevenscales.domain.PathDTO;
-
-import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Touch;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
-import com.google.gwt.dom.client.Touch;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.core.client.Scheduler.RepeatingCommand;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArray;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.EditorProperty;
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.event.ColorSelectedEvent;
+import net.sevenscales.editor.api.event.ColorSelectedEventHandler;
+import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
+import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
+import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.content.ui.UIKeyHelpers;
+import net.sevenscales.editor.diagram.utils.GridUtils;
+import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.Point;
+import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 
 
 public class FreehandDrawerHandler implements MouseDiagramHandler {

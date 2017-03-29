@@ -1,16 +1,16 @@
 package net.sevenscales.editor.api.ot;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-import com.google.gwt.core.client.JsArray;
-import com.google.gwt.core.client.JsonUtils;
-import com.google.gwt.json.client.*;
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
 
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.JSONBoardUserParser;
 import net.sevenscales.domain.JSONDiagramParser;
-import net.sevenscales.editor.api.ot.OTOperation;
 
 public class ApplyHelpers {
 

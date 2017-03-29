@@ -1,13 +1,11 @@
 package net.sevenscales.editor.api.event;
 
-import java.util.List;
 import java.util.ArrayList;
-
-import net.sevenscales.editor.diagram.Diagram;
-import net.sevenscales.domain.IDiagramItemRO;
-
+import java.util.List;
 
 import com.google.gwt.event.shared.GwtEvent;
+
+import net.sevenscales.domain.IDiagramItemRO;
 
 public class BoardRemoveFailureItemsEvent extends GwtEvent<BoardRemoveFailureItemsEventHandler> {
   public static Type<BoardRemoveFailureItemsEventHandler> TYPE = new Type<BoardRemoveFailureItemsEventHandler>();

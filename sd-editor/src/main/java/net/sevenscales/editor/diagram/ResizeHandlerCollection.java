@@ -1,9 +1,8 @@
 package net.sevenscales.editor.diagram;
 
-import net.sevenscales.editor.gfx.domain.Point;
-import net.sevenscales.editor.uicomponents.ResizeInfo;
-
 import java.util.ArrayList;
+
+import net.sevenscales.editor.gfx.domain.Point;
 
 public class ResizeHandlerCollection extends ArrayList<DiagramResizeHandler> {
 

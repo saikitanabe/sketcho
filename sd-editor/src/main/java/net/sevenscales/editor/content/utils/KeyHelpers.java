@@ -2,6 +2,7 @@ package net.sevenscales.editor.content.utils;
 
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
+
 import net.sevenscales.domain.utils.SLogger;
 
 

@@ -2,12 +2,8 @@ package net.sevenscales.domain.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.api.IDiagramItem;
-import net.sevenscales.domain.utils.DiagramItemIdComparator;
 
 public class DiagramItemRWList<T extends IDiagramItemRO> extends ArrayList<T> {	
   private static final DiagramItemIdComparator DIAGRAM_ITEM_IDENTIFIER_COMPARATOR = new DiagramItemIdComparator();

@@ -1,34 +1,32 @@
 package net.sevenscales.editor.uicomponents.uml;
 
 
-import net.sevenscales.editor.content.ui.ContextMenuItem;
+import com.google.gwt.core.client.JavaScriptObject;
+
+import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
-import net.sevenscales.editor.content.utils.AreaUtils;
+import net.sevenscales.editor.content.ui.ContextMenuItem;
+import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.drag.Anchor;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.shape.EllipseShape;
 import net.sevenscales.editor.diagram.shape.Info;
-import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IEllipse;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
-import net.sevenscales.editor.diagram.drag.Anchor;
-import net.sevenscales.editor.diagram.drag.AnchorElement;
-import net.sevenscales.editor.gfx.domain.Point;
+import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
-import net.sevenscales.editor.uicomponents.AnchorUtils;
-import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.DiagramItemDTO;
-
-import com.google.gwt.core.client.JavaScriptObject;
 
 public class EllipseElement extends AbstractDiagramItem implements SupportsRectangleShape {
 	private IEllipse ellipse;

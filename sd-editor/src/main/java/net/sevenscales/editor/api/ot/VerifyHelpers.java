@@ -3,15 +3,13 @@ package net.sevenscales.editor.api.ot;
 
 import java.util.logging.Level;
 
+import com.google.gwt.logging.client.LogConfiguration;
+
 import net.sevenscales.domain.utils.JsonFormat;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.utils.JsonHelpers;
 import net.sevenscales.editor.content.utils.JsonHelpers.MisMatchException;
-import net.sevenscales.editor.api.EditorProperty;
-
-import com.google.gwt.logging.client.LogConfiguration;
-import com.google.gwt.user.client.Timer;
 
 public class VerifyHelpers {
 	private static final SLogger logger = SLogger

@@ -1,11 +1,10 @@
 package net.sevenscales.domain.js;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONString;
-import com.google.gwt.json.client.JSONNumber;
-import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONNumber;
+import com.google.gwt.json.client.JSONObject;
 
 public class JsPresentation extends JavaScriptObject {
 	protected JsPresentation() {

@@ -5,11 +5,11 @@ import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
+import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.MeasurementPanel;
 import net.sevenscales.editor.content.utils.TokenParser;
-import net.sevenscales.editor.content.utils.TokenParser.StringToken;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.base.GraphicsMouseDownHandler;
 import net.sevenscales.editor.gfx.base.GraphicsMouseEnterHandler;
@@ -23,8 +23,6 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
-import net.sevenscales.domain.ShapeProperty;
-import net.sevenscales.domain.utils.SLogger;
 
 
 public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {

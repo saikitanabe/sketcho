@@ -2,9 +2,6 @@ package net.sevenscales.domain;
 
 import java.util.List;
 
-import com.google.gwt.json.client.*;
-
-import net.sevenscales.domain.utils.JsonFormat;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.api.IExtension;
 

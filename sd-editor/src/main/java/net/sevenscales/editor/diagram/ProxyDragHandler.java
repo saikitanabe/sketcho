@@ -1,20 +1,14 @@
 package net.sevenscales.editor.diagram;
 
-import com.google.gwt.dom.client.EventTarget;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-
-import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.utils.Error;
+import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
-import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
-import net.sevenscales.editor.api.impl.TouchDragAndDrop;
-import net.sevenscales.editor.api.impl.TouchDragAndDrop.ITouchToMouseHandler;
 import net.sevenscales.editor.api.Tools;
+import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
+import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.utils.GridUtils;
-import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 
 /**

@@ -1,7 +1,7 @@
 package net.sevenscales.editor.api.event;
 
 import net.sevenscales.editor.api.LibrarySelections;
-import net.sevenscales.editor.api.LibrarySelections.Library;
+import net.sevenscales.editor.api.Library;
 
 import com.google.gwt.event.shared.GwtEvent;
 
@@ -9,7 +9,7 @@ public class LibrarySelectionEvent extends GwtEvent<LibrarySelectionEventHandler
   public static Type<LibrarySelectionEventHandler> TYPE = new Type<LibrarySelectionEventHandler>();
 	private Library library;
 
-  public LibrarySelectionEvent(LibrarySelections.Library library) {
+  public LibrarySelectionEvent(Library library) {
   	this.library = library;
 	}
 

@@ -3,29 +3,28 @@ package net.sevenscales.editor.diagram;
 import java.util.List;
 import java.util.Set;
 
-import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.js.JsSlideData;
+import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.StartSelectToolEvent;
 import net.sevenscales.editor.api.event.StartSelectToolEventHandler;
-import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.ShapeParser;
-import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.diagram.shape.GenericShape;
+import net.sevenscales.editor.diagram.utils.GridUtils;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
-import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.uicomponents.CircleElement;
-import net.sevenscales.editor.gfx.domain.Color;
 
 
 

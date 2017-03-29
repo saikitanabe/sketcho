@@ -1,9 +1,9 @@
 package net.sevenscales.editor.gfx.base;
 
-import net.sevenscales.editor.api.SurfaceUtil;
-
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
+
+import net.sevenscales.editor.api.SurfaceUtil;
 
 public abstract class GraphicsEvent extends Event {
   

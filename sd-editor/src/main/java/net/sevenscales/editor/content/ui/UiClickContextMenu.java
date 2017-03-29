@@ -1,5 +1,21 @@
 package net.sevenscales.editor.content.ui;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.TouchStartEvent;
+import com.google.gwt.event.dom.client.TouchStartHandler;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.Widget;
+
+import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
@@ -7,41 +23,12 @@ import net.sevenscales.editor.api.event.BoardEmptyAreaClickEventHandler;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
 import net.sevenscales.editor.api.event.CreateElementEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
-import net.sevenscales.editor.api.event.FreehandModeChangedEvent.FreehandModeType;
-import net.sevenscales.editor.api.event.CommentModeEvent;
 import net.sevenscales.editor.api.event.SaveButtonClickedEvent;
 import net.sevenscales.editor.api.event.SaveButtonClickedEventHandler;
 import net.sevenscales.editor.api.event.StartSelectToolEvent;
 import net.sevenscales.editor.api.event.SurfaceMouseUpNoHandlingYetEvent;
-import net.sevenscales.editor.content.ui.UMLDiagramSelections.UMLDiagramType;
-import net.sevenscales.editor.content.utils.EffectHelpers;
-import net.sevenscales.editor.uicomponents.helpers.ElementHelpers;
 import net.sevenscales.editor.api.impl.FastButton;
-import net.sevenscales.domain.utils.SLogger;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseMoveHandler;
-import com.google.gwt.event.dom.client.TouchStartEvent;
-import com.google.gwt.event.dom.client.TouchStartHandler;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.dom.client.UListElement;
-import com.google.gwt.dom.client.LIElement;
-import com.google.gwt.user.client.EventListener;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.DOM;
+import net.sevenscales.editor.content.utils.EffectHelpers;
 
 
 public class UiClickContextMenu extends Composite {

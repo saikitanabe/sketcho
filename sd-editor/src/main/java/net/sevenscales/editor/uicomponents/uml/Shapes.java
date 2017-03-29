@@ -2,7 +2,6 @@ package net.sevenscales.editor.uicomponents.uml;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.utils.SLogger;
 
 

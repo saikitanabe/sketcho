@@ -1,7 +1,6 @@
 package net.sevenscales.appFrame.impl;
 
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.user.client.ui.Widget;
 
 import net.sevenscales.appFrame.api.IContext;
 

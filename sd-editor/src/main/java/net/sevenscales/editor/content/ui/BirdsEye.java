@@ -1,22 +1,18 @@
 package net.sevenscales.editor.content.ui;
 
-import com.google.gwt.user.client.Window;
-
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.dom.client.Touch;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
-import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.core.client.JsArray;
-import com.google.gwt.dom.client.Touch;
 
+import net.sevenscales.domain.constants.Constants;
+import net.sevenscales.editor.api.BoardDimensions;
+import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.EditorContext;
-import net.sevenscales.editor.api.EditorProperty;
-import net.sevenscales.editor.api.BoardDimensions;
-import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.editor.api.event.SurfaceScaleEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
 

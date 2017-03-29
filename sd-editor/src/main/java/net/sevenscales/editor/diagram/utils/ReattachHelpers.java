@@ -2,11 +2,9 @@ package net.sevenscales.editor.diagram.utils;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.List;
-
-import com.google.gwt.logging.client.LogConfiguration;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.diagram.Diagram;

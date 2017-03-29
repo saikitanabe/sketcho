@@ -1,20 +1,18 @@
 package net.sevenscales.editor.api.ot;
 
 import java.util.List;
-import java.util.ArrayList;
 
 import com.google.gwt.core.client.JsArray;
 
-import net.sevenscales.domain.js.JsTimestamp;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.domain.constants.Constants;
+import net.sevenscales.domain.js.JsTimestamp;
+import net.sevenscales.domain.json.JsonExtraction;
+import net.sevenscales.domain.utils.JsonFormat;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.content.ClientIdHelpers.UniqueChecker;
-import net.sevenscales.editor.content.utils.JsonHelpers;
-import net.sevenscales.domain.utils.JsonFormat;
-import net.sevenscales.domain.constants.Constants;
-import net.sevenscales.domain.json.JsonExtraction;
 
 
 public class BoardDocument implements UniqueChecker {

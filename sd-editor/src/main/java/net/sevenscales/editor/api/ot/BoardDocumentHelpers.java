@@ -6,7 +6,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import net.sevenscales.domain.DiagramItemDTO;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayString;
+
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.DiagramItemIdComparator;
@@ -14,16 +16,10 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSearch;
-import net.sevenscales.editor.uicomponents.uml.ChildTextElement;
-import net.sevenscales.editor.uicomponents.CircleElement;
-import net.sevenscales.editor.api.ot.BoardUser.BoardUserJson;
-import net.sevenscales.editor.gfx.domain.IRelationship;
 import net.sevenscales.editor.gfx.domain.IChildElement;
-
-import com.google.gwt.core.client.JsArray;
-import com.google.gwt.core.client.JsonUtils;
-import com.google.gwt.core.client.JsArrayString;
-import com.google.gwt.core.client.JavaScriptObject;
+import net.sevenscales.editor.gfx.domain.IRelationship;
+import net.sevenscales.editor.uicomponents.CircleElement;
+import net.sevenscales.editor.uicomponents.uml.ChildTextElement;
 
 public class BoardDocumentHelpers {
 	private static final SLogger logger = SLogger.createLogger(BoardDocumentHelpers.class);

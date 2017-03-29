@@ -25,10 +25,6 @@ public class LibrarySelections extends Composite {
 			UiBinder<Widget, LibrarySelections> {
 	}
 
-	public enum Library {
-		SOFTWARE, MINDMAP, ROADMAP, GENERAL, IMAGES, TEAM, EXTRA, LIBRARY_SETTINGS
-	}
-
 	public interface LibrarySelectedHandler {
 		void onSelected(Library library);
 	}

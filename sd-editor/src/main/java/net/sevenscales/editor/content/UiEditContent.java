@@ -6,19 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sevenscales.domain.api.IContent;
-import net.sevenscales.domain.dto.ContentPropertyDTO;
-import net.sevenscales.editor.api.EditorContext;
-import net.sevenscales.editor.api.event.DeleteSelectedEvent;
-import net.sevenscales.editor.api.event.SelectionEvent;
-import net.sevenscales.editor.api.event.SelectionEventHandler;
-import net.sevenscales.editor.api.event.UnselectAllEvent;
-import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
-import net.sevenscales.editor.content.ui.IModeManager;
-import net.sevenscales.editor.content.ui.ModeBarUi;
-import net.sevenscales.editor.content.ui.SelectButtonBox;
-import net.sevenscales.editor.ui.UpDownController.ISizeCallback;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -35,6 +22,16 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import net.sevenscales.domain.api.IContent;
+import net.sevenscales.domain.dto.ContentPropertyDTO;
+import net.sevenscales.editor.api.EditorContext;
+import net.sevenscales.editor.api.event.DeleteSelectedEvent;
+import net.sevenscales.editor.api.event.UnselectAllEvent;
+import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
+import net.sevenscales.editor.content.ui.IModeManager;
+import net.sevenscales.editor.content.ui.ModeBarUi;
+import net.sevenscales.editor.ui.UpDownController.ISizeCallback;
 
 public abstract class UiEditContent extends UiContent implements KeyDownHandler {
   protected boolean supportsEditMenu = false;
