@@ -78,8 +78,8 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 
   private void createImage() {
     image = IShapeFactory.Util.factory(true).createImage(subgroup, 
-      shape.rectShape.left, 
-      shape.rectShape.top,
+      0, 
+      0,
       // cannot center loader icon since it might not be visible for the user
       // when loading a big image which doesn't fit the screen
       // left, top should be always visible for the user
@@ -110,7 +110,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   }
 
   private void applyImageShape(String url) {
-    image.setShape(0,
+    image.setShape(0, 
                    0,
                    getWidth(), 
                    getHeight(),
@@ -233,7 +233,6 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
         image.setShape(0, 0, width, height);
       }
 
-      // group.setTransform(left, top);
       subgroup.setTransform(left, top);
 
       background.setShape(left, top, width, height, 0);
