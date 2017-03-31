@@ -242,9 +242,8 @@ public class SvgConverter {
       result += groupStart(group, zeroLeft, zeroTop);
 
       // check if subgroup is started
-      IGroup subgroup = null;
-      if (d instanceof GenericElement) {
-        subgroup = ((GenericElement) d).getSubgroup();
+      IGroup subgroup = d.getSubgroup();
+      if (subgroup != null) {
         result += groupStart(subgroup, 0, 0);
       }
 
