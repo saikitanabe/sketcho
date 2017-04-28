@@ -6,6 +6,7 @@ public class JSONBoardUserParser {
 	private String email;
 	private String username;
 	private String avatarUrl;
+	private boolean sketchboardAvatar;
 	private int x;
 	private int y;
 	private int tx;
@@ -17,6 +18,7 @@ public class JSONBoardUserParser {
 		email = JSONParserHelpers.getString(obj.get("email"));
 		username = JSONParserHelpers.getString(obj.get("username"));
 		avatarUrl = JSONParserHelpers.getString(obj.get("avatarUrl"));
+		sketchboardAvatar = JSONParserHelpers.getBoolean(obj.get("sketchboardAvatar"));
 		x = JSONParserHelpers.getInt(obj.get("x"));
 		y = JSONParserHelpers.getInt(obj.get("y"));
 		tx = JSONParserHelpers.getInt(obj.get("tx"));
@@ -33,6 +35,9 @@ public class JSONBoardUserParser {
 	}
 	public String getAvatarUrl() {
 		return this.avatarUrl;
+	}
+	public boolean isSketchboardAvatar() {
+		return this.sketchboardAvatar;
 	}
 	public int getX() {
 		return this.x;

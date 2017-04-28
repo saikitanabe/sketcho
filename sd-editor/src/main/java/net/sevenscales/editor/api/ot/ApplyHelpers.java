@@ -90,6 +90,7 @@ public class ApplyHelpers {
 		private String email;
 		private String username;
 		private String avatarUrl;
+		private boolean sketchboardAvatar;
 		private int x;
 		private int y;
 		private int targetx;
@@ -97,11 +98,12 @@ public class ApplyHelpers {
 		private String selectedCids;
 		private String clientIdentifier;
 
-		public BoardUserApplyOperation(OTOperation operation, String email, String username, String avatarUrl, int x, int y, int targetx, int targety, String selectedCids, String clientIdentifier) {
+		public BoardUserApplyOperation(OTOperation operation, String email, String username, String avatarUrl, boolean sketchboardAvatar, int x, int y, int targetx, int targety, String selectedCids, String clientIdentifier) {
 			super(operation);
 			this.email = email;
 			this.username = username;
 			this.avatarUrl = avatarUrl;
+			this.sketchboardAvatar = sketchboardAvatar;
 			this.x = x;
 			this.y = y;
 			this.targetx = targetx;
@@ -120,6 +122,10 @@ public class ApplyHelpers {
 
 		public String getAvatarUrl() {
 			return avatarUrl;
+		}
+
+		public boolean isSketchboardAvatar() {
+			return sketchboardAvatar;
 		}
 
 		public int getX() {
@@ -177,6 +183,7 @@ public class ApplyHelpers {
 																					 parser.getEmail(),
 																					 parser.getUsername(), 
 																					 parser.getAvatarUrl(), 
+																					 parser.isSketchboardAvatar(),
 																					 parser.getX(), 
 																					 parser.getY(), 
 																					 parser.getTargetX(), 
