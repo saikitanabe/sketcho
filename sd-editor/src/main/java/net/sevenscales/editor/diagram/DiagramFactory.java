@@ -494,14 +494,19 @@ public class DiagramFactory {
   		callback.saved(elementType);
   	} else {
   		// save shape on board
-  		_saveBoardShape(this, elementType, JsShape.SHAPE_TYPE_SKETCH, callback);
+  		_saveBoardShape(this, elementType, Tools.getCurrentSketchMode(), callback);
   	}
 	}
 
 	public void saveBoardShapes(List<? extends IDiagramItemRO> items, IBoardSaved callback) {
 		List<String> elementTypes = missingShapes(items);
 		if (elementTypes.size() > 0) {
-			_saveBoardShapes(this, toJsArrayString(elementTypes), JsShape.SHAPE_TYPE_SKETCH, callback);
+			_saveBoardShapes(
+				this,
+				toJsArrayString(elementTypes),
+				Tools.getCurrentSketchMode(),
+				callback
+			);
 		} else {
 			callback.savedAll();
 		}

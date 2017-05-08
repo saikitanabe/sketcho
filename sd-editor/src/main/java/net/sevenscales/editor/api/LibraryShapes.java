@@ -120,7 +120,7 @@ public class LibraryShapes {
       //     LibraryShapes.LibraryShape s = LibraryShapes.get(ElementType.getEnum(elementType));
       // can be removed
 
-      IShapeGroup sg = ShapeCache.get(elementType, true);
+      IShapeGroup sg = ShapeCache.get(elementType, Tools.isSketchMode());
       if (sg.isReady()) {
         properties = sg.getShape().properties;
         fontSize = sg.getShape().fontSize;
