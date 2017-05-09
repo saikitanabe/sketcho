@@ -153,8 +153,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
     // immediately if there are no references, it should be removed from local cache as well
     // so shape could be readded to board library. But for now going with cleanup on session end.
 
-    setBorderColor(borderColor);
     setBackgroundColor(backgroundColor);
+    setBorderColor(borderColor);
 
     if (!"".equals(text)) {
     	// do not set empty initial text, to keep shape dimensions as defined
@@ -179,8 +179,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
 
 		// needed to make shape visible
-    setBorderColor(borderColor);
     setBackgroundColor(backgroundColor);
+    setBorderColor(borderColor);
 	}
 	public void onError() {
 
