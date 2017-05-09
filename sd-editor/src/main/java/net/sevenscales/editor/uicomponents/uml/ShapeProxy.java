@@ -15,7 +15,7 @@ class ShapeProxy implements IShapeGroup {
 		this.shapeType = shapeType;
 	}
 
-	private void setShape(ShapeGroup shape) {
+	public void setShape(ShapeGroup shape) {
 		this.shape = shape;
 	}
 

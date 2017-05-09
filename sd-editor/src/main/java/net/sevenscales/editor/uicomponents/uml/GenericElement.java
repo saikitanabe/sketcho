@@ -66,7 +66,11 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private boolean tosvg;
   private boolean forceTextRendering;
   
-  private static final String BOUNDARY_COLOR = "#aaaaaa";
+  private static final String BOUNDARY_COLOR 					= "#aaaaaa";
+  private static final String FILL_BORDER_COLOR 			= "fill:bordercolor;";
+  private static final String FILL_BORDER_COLOR_DARK 	= "fill:bordercolor-dark;";
+  private static final String FILL_BG_COLOR 					= "fill:bgcolor;";
+  private static final String FILL_BG_COLOR_LIGHT			= "fill:bgcolor-light;";
 
   private IPath.PathTransformer pathTransformer = new IPath.PathTransformer() {
   	public String getShapeStr(int dx, int dy) {
@@ -150,6 +154,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
     // so shape could be readded to board library. But for now going with cleanup on session end.
 
     setBorderColor(borderColor);
+    setBackgroundColor(backgroundColor);
 
     if (!"".equals(text)) {
     	// do not set empty initial text, to keep shape dimensions as defined
@@ -175,6 +180,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
 		// needed to make shape visible
     setBorderColor(borderColor);
+    setBackgroundColor(backgroundColor);
 	}
 	public void onError() {
 
@@ -239,7 +245,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		    result.setStrokeWidth(FREEHAND_STROKE_WIDTH);
     	}
     }
-    result.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+    // result.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     // path.setStrokeCap("round");
     if (style != null && !"".equals(style)) {
     	style = handleStyle(result, style);
@@ -259,13 +265,19 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 
 	private String handleStyle(IPath path, String style) {
-		if (style.contains("fill:bordercolor;")) {
+		if (style.contains(FILL_BORDER_COLOR)) {
 			path.setFillAsBorderColor(true);
 			// need to clear or will contain invalid fill valud since bordercolor is not hex code or pre color code
-			style = style.replace("fill:bordercolor;", "");
-		} else if (style.contains("fill:bgcolor;")) {
+			style = style.replace(FILL_BORDER_COLOR, "");
+		} else if (style.contains(FILL_BG_COLOR)) {
 			path.setFillAsBoardBackgroundColor(true);
-			style = style.replace("fill:bgcolor;", "");
+			style = style.replace(FILL_BG_COLOR, "");
+		} else if (style.contains(FILL_BORDER_COLOR_DARK)) {
+			path.setFillAsBorderColorDark(true);
+			style = style.replace(FILL_BORDER_COLOR_DARK, "");
+		} else if (style.contains(FILL_BG_COLOR_LIGHT)) {
+			path.setFillAsBackgroundColorLight(true);
+			style = style.replace(FILL_BG_COLOR_LIGHT, "");
 		}
 		return style;
 	}
@@ -560,6 +572,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 				path.path.setFill(color);
 			} else if (path.path.isFillAsBoardBackgroundColor()) {
   			path.path.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
+  		} else if (path.path.isFillAsBorderColorDark()) {
+  			path.path.setFill(color.toDarker());
   		}
   	}
 		// background.setStroke(color);
@@ -570,7 +584,12 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   	super.setBackgroundColor(red, green, blue, opacity);
   	for (PathWrapper path : paths) {
   		if (!path.path.isFillAsBorderColor() && !path.path.isFillAsBoardBackgroundColor()) {
-		    path.path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+			    path.path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+			  }
+
+			if (path.path.isFillAsBackgroundColorLight()) {
+				Color color = getBackgroundColorAsColor();
+  			path.path.setFill(color.toLighter());
   		}
   	}
   }

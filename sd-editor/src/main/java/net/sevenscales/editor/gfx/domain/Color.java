@@ -1,5 +1,7 @@
 package net.sevenscales.editor.gfx.domain;
 
+import com.google.gwt.core.client.JsArrayInteger;
+
 public class Color {
   public int red;
   public int green;
@@ -26,6 +28,35 @@ public class Color {
 		blue = Integer.valueOf(backgroundColor[2]); 
 		opacity = Double.valueOf(backgroundColor[3]);
 	}
+
+	public Color toLighter() {
+		JsArrayInteger rgb = tsRgbToLighter(red, green, blue);
+
+		Color result = create();
+		result.red = rgb.get(0);
+		result.green = rgb.get(1);
+		result.blue = rgb.get(2);
+
+		return result;
+	}
+
+	public Color toDarker() {
+		JsArrayInteger rgb = tsRgbToDarker(red, green, blue);
+
+		Color result = create();
+		result.red = rgb.get(0);
+		result.green = rgb.get(1);
+		result.blue = rgb.get(2);
+
+		return result;
+	}
+
+	private native JsArrayInteger tsRgbToLighter(int red, int green, int blue)/*-{
+		return $wnd.tsRgbToLighter(red, green, blue);
+	}-*/;
+	private native JsArrayInteger tsRgbToDarker(int red, int green, int blue)/*-{
+		return $wnd.tsRgbToDarker(red, green, blue);
+	}-*/;
 	
 	public void copy(Color color) {
 	  red = color.red;
