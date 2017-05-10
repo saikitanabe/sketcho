@@ -1,5 +1,7 @@
 package net.sevenscales.editor.uicomponents.uml;
 
+import net.sevenscales.domain.js.JsShapeConfig;
+
 public interface IShapeGroup {
 	public interface ShapeLoaded {
 		void onSuccess();

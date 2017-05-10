@@ -8,6 +8,7 @@ import net.sevenscales.domain.ExtensionDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.IPathRO;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.js.JsShapeConfig;
 import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ActionType;
@@ -802,4 +803,36 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		return 0;
   }
 
+  @Override
+  public boolean hasDefaultColors() {
+  	ShapeGroup sg = theshape.getShape();
+  	if (sg != null) {
+	  	JsShapeConfig config = sg.getShapeConfig();
+	  	if (config != null) {
+	  		// either has default shape background color or border color defined
+				return config.isDefaultBgColor() || config.isDefaultBorderColor();
+	  	}
+	  }
+    return false;
+  }
+
+  @Override
+  public void restoreDefaultColors() {
+  	ShapeGroup sg = theshape.getShape();
+  	if (sg != null) {
+
+	  	JsShapeConfig config = sg.getShapeConfig();
+
+	  	if (config != null && config.isDefaultBgColor()) {
+	  		Color c = Color.hexToColor(config.getDefaultBgColor());
+		  	setBackgroundColor(c);
+	  	}
+
+	  	if (config != null && config.isDefaultBorderColor()) {
+	  		Color c = Color.hexToColor(config.getDefaultBorderColor());
+		  	setBorderColor(c);
+	  	}
+
+	  }
+	}
 }

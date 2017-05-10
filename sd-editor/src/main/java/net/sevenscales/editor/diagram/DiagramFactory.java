@@ -577,8 +577,7 @@ public class DiagramFactory {
 
   public static Color defaultBgColor(Color background, JsShapeConfig shapeConfig) {
 		if (background.opacity == 0 && shapeConfig != null && shapeConfig.isDefaultBgColor()) {
-			Rgb rgb = Rgb.toRgb(shapeConfig.getDefaultBgColor());
-			Color bg = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
+			Color bg = Color.hexToColor(shapeConfig.getDefaultBgColor());
 			background = bg;
 		}
 
@@ -587,13 +586,11 @@ public class DiagramFactory {
 
   public static Color defaultBorderColor(Color color, JsShapeConfig shapeConfig) {
 		if (shapeConfig != null && shapeConfig.isDefaultBorderColor()) {
-			Rgb rgb = Rgb.toRgb(shapeConfig.getDefaultBorderColor());
-			Color c = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
+			Color c = Color.hexToColor(shapeConfig.getDefaultBorderColor());
 			color = c;
 		}
 
 		return color;
   }
-
 
 }

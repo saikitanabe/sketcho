@@ -1,6 +1,7 @@
 package net.sevenscales.editor.gfx.domain;
 
 import com.google.gwt.core.client.JsArrayInteger;
+import net.sevenscales.editor.content.utils.Rgb;
 
 public class Color {
   public int red;
@@ -28,6 +29,12 @@ public class Color {
 		blue = Integer.valueOf(backgroundColor[2]); 
 		opacity = Double.valueOf(backgroundColor[3]);
 	}
+
+  public static Color hexToColor(String color) {
+		Rgb rgb = Rgb.toRgb(color);
+		Color result = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
+		return result;
+  }
 
 	public Color toLighter() {
 		JsArrayInteger rgb = tsRgbToLighter(red, green, blue);

@@ -1100,6 +1100,15 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public boolean canSetBackgroundColor() {
   	return true;
   }
+
+  @Override
+  public boolean hasDefaultColors() {
+    return false;
+  }
+
+  @Override
+  public void restoreDefaultColors() {
+  }
   
   @Override
   public void setBackgroundColor(int red, int green, int blue, double opacity) {

@@ -165,6 +165,8 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   
   public UMLDiagramType getDiagramType();
   boolean canSetBackgroundColor();
+  boolean hasDefaultColors();
+  void restoreDefaultColors();
 	public void setBackgroundColor(int red, int green, int blue, double opacity);
 	void setBackgroundColor(Color color);
 	String getBackgroundColor();
