@@ -21,6 +21,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
+import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorSetType;
 import net.sevenscales.editor.api.impl.FastButton;
 import net.sevenscales.editor.api.impl.FastElementButton;
 import net.sevenscales.editor.api.impl.Theme;
@@ -44,7 +45,7 @@ public class ColorSelections extends Composite {
 	}
 	
 	public interface SelectionHandler {
-		void itemSelected(ElementColor currentColor, ColorTarget colorTarget);
+		void itemSelected(ElementColor currentColor, ColorTarget colorTarget, ColorSetType colorSetType);
 	}
 
 	@UiField Style style;
@@ -217,7 +218,7 @@ public class ColorSelections extends Composite {
 				color.setTextColor(currentColor.getTextColor().create());
 				break;
 			}
-			selectionHandler.itemSelected(color, colorTarget);
+			selectionHandler.itemSelected(color, colorTarget, ColorSetType.NORMAL);
 		}
 	};
 	
@@ -405,7 +406,11 @@ public class ColorSelections extends Composite {
 
 		updateColorCheckMark();
 
-		selectionHandler.itemSelected(currentColor, ColorTarget.ALL);
+		selectionHandler.itemSelected(
+			currentColor,
+			ColorTarget.ALL,
+			ColorSetType.RESTORE_COLORS
+		);
 	}
 	
 	public void onTransparent() {
@@ -423,7 +428,7 @@ public class ColorSelections extends Composite {
 		}
 		
 		updateColorCheckMark();
-		selectionHandler.itemSelected(currentColor, colorTarget);
+		selectionHandler.itemSelected(currentColor, colorTarget, ColorSetType.TRANSPARENT);
 	}
 	
 	public void setCurrentDiagramColor(Color textColor, Color backgroundColor, Color borderColor) {

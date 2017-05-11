@@ -27,6 +27,7 @@ import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
 import net.sevenscales.editor.api.event.ChangeTextSizeEventHandler;
 import net.sevenscales.editor.api.event.ColorSelectedEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
+import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorSetType;
 import net.sevenscales.editor.api.event.ColorSelectedEventHandler;
 import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
 import net.sevenscales.editor.api.event.DiagramElementAddedEventHandler;
@@ -155,7 +156,12 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 				Set<Diagram> modified = new HashSet<Diagram>();
 				for (Diagram d : Properties.this.selectionHandler.getSelectedItems()) {
 					if (AuthHelpers.allowedToEdit(d) && AuthHelpers.allowColorChange(d)) {
-						setColors(d, event.getColorTarget(), event.getElementColor());
+						setColors(
+							d,
+							event.getColorTarget(),
+							event.getElementColor(),
+							event.getColorSetType()
+						);
 						modified.add(d);
 					}
 				}
@@ -339,10 +345,18 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		MouseDiagramEventHelpers.fireDiagramsChangedEvenet(modified, surface, ActionType.FONT_CHANGE);
 	}
 
-	private void setColors(Diagram d, ColorTarget colorTarget, ElementColor color) {
+	private void setColors(Diagram d, ColorTarget colorTarget, ElementColor color, ColorSetType colorSetType) {
+
+		if (colorSetType == ColorSetType.RESTORE_COLORS && d.hasDefaultColors()) {
+			// e.g. AWS icons have default colors
+			d.restoreDefaultColors();
+			return;
+		}
+
 		switch (colorTarget) {
 		case BACKGROUND:
 			logger.debug("onSelection background {}...", d);
+
 			if (d.canSetBackgroundColor()) {
 		  	// Color newbg = new Color(color.getRr(), color.getGg(), color.getBb(), color.getOpacity());
 		  	Color newbg = color.getBackgroundColor();

@@ -35,6 +35,7 @@ import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
+import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorSetType;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
@@ -821,7 +822,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	}
 	
 	@Override
-	public void itemSelected(ElementColor color, ColorTarget colorTarget) {
+	public void itemSelected(ElementColor color, ColorTarget colorTarget, ColorSetType colorSetType) {
 		logger.debug2("itemSelected color {}, colorTarget {}...", color, colorTarget);
 		this.color = color;
 		if (editorContext.isFreehandMode()) {
@@ -830,7 +831,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			popup.hide();
 			// <<<<<< usability ends
 		}
-		editorContext.getEventBus().fireEvent(new ColorSelectedEvent(color, colorTarget));
+		editorContext.getEventBus().fireEvent(new ColorSelectedEvent(color, colorTarget, colorSetType));
 	}
 
 	@Override

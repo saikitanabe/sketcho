@@ -494,14 +494,19 @@ public class DiagramFactory {
   		callback.saved(elementType);
   	} else {
   		// save shape on board
-  		_saveBoardShape(this, elementType, JsShape.SHAPE_TYPE_SKETCH, callback);
+  		_saveBoardShape(this, elementType, Tools.getCurrentSketchMode(), callback);
   	}
 	}
 
 	public void saveBoardShapes(List<? extends IDiagramItemRO> items, IBoardSaved callback) {
 		List<String> elementTypes = missingShapes(items);
 		if (elementTypes.size() > 0) {
-			_saveBoardShapes(this, toJsArrayString(elementTypes), JsShape.SHAPE_TYPE_SKETCH, callback);
+			_saveBoardShapes(
+				this,
+				toJsArrayString(elementTypes),
+				Tools.getCurrentSketchMode(),
+				callback
+			);
 		} else {
 			callback.savedAll();
 		}
@@ -572,8 +577,7 @@ public class DiagramFactory {
 
   public static Color defaultBgColor(Color background, JsShapeConfig shapeConfig) {
 		if (background.opacity == 0 && shapeConfig != null && shapeConfig.isDefaultBgColor()) {
-			Rgb rgb = Rgb.toRgb(shapeConfig.getDefaultBgColor());
-			Color bg = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
+			Color bg = Color.hexToColor(shapeConfig.getDefaultBgColor());
 			background = bg;
 		}
 
@@ -582,13 +586,11 @@ public class DiagramFactory {
 
   public static Color defaultBorderColor(Color color, JsShapeConfig shapeConfig) {
 		if (shapeConfig != null && shapeConfig.isDefaultBorderColor()) {
-			Rgb rgb = Rgb.toRgb(shapeConfig.getDefaultBorderColor());
-			Color c = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
+			Color c = Color.hexToColor(shapeConfig.getDefaultBorderColor());
 			color = c;
 		}
 
 		return color;
   }
-
 
 }

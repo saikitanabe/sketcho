@@ -8,13 +8,19 @@ public class ColorSelectedEvent extends GwtEvent<ColorSelectedEventHandler> {
 		BORDER, BACKGROUND, TEXT, ALL
 	}
 
+	public enum ColorSetType {
+		NORMAL, RESTORE_COLORS, TRANSPARENT
+	}
+
   public static Type<ColorSelectedEventHandler> TYPE = new Type<ColorSelectedEventHandler>();
 	private ElementColor elementColor;
 	private ColorTarget colorTarget;
+	private ColorSetType colorSetType;
 
-	public ColorSelectedEvent(ElementColor elementColor, ColorTarget colorTarget) {
+	public ColorSelectedEvent(ElementColor elementColor, ColorTarget colorTarget, ColorSetType colorSetType) {
 		this.elementColor = elementColor;
 		this.colorTarget = colorTarget;
+		this.colorSetType = colorSetType;
 	}
 
 	@Override
@@ -33,6 +39,10 @@ public class ColorSelectedEvent extends GwtEvent<ColorSelectedEventHandler> {
 	
 	public ColorTarget getColorTarget() {
 		return colorTarget;
+	}
+
+	public ColorSetType getColorSetType() {
+		return colorSetType;
 	}
 	
 }

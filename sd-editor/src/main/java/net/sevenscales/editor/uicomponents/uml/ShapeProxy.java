@@ -12,9 +12,10 @@ class ShapeProxy implements IShapeGroup {
 
 	ShapeProxy(String elementType, int shapeType) {
 		this.elementType = elementType;
+		this.shapeType = shapeType;
 	}
 
-	void setShape(ShapeGroup shape) {
+	public void setShape(ShapeGroup shape) {
 		this.shape = shape;
 	}
 

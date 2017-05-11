@@ -184,6 +184,10 @@ public class Tools {
 		setSketchMode(sketchMode);
 	}
 
+	public static native int getCurrentSketchMode()/*-{
+		return $wnd.tsCurrentSketchMode();
+	}-*/;
+
 	public static boolean isSketchMode() {
 		return instance._isSketchMode();
 	}
