@@ -291,6 +291,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     alink.use.setAttribute('y', -15)
     alink.setAttribute('title', link)
 
+    $wnd.__addLinkListener__(alink)
+
     // TODO tooltip doesn't work on SvgHandler (preview handler)
     // bootstrap is not available
     // $wnd.$(alink).tooltip()
@@ -302,7 +304,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     if (typeof $wnd.linkOutside === 'function' &&
         $wnd.linkOutside(link)) {
       _setAttributeNS(alink, null, "target", "_blank")
-      _setAttributeNS(alink, null, "rel", "noreferrer")
+      _setAttributeNS(alink, null, "rel", "noopener noreferrer")
     }
     // } else {
       // Firefox opens same page when pressing cmd+click on different tab

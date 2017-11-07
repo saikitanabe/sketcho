@@ -384,7 +384,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
   	if (!itsDoubleTap) {
   		// double tap is handling touch end already
-	  	net.sevenscales.domain.utils.Debug.log("onTouchEnd", itsDoubleTap);
+	  	// net.sevenscales.domain.utils.Debug.log("onTouchEnd", itsDoubleTap);
 			onMouseUp(sender, point, 0);
   	}
   	// reset the state

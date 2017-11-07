@@ -42,12 +42,12 @@ public class EditLinkForm extends Composite {
 	}
 
   interface Template extends SafeHtmlTemplates {
-    @Template("<a href=\"{0}\" target=\"_blank\" rel=\"noreferrer\" class=\"white-text\">{1}</a>")
+    @Template("<a href=\"{0}\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"white-text\">{1}</a>")
     SafeHtml a(String url, String name);
   }
 
   interface NameTruncatedTemplate extends SafeHtmlTemplates {
-    @Template("<a href=\"{0}\" target=\"_blank\" rel=\"noreferrer\" class=\"white-text\">{1}&hellip;{2}</a>")
+    @Template("<a href=\"{0}\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"white-text\">{1}&hellip;{2}</a>")
     SafeHtml a(String url, String nameStart, String nameEnd);
   }
 
