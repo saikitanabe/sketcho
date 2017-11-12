@@ -516,10 +516,12 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	}
 	
 	private void setCurrentHandle(ConnectionHandle connectionHandle) {
-		highlight(connectionHandle.visibleHandle);
+		if (parent != null) {
+			highlight(connectionHandle.visibleHandle);
 
-		ConnectionHelpers.this.modeManager.setConnectionMode(true);
-		ConnectionHelpers.this.modeManager.setForceConnectionPoint(connectionHandle.visibleHandle.getX() + parent.getTransformX(), connectionHandle.visibleHandle.getY() + parent.getTransformY());
+			ConnectionHelpers.this.modeManager.setConnectionMode(true);
+			ConnectionHelpers.this.modeManager.setForceConnectionPoint(connectionHandle.visibleHandle.getX() + parent.getTransformX(), connectionHandle.visibleHandle.getY() + parent.getTransformY());
+		}
 	}
 
 	private void highlight(ICircle visibleHandle) {
