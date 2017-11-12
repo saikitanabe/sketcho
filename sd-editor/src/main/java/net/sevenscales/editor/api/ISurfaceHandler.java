@@ -56,6 +56,7 @@ public interface ISurfaceHandler extends OperationTransaction, HasMouseWheelHand
 	void show();
 	void hide();
 	ISurface getSurface();
+	String getSvg();
 	void setBoardUserHandler(IBoardUserHandler boardUserHandler);
 	IBoardUserHandler getBoardUserHandler();
 	List<Diagram> getDiagrams();

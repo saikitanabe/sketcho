@@ -516,6 +516,9 @@ class SurfaceHandler extends SimplePanel implements
   public ISurface getSurface() {
     return surface;
   }
+  public String getSvg() {
+    return "";
+  }
   
   public IGroup getElementLayer() {
     return elementLayer2;

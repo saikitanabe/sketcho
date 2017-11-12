@@ -9,6 +9,7 @@ import net.sevenscales.domain.JSONContentParser;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.impl.UnAttachedSurface;
+import net.sevenscales.editor.api.BoardDimensions;
 import net.sevenscales.editor.content.UiModelContentHandler;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.gfx.domain.ILoadObserver;
@@ -78,7 +79,14 @@ public class SvgHandler {
 	   		height = content.getHeight();
 	   	}
 			SvgData data = converter.convertToSvg(width, height, surface, false, true);
+			// this.svg = data.svg;
+
+			// net.sevenscales.domain.utils.Debug.log("svg2:", data.svg);
+
+			data.svg = surface.getSvg();
 			this.svg = data.svg;
+
+			
 			nativeReady(handler, data.svg);
     }
 

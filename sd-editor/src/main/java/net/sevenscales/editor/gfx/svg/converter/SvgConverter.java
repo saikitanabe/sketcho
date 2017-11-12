@@ -158,7 +158,9 @@ public class SvgConverter {
 
 //    String result = svgStart + " x='"+outerleft+"'"+" y='"+outertop+"'"+ " width='"+outerright+"' height='"+outerbottom+"'"+svgStartClose;
     if (fontToChange) {
-      result.svg = svgStart + " viewBox='"+outerleft+" "+outertop+" "+(outerright-outerleft)+" "+(outerbottom-outertop)+"'" + " width='" + width() + "' height='" + height() + "'" + svgStartClose;
+      result.viewBox = " viewBox='"+outerleft+" "+outertop+" "+(outerright-outerleft)+" "+(outerbottom-outertop)+"'" + " width='" + width() + "' height='" + height() + "'";
+
+      result.svg = svgStart + result.viewBox + svgStartClose;
     } else {
       // Confluence svg rendering directly no page
       // neeed to scale according to widht provided for the diagram
@@ -177,7 +179,9 @@ public class SvgConverter {
         viewBoxHeight *= sizeFactorial;
       }
       logger.debug("viewBoxWidth {} viewBoxHeight {}", viewBoxWidth, viewBoxHeight);
-      result.svg = svgStart + " viewBox='"+outerleft+" "+outertop+" " + viewBoxWidth + " " + viewBoxHeight + "'" + " width='" + svgWidth + "' height='" + viewBoxHeight + "'" + svgStartClose;
+
+      result.viewBox = " viewBox='"+outerleft+" "+outertop+" " + viewBoxWidth + " " + viewBoxHeight + "'" + " width='" + svgWidth + "' height='" + viewBoxHeight + "'";
+      result.svg = svgStart + result.viewBox + svgStartClose;
     }
 //    result.svg = SafeHtmlUtils.htmlEscape(result.svg);
 //    String result = svgStart + " width='100%' height='100%'"+svgStartClose;

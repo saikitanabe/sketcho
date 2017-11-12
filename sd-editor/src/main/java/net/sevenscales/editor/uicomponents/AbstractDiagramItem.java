@@ -135,6 +135,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   private int transformY;
   protected int factorX = 1;
   protected int factorY = 1;
+  private boolean svgExport;
 	
   public static final String EVENT_DOUBLE_CLICK = "ondblclick";
 
@@ -214,6 +215,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   protected void applyLink() {
+    // if (!this.svgExport) {
+    //   // enabled only on export
+    //   return;
+    // }
+
     IGroup g = getSubgroup();
     if (g == null) {
       g = getGroup();
@@ -226,7 +232,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
         if (linkicon != null) {
           SafeUri url = UriUtils.fromString(linkUrl);
           String urlString = url.asString(); //.replaceAll("&", "&amp;");
-          _applyLink(g.getContainer(), "#linkshape", (int)(getWidth() / 2 - linkicon.getWidth() / 2), getHeight(), urlString);
+          // _applyLink(g.getContainer(), "#linkshape", (int)(getWidth() / 2 - linkicon.getWidth() / 2), getHeight(), urlString);
+          _applyLink(g.getContainer(), "#linkshape", (int)(getWidth() - 3), -25, urlString);
         }
       } else {
         _deleteLink(g.getContainer());
@@ -288,10 +295,15 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     var alink = createOrFindLink()
 
     alink.use.setAttribute('x', x)
-    alink.use.setAttribute('y', -15)
+    alink.use.setAttribute('y', y)
     alink.setAttribute('title', link)
 
-    $wnd.__addLinkListener__(alink)
+    // having a HTML layer to handle link clicks on touch devices
+    // this is no longer needed, because mystically it doesn't
+    // work sometimes on touch...
+    // if (typeof $wnd.__addLinkListener__ === 'function') {
+    //   $wnd.__addLinkListener__(alink)
+    // }
 
     // TODO tooltip doesn't work on SvgHandler (preview handler)
     // bootstrap is not available
@@ -789,11 +801,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
   
   public void toSvgStart() {
-
+    this.svgExport = true;
   }
 
   public void toSvgEnd() {
-
+    this.svgExport = false;
   }
 
   public List<IShape> getElements() {
@@ -943,7 +955,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public void setLink(String link) {
     data.setLink(link);
     applyLink();
+    notifyLinkAdded(link);
   }
+
+  private native void notifyLinkAdded(String url)/*-{
+    $wnd.globalStreams.shapeLinkStream.push(url)
+  }-*/;
   
   public String getLink() {
     if (data != null) {
@@ -1128,6 +1145,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   protected void applyLinkColor() {
+    // if (!this.svgExport) {
+    //   // enabled only on export
+    //   return;
+    // }
+    
     Color bg = getBackgroundColorAsColor();
     IGroup g = getGroup();
     if (g != null && bg.opacity != 0 && !ColorHelpers.isRgbBlack(bg.red, bg.green, bg.blue)) {
