@@ -79,12 +79,12 @@ public class SvgHandler {
 	   		height = content.getHeight();
 	   	}
 			SvgData data = converter.convertToSvg(width, height, surface, false, true);
-			// this.svg = data.svg;
-
-			// net.sevenscales.domain.utils.Debug.log("svg2:", data.svg);
-
-			data.svg = surface.getSvg();
 			this.svg = data.svg;
+
+			// ST 12.11.2017: NEW DOM based svg extraction
+			// data.svg = surface.getSvg();
+			// this.svg = data.svg;
+			// ST 12.11.2017: END NEW DOM based svg extraction
 
 			
 			nativeReady(handler, data.svg);
