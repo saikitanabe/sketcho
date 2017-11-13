@@ -379,6 +379,10 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		links.add(new UrlLinkDTO(link));
 	}
 
+	public void clearLinks() {
+		links = null;
+	}
+
 	public String getFirstLink() {
 		if (links != null && links.size() > 0) {
 			return links.get(0).getUrl();
