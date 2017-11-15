@@ -43,7 +43,8 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	private Point coords = new Point();
   // utility shape container to align text and make separators
   private List<IShape> innerShapes = new ArrayList<IShape>();
-  private IGroup group;
+	private IGroup group;
+	private IGroup subgroup;
 //  private int[] points;
 //  private static final int FOLD_SIZE = 10;
 //  private IPolyline fold;
@@ -71,6 +72,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
+		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
     // group.setAttribute("cursor", "default");
     
     // TODO, implement shadows using svg
@@ -133,7 +135,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
     shapes.add(tape);
 //    shapes.add(fold);
     
-    textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+    textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
 
     setReadOnly(!editable);
     setShape(shape.rectShape.left, shape.rectShape.top, 
@@ -162,6 +164,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 
 		// group.setTransform(left, top);
 		boundary.setShape(left, top, width, height, 0);
+		subgroup.setTransform(left, top);		
 		
 //		leftShadow.setShape(left - LEFT_SHADOW_LEFT, top + height - LEFT_SHADOW_HEIGHT, 50, 50);
 //		rightShadow.setShape(left + width - RIGHT_SHADOW_LEFT, top + height - RIGHT_SHADOW_HEIGHT, 50, 50);
@@ -218,10 +221,12 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
     	return boundary.getWidth() - MARGIN_LEFT * 2;
     }
     public int getX() {
-    	return boundary.getX() + MARGIN_LEFT;
+    	// return boundary.getX() + MARGIN_LEFT;
+    	return MARGIN_LEFT;
     }
     public int getY() {
-    	return boundary.getY() + MARGIN_TOP;
+    	// return boundary.getY() + MARGIN_TOP;
+    	return MARGIN_TOP;
     }
     public int getHeight() {
     	return boundary.getHeight() - MARGIN_TOP;
@@ -462,6 +467,10 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	@Override
 	public IGroup getGroup() {
 		return group;
+	}
+	@Override
+	public IGroup getSubgroup() {
+		return subgroup;
 	}
 	
 	@Override
