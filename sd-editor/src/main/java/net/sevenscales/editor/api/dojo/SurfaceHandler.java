@@ -516,6 +516,13 @@ class SurfaceHandler extends SimplePanel implements
   public ISurface getSurface() {
     return surface;
   }
+	public boolean isExporting() {
+    // DEV to see export svg directly on board
+    // return true;
+    
+    // PROD setting don't show link svg on realtime board
+		return false;
+	}
   public String getSvg() {
     return "";
   }
