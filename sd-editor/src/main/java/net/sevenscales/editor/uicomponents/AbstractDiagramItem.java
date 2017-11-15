@@ -215,10 +215,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   protected void applyLink() {
-    // if (!this.svgExport) {
-    //   // enabled only on export
-    //   return;
-    // }
+    if (!this.surface.isExporting()) {
+      // enabled only on export
+      return;
+    }
 
     IGroup g = getSubgroup();
     if (g == null) {
@@ -1145,10 +1145,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   protected void applyLinkColor() {
-    // if (!this.svgExport) {
-    //   // enabled only on export
-    //   return;
-    // }
+    if (!this.surface.isExporting()) {
+      // enabled only on export
+      return;
+    }
     
     Color bg = getBackgroundColorAsColor();
     IGroup g = getGroup();

@@ -82,8 +82,8 @@ public class SvgHandler {
 			this.svg = data.svg;
 
 			// ST 12.11.2017: NEW DOM based svg extraction
-			// data.svg = surface.getSvg();
-			// this.svg = data.svg;
+			data.svg = surface.getSvg();
+			this.svg = data.svg;
 			// ST 12.11.2017: END NEW DOM based svg extraction
 
 			

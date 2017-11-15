@@ -116,12 +116,17 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public ISurface getSurface() {
 		return surface;
 	}
+	public boolean isExporting() {
+		return true;
+	}
   public String getSvg() {
   	// surface.getContainer();
   	JsSvgContainer svg = surface.getContainer().cast();
   	// net.sevenscales.domain.utils.Debug.log("svg:", svg.getSvg());
-    // return surface.getContainer().toString();
-    return svg.getSvg();
+		// return surface.getContainer().toString();
+		
+		String result = svg.getSvg();
+		return result;
   }
 	public void setBoardUserHandler(IBoardUserHandler boardUserHandler) {
 	}
