@@ -13,6 +13,7 @@ import net.sevenscales.editor.api.BoardDimensions;
 import net.sevenscales.editor.content.UiModelContentHandler;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.gfx.domain.ILoadObserver;
+import net.sevenscales.editor.gfx.domain.JsSvg;
 import net.sevenscales.editor.gfx.svg.converter.SvgConverter;
 import net.sevenscales.editor.gfx.svg.converter.SvgData;
 import net.sevenscales.editor.uicomponents.uml.ShapeCache;
@@ -82,12 +83,16 @@ public class SvgHandler {
 			this.svg = data.svg;
 
 			// ST 12.11.2017: NEW DOM based svg extraction
-			data.svg = surface.getSvg();
-			this.svg = data.svg;
+			JsSvg jsSvg = surface.getSvg();
+			if (jsSvg != null) {
+				// jsSvg could be null, e.g. now on normal SurfaceHandler
+				data.svg = jsSvg.getSvg();
+				this.svg = data.svg;
+			}
 			// ST 12.11.2017: END NEW DOM based svg extraction
 
 			
-			nativeReady(handler, data.svg);
+			nativeReady(handler, jsSvg);
     }
 
     // synchronous from RootPanel.get().add, so break out
@@ -105,7 +110,7 @@ public class SvgHandler {
 		return svg;
 	}
 
-	private native void nativeReady(JavaScriptObject handler, String svg)/*-{
+	private native void nativeReady(JavaScriptObject handler, JsSvg svg)/*-{
 		handler(svg)
 	}-*/;
 	

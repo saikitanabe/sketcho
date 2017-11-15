@@ -12,7 +12,7 @@ public class JsSvgContainer extends JavaScriptObject {
 		return this.rawNode
 	}-*/;
 
-	public final native String getSvg()/*-{
+	public final native JsSvg getSvg()/*-{
 		var svg = this.rawNode;
 
 		if (typeof $wnd.__svgNodeToString__ === 'function') {
