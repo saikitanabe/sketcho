@@ -65,7 +65,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private GenericHasTextElement hasTextElement;
   private boolean pathsSetAtLeastOnce;
   private boolean tosvg;
-  private boolean forceTextRendering;
+	private boolean forceTextRendering;
+	private boolean legacy = true;
   
   private static final String BOUNDARY_COLOR 					= "#aaaaaa";
   private static final String FILL_BORDER_COLOR 			= "fill:bordercolor;";
@@ -123,15 +124,17 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
     hasTextElement.setMarginLeft(getMarginLeft());
     hasTextElement.setMarginTop(getMarginTop());
 		hasTextElement.setMarginBottom(getMarginBottom());
-		
+
 		// ST 20.11.2017: Commented out due to SVG text moved under subgroup
 		// and text layer was under background color
-    // if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
-	  //   textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
-	  //   textUtil.setMarginTop(0);
-    // } else {
-	  //   textUtil = new TextElementFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
-    // }
+		if (legacy) {
+			if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
+				textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+				textUtil.setMarginTop(0);
+			} else {
+				textUtil = new TextElementFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+			}
+		}
 
     setReadOnly(!editable);
 
@@ -150,15 +153,17 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	  	theshape.fetch(this);
 		}
 		
-		// ST 20.11.2017: Moved due to SVG text layer was behind background color
-		// order changed due to text is now part of subgroup
-		// and moved with the subgroup
-    if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
-	    textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
-	    textUtil.setMarginTop(0);
-    } else {
-	    textUtil = new TextElementFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
-    }
+		if (!legacy) {
+			// ST 20.11.2017: Moved due to SVG text layer was behind background color
+			// order changed due to text is now part of subgroup
+			// and moved with the subgroup
+			if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
+				textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
+				textUtil.setMarginTop(0);
+			} else {
+				textUtil = new TextElementFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
+			}
+		}
 
     // NOTE setShape is called after fetch is ready
     // - fetch is synchronous on page load and when ever shape is found from cache
@@ -499,7 +504,9 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			// ST 15.11.2017: commented out after text moved under subgroup
 			// and is moved with the subgroup
 			// could speed moving large text shapes...
-	    // textUtil.setTextShape();
+			if (legacy) {
+				textUtil.setTextShape();
+			}
 			super.applyHelpersShape();
   	}
   }

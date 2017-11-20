@@ -22,6 +22,7 @@ class GenericHasTextElement extends AbstractHasTextElement {
 	private IGenericElement parent;
 	private GenericShape shape;
 	private String elementType;
+	private boolean legacy = true;
 
 	GenericHasTextElement(IGenericElement parent, GenericShape shape) {
 		super(parent.getDiagram());
@@ -48,30 +49,41 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
   public int getX() {
-		// ST 20.11.2017: text moved with a subgroup transformation
-    // return parent.getRelativeLeft() + getMarginLeft();
+		if (legacy) {
+			// ST 20.11.2017: text moved with a subgroup transformation
+			return parent.getRelativeLeft() + getMarginLeft();
+		}
     return getMarginLeft();
   }
 
 	@Override
   public int getY() {
   	if (Tools.isSketchMode() && ElementType.BUBBLE_R.getValue().equals(shape.getElementType())) {
-			// ST 20.11.2017: text moved with a subgroup transformation			
-  		// return parent.getRelativeTop() + getMarginTop();
+			// ST 20.11.2017: text moved with a subgroup transformation
+			if (legacy) {
+				return parent.getRelativeTop() + getMarginTop();
+			}
   		return getMarginTop();
   	} else if (Tools.isSketchMode() && ElementType.BUBBLE.getValue().equals(shape.getElementType())) {
 			// ST 20.11.2017: text moved with a subgroup transformation			
-  		// return parent.getRelativeTop() + getMarginTop();
-  		return getMarginTop();
+			if (legacy) {
+				return parent.getRelativeTop() + getMarginTop();
+			}
+			return getMarginTop();
   	}
 
   	if (ShapeProperty.isTextPositionBottom(parent.getDiagramItem().getShapeProperties())) {
 			// ST 20.11.2017: text moved with a subgroup transformation			
-			// return parent.getRelativeTop() + parent.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 8;
+			if (legacy) {
+				return parent.getRelativeTop() + parent.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 8;
+			}
 			return parent.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 8;
   	} else if (ShapeProperty.isTextResizeDimVerticalResize(parent.getDiagramItem().getShapeProperties())) {
 			// ST 20.11.2017: text moved with a subgroup transformation			
-  		// return parent.getRelativeTop() + parent.getHeight() / 2 - ((int) parent.getTextHeight() / 2 + TextElementVerticalFormatUtil.DEFAULT_TOP_MARGIN / 2);
+			if (legacy) {
+				return parent.getRelativeTop() + parent.getHeight() / 2
+						- ((int) parent.getTextHeight() / 2 + TextElementVerticalFormatUtil.DEFAULT_TOP_MARGIN / 2);
+			}
   		return parent.getHeight() / 2 - ((int) parent.getTextHeight() / 2 + TextElementVerticalFormatUtil.DEFAULT_TOP_MARGIN / 2);
   	} else {
 			// switch (elementType) {
@@ -81,7 +93,9 @@ class GenericHasTextElement extends AbstractHasTextElement {
 			// }
 
 			// ST 20.11.2017: text moved with a subgroup transformation
-  		// return parent.getRelativeTop();
+			if (legacy) {
+				return parent.getRelativeTop();
+			}
   		return 0;
   	}
   }

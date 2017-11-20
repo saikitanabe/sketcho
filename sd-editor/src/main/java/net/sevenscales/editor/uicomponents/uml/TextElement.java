@@ -39,6 +39,7 @@ public class TextElement extends AbstractDiagramItem implements
 	private TextElementFormatUtil textUtil;
 	private int minimumWidth = 5;
 	private int minimumHeight = 5;
+	private boolean legacy = true;
 
 	public TextElement(ISurfaceHandler surface, TextShape newShape,
 			Color backgroundColor, Color borderColor, Color textColor, String text, boolean editable, IDiagramItemRO item) {
@@ -85,6 +86,9 @@ public class TextElement extends AbstractDiagramItem implements
 	}
 
 	protected TextElementFormatUtil createTextFormatter(HasTextElement hasTextElement) {
+		if (legacy) {
+			return new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+		}
 		return new TextElementVerticalFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
 	}
 
@@ -100,13 +104,17 @@ public class TextElement extends AbstractDiagramItem implements
 				public int getX() {
 					// ST 15.11.2017: changed when subgroup added to handle link position
 					// text is moved with the subgroup as well
-					// return getTextX();
+					if (legacy) {
+						return getTextX();
+					}
 					return 0;
 				}
 
 				public int getY() {
 					// ST 15.11.2017: see comment from getX()
-					// return attachBoundary.getY();
+					if (legacy) {
+						return attachBoundary.getY();
+					}
 					return 0;
 				}
 				public int getHeight() {
