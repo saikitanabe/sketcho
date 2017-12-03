@@ -39,6 +39,7 @@ import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.ISurface;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.JsSvg;
 
 
 public interface ISurfaceHandler extends OperationTransaction, HasMouseWheelHandlers {
@@ -56,6 +57,8 @@ public interface ISurfaceHandler extends OperationTransaction, HasMouseWheelHand
 	void show();
 	void hide();
 	ISurface getSurface();
+	boolean isExporting();
+	JsSvg getSvg();
 	void setBoardUserHandler(IBoardUserHandler boardUserHandler);
 	IBoardUserHandler getBoardUserHandler();
 	List<Diagram> getDiagrams();

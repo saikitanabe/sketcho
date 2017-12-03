@@ -310,11 +310,16 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 
     if (confirmedRemove.size() > 0) {
       surface.getEditorContext().getEventBus().fireEvent(new BoardRemoveDiagramsEvent(confirmedRemove));
+      notifyRemove();
     }
     if (convertedToModify.size() > 0) {
       surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(convertedToModify));
     }
   }
+
+  private native void notifyRemove()/*-{
+    $wnd.globalStreams.deleteShapeStream.push()
+  }-*/;
 
   /**
   * This can be used to hook parent deletion after

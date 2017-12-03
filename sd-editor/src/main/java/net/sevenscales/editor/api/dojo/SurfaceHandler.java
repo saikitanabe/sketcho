@@ -85,6 +85,7 @@ import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.ISurface;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.JsSvg;
 import net.sevenscales.editor.uicomponents.CircleElement;
 
 
@@ -515,6 +516,16 @@ class SurfaceHandler extends SimplePanel implements
 
   public ISurface getSurface() {
     return surface;
+  }
+	public boolean isExporting() {
+    // DEV to see export svg directly on board
+    // return true;
+    
+    // PROD setting don't show link svg on realtime board
+		return false;
+	}
+  public JsSvg getSvg() {
+    return null;
   }
   
   public IGroup getElementLayer() {

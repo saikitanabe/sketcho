@@ -506,6 +506,8 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	private IDiagramItem setDefaultValues(IDiagramItem item) {
 		modifyDefaultColors(item);
 
+		item.clearLinks();
+
 		LibraryShapes.ShapeProps ls = LibraryShapes.getShapeProps(item.getType());
 		if (ls != null) {
 			item.setShapeProperties(ls.properties);

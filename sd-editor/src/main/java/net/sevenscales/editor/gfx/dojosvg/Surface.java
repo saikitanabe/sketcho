@@ -6,13 +6,14 @@ import com.google.gwt.user.client.ui.UIObject;
 
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.domain.IContainer;
+import net.sevenscales.editor.gfx.domain.JsSvgContainer;
 import net.sevenscales.editor.gfx.domain.IKeyEventHandler;
 import net.sevenscales.editor.gfx.domain.ILoadObserver;
 import net.sevenscales.editor.gfx.domain.ISurface;
 
 class Surface extends Graphics implements IContainer, ISurface {
 	protected UIObject uiObject;
-	protected JavaScriptObject surface;
+	protected JsSvgContainer surface;
 //	private Rectangle canvas;
 	private ILoadObserver loadObserver;
 	private int width;
@@ -27,7 +28,7 @@ class Surface extends Graphics implements IContainer, ISurface {
 		this.loadObserver = loadObserver;
 		this.uiObject = uiObject;
 		surface = createSurface(uiObject.getElement(), uiObject.getOffsetWidth(),
-				uiObject.getOffsetHeight());
+				uiObject.getOffsetHeight()).cast();
 	}
 
 	public void load() {

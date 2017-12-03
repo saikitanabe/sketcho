@@ -39,9 +39,9 @@ public class SurfaceDefs {
 			var rect = _createElementNS(svgns, 'rect')
 			rect.setAttribute('width', icon.w)
 			rect.setAttribute('height', icon.h)
-			rect.setAttribute('x', -1)
-			rect.setAttribute('y', -1)
-			rect.setAttribute('rx', 9)
+			rect.setAttribute('x', 0)
+			rect.setAttribute('y', 0)
+			rect.setAttribute('rx', 26)
 			rect.setAttribute('style', 'fill:#fff;stroke:none;')
 			group.appendChild(rect)
 

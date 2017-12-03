@@ -35,9 +35,11 @@ public class TextElement extends AbstractDiagramItem implements
 	private TextShape shape;
 	private Point coords = new Point();
 	private IGroup group;
+	private IGroup subgroup;	
 	private TextElementFormatUtil textUtil;
 	private int minimumWidth = 5;
 	private int minimumHeight = 5;
+	private boolean legacy = true;
 
 	public TextElement(ISurfaceHandler surface, TextShape newShape,
 			Color backgroundColor, Color borderColor, Color textColor, String text, boolean editable, IDiagramItemRO item) {
@@ -46,6 +48,7 @@ public class TextElement extends AbstractDiagramItem implements
 
 		group = IShapeFactory.Util.factory(editable).createGroup(
 				surface.getElementLayer());
+		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
 		// group.setAttribute("cursor", "default");
 
 		attachBoundary = IShapeFactory.Util.factory(editable)
@@ -83,7 +86,10 @@ public class TextElement extends AbstractDiagramItem implements
 	}
 
 	protected TextElementFormatUtil createTextFormatter(HasTextElement hasTextElement) {
-		return new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+		if (legacy) {
+			return new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+		}
+		return new TextElementVerticalFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
 	}
 
 	// nice way to clearly separate interface methods :)
@@ -96,11 +102,20 @@ public class TextElement extends AbstractDiagramItem implements
 				}
 
 				public int getX() {
-					return getTextX();
+					// ST 15.11.2017: changed when subgroup added to handle link position
+					// text is moved with the subgroup as well
+					if (legacy) {
+						return getTextX();
+					}
+					return 0;
 				}
 
 				public int getY() {
-					return attachBoundary.getY();
+					// ST 15.11.2017: see comment from getX()
+					if (legacy) {
+						return attachBoundary.getY();
+					}
+					return 0;
 				}
 				public int getHeight() {
 					return attachBoundary.getHeight();
@@ -306,6 +321,7 @@ public class TextElement extends AbstractDiagramItem implements
 		// }
 		// group.setTransform(left, top);
 		attachBoundary.setShape(left, top, width, height, 4);
+		subgroup.setTransform(left, top);
 		textUtil.setTextShape();
     super.applyHelpersShape();
 	}
@@ -363,6 +379,10 @@ public class TextElement extends AbstractDiagramItem implements
 	@Override
 	public IGroup getGroup() {
 		return group;
+	}
+	@Override
+	public IGroup getSubgroup() {
+		return subgroup;
 	}
 
 	@Override

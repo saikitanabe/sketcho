@@ -11,6 +11,7 @@ import java.util.Set;
 import com.google.gwt.user.client.Window;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
@@ -285,7 +286,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 			if (mouseDown && !dragging) {
 				// Debug.print("dragstarted");
 				// mouse down but dragging not yet started => dragStart
-				logger.debug("drag start, moveItems={}", moveItems());
+				// logger.debug("drag start, moveItems={}", moveItems());
 				startDragging(currentDiagram);
 			}
 //			logger.debug("drag {}", currentDiagram);
@@ -497,8 +498,24 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		// safari doesn't support cumulative transformations
 			snapshotTransformations();
 		// }
-		_notifyDrag("start");
-  }
+
+		_notifyDrag("start", getMoveShapeIDs());
+	}
+	
+	private String[] getMoveShapeIDs() {
+		Set<Diagram> shapes = moveItems();
+		String[] result = new String[shapes.size()];
+		
+		int i = 0;
+		for (Diagram d : shapes) {
+			IDiagramItem item = d.getDiagramItem();
+			if (item != null) {
+				result[i++] = item.getClientId();
+			}
+		}
+
+		return result;
+	}
 
   /**
   * Need to take snapshot from all selected diagram transformations
@@ -656,12 +673,13 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 			MouseDiagramEventHelpers.fireDiagramsChangedEvenet(selectedItems, surface, ActionType.DRAGGING);
 		}
 
-		_notifyDrag("end");
+		_notifyDrag("end", null);
 	}
 
-	private native void _notifyDrag(String type)/*-{
+	private native void _notifyDrag(String type, String[] shapeIDs)/*-{
 		$wnd.globalStreams.shapeDragStream.push({
-			type: type
+			type: type,
+			shape_ids: shapeIDs
 		})
 	}-*/;
 		

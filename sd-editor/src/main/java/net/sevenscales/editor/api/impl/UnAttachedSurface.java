@@ -42,6 +42,8 @@ import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.domain.IGroup;
+import net.sevenscales.editor.gfx.domain.JsSvgContainer;
+import net.sevenscales.editor.gfx.domain.JsSvg;
 import net.sevenscales.editor.gfx.domain.ILoadObserver;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.ISurface;
@@ -115,6 +117,13 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public ISurface getSurface() {
 		return surface;
 	}
+	public boolean isExporting() {
+		return true;
+	}
+  public JsSvg getSvg() {
+  	JsSvgContainer svg = surface.getContainer().cast();
+		return svg.getSvg();
+  }
 	public void setBoardUserHandler(IBoardUserHandler boardUserHandler) {
 	}
 	public IBoardUserHandler getBoardUserHandler() {

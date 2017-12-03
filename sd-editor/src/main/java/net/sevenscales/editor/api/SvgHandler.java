@@ -9,9 +9,11 @@ import net.sevenscales.domain.JSONContentParser;
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.impl.UnAttachedSurface;
+import net.sevenscales.editor.api.BoardDimensions;
 import net.sevenscales.editor.content.UiModelContentHandler;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.gfx.domain.ILoadObserver;
+import net.sevenscales.editor.gfx.domain.JsSvg;
 import net.sevenscales.editor.gfx.svg.converter.SvgConverter;
 import net.sevenscales.editor.gfx.svg.converter.SvgData;
 import net.sevenscales.editor.uicomponents.uml.ShapeCache;
@@ -76,10 +78,26 @@ public class SvgHandler {
 	   	int height = 0;
 	   	if (content.getHeight() != null) {
 	   		height = content.getHeight();
-	   	}
+			}
+
+			// ST 20.11.2017: Legacy SVG custom conversion
 			SvgData data = converter.convertToSvg(width, height, surface, false, true);
 			this.svg = data.svg;
-			nativeReady(handler, data.svg);
+			JsSvg jsSvg = JsSvg.create(data.svg);
+			nativeReadyLegacy(handler, data.svg);
+			// ST 20.11.2017: END Legacy SVG custom conversion
+
+			// ST 12.11.2017: NEW DOM based svg extraction
+			// JsSvg jsSvg = surface.getSvg();
+			// if (jsSvg != null) {
+			// 	// jsSvg could be null, e.g. now on normal SurfaceHandler
+			// 	data.svg = jsSvg.getSvg();
+			// 	this.svg = data.svg;
+			// }
+			// nativeReady(handler, jsSvg);
+			// ST 12.11.2017: END NEW DOM based svg extraction
+
+			
     }
 
     // synchronous from RootPanel.get().add, so break out
@@ -97,7 +115,11 @@ public class SvgHandler {
 		return svg;
 	}
 
-	private native void nativeReady(JavaScriptObject handler, String svg)/*-{
+	private native void nativeReadyLegacy(JavaScriptObject handler, String svg)/*-{
+		handler(svg)
+	}-*/;
+
+	private native void nativeReady(JavaScriptObject handler, JsSvg svg)/*-{
 		handler(svg)
 	}-*/;
 	

@@ -177,6 +177,7 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 			this.sender.resizeEnd();
 			AnchorElement.dragEndAnchors(this.sender);
 			resizeHandlerCollection.fireResizeEnd(this.sender);
+			_notifyResizeEnd();
 			
 			// TODO collect all dependant relationships!!!
 			// to common code with mouse drag manager
@@ -190,6 +191,10 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 
 		clearResize();
 	}
+
+	private native void _notifyResizeEnd()/*-{
+		$wnd.globalStreams.shapeResizeStream.push()
+	}-*/;
 
 	private void clearResize() {
 		this.sender = null;
