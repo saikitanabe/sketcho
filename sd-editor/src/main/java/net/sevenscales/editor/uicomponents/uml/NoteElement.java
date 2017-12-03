@@ -72,6 +72,13 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
+
+		// >>>> ST 3.12.2017: regression bug: background color hides text
+		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
+		boundary.setStrokeWidth(STROKE_WIDTH);
+		boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+		// <<<< ST 3.12.2017: regression bug: background color hides text
+
 		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
     // group.setAttribute("cursor", "default");
     
@@ -91,9 +98,6 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 //                       shape.rectShape.left+shape.rectShape.width, shape.rectShape.top+shape.rectShape.height,
 //                       shape.rectShape.left, shape.rectShape.top+shape.rectShape.height,
 //                       shape.rectShape.left, shape.rectShape.top};
-		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
-		boundary.setStrokeWidth(STROKE_WIDTH);
-		boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 		
 //    topBlur = IShapeFactory.Util.factory(editable)
 //    		.createImage(group, shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height, "images/notetopblur.png");
@@ -164,7 +168,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 
 		// group.setTransform(left, top);
 		boundary.setShape(left, top, width, height, 0);
-		subgroup.setTransform(left, top);		
+		subgroup.setTransform(left, top);
 		
 //		leftShadow.setShape(left - LEFT_SHADOW_LEFT, top + height - LEFT_SHADOW_HEIGHT, 50, 50);
 //		rightShadow.setShape(left + width - RIGHT_SHADOW_LEFT, top + height - RIGHT_SHADOW_HEIGHT, 50, 50);
