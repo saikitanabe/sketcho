@@ -297,6 +297,9 @@ public class RelationshipDragEndHandler implements
 		to.setText(src.getText());
 		reattachHelpers.processDiagram(to);
 		surface.addAsSelected(to, true);
+		to.setBackgroundColor(src.getBackgroundColorAsColor());
+		to.setBorderColor(src.getBorderColor());
+		to.setTextColor(src.getTextColor());
 
     for (AnchorElement ae : src.getAnchors()) {
     	Relationship2 rel = ae.getRelationship();
