@@ -615,7 +615,11 @@ public class TextElementFormatUtil {
 	
 	public double getTextHeight() {
 		return (lines.size() + 1) * fontProperty.rowHeight;
-	}
+  }
+  
+  public boolean isSupportFontSize() {
+    return true;
+  }
 
   public int getFontSize() {
     return fontSize;

@@ -50,6 +50,11 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
     // calculateAndNotifyHeight(hasTextElement.getWidth());
   }
 
+  @Override
+  public boolean isSupportFontSize() {
+    return false;
+  }
+
   private void calculateLines2() {
     try {
       this.tokens = TokenParser.parse2(getText());
