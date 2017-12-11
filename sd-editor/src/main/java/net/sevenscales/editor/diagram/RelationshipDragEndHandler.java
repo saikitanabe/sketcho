@@ -301,7 +301,6 @@ public class RelationshipDragEndHandler implements
     for (AnchorElement ae : src.getAnchors()) {
     	Relationship2 rel = ae.getRelationship();
     	if (rel != null) {
-    		reattachHelpers.processDiagram(rel);
       	Diagram start = rel.getStartAnchor().getDiagram();
       	Diagram end = rel.getEndAnchor().getDiagram();
 
@@ -317,7 +316,14 @@ public class RelationshipDragEndHandler implements
       		// need to find the other end
       		reattachHelpers.processDiagram(start);
       	}
-    	}
+			}
+
+			// ST 11.12.2017: BUG switch shape doesn't reconnect relationships
+			// to new shape.
+			// For some reason old relationship data custom data is reused
+			// if relationship is added in the beginning of this for loop
+			// and after if (rel != null)
+			reattachHelpers.processDiagram(rel);
 		}
 		surface.getSelectionHandler().remove(src, true);
 		reattachHelpers.reattachRelationshipsAndDrawClosestPath();
