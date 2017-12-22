@@ -292,9 +292,16 @@ public class RelationshipDragEndHandler implements
 
 		Diagram to = DiagramFactory.getFactory(surface)
 			.createDiagram(elementType, shapeConfig, imageInfo, src.getLeft(), src.getTop(), src.getWidth(), src.getHeight(), initialShapeProperties);
+
+		to.setBackgroundColor(src.getBackgroundColorAsColor());
+		to.setBorderColor(src.getBorderColor());
+		to.setTextColor(src.getTextColor());
+				
 		to.getDiagramItem().setClientId(null);
 		ClientIdHelpers.generateClientIdIfNotSet(to.getDiagramItem(), 0, surface.getEditorContext().getGraphicalDocumentCache(), surface.getEditorContext());
 		to.setText(src.getText());
+		to.setFontSize(src.getFontSize());
+
 		reattachHelpers.processDiagram(to);
 		surface.addAsSelected(to, true);
 

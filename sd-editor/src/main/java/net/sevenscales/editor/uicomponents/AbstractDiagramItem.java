@@ -1202,11 +1202,13 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   @Override
   public void setFontSize(Integer fontSize) {
     if (fontSize != null && fontSize > 0) {
-      getDiagramItem().setFontSize(fontSize);
       TextElementFormatUtil formatter = getTextFormatter();
-      if (formatter != null) {
-        formatter.setFontSize(fontSize);
-        formatter.reapplyText();
+      if (formatter.isSupportFontSize()) {
+        getDiagramItem().setFontSize(fontSize);
+        if (formatter != null) {
+          formatter.setFontSize(fontSize);
+          formatter.reapplyText();
+        }
       }
     }
   }
