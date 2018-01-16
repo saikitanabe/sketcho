@@ -83,21 +83,21 @@ public class SvgHandler {
 			}
 
 			// ST 20.11.2017: Legacy SVG custom conversion
-			// SvgData data = converter.convertToSvg(width, height, surface, false, true);
-			// this.svg = data.svg;
-			// JsSvg jsSvg = JsSvg.create(data.svg);
-			// nativeReadyLegacy(handler, data.svg);
+			SvgData data = converter.convertToSvg(width, height, surface, false, true);
+			this.svg = data.svg;
+			JsSvg jsSvg = JsSvg.create(data.svg);
+			nativeReadyLegacy(handler, data.svg);
 			// ST 20.11.2017: END Legacy SVG custom conversion
 
 			// ST 12.11.2017: NEW DOM based svg extraction
-			SvgData data = new SvgData();
-			JsSvg jsSvg = surface.getSvg();
-			if (jsSvg != null) {
-				// jsSvg could be null, e.g. now on normal SurfaceHandler
-				data.svg = jsSvg.getSvg();
-				this.svg = data.svg;
-			}
-			nativeReady(handler, jsSvg);
+			// SvgData data = new SvgData();
+			// JsSvg jsSvg = surface.getSvg();
+			// if (jsSvg != null) {
+			// 	// jsSvg could be null, e.g. now on normal SurfaceHandler
+			// 	data.svg = jsSvg.getSvg();
+			// 	this.svg = data.svg;
+			// }
+			// nativeReady(handler, jsSvg);
 			// ST 12.11.2017: END NEW DOM based svg extraction
 
 			Tools.setExportMode(false);
