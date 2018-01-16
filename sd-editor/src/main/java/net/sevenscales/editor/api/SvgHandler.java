@@ -63,6 +63,8 @@ public class SvgHandler {
 
 		SurfaceDefs.addToDefs(surface.getSurface().getContainer(), ShapeCache.icons());
 
+		Tools.setExportMode(true);
+
     JSONObject obj = new JSONObject(json);
     if (obj.isObject() != null) {
 	    JSONContentParser parser = new JSONContentParser(obj);
@@ -97,7 +99,7 @@ public class SvgHandler {
 			// nativeReady(handler, jsSvg);
 			// ST 12.11.2017: END NEW DOM based svg extraction
 
-			
+			Tools.setExportMode(false);
     }
 
     // synchronous from RootPanel.get().add, so break out
