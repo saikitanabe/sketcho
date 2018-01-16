@@ -19,6 +19,7 @@ public class Tools {
 
 	private EditorContext editorContext;
 	private int currentTools;
+	private boolean exportMode;
 
 	private Tools(EditorContext editorContext, Boolean superQuickMode) {
 		this.editorContext = editorContext;
@@ -264,6 +265,13 @@ public class Tools {
 		}
 		// do not show annotated and comments
 		return !diagram.isAnnotation();
+	}
+
+	public static boolean isExport() {
+		return instance.exportMode;
+	}
+	public static void setExportMode(boolean export) {
+		instance.exportMode = export;
 	}
 
 }
