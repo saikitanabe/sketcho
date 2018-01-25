@@ -10,6 +10,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.diagram.Diagram;
@@ -53,11 +54,15 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
     subgroup = IShapeFactory.Util.factory(editable).createGroup(group);    
     // group.setAttribute("cursor", "default");
 
-    createImage();
-
     background = IShapeFactory.Util.factory(editable).createRectangle(group);
     background.setFill(0, 0 , 0, 0); // transparent
     // background.setStroke("#363636");
+
+    // ST 16.1.2018 not the best way to use global state, better would be to
+    // pass it by parameter, but that affects so many places
+    // but this doesn't break anything
+    // used from SvgHandler to enable export mode specifically
+    createImage(Tools.isExport());
 
 		addEvents(background);
 		
@@ -76,7 +81,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
     super.constructorDone();
 	}
 
-  private void createImage() {
+  private void createImage(boolean export) {
     image = IShapeFactory.Util.factory(true).createImage(subgroup, 
       0, 
       0,
@@ -90,6 +95,10 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
       "/static/images/ajax-loader.gif");
 
     startLoader(shape.getUrl());
+
+    if (export) {
+      applyImageShape(shape.getUrl());
+    }
   }
 
   private void startLoader(final String url) {
