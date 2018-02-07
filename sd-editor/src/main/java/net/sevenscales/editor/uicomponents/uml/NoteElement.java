@@ -52,7 +52,8 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 //  private IImage leftShadow;
 //  private IImage rightShadow;
 //  private IImage topBlur;
-  private TextElementVerticalFormatUtil textUtil;
+	private TextElementVerticalFormatUtil textUtil;
+	private boolean legacy = true;
   
   private static final int LEFT_SHADOW_LEFT = 6; 
   private static final int LEFT_SHADOW_HEIGHT = 41; 
@@ -138,8 +139,12 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
     shapes.add(boundary);
     shapes.add(tape);
 //    shapes.add(fold);
-    
-    textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
+		
+		if (legacy) {
+			textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+		} else {
+			textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
+		}
 
     setReadOnly(!editable);
     setShape(shape.rectShape.left, shape.rectShape.top, 
@@ -225,11 +230,15 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
     	return boundary.getWidth() - MARGIN_LEFT * 2;
     }
     public int getX() {
-    	// return boundary.getX() + MARGIN_LEFT;
+			if (legacy) {
+				return boundary.getX() + MARGIN_LEFT;
+			}
     	return MARGIN_LEFT;
     }
     public int getY() {
-    	// return boundary.getY() + MARGIN_TOP;
+			if (legacy) {
+				return boundary.getY() + MARGIN_TOP;
+			}
     	return MARGIN_TOP;
     }
     public int getHeight() {
@@ -474,6 +483,12 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	}
 	@Override
 	public IGroup getSubgroup() {
+		if (legacy) {
+			// ST 7.2.2018: Fix legacy note not included in presentation
+			// legacy implementation presentation doesn't show
+			// boundary and tape, if returning subgroup
+			return null;
+		}
 		return subgroup;
 	}
 	
