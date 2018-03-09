@@ -43,7 +43,6 @@ import net.sevenscales.editor.uicomponents.uml.ActivityChoiceElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityEnd;
 import net.sevenscales.editor.uicomponents.uml.ActivityStart;
-import net.sevenscales.editor.uicomponents.uml.Actor;
 import net.sevenscales.editor.uicomponents.uml.ChildTextElement;
 import net.sevenscales.editor.uicomponents.uml.ClassElement2;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;

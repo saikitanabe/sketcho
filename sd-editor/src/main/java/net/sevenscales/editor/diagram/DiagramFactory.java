@@ -46,7 +46,6 @@ import net.sevenscales.editor.uicomponents.uml.ActivityChoiceElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityEnd;
 import net.sevenscales.editor.uicomponents.uml.ActivityStart;
-import net.sevenscales.editor.uicomponents.uml.Actor;
 import net.sevenscales.editor.uicomponents.uml.ClassElement2;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.ComponentElement;
@@ -183,17 +182,17 @@ public class DiagramFactory {
 	        defaultText,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = se;
-		} else if (ElementType.ACTOR.getValue().equals(elementType)) {
-      Actor actor = new Actor(surface,
-          new ActorShape(x, 
-              y,
-              25,
-              40),
-              defaultText,
-              background, borderColor, color, 
-              true,
-              new DiagramItemDTO());
-			result = actor;
+		// } else if (ElementType.ACTOR.getValue().equals(elementType)) {
+    //   Actor actor = new Actor(surface,
+    //       new ActorShape(x, 
+    //           y,
+    //           25,
+    //           40),
+    //           defaultText,
+    //           background, borderColor, color, 
+    //           true,
+    //           new DiagramItemDTO());
+		// 	result = actor;
 		} else if (ElementType.NOTE.getValue().equals(elementType)) {
 			int cwidth = 150;
 			int cheight = 45;
