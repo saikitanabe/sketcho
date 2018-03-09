@@ -44,7 +44,9 @@ public class ShapeParser {
 		// new ParserMap(ElementType.COMMENT, new AbstractDiagramFactory.CommentFactory()),
 		new ParserMap(ElementType.TEXT_ITEM, new AbstractDiagramFactory.TextItemFactory()),
 		new ParserMap(ElementType.CHILD_TEXT, new AbstractDiagramFactory.ChildTextItemFactory()),
-		new ParserMap(ElementType.ACTOR, new AbstractDiagramFactory.ActorFactory()),
+		// ST 9.3.2018: Legacy actor didn't work in realtime collaboration and when resizing
+		// replaced with SVG Generic Element Actor icon.
+		// new ParserMap(ElementType.ACTOR, new AbstractDiagramFactory.ActorFactory()),
 		new ParserMap(ElementType.RELATIONSHIP, new AbstractDiagramFactory.RelationshipFactory()),
 		new ParserMap(ElementType.FREEHAND, new AbstractDiagramFactory.FreehandFactory()),
 		new ParserMap(ElementType.PACKAGE, new AbstractDiagramFactory.PackageFactory()),

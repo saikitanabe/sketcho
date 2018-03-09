@@ -429,27 +429,27 @@ public interface AbstractDiagramFactory {
     }
   }
 
-	public class ActorFactory implements AbstractDiagramFactory {
-		public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
-      String[] s = item.getShape().split(",");
-      int x = Integer.valueOf(s[0]);
-      int y = Integer.valueOf(s[1]);
-      int width = Integer.valueOf(s[2]);
-      int height = Integer.valueOf(s[3]);
-      return new ActorShape(x, y, width, height).move(moveX, moveY);
-		}
+	// public class ActorFactory implements AbstractDiagramFactory {
+	// 	public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
+  //     String[] s = item.getShape().split(",");
+  //     int x = Integer.valueOf(s[0]);
+  //     int y = Integer.valueOf(s[1]);
+  //     int width = Integer.valueOf(s[2]);
+  //     int height = Integer.valueOf(s[3]);
+  //     return new ActorShape(x, y, width, height).move(moveX, moveY);
+	// 	}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
-			return new Actor(surface,
-          		(ActorShape)shape,
-              item.getText(),
-              DiagramItemFactory.parseBackgroundColor(item),
-              DiagramItemFactory.parseBorderColor(item),
-              DiagramItemFactory.parseTextColor(item),
-          editable,
-          item);			
-		}
-	}
+	// 	public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
+	// 		return new Actor(surface,
+  //         		(ActorShape)shape,
+  //             item.getText(),
+  //             DiagramItemFactory.parseBackgroundColor(item),
+  //             DiagramItemFactory.parseBorderColor(item),
+  //             DiagramItemFactory.parseTextColor(item),
+  //         editable,
+  //         item);			
+	// 	}
+	// }
 
 	public class RelationshipFactory implements AbstractDiagramFactory {
 		public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
