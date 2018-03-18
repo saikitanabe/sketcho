@@ -34,12 +34,13 @@ public class CommentHandler {
 				}
 			});
 
-	    Event.addNativePreviewHandler(new NativePreviewHandler() {
-	      @Override
-	      public void onPreviewNativeEvent(NativePreviewEvent event) {
-	      	handleOnPreviewNativeEvent(event);
-	      }
-	    });
+			// ST 13.3.2018 Comment mode is removed
+	    // Event.addNativePreviewHandler(new NativePreviewHandler() {
+	    //   @Override
+	    //   public void onPreviewNativeEvent(NativePreviewEvent event) {
+	    //   	handleOnPreviewNativeEvent(event);
+	    //   }
+	    // });
 		}
 	}
 
@@ -47,21 +48,22 @@ public class CommentHandler {
 		return !surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE);
 	}	
 
-	private void handleOnPreviewNativeEvent(NativePreviewEvent event) {
-    NativeEvent ne = event.getNativeEvent();
-    if (!commentKeyDown && event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.noMetaKeys(ne) && UIKeyHelpers.isEditorClosed(surface.getEditorContext())) {
-      if (ne.getKeyCode() == 'C' && UIKeyHelpers.allMenusAreClosed()) {
-        commentKeyDown = true;
-        fireToggleCommentMode();
-      }
-    }
+	// ST 13.3.2018 Comment mode is removed
+	// private void handleOnPreviewNativeEvent(NativePreviewEvent event) {
+  //   NativeEvent ne = event.getNativeEvent();
+  //   if (!commentKeyDown && event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.noMetaKeys(ne) && UIKeyHelpers.isEditorClosed(surface.getEditorContext())) {
+  //     if (ne.getKeyCode() == 'C' && UIKeyHelpers.allMenusAreClosed()) {
+  //       commentKeyDown = true;
+  //       fireToggleCommentMode();
+  //     }
+  //   }
 
-    if (commentKeyDown && event.getTypeInt() == Event.ONKEYUP && UIKeyHelpers.isEditorClosed(surface.getEditorContext())) {
-      if (ne.getKeyCode() == 'C' && UIKeyHelpers.allMenusAreClosed()) {
-        commentKeyDown = false;
-      }
-    }
-	}
+  //   if (commentKeyDown && event.getTypeInt() == Event.ONKEYUP && UIKeyHelpers.isEditorClosed(surface.getEditorContext())) {
+  //     if (ne.getKeyCode() == 'C' && UIKeyHelpers.allMenusAreClosed()) {
+  //       commentKeyDown = false;
+  //     }
+  //   }
+	// }
 
 	private void fireToggleCommentMode() {
 		Tools.toggleCommentMode();
