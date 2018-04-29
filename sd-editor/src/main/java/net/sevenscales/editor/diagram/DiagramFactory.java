@@ -163,7 +163,7 @@ public class DiagramFactory {
 		background = DiagramFactory.defaultBgColor(background, shapeConfig);
 		borderColor = DiagramFactory.defaultBorderColor(borderColor, shapeConfig);
 
-		if (width == null && height == null && shapeConfig.isTargetSizeDefined()) {
+		if (width == null && height == null && shapeConfig != null && shapeConfig.isTargetSizeDefined()) {
 			width = (int) shapeConfig.getTargetWidth();
 			height = (int) shapeConfig.getTargetHeight();
 		}
