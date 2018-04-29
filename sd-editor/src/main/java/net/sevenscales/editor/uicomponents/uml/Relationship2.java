@@ -1183,8 +1183,12 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
       anchorElement.highlight(false);
 
-      // hack to center just created connections aligned in center
-      if (modifyEndToCenter(ax, ay)) {
+      if (anchorElement.getRelationship() != null &&
+          anchorElement.getRelationship().isClosestPath()) {
+        anchorElement.getRelationship().applyClosestPath();
+        result = true;
+      } else if (modifyEndToCenter(ax, ay)) {
+        // hack to center just created connections aligned in center
         // modified separately with new points
       } else {
         doSetShape();
@@ -2766,6 +2770,12 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     if (!surface.getModeManager().isConnectMode()) {
       getDiagramItem().clearShapeProperty(ShapeProperty.CLOSEST_PATH);
       getDiagramItem().clearShapeProperty(ShapeProperty.CENTERED_PATH);
+    }
+  }
+
+  public void clearOnlyClosestPath() {
+    if (!surface.getModeManager().isConnectMode()) {
+      getDiagramItem().clearShapeProperty(ShapeProperty.CLOSEST_PATH);
     }
   }
 

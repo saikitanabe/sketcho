@@ -246,10 +246,11 @@ public class RelationshipDragEndHandler implements
 
 		if (currentRel != null) {
 			diagram = createDiagramFromRelationShip(elementType, shapeConfig, imageInfo, x, y);
-			applyClosestPath(currentRel);
 			surface.addAsSelected(diagram, true);
 			// this is connect drop element
 			currentRel.anchorEnd(true);
+			// NOTE order matters anchorEnd resets potentially closest path
+			applyClosestPath(currentRel);
 			currentRel.setType(RelationshipHelpers.relationship(diagram, surface.getEditorContext(), currentRel.getStartAnchor().getDiagram()));
 			surface.getEditorContext().getEventBus().fireEvent(new PotentialOnChangedEvent(currentRel));
 		} else {

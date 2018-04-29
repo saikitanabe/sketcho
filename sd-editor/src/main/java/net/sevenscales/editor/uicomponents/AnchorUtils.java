@@ -8,12 +8,20 @@ import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.IRectangle;
+import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.api.ISurfaceHandler;
 
 public class AnchorUtils {
   private static final SLogger logger = SLogger.createLogger(AnchorUtils.class);
   static {
     logger.addFilter(AnchorUtils.class);
   }
+
+	private static final Color HIGHLIGHT_COLOR = new Color(0x6A, 0xCA, 0x00, 1);
+	private static final Color COLOR_TRANSPARENT = new Color(0x6A, 0xCA, 0x00, 0);
+	private static IRectangle anchorPoint;
 
   public static class AnchorProperties {
     public int x;
@@ -23,8 +31,17 @@ public class AnchorUtils {
     public CardinalDirection cardinalDirection = CardinalDirection.NORTH;
   }
   
-  private static final int MAGNETIC_VALUE = 10;
+  private static final int MAGNETIC_VALUE = 15;
+  private static final int MAGNETIC_AUTO_VALUE = 0;
   public static final int ATTACH_EXTRA_DISTANCE = 2;
+
+	private static void Init(ISurfaceHandler surface) {
+		if (AnchorUtils.anchorPoint == null) {
+			AnchorUtils.anchorPoint = IShapeFactory.Util.factory(true).createRectangle(surface.getInteractionLayer());
+			AnchorUtils.anchorPoint.setStrokeWidth(2);
+			AnchorUtils.anchorPoint.setVisibility(false);
+		}
+	}
 
   public static boolean onAttachArea(int x, int y, IRectangle rect) {
     if ( x >= (rect.getX() - MAGNETIC_VALUE) && x <= (rect.getX()+rect.getWidth() + MAGNETIC_VALUE) &&
@@ -43,29 +60,124 @@ public class AnchorUtils {
     return false;
   }
   
-	public static boolean onAttachArea(int x, int y, int left, int top, int width, int height, int distance) {
+	public static boolean onAttachAreaManual(int x, int y, int left, int top, int width, int height, ISurfaceHandler surface) {
+
+    // small shapes have smaller inner magnet
+    // int min = Math.min(width, height);
+    int distance = 20;
+    // if (min < 30) {
+    //   distance = min / 2;
+    // }
+
+    boolean result = AnchorUtils.onAttachArea(
+      x,
+      y,
+      left,
+      top,
+      width,
+      height,
+      distance,
+      MAGNETIC_VALUE
+    );
+
+    AnchorUtils.Init(surface);
+
+    if (result) {
+			net.sevenscales.domain.utils.Debug.log("", left + ", ", top + ", ", width + ", ", height + "");
+      
+      AnchorUtils.anchorPoint.setShape(left, top, width, height, 4);
+      AnchorUtils.anchorPoint.setVisibility(true);
+      AnchorUtils.anchorPoint.setStrokeWidth(distance);
+      AnchorUtils.anchorPoint.setStroke(HIGHLIGHT_COLOR);
+      AnchorUtils.anchorPoint.setFill(COLOR_TRANSPARENT);
+    }
+
+    return result;
+  }
+
+	public static boolean onAttachAreaAuto(int x, int y, int left, int top, int width, int height, ISurfaceHandler surface) {
+
+    int l = left + 20;
+    int t = top + 20;
+    int w = width - 40;
+    int h = height - 40;
+
+    boolean result = AnchorUtils.pointOnArea(
+      x,
+      y,
+      l,
+      t,
+      w,
+      h
+    );
+
+    net.sevenscales.domain.utils.Debug.log("", x + ",", y + ",", l + ", ", t + ", ", w + ", ", h + "");
+
+    AnchorUtils.Init(surface);
+
+    if (result) {
+      AnchorUtils.anchorPoint.setShape(l, t, w, h, 4);
+      AnchorUtils.anchorPoint.setVisibility(true);
+      AnchorUtils.anchorPoint.setStrokeWidth(1);
+      AnchorUtils.anchorPoint.setStroke(HIGHLIGHT_COLOR);
+      AnchorUtils.anchorPoint.setFill(HIGHLIGHT_COLOR);
+    }
+
+    return result;
+  }
+
+	private static boolean onAttachArea(int x, int y, int left, int top, int width, int height, int distance, int magneticValue) {
 		
 		// top line
-    if ( (x >= (left - MAGNETIC_VALUE) && x <= (left + width + MAGNETIC_VALUE)) &&
-    		 (y >= (top - MAGNETIC_VALUE) && y <= (top + distance))) {
+    if ( (x >= (left - magneticValue) && x <= (left + width + magneticValue)) &&
+    		 (y >= (top - magneticValue) && y <= (top + distance))) {
     	return true;
     }
     		
     // right line
-    if ((x <= (left + width + MAGNETIC_VALUE) && x >= (left + width - distance)) &&
-        (y >= (top - MAGNETIC_VALUE) && y <= (top + height + MAGNETIC_VALUE))) {
+    if ((x <= (left + width + magneticValue) && x >= (left + width - distance)) &&
+        (y >= (top - magneticValue) && y <= (top + height + magneticValue))) {
       return true;
     }
     
 		// bottom line
-    if ( (x >= (left - MAGNETIC_VALUE) && x <= (left + width + MAGNETIC_VALUE)) &&
-    		 (y <= (top + height + MAGNETIC_VALUE) && y >= (top + height - distance))) {
+    if ( (x >= (left - magneticValue) && x <= (left + width + magneticValue)) &&
+    		 (y <= (top + height + magneticValue) && y >= (top + height - distance))) {
     	return true;
     }
     
     // left line
-    if ((x >= (left - MAGNETIC_VALUE) && x <= (left + distance)) &&
-        (y >= (top - MAGNETIC_VALUE) && y <= (top + height + MAGNETIC_VALUE))) {
+    if ((x >= (left - magneticValue) && x <= (left + distance)) &&
+        (y >= (top - magneticValue) && y <= (top + height + magneticValue))) {
+      return true;
+    }
+
+		return false;
+  }
+
+	private static boolean pointOnArea(int x, int y, int left, int top, int width, int height) {
+		
+		// top line
+    if ( (x >= left && x <= (left + width)) &&
+    		 (y >= top && y <= top)) {
+    	return true;
+    }
+    		
+    // right line
+    if ((x <= (left + width) && x >= (left + width)) &&
+        (y >= top && y <= (top + height))) {
+      return true;
+    }
+    
+		// bottom line
+    if ( (x >= (left) && x <= (left + width)) &&
+    		 (y <= (top + height) && y >= (top + height))) {
+    	return true;
+    }
+    
+    // left line
+    if ((x >= (left) && x <= left) &&
+        (y >= top && y <= (top + height))) {
       return true;
     }
 

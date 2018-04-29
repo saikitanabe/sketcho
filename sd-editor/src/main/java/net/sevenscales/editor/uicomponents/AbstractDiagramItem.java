@@ -34,6 +34,7 @@ import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.content.utils.ColorHelpers;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
+import net.sevenscales.editor.content.utils.ContainerAttachHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramProxy;
 import net.sevenscales.editor.diagram.DiagramSelectionHandler;
@@ -188,7 +189,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   public void setAnchorPointShape(int ax, int ay) {
     if (anchorPoint != null) {
-      anchorPoint.setShape(ax, ay, 6);
+      anchorPoint.setShape(ax, ay, 7);
       anchorPoint.moveToFront();
     }
   }
@@ -599,7 +600,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
   
   public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
-    return onAttachArea(anchor, x, y, getLeft(), getTop(), getWidth(), getHeight());
+    // return onAttachArea(anchor, x, y, getLeft(), getTop(), getWidth(), getHeight());
+    return ContainerAttachHelpers.onAttachArea(this, anchor, x, y);
   }
   
   protected boolean onDynamicAttachArea(Anchor anchor, int x, int y) {
@@ -1736,12 +1738,15 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     if (anchorPoint != null) {
       anchorPoint.setVisibility(highlight);
       anchorPoint.setStroke(color);
+      anchorPoint.setFill(color);
     }
 
     if (!highlight && isAnnotation()) {
       applyAnnotationColors();
     } else {
-      setHighlightColor(color);
+      // 26.4.2018 ST: potentially disturbing to highlight
+      // whole shape when making connection pre highlight
+      // setHighlightColor(color);
     }
   }
   
