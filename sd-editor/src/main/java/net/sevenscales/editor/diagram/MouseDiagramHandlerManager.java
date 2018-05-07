@@ -365,6 +365,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 			lassoSelectionHandler.onMouseUp(sender, point, keys);
 			surfaceClickHandler.onMouseUp(sender, point, keys);
 			quickConnectionHandler.onMouseUp(sender, point, keys);
+			net.sevenscales.editor.uicomponents.AnchorUtils.hide();
 			// logger.debugTime();
 	    currentMouseHandler = null;
 		} catch (Exception e) {

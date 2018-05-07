@@ -1738,7 +1738,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     if (anchorPoint != null) {
       anchorPoint.setVisibility(highlight);
       anchorPoint.setStroke(color);
-      anchorPoint.setFill(color);
+      // anchorPoint.setFill(color);
     }
 
     if (!highlight && isAnnotation()) {

@@ -19,7 +19,7 @@ public class AnchorUtils {
     logger.addFilter(AnchorUtils.class);
   }
 
-	private static final Color HIGHLIGHT_COLOR = new Color(0x6A, 0xCA, 0x00, 1);
+	private static final Color HIGHLIGHT_COLOR = new Color(0x6A, 0xCA, 0x00, 0.5);
 	private static final Color COLOR_TRANSPARENT = new Color(0x6A, 0xCA, 0x00, 0);
 	private static IRectangle anchorPoint;
 
@@ -41,7 +41,13 @@ public class AnchorUtils {
 			AnchorUtils.anchorPoint.setStrokeWidth(2);
 			AnchorUtils.anchorPoint.setVisibility(false);
 		}
-	}
+  }
+  
+  public static void hide() {
+    if (AnchorUtils.anchorPoint != null) {
+      AnchorUtils.anchorPoint.setVisibility(false);
+    }
+  }
 
   public static boolean onAttachArea(int x, int y, IRectangle rect) {
     if ( x >= (rect.getX() - MAGNETIC_VALUE) && x <= (rect.getX()+rect.getWidth() + MAGNETIC_VALUE) &&
@@ -63,11 +69,7 @@ public class AnchorUtils {
 	public static boolean onAttachAreaManual(int x, int y, int left, int top, int width, int height, ISurfaceHandler surface) {
 
     // small shapes have smaller inner magnet
-    // int min = Math.min(width, height);
-    int distance = 20;
-    // if (min < 30) {
-    //   distance = min / 2;
-    // }
+    int distance = calcDistance(width, height);
 
     boolean result = AnchorUtils.onAttachArea(
       x,
@@ -83,13 +85,17 @@ public class AnchorUtils {
     AnchorUtils.Init(surface);
 
     if (result) {
-			net.sevenscales.domain.utils.Debug.log("", left + ", ", top + ", ", width + ", ", height + "");
+			// net.sevenscales.domain.utils.Debug.log("", left + ", ", top + ", ", width + ", ", height + "");
       
-      AnchorUtils.anchorPoint.setShape(left, top, width, height, 4);
-      AnchorUtils.anchorPoint.setVisibility(true);
-      AnchorUtils.anchorPoint.setStrokeWidth(distance);
-      AnchorUtils.anchorPoint.setStroke(HIGHLIGHT_COLOR);
-      AnchorUtils.anchorPoint.setFill(COLOR_TRANSPARENT);
+      // AnchorUtils.anchorPoint.setShape(left, top, width, height, 4);
+      // AnchorUtils.anchorPoint.setStrokeWidth(distance);
+      // AnchorUtils.anchorPoint.setStroke(HIGHLIGHT_COLOR);
+      // AnchorUtils.anchorPoint.setFill(COLOR_TRANSPARENT);
+      // AnchorUtils.anchorPoint.setVisibility(true);
+
+      // 7.5.2018 ST: decided to hide helper rect on manual connections
+      // abstract diagram item highlights the edge.
+      AnchorUtils.anchorPoint.setVisibility(false);
     }
 
     return result;
@@ -97,10 +103,13 @@ public class AnchorUtils {
 
 	public static boolean onAttachAreaAuto(int x, int y, int left, int top, int width, int height, ISurfaceHandler surface) {
 
-    int l = left + 20;
-    int t = top + 20;
-    int w = width - 40;
-    int h = height - 40;
+    int distance = calcDistance(width, height);
+    int dd = distance * 2;
+
+    int l = left + distance;
+    int t = top + distance;
+    int w = width - dd;
+    int h = height - dd;
 
     boolean result = AnchorUtils.pointOnArea(
       x,
@@ -111,7 +120,7 @@ public class AnchorUtils {
       h
     );
 
-    net.sevenscales.domain.utils.Debug.log("", x + ",", y + ",", l + ", ", t + ", ", w + ", ", h + "");
+    // net.sevenscales.domain.utils.Debug.log("point on area: " + result, "", "x:" + x + ",", "y:" + y + ",", l + ", ", t + ", ", w + ", ", h + "");
 
     AnchorUtils.Init(surface);
 
@@ -124,6 +133,16 @@ public class AnchorUtils {
     }
 
     return result;
+  }
+
+  private static int calcDistance(int width, int height) {
+    int min = Math.min(width, height);
+    int distance = 15;
+    if (min < 50) {
+      distance = min / 4;
+    }
+
+    return distance;
   }
 
 	private static boolean onAttachArea(int x, int y, int left, int top, int width, int height, int distance, int magneticValue) {
@@ -157,30 +176,12 @@ public class AnchorUtils {
 
 	private static boolean pointOnArea(int x, int y, int left, int top, int width, int height) {
 		
-		// top line
+		// on rect area
     if ( (x >= left && x <= (left + width)) &&
-    		 (y >= top && y <= top)) {
+    		 (y >= top && y <= (top + height))) {
     	return true;
     }
     		
-    // right line
-    if ((x <= (left + width) && x >= (left + width)) &&
-        (y >= top && y <= (top + height))) {
-      return true;
-    }
-    
-		// bottom line
-    if ( (x >= (left) && x <= (left + width)) &&
-    		 (y <= (top + height) && y >= (top + height))) {
-    	return true;
-    }
-    
-    // left line
-    if ((x >= (left) && x <= left) &&
-        (y >= top && y <= (top + height))) {
-      return true;
-    }
-
 		return false;
 	}
 
