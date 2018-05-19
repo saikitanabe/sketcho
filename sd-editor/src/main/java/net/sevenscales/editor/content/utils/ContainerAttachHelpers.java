@@ -1,5 +1,6 @@
 package net.sevenscales.editor.content.utils;
 
+import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
@@ -12,7 +13,7 @@ public class ContainerAttachHelpers {
 	public ContainerAttachHelpers() {
 //		this.diagram = diagram;
 	}
-	
+
   public static AnchorElement onAttachArea(AbstractDiagramItem diagram, Anchor anchor, int x, int y) {
 		// container attach is different only border areas can attach
 		// TODO make this as utility to be used by other container elements
@@ -22,8 +23,16 @@ public class ContainerAttachHelpers {
 		if (a != null) {
 			return a;
 		}
-		
-	  if (AnchorUtils.onAttachArea(x, y, diagram.getLeft(), diagram.getTop(), diagram.getWidth(), diagram.getHeight(), 20)) {
+
+		if (AnchorUtils.onAttachAreaManual(
+			x, 
+			y,
+			diagram.getLeft(), 
+			diagram.getTop(),
+			diagram.getWidth(),
+			diagram.getHeight(),
+			diagram.getSurfaceHandler())) {
+
 	    AnchorElement result = diagram.getAnchorElement(anchor);
 	    AnchorProperties tempAnchorProperties = diagram.getTempAnchorProperties(); 
 	    AnchorUtils.anchorPoint(x, y, tempAnchorProperties, diagram.getLeft(), diagram.getTop(), diagram.getWidth(), diagram.getHeight());
@@ -34,10 +43,52 @@ public class ContainerAttachHelpers {
 	    result.setRelativeY(tempAnchorProperties.relativeValueY);
 	    result.setCardinalDirection(tempAnchorProperties.cardinalDirection);
 	    
-	    diagram.setAnchorPointShape(tempAnchorProperties.x, tempAnchorProperties.y);
+			diagram.setAnchorPointShape(tempAnchorProperties.x, tempAnchorProperties.y);
+			
+			if (anchor.getRelationship() != null) {
+				anchor.getRelationship().clearOnlyClosestPath();
+			}
 	
 	    return result;
-	  }
+		}
+
+		if (AnchorUtils.onAttachAreaAuto(
+			x,
+			y,
+			diagram.getLeft(), 
+			diagram.getTop(), 
+			diagram.getWidth(), 
+			diagram.getHeight(),
+			diagram.getSurfaceHandler())) {
+
+			AnchorElement result = diagram.getAnchorElement(anchor);
+			AnchorProperties tempAnchorProperties = diagram.getTempAnchorProperties();
+
+			Diagram second = anchor.getTheOtherEnd().getDiagram();
+			if (second != null) {
+				AnchorUtils.ClosestSegment closestSegment = AnchorUtils.closestSegment(diagram.getLeft(), diagram.getTop(), diagram.getWidth(), diagram.getHeight(), second.getLeft(), second.getTop(), second.getWidth(), second.getHeight());
+							
+				tempAnchorProperties.x = closestSegment.start.x;
+				tempAnchorProperties.y = closestSegment.start.y;
+			} else {
+				AnchorUtils.anchorPoint(x, y, tempAnchorProperties, diagram.getLeft(), diagram.getTop(), diagram.getWidth(), diagram.getHeight());
+
+				result.setAx(tempAnchorProperties.x);
+				result.setAy(tempAnchorProperties.y);
+				result.setRelativeX(tempAnchorProperties.relativeValueX);
+				result.setRelativeY(tempAnchorProperties.relativeValueY);
+				result.setCardinalDirection(tempAnchorProperties.cardinalDirection);
+			}
+
+			diagram.setAnchorPointShape(tempAnchorProperties.x, tempAnchorProperties.y);
+	
+			if (anchor.getRelationship() != null) {
+				anchor.getRelationship().asClosestPath();
+			}
+
+			return result;
+		}
+		
 	  return null;
   }
 

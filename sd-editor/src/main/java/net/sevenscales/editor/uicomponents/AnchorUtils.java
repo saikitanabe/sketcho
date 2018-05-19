@@ -8,12 +8,20 @@ import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.IRectangle;
+import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.api.ISurfaceHandler;
 
 public class AnchorUtils {
   private static final SLogger logger = SLogger.createLogger(AnchorUtils.class);
   static {
     logger.addFilter(AnchorUtils.class);
   }
+
+	private static final Color HIGHLIGHT_COLOR = new Color(0x6A, 0xCA, 0x00, 0.5);
+	private static final Color COLOR_TRANSPARENT = new Color(0x6A, 0xCA, 0x00, 0);
+	private static IRectangle anchorPoint;
 
   public static class AnchorProperties {
     public int x;
@@ -23,8 +31,23 @@ public class AnchorUtils {
     public CardinalDirection cardinalDirection = CardinalDirection.NORTH;
   }
   
-  private static final int MAGNETIC_VALUE = 10;
+  private static final int MAGNETIC_VALUE = 15;
+  private static final int MAGNETIC_AUTO_VALUE = 0;
   public static final int ATTACH_EXTRA_DISTANCE = 2;
+
+	private static void Init(ISurfaceHandler surface) {
+		if (AnchorUtils.anchorPoint == null) {
+			AnchorUtils.anchorPoint = IShapeFactory.Util.factory(true).createRectangle(surface.getInteractionLayer());
+			AnchorUtils.anchorPoint.setStrokeWidth(2);
+			AnchorUtils.anchorPoint.setVisibility(false);
+		}
+  }
+  
+  public static void hide() {
+    if (AnchorUtils.anchorPoint != null) {
+      AnchorUtils.anchorPoint.setVisibility(false);
+    }
+  }
 
   public static boolean onAttachArea(int x, int y, IRectangle rect) {
     if ( x >= (rect.getX() - MAGNETIC_VALUE) && x <= (rect.getX()+rect.getWidth() + MAGNETIC_VALUE) &&
@@ -43,32 +66,122 @@ public class AnchorUtils {
     return false;
   }
   
-	public static boolean onAttachArea(int x, int y, int left, int top, int width, int height, int distance) {
+	public static boolean onAttachAreaManual(int x, int y, int left, int top, int width, int height, ISurfaceHandler surface) {
+
+    // small shapes have smaller inner magnet
+    int distance = calcDistance(width, height);
+
+    boolean result = AnchorUtils.onAttachArea(
+      x,
+      y,
+      left,
+      top,
+      width,
+      height,
+      distance,
+      MAGNETIC_VALUE
+    );
+
+    AnchorUtils.Init(surface);
+
+    if (result) {
+			// net.sevenscales.domain.utils.Debug.log("", left + ", ", top + ", ", width + ", ", height + "");
+      
+      // AnchorUtils.anchorPoint.setShape(left, top, width, height, 4);
+      // AnchorUtils.anchorPoint.setStrokeWidth(distance);
+      // AnchorUtils.anchorPoint.setStroke(HIGHLIGHT_COLOR);
+      // AnchorUtils.anchorPoint.setFill(COLOR_TRANSPARENT);
+      // AnchorUtils.anchorPoint.setVisibility(true);
+
+      // 7.5.2018 ST: decided to hide helper rect on manual connections
+      // abstract diagram item highlights the edge.
+      AnchorUtils.anchorPoint.setVisibility(false);
+    }
+
+    return result;
+  }
+
+	public static boolean onAttachAreaAuto(int x, int y, int left, int top, int width, int height, ISurfaceHandler surface) {
+
+    int distance = calcDistance(width, height);
+    int dd = distance * 2;
+
+    int l = left + distance;
+    int t = top + distance;
+    int w = width - dd;
+    int h = height - dd;
+
+    boolean result = AnchorUtils.pointOnArea(
+      x,
+      y,
+      l,
+      t,
+      w,
+      h
+    );
+
+    // net.sevenscales.domain.utils.Debug.log("point on area: " + result, "", "x:" + x + ",", "y:" + y + ",", l + ", ", t + ", ", w + ", ", h + "");
+
+    AnchorUtils.Init(surface);
+
+    if (result) {
+      AnchorUtils.anchorPoint.setShape(l, t, w, h, 4);
+      AnchorUtils.anchorPoint.setVisibility(true);
+      AnchorUtils.anchorPoint.setStrokeWidth(1);
+      AnchorUtils.anchorPoint.setStroke(HIGHLIGHT_COLOR);
+      AnchorUtils.anchorPoint.setFill(HIGHLIGHT_COLOR);
+    }
+
+    return result;
+  }
+
+  private static int calcDistance(int width, int height) {
+    int min = Math.min(width, height);
+    int distance = 15;
+    if (min < 50) {
+      distance = min / 4;
+    }
+
+    return distance;
+  }
+
+	private static boolean onAttachArea(int x, int y, int left, int top, int width, int height, int distance, int magneticValue) {
 		
 		// top line
-    if ( (x >= (left - MAGNETIC_VALUE) && x <= (left + width + MAGNETIC_VALUE)) &&
-    		 (y >= (top - MAGNETIC_VALUE) && y <= (top + distance))) {
+    if ( (x >= (left - magneticValue) && x <= (left + width + magneticValue)) &&
+    		 (y >= (top - magneticValue) && y <= (top + distance))) {
     	return true;
     }
     		
     // right line
-    if ((x <= (left + width + MAGNETIC_VALUE) && x >= (left + width - distance)) &&
-        (y >= (top - MAGNETIC_VALUE) && y <= (top + height + MAGNETIC_VALUE))) {
+    if ((x <= (left + width + magneticValue) && x >= (left + width - distance)) &&
+        (y >= (top - magneticValue) && y <= (top + height + magneticValue))) {
       return true;
     }
     
 		// bottom line
-    if ( (x >= (left - MAGNETIC_VALUE) && x <= (left + width + MAGNETIC_VALUE)) &&
-    		 (y <= (top + height + MAGNETIC_VALUE) && y >= (top + height - distance))) {
+    if ( (x >= (left - magneticValue) && x <= (left + width + magneticValue)) &&
+    		 (y <= (top + height + magneticValue) && y >= (top + height - distance))) {
     	return true;
     }
     
     // left line
-    if ((x >= (left - MAGNETIC_VALUE) && x <= (left + distance)) &&
-        (y >= (top - MAGNETIC_VALUE) && y <= (top + height + MAGNETIC_VALUE))) {
+    if ((x >= (left - magneticValue) && x <= (left + distance)) &&
+        (y >= (top - magneticValue) && y <= (top + height + magneticValue))) {
       return true;
     }
 
+		return false;
+  }
+
+	private static boolean pointOnArea(int x, int y, int left, int top, int width, int height) {
+		
+		// on rect area
+    if ( (x >= left && x <= (left + width)) &&
+    		 (y >= top && y <= (top + height))) {
+    	return true;
+    }
+    		
 		return false;
 	}
 
