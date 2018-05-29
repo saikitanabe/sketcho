@@ -23,33 +23,11 @@ public class ContainerAttachHelpers {
 		if (a != null) {
 			return a;
 		}
+		
+		AnchorElement result = ContainerAttachHelpers.onAttachAreaManualOnly(diagram, anchor, x, y);
 
-		if (AnchorUtils.onAttachAreaManual(
-			x, 
-			y,
-			diagram.getLeft(), 
-			diagram.getTop(),
-			diagram.getWidth(),
-			diagram.getHeight(),
-			diagram.getSurfaceHandler())) {
-
-	    AnchorElement result = diagram.getAnchorElement(anchor);
-	    AnchorProperties tempAnchorProperties = diagram.getTempAnchorProperties(); 
-	    AnchorUtils.anchorPoint(x, y, tempAnchorProperties, diagram.getLeft(), diagram.getTop(), diagram.getWidth(), diagram.getHeight());
-	
-	    result.setAx(tempAnchorProperties.x);
-	    result.setAy(tempAnchorProperties.y);
-	    result.setRelativeX(tempAnchorProperties.relativeValueX);
-	    result.setRelativeY(tempAnchorProperties.relativeValueY);
-	    result.setCardinalDirection(tempAnchorProperties.cardinalDirection);
-	    
-			diagram.setAnchorPointShape(tempAnchorProperties.x, tempAnchorProperties.y);
-			
-			if (anchor.getRelationship() != null) {
-				anchor.getRelationship().clearOnlyClosestPath();
-			}
-	
-	    return result;
+		if (result != null) {
+			return result;
 		}
 
 		if (AnchorUtils.onAttachAreaAuto(
@@ -61,7 +39,7 @@ public class ContainerAttachHelpers {
 			diagram.getHeight(),
 			diagram.getSurfaceHandler())) {
 
-			AnchorElement result = diagram.getAnchorElement(anchor);
+			result = diagram.getAnchorElement(anchor);
 			AnchorProperties tempAnchorProperties = diagram.getTempAnchorProperties();
 
 			Diagram second = anchor.getTheOtherEnd().getDiagram();
@@ -90,6 +68,35 @@ public class ContainerAttachHelpers {
 		}
 		
 	  return null;
-  }
+	}
+	
+	public static AnchorElement onAttachAreaManualOnly(
+		AbstractDiagramItem diagram, Anchor anchor, int x, int y
+	) {
+		if (AnchorUtils.onAttachAreaManual(x, y, diagram.getLeft(), diagram.getTop(), diagram.getWidth(),
+				diagram.getHeight(), diagram.getSurfaceHandler())) {
 
+			AnchorElement result = diagram.getAnchorElement(anchor);
+			AnchorProperties tempAnchorProperties = diagram.getTempAnchorProperties();
+			AnchorUtils.anchorPoint(x, y, tempAnchorProperties, diagram.getLeft(), diagram.getTop(), diagram.getWidth(),
+					diagram.getHeight());
+
+			result.setAx(tempAnchorProperties.x);
+			result.setAy(tempAnchorProperties.y);
+			result.setRelativeX(tempAnchorProperties.relativeValueX);
+			result.setRelativeY(tempAnchorProperties.relativeValueY);
+			result.setCardinalDirection(tempAnchorProperties.cardinalDirection);
+
+			diagram.setAnchorPointShape(tempAnchorProperties.x, tempAnchorProperties.y);
+
+			if (anchor.getRelationship() != null) {
+				anchor.getRelationship().clearOnlyClosestPath();
+			}
+
+			return result;
+		}
+
+		return null;
+
+	}
 }
