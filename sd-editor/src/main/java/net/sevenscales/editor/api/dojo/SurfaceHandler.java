@@ -446,13 +446,26 @@ class SurfaceHandler extends SimplePanel implements
         // if element is not visible do not show anchor point
         // e.g. comment thread is only hidden if resolved.
 
-  //      if (result == null) {
-        AnchorElement candidate = d.onAttachArea(anchor, x, y);
-        if (candidate != null && result == null) {
-          result = candidate;
+        if (result == null) {
+          // 22.5.2018 ST: bug fix shows auto attach circle for the last
+          // but not for the first selected shape.
+          // auto center functionality takes priority based on
+          // shape order on a board.
+          AnchorElement candidate = d.onAttachArea(anchor, x, y);
+          if (candidate != null && result == null) {
+            result = candidate;
+          } 
         } else {
           d.setHighlight(false);
         }
+
+        // 22.5.2018 ST: legacy attach functionality that
+        // doesn't take into account first attached shape that are in order
+        // if (candidate != null && result == null) {
+        //   result = candidate;
+        // } else {
+        //   d.setHighlight(false);
+        // }
       }
     }
 

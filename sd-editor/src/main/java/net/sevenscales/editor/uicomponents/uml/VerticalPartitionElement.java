@@ -7,7 +7,10 @@ import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.LibraryShapes;
+import net.sevenscales.editor.content.utils.ContainerAttachHelpers;
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.drag.Anchor;
+import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.Point;
@@ -35,6 +38,11 @@ public class VerticalPartitionElement extends CalculatedPathElement {
     textUtil.setMarginTop(0);
     setText(text);
     super.constructorDone();
+  }
+
+  @Override
+	public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
+  	return ContainerAttachHelpers.onAttachAreaManualOnly(this, anchor, x, y);
   }
 
   protected List<IPathFactory> getPathFactories() {

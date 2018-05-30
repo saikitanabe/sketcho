@@ -172,7 +172,7 @@ public class RectBoundaryElement extends AbstractDiagramItem implements Supports
   }
   
   public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
-  	return ContainerAttachHelpers.onAttachArea(this, anchor, x, y);
+  	return ContainerAttachHelpers.onAttachAreaManualOnly(this, anchor, x, y);
   }
 
   public String getText() {
