@@ -13,6 +13,8 @@ public class Constants {
 	public static final int SKETCH_MODE_REL_LINE_WEIGHT = 2;
 	public static final int SKETCH_SEPARATOR_WEIGHT = 2;
 
+	public static final int CORPORATE_MODE_LINE_WEIGHT = 2;
+
 	public static final int ELLIPSE_RECT_SHAPE_VERSION = 7;
 
 	public static int ZOOM_DEFAULT_INDEX;

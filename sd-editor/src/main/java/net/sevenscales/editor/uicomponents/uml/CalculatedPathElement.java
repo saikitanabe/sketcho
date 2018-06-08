@@ -8,6 +8,7 @@ import com.google.gwt.core.client.JsArray;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.utils.ContainerAttachHelpers;
 import net.sevenscales.editor.diagram.ContainerType;
@@ -36,6 +37,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
   private RectShape rectShape = new RectShape();
   private Point coords = new Point();
   private IGroup group;
+  private IGroup subgroup;
   private TextElementFormatUtil textUtil;
   private GenericHasTextElement hasTextElement;
 
@@ -65,6 +67,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     this.shape = newShape;
 
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getContainerLayer());
+    subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
     // group.setAttribute("cursor", "default");
 
     // set clipping area => text is visible only within canvas boundary
@@ -77,7 +80,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
     hasTextElement = new GenericHasTextElement(this, shape);
     hasTextElement.setMarginLeft(getMarginLeft());
-    textUtil = new TextElementFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+    textUtil = new TextElementFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
     // textUtil.setMarginTop(0);
     // textUtil.setRotate(-90);
 
@@ -139,7 +142,8 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     rectShape.width = width;
     rectShape.height = height;
 
-    setPathShapes(left, top, width, height);
+    setPathShapes(0, 0, width, height);
+    subgroup.setTransform(left, top);
 
     textUtil.setTextShape();
   }
@@ -148,8 +152,14 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     if (paths == null) {
       paths = new ArrayList();
       for (IPathFactory f : getPathFactories()) {
-        IPath p = IShapeFactory.Util.factory(editable).createPath(group, null);
-        p.setStrokeWidth(Constants.SKETCH_MODE_LINE_WEIGHT);
+        IPath p = IShapeFactory.Util.factory(editable).createPath(subgroup, null);
+
+        if (Tools.isSketchMode()) {
+          p.setStrokeWidth(Constants.SKETCH_MODE_LINE_WEIGHT);
+        } else {
+          p.setStrokeWidth(Constants.CORPORATE_MODE_LINE_WEIGHT);
+        }
+
         p.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, 0); // force transparent
         p.setAttribute("style", "stroke-linejoin:round;");
         paths.add(new PathWrapper(f, p));
@@ -303,8 +313,13 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
 	@Override
 	public IGroup getGroup() {
 		return group;
+  }
+  
+	@Override
+	public IGroup getSubgroup() {
+		return subgroup;
 	}
-	
+
 	@Override
 	protected TextElementFormatUtil getTextFormatter() {
 		return textUtil;

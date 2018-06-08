@@ -50,11 +50,11 @@ import net.sevenscales.editor.uicomponents.uml.ClassElement2;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.ComponentElement;
 import net.sevenscales.editor.uicomponents.uml.ForkElement;
-import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement;
+import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElementCorporate;
+import net.sevenscales.editor.uicomponents.uml.VerticalPartitionElementCorporate;
 import net.sevenscales.editor.uicomponents.uml.IShapeGroup;
 import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
-import net.sevenscales.editor.uicomponents.uml.RectBoundaryElement;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
 import net.sevenscales.editor.uicomponents.uml.ShapeCache;
@@ -269,7 +269,7 @@ public class DiagramFactory {
 					defaultText, background, borderColor, color, true, new DiagramItemDTO());
 			result = ce;
 		} else if (ElementType.HORIZONTAL_PARTITION.getValue().equals(elementType)) {
-			result = new HorizontalPartitionElement(surface,
+			result = new HorizontalPartitionElementCorporate(surface,
         		new HorizontalPartitionShape(x, y, 170, 70),
             defaultText,
             background,
@@ -278,8 +278,15 @@ public class DiagramFactory {
         	  true,
         	  new DiagramItemDTO());			
 		} else if (ElementType.VERTICAL_PARTITION.getValue().equals(elementType)) {
-			result = new RectBoundaryElement(surface,
-        		new RectContainerShape(x, y, 170, 225),
+      Integer props = null;
+      LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.VERTICAL_PARTITION.getValue());
+      if (sh != null) {
+        props = sh.properties;
+      }
+			
+			GenericShape gs = ((RectContainerShape) new RectContainerShape(x, y, 170, 225)).toGenericShape(props);
+			result = new VerticalPartitionElementCorporate(surface,
+        		gs,
             defaultText,
             background,
             borderColor,
