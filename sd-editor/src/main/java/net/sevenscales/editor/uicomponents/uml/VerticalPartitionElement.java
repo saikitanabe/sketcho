@@ -40,6 +40,10 @@ public class VerticalPartitionElement extends CalculatedPathElement {
     super.constructorDone();
   }
 
+  protected int off() {
+    return OFF;
+  }
+
   @Override
 	public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
   	return ContainerAttachHelpers.onAttachAreaManualOnly(this, anchor, x, y);
@@ -51,9 +55,9 @@ public class VerticalPartitionElement extends CalculatedPathElement {
       factories.add(new IPathFactory() {
         public String createPath(int left, int top, int width, int height) {
           return "m" + left + "," + top + 
-                 "l" + width + "," + OFF + 
-                 "l" + 0 + "," + (HEADER_HEIGHT + OFF) +
-                 "l" + (-width) + "," + (0 - OFF) + 
+                 "l" + width + "," + off() + 
+                 "l" + 0 + "," + (HEADER_HEIGHT + off()) +
+                 "l" + (-width) + "," + (0 - off()) + 
                  "z";
 
         }
@@ -64,9 +68,9 @@ public class VerticalPartitionElement extends CalculatedPathElement {
       factories.add(new IPathFactory() {
         public String createPath(int left, int top, int width, int height) {
           return "m" + left + "," + (top + HEADER_HEIGHT) + 
-                 "l" + 0 + "," + (height - HEADER_HEIGHT + OFF) + 
-                 "l" + width + "," + (-OFF) +
-                 "l" + 0 + "," + (- height + HEADER_HEIGHT - OFF);
+                 "l" + 0 + "," + (height - HEADER_HEIGHT + off()) + 
+                 "l" + width + "," + (-off()) +
+                 "l" + 0 + "," + (- height + HEADER_HEIGHT - off());
         }
         public boolean supportsEvents() {
           return false;
