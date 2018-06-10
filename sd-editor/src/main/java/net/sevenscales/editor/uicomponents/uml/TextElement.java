@@ -39,7 +39,7 @@ public class TextElement extends AbstractDiagramItem implements
 	private TextElementFormatUtil textUtil;
 	private int minimumWidth = 5;
 	private int minimumHeight = 5;
-	private boolean legacy = true;
+	private boolean legacy = false;
 
 	public TextElement(ISurfaceHandler surface, TextShape newShape,
 			Color backgroundColor, Color borderColor, Color textColor, String text, boolean editable, IDiagramItemRO item) {

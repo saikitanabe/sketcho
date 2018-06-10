@@ -66,7 +66,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private boolean pathsSetAtLeastOnce;
   private boolean tosvg;
 	private boolean forceTextRendering;
-	private boolean legacy = true;
+	private boolean legacy = false;
   
   private static final String BOUNDARY_COLOR 					= "#aaaaaa";
   private static final String FILL_BORDER_COLOR 			= "fill:bordercolor;";
@@ -704,7 +704,9 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	public int getTextAreaTop() {
 		// cannot find enum since user custom types will not be part of enums!!
 		if (hasTextElement.verticalAlignMiddle()) {
-			return textUtil.middleY(0) + getTransformY();
+			// ST 8.6.2018: subgroup needs to be taken into count on textarea position
+			// calculation
+			return textUtil.middleY(0) + getTransformY() + getTransformY(getSubgroup());
 		}
   	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
 			return getTop() + getHeight() - 1;
