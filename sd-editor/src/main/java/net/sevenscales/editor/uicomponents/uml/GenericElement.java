@@ -56,6 +56,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private IRectangle background;
   private IGroup group;
   private IGroup subgroup;
+  private IGroup textGroup;
   private int left;
   private int top;
   private int width;
@@ -109,9 +110,14 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
     // sub// group.setAttribute("cursor", "default");
 
+		// order is important or cannot move shape with background
     background = IShapeFactory.Util.factory(editable).createRectangle(group);
     background.setFill(0, 0 , 0, 0); // transparent
-    // background.setStroke("#363636");
+		// background.setStroke("#363636");
+		
+		// separate text group is needed or can't interact with links that are behind
+		// background rectangle
+		textGroup = IShapeFactory.Util.factory(editable).createGroup(group);
 
   	paths = new ArrayList<PathWrapper>(); // theshape.protos.length
 
@@ -158,10 +164,10 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			// order changed due to text is now part of subgroup
 			// and moved with the subgroup
 			if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
-				textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
+				textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
 				textUtil.setMarginTop(0);
 			} else {
-				textUtil = new TextElementFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
+				textUtil = new TextElementFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
 			}
 		}
 
@@ -493,7 +499,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			} else if (!pathsSetAtLeastOnce || width != orgwidth || height != orgheight) {
 		  	scalePaths(factorX, factorY);
 			}
-	  	subgroup.setTransform(left, top);
+			subgroup.setTransform(left, top);
+			textGroup.setTransform(left, top);
 	  	if (UiUtils.isIE()) {
 			  // no need to use, which doesn't work svg => pdf, scale down stroke width
 			  // vector-effect="non-scaling-stroke"

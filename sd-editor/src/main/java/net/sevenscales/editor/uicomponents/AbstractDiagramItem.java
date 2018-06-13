@@ -930,7 +930,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	
 	@Override
 	public int getTransformX() {
-  	IGroup group = getGroup();
+    return getTransformX(getGroup());
+	}
+	protected int getTransformX(IGroup group) {
   	if (group != null) {
   		return group.getTransformX();
   	}
@@ -939,7 +941,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
 	@Override
 	public int getTransformY() {
-  	IGroup group = getGroup();
+    return getTransformY(getGroup());
+	}
+	protected int getTransformY(IGroup group) {
   	if (group != null) {
   		return group.getTransformY();
   	}
