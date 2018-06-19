@@ -15,9 +15,6 @@ import net.sevenscales.editor.gfx.domain.Point;
 
 
 public class PackageElement extends CalculatedPathElement {
-  private int minimumWidth = 25;
-  private int minimumHeight = 25;
-  private GenericShape shape;
   private static final int HEADER_HEIGHT = 13;
   private static final int HEADER_WIDTH = (int) (HEADER_HEIGHT * 1.5);
   private static final int HEADER_OFF = 1;
@@ -32,8 +29,14 @@ public class PackageElement extends CalculatedPathElement {
   public PackageElement(ISurfaceHandler surface, GenericShape newShape, String text, 
   		Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText, IDiagramItemRO item) {
     super(surface, newShape, text, backgroundColor, borderColor, textColor, editable, item);
-    this.shape = newShape;
     super.constructorDone();
+  }
+
+  protected int off() {
+    return OFF;
+  }
+  protected int headerOff() {
+    return HEADER_OFF;
   }
 
   protected List<IPathFactory> getPathFactories() {
@@ -42,9 +45,9 @@ public class PackageElement extends CalculatedPathElement {
       factories.add(new IPathFactory() {
         public String createPath(int left, int top, int width, int height) {
           return "m" + left + "," + top + 
-                 "l" + (0 + HEADER_OFF) + "," + -HEADER_HEIGHT + 
-                 "l" + (HEADER_WIDTH + HEADER_OFF) + "," + 0 +
-                 "l" + (-HEADER_OFF) + "," + HEADER_HEIGHT;
+                 "l" + (0 + headerOff()) + "," + -HEADER_HEIGHT + 
+                 "l" + (HEADER_WIDTH + headerOff()) + "," + 0 +
+                 "l" + (-headerOff()) + "," + HEADER_HEIGHT;
 
         }
         public boolean supportsEvents() {
@@ -54,9 +57,9 @@ public class PackageElement extends CalculatedPathElement {
       factories.add(new IPathFactory() {
         public String createPath(int left, int top, int width, int height) {
           return "m" + left + "," + top + 
-                 "l" + (width + OFF) + "," + -OFF + 
-                 "l" + (0 - OFF) + "," + height +
-                 "l" + (-width - OFF) + "," + OFF + 
+                 "l" + (width + off()) + "," + -off() + 
+                 "l" + (0 - off()) + "," + height +
+                 "l" + (-width - off()) + "," + off() + 
                  "z";
         }
         public boolean supportsEvents() {
