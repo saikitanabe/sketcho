@@ -18,9 +18,6 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 
 
 public class VerticalPartitionElement extends CalculatedPathElement {
-  private int minimumWidth = 25;
-  private int minimumHeight = 25;
-  private GenericShape shape;
   private static final int HEADER_HEIGHT = 25;
   private static final int OFF = 2;
   private List<IPathFactory> factories;
@@ -33,7 +30,6 @@ public class VerticalPartitionElement extends CalculatedPathElement {
   public VerticalPartitionElement(ISurfaceHandler surface, GenericShape newShape, String text, 
   		Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText, IDiagramItemRO item) {
     super(surface, newShape, text, backgroundColor, borderColor, textColor, editable, item);
-    this.shape = newShape;
     TextElementFormatUtil textUtil = getTextFormatter();
     textUtil.setMarginTop(0);
     setText(text);
