@@ -40,6 +40,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
   private IGroup subgroup;
   private TextElementFormatUtil textUtil;
   private GenericHasTextElement hasTextElement;
+  private boolean legacy = false;
 
   public interface IPathFactory {
     String createPath(int left, int top, int width, int height);
@@ -145,7 +146,9 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     setPathShapes(0, 0, width, height);
     subgroup.setTransform(left, top);
 
-    textUtil.setTextShape();
+    if (legacy) {
+      textUtil.setTextShape();
+    }
   }
 
   private void lazyAllocatePaths() {
@@ -213,7 +216,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
   @Override
   public boolean resize(int left, int top, int width, int height) {
     if (width >= minimumWidth && height >= minimumHeight) {
-      setShape(left, top, width, height);
+      setShape(getRelativeLeft(), getRelativeTop(), width, height);
       super.applyHelpersShape();
       dispatchAndRecalculateAnchorPositions();
       return true;
