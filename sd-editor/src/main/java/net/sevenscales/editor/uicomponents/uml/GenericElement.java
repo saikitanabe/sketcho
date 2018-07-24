@@ -533,7 +533,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	
 	private boolean legacySvgShape(String elementType) {
 		// default library element type doesn't start with d_
-		boolean defaultLibrary = !elementType.matches("^[^_]+_");
+		// e.g. noteitem is part of default library
+		boolean defaultLibrary = !elementType.matches("^[^_]+_.*$");
 		return defaultLibrary || elementType.startsWith("e_");
 	}
 
