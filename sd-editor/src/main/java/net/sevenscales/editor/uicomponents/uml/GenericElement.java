@@ -491,13 +491,29 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			double factorX = getFactorX();
 			double factorY = getFactorY();
 
+			// if (shape.getSvgData() != null) {
+			// 	// freehand and any custom svg case
+		  // 	subgroup.setScale(factorX, factorY);
+			// } else if (!pathsSetAtLeastOnce || width != orgwidth || height != orgheight) {
+			// ST 24.7.2018: BUG: some of the paths scaling gets broken (too big or small)
+			// started to happen when imported new AWS icons
+		  // 	scalePaths(factorX, factorY);
+			// }
+
 			if (shape.getSvgData() != null) {
 				// freehand and any custom svg case
-		  	subgroup.setScale(factorX, factorY);
-			} else if (!pathsSetAtLeastOnce || width != orgwidth || height != orgheight) {
+				subgroup.setScale(factorX, factorY);
+			} else if (legacySvgShape(shape.getElementType()) && !pathsSetAtLeastOnce || width != orgwidth || height != orgheight) {
 		  	scalePaths(factorX, factorY);
+			} else if (!pathsSetAtLeastOnce) {
+				// shape.getSvgData() == null checks that not e.g. freehand drawing
+
+				// ST 24.7.2018: set prototype path with original scale one time
+				// fix separate path scaling problem with new aws compute icons
+				scalePaths(1, 1);
+				subgroup.setScale(factorX, factorY);
 			}
-	  	subgroup.setTransform(left, top);
+			subgroup.setTransform(left, top);
 	  	if (UiUtils.isIE()) {
 			  // no need to use, which doesn't work svg => pdf, scale down stroke width
 			  // vector-effect="non-scaling-stroke"
@@ -513,7 +529,13 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			}
 			super.applyHelpersShape();
   	}
-  }
+	}
+	
+	private boolean legacySvgShape(String elementType) {
+		// default library element type doesn't start with d_
+		boolean defaultLibrary = !elementType.matches("^[^_]+_");
+		return defaultLibrary || elementType.startsWith("e_");
+	}
 
   private void scalePaths(double factorX, double factorY) {
   	if (theshape.isReady()) {
