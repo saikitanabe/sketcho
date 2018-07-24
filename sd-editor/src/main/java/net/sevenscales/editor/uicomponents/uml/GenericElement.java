@@ -72,6 +72,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private static final String BOUNDARY_COLOR 					= "#aaaaaa";
   private static final String FILL_BORDER_COLOR 			= "fill:bordercolor;";
   private static final String FILL_BORDER_COLOR_DARK 	= "fill:bordercolor-dark;";
+  private static final String FILL_SHAPE_BG_COLOR 		= "fill:shape-bgcolor;";
   private static final String FILL_BG_COLOR 					= "fill:bgcolor;";
   private static final String FILL_BG_COLOR_LIGHT			= "fill:bgcolor-light;";
 
@@ -294,6 +295,9 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			path.setFillAsBorderColor(true);
 			// need to clear or will contain invalid fill valud since bordercolor is not hex code or pre color code
 			style = style.replace(FILL_BORDER_COLOR, "");
+		} else if (style.contains(FILL_SHAPE_BG_COLOR)) {
+			path.setFillAsShapeBackgroundColor(true);
+			style = style.replace(FILL_SHAPE_BG_COLOR, "");
 		} else if (style.contains(FILL_BG_COLOR)) {
 			path.setFillAsBoardBackgroundColor(true);
 			style = style.replace(FILL_BG_COLOR, "");
@@ -621,7 +625,9 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			if (path.path.isFillAsBackgroundColorLight()) {
 				Color color = getBackgroundColorAsColor();
   			path.path.setFill(color.toLighter());
-  		}
+  		} else if (path.path.isFillAsShapeBackgroundColor()) {
+  			path.path.setFill(red, green, blue, opacity);
+			}
   	}
   }
 

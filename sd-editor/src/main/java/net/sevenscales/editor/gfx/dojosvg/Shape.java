@@ -18,6 +18,7 @@ abstract class Shape extends Graphics implements IShape {
 	private boolean themeSupported = true;
 	private boolean fillAsBorderColor = false;
 	private boolean fillAsBorderColorDark = false;
+	private boolean fillAsShapeBackgroundColor = false;
 	private boolean fillAsBoardBackgroundColor = false;
 	private boolean fillAsBackgroundColorLight = false;
 	
@@ -506,6 +507,14 @@ abstract class Shape extends Graphics implements IShape {
   	return fillAsBorderColor;
   }
 
+	public void setFillAsShapeBackgroundColor(boolean value) {
+		this.fillAsShapeBackgroundColor = value;
+	}
+
+  public boolean isFillAsShapeBackgroundColor() {
+  	return fillAsShapeBackgroundColor;
+	}
+	
 	public void setFillAsBoardBackgroundColor(boolean value) {
 		this.fillAsBoardBackgroundColor = value;
 	}
