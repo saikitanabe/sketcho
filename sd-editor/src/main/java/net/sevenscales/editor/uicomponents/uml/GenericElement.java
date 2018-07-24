@@ -410,7 +410,12 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
   @Override
   public boolean resize(int left, int top, int width, int height) {
-    setShape(getRelativeLeft(), getRelativeTop(), width, height);
+		setShape(getRelativeLeft(), getRelativeTop(), width, height);
+
+		// ST 24.7.2018: after text group was taken into use
+		// setShape doesn't reset text position on resize.
+		// Do it separately in here.
+		textUtil.setTextShape();
     dispatchAndRecalculateAnchorPositions();
     return true;
   }
