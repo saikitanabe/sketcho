@@ -503,14 +503,15 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			if (shape.getSvgData() != null) {
 				// freehand and any custom svg case
 				subgroup.setScale(factorX, factorY);
-			} else if (legacySvgShape(shape.getElementType()) && !pathsSetAtLeastOnce || width != orgwidth || height != orgheight) {
+			} else if (legacySvgShape(shape.getElementType()) && (!pathsSetAtLeastOnce || width != orgwidth || height != orgheight)) {
 		  	scalePaths(factorX, factorY);
-			} else if (!pathsSetAtLeastOnce) {
-				// shape.getSvgData() == null checks that not e.g. freehand drawing
-
+			} else {
 				// ST 24.7.2018: set prototype path with original scale one time
 				// fix separate path scaling problem with new aws compute icons
-				scalePaths(1, 1);
+				if (!pathsSetAtLeastOnce) {
+					// set path only once
+					scalePaths(1, 1);
+				}
 				subgroup.setScale(factorX, factorY);
 			}
 			subgroup.setTransform(left, top);
@@ -533,7 +534,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	
 	private boolean legacySvgShape(String elementType) {
 		// default library element type doesn't start with d_
-		boolean defaultLibrary = !elementType.matches("^[^_]+_");
+		// e.g. noteitem is part of default library
+		boolean defaultLibrary = !elementType.matches("^[^_]+_.*$");
 		return defaultLibrary || elementType.startsWith("e_");
 	}
 
