@@ -509,7 +509,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 				subgroup.setScale(factorX, factorY);
 			} else if (legacySvgShape(shape.getElementType()) && (!pathsSetAtLeastOnce || width != orgwidth || height != orgheight)) {
 		  	scalePaths(factorX, factorY);
-			} else {
+			} else if (width != orgwidth || height != orgheight) {
 				// ST 24.7.2018: set prototype path with original scale one time
 				// fix separate path scaling problem with new aws compute icons
 				if (!pathsSetAtLeastOnce) {
