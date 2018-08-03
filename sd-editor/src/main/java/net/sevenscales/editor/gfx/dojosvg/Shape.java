@@ -21,6 +21,7 @@ abstract class Shape extends Graphics implements IShape {
 	private boolean fillAsShapeBackgroundColor = false;
 	private boolean fillAsBoardBackgroundColor = false;
 	private boolean fillAsBackgroundColorLight = false;
+	private boolean fillAsBackgroundColorDark = false;
 	
 	final public void setStroke(Color color) {
 		if (visibility) {
@@ -537,6 +538,14 @@ abstract class Shape extends Graphics implements IShape {
 
   public boolean isFillAsBackgroundColorLight() {
   	return fillAsBackgroundColorLight;
+	}
+
+	public void setFillAsBackgroundColorDark(boolean value) {
+		this.fillAsBackgroundColorDark = value;
+	}
+
+  public boolean isFillAsBackgroundColorDark() {
+  	return fillAsBackgroundColorDark;
   }
 	
 }
