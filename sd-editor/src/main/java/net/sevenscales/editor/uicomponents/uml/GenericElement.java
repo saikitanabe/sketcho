@@ -75,6 +75,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private static final String FILL_SHAPE_BG_COLOR 		= "fill:shape-bgcolor;";
   private static final String FILL_BG_COLOR 					= "fill:bgcolor;";
   private static final String FILL_BG_COLOR_LIGHT			= "fill:bgcolor-light;";
+  private static final String FILL_BG_COLOR_DARK			= "fill:bgcolor-dark;";
 
   private IPath.PathTransformer pathTransformer = new IPath.PathTransformer() {
   	public String getShapeStr(int dx, int dy) {
@@ -307,6 +308,9 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		} else if (style.contains(FILL_BG_COLOR_LIGHT)) {
 			path.setFillAsBackgroundColorLight(true);
 			style = style.replace(FILL_BG_COLOR_LIGHT, "");
+		} else if (style.contains(FILL_BG_COLOR_DARK)) {
+			path.setFillAsBackgroundColorDark(true);
+			style = style.replace(FILL_BG_COLOR_DARK, "");
 		}
 		return style;
 	}
@@ -516,7 +520,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 				subgroup.setScale(factorX, factorY);
 			} else if (legacySvgShape(shape.getElementType()) && (!pathsSetAtLeastOnce || width != orgwidth || height != orgheight)) {
 		  	scalePaths(factorX, factorY);
-			} else {
+			} else if (!pathsSetAtLeastOnce || width != orgwidth || height != orgheight) {
 				// ST 24.7.2018: set prototype path with original scale one time
 				// fix separate path scaling problem with new aws compute icons
 				if (!pathsSetAtLeastOnce) {
@@ -654,6 +658,9 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			if (path.path.isFillAsBackgroundColorLight()) {
 				Color color = getBackgroundColorAsColor();
   			path.path.setFill(color.toLighter());
+  		} else if (path.path.isFillAsBackgroundColorDark()) {
+				Color color = getBackgroundColorAsColor();
+  			path.path.setFill(color.toDarker());
   		} else if (path.path.isFillAsShapeBackgroundColor()) {
   			path.path.setFill(red, green, blue, opacity);
 			}
