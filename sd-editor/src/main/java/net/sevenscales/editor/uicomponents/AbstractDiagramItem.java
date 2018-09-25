@@ -215,7 +215,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     applyLinkColor();
     IGroup group = getGroup();
     if (group != null) {
-      net.sevenscales.domain.utils.Debug.log("add shapebase...");
+      // net.sevenscales.domain.utils.Debug.log("add shapebase...");
       group.setAttribute("class", "shapebase");
     }
   }

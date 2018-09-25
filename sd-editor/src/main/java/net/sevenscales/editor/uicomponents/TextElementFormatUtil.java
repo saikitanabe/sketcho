@@ -220,6 +220,7 @@ public class TextElementFormatUtil {
     
 //    group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     textGroup = IShapeFactory.Util.factory(true).createGroup(group);
+    textGroup.setAttribute("class", "shapebase");
     fontProperty = fontToRowSizeMap.get(12);
   }
   

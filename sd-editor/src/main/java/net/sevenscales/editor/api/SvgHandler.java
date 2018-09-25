@@ -18,7 +18,6 @@ import net.sevenscales.editor.gfx.svg.converter.SvgConverter;
 import net.sevenscales.editor.gfx.svg.converter.SvgData;
 import net.sevenscales.editor.uicomponents.uml.ShapeCache;
 
-
 public class SvgHandler {
 	private static SLogger logger = SLogger.createLogger(SvgHandler.class);
 	static {
@@ -43,18 +42,18 @@ public class SvgHandler {
 		}
 
 		// if (SvgHandler.surface == null) {
-	    surface = new UnAttachedSurface(editorContext, new ILoadObserver() {
-				public void loaded() {
-					handleLoaded();
-				}
-			});
+		surface = new UnAttachedSurface(editorContext, new ILoadObserver() {
+			public void loaded() {
+				handleLoaded();
+			}
+		});
 
-			// Firefor cannot render manipulate dom if not attached
-			// chrome could do without adding to DOM
-			// surface.getElement().getStyle().setDisplay(Style.Display.NONE);
-			RootPanel.get().add(surface);
+		// Firefor cannot render manipulate dom if not attached
+		// chrome could do without adding to DOM
+		// surface.getElement().getStyle().setDisplay(Style.Display.NONE);
+		RootPanel.get().add(surface);
 		// } else {
-		// 	surface.clearAndInit();
+		// surface.clearAndInit();
 		// }
 	}
 
@@ -65,21 +64,21 @@ public class SvgHandler {
 
 		Tools.setExportMode(true);
 
-    JSONObject obj = new JSONObject(json);
-    if (obj.isObject() != null) {
-	    JSONContentParser parser = new JSONContentParser(obj);
-	    IDiagramContent content = parser.toDTO();
+		JSONObject obj = new JSONObject(json);
+		if (obj.isObject() != null) {
+			JSONContentParser parser = new JSONContentParser(obj);
+			IDiagramContent content = parser.toDTO();
 			ShapeCache.updateShapes(content.getLibrary());
-	    UiModelContentHandler modelHandler = new UiModelContentHandler(editorContext);
-	    modelHandler.addContentItems(content, surface);
-	    SvgConverter converter = new SvgConverter(false);
-	    int width = 0;
-	    if (content.getWidth() != null) {
-	    	width = content.getWidth();
-	    }
-	   	int height = 0;
-	   	if (content.getHeight() != null) {
-	   		height = content.getHeight();
+			UiModelContentHandler modelHandler = new UiModelContentHandler(editorContext);
+			modelHandler.addContentItems(content, surface);
+			SvgConverter converter = new SvgConverter(false);
+			int width = 0;
+			if (content.getWidth() != null) {
+				width = content.getWidth();
+			}
+			int height = 0;
+			if (content.getHeight() != null) {
+				height = content.getHeight();
 			}
 
 			// ST 20.11.2017: Legacy SVG custom conversion
@@ -101,29 +100,29 @@ public class SvgHandler {
 			// ST 12.11.2017: END NEW DOM based svg extraction
 
 			Tools.setExportMode(false);
-    }
+		}
 
-    // synchronous from RootPanel.get().add, so break out
+		// synchronous from RootPanel.get().add, so break out
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			@Override
 			public void execute() {
-	    	surface.removeFromParent();
+				surface.removeFromParent();
 			}
 		});
 
 		// RootPanel.get().remove(surface);
-  }
+	}
 
 	public String getSvg() {
 		return svg;
 	}
 
 	private native void nativeReadyLegacy(JavaScriptObject handler, String svg)/*-{
-		handler(svg)
-	}-*/;
+																																							handler(svg)
+																																							}-*/;
 
 	private native void nativeReady(JavaScriptObject handler, JsSvg svg)/*-{
-		handler(svg)
-	}-*/;
-	
+																																			handler(svg)
+																																			}-*/;
+
 }
