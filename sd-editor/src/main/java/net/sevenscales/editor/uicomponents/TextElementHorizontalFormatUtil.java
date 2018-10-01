@@ -117,7 +117,7 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
     if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION) && hasTextElement.supportElementResize()) {
       // during OT operation element is not resized and everything is 
       // copied as is, element size and text
-      hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), (int) width, (int) height);
+      hasTextElement.resizeWidthHeight((int) width, (int) height);
     }
   }
 

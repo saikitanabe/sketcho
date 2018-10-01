@@ -122,6 +122,7 @@ public class TextElementFormatUtil {
     boolean isAutoResize();
     void resize(int x, int y, int width, int height);
     void resizeHeight(int height);
+    void resizeWidthHeight(int width, int height);
     void setLink(String lik);
     String getLink();
     boolean supportsTitleCenter();
@@ -176,6 +177,8 @@ public class TextElementFormatUtil {
       return 0;
     }
     public void resizeHeight(int height) {
+    }
+    public void resizeWidthHeight(int width, int height) {
     }
     public boolean isSketchiness() {
       return false;

@@ -56,7 +56,7 @@ public class ChildTextElement extends TextElement implements IChildElement {
 
 	@Override
 	protected TextElementFormatUtil createTextFormatter(HasTextElement hasTextElement) {
-		return new TextElementHorizontalFormatUtil(this, hasTextElement, getGroup(), surface.getEditorContext());
+		return new TextElementHorizontalFormatUtil(this, hasTextElement, getTextGroup(), surface.getEditorContext());
 	}
 
 	// @Override

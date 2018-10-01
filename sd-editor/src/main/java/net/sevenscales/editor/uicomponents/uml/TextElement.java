@@ -35,7 +35,8 @@ public class TextElement extends AbstractDiagramItem implements
 	private TextShape shape;
 	private Point coords = new Point();
 	private IGroup group;
-	private IGroup subgroup;	
+	private IGroup subgroup;
+  private IGroup textGroup;
 	private TextElementFormatUtil textUtil;
 	private int minimumWidth = 5;
 	private int minimumHeight = 5;
@@ -55,6 +56,10 @@ public class TextElement extends AbstractDiagramItem implements
 				.createRectangle(group);
 		// attachBoundary.setFill(255, 255, 255, 0.1);
 		attachBoundary.setFill(new Color(0, 0, 0, 0));
+
+		// separate text group is needed or can't interact with links that are behind
+		// background rectangle
+		textGroup = IShapeFactory.Util.factory(editable).createGroup(group);
 
 		// child text element prints background as well
 		// so should text element do later
@@ -87,9 +92,9 @@ public class TextElement extends AbstractDiagramItem implements
 
 	protected TextElementFormatUtil createTextFormatter(HasTextElement hasTextElement) {
 		if (legacy) {
-			return new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+			return new TextElementVerticalFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
 		}
-		return new TextElementVerticalFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
+		return new TextElementVerticalFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
 	}
 
 	// nice way to clearly separate interface methods :)
@@ -146,6 +151,10 @@ public class TextElement extends AbstractDiagramItem implements
 		    public void resizeHeight(int height) {
 		      TextElement.this.setHeight(height);
 				}    
+
+		    public void resizeWidthHeight(int width, int height) {
+		      TextElement.this.setWidthHeight(width, height);
+				}
 
 				public void setLink(String link) {
 					TextElement.this.setLink(link);
@@ -309,6 +318,9 @@ public class TextElement extends AbstractDiagramItem implements
 	public void setHeight(int height) {
 		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height);
 	}
+	public void setWidthHeight(int width, int height) {
+		setShape(getRelativeLeft(), getRelativeTop(), width, height);
+	}
 
 	@Override	
 	public void setWidth(int width) {
@@ -322,6 +334,7 @@ public class TextElement extends AbstractDiagramItem implements
 		// group.setTransform(left, top);
 		attachBoundary.setShape(left, top, width, height, 4);
 		subgroup.setTransform(left, top);
+		textGroup.setTransform(left, top);
 		textUtil.setTextShape();
     super.applyHelpersShape();
 	}
@@ -337,17 +350,17 @@ public class TextElement extends AbstractDiagramItem implements
 			color = new Color(0, 0, 0, 0);
 		}
 
-		attachBoundary.setStroke(color);
+		// attachBoundary.setStroke(color);
 	}
 
   @Override
   public void setHighlightBackgroundBorder(Color color) {
-  	attachBoundary.setStroke(color);
+  	// attachBoundary.setStroke(color);
   }
 
   @Override
   public void clearHighlightBackgroundBorder() {
-  	attachBoundary.setStroke(0x33, 0x33, 0x33, 0);
+  	// attachBoundary.setStroke(0x33, 0x33, 0x33, 0);
   }
 	
 	
@@ -383,6 +396,9 @@ public class TextElement extends AbstractDiagramItem implements
 	@Override
 	public IGroup getSubgroup() {
 		return subgroup;
+	}
+	public IGroup getTextGroup() {
+		return textGroup;
 	}
 
 	@Override
