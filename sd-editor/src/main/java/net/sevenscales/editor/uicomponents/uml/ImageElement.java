@@ -125,7 +125,14 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
                    getHeight(),
                    url);
     loaded = true;
+    __notifyImageLoaded(url);
   }
+
+  private native void __notifyImageLoaded(String url)/*-{
+    if (typeof $wnd.__imageLoaded__ === 'function') {
+			return $wnd.__imageLoaded__(url);
+		}
+  }-*/;
 
   private void fetchSignedUrlIfMissing() {
     if (isNotFetchedAwsUrl()) {

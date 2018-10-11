@@ -53,7 +53,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 //  private IImage rightShadow;
 //  private IImage topBlur;
 	private TextElementVerticalFormatUtil textUtil;
-	private boolean legacy = true;
+	private boolean legacy = false;
   
   private static final int LEFT_SHADOW_LEFT = 6; 
   private static final int LEFT_SHADOW_HEIGHT = 41; 

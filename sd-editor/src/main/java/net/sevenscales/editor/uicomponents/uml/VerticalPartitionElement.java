@@ -18,9 +18,6 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 
 
 public class VerticalPartitionElement extends CalculatedPathElement {
-  private int minimumWidth = 25;
-  private int minimumHeight = 25;
-  private GenericShape shape;
   private static final int HEADER_HEIGHT = 25;
   private static final int OFF = 2;
   private List<IPathFactory> factories;
@@ -33,11 +30,14 @@ public class VerticalPartitionElement extends CalculatedPathElement {
   public VerticalPartitionElement(ISurfaceHandler surface, GenericShape newShape, String text, 
   		Color backgroundColor, Color borderColor, Color textColor, boolean editable, boolean delayText, IDiagramItemRO item) {
     super(surface, newShape, text, backgroundColor, borderColor, textColor, editable, item);
-    this.shape = newShape;
     TextElementFormatUtil textUtil = getTextFormatter();
     textUtil.setMarginTop(0);
     setText(text);
     super.constructorDone();
+  }
+
+  protected int off() {
+    return OFF;
   }
 
   @Override
@@ -51,9 +51,9 @@ public class VerticalPartitionElement extends CalculatedPathElement {
       factories.add(new IPathFactory() {
         public String createPath(int left, int top, int width, int height) {
           return "m" + left + "," + top + 
-                 "l" + width + "," + OFF + 
-                 "l" + 0 + "," + (HEADER_HEIGHT + OFF) +
-                 "l" + (-width) + "," + (0 - OFF) + 
+                 "l" + width + "," + off() + 
+                 "l" + 0 + "," + (HEADER_HEIGHT + off()) +
+                 "l" + (-width) + "," + (0 - off()) + 
                  "z";
 
         }
@@ -64,9 +64,9 @@ public class VerticalPartitionElement extends CalculatedPathElement {
       factories.add(new IPathFactory() {
         public String createPath(int left, int top, int width, int height) {
           return "m" + left + "," + (top + HEADER_HEIGHT) + 
-                 "l" + 0 + "," + (height - HEADER_HEIGHT + OFF) + 
-                 "l" + width + "," + (-OFF) +
-                 "l" + 0 + "," + (- height + HEADER_HEIGHT - OFF);
+                 "l" + 0 + "," + (height - HEADER_HEIGHT + off()) + 
+                 "l" + width + "," + (-off()) +
+                 "l" + 0 + "," + (- height + HEADER_HEIGHT - off());
         }
         public boolean supportsEvents() {
           return false;

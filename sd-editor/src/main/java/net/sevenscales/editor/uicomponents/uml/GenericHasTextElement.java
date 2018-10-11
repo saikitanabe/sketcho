@@ -22,7 +22,7 @@ class GenericHasTextElement extends AbstractHasTextElement {
 	private IGenericElement parent;
 	private GenericShape shape;
 	private String elementType;
-	private boolean legacy = true;
+	private boolean legacy = false;
 
 	GenericHasTextElement(IGenericElement parent, GenericShape shape) {
 		super(parent.getDiagram());

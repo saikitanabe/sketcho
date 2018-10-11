@@ -19,13 +19,11 @@ import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.utils.DiagramElementFactory;
-import net.sevenscales.editor.content.utils.Rgb;
 import net.sevenscales.editor.content.utils.ShapeParser;
 import net.sevenscales.editor.diagram.shape.ActivityChoiceShape;
 import net.sevenscales.editor.diagram.shape.ActivityEndShape;
 import net.sevenscales.editor.diagram.shape.ActivityShape;
 import net.sevenscales.editor.diagram.shape.ActivityStartShape;
-import net.sevenscales.editor.diagram.shape.ActorShape;
 import net.sevenscales.editor.diagram.shape.CommentThreadShape;
 import net.sevenscales.editor.diagram.shape.ComponentShape;
 import net.sevenscales.editor.diagram.shape.DbShape;
@@ -50,18 +48,18 @@ import net.sevenscales.editor.uicomponents.uml.ClassElement2;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.ComponentElement;
 import net.sevenscales.editor.uicomponents.uml.ForkElement;
-import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement;
+import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElementCorporate;
 import net.sevenscales.editor.uicomponents.uml.IShapeGroup;
 import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
-import net.sevenscales.editor.uicomponents.uml.RectBoundaryElement;
+import net.sevenscales.editor.uicomponents.uml.PackageElementCorporate;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
 import net.sevenscales.editor.uicomponents.uml.ShapeCache;
 import net.sevenscales.editor.uicomponents.uml.ShapeGroup;
 import net.sevenscales.editor.uicomponents.uml.StorageElement;
 import net.sevenscales.editor.uicomponents.uml.TextElement;
-import net.sevenscales.editor.uicomponents.uml.UMLPackageElement;
+import net.sevenscales.editor.uicomponents.uml.VerticalPartitionElementCorporate;
 import net.sevenscales.editor.utils.DiagramItemConfiguration;
 
 
@@ -263,13 +261,30 @@ public class DiagramFactory {
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ae;
 		} else if (ElementType.PACKAGE.getValue().equals(elementType)) {
-			UMLPackageElement ce = new UMLPackageElement(surface, new UMLPackageShape(x,
-					y, 100, // package has no auto resizes
-					40), // package has no auto resizes
-					defaultText, background, borderColor, color, true, new DiagramItemDTO());
+			Integer props = null;
+			LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.PACKAGE.getValue());
+			if (sh != null) {
+				props = sh.properties;
+			}
+
+			PackageElementCorporate ce = new PackageElementCorporate(
+				surface,
+				new UMLPackageShape(
+					x,
+					y,
+					100,
+					40
+				).toGenericShape(props), // package has no auto resizes
+				defaultText,
+				background,
+				borderColor,
+				color,
+				true,
+				((IDiagramItemRO)new DiagramItemDTO())
+			);
 			result = ce;
 		} else if (ElementType.HORIZONTAL_PARTITION.getValue().equals(elementType)) {
-			result = new HorizontalPartitionElement(surface,
+			result = new HorizontalPartitionElementCorporate(surface,
         		new HorizontalPartitionShape(x, y, 170, 70),
             defaultText,
             background,
@@ -278,8 +293,15 @@ public class DiagramFactory {
         	  true,
         	  new DiagramItemDTO());			
 		} else if (ElementType.VERTICAL_PARTITION.getValue().equals(elementType)) {
-			result = new RectBoundaryElement(surface,
-        		new RectContainerShape(x, y, 170, 225),
+      Integer props = null;
+      LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.VERTICAL_PARTITION.getValue());
+      if (sh != null) {
+        props = sh.properties;
+      }
+			
+			GenericShape gs = ((RectContainerShape) new RectContainerShape(x, y, 170, 225)).toGenericShape(props);
+			result = new VerticalPartitionElementCorporate(surface,
+        		gs,
             defaultText,
             background,
             borderColor,

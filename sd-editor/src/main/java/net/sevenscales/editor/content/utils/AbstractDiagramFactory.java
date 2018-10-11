@@ -17,7 +17,6 @@ import net.sevenscales.editor.diagram.shape.ActivityChoiceShape;
 import net.sevenscales.editor.diagram.shape.ActivityEndShape;
 import net.sevenscales.editor.diagram.shape.ActivityShape;
 import net.sevenscales.editor.diagram.shape.ActivityStartShape;
-import net.sevenscales.editor.diagram.shape.ActorShape;
 import net.sevenscales.editor.diagram.shape.ChildTextShape;
 import net.sevenscales.editor.diagram.shape.CommentThreadShape;
 import net.sevenscales.editor.diagram.shape.ComponentShape;
@@ -53,21 +52,22 @@ import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
 import net.sevenscales.editor.uicomponents.uml.GenericFreehandElement;
 import net.sevenscales.editor.uicomponents.uml.GenericNoteElement;
-import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement;
+// import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement;
 import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement4;
+import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElementCorporate;
 import net.sevenscales.editor.uicomponents.uml.ImageElement;
 import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
 import net.sevenscales.editor.uicomponents.uml.PackageElement;
-import net.sevenscales.editor.uicomponents.uml.RectBoundaryElement;
+import net.sevenscales.editor.uicomponents.uml.PackageElementCorporate;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement2;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
 import net.sevenscales.editor.uicomponents.uml.StorageElement;
 import net.sevenscales.editor.uicomponents.uml.TextElement;
-import net.sevenscales.editor.uicomponents.uml.UMLPackageElement;
 import net.sevenscales.editor.uicomponents.uml.VerticalPartitionElement;
+import net.sevenscales.editor.uicomponents.uml.VerticalPartitionElementCorporate;
 
 
 public interface AbstractDiagramFactory {
@@ -601,13 +601,14 @@ public interface AbstractDiagramFactory {
 		}
 
 		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
+      Integer props = null;
+      LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.PACKAGE.getValue());
+      if (sh != null) {
+        props = sh.properties;
+      }
+      GenericShape gs = ((UMLPackageShape) shape).toGenericShape(props);
+
       if (Tools.isSketchMode()) {
-        Integer props = null;
-        LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.PACKAGE.getValue());
-        if (sh != null) {
-          props = sh.properties;
-        }
-        GenericShape gs = ((UMLPackageShape) shape).toGenericShape(props);
         return new PackageElement(surface,
                 gs,
                 item.getText(),
@@ -617,14 +618,24 @@ public interface AbstractDiagramFactory {
             editable,
             item);
       } else {
-        return new UMLPackageElement(surface,
-            		(UMLPackageShape)shape,
-                item.getText(),
-                DiagramItemFactory.parseBackgroundColor(item),
-                DiagramItemFactory.parseBorderColor(item),
-                DiagramItemFactory.parseTextColor(item),
-            editable,
-            item);
+        // return new UMLPackageElement(surface,
+        //     		(UMLPackageShape)shape,
+        //         item.getText(),
+        //         DiagramItemFactory.parseBackgroundColor(item),
+        //         DiagramItemFactory.parseBorderColor(item),
+        //         DiagramItemFactory.parseTextColor(item),
+        //     editable,
+        //     item);
+        return new PackageElementCorporate(
+          surface,
+              gs,
+              item.getText(),
+              DiagramItemFactory.parseBackgroundColor(item),
+              DiagramItemFactory.parseBorderColor(item),
+              DiagramItemFactory.parseTextColor(item),
+          editable,
+          item
+        );
       }
 		}
 	}
@@ -635,13 +646,14 @@ public interface AbstractDiagramFactory {
 		}
 
 		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
+      Integer props = null;
+      LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.VERTICAL_PARTITION.getValue());
+      if (sh != null) {
+        props = sh.properties;
+      }
+      GenericShape gs = ((RectContainerShape) shape).toGenericShape(props);
+
       if (Tools.isSketchMode()) {
-        Integer props = null;
-        LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.VERTICAL_PARTITION.getValue());
-        if (sh != null) {
-          props = sh.properties;
-        }
-        GenericShape gs = ((RectContainerShape) shape).toGenericShape(props);
         return new VerticalPartitionElement(surface,
                 gs,
                 item.getText(),
@@ -651,14 +663,23 @@ public interface AbstractDiagramFactory {
             editable,
             item);
       } else {
-  			return new RectBoundaryElement(surface,
-            		(RectContainerShape) shape,
-                item.getText(),
-                DiagramItemFactory.parseBackgroundColor(item),
-                DiagramItemFactory.parseBorderColor(item),
-                DiagramItemFactory.parseTextColor(item),
-            editable,
-            item);
+  			// return new RectBoundaryElement(surface,
+        //     		(RectContainerShape) shape,
+        //         item.getText(),
+        //         DiagramItemFactory.parseBackgroundColor(item),
+        //         DiagramItemFactory.parseBorderColor(item),
+        //         DiagramItemFactory.parseTextColor(item),
+        //     editable,
+        //     item);
+        return new VerticalPartitionElementCorporate(surface,
+          gs,
+          item.getText(),
+          DiagramItemFactory.parseBackgroundColor(item),
+          DiagramItemFactory.parseBorderColor(item),
+          DiagramItemFactory.parseTextColor(item),
+          editable,
+          item
+        );
       }
 		}
 	}
@@ -680,14 +701,23 @@ public interface AbstractDiagramFactory {
           editable,
           item);      
       } else {
-				return new HorizontalPartitionElement(surface,
-          		(HorizontalPartitionShape)shape,
-              item.getText(),
-              DiagramItemFactory.parseBackgroundColor(item),
-              DiagramItemFactory.parseBorderColor(item),
-              DiagramItemFactory.parseTextColor(item),
+				// return new HorizontalPartitionElement(surface,
+        //   		(HorizontalPartitionShape)shape,
+        //       item.getText(),
+        //       DiagramItemFactory.parseBackgroundColor(item),
+        //       DiagramItemFactory.parseBorderColor(item),
+        //       DiagramItemFactory.parseTextColor(item),
+        //   editable,
+        //   item);
+        return new HorizontalPartitionElementCorporate(surface,
+          (HorizontalPartitionShape)shape,
+          item.getText(),
+          DiagramItemFactory.parseBackgroundColor(item),
+          DiagramItemFactory.parseBorderColor(item),
+          DiagramItemFactory.parseTextColor(item),
           editable,
-          item);			
+          item
+        );
       }
 		}
 	}

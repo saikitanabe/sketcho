@@ -579,7 +579,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			return;
 		}
 
-		if (surface.getScaleFactor() < 0.7 && !UiUtils.isMobile()) {
+		if (surface.getScaleFactor() < 0.8 && !UiUtils.isMobile()) {
 			// zoom to mouse position
 			// not when using iPad (mobile) focus goes wrong
 			editorContext.getEventBus().fireEvent(

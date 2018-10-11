@@ -122,6 +122,7 @@ public class TextElementFormatUtil {
     boolean isAutoResize();
     void resize(int x, int y, int width, int height);
     void resizeHeight(int height);
+    void resizeWidthHeight(int width, int height);
     void setLink(String lik);
     String getLink();
     boolean supportsTitleCenter();
@@ -177,6 +178,8 @@ public class TextElementFormatUtil {
     }
     public void resizeHeight(int height) {
     }
+    public void resizeWidthHeight(int width, int height) {
+    }
     public boolean isSketchiness() {
       return false;
     }
@@ -220,6 +223,7 @@ public class TextElementFormatUtil {
     
 //    group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     textGroup = IShapeFactory.Util.factory(true).createGroup(group);
+    textGroup.setAttribute("class", "shapebase");
     fontProperty = fontToRowSizeMap.get(12);
   }
   

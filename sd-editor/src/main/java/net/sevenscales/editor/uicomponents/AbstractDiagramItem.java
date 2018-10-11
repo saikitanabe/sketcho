@@ -213,6 +213,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	protected void constructorDone() {
     applyLink();
     applyLinkColor();
+    IGroup group = getGroup();
+    if (group != null) {
+      // net.sevenscales.domain.utils.Debug.log("add shapebase...");
+      group.setAttribute("class", "shapebase");
+    }
   }
 
   protected void applyLink() {
@@ -930,7 +935,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	
 	@Override
 	public int getTransformX() {
-  	IGroup group = getGroup();
+    return getTransformX(getGroup());
+	}
+	protected int getTransformX(IGroup group) {
   	if (group != null) {
   		return group.getTransformX();
   	}
@@ -939,7 +946,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
 	@Override
 	public int getTransformY() {
-  	IGroup group = getGroup();
+    return getTransformY(getGroup());
+	}
+	protected int getTransformY(IGroup group) {
   	if (group != null) {
   		return group.getTransformY();
   	}
@@ -1155,9 +1164,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     Color bg = getBackgroundColorAsColor();
     IGroup g = getGroup();
     if (g != null && bg.opacity != 0 && !ColorHelpers.isRgbBlack(bg.red, bg.green, bg.blue)) {
-      g.setAttribute("class", "dark-shape");
+      g.setAttribute("class", "dark-shape shapebase");
     } else {
-      g.setAttribute("class", "");
+      g.setAttribute("class", "shapebase");
     }
   }
   

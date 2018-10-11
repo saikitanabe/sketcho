@@ -56,6 +56,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private IRectangle background;
   private IGroup group;
   private IGroup subgroup;
+  private IGroup textGroup;
   private int left;
   private int top;
   private int width;
@@ -66,7 +67,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private boolean pathsSetAtLeastOnce;
   private boolean tosvg;
 	private boolean forceTextRendering;
-	private boolean legacy = true;
+	private boolean legacy = false;
   
   private static final String BOUNDARY_COLOR 					= "#aaaaaa";
   private static final String FILL_BORDER_COLOR 			= "fill:bordercolor;";
@@ -111,9 +112,14 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
     // sub// group.setAttribute("cursor", "default");
 
+		// order is important or cannot move shape with background
     background = IShapeFactory.Util.factory(editable).createRectangle(group);
     background.setFill(0, 0 , 0, 0); // transparent
-    // background.setStroke("#363636");
+		// background.setStroke("#363636");
+		
+		// separate text group is needed or can't interact with links that are behind
+		// background rectangle
+		textGroup = IShapeFactory.Util.factory(editable).createGroup(group);
 
   	paths = new ArrayList<PathWrapper>(); // theshape.protos.length
 
@@ -160,10 +166,10 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			// order changed due to text is now part of subgroup
 			// and moved with the subgroup
 			if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
-				textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
+				textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
 				textUtil.setMarginTop(0);
 			} else {
-				textUtil = new TextElementFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
+				textUtil = new TextElementFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
 			}
 		}
 
@@ -408,7 +414,12 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
   @Override
   public boolean resize(int left, int top, int width, int height) {
-    setShape(getRelativeLeft(), getRelativeTop(), width, height);
+		setShape(getRelativeLeft(), getRelativeTop(), width, height);
+
+		// ST 24.7.2018: after text group was taken into use
+		// setShape doesn't reset text position on resize.
+		// Do it separately in here.
+		textUtil.setTextShape();
     dispatchAndRecalculateAnchorPositions();
     return true;
   }
@@ -519,6 +530,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 				subgroup.setScale(factorX, factorY);
 			}
 			subgroup.setTransform(left, top);
+			textGroup.setTransform(left, top);
 	  	if (UiUtils.isIE()) {
 			  // no need to use, which doesn't work svg => pdf, scale down stroke width
 			  // vector-effect="non-scaling-stroke"
@@ -741,7 +753,9 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	public int getTextAreaTop() {
 		// cannot find enum since user custom types will not be part of enums!!
 		if (hasTextElement.verticalAlignMiddle()) {
-			return textUtil.middleY(0) + getTransformY();
+			// ST 8.6.2018: subgroup needs to be taken into count on textarea position
+			// calculation
+			return textUtil.middleY(0) + getTransformY() + getTransformY(getSubgroup());
 		}
   	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
 			return getTop() + getHeight() - 1;
