@@ -244,6 +244,7 @@ public interface Diagram extends SourcesMouseDiagramEvents {
 	void setBorderColor(Color color);
   IGroup getGroup();
 	IGroup getSubgroup();
+	IGroup getTextGroup();
 	
 	public interface SizeChangedHandler {
 		void onSizeChanged(Diagram diagram, int width, int height);

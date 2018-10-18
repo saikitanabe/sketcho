@@ -694,6 +694,11 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	public IGroup getSubgroup() {
 		return subgroup;
 	}
+
+	@Override
+	public IGroup getTextGroup() {
+		return textGroup;
+	}
 	
 	@Override
   public boolean supportsTextEditing() {

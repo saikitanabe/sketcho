@@ -259,6 +259,11 @@ public class SvgConverter {
         result += groupEnd();  
       }
 
+      IGroup textGroup = d.getTextGroup();
+      if (textGroup != null) {
+        result += groupStart(textGroup, 0, 0);
+      }
+
       // text helper elements are not included in getElements
       // should be changed that text shapes are under group as well!!
       // then only main group needs to be modified!
@@ -266,6 +271,13 @@ public class SvgConverter {
       if (textElements != null) {
         result += toSvg(d, textElements, editorContext, fontToChange, absoluteUrl, zeroLeft, zeroTop);
       }
+
+      if (textGroup != null) {
+        // close text group
+        result += groupEnd();
+      }
+
+      // close main group
       result += groupEnd();
       result += linkEnd(d);
       d.toSvgEnd();

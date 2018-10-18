@@ -2066,4 +2066,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     return null;
   }
 
+	public IGroup getTextGroup() {
+		return null;
+	}
+
 }

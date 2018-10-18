@@ -36,6 +36,8 @@ import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 public class NoteElement extends AbstractDiagramItem implements SupportsRectangleShape {
 //	private Rectangle rectSurface;
 //  private IPolyline boundary;
+	// background is just to keep absolute left, right, width, height
+	private IRectangle background;
 	private IRectangle boundary;
 	private int minimumWidth = 25;
 	private int minimumHeight = 25;
@@ -45,6 +47,8 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
   private List<IShape> innerShapes = new ArrayList<IShape>();
 	private IGroup group;
 	private IGroup subgroup;
+	// have same structure as generic element to form svg in a same way
+	private IGroup textGroup;
 //  private int[] points;
 //  private static final int FOLD_SIZE = 10;
 //  private IPolyline fold;
@@ -62,7 +66,8 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 
   private IPath.PathTransformer pathTransformer = new IPath.PathTransformer() {
   	public String getShapeStr(int dx, int dy) {
-  		return calcShape(getRelativeLeft() + dx, getRelativeTop() + dy, getWidth(), getTop());
+  		// return calcShape(getRelativeLeft() + dx, getRelativeTop() + dy, getWidth(), getTop());
+  		return calcShape(dx, dy, getWidth(), getTop());
   	}
   };
 
@@ -74,13 +79,18 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
 
+    background = IShapeFactory.Util.factory(editable).createRectangle(group);
+    background.setFill(0, 0 , 0, 0); // transparent
+
+		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
+
 		// >>>> ST 3.12.2017: regression bug: background color hides text
-		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
+		boundary = IShapeFactory.Util.factory(editable).createRectangle(subgroup);
 		boundary.setStrokeWidth(STROKE_WIDTH);
 		boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 		// <<<< ST 3.12.2017: regression bug: background color hides text
 
-		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
+		textGroup = IShapeFactory.Util.factory(editable).createGroup(group);
     // group.setAttribute("cursor", "default");
     
     // TODO, implement shadows using svg
@@ -110,7 +120,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 //		fold.setStrokeWidth(3.0);
 //    fold.setFill(255, 255, 255, 0.1);
     
-		tape = IShapeFactory.Util.factory(editable).createPath(group, pathTransformer);
+		tape = IShapeFactory.Util.factory(editable).createPath(subgroup, pathTransformer);
 		if (surface.getEditorContext().isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {
 			tape.setFill(0xe2, 0x56, 0x56, 0.7);
 			tape.setStroke(0xe2, 0x56, 0x56, 0.7);
@@ -127,6 +137,10 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 
 //		addObserver(rectSurface.getRawNode(), AbstractDiagramItem.EVENT_DOUBLE_CLICK);
 		// addEvents(tape);
+
+		// ST 18.10.2018: This differs from generic element
+		// since now background and boundary are in different order
+		// but keeping legacy functionality to highligh border or boundary
 		addEvents(boundary);
     
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
@@ -143,7 +157,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 		if (legacy) {
 			textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
 		} else {
-			textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
+			textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
 		}
 
     setReadOnly(!editable);
@@ -172,8 +186,12 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 
 
 		// group.setTransform(left, top);
-		boundary.setShape(left, top, width, height, 0);
+		// set absolute values to backround 
+		background.setShape(left, top, width, height, 0);
+		// just update width and height, otherwise part of subgroup
+		boundary.setShape(0, 0, width, height, 0);
 		subgroup.setTransform(left, top);
+		textGroup.setTransform(left, top);
 		
 //		leftShadow.setShape(left - LEFT_SHADOW_LEFT, top + height - LEFT_SHADOW_HEIGHT, 50, 50);
 //		rightShadow.setShape(left + width - RIGHT_SHADOW_LEFT, top + height - RIGHT_SHADOW_HEIGHT, 50, 50);
@@ -182,9 +200,9 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
     
 		// tape.resetAllTransforms();
 		// tape.setShape(left + width / 2 - 15, top - 4, 30, 15, 0);
-    tape.setShape(calcShape(left, top, width, height));
+    tape.setShape(calcShape(0, 0, width, height));
     // tape.rotate(-3, getCenterX(), getLeft() + (getWidth() / 2));
-    
+		
     textUtil.setTextShape();
     setBorderColor(borderColor);
     super.applyHelpersShape();
@@ -227,22 +245,22 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	private final int MARGIN_LEFT = 13;
   private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
     public int getWidth() {
-    	return boundary.getWidth() - MARGIN_LEFT * 2;
+    	return background.getWidth() - MARGIN_LEFT * 2;
     }
     public int getX() {
 			if (legacy) {
-				return boundary.getX() + MARGIN_LEFT;
+				return background.getX() + MARGIN_LEFT;
 			}
     	return MARGIN_LEFT;
     }
     public int getY() {
 			if (legacy) {
-				return boundary.getY() + MARGIN_TOP;
+				return background.getY() + MARGIN_TOP;
 			}
     	return MARGIN_TOP;
     }
     public int getHeight() {
-    	return boundary.getHeight() - MARGIN_TOP;
+    	return background.getHeight() - MARGIN_TOP;
     }
     public void removeShape(IShape shape) {
       group.remove(shape);
@@ -315,24 +333,24 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 
 	@Override
 	public int getRelativeLeft() {
-		return boundary.getX();
+		return background.getX();
 	}
 	
 	@Override
 	public int getRelativeTop() {
-		return boundary.getY();
+		return background.getY();
 	}
 	
 	@Override
 	public int getWidth() {
 //		return boundary.getArrayValue(4) - boundary.getArrayValue(0);
-		return boundary.getWidth();
+		return background.getWidth();
 	}
 	
 	@Override
 	public int getHeight() {
 //    return boundary.getArrayValue(9) - boundary.getArrayValue(1);
-		return boundary.getHeight();
+		return background.getHeight();
 	}
 
 	@Override	
@@ -490,6 +508,10 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 			return null;
 		}
 		return subgroup;
+	}
+	@Override
+	public IGroup getTextGroup() {
+		return textGroup;
 	}
 	
 	@Override
