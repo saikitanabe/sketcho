@@ -11,20 +11,25 @@ public class Error {
   }-*/;
 
 	public static void reload(Exception e) {
-		Error._reload("Exception: " + e);
+		Error._reload("Exception", e);
+	}
+	public static void reload(Throwable e) {
+		Error._reload("Exception", e);
 	}
 
   public static void reload(String msg, Exception e) {
-    Error._reload("Error msg: " + msg + "\nException: " + e);
+    Error._reload("Error msg: " + msg, e);
   }
 
   public static void reload(String msg) {
-    Error._reload("Error: " + msg);
+    Error._reload("Error: " + msg, null);
   }
 
-	private static void _reload(String msg) {
+	private static void _reload(String msg, Throwable e) {
     // TODO in future report to server so problem can be fixed!
-    Debug.log(msg);
+    Debug.log("Error msg: " + msg + "\nException: " + e);
+
+    Error.report(e);
 
     if (LogConfiguration.loggingIsEnabled()) {
       GWT.debugger();
@@ -37,5 +42,11 @@ public class Error {
       Window.Location.reload();
     }
 
-	}
+  }
+  
+  private native static void report(Throwable e)/*-{
+    if (typeof $wnd.__reportExeption === 'function') {
+      $wnd.__reportExeption(e)
+    }
+  }-*/;
 }
