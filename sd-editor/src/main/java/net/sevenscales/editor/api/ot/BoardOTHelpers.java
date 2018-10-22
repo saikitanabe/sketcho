@@ -83,7 +83,7 @@ public class BoardOTHelpers {
 
 			_applyOperationToGraphicalView(originator, operation, items);
 		} catch (Exception e) {
-			Error.reload("applyOperationToGraphicalView failed:" + e);
+			Error.reload("applyOperationToGraphicalView failed", e);
 		} finally {
 			// always need to reverse, not to leav app in invalid state
 			// it would mean that nothing gets sent to server if these wrong!
