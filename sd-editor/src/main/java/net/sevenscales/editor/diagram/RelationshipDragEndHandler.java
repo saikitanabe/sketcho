@@ -238,11 +238,19 @@ public class RelationshipDragEndHandler implements
 		currentY = y;
 	}
 
-	public void itemSelected(String elementType, JsShapeConfig shapeConfig, ImageInfo imageInfo, int x, int y) {
+	public void itemSelected(String elementType, JsShapeConfig shapeConfig, ImageInfo imageInfo, Integer x, Integer y) {
 		logger.debug("itemSelected {}", elementType);
 		hide();
 		Diagram diagram = null;
 		checkCurrentRelationshipexists();
+
+		// ST 23.10.2018: Trying to fix a bug where x can be undefined on Chrome OS
+		if (x == null) {
+			x = 0;
+		}
+		if (y == null) {
+			y = 0;
+		}
 
 		if (currentRel != null) {
 			diagram = createDiagramFromRelationShip(elementType, shapeConfig, imageInfo, x, y);
