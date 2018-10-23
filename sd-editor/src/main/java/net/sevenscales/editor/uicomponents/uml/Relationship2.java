@@ -1752,6 +1752,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     logger.debug("Relationship2.doSetShape()");
 
     int size = points.size();
+
+    if (size < 4) {
+      // do not allow to access drawPoints if size is below 4
+      // NOTE this might hide other errors, since size should not be
+      // below 4
+      return;
+    }
     double x1 = drawPoints.get(size - 4);
     double y1 = drawPoints.get(size - 3);
     double x2 = drawPoints.get(size - 2);
