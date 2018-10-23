@@ -153,10 +153,14 @@ class QuickConnectionHandler implements MouseDiagramHandler {
   }
 
   private void cancelLastOperationIfLastQuickConnection() {
-  	if (lastModel != null && lastModel == surface.getOTBuffer().topModel()) {
-  		logger.debug("canselling cancelLastOperationIfLastQuickConnection...");
-  		surface.getEditorContext().getEventBus().fireEvent(new UndoEvent());
-  	}
+		if (lastModel != null &&
+				// ST 23.10.2018: throws NoSuchElementException if empty
+				// check that is not empty
+				!surface.getOTBuffer().isEmpty() &&
+				lastModel == surface.getOTBuffer().topModel()) {
+			logger.debug("canselling cancelLastOperationIfLastQuickConnection...");
+			surface.getEditorContext().getEventBus().fireEvent(new UndoEvent());
+		}
 		lastModel = null;
   }
 
