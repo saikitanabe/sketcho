@@ -20,6 +20,9 @@ public class Error {
   public static void reload(String msg, Exception e) {
     Error._reload(msg + " Exception: " + e, e);
   }
+  public static void reload(String msg, Throwable e) {
+    Error._reload(msg + " Exception: " + e, e);
+  }
 
   public static void reload(String msg) {
     Error._reload(msg, null);
