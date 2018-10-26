@@ -1,5 +1,6 @@
 package net.sevenscales.editor.api.ot;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,6 +25,7 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ThemeName;
 import net.sevenscales.editor.api.ot.ApplyHelpers.DiagramApplyOperation;
+import net.sevenscales.editor.content.utils.DiagramDisplaySorter;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSearch;
@@ -222,9 +224,21 @@ public class BoardOTHelpers {
 
 	private void insertOT(String originator, List<IDiagramItemRO> items) throws MappingNotFoundException {
 		Set<Diagram> diagrams = new HashSet<Diagram>();
-    ReattachHelpers reattachHelpers = new ReattachHelpers(surface.createDiagramSearch(), true);
+		ReattachHelpers reattachHelpers = new ReattachHelpers(surface.createDiagramSearch(), true);
+		
+		// ST 26.10.2018: Fix child client sorts lower than parent client id
+		// therefore child is not created and mapping is not found
+		// cannot process child text element before parent or should try to find parent first
+		// order changes little bit, but this is the way it should be
+		//
+    IDiagramItemRO[] itemsSorted = new IDiagramItemRO[items.size()];
+    items.toArray(itemsSorted);
+		Arrays.sort(
+			itemsSorted,
+			DiagramDisplaySorter.createDiagramItemSortParentComparator()
+		);
 
-		for (IDiagramItemRO diro: items) {
+		for (IDiagramItemRO diro: itemsSorted) {
 			// TODO diagram should never be found!?!?
 			Diagram diagram = findDiagramByClientId(diro.getClientId());
 			if (diagram == null) {
@@ -244,7 +258,9 @@ public class BoardOTHelpers {
 		reattachHelpers.reattachRelationshipsAndDraw();
 		
 		// 0 on originator
-		boolean validation = (diagrams.size() == items.size() || diagrams.size() == 0);
+		int diagramsSize = diagrams.size();
+		int itemsSize = items.size();
+		boolean validation = (diagramsSize == itemsSize || diagramsSize == 0);
 		if (!validation) {
 		  throw new MappingNotFoundException(SLogger.format("insertOT failed for\ndiagrams {}\nitems {}", diagrams.toString(), items.toString()));
 		}
