@@ -1,6 +1,7 @@
 package net.sevenscales.domain.utils;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.shared.UmbrellaException;
 import com.google.gwt.logging.client.LogConfiguration;
 import com.google.gwt.user.client.Window;
 
@@ -29,14 +30,19 @@ public class Error {
   }
 
 	private static void _reload(String msg, Throwable e) {
-    // TODO in future report to server so problem can be fixed!
-
     String stack = "";
 
     try {
       // make sure that doesn't break
       for (StackTraceElement ste : e.getStackTrace()) {
         stack += ste.getMethodName() + ": " + ste.getFileName() + " " + ste.getLineNumber() + "\n";
+      }
+
+      if (e instanceof UmbrellaException) {
+        // try to get more information about UmbrellaException
+        UmbrellaException u = (UmbrellaException) e;
+        stack += "Add UmbrellaException message\n";
+        stack += u.getMessage();
       }
     } catch(Exception ex) {
       // make sure execution continues
