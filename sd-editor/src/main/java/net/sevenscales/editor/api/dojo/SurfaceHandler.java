@@ -1014,6 +1014,13 @@ class SurfaceHandler extends SimplePanel implements
   }
 
   private void sort() {
+    // ST 28.10.2018: diagrams contain circle elements that don't have
+    // client id
+    // for (Diagram d : diagrams) {
+    //   if (d.getDiagramItem().getClientId() == null) {
+    //     net.sevenscales.domain.utils.Debug.log("diagram:", d.getDiagramItem(), d);
+    //   }
+    // }
     Collections.sort(diagrams, DiagramDisplaySorter.createDiagramComparator());
   }
 
