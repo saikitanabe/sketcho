@@ -563,7 +563,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		textEditY = screenY;
 
 		if (selectedDiagram != null) {
-			// ST 28.10.2018: Try to fix null pointer 
+			// ST 28.10.2018: Try to fix null pointer on next line
 			showEditor(selectedDiagram, selectedDiagram.getText(textEditX, textEditY), x, y, false);
 		}
 	}
