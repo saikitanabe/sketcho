@@ -172,6 +172,7 @@ public class BoardOTHelpers {
 		// 0 on originator; otherwise should match
 		boolean validation = (diagrams.size() == items.size() || diagrams.size() == 0);
 		if (!validation) {
+			// ST 28.10.2018: Do not throw exception if shape is already deleted from the board
 			// throw new MappingNotFoundException(SLogger.format("deleteOT failed for {}", items.toString()));
 			Error.error("BoardOTHelpers.deleteOT:", SLogger.format("deleteOT failed for {}", items.toString()));
 		}
