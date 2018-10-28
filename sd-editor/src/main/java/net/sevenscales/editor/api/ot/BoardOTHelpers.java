@@ -328,9 +328,12 @@ public class BoardOTHelpers {
 
 		reattachHelpers.reattachRelationshipsAndDraw();
 
-		if (diagrams.size() != items.size()) {
-		  throw new MappingNotFoundException(SLogger.format("modifyOT failed for {}", items.toString()));
-		}
+		// ST 28.10.2018: server changes modify to insert and will be reapplied as insert
+		// this is tested.
+		// if (diagrams.size() != items.size()) {
+		//   throw new MappingNotFoundException(SLogger.format("modifyOT failed for {}", items.toString()));
+		// }
+
   	highlightChanges(originator, diagrams, new OTHighlight(diagrams, boardUserHandler));
 	}
 
