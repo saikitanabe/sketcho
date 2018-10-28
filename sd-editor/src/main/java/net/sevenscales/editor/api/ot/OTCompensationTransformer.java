@@ -285,9 +285,12 @@ public class OTCompensationTransformer {
   		if (!mappingFound) {
   			// cannot fail whole apply; so better to fail 
   			String msg = SLogger.format("Operation {} failed, mapping not found. NEW ITEM STATE: {} \n CURR STATE: {}", operation.getValue(), n.toString(), currentState.toString());
-  			logger.error(msg);
-  			GWT.debugger();
-  			throw new MappingNotFoundException("mapNewToCurrent failed");
+				logger.error(msg);
+				
+				// ST 27.10.2018: Do not throw and modify will become
+				// automatically an insert operation if not found.
+  			// GWT.debugger();
+  			// throw new MappingNotFoundException("mapNewToCurrent failed");
 //  			if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
 //  			  throw new RuntimeException(msg);
 //  			}
