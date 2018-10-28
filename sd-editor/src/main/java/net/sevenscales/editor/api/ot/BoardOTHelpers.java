@@ -172,7 +172,8 @@ public class BoardOTHelpers {
 		// 0 on originator; otherwise should match
 		boolean validation = (diagrams.size() == items.size() || diagrams.size() == 0);
 		if (!validation) {
-		  throw new MappingNotFoundException(SLogger.format("deleteOT failed for {}", items.toString()));
+			// throw new MappingNotFoundException(SLogger.format("deleteOT failed for {}", items.toString()));
+			Error.error("BoardOTHelpers.deleteOT:", SLogger.format("deleteOT failed for {}", items.toString()));
 		}
 		
 		// first highlight that something is gonna happen
