@@ -43,6 +43,13 @@ public class Error {
         UmbrellaException u = (UmbrellaException) e;
         stack += "Add UmbrellaException message\n";
         stack += u.getMessage();
+
+        // this might need to be recursive!
+        for (Throwable th : u.getCauses()) {
+          for (StackTraceElement ste : th.getStackTrace()) {
+            stack += ste.getMethodName() + ": " + ste.getFileName() + " " + ste.getLineNumber() + "\n";
+          }
+        }
       }
     } catch(Exception ex) {
       // make sure execution continues
