@@ -561,7 +561,11 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private void setTextCoordinatesAndShowEditor(int screenX, int screenY, int x, int y) {
 		textEditX = screenX;
 		textEditY = screenY;
-		showEditor(selectedDiagram, selectedDiagram.getText(textEditX, textEditY), x, y, false);
+
+		if (selectedDiagram != null) {
+			// ST 28.10.2018: Try to fix null pointer 
+			showEditor(selectedDiagram, selectedDiagram.getText(textEditX, textEditY), x, y, false);
+		}
 	}
 
 	private void showEditor(Diagram diagram, String text, final int left, final int top, boolean justCreated) {
