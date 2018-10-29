@@ -20,6 +20,7 @@ import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.KeyboardListener;
 
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.utils.Error;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.BoardDimensions;
@@ -266,29 +267,35 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   * work in correct order.
   */
 	public void removeSelected() {
-    if (surface.isLibrary() || !surface.getEditorContext().isEditable()) {
-      // HACK: not allowed to remove anything from library
-      // not allowed to remove anything from read only board
-      return;
+    try {
+      // ST 29.10.2018: Catch this not to go as GWT unhandled exception
+      // where it is more difficult to get stack trace
+      if (surface.isLibrary() || !surface.getEditorContext().isEditable()) {
+        // HACK: not allowed to remove anything from library
+        // not allowed to remove anything from read only board
+        return;
+      }
+
+      Diagram[] items = new Diagram[]{};
+      items = diagrams.toArray(items);
+      // clear to be removed so hooks are valid in this cycle
+      clearToBeRemovedCycle();
+      Set<Diagram> removed = new HashSet<Diagram>();
+      for (Diagram d : items) {
+        // Diagram d = diagrams.get(i);
+        logger.debug("removeSelected: item {}", d);
+        if (d.isSelected()) {
+          _remove(d, removed, false);
+        }
+      }
+      logger.debug("removeSelected: removed {}", removed);
+
+      handleAdditionalRemovals(removed);
+      fireDeletedOrModifyEvent(removed);
+      removeGroups();
+    } catch(Exception e) {
+      Error.reload("removeSelected", e);
     }
-
-    Diagram[] items = new Diagram[]{};
-    items = diagrams.toArray(items);
-    // clear to be removed so hooks are valid in this cycle
-    clearToBeRemovedCycle();
-	  Set<Diagram> removed = new HashSet<Diagram>();
-		for (Diagram d : items) {
-      // Diagram d = diagrams.get(i);
-      logger.debug("removeSelected: item {}", d);
-		  if (d.isSelected()) {
-        _remove(d, removed, false);
-		  }
-		}
-    logger.debug("removeSelected: removed {}", removed);
-
-    handleAdditionalRemovals(removed);
-    fireDeletedOrModifyEvent(removed);
-    removeGroups();
 	}
 
   private void fireDeletedOrModifyEvent(Set<Diagram> removed) {
