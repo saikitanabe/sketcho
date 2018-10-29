@@ -46,6 +46,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   private ISurfaceHandler surface;
 
   private Relationship2 parentRelationship;
+  private int debugIdIndex;
 
   static {
     instances = new HashMap<ISurfaceHandler, RelationshipHandleHelpers>();
@@ -77,6 +78,11 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
 
     // fix: sometimes handle helpers are shown after initialization
     forceHide();
+  }
+
+  private String createDebugId() {
+    ++debugIdIndex;
+    return "relhh-" + debugIdIndex;
   }
 
   public static RelationshipHandleHelpers createConnectionHelpers(ISurfaceHandler surface, Relationship2 
@@ -254,7 +260,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
 
   private CircleElement createHandle(int x, int y, int radius, int selectionRadius, Color color, boolean setDeleteHandler) {
     boolean editable = true;
-    CircleElement h = new CircleElement(surface.getInteractionLayer(), surface, this, x, y, radius, selectionRadius, editable, new DiagramItemDTO());
+    CircleElement h = new CircleElement(surface.getInteractionLayer(), surface, this, x, y, radius, selectionRadius, editable, new DiagramItemDTO(), createDebugId());
     h.setStroke(color);
     surface.add(h, true);
     // pass events to parent relationship
