@@ -150,7 +150,10 @@ public class BoardDocument implements UniqueChecker {
 	
 	private void insert(List<? extends IDiagramItemRO> from, List<IDiagramItemRO> to) {
 		for (IDiagramItemRO di : from) {
-			BoardDocumentHelpers.insertInOrder(di.copy(), to);
+			if (di.getClientId() != null && !"".equals(di.getClientId())) {
+				// ST 29.10.2018: check that client id exists before insert
+				BoardDocumentHelpers.insertInOrder(di.copy(), to);
+			}
 		}
 	}
 	
