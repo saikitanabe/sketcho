@@ -34,9 +34,7 @@ public class Error {
 
     try {
       // make sure that doesn't break
-      for (StackTraceElement ste : e.getStackTrace()) {
-        stack += ste.getMethodName() + ": " + ste.getFileName() + " " + ste.getLineNumber() + "\n";
-      }
+      stack = Error.addStackTrace(stack, e);
 
       if (e instanceof UmbrellaException) {
         // try to get more information about UmbrellaException
@@ -46,9 +44,7 @@ public class Error {
 
         // this might need to be recursive!
         for (Throwable th : u.getCauses()) {
-          for (StackTraceElement ste : th.getStackTrace()) {
-            stack += ste.getMethodName() + ": " + ste.getFileName() + " " + ste.getLineNumber() + "\n";
-          }
+          stack = Error.addStackTrace(stack, th);
         }
       }
     } catch(Exception ex) {
@@ -74,6 +70,14 @@ public class Error {
       Window.Location.reload();
     }
 
+  }
+
+  private static String addStackTrace(String stack, Throwable th) {
+    for (StackTraceElement ste : th.getStackTrace()) {
+      stack += ste.getMethodName() + ": " + ste.getFileName() + " " + ste.getLineNumber() + "\n";
+    }
+
+    return stack;
   }
   
   private native static void report(Throwable e, String msg, String stack)/*-{
