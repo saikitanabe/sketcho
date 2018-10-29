@@ -273,8 +273,12 @@ public class OTCompensationTransformer {
 	  		for (IDiagramItemRO c : currentState) {
 	  			if (LogConfiguration.loggingIsEnabled(Level.FINEST) && "".equals(n.getClientId()) || "".equals(c.getClientId())) {
 	  				throw new RuntimeException("Client ID cannot be empty!");
-	  			}
-	    		if (n.getClientId().equals(c.getClientId())) {
+					}
+					// ST 29.10.2018: check that client id is defined
+					// due to undefined crash in here
+					if (n.getClientId() != null &&
+							c.getClientId() != null &&
+							n.getClientId().equals(c.getClientId())) {
 	    			result.add(c.copy());
 	    			mappingFound = true;
 	    			break;
