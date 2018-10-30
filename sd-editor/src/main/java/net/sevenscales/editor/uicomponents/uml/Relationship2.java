@@ -1051,7 +1051,18 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   public void removePoint(int index) {
-    if (index > 0 && index < points.size() - 2 && (index * 2 + 1) < points.size()) {
+    // ST 30.10.2018: Fix removed last relationship point crash
+    // when deleting from the CircleElement.
+    // now deleting the last relationship point doesn't do
+    // anything, but is going to be a modify OT to the server
+    // even though nothing is changed.
+    // Client could even check against server document
+    // if a shape has changed OR server does it does not
+    // apply it to db and other clients.
+    // Now it is just an empty operation
+    int numberOfPoints = points.size() / 2;
+    // if (index > 0 && index < points.size() - 2 && (index * 2 + 1) < points.size()) {
+    if (index > 0 && index < numberOfPoints - 1) {
       // do not allow to remove first or last point
       // NOTE order is important or would remove wrong y (actually x) if reversed
       points.remove(index * 2 + 1);
