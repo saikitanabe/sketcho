@@ -5,7 +5,6 @@ import java.util.Comparator;
 import net.sevenscales.domain.IDiagramItemRO;
 
 public class DiagramItemIdComparator implements Comparator<IDiagramItemRO> {
-	@Override
 	public int compare(IDiagramItemRO diagram, IDiagramItemRO theother) {
 		return compareClientId(diagram, theother);
 	}

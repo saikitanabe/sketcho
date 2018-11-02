@@ -1,7 +1,7 @@
 <module>
 	<inherits name='com.google.gwt.user.User'/>
   <inherits name="com.google.gwt.json.JSON" />
-	<inherits name='net.sf.hibernate4gwt.Hibernate4GwtDomain'/>
+	<!-- <inherits name='net.sf.hibernate4gwt.Hibernate4GwtDomain'/> -->
 	
 	<source path='domain'/>
 

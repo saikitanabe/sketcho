@@ -4,10 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sevenscales.domain.api.IContent;
-import net.sf.hibernate4gwt.pojo.java5.LazyPojo;
 
-
-public abstract class ContentDTO extends LazyPojo implements IContent {  
+public abstract class ContentDTO implements IContent {  
   private static final long serialVersionUID = 117091171912324424L;
   private Long id;
 	private String name;

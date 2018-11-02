@@ -30,7 +30,6 @@ import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import net.sevenscales.appFrame.impl.EventRegistry;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.js.JsDimension;
 import net.sevenscales.domain.js.JsShape;
@@ -53,6 +52,7 @@ import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.editor.api.ot.IBoardUserHandler;
 import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.api.ot.OperationTransaction;
+import net.sevenscales.editor.appframe.EventRegistry;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.utils.DiagramDisplaySorter;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
