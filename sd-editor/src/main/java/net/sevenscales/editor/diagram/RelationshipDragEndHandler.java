@@ -180,7 +180,7 @@ public class RelationshipDragEndHandler implements
 			
 			showPopup(x, y);
 			
-			// face mouse down to release anything running on background
+			// fake mouse up to release anything running on background
       surface.getMouseDiagramManager().onMouseUp(null, point, 0);
 		}
 		logger.debugTime();
