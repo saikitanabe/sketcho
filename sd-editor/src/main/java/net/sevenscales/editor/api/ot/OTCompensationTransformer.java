@@ -42,7 +42,26 @@ public class OTCompensationTransformer {
 		this.currentState = currentState;
 		// logger.debug("compensate operation {} newState {} currentState {}", operation, newItems, currentState);
 		logger.debug("compensate operation {}", operation);
-		return compensateOperation(operation, newItems);
+		CompensationModel result = compensateOperation(operation, newItems);
+		if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
+			// for now check only on development mode
+			checkCompensationModel(result);
+		}
+		return result;
+	}
+
+	private void checkCompensationModel(CompensationModel model) {
+		for (IDiagramItemRO diro : model.undoJson) {
+			if (diro.getClientId() == null || "".equals(diro.getClientId())) {
+				throw new RuntimeException("checkCompensationModel undoJson: Client ID cannot be empty!");
+			}
+		}
+
+		for (IDiagramItemRO diro : model.redoJson) {
+			if (diro.getClientId() == null || "".equals(diro.getClientId())) {
+				throw new RuntimeException("checkCompensationModel redoJson: Client ID cannot be empty!");
+			}
+		}
 	}
 	
 	public List<CompensationModel> compensateApplyOperations(List<ApplyHelpers.DiagramApplyOperation> applyOperations, List<? extends IDiagramItemRO> currentState) throws MappingNotFoundException {
