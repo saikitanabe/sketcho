@@ -335,7 +335,15 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	    }
 	    
 	    if (currentMouseHandler == sketchDiagramAreaHandler) {
-	      sketchDiagramAreaHandler.onMouseUp(sender, point, keys);
+				sketchDiagramAreaHandler.onMouseUp(sender, point, keys);
+				// ST 2.11.2018: Fix endless loop when sender is null
+				// This is a regression bug after insertMoveElement
+				// initiated dragEnd call on onMouseUp
+				// and RelationshipDragEndHandler.onNotAttached
+				// calls fake mouse up to free resources
+				// see below: dragHandler.onMouseUp(sender, point, keys);
+				// clear already handled
+				currentMouseHandler = null;
 	    }
 	    
 	    if (freehandDrawHandler != null) {
