@@ -732,6 +732,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     children = new ArrayList<IChildElement>();
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
 
+    group.setAttribute("class", "shapebase");    
+
     // DEBUG curve visualization START
     // tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
     // tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
