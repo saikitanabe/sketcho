@@ -258,4 +258,8 @@ public class Theme {
     return THEME_PREFIX + getCurrentThemeName().name;
   }
 
+  public static boolean isBlackTheme() {
+    return Theme.ThemeName.BLACK.equals(Theme.getCurrentThemeName());
+  }
+
 }

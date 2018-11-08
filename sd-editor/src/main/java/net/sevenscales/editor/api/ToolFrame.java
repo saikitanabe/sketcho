@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.api.ot.OperationTransaction;
 import net.sevenscales.editor.content.ui.IModeManager;
@@ -42,7 +43,11 @@ public class ToolFrame extends SimplePanel {
 		
 		justBacgkround = new SimplePanel();
 //		justBacgkround.getElement().setId("sketchboardme-toolframe");
-		justBacgkround.setWidget(new HTML("<img src='/static/images/menu_open_white.svg' class='library-show-ide-button'>"));
+		if (Theme.isBlackTheme()) {
+			justBacgkround.setWidget(new HTML("<img src='/static/images/menu_open_black_01.svg' class='library-show-ide-button'>"));
+		} else {
+			justBacgkround.setWidget(new HTML("<img src='/static/images/menu_open_white.svg' class='library-show-ide-button'>"));
+		}
 		justBacgkround.setStyleName("library-showhide-area");
 		
 		// justBacgkround.setWidget(panel);
