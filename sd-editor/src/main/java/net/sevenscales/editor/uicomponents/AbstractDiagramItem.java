@@ -1163,7 +1163,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     
     Color bg = getBackgroundColorAsColor();
     IGroup g = getGroup();
-    if (g != null && bg.opacity != 0 && !ColorHelpers.isRgbBlack(bg.red, bg.green, bg.blue)) {
+    if (g != null && bg.opacity != 0 && ColorHelpers.isRgbBlack(bg.red, bg.green, bg.blue)) {
       g.setAttribute("class", "dark-shape shapebase");
     } else {
       g.setAttribute("class", "shapebase");

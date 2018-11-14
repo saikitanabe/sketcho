@@ -28,23 +28,35 @@ public class ColorHelpers {
 	public static String createOppositeColor(String color) {
 		Rgb rgb = Rgb.toRgb(color);
 		String result = "#444444";
-		if (!"transparent".equals(color) && isRgbBlack(rgb.toString())) {
+		if (!"transparent".equals(color) && isRgbWhite(rgb.toString())) {
 			result = "#dddddd";
 		}
 		return result;
 	}
 
 	public static boolean isHexBlack(String hexColor) {
+		return !isHexWhite(hexColor);
+	}
+
+	public static boolean isRgbBlack(String rgb) {
+		return !isRgbWhite(rgb);
+	}
+
+	public static boolean isRgbBlack(int r, int g, int b) {
+		return !isRgbWhite(r, g, b);
+	}
+
+	public static boolean isHexWhite(String hexColor) {
 		Rgb rgb = Rgb.toRgb(hexColor);
-		return isRgbBlack(rgb.red, rgb.green, rgb.blue);
+		return isRgbWhite(rgb.red, rgb.green, rgb.blue);
 	}
 	
-	public static native boolean isRgbBlack(String rgb)/*-{
+	public static native boolean isRgbWhite(String rgb)/*-{
 		rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
 		return (((parseInt(rgb[1]) + parseInt(rgb[2]) + parseInt(rgb[3])) / 3) > 128) ? true : false;
 	}-*/;
 
-	public static native boolean isRgbBlack(int r, int g, int b)/*-{
+	public static native boolean isRgbWhite(int r, int g, int b)/*-{
 		return (((r + g + b) / 3) > 128) ? true : false;
 	}-*/;
 

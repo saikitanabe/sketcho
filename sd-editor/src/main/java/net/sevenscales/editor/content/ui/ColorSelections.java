@@ -179,7 +179,7 @@ public class ColorSelections extends Composite {
 
 	private String textColorByBackgroundColor(String bgcolor) {
 		String textcolor = "ffffff";
-		if (ColorHelpers.isRgbBlack(bgcolor)) {
+		if (ColorHelpers.isRgbWhite(bgcolor)) {
 			textcolor = "444444";
 		}
 		return textcolor;

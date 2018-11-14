@@ -131,7 +131,7 @@ class CodeMirror extends Composite implements ITextEditor {
 
 		// best would be to apply text color for the cursor but
 		// it would require modifying css class on run time
-		if (!ColorHelpers.isHexBlack(bgcolor)) {
+		if (ColorHelpers.isHexBlack(bgcolor)) {
 			setCursorStyleClass("cm-cursor-white", "cm-cursor-white", cm);
 		} else {
 			setCursorStyleClass("cm-cursor-white", "", cm);
