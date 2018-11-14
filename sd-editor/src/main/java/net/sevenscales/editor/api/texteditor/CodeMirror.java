@@ -3,6 +3,10 @@ package net.sevenscales.editor.api.texteditor;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+
+import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.content.utils.ColorHelpers;
+
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.dom.client.TextAreaElement;
@@ -119,12 +123,33 @@ class CodeMirror extends Composite implements ITextEditor {
 		$wnd.$(cm.getTextArea().parentNode).css("backgroundColor", color)
 	}-*/;
 
+	public void setCursorColorByBgColor(String bgcolor) {
+		if ("transparent".equals(bgcolor) && Theme.isBlackTheme()) {
+			setCursorStyleClass("cm-cursor-white", "cm-cursor-white", cm);
+			return;
+		}
+
+		// best would be to apply text color for the cursor but
+		// it would require modifying css class on run time
+		if (!ColorHelpers.isHexBlack(bgcolor)) {
+			setCursorStyleClass("cm-cursor-white", "cm-cursor-white", cm);
+		} else {
+			setCursorStyleClass("cm-cursor-white", "", cm);
+		}
+	}
+
 	@Override
 	public void setColor(String color) {
 		setColor(color, cm);
 	}
 	private native void setColor(String color, JavaScriptObject cm)/*-{
 		$wnd.$(cm.getTextArea().parentNode).find(".CodeMirror").css("color", color)
+	}-*/;
+
+	private native void setCursorStyleClass(String removeClass, String newStyleClass, JavaScriptObject cm)/*-{
+		var base = $wnd.$(cm.getTextArea().parentNode).find(".CodeMirror")
+		base.removeClass(removeClass)
+		base.addClass(newStyleClass)
 	}-*/;
 
 	@Override

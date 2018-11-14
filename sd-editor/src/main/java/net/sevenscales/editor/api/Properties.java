@@ -691,6 +691,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			codeMirror.setBackgroundColor(diagram.getTextAreaBackgroundColor());
 		}
 
+		// ST 14.11.2018: Fix code mirror cursor not visible on black background
+		// set cursor color based on background, black or white
+		codeMirror.setCursorColorByBgColor(diagram.getTextAreaBackgroundColor());
 
 		double scaleFactor = surface.getScaleFactor();
 		

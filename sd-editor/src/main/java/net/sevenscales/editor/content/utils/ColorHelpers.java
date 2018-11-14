@@ -33,6 +33,11 @@ public class ColorHelpers {
 		}
 		return result;
 	}
+
+	public static boolean isHexBlack(String hexColor) {
+		Rgb rgb = Rgb.toRgb(hexColor);
+		return isRgbBlack(rgb.red, rgb.green, rgb.blue);
+	}
 	
 	public static native boolean isRgbBlack(String rgb)/*-{
 		rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);

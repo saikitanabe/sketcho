@@ -114,6 +114,10 @@ class TextEditor extends Composite implements ITextEditor {
 	}
 
 	@Override
+	public void setCursorColorByBgColor(String bgcolor) {
+	}
+
+	@Override
 	public void setFontSize(String fontSize) {
 		textArea.getElement().getStyle().setProperty("fontSize", fontSize);
 	}
