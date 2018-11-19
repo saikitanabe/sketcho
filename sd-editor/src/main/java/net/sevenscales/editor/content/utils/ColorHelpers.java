@@ -1,5 +1,6 @@
 package net.sevenscales.editor.content.utils;
 
+import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.gfx.domain.Color;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -61,6 +62,10 @@ public class ColorHelpers {
 	}-*/;
 
 	public static Color borderColorByBackground(int red, int green, int blue) {
+		if (Theme.isBlackTheme()) {
+			return new Color(red, green, blue, 1);
+		}
+		
 		JavaScriptObject hsv = rgbToHsv(red, green, blue);
 		JavaScriptObject rgb = hsv2rgb(getIntValue(hsv, 0), getIntValue(hsv, 1),
 				getIntValue(hsv, 2) - 10);

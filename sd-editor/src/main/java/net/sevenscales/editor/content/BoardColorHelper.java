@@ -103,6 +103,8 @@ public class BoardColorHelper {
     //   d.setTextColor(d.getDefaultTextColor(newColorScheme));
     // }
 
+    d.applyThemeBorderColor();
+
     // checks if diagram is annotation or not and applies colors accordingly
     d.applyAnnotationColors();
   }

@@ -11,6 +11,11 @@ import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.ElementColor;
 
 public class Theme {
+  // ST 16.11.2018: if border color has been saved in this color
+  // it is just a storage format border color and real color
+  // should be calculated based on theme and background color.
+  public static final Color THEME_BORDER_COLOR_STORAGE = new Color(0x1, 0x1, 0x1, 0);
+
   private static final String THEME_PREFIX = "theme-";
 	private static Theme instance;
 	
@@ -260,6 +265,10 @@ public class Theme {
 
   public static boolean isBlackTheme() {
     return Theme.ThemeName.BLACK.equals(Theme.getCurrentThemeName());
+  }
+
+  public static boolean isThemeBorderColor(Color color) {
+    return THEME_BORDER_COLOR_STORAGE.equals(color);
   }
 
 }

@@ -1600,6 +1600,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public void setBorderColor(Color color) {
     borderColor.copy(color);
     setHighlightColor(color);
+    applyThemeBorderColor();
     applyAnnotationColors();
     TextElementFormatUtil textUtil = getTextFormatter();
     if (textUtil != null) {
@@ -2030,6 +2031,16 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public void annotate() {
     getDiagramItem().annotate();
     applyAnnotationColors();
+  }
+
+  @Override 
+  public void applyThemeBorderColor() {
+    if (Theme.isThemeBorderColor(borderColor)) {
+      Color color = ColorHelpers.borderColorByBackground(
+        backgroundColor.red, backgroundColor.green, backgroundColor.blue
+      );
+      setHighlightColor(color);
+    }
   }
 
   public void applyAnnotationColors() {

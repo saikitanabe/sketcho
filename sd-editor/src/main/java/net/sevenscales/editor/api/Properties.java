@@ -359,11 +359,12 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 			if (d.canSetBackgroundColor()) {
 		  	// Color newbg = new Color(color.getRr(), color.getGg(), color.getBb(), color.getOpacity());
-		  	Color newbg = color.getBackgroundColor();
+		  	// Color newbg = color.getBackgroundColor();
 				d.setBackgroundColor(color.getBackgroundColor());
-	    	Color borderColor = ColorHelpers.borderColorByBackground(newbg.red, newbg.green, newbg.blue);
-	    	// Color newbordercolor = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
-	      d.setBorderColor(borderColor);
+				// ST 19.11.2018: Save with special border color
+				// that is changed based on theme and calculated on runtime.
+	    	// Color borderColor = ColorHelpers.borderColorByBackground(newbg.red, newbg.green, newbg.blue);
+	      d.setBorderColor(Theme.THEME_BORDER_COLOR_STORAGE);
 			}
 		
 			if (!"transparent".equals(d.getTextAreaBackgroundColor())) {
