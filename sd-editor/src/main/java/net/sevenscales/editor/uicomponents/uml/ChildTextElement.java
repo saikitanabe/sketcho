@@ -17,6 +17,7 @@ import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.gfx.domain.PointDouble;
 import net.sevenscales.editor.gfx.domain.SegmentPoint;
+import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementHorizontalFormatUtil;
@@ -273,7 +274,13 @@ public class ChildTextElement extends TextElement implements IChildElement {
 
   @Override
 	public void setBackgroundColor(int red, int green, int blue, double opacity) {
-  	super.setBackgroundColor(red, green, blue, opacity);
+		if (opacity == 0) {
+			// if setting transparent color, use theme board background color
+			// to have some background to hide relationship
+			super.setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor().create());
+		} else {
+			super.setBackgroundColor(red, green, blue, opacity);
+		}
 	  getAttachBoundary().setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }
 
@@ -282,6 +289,22 @@ public class ChildTextElement extends TextElement implements IChildElement {
 		// provided PAPER theme as reference when needed e.g. on save
 		return colorScheme.getBoardBackgroundColor();
 	}
+
+	@Override
+	// Copied from AbstractDiagramItem since TextElement doesn't have
+	// currently background color. To be changed in the future
+	// that TextElement can have background color as well.
+	public String getTextAreaBackgroundColor() {
+		if (backgroundColor.opacity == 0) {
+			// transparent
+			return "transparent";
+		}
+		// NOTE differs from AbstractDiagramItem implementation
+		// due to inheriting from TextElement that always returns
+		// transparent for getBackgroundColor()
+		return getBackgroundColorAsColor().toHexStringWithHash();
+	}
+
 
 	@Override
   public boolean usesSchemeDefaultTextColor(Theme.ElementColorScheme colorScheme) {
