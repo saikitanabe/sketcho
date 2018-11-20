@@ -8,6 +8,7 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.ThemeChangedEvent;
+import net.sevenscales.editor.api.event.ThemeChangedEventHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 import net.sevenscales.editor.api.impl.Theme.ThemeName;
@@ -27,6 +28,14 @@ public class BoardColorHelper {
 
   public BoardColorHelper(HandlerManager eventBus) {
     this.evenBus = eventBus;
+
+		evenBus.addHandler(ThemeChangedEvent.TYPE, new ThemeChangedEventHandler() {
+      @Override
+      public void on(ThemeChangedEvent event) {
+        applyThemeChanged();
+      }
+    });
+
   }
 
   public void setBoardBackgroundroundColor(String colorName) {
@@ -107,6 +116,17 @@ public class BoardColorHelper {
 
     // checks if diagram is annotation or not and applies colors accordingly
     d.applyAnnotationColors();
+  }
+
+  /**
+   * Normal call through applyThemeToDiagram doesn't work
+   * when dynamically changing background color.
+   * Waiting event after global theme has been changed.
+   */
+  private void applyThemeChanged() {
+    for (Diagram d : surface.getDiagrams()) {
+      d.applyThemeBorderColor();
+    }
   }
 
 }
