@@ -63,7 +63,7 @@ public class ColorHelpers {
 
 	public static Color borderColorByBackground(int red, int green, int blue) {
 		if (Theme.isBlackTheme()) {
-			return new Color(red, green, blue, 1);
+			return new Color(red, green, blue, 1).toLighterLess();
 		}
 		
 		JavaScriptObject hsv = rgbToHsv(red, green, blue);

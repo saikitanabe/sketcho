@@ -36,9 +36,17 @@ public class Color {
 		return result;
   }
 
-	public Color toLighter() {
-		JsArrayInteger rgb = tsRgbToLighter(red, green, blue);
+	public Color toLighterLess() {
+		JsArrayInteger rgb = tsRgbToLighter(red, green, blue, 5);
+		return copyRgbColor(rgb);
+	}
 
+	public Color toLighter() {
+		JsArrayInteger rgb = tsRgbToLighter(red, green, blue, 20);
+		return copyRgbColor(rgb);
+	}
+
+	private Color copyRgbColor(JsArrayInteger rgb) {
 		Color result = create();
 		result.red = rgb.get(0);
 		result.green = rgb.get(1);
@@ -58,8 +66,8 @@ public class Color {
 		return result;
 	}
 
-	private native JsArrayInteger tsRgbToLighter(int red, int green, int blue)/*-{
-		return $wnd.tsRgbToLighter(red, green, blue);
+	private native JsArrayInteger tsRgbToLighter(int red, int green, int blue, int lighter)/*-{
+		return $wnd.tsRgbToLighter(red, green, blue, lighter);
 	}-*/;
 	private native JsArrayInteger tsRgbToDarker(int red, int green, int blue)/*-{
 		return $wnd.tsRgbToDarker(red, green, blue);
