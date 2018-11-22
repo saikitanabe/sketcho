@@ -5,6 +5,7 @@ import com.google.gwt.core.client.Scheduler;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
@@ -100,7 +101,9 @@ public class ChildTextElement extends TextElement implements IChildElement {
 
 	@Override
   public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
-  	if (anchor.getRelationship() == parent.asDiagram()) {
+		if (anchor.getRelationship() == parent.asDiagram() ||
+			anchor.getRelationship().getDiagramItem().getClientId().equals(parent.asDiagram().getDiagramItem().getClientId())) {
+			// ST 22.11.2018: One extra check that child text cannot attach to parent
   		return null;
   	}
     return super.onAttachArea(anchor, x, y);
@@ -171,7 +174,10 @@ public class ChildTextElement extends TextElement implements IChildElement {
 		int dx = ddx - prevDX;
 		int dy = ddy - prevDY;
 
-  	moveAttachedRelationships(dx, dy);
+		if (!surface.getEditorContext().isTrue(EditorProperty.ON_SURFACE_LOAD)) {
+			// ST 22.11.2018: Do not calculate attached relationships on board load
+			moveAttachedRelationships(dx, dy);
+		}
 
   	prevDX = ddx;
   	prevDY = ddy;
@@ -184,7 +190,11 @@ public class ChildTextElement extends TextElement implements IChildElement {
 
 	private void moveAttachedRelationships(int dx, int dy) {
 		for (AnchorElement ae : getAnchors()) {
-			ae.dispatch(dx, dy, 0);
+			if (!parent.asDiagram().getDiagramItem().getClientId().equals(ae.getRelationship().getDiagramItem().getClientId())) {
+				// ST 22.11.2018: Fix forever loop when child text tries to move parent relationship that tries to move child text
+				// do not move attached relationship if pointing to parent
+				ae.dispatch(dx, dy, 0);
+			}
 		}
   }
 
