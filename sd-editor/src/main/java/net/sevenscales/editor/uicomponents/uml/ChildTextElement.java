@@ -101,8 +101,9 @@ public class ChildTextElement extends TextElement implements IChildElement {
 
 	@Override
   public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
-		if (anchor.getRelationship() == parent.asDiagram() ||
-			anchor.getRelationship().getDiagramItem().getClientId().equals(parent.asDiagram().getDiagramItem().getClientId())) {
+		if (anchor.getRelationship() == parent.asDiagram()) {
+		// 	||
+		// anchor.getRelationship().getDiagramItem().getClientId().equals(parent.asDiagram().getDiagramItem().getClientId())) {
 			// ST 22.11.2018: One extra check that child text cannot attach to parent
   		return null;
   	}
