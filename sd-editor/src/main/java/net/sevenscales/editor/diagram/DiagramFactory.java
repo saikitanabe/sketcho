@@ -10,6 +10,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.js.ImageInfo;
 import net.sevenscales.domain.js.JsShape;
 import net.sevenscales.domain.js.JsShapeConfig;
@@ -267,20 +268,35 @@ public class DiagramFactory {
 				props = sh.properties;
 			}
 
+			GenericShape shape = new UMLPackageShape(
+				x,
+				y,
+				100,
+				40
+			).toGenericShape(props);
+
+			IDiagramItem item = createGenericDiagramItem(
+				elementType,
+				x,
+				y,
+				shape.getWidth(),
+				shape.getHeight(),
+				props,
+				background,
+				borderColor,
+				color,
+				defaultText			
+			);
+
 			PackageElementCorporate ce = new PackageElementCorporate(
 				surface,
-				new UMLPackageShape(
-					x,
-					y,
-					100,
-					40
-				).toGenericShape(props), // package has no auto resizes
+				shape, // package has no auto resizes
 				defaultText,
 				background,
 				borderColor,
 				color,
 				true,
-				((IDiagramItemRO)new DiagramItemDTO())
+				item
 			);
 			result = ce;
 		} else if (ElementType.HORIZONTAL_PARTITION.getValue().equals(elementType)) {
@@ -471,6 +487,34 @@ public class DiagramFactory {
 	}
 
 	private Diagram _createGenericElement(String elementType, int x, int y, int width, int height, Integer properties, Color background, Color borderColor, Color color, String defaultText) {
+
+		IDiagramItem item = createGenericDiagramItem(
+			elementType,
+			x,
+			y,
+			width,
+			height,
+			properties,
+			background,
+			borderColor,
+			color,
+			defaultText			
+		);
+
+    return ShapeParser.createDiagramElement(item, surface);
+	}
+
+	private IDiagramItem createGenericDiagramItem(
+		String elementType,
+		int x,
+		int y,
+		int width,
+		int height,
+		Integer properties,
+		Color background,
+		Color borderColor,
+		Color color,
+		String defaultText) {
     DiagramItemDTO item = LibraryShapes.createByType(elementType);
     DiagramItemConfiguration.setColors(item, background, borderColor, color);
     item.setText(defaultText);
@@ -478,7 +522,7 @@ public class DiagramFactory {
 
     item.setShapeProperties(combineDynamicProperties(item.getShapeProperties(), properties));
 
-    return ShapeParser.createDiagramElement(item, surface);
+		return item;
 	}
 
 	private Integer combineDynamicProperties(Integer oldProps, Integer newProps) {
