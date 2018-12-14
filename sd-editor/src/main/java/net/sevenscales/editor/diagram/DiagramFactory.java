@@ -262,43 +262,20 @@ public class DiagramFactory {
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ae;
 		} else if (ElementType.PACKAGE.getValue().equals(elementType)) {
-			Integer props = null;
-			LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.PACKAGE.getValue());
-			if (sh != null) {
-				props = sh.properties;
-			}
-
-			GenericShape shape = new UMLPackageShape(
-				x,
-				y,
-				100,
-				40
-			).toGenericShape(props);
-
-			IDiagramItem item = createGenericDiagramItem(
+			// ST 14.12.2018: Fix package corporate element creation.
+			// Failed to add corporate package element, and reloaded a board.
+			result = createGenericDiagram2(
 				elementType,
 				x,
 				y,
-				shape.getWidth(),
-				shape.getHeight(),
-				props,
+				100,
+				40,
 				background,
 				borderColor,
 				color,
-				defaultText			
+				shapeConfig,
+				0
 			);
-
-			PackageElementCorporate ce = new PackageElementCorporate(
-				surface,
-				shape, // package has no auto resizes
-				defaultText,
-				background,
-				borderColor,
-				color,
-				true,
-				item
-			);
-			result = ce;
 		} else if (ElementType.HORIZONTAL_PARTITION.getValue().equals(elementType)) {
 			result = new HorizontalPartitionElementCorporate(surface,
         		new HorizontalPartitionShape(x, y, 170, 70),
@@ -390,8 +367,8 @@ public class DiagramFactory {
 		Color borderColor,
 		Color color,
 		JsShapeConfig shapeConfig,
-		int initialProperties) {
-
+		int initialProperties
+	) {
 		Diagram result = null;
 		IShapeGroup proxy = ShapeCache.get(elementType, Tools.isSketchMode());
 		ShapeGroup shapeGroup = proxy.getShape();
@@ -441,27 +418,67 @@ public class DiagramFactory {
 		}
 
 		if (result == null && shapeGroup == null && Tools.isSketchMode()) {
-			// exception cases that are not drawn using plain svg
-			LibraryShapes.LibraryShape ls = LibraryShapes.getDefaultShape(elementType);
-			if (ls != null) {
-
-				if (shapeConfig != null && shapeConfig.isTargetSizeDefined()) {
-					// menu can have own configuration
-					width = (int) shapeConfig.getTargetWidth();
-					height = (int) shapeConfig.getTargetHeight();
-				}
-
-
-				if (width == null || height == null) {
-					// if width or height is not set then get size from svg shape directly 
-					width = ls.width;
-					height = ls.height;
-				}
-
-				// try crating through static code element mapping
-				result = _createGenericElement(elementType, x, y, (int) width, (int) height, initialProperties, background, borderColor, color, "");
-			}
+			result = createGenericDiagram2(
+				elementType,
+				x,
+				y,
+				width,
+				height,
+				background, 
+				borderColor,
+				color,
+				shapeConfig,
+				initialProperties
+			);
 		}
+		return result;
+	}
+
+	public Diagram createGenericDiagram2(
+		String elementType,
+		int x,
+		int y,
+		Integer width,
+		Integer height,
+		Color background, 
+		Color borderColor,
+		Color color,
+		JsShapeConfig shapeConfig,
+		int initialProperties
+	) {
+		Diagram result = null;
+
+		// exception cases that are not drawn using plain svg
+		LibraryShapes.LibraryShape ls = LibraryShapes.getDefaultShape(elementType);
+		if (ls != null) {
+
+			if (shapeConfig != null && shapeConfig.isTargetSizeDefined()) {
+				// menu can have own configuration
+				width = (int) shapeConfig.getTargetWidth();
+				height = (int) shapeConfig.getTargetHeight();
+			}
+
+			if (width == null || height == null) {
+				// if width or height is not set then get size from svg shape directly 
+				width = ls.width;
+				height = ls.height;
+			}
+
+			// try crating through static code element mapping
+			result = _createGenericElement(
+				elementType,
+				x,
+				y,
+				(int) width,
+				(int) height,
+				initialProperties,
+				background,
+				borderColor,
+				color,
+				""
+			);
+		}
+
 		return result;
 	}
 
