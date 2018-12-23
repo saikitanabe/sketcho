@@ -277,30 +277,36 @@ public class DiagramFactory {
 				0
 			);
 		} else if (ElementType.HORIZONTAL_PARTITION.getValue().equals(elementType)) {
-			result = new HorizontalPartitionElementCorporate(surface,
-        		new HorizontalPartitionShape(x, y, 170, 70),
-            defaultText,
-            background,
-            borderColor,
-            color,
-        	  true,
-        	  new DiagramItemDTO());			
-		} else if (ElementType.VERTICAL_PARTITION.getValue().equals(elementType)) {
-      Integer props = null;
-      LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.VERTICAL_PARTITION.getValue());
-      if (sh != null) {
-        props = sh.properties;
-      }
+			// ST 23.12.2018: Fix hpart corporate element creation.
+			// Failed to add corporate hpart element, and reloaded a board.
+			result = createGenericDiagram2(
+				elementType,
+				x,
+				y,
+				170,
+				70,
+				background,
+				borderColor,
+				color,
+				shapeConfig,
+				0
+			);
 			
-			GenericShape gs = ((RectContainerShape) new RectContainerShape(x, y, 170, 225)).toGenericShape(props);
-			result = new VerticalPartitionElementCorporate(surface,
-        		gs,
-            defaultText,
-            background,
-            borderColor,
-            color,
-        	  true,
-        	  new DiagramItemDTO());			
+		} else if (ElementType.VERTICAL_PARTITION.getValue().equals(elementType)) {
+			// ST 23.12.2018: Fix vpart corporate element creation.
+			// Failed to add corporate vpart element, and reloaded a board.
+			result = createGenericDiagram2(
+				elementType,
+				x,
+				y,
+				170,
+				225,
+				background,
+				borderColor,
+				color,
+				shapeConfig,
+				0
+			);
 		} else if (ElementType.MIND_CENTRAL.getValue().equals(elementType)) {
 			MindCentralElement ae = new MindCentralElement(surface,
 	        new MindCentralShape(x, y, 1, 1),
