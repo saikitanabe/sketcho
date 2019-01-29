@@ -77,13 +77,19 @@ public class DiagramHelpers {
 	}
 
 	public static List<Diagram> filterOwnerDiagramsAsListKeepOrder(Iterable<Diagram> diagrams, ActionType actionType) {
-		List<Diagram> result = new ArrayList();
+
+    DiagramList result = new DiagramList();
+		// List<Diagram> result = new ArrayList();
 		for (Diagram d : diagrams) {
-			d = d.getOwnerComponent(actionType);
+      d = d.getOwnerComponent(actionType);
+      
+      // ST 29.1.2019: Performance bug.
+      // Takes really long time on a big board.
 			// do not add duplicate items, check contains element with client id
-			if (!result.contains(d)) {
-				result.add(d);
-			}
+			// if (!result.contains(d)) {
+			// 	result.add(d);
+      // }
+      result.add(d);
 		}
 		return result;
 	}
