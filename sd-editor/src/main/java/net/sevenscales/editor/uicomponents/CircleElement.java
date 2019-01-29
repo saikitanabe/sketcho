@@ -40,24 +40,31 @@ public class CircleElement extends AbstractDiagramItem {
 		int supportedMenuItems(CircleElement ce);
 	}
 
-	public CircleElement(IGroup layer, ISurfaceHandler surface, DiagramProxy parent, int circleX, int circleY, int radius, boolean editable, IDiagramItemRO item) {
-		this(layer, surface, parent, circleX, circleY, radius, 0, editable, item);
+	public CircleElement(IGroup layer, ISurfaceHandler surface, DiagramProxy parent, int circleX, int circleY, int radius, boolean editable, IDiagramItemRO item, String debugId) {
+		this(layer, surface, parent, circleX, circleY, radius, 0, editable, item, debugId);
 	}
 	
-	public CircleElement(IGroup layer, 
-											ISurfaceHandler surface, 
-											DiagramProxy parent, 
-											int circleX, 
-											int circleY, 
-											int radius, 
-											int selectionRadius, 
-											boolean editable, IDiagramItemRO item) {
+	public CircleElement(
+		IGroup layer, 
+		ISurfaceHandler surface, 
+		DiagramProxy parent, 
+		int circleX, 
+		int circleY, 
+		int radius, 
+		int selectionRadius, 
+		boolean editable,
+		IDiagramItemRO item,
+		String debugId
+	) {
 		super(editable, surface, item);
 		setOwnerComponent(parent);
 		addMouseDiagramHandler(this);
 		group = IShapeFactory.Util.factory(editable).createGroup(layer);
 		
 		circle = IShapeFactory.Util.factory(editable).createCircle(group);
+		// This is just for debugging to understand what are all circles
+		// on svg.
+		circle.setAttribute("id", debugId);
 		circle.setShape(circleX, circleY, radius);
 		circle.setFill(255, 255, 255, 0.6);
 		circle.setStroke(Theme.getCurrentColorScheme().getBorderColor());

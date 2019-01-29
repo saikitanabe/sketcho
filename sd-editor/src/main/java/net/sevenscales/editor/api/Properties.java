@@ -358,12 +358,24 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			logger.debug("onSelection background {}...", d);
 
 			if (d.canSetBackgroundColor()) {
-		  	// Color newbg = new Color(color.getRr(), color.getGg(), color.getBb(), color.getOpacity());
-		  	Color newbg = color.getBackgroundColor();
-				d.setBackgroundColor(color.getBackgroundColor());
-	    	Color borderColor = ColorHelpers.borderColorByBackground(newbg.red, newbg.green, newbg.blue);
-	    	// Color newbordercolor = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
-	      d.setBorderColor(borderColor);
+				if (d instanceof Relationship2) {
+					if (color.getBackgroundColor().opacity > 0) {
+						// do not apply transparent color, relationship gets invisible
+						// relationship has only border color
+						d.setBorderColor(color.getBackgroundColor());	
+					}
+				} else {
+					// Color newbg = new Color(color.getRr(), color.getGg(), color.getBb(), color.getOpacity());
+					// Color newbg = color.getBackgroundColor();
+					d.setBackgroundColor(color.getBackgroundColor());
+					// ST 19.11.2018: Save with special border color
+					// that is changed based on theme and calculated on runtime.
+					// Color borderColor = ColorHelpers.borderColorByBackground(newbg.red, newbg.green, newbg.blue);
+					if (color.getBackgroundColor().opacity > 0) {
+						// do not apply theme color if color is transparent
+						d.setBorderColor(Theme.THEME_BORDER_COLOR_STORAGE);
+					}
+				}
 			}
 		
 			if (!"transparent".equals(d.getTextAreaBackgroundColor())) {
@@ -371,6 +383,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		  	// this is due to theme switching, e.g. actor text element is on always on top of 
 		  	// board background color
 				d.setTextColor(color.getTextColor());
+			} else if (color.getBackgroundColor().opacity == 0) {
+				// if background is transparent set default theme text color that is changed
+				// based on theme
+				d.setTextColor(Theme.createDefaultTextColor());
 			}
 			logger.debug("onSelection background... done");
 			break;
@@ -561,7 +577,11 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private void setTextCoordinatesAndShowEditor(int screenX, int screenY, int x, int y) {
 		textEditX = screenX;
 		textEditY = screenY;
-		showEditor(selectedDiagram, selectedDiagram.getText(textEditX, textEditY), x, y, false);
+
+		if (selectedDiagram != null) {
+			// ST 28.10.2018: Try to fix null pointer on next line
+			showEditor(selectedDiagram, selectedDiagram.getText(textEditX, textEditY), x, y, false);
+		}
 	}
 
 	private void showEditor(Diagram diagram, String text, final int left, final int top, boolean justCreated) {
@@ -687,6 +707,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			codeMirror.setBackgroundColor(diagram.getTextAreaBackgroundColor());
 		}
 
+		// ST 14.11.2018: Fix code mirror cursor not visible on black background
+		// set cursor color based on background, black or white
+		codeMirror.setCursorColorByBgColor(diagram.getTextAreaBackgroundColor());
 
 		double scaleFactor = surface.getScaleFactor();
 		

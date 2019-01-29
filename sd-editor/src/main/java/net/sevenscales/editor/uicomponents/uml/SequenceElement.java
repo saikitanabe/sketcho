@@ -353,8 +353,11 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 	
 	//	@Override
 	public void unselect() {
-	  super.unselect();
-    setHighlightColor(borderColor);
+    super.unselect();
+    
+    // ST 16.11.2018: parent already calls set highlight color
+    // and applies also theme border color
+    // setHighlightColor(borderColor);
     lifeLineEditor.hide(this);
 	}
 	

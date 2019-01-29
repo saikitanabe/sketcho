@@ -602,6 +602,15 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 
 	public void insertMoveElement(Relationship2 relationship) {
 		this.insertMoveToSingle = relationship;
+
+		// ST 2.11.2018: Fix relationship not inserted when created
+		// from connection handlers.
+		// Dragging treshold was not passed
+		// and ghost relationship was created that lead
+		// to crash when used from undo queue.
+		// now force dragging for inserted relationship
+		this.currentDiagram = this.insertMoveToSingle;
+		this.dragging = true;
 	}
 
 	public void releaseForce(CircleElement currentHandle) {

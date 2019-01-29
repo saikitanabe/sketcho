@@ -4,6 +4,7 @@
 	<inherits name="com.google.gwt.user.UserAgent"/>
 	
 	<source path='api'/>
+	<source path='appframe'/>
 	<source path='diagram'/>
 	<source path='gfx'/>
 	<source path='silver'/>

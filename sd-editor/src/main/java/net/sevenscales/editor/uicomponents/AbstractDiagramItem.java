@@ -212,12 +212,13 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
 	protected void constructorDone() {
     applyLink();
-    applyLinkColor();
-    IGroup group = getGroup();
-    if (group != null) {
-      // net.sevenscales.domain.utils.Debug.log("add shapebase...");
-      group.setAttribute("class", "shapebase");
-    }
+    setShapeCssClass();
+    // ST 21.11.2018: Fix do not override shape class
+    // IGroup group = getGroup();
+    // if (group != null) {
+    //   // net.sevenscales.domain.utils.Debug.log("add shapebase...");
+    //   group.setAttribute("class", "shapebase");
+    // }
   }
 
   protected void applyLink() {
@@ -1147,7 +1148,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   	backgroundColor.blue = blue;
   	backgroundColor.opacity = opacity;
 
-    applyLinkColor();
+    setShapeCssClass();
   }
   
   @Override
@@ -1155,15 +1156,15 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     setBackgroundColor(color.red, color.green, color.blue, color.opacity);
   }
 
-  protected void applyLinkColor() {
-    if (!this.surface.isExporting()) {
-      // enabled only on export
-      return;
-    }
+  protected void setShapeCssClass() {
+    // if (!this.surface.isExporting()) {
+    //   // enabled only on export
+    //   return;
+    // }
     
     Color bg = getBackgroundColorAsColor();
     IGroup g = getGroup();
-    if (g != null && bg.opacity != 0 && !ColorHelpers.isRgbBlack(bg.red, bg.green, bg.blue)) {
+    if (g != null && bg.opacity != 0 && ColorHelpers.isRgbBlack(bg.red, bg.green, bg.blue)) {
       g.setAttribute("class", "dark-shape shapebase");
     } else {
       g.setAttribute("class", "shapebase");
@@ -1600,6 +1601,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public void setBorderColor(Color color) {
     borderColor.copy(color);
     setHighlightColor(color);
+    applyThemeBorderColor();
     applyAnnotationColors();
     TextElementFormatUtil textUtil = getTextFormatter();
     if (textUtil != null) {
@@ -2030,6 +2032,16 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public void annotate() {
     getDiagramItem().annotate();
     applyAnnotationColors();
+  }
+
+  @Override 
+  public void applyThemeBorderColor() {
+    if (Theme.isThemeBorderColor(borderColor)) {
+      Color color = ColorHelpers.borderColorByBackground(
+        backgroundColor.red, backgroundColor.green, backgroundColor.blue
+      );
+      setHighlightColor(color);
+    }
   }
 
   public void applyAnnotationColors() {

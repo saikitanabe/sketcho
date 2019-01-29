@@ -10,6 +10,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.js.ImageInfo;
 import net.sevenscales.domain.js.JsShape;
 import net.sevenscales.domain.js.JsShapeConfig;
@@ -261,53 +262,51 @@ public class DiagramFactory {
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ae;
 		} else if (ElementType.PACKAGE.getValue().equals(elementType)) {
-			Integer props = null;
-			LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.PACKAGE.getValue());
-			if (sh != null) {
-				props = sh.properties;
-			}
-
-			PackageElementCorporate ce = new PackageElementCorporate(
-				surface,
-				new UMLPackageShape(
-					x,
-					y,
-					100,
-					40
-				).toGenericShape(props), // package has no auto resizes
-				defaultText,
+			// ST 14.12.2018: Fix package corporate element creation.
+			// Failed to add corporate package element, and reloaded a board.
+			result = createGenericDiagram2(
+				elementType,
+				x,
+				y,
+				100,
+				40,
 				background,
 				borderColor,
 				color,
-				true,
-				((IDiagramItemRO)new DiagramItemDTO())
+				shapeConfig,
+				0
 			);
-			result = ce;
 		} else if (ElementType.HORIZONTAL_PARTITION.getValue().equals(elementType)) {
-			result = new HorizontalPartitionElementCorporate(surface,
-        		new HorizontalPartitionShape(x, y, 170, 70),
-            defaultText,
-            background,
-            borderColor,
-            color,
-        	  true,
-        	  new DiagramItemDTO());			
-		} else if (ElementType.VERTICAL_PARTITION.getValue().equals(elementType)) {
-      Integer props = null;
-      LibraryShapes.ShapeProps sh = LibraryShapes.getShapeProps(ElementType.VERTICAL_PARTITION.getValue());
-      if (sh != null) {
-        props = sh.properties;
-      }
+			// ST 23.12.2018: Fix hpart corporate element creation.
+			// Failed to add corporate hpart element, and reloaded a board.
+			result = createGenericDiagram2(
+				elementType,
+				x,
+				y,
+				170,
+				70,
+				background,
+				borderColor,
+				color,
+				shapeConfig,
+				0
+			);
 			
-			GenericShape gs = ((RectContainerShape) new RectContainerShape(x, y, 170, 225)).toGenericShape(props);
-			result = new VerticalPartitionElementCorporate(surface,
-        		gs,
-            defaultText,
-            background,
-            borderColor,
-            color,
-        	  true,
-        	  new DiagramItemDTO());			
+		} else if (ElementType.VERTICAL_PARTITION.getValue().equals(elementType)) {
+			// ST 23.12.2018: Fix vpart corporate element creation.
+			// Failed to add corporate vpart element, and reloaded a board.
+			result = createGenericDiagram2(
+				elementType,
+				x,
+				y,
+				170,
+				225,
+				background,
+				borderColor,
+				color,
+				shapeConfig,
+				0
+			);
 		} else if (ElementType.MIND_CENTRAL.getValue().equals(elementType)) {
 			MindCentralElement ae = new MindCentralElement(surface,
 	        new MindCentralShape(x, y, 1, 1),
@@ -374,8 +373,8 @@ public class DiagramFactory {
 		Color borderColor,
 		Color color,
 		JsShapeConfig shapeConfig,
-		int initialProperties) {
-
+		int initialProperties
+	) {
 		Diagram result = null;
 		IShapeGroup proxy = ShapeCache.get(elementType, Tools.isSketchMode());
 		ShapeGroup shapeGroup = proxy.getShape();
@@ -425,27 +424,67 @@ public class DiagramFactory {
 		}
 
 		if (result == null && shapeGroup == null && Tools.isSketchMode()) {
-			// exception cases that are not drawn using plain svg
-			LibraryShapes.LibraryShape ls = LibraryShapes.getDefaultShape(elementType);
-			if (ls != null) {
-
-				if (shapeConfig != null && shapeConfig.isTargetSizeDefined()) {
-					// menu can have own configuration
-					width = (int) shapeConfig.getTargetWidth();
-					height = (int) shapeConfig.getTargetHeight();
-				}
-
-
-				if (width == null || height == null) {
-					// if width or height is not set then get size from svg shape directly 
-					width = ls.width;
-					height = ls.height;
-				}
-
-				// try crating through static code element mapping
-				result = _createGenericElement(elementType, x, y, (int) width, (int) height, initialProperties, background, borderColor, color, "");
-			}
+			result = createGenericDiagram2(
+				elementType,
+				x,
+				y,
+				width,
+				height,
+				background, 
+				borderColor,
+				color,
+				shapeConfig,
+				initialProperties
+			);
 		}
+		return result;
+	}
+
+	public Diagram createGenericDiagram2(
+		String elementType,
+		int x,
+		int y,
+		Integer width,
+		Integer height,
+		Color background, 
+		Color borderColor,
+		Color color,
+		JsShapeConfig shapeConfig,
+		int initialProperties
+	) {
+		Diagram result = null;
+
+		// exception cases that are not drawn using plain svg
+		LibraryShapes.LibraryShape ls = LibraryShapes.getDefaultShape(elementType);
+		if (ls != null) {
+
+			if (shapeConfig != null && shapeConfig.isTargetSizeDefined()) {
+				// menu can have own configuration
+				width = (int) shapeConfig.getTargetWidth();
+				height = (int) shapeConfig.getTargetHeight();
+			}
+
+			if (width == null || height == null) {
+				// if width or height is not set then get size from svg shape directly 
+				width = ls.width;
+				height = ls.height;
+			}
+
+			// try crating through static code element mapping
+			result = _createGenericElement(
+				elementType,
+				x,
+				y,
+				(int) width,
+				(int) height,
+				initialProperties,
+				background,
+				borderColor,
+				color,
+				""
+			);
+		}
+
 		return result;
 	}
 
@@ -471,6 +510,34 @@ public class DiagramFactory {
 	}
 
 	private Diagram _createGenericElement(String elementType, int x, int y, int width, int height, Integer properties, Color background, Color borderColor, Color color, String defaultText) {
+
+		IDiagramItem item = createGenericDiagramItem(
+			elementType,
+			x,
+			y,
+			width,
+			height,
+			properties,
+			background,
+			borderColor,
+			color,
+			defaultText			
+		);
+
+    return ShapeParser.createDiagramElement(item, surface);
+	}
+
+	private IDiagramItem createGenericDiagramItem(
+		String elementType,
+		int x,
+		int y,
+		int width,
+		int height,
+		Integer properties,
+		Color background,
+		Color borderColor,
+		Color color,
+		String defaultText) {
     DiagramItemDTO item = LibraryShapes.createByType(elementType);
     DiagramItemConfiguration.setColors(item, background, borderColor, color);
     item.setText(defaultText);
@@ -478,7 +545,7 @@ public class DiagramFactory {
 
     item.setShapeProperties(combineDynamicProperties(item.getShapeProperties(), properties));
 
-    return ShapeParser.createDiagramElement(item, surface);
+		return item;
 	}
 
 	private Integer combineDynamicProperties(Integer oldProps, Integer newProps) {

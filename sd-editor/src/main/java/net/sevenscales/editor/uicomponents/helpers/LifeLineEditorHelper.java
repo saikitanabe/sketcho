@@ -19,13 +19,13 @@ public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
 
   public static final int RADIUS_START = 12;
   public static final int RADIUS_SELECTION = 25;
-
   
   private CircleElement startSelection;
   private CircleShape circleShape = new CircleShape();
   private ISurfaceHandler surface;
   private ISequenceElement parent;
   private static Map<ISurfaceHandler, ILifeLineEditor> instances;
+  private int debugIdIndex;
 
   private static ILifeLineEditor EMPTY_EDITOR = new ILifeLineEditor() {
     @Override
@@ -75,7 +75,7 @@ public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
     this.parent = parent;
     
     // use it as global singleton element, it is actually a visual editor that can be visible only once on the board.
-    startSelection = new CircleElement(surface.getInteractionLayer(), surface, this, 0, 0, RADIUS_START, RADIUS_SELECTION, editable, new DiagramItemDTO());
+    startSelection = new CircleElement(surface.getInteractionLayer(), surface, this, 0, 0, RADIUS_START, RADIUS_SELECTION, editable, new DiagramItemDTO(), createDebugId());
     startSelection.setVerticalMovement(true);
     surface.add(startSelection, true);
     startSelection.setStroke(new Color(0x1D, 0x00, 0xFF, 1));
@@ -109,6 +109,11 @@ public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
   
   public static ILifeLineEditor getIfAny(ISurfaceHandler surface) {
     return instances.get(surface);
+  }
+
+  private String createDebugId() {
+    ++debugIdIndex;
+    return "relhh-" + debugIdIndex;
   }
 
   @Override

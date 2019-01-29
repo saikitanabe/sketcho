@@ -2,6 +2,7 @@ package net.sevenscales.editor.content.utils;
 
 import java.util.Comparator;
 
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.editor.diagram.Diagram;
@@ -53,4 +54,33 @@ public class DiagramDisplaySorter {
 	public static Comparator<Diagram> createDiagramComparator() {
 		return new DiagramComparator();
 	}
+
+
+	/**
+	 * Sorts parents before child items.
+	 */
+	private static class DiagramItemParentSorter implements Comparator<IDiagramItemRO> {
+		@Override
+		public int compare(IDiagramItemRO item1, IDiagramItemRO item2) {
+			if (item1.getParentId() == null && 
+					item2.getParentId() == null) {
+				return 0;
+			}
+			if (item1.getParentId() == null &&
+					item2.getParentId() != null) {
+				return -1;
+			}
+			if (item1.getParentId() != null &&
+					item2.getParentId() == null) {
+			return 1;
+		}
+		// child is returned after the parent
+			return 0;
+		}
+  }
+
+	public static Comparator<IDiagramItemRO> createDiagramItemSortParentComparator() {
+		return new DiagramItemParentSorter();
+	}
+
 }

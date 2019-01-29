@@ -313,6 +313,7 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   List<? extends Diagram> getChildElements();
 
   void attachedRelationship(AnchorElement anchorElement);
+  void applyThemeBorderColor();
   void applyAnnotationColors();
   boolean isAnnotation();
   boolean isResolved();

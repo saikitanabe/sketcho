@@ -12,9 +12,8 @@ import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.api.IExtension;
 import net.sevenscales.domain.utils.DiagramItemUtils;
-import net.sf.hibernate4gwt.pojo.java5.LazyPojo;
 
-public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializable, IsSerializable {
+public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializable {
 	public static final int DATA_VERSION = 4;
 	private static final long serialVersionUID = 5754682876312853660L;
 	private long id;
@@ -157,25 +156,25 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		return backgroundColor;
 	}
 	
-	@Override
+	// @Override
 	public String getTextColor() {
 		return textColor;
 	}
-	@Override
+	// @Override
 	public void setTextColor(String textColor) {
 		this.textColor = textColor;
 	}
 
-	@Override
+	// @Override
 	public Integer getFontSize() {
 		return fontSize;
 	}
-	@Override
+	// @Override
 	public void setFontSize(Integer fontSize) {
 		this.fontSize = fontSize;
 	}
 
-	@Override
+	// @Override
 	public void setTextAlign(ShapeProperty textAlign) {
 		clearShapeProperty(ShapeProperty.TXT_ALIGN_CENTER);
 		clearShapeProperty(ShapeProperty.TXT_ALIGN_RIGHT);
@@ -187,14 +186,14 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		}
 	}
 
-	@Override
+	// @Override
 	public Integer getLineWeight() {
 		if (extension != null) {
 			return extension.getLineWeight();
 		}
 		return null;
 	}
-	@Override
+	// @Override
 	public void setLineWeight(Integer lineWeight) {
 		if (extension == null) {
 			extension = new ExtensionDTO();
@@ -202,17 +201,17 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		extension.setLineWeight(lineWeight);
 	}
 
-	@Override
+	// @Override
 	public Integer getShapeProperties() {
 		return shapeProperties;
 	}
 
-	@Override
+	// @Override
 	public void setShapeProperties(Integer shapeProperties) {
 		this.shapeProperties = shapeProperties;
 	}
 
-	@Override
+	// @Override
 	public void addShapeProperty(ShapeProperty shapeProperty) {
 		if (shapeProperties == null) {
 			shapeProperties = 0;
@@ -220,17 +219,17 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		this.shapeProperties |= shapeProperty.getValue();
 	}
 
-	@Override
+	// @Override
 	public void clearShapeProperty(ShapeProperty shapeProperty) {
 		shapeProperties = ShapeProperty.clear(shapeProperties, shapeProperty.getValue());
 	}
 
-	@Override
+	// @Override
 	public Integer getDisplayOrder() {
 		return displayOrder;
 	}
 
-	@Override
+	// @Override
 	public void setDisplayOrder(Integer displayOrder) {
 		this.displayOrder = displayOrder;
 	}
@@ -243,127 +242,127 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		this.version = version;
 	}
 	
-	@Override
+	// @Override
 	public String getClientId() {
 		return clientId;
 	}
 	
-	@Override
+	// @Override
 	public void setClientId(String clientId) {
 		this.clientId = clientId;
 	}
 	
-	@Override
+	// @Override
 	public String getCustomData() {
 		return customData;
 	}
 
-	@Override
+	// @Override
 	public void setCustomData(String customData) {
 		this.customData = customData;
 	}
 
-	@Override
+	// @Override
 	public String getParentId() {
 		return parentId;
 	}
-	@Override
+	// @Override
 	public void setParentId(String parentId) {
 		this.parentId = parentId;
 	}
 
-	@Override
+	// @Override
 	public double getCrc32() {
 		return crc32;
 	}
 
-	@Override
+	// @Override
 	public void setCrc32(double crc32) {
 		this.crc32 = crc32;
 	}
 
-	@Override
+	// @Override
 	public String getGroup() {
 		return this.group;
 	}
-	@Override
+	// @Override
 	public void setGroup(String group) {
 		this.group = group;
 	}
-	@Override
+	// @Override
 	public boolean isGroup() {
 		return group != null && !"".equals(group);
 	}
 
-	@Override
+	// @Override
 	public Long getCreatedAt() {
 		return createdAt;
 	}
-	@Override
+	// @Override
 	public void setCreatedAt(Long cat) {
 		this.createdAt = cat;
 	}
 
-	@Override
+	// @Override
 	public Long getUpdatedAt() {
 		return updatedAt;
 	}
-	@Override
+	// @Override
 	public void setUpdatedAt(Long uat) {
 		this.updatedAt = uat;
 	}
 
 
-	@Override
+	// @Override
 	public JavaScriptObject getData() {
 		return this.data;
 	}
-	@Override
+	// @Override
 	public void setData(JavaScriptObject data) {
 		this.data = data;
 	}	
 
-	@Override
+	// @Override
 	public int getAnnotation() {
 		return annotation;
 	}
 
-	@Override
+	// @Override
 	public int getResolved() {
 		return resolved;
 	}
 
-	@Override
+	// @Override
 	public boolean isAnnotation() {
 		return annotation == 1;
 	}
 
-	@Override
+	// @Override
 	public boolean isResolved() {
 		return resolved == 1;
 	}
 
-	@Override
+	// @Override
 	public void annotate() {
 		annotation = 1;
 	}
 
-	@Override
+	// @Override
 	public void unannotate() {
 		annotation = 0;
 	}
 
-	@Override
+	// @Override
 	public void resolve() {
 		resolved = 1;
 	}
 
-	@Override
+	// @Override
 	public void unresolve() {
 		resolved = 0;
 	}
 
-	@Override 
+	// @Override 
 	public List<? extends IUrlLinkRO> getLinks() {
 		return links;
 	}
@@ -396,7 +395,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		}
 	}
 
-	@Override
+	// @Override
 	public boolean equals(Object obj) {
 		if (obj instanceof IDiagramItemRO) {
 			return compare((IDiagramItemRO) obj, null);
@@ -404,12 +403,12 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		return false;
 	}
 	
-	@Override
+	// @Override
 	public IDiagramItem copy() {
 		return new DiagramItemDTO(this);
 	}
 	
-	@Override
+	// @Override
 	public void copyFrom(IDiagramItemRO di) {
 		DiagramItemDTO dit = (DiagramItemDTO) di;
 		id = dit.id;
@@ -567,7 +566,7 @@ public class DiagramItemDTO extends LazyPojo implements IDiagramItem, Serializab
 		return result;
 	}
 
-	@Override
+	// @Override
 	public boolean isSketchiness() {
 		return type.endsWith("_s");
 	}

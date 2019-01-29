@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.shared.GWT;
 
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.IDiagramItemRO;
@@ -217,8 +218,15 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
 	  int x2 = x1;
 	  int y2 = y1 + lifelineheight;
 	  
-	  line.setShape(x1, y1, x2, y2);
-		selectionArea.setShape(x1 - SELECTION_AREA_WIDTH, y1, SELECTION_AREA_WIDTH * 2, y2-y1, 0);
+    line.setShape(x1, y1, x2, y2);
+    
+    int selectionAreaHeight = y2 - y1;
+    if (selectionAreaHeight > 0) {
+      // ST 22.11.2018: Fix negative height crash.
+      // User set lifeline height inside the shape.
+      // do not allow to set negative height
+      selectionArea.setShape(x1 - SELECTION_AREA_WIDTH, y1, SELECTION_AREA_WIDTH * 2, selectionAreaHeight, 0);
+    }
     
     makeFixedAnchorPoints();
     lifeLineEditor.setShape(this);
@@ -393,8 +401,11 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
 	
 	//	@Override
 	public void unselect() {
-	  super.unselect();
-    setHighlightColor(borderColor);
+    super.unselect();
+    
+    // ST 16.11.2018: parent already calls set highlight color
+    // and applies also theme border color
+    // setHighlightColor(borderColor);
     lifeLineEditor.hide(this);
 	}
 	
@@ -413,7 +424,13 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
 //	    int x2 = startSelection.getLocationX()+startSelection.getTransformX();
 //	    int y2 = startSelection.getLocationY()+startSelection.getTransformY();
       line.setShape(line.getX1(), line.getY1(), line.getX1(), line.getY2() + dy);
-      selectionArea.setShape(line.getX1() - SELECTION_AREA_WIDTH, line.getY1(), SELECTION_AREA_WIDTH * 2, line.getY2()-line.getY1(), 0);
+      int selectionAreaHeight = line.getY2()-line.getY1();
+      if (selectionAreaHeight > 0) {
+        // ST 22.11.2018: Fix negative height crash.
+        // User set lifeline height inside the shape.
+        // do not allow to set negative height
+        selectionArea.setShape(line.getX1() - SELECTION_AREA_WIDTH, line.getY1(), SELECTION_AREA_WIDTH * 2, selectionAreaHeight, 0);
+      }
     }
   }
 

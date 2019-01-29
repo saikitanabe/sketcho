@@ -12,6 +12,7 @@ import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.dom.client.NativeEvent;
 
+import net.sevenscales.domain.utils.Error;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
@@ -278,15 +279,19 @@ public class ToolBar extends Composite {
 	}
 
 	private void onUndo() {
-		surface.getEditorContext().getEventBus().fireEvent(new UndoEvent());
-		toggleButton(undo, "undo");
-		Scheduler.get().scheduleFixedPeriod(new Scheduler.RepeatingCommand() {
-			@Override
-			public boolean execute() {
-				toggleButton(undo, "undo");
-				return false;
-			}
-		}, 100);
+		try {
+			surface.getEditorContext().getEventBus().fireEvent(new UndoEvent());
+			toggleButton(undo, "undo");
+			Scheduler.get().scheduleFixedPeriod(new Scheduler.RepeatingCommand() {
+				@Override
+				public boolean execute() {
+					toggleButton(undo, "undo");
+					return false;
+				}
+			}, 100);
+		} catch(Exception e) {
+			Error.reload("ToolBar.onUndo", e);	
+		}
 	}
 	private void onRedo() {
 		surface.getEditorContext().getEventBus().fireEvent(new RedoEvent());

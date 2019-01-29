@@ -28,6 +28,7 @@ public interface ITextEditor {
 	void setText(String text);
 	void setBackgroundColor(String color);
 	void setColor(String color);
+	void setCursorColorByBgColor(String bgcolor);
 	void setFontSize(String fontSize);
 	void setLineHeight(String lineHeight);
 	void setTextAlign(String textAlign);

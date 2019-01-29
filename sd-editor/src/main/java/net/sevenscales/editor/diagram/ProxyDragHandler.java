@@ -114,7 +114,7 @@ public class ProxyDragHandler implements MouseDiagramHandler {
       try {
         createProxy(sender, point);
       } catch (Exception e) {
-        Error.reload("createProxy: " + e);
+        Error.reload("createProxy", e);
       } finally {
         // restore server saving state
         target.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, true);

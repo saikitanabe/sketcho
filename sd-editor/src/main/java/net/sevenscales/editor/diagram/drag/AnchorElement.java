@@ -28,6 +28,15 @@ public class AnchorElement {
   public AnchorElement(Anchor anchor, Diagram diagram) {
     this.diagram = diagram;
     this.anchor = anchor;
+
+    // ST 29.10.2018: Fix creating ghost
+    // anchor map relationships cause crashes
+    // because those do not really exists
+    // when trying to delete shape connected
+    // relationships.
+    // need to set diagram to anchor as well or 
+    // anchor map starts to leak relationship anchors
+    anchor.setDiagram(diagram);
   }
 
   public int getAx() {

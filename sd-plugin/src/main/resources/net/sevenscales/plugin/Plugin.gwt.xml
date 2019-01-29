@@ -1,9 +1,0 @@
-<module>
-	<inherits name='com.google.gwt.user.User'/>
-    <inherits name='net.sevenscales.pluginManager.PluginManager'/>	
-	
-	<source path='api'/>
-	<source path='constants'/>
-	<source path='impl'/>
-
-</module>

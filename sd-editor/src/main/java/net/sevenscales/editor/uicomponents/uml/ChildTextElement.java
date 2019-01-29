@@ -5,6 +5,7 @@ import com.google.gwt.core.client.Scheduler;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
@@ -17,6 +18,7 @@ import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.gfx.domain.PointDouble;
 import net.sevenscales.editor.gfx.domain.SegmentPoint;
+import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementHorizontalFormatUtil;
@@ -99,7 +101,10 @@ public class ChildTextElement extends TextElement implements IChildElement {
 
 	@Override
   public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
-  	if (anchor.getRelationship() == parent.asDiagram()) {
+		if (anchor.getRelationship() == parent.asDiagram()) {
+		// 	||
+		// anchor.getRelationship().getDiagramItem().getClientId().equals(parent.asDiagram().getDiagramItem().getClientId())) {
+			// ST 22.11.2018: One extra check that child text cannot attach to parent
   		return null;
   	}
     return super.onAttachArea(anchor, x, y);
@@ -170,7 +175,10 @@ public class ChildTextElement extends TextElement implements IChildElement {
 		int dx = ddx - prevDX;
 		int dy = ddy - prevDY;
 
-  	moveAttachedRelationships(dx, dy);
+		if (!surface.getEditorContext().isTrue(EditorProperty.ON_SURFACE_LOAD)) {
+			// ST 22.11.2018: Do not calculate attached relationships on board load
+			moveAttachedRelationships(dx, dy);
+		}
 
   	prevDX = ddx;
   	prevDY = ddy;
@@ -183,7 +191,11 @@ public class ChildTextElement extends TextElement implements IChildElement {
 
 	private void moveAttachedRelationships(int dx, int dy) {
 		for (AnchorElement ae : getAnchors()) {
-			ae.dispatch(dx, dy, 0);
+			if (!parent.asDiagram().getDiagramItem().getClientId().equals(ae.getRelationship().getDiagramItem().getClientId())) {
+				// ST 22.11.2018: Fix forever loop when child text tries to move parent relationship that tries to move child text
+				// do not move attached relationship if pointing to parent
+				ae.dispatch(dx, dy, 0);
+			}
 		}
   }
 
@@ -273,7 +285,13 @@ public class ChildTextElement extends TextElement implements IChildElement {
 
   @Override
 	public void setBackgroundColor(int red, int green, int blue, double opacity) {
-  	super.setBackgroundColor(red, green, blue, opacity);
+		if (opacity == 0) {
+			// if setting transparent color, use theme board background color
+			// to have some background to hide relationship
+			super.setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor().create());
+		} else {
+			super.setBackgroundColor(red, green, blue, opacity);
+		}
 	  getAttachBoundary().setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }
 
@@ -282,6 +300,22 @@ public class ChildTextElement extends TextElement implements IChildElement {
 		// provided PAPER theme as reference when needed e.g. on save
 		return colorScheme.getBoardBackgroundColor();
 	}
+
+	@Override
+	// Copied from AbstractDiagramItem since TextElement doesn't have
+	// currently background color. To be changed in the future
+	// that TextElement can have background color as well.
+	public String getTextAreaBackgroundColor() {
+		if (backgroundColor.opacity == 0) {
+			// transparent
+			return "transparent";
+		}
+		// NOTE differs from AbstractDiagramItem implementation
+		// due to inheriting from TextElement that always returns
+		// transparent for getBackgroundColor()
+		return getBackgroundColorAsColor().toHexStringWithHash();
+	}
+
 
 	@Override
   public boolean usesSchemeDefaultTextColor(Theme.ElementColorScheme colorScheme) {

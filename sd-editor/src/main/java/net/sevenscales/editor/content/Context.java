@@ -1,16 +1,12 @@
 package net.sevenscales.editor.content;
 
-import net.sevenscales.appFrame.api.IContext;
-import net.sevenscales.appFrame.api.IContributor;
-import net.sevenscales.appFrame.impl.EventRegistry;
-import net.sevenscales.appFrame.impl.ITilesEngine;
+import net.sevenscales.editor.appframe.IContext;
+import net.sevenscales.editor.appframe.EventRegistry;
 
 public class Context implements IContext {
   private String userId;
   private String cookieValue;
   private EventRegistry eventRegistry;
-  private ITilesEngine tilesEngine;
-  private IContributor contributor;
   private Long projectId;
   private int memberPermissions;
   private Long pageId;
@@ -38,24 +34,6 @@ public class Context implements IContext {
   // @Override
   public void setEventRegistry(EventRegistry eventRegistry) {
     this.eventRegistry = eventRegistry;
-  }
-
-  // not so nice design to share these in here...
-  public ITilesEngine getTilesEngine() {
-    return tilesEngine;
-  }
-
-  // not so nice design to share these in here...
-  public IContributor getContributor() {
-    return contributor;
-  }
-
-  public void setTilesEngine(ITilesEngine tilesEngine) {
-    this.tilesEngine = tilesEngine;    
-  }
-
-  public void setContributor(IContributor contributor) {
-    this.contributor = contributor;
   }
 
   public Long getProjectId() {

@@ -42,7 +42,26 @@ public class OTCompensationTransformer {
 		this.currentState = currentState;
 		// logger.debug("compensate operation {} newState {} currentState {}", operation, newItems, currentState);
 		logger.debug("compensate operation {}", operation);
-		return compensateOperation(operation, newItems);
+		CompensationModel result = compensateOperation(operation, newItems);
+		if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
+			// for now check only on development mode
+			checkCompensationModel(result);
+		}
+		return result;
+	}
+
+	private void checkCompensationModel(CompensationModel model) {
+		for (IDiagramItemRO diro : model.undoJson) {
+			if (diro.getClientId() == null || "".equals(diro.getClientId())) {
+				throw new RuntimeException("checkCompensationModel undoJson: Client ID cannot be empty!");
+			}
+		}
+
+		for (IDiagramItemRO diro : model.redoJson) {
+			if (diro.getClientId() == null || "".equals(diro.getClientId())) {
+				throw new RuntimeException("checkCompensationModel redoJson: Client ID cannot be empty!");
+			}
+		}
 	}
 	
 	public List<CompensationModel> compensateApplyOperations(List<ApplyHelpers.DiagramApplyOperation> applyOperations, List<? extends IDiagramItemRO> currentState) throws MappingNotFoundException {
@@ -273,8 +292,12 @@ public class OTCompensationTransformer {
 	  		for (IDiagramItemRO c : currentState) {
 	  			if (LogConfiguration.loggingIsEnabled(Level.FINEST) && "".equals(n.getClientId()) || "".equals(c.getClientId())) {
 	  				throw new RuntimeException("Client ID cannot be empty!");
-	  			}
-	    		if (n.getClientId().equals(c.getClientId())) {
+					}
+					// ST 29.10.2018: check that client id is defined
+					// due to undefined crash in here
+					if (n.getClientId() != null &&
+							c.getClientId() != null &&
+							n.getClientId().equals(c.getClientId())) {
 	    			result.add(c.copy());
 	    			mappingFound = true;
 	    			break;
@@ -285,9 +308,12 @@ public class OTCompensationTransformer {
   		if (!mappingFound) {
   			// cannot fail whole apply; so better to fail 
   			String msg = SLogger.format("Operation {} failed, mapping not found. NEW ITEM STATE: {} \n CURR STATE: {}", operation.getValue(), n.toString(), currentState.toString());
-  			logger.error(msg);
-  			GWT.debugger();
-  			throw new MappingNotFoundException("mapNewToCurrent failed");
+				logger.error(msg);
+				
+				// ST 27.10.2018: Do not throw and modify will become
+				// automatically an insert operation if not found.
+  			// GWT.debugger();
+  			// throw new MappingNotFoundException("mapNewToCurrent failed");
 //  			if (LogConfiguration.loggingIsEnabled(Level.FINEST)) {
 //  			  throw new RuntimeException(msg);
 //  			}

@@ -732,6 +732,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     children = new ArrayList<IChildElement>();
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
 
+    group.setAttribute("class", "shapebase");    
+
     // DEBUG curve visualization START
     // tempCircle = IShapeFactory.Util.factory(editable).createCircle(group);
     // tempC1 = IShapeFactory.Util.factory(editable).createCircle(group);
@@ -1051,7 +1053,18 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   public void removePoint(int index) {
-    if (index > 0 && index < points.size() - 2 && (index * 2 + 1) < points.size()) {
+    // ST 30.10.2018: Fix removed last relationship point crash
+    // when deleting from the CircleElement.
+    // now deleting the last relationship point doesn't do
+    // anything, but is going to be a modify OT to the server
+    // even though nothing is changed.
+    // Client could even check against server document
+    // if a shape has changed OR server does it does not
+    // apply it to db and other clients.
+    // Now it is just an empty operation
+    int numberOfPoints = points.size() / 2;
+    // if (index > 0 && index < points.size() - 2 && (index * 2 + 1) < points.size()) {
+    if (index > 0 && index < numberOfPoints - 1) {
       // do not allow to remove first or last point
       // NOTE order is important or would remove wrong y (actually x) if reversed
       points.remove(index * 2 + 1);
@@ -1752,6 +1765,13 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     logger.debug("Relationship2.doSetShape()");
 
     int size = points.size();
+
+    if (size < 4) {
+      // do not allow to access drawPoints if size is below 4
+      // NOTE this might hide other errors, since size should not be
+      // below 4
+      return;
+    }
     double x1 = drawPoints.get(size - 4);
     double y1 = drawPoints.get(size - 3);
     double x2 = drawPoints.get(size - 2);

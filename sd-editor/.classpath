@@ -18,10 +18,9 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/sd-domain"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/sd-app-frame"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/hibernate4gwt-domain"/>
-	<classpathentry kind="lib" path="/Users/saikitanabe/tools/gwt-2.7.0/gwt-user.jar"/>
+	<classpathentry kind="lib" path="/Users/saikitanabe/tools/gwt-2.8.2/gwt-user.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

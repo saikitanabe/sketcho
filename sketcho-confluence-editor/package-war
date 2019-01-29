@@ -1,8 +1,0 @@
-rm sketcho-editor.war
-cp -r ../sketcho-confluence/target/classes/ war/WEB-INF/classes/
-cp -r ../sd-domain/target/classes/ war/WEB-INF/classes
-cp -r ../hibernate4gwt-domain/target/classes/ war/WEB-INF/classes
-cd war
-zip -r ../sketcho-editor.war .
-cd ..
-scp sketcho-editor.war saiki@sketcho.7scales.net:

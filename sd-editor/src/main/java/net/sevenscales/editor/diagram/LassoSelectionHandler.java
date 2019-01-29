@@ -275,10 +275,14 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 				}
 			} else {
 //				d.unselect();
-			  if ((d instanceof CircleElement) /*&& d.isSelected()*/) {
-			    // do not select circle elements that are just handles
-			    surface.getSelectionHandler().unselect(d);
-			  }
+
+				// ST 30.10.2018: comment out
+				// relationship handle helpers hidden circles gets selected on lasso 
+				// selection if parent has been selected before
+			  // if ((d instanceof CircleElement) /*&& d.isSelected()*/) {
+			  //   // do not select circle elements that are just handles
+			  //   surface.getSelectionHandler().unselect(d);
+			  // }
 			}
 		}
 	}
