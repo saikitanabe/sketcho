@@ -5,8 +5,12 @@ package net.sevenscales.domain.utils;
 // import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+
+import java.util.logging.Level;
+
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.logging.client.LogConfiguration;
 
 // net.sevenscales.domain.utils.Debug.log()
 public class Debug {
@@ -39,6 +43,27 @@ public class Debug {
       return o + ""
     }));
   }-*/;
+
+  public static class Profile {
+    String title;
+    Long time;
+
+    Profile(String title, Long time) {
+      this.title = title;
+      this.time = time;
+    }
+
+    public void stopAndLog() {
+      if (LogConfiguration.loggingIsEnabled(Level.FINER)) {
+        Long diff = System.currentTimeMillis() - this.time;
+        Debug.log(this.title + " took: " + diff.toString() + " milliseconds");
+      }
+    }
+  }
+
+  public static Profile startProfile(String title) {
+    return new Profile(title, System.currentTimeMillis());
+  }
 
   public static void debugBox(double left, double top) {
     if (Debug.dbox == null) {
