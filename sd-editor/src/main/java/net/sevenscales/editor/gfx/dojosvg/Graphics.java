@@ -1,5 +1,7 @@
 package net.sevenscales.editor.gfx.dojosvg;
 
+import net.sevenscales.editor.api.event.pointer.Events;
+import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
 import net.sevenscales.editor.gfx.base.GraphicsBase;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -8,6 +10,28 @@ abstract class Graphics extends GraphicsBase {
   
   @Override
   protected void connectMouse(String eventType) {
+    if (PointerEventsSupport.isSupported()) {
+      supportPointerEvents(eventType);
+    } else {
+      supportMouseTouchEvents(eventType);
+    }
+  }
+
+  private void supportPointerEvents(String eventType) {
+    if (eventType.equals(Events.PointerDown.getNativeEventName())) {
+      nativeConnectOnMouseDown(rawNode, eventType);
+    } else if (eventType.equals(Events.PointerUp.getNativeEventName())) {
+      nativeConnectOnMouseUp(rawNode, eventType);
+    } else if (eventType.equals(Events.PointerMove.getNativeEventName())) {
+      nativeConnectMouseMove(rawNode, eventType);
+    } else if (eventType.equals(Events.PointerLeave.getNativeEventName())) {
+      nativeConnectMouseLeave(rawNode, eventType);
+    } else if (eventType.equals(Events.PointerEnter.getNativeEventName())) {
+      nativeConnectMouseEnter(rawNode, eventType);
+    }
+  }
+
+  private void supportMouseTouchEvents(String eventType) {
     if (eventType.equals(ON_MOUSE_LEAVE)) {
       nativeConnectMouseLeave(rawNode, eventType);
     } else if (eventType.equals(ON_MOUSE_ENTER)) {
@@ -78,7 +102,7 @@ abstract class Graphics extends GraphicsBase {
      keys |= e.metaKey ? @net.sevenscales.editor.gfx.domain.IGraphics::META : 0;
 		 self.@net.sevenscales.editor.gfx.dojosvg.Graphics::onMouseDown(Lnet/sevenscales/editor/gfx/base/GraphicsEvent;I)(e,keys);
 		}
-		object.connect("onmousedown", onMouseDown);
+		object.connect(eventType, onMouseDown);
 	}-*/;
 	native void nativeConnectOnMouseUp(JavaScriptObject object, String eventType)/*-{
 		var self = this;
