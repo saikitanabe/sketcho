@@ -229,7 +229,7 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public void setTransform(double tx, double ty) {
 		
 	}
-	public void scale(double value, boolean wheel) {
+	public void scale(double value, boolean wheel, int middleX, int middleY) {
 
 	}
 	public double getScaleFactor() {

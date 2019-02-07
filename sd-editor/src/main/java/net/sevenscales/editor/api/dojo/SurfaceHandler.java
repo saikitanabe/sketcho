@@ -1122,7 +1122,7 @@ class SurfaceHandler extends SimplePanel implements
 //  }
   
   public void scale() {
-    scale(scaleFactor, false);
+    scale(scaleFactor, false, 0, 0);
   }
   
   public void invertScale() {
@@ -1134,10 +1134,13 @@ class SurfaceHandler extends SimplePanel implements
   }
   
   @Override
-  public void scale(double value, boolean wheel) {
+  public void scale(double value, boolean wheel, int middleX, int middleY) {
     if (wheel) {
       // wheel zoom zooms to mouse point
       scaleAtPoint(value, currentClientMouseMoveX, currentClientMouseMoveY);
+    } else if (middleX != 0 || middleY != 0) {
+      // wheel zoom zooms to mouse point
+      scaleAtPoint(value, middleX, middleY);
     } else {
       // NOTE
       // - e.g. touch device should calculate center point between fingers
