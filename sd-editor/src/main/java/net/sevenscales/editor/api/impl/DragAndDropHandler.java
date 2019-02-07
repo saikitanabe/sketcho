@@ -9,7 +9,6 @@ import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 
-import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
@@ -63,7 +62,6 @@ public class DragAndDropHandler implements
   
 	@Override
 	public void onPointerMove(PointerMoveEvent event) {
-    Debug.log(("pointermove root"));
     handleOnMouseMove(TouchHelpers.createMouseMoveEvent(event));
 	}
 
@@ -91,10 +89,8 @@ public class DragAndDropHandler implements
 		}
 		
 		if (onsurface) {
-      Debug.Profile p1 = Debug.startProfile("pointermove 1");
 			boolean toolbar = false;
       sh.fireMouseMove(event, toolbar);
-      p1.stopAndLog();
 		} else {
 			onentersurface = false;
 			sh.fireMouseOnLeave(event);

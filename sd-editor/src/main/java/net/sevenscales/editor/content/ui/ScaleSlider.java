@@ -14,7 +14,6 @@ import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import net.sevenscales.domain.constants.Constants;
-import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
@@ -182,8 +181,6 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
   private void replacePointerEvent(PointerEvent event) {
     for (int i = 0; i < pointerEvents.size(); ++i) {
       if (pointerEvents.get(i).pointerId == event.getPointerId()) {
-        Debug.log("pinch replace pointer event " + event.getPointerId());
-
         pointerEvents.set(i, new PointerSnapShot(
           event.getPointerId(),
           event.getClientX(),
@@ -374,14 +371,11 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	}
 
 	private void endPinch() {
-    Debug.log("pinch end");
     EffectHelpers.fadeOut(innerScaleSlider.getElement());
     surface.getEditorContext().getEventBus().fireEvent(new PinchZoomEvent(false));
 	}
 	
 	private void pinch(double distance) {
-    Debug.log("pinch", distance);
-
 		boolean exceedTreshold = Math.abs(currentDistance - distance) > TRESHOLD; 
 		if (exceedTreshold) {
 			int index = currentIndex;

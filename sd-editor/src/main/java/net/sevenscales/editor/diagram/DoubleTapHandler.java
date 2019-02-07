@@ -5,16 +5,14 @@ import java.util.List;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.MouseEvent;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.RootPanel;
 
-import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.LongPressHandler;
-import net.sevenscales.editor.api.event.pointer.PointerUpEvent;
-import net.sevenscales.editor.api.event.pointer.PointerUpHandler;
 import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
 import net.sevenscales.editor.api.event.pointer.PointerMoveEvent;
 import net.sevenscales.editor.api.event.pointer.PointerMoveHandler;
+import net.sevenscales.editor.api.event.pointer.PointerUpEvent;
+import net.sevenscales.editor.api.event.pointer.PointerUpHandler;
 
 class DoubleTapHandler implements
   DiagramSelectionHandler,
@@ -57,8 +55,6 @@ class DoubleTapHandler implements
   }
 
   void resetState() {
-    Debug.log("double tap reset state...");
-
     itsDoubleTap = false;
     tapped = false;
     timer.cancel();
@@ -118,7 +114,7 @@ class DoubleTapHandler implements
     public void run() {
       tapped = false;
       itsDoubleTap = false;
-      Debug.log("single tap...");
+      // Debug.log("single tap...");
     }
   };
 private int tapX;
@@ -144,7 +140,7 @@ private int tapY;
       tapY = event.getClientY();
 
       timer.schedule(DOUBLETAP_MILLIS);
-      Debug.log("tap: timer scheduled...");
+      // Debug.log("tap: timer scheduled...");
     } else {
       // it is a double tap
 
@@ -153,7 +149,7 @@ private int tapY;
 
       if (Math.abs(diffx) < DOUBLETAP_POSITION_MAX_DIFF &&
           Math.abs(diffy) < DOUBLETAP_POSITION_MAX_DIFF) {
-        Debug.log("double tap...");
+        // Debug.log("double tap...");
         timer.cancel(); // stop single tap
         tapped = false;
         itsDoubleTap = true;

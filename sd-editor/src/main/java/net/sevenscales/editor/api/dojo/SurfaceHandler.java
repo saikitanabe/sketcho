@@ -33,7 +33,6 @@ import com.google.gwt.user.client.ui.Widget;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.js.JsDimension;
 import net.sevenscales.domain.js.JsShape;
-import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.BoardDimensions;
 import net.sevenscales.editor.api.EditorContext;
@@ -84,8 +83,8 @@ import net.sevenscales.editor.gfx.domain.ILoadObserver;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.ISurface;
-import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.JsSvg;
+import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.uicomponents.CircleElement;
 
 
@@ -815,8 +814,8 @@ class SurfaceHandler extends SimplePanel implements
     
     diagrams.clear();
     loadEventListenerCollection.fireLoadedEvent();
-    Debug.log("SurfaceHandler::loaded (callback)");
-    logger.debug("loaded {}... done", name);
+    // Debug.log("SurfaceHandler::loaded (callback)");
+    // logger.debug("loaded {}... done", name);
   }
 
   @Override
