@@ -16,6 +16,7 @@ import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
 import net.sevenscales.editor.api.event.UndoEvent;
 import net.sevenscales.editor.api.event.UndoEventHandler;
+import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.diagram.Diagram;
@@ -70,8 +71,8 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	
 	static {
 		instances = new HashMap<ISurfaceHandler, IConnectionHelpers>();
-		if (TouchHelpers.isSupportsTouch()) {
-			RADIUS = 25;
+		if (TouchHelpers.isSupportsTouch() || PointerEventsSupport.isSupported()) {
+			RADIUS = 15;
 		} else {
 			// mouse pointer needs smaller attach area
 			RADIUS = 7;

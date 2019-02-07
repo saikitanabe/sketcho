@@ -1,19 +1,32 @@
 package net.sevenscales.editor.api.impl;
 
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.impl.TouchDragAndDrop.ITouchToMouseHandler;
-
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
 
-public class DragAndDropHandler implements MouseDownHandler, MouseUpHandler, MouseMoveHandler, ITouchToMouseHandler {
+import net.sevenscales.domain.utils.Debug;
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
+import net.sevenscales.editor.api.event.pointer.PointerDownHandler;
+import net.sevenscales.editor.api.event.pointer.PointerMoveEvent;
+import net.sevenscales.editor.api.event.pointer.PointerMoveHandler;
+import net.sevenscales.editor.api.event.pointer.PointerUpEvent;
+import net.sevenscales.editor.api.event.pointer.PointerUpHandler;
+
+public class DragAndDropHandler implements 
+  MouseDownHandler,
+  MouseUpHandler,
+  MouseMoveHandler,
+  PointerDownHandler,
+  PointerUpHandler,
+  PointerMoveHandler,
+  ITouchToMouseHandler {
 	private static final SLogger logger = SLogger.createLogger(DragAndDropHandler.class);
 	
 	private ISurfaceHandler surface;
@@ -46,6 +59,22 @@ public class DragAndDropHandler implements MouseDownHandler, MouseUpHandler, Mou
 	@Override
 	public void onMouseMove(MouseMoveEvent event) {
 		handleOnMouseMove(event);
+  }
+  
+	@Override
+	public void onPointerMove(PointerMoveEvent event) {
+    Debug.log(("pointermove root"));
+    handleOnMouseMove(TouchHelpers.createMouseMoveEvent(event));
+	}
+
+	@Override
+	public void onPointerUp(PointerUpEvent event) {
+    overToolBar = false;
+	}
+
+	@Override
+	public void onPointerDown(PointerDownEvent event) {
+    overToolBar = _isOverToolbar(event);
 	}
 
 	private void handleOnMouseMove(MouseMoveEvent event) {
@@ -62,8 +91,10 @@ public class DragAndDropHandler implements MouseDownHandler, MouseUpHandler, Mou
 		}
 		
 		if (onsurface) {
+      Debug.Profile p1 = Debug.startProfile("pointermove 1");
 			boolean toolbar = false;
-			sh.fireMouseMove(event, toolbar);
+      sh.fireMouseMove(event, toolbar);
+      p1.stopAndLog();
 		} else {
 			onentersurface = false;
 			sh.fireMouseOnLeave(event);

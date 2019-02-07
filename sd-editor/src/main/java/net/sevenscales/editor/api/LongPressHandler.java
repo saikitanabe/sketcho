@@ -3,6 +3,7 @@ package net.sevenscales.editor.api;
 import com.google.gwt.dom.client.Touch;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
@@ -17,11 +18,21 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
+import net.sevenscales.editor.api.event.pointer.PointerDownHandler;
+import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
+import net.sevenscales.editor.api.event.pointer.PointerMoveEvent;
+import net.sevenscales.editor.api.event.pointer.PointerMoveHandler;
+import net.sevenscales.editor.api.event.pointer.PointerUpEvent;
+import net.sevenscales.editor.api.event.pointer.PointerUpHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 
 public class LongPressHandler implements MouseDownHandler, 
 																				 MouseMoveHandler, 
-																				 MouseUpHandler,
+                                         MouseUpHandler,
+                                         PointerDownHandler, 
+																				 PointerMoveHandler, 
+																				 PointerUpHandler,
 																				 TouchStartHandler,
 																				 TouchMoveHandler,
 																				 TouchEndHandler {
@@ -69,24 +80,35 @@ public class LongPressHandler implements MouseDownHandler,
 	private int startY;
 	
 	public LongPressHandler(ISurfaceHandler surface) {
-		this.surface = surface;
-		surface.addDomHandler(this, MouseDownEvent.getType());
-		surface.addDomHandler(this, MouseUpEvent.getType());
-		surface.addDomHandler(this, MouseMoveEvent.getType());
-
-		surface.addDomHandler(this, TouchStartEvent.getType());
-		surface.addDomHandler(this, TouchMoveEvent.getType());
-		surface.addDomHandler(this, TouchEndEvent.getType());
+    this.surface = surface;
+    
+    if (PointerEventsSupport.isSupported()) {
+      surface.addDomHandler(this, PointerDownEvent.getType());
+      surface.addDomHandler(this, PointerUpEvent.getType());
+      surface.addDomHandler(this, PointerMoveEvent.getType());
+    } else {
+      surface.addDomHandler(this, MouseDownEvent.getType());
+      surface.addDomHandler(this, MouseUpEvent.getType());
+      surface.addDomHandler(this, MouseMoveEvent.getType());
+  
+      surface.addDomHandler(this, TouchStartEvent.getType());
+      surface.addDomHandler(this, TouchMoveEvent.getType());
+      surface.addDomHandler(this, TouchEndEvent.getType());
+    }
 	}
 	
 	@Override
 	public void onMouseDown(MouseDownEvent event) {
+    mouseDown(event);
+  }
+  
+  private void mouseDown(MouseEvent event) {
 		if (event.getNativeEvent().getButton() == Event.BUTTON_LEFT && !surface.getEditorContext().isTrue(EditorProperty.START_SELECTION_TOOL)) {
 			startX = event.getClientX();
 			startY = event.getClientY();
 			starScheduler();
 		}
-	}
+  }
 	
 	private void starScheduler() {
 		if (!timer.isScheduled) {
@@ -98,8 +120,12 @@ public class LongPressHandler implements MouseDownHandler,
 
 	@Override
 	public void onMouseMove(MouseMoveEvent event) {
-		cancelScheduler(event.getClientX(), event.getClientY());
-	}
+		mouseMove(event);
+  }
+  
+  private void mouseMove(MouseEvent event) {
+    cancelScheduler(event.getClientX(), event.getClientY());
+  }
 	
 	private void cancelScheduler(int x, int y) {
 		int deltaX = Math.abs(startX - x);
@@ -110,7 +136,7 @@ public class LongPressHandler implements MouseDownHandler,
 		}
 	}
 		
-	private void cancel() {
+	public void cancel() {
 		if (timer.isScheduled) {
 			timer.cancel();
 		}
@@ -119,8 +145,12 @@ public class LongPressHandler implements MouseDownHandler,
 
 	@Override
 	public void onMouseUp(MouseUpEvent event) {
-		timer.cancel();
-	}
+    mouseUp();
+  }
+  
+  private void mouseUp() {
+    timer.cancel();
+  }
 
 	private void fireLongPress() {
 		logger.info("fireLongPress xy({}, {})...", startX, startY);
@@ -154,6 +184,21 @@ public class LongPressHandler implements MouseDownHandler,
 	@Override
 	public void onTouchEnd(TouchEndEvent event) {
 		cancel();
+	}
+
+	@Override
+	public void onPointerUp(PointerUpEvent event) {
+		mouseUp();
+	}
+
+	@Override
+	public void onPointerMove(PointerMoveEvent event) {
+		mouseMove(event);
+	}
+
+	@Override
+	public void onPointerDown(PointerDownEvent event) {
+		mouseDown(event);
 	}
 
 }

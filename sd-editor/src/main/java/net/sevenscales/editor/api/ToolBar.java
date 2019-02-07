@@ -57,7 +57,7 @@ public class ToolBar extends Composite {
 			}
 		});
 
-		handleButtons(this, handtool, freehand, undo, redo);
+    handleButtons(this, handtool, freehand, undo, redo);
 		map.setTitle("Map View | Z");
 		handleMapView(this, map);
 

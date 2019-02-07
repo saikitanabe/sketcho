@@ -2,17 +2,18 @@ package net.sevenscales.editor.diagram;
 
 import java.util.List;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.event.PinchZoomStartedEvent;
-import net.sevenscales.editor.api.event.PinchZoomStartedEventHandler;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.BackgroundMoveStartedEvent;
+import net.sevenscales.editor.api.event.PinchZoomEvent;
+import net.sevenscales.editor.api.event.PinchZoomEventHandler;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
-import com.google.gwt.core.client.JavaScriptObject;
-import net.sevenscales.editor.api.Tools;
 
 
 public class BackgroundMoveHandler implements MouseDiagramHandler {
@@ -50,18 +51,23 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
   }-*/;
 
   private void listenPinchZoom() {
-  	surface.getEditorContext().getEventBus().addHandler(PinchZoomStartedEvent.TYPE, new PinchZoomStartedEventHandler() {
+  	surface.getEditorContext().getEventBus().addHandler(PinchZoomEvent.TYPE, new PinchZoomEventHandler() {
 			@Override
-			public void on(PinchZoomStartedEvent event) {
+			public void on(PinchZoomEvent event) {
 		  	// cancel background move to prevent side effects, e.g. pinch zoom
 		  	// 1. one finger on board => background move started
 		  	// 2. two finer on board => background move should be canceled
-		  	// 3. if not canceled will move background based on first finger if released appropriately
-		  	mouseDown = false;
-		  	backgroundMouseDown = false;
+        // 3. if not canceled will move background based on first finger if released appropriately
+        cancelBackgroundMove();
 			}
 		});
-	}
+  }
+  
+  public void cancelBackgroundMove() {
+    mouseDown = false;
+    backgroundMouseDown = false;
+    backgroundMoving = false;
+  }
 
 	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
   	if (!surface.isDragEnabled()) {
@@ -136,7 +142,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
       if (surface.isVerticalDrag()) {
         dx = 0;
       }
-      
+
       surface.setTransform(dx, dy);
       if (cachedEditor == null) {
         cachedEditor = getEditor();

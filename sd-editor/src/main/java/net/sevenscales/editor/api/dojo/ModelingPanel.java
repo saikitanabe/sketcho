@@ -3,13 +3,7 @@ package net.sevenscales.editor.api.dojo;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
-import com.google.gwt.event.dom.client.MouseMoveEvent;
-import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -33,10 +27,7 @@ import net.sevenscales.editor.api.event.DiagramElementAddedEventHandler;
 import net.sevenscales.editor.api.event.RelationshipNotAttachedEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
-import net.sevenscales.editor.api.impl.DragAndDropHandler;
 import net.sevenscales.editor.api.impl.ModelingPanelEventHandler;
-import net.sevenscales.editor.api.impl.SurfaceEventWrapper;
-import net.sevenscales.editor.api.impl.TouchDragAndDrop;
 import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.api.ot.OperationTransaction;
 import net.sevenscales.editor.content.ui.IModeManager;
@@ -48,8 +39,6 @@ import net.sevenscales.editor.diagram.DiagramSelectionHandler;
 import net.sevenscales.editor.diagram.KeyEventListener;
 import net.sevenscales.editor.diagram.RelationshipDragEndHandler;
 import net.sevenscales.editor.diagram.utils.UiUtils;
-import net.sevenscales.editor.gfx.base.GraphicsEvent;
-import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.uicomponents.uml.ShapeCache;
 
 class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEyeView {
@@ -68,11 +57,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
 	private UIObject _parent;
 	private int prevScrollLeft;
 	private int prevScrollTop;
-	private TouchDragAndDrop touchManager;
 //	private boolean initializing = true;
-	
-	private DragAndDropHandler dragAndDropHandler;
-
   private ScaleSlider scaleSlider;
 	
 	public ModelingPanel(UIObject parent, int width, int height, boolean editable,
@@ -115,7 +100,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
 			public void on(SurfaceScaleEvent event) {
 				double factor = Constants.ZOOM_FACTORS[event.getScaleFactor()];
 //				surface.invertScale();
-			  surface.scale(factor, event.isWheel());
+			  surface.scale(factor, event.isWheel(), event.getMiddleX(), event.getMiddleY());
 //			  int dx = 0;
 //			  int dy = 0;
 //		  	double val = ScaleHelpers.scaleValue(1, factor);
@@ -188,11 +173,6 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
 				}
 			});
 		// }
-		
-		dragAndDropHandler = new DragAndDropHandler(surface, toolFrame.getToolbar());
-		touchManager = new TouchDragAndDrop(dragAndDropHandler, toolFrame.getToolbar().getHasTouchStartHandlers());
-		new SurfaceEventWrapper(surface, dragAndDropHandler);
-		RootPanel.get().add((new ToolBar(surface)));
 		// RootPanel.get().add((new MainMenu(surface)));
 
 		this.scaleSlider = new ScaleSlider(surface);
@@ -238,48 +218,6 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
 		// in this case modeling panel handles both toolbar and drawing area
 		// and can recognize when mouse enters drawing area
 		
-		// add dom handler on the root panel, then drag and drop works safely
-		RootPanel.get().addDomHandler(dragAndDropHandler, MouseDownEvent.getType());
-		RootPanel.get().addDomHandler(dragAndDropHandler, MouseUpEvent.getType());
-		RootPanel.get().addDomHandler(dragAndDropHandler, MouseMoveEvent.getType());
-
-		RootPanel.get().addDomHandler(new MouseDownHandler() {
-			@Override
-			public void onMouseDown(MouseDownEvent event) {
-				if (!(event.getNativeEvent().getButton() == Event.BUTTON_LEFT) || !Element.is(event.getNativeEvent().getEventTarget())) {
-					// handle only left button events
-					return;
-				}
-
-				com.google.gwt.user.client.Event e = Event.as(event.getNativeEvent());
-				int keys = e.getShiftKey() ? IGraphics.SHIFT : 0;
-				keys |= e.getAltKey() ? IGraphics.ALT : 0;
-				if (surface.getElement().isOrHasChild(Element.as(event.getNativeEvent().getEventTarget()))) {
-					surface.onMouseDown((GraphicsEvent) e, keys);
-					event.getNativeEvent().preventDefault();
-				} else if (toolFrame.getToolbar().getElement().isOrHasChild(Element.as(event.getNativeEvent().getEventTarget()))) {
-					toolFrame.getToolbar().onMouseDown((GraphicsEvent) e, keys);
-				}
-			}
-		}, MouseDownEvent.getType());
-		RootPanel.get().addDomHandler(new MouseUpHandler() {
-			@Override
-			public void onMouseUp(MouseUpEvent event) {
-				if (!(event.getNativeEvent().getButton() == Event.BUTTON_LEFT) || !Element.is(event.getNativeEvent().getEventTarget())) {
-					// handle only left button events
-					return;
-				}
-
-				com.google.gwt.user.client.Event e = Event.as(event.getNativeEvent());
-				int keys = e.getShiftKey() ? IGraphics.SHIFT : 0;
-				if (surface.getElement().isOrHasChild(Element.as(event.getNativeEvent().getEventTarget()))) {
-					surface.onMouseUp((GraphicsEvent) e, keys);
-				} else if (toolFrame.getToolbar().getElement().isOrHasChild(Element.as(event.getNativeEvent().getEventTarget()))) {
-					toolFrame.getToolbar().onMouseUp((GraphicsEvent) e, keys);
-				}
-			}
-		}, MouseUpEvent.getType());
-		
 		// native preview handler doesn't work with resize helpers for some reason
 		// on mouse down..., would need to study more...
 		// this commit is last to have routed through native preview handler
@@ -289,12 +227,11 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
 	 //        case Event.ONMOUSEDOWN: {
 	 //        case Event.ONMOUSEUP: {
 
+		RootPanel.get().add((new ToolBar(surface)));
 		new ModelingPanelEventHandler(surface, toolFrame);
 		
 		// click menu is not used at the moment...
 		if (editable) {
-			// >>>>> long press disabled - 29.10.2015 Saiki T. 
-			new LongPressHandler(surface);
 			// <<<<< long press disabled - 29.10.2015 Saiki T. 
 			new UiContextMenu(surface, editorContext, surface.getSelectionHandler());
 			new UiClickContextMenu(surface);
@@ -315,7 +252,7 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
   }-*/;
 
   private void onBoardReady() {
-  	surface.scale(2f, false);
+  	surface.scale(2f, false, 0, 0);
   }
 	// <<<<<<<<<< SOLU
 

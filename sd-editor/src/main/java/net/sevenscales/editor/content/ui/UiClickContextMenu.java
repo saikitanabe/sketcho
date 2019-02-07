@@ -27,6 +27,11 @@ import net.sevenscales.editor.api.event.SaveButtonClickedEvent;
 import net.sevenscales.editor.api.event.SaveButtonClickedEventHandler;
 import net.sevenscales.editor.api.event.StartSelectToolEvent;
 import net.sevenscales.editor.api.event.SurfaceMouseUpNoHandlingYetEvent;
+import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
+import net.sevenscales.editor.api.event.pointer.PointerDownHandler;
+import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
+import net.sevenscales.editor.api.event.pointer.PointerMoveEvent;
+import net.sevenscales.editor.api.event.pointer.PointerMoveHandler;
 import net.sevenscales.editor.api.impl.FastButton;
 import net.sevenscales.editor.content.utils.EffectHelpers;
 
@@ -78,25 +83,12 @@ public class UiClickContextMenu extends Composite {
 		popup.setStyleName("UiContextMenu");
 		popup.setAutoHideEnabled(true);
 		popup.setWidget(this);
-				
-		surface.addDomHandler(new TouchStartHandler() {
-			@Override
-			public void onTouchStart(TouchStartEvent event) {
-				if (popup.isShowing()) {
-					hide();
-				}
-			}
-		}, TouchStartEvent.getType());
-		
-		surface.addDomHandler(new MouseMoveHandler() {
-			@Override
-			public void onMouseMove(MouseMoveEvent event) {
-				if (UiClickContextMenu.this.surface.getMouseDiagramManager().isMovingBackground() ||
-						UiClickContextMenu.this.surface.getMouseDiagramManager().isLassoing()) {
-					hide();
-				}
-			}
-		}, MouseMoveEvent.getType());
+        
+    if (PointerEventsSupport.isSupported()) {
+      supportPointerEvents();
+    } else {
+      supportMouseTouchEvents();
+    }
 
 		surface.getEditorContext().getEventBus().addHandler(BoardEmptyAreaClickedEvent.TYPE, new BoardEmptyAreaClickEventHandler() {
 			@Override
@@ -139,7 +131,52 @@ public class UiClickContextMenu extends Composite {
 		// 		});
 
 		closeOnSave();
-	}
+  }
+
+  private void supportPointerEvents() {
+		surface.addDomHandler(new PointerDownHandler() {
+			@Override
+			public void onPointerDown(PointerDownEvent event) {
+        touchStart();
+			}
+		}, PointerDownEvent.getType());
+		
+		surface.addDomHandler(new PointerMoveHandler() {
+			@Override
+			public void onPointerMove(PointerMoveEvent event) {
+        mouseMove();
+			}
+		}, PointerMoveEvent.getType());
+  }
+  
+  private void supportMouseTouchEvents() {
+		surface.addDomHandler(new TouchStartHandler() {
+			@Override
+			public void onTouchStart(TouchStartEvent event) {
+        touchStart();
+			}
+		}, TouchStartEvent.getType());
+		
+		surface.addDomHandler(new MouseMoveHandler() {
+			@Override
+			public void onMouseMove(MouseMoveEvent event) {
+        mouseMove();
+			}
+		}, MouseMoveEvent.getType());
+  }
+
+  private void touchStart() {
+    if (popup.isShowing()) {
+      hide();
+    }
+  }
+
+  private void mouseMove() {
+    if (UiClickContextMenu.this.surface.getMouseDiagramManager().isMovingBackground() ||
+        UiClickContextMenu.this.surface.getMouseDiagramManager().isLassoing()) {
+      hide();
+    }
+  }
 
 	private void openClickMenu(final BoardEmptyAreaClickedEvent event) {
 		if (UiClickContextMenu.this.surface.getSelectionHandler().getSelectedItems().size() == 0 &&

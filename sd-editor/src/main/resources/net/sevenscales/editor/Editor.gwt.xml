@@ -23,6 +23,43 @@
          <when-property-is name="user.agent" value="gecko1_8"/>
     </replace-with>
 
+	<!-- <define-property name="modernie" values="none,yes" /> -->
+	<!-- <property-provider name="modernie"><![CDATA[
+	  {
+	    var ua = $wnd.navigator.userAgent;
+	    if (ua.indexOf('IE') == -1 && ua.indexOf('Trident') != -1) { return 'yes'; }
+	    return 'none';
+	  }
+	]]></property-provider> -->
+	<!-- <property-provider name="modernie"><![CDATA[
+	  {
+          if (window.PointerEvent) {
+               return "yes";
+          }
+          return "none";
+	  }
+	]]></property-provider> -->
+
+	<!-- <set-property name="modernie" value="none">
+          <none>
+               <when-property-is name="user.agent" value="gecko1_8" />
+          </none>
+	</set-property> -->
+
+     <!-- Doesn't work so ModernSupportImpl is default -->
+	<!-- <replace-with class="net.sevenscales.editor.api.event.pointer.ModernSupportImpl">
+		<when-type-is class="net.sevenscales.editor.api.event.pointer.PointerEventsSupport"/>
+		<when-property-is name="modernie" value="yes"/>
+	</replace-with> -->
+	
+	<!-- <replace-with class="net.sevenscales.editor.api.event.pointer.PrefixedSupportImpl">
+		<when-type-is class="net.sevenscales.editor.api.event.pointer.ModernSupportImpl"/>
+		<when-property-is value="ie10" name="user.agent"/>
+	</replace-with> -->
+
+	<entry-point class="net.sevenscales.editor.api.event.pointer.PointerEventInitializer"/>
+
+
 <!--     <replace-with class="net.sevenscales.editor.api.impl.SurfaceHandlerImplFirefox"> -->
 <!--          <when-type-is class="net.sevenscales.editor.api.SurfaceHandler"/> -->
 <!--          <when-property-is name="user.agent" value="gecko1_8"/> -->

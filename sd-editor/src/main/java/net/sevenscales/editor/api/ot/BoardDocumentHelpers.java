@@ -11,6 +11,7 @@ import com.google.gwt.core.client.JsArrayString;
 
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.DiagramItemIdComparator;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
@@ -63,8 +64,18 @@ public class BoardDocumentHelpers {
 
 
 	public static List<? extends IDiagramItemRO> diagramsToItems(Iterable<Diagram> diagrams) {
-		List<Diagram> filteredDiagrams = net.sevenscales.editor.content.utils.DiagramHelpers.filterOwnerDiagramsAsListKeepOrder(diagrams, net.sevenscales.editor.api.ActionType.NONE);
-		List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.getDiagramsAsDTOKeepOrder(filteredDiagrams, true);
+    Debug.Profile p1 = Debug.startProfile("diagramsToItems: filter diagrams");
+
+    List<Diagram> filteredDiagrams = net.sevenscales.editor.content.utils.DiagramHelpers.filterOwnerDiagramsAsListKeepOrder(diagrams, net.sevenscales.editor.api.ActionType.NONE);
+    
+    p1.stopAndLog();
+
+    Debug.Profile p2 = Debug.startProfile("diagramsToItems: getDiagramsAsDTOKeepOrder");
+
+    List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.getDiagramsAsDTOKeepOrder(filteredDiagrams, true);
+    
+    p2.stopAndLog();
+
 		return operationItems;
 	}
 

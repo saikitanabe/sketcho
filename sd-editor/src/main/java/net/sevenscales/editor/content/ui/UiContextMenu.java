@@ -35,6 +35,9 @@ import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
+import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
+import net.sevenscales.editor.api.event.pointer.PointerDownHandler;
+import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorSetType;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
@@ -173,14 +176,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		lineWeightPopup = new LineWeightPopup(surface, lineWeight);
 		textAlignPopup = new TextAlignPopup(surface, textAlign);
 
-		surface.addDomHandler(new TouchStartHandler() {
-			@Override
-			public void onTouchStart(TouchStartEvent event) {
-				if (popup.isShowing()) {
-					hide();
-				}
-			}
-		}, TouchStartEvent.getType());
+    if (PointerEventsSupport.isSupported()) {
+      supportPointerEvents();
+    } else {
+      supportMouseTouchEvents();
+    }
 
 		changeConnection.setWidget(new SelectButtonBox(new SelectButtonBox.IParent() {
 			public void show() {
@@ -382,7 +382,31 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		tapCurvedArrow(curvedArrow, this);
 		tapRectifiedArrow(rectifiedArrow, this);
 		tapGroup(group, this);
-	}
+  }
+
+  private void supportPointerEvents() {
+		surface.addDomHandler(new PointerDownHandler() {
+			@Override
+			public void onPointerDown(PointerDownEvent event) {
+        touchStart();
+			}
+		}, PointerDownEvent.getType());
+  }
+  
+  private void supportMouseTouchEvents() {
+		surface.addDomHandler(new TouchStartHandler() {
+			@Override
+			public void onTouchStart(TouchStartEvent event) {
+        touchStart();
+			}
+		}, TouchStartEvent.getType());
+  }
+
+  private void touchStart() {
+    if (popup.isShowing()) {
+      hide();
+    }
+  }
 
 	private void showContextMenu() {
 		popup.setPopupPositionAndShow(mainContextPosition);
