@@ -2,6 +2,8 @@ package net.sevenscales.editor.api;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.event.CommentModeEvent;
+import net.sevenscales.editor.api.event.PinchZoomEvent;
+import net.sevenscales.editor.api.event.PinchZoomEventHandler;
 import net.sevenscales.editor.api.event.SketchModeEvent;
 import net.sevenscales.editor.api.event.SuperQuickModeEvent;
 import net.sevenscales.editor.diagram.Diagram;
@@ -40,7 +42,18 @@ public class Tools {
 		// 			_setCommentTool(event.isEnabled());
 		// 		}
 		// 	}
-		// });
+    // });
+    
+    editorContext.getEventBus().addHandler(
+      PinchZoomEvent.TYPE,
+      new PinchZoomEventHandler() {
+        @Override
+        public void on(PinchZoomEvent event) {
+          // set hand tool to prevent modifying the board while zooming
+          setHandTool(event.getStarted());
+        }
+      }
+    );
 
 		init(this);
 	}
