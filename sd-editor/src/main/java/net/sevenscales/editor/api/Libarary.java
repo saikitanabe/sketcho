@@ -227,8 +227,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     if (TouchHelpers.isSupportsTouch()) {
       factor = 0.7f;
     }
-    toolpool.scale(factor, false);
-
+    toolpool.scale(factor, false, 0, 0);
   }
 
   private native boolean ngIsLibraryManualShowHide()/*-{
