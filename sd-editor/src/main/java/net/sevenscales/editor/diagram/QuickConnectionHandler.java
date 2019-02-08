@@ -278,9 +278,9 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 	private boolean checkToCreateQuickConnection(int screenX, int screenY, boolean fromPreviousIfAny) {
 		boolean result = false;
-		Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
-		if (notAddedFromLibrary &&
-			  selected.size() == 0 && 
+    Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
+    if (notAddedFromLibrary &&
+        selected.size() == 0 &&
 				previouslySelected != null && 
 				exists(previouslySelected)) {
 			result = createQuickConnection(screenX, screenY, fromPreviousIfAny);
@@ -289,8 +289,8 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		// remembers what has been dragged and dropped
 		notAddedFromLibrary = true;
 		return result;
-	}
-
+  }
+  
 	private boolean createQuickConnection(int screenX, int screenY, boolean fromPreviousIfAny) {
 		ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint(screenX, screenY, surface);
 		int x = stp.scaledAndTranslatedPoint.x;

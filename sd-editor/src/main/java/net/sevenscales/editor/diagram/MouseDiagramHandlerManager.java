@@ -14,6 +14,7 @@ import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
+import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.diagram.drag.MouseDiagramDragHandler;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
@@ -81,7 +82,7 @@ public class MouseDiagramHandlerManager implements
     doubleTapHandler = new DoubleTapHandler(editable, surface, selectionHandler, this);
 		resizeHandler = new MouseDiagramResizeHandler(this, surface, modeManager);
 		backgroundMoveHandler = new BackgroundMoveHandler(diagrams, surface);
-		lassoSelectionHandler = new LassoSelectionHandler(surface, this, selectionHandler);
+		lassoSelectionHandler = new LassoSelectionHandler(surface, this);
 		if (ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
 			// free hand drawing is not possible on library area
 			freehandDrawHandler = new FreehandDrawerHandler(surface);
@@ -545,6 +546,7 @@ public class MouseDiagramHandlerManager implements
 
 	public void handleDoubleTap(int x, int y, boolean shiftKey, String targetId) {
     backgroundMoveHandler.cancelBackgroundMove();
+    lassoSelectionHandler.cancel();
 
 		if (surface.getEditorContext().isFreehandMode()) {
 			// double click is disabled on freehand
@@ -577,7 +579,7 @@ public class MouseDiagramHandlerManager implements
 			return;
 		}
 
-		if (selected.size() == 1) {
+    if (selected.size() == 1) {
 			Diagram s = selected.iterator().next().getOwnerComponent();
 	    MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
 			surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(s, point));

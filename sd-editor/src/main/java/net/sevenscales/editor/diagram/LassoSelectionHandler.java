@@ -112,6 +112,10 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 		dimensionContext = new DimensionContext();
   }
 
+  public void cancel() {
+    mouseDown = false;
+  }
+
   private native void init(LassoSelectionHandler me)/*-{
   	$wnd.globalStreams.contextMenuStream.filter(function(e) {
   		return e && e.type === 'select'

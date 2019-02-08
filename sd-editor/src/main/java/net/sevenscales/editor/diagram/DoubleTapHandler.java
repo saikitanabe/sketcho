@@ -6,6 +6,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.MouseEvent;
 import com.google.gwt.user.client.Timer;
 
+import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.LongPressHandler;
 import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
@@ -19,7 +20,6 @@ class DoubleTapHandler implements
   PointerUpHandler,
   PointerMoveHandler {
   private boolean itsDoubleTap;
-  private boolean canceled;
   private IDoubleTapHandler handler;
   private ISurfaceHandler surface;
   private LongPressHandler longPressHandler;
@@ -43,9 +43,7 @@ class DoubleTapHandler implements
       longPressHandler = new LongPressHandler(surface);
       selectionHandler.addDiagramSelectionHandler(this);
 
-      handleDoubleTap();
-      // handleDoubleTap(surface.getElement(), this, DOUBLETAP_MILLIS);
-      // handleMouseDoubleClick(surface.getElement(), this);
+      initDoubleTap();
     }
 
   }
@@ -77,7 +75,7 @@ class DoubleTapHandler implements
 		handler.handleDoubleTap(x, y, shiftKey, targetId);
   }
   
-  private void handleDoubleTap() {
+  private void initDoubleTap() {
     if (PointerEventsSupport.isSupported()) {
       disableTouch(this.surface.getElement());
       supportPointerEvents();
@@ -104,7 +102,8 @@ class DoubleTapHandler implements
   }
 
   private void supportMouseTouchEvents() {
-
+    handleDoubleTap(surface.getElement(), this, DOUBLETAP_MILLIS);
+    handleMouseDoubleClick(surface.getElement(), this);
   }
 
   private boolean tapped = false;
@@ -122,7 +121,7 @@ private int tapY;
 
   @Override
 	public void onPointerUp(PointerUpEvent event) {
-    mouseDown(event);
+    handlePointerEvent(event);
   }
 
 	@Override
@@ -130,7 +129,7 @@ private int tapY;
 		// resetState();
 	}
   
-  private void mouseDown(MouseEvent event) {
+  private void handlePointerEvent(MouseEvent event) {
     itsDoubleTap = false;
 
     if (!tapped) {
@@ -149,7 +148,9 @@ private int tapY;
 
       if (Math.abs(diffx) < DOUBLETAP_POSITION_MAX_DIFF &&
           Math.abs(diffy) < DOUBLETAP_POSITION_MAX_DIFF) {
-        // Debug.log("double tap...");
+
+        // Debug.log("double tap..." + event.isShiftKeyDown());
+
         timer.cancel(); // stop single tap
         tapped = false;
         itsDoubleTap = true;
@@ -157,8 +158,8 @@ private int tapY;
         doubleTap(
           event.getClientX(),
           event.getClientY(),
-          false,
-          event.getRelativeElement().getId()
+          event.isShiftKeyDown(),
+          getTargetId(event)
         );
 
         event.preventDefault();
@@ -166,6 +167,17 @@ private int tapY;
     }
   }
 
+  private String getTargetId(MouseEvent event) {
+    if (Element.is(event.getNativeEvent().getEventTarget())) {
+      return Element.as(event.getNativeEvent().getEventTarget()).getId();
+    }
+
+    return "";
+  }
+
+  /**
+   * Used on iPad and Safari. Could be variated for safari and ios and not loaded at all on Chrome.
+   */
   private native void handleDoubleTap(Element elem, DoubleTapHandler me, int millis)/*-{
 		// Hammer has performance problems on big boards
 		// e.g. Macbook Air doesn't fire double tap at all
@@ -208,6 +220,9 @@ private int tapY;
 		})
   }-*/;
   
+  /**
+   * Used on Safari that doesn't support pointer events.
+   */
 	private native void handleMouseDoubleClick(Element e, DoubleTapHandler me)/*-{
 		$wnd.$(e).on('dblclick', function(e) {
 			e.stopPropagation()
@@ -217,10 +232,6 @@ private int tapY;
 		})
   }-*/;
   
-  private void cancelDoubleTap() {
-    this.canceled = true;
-  }
-
 	@Override
 	public void selected(List<Diagram> sender) {
     // cancelDoubleTap();
