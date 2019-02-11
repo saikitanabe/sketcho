@@ -6,13 +6,16 @@ import java.util.List;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Touch;
+import com.google.gwt.event.dom.client.MouseEvent;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.RootPanel;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
@@ -21,6 +24,8 @@ import net.sevenscales.editor.api.event.ColorSelectedEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEventHandler;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
+import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
+import net.sevenscales.editor.api.event.pointer.PointerDownHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.UIKeyHelpers;
 import net.sevenscales.editor.diagram.utils.GridUtils;
@@ -30,7 +35,9 @@ import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 
 
-public class FreehandDrawerHandler implements MouseDiagramHandler {
+public class FreehandDrawerHandler implements
+  MouseDiagramHandler, 
+  PointerDownHandler {
   private static SLogger logger = SLogger.createLogger(FreehandDrawerHandler.class);
 
   static {
@@ -132,6 +139,8 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       }
     });
 
+    RootPanel.get().addDomHandler(this, PointerDownEvent.getType());
+
     handleStreams(this);
   }
 
@@ -166,12 +175,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     }
 
     if (event.getTypeInt() == Event.ONMOUSEDOWN) {
-      if (Element.is(ne.getEventTarget())) {
-        // check is mouse down for surface or it could be some button
-        if (surface.getElement().isOrHasChild(Element.as(ne.getEventTarget()))) {
-          handleMouseDown(ne.getClientX(), ne.getClientY());
-        }
-      }
+      mouseDown(ne);
     } else if (event.getTypeInt() == Event.ONTOUCHSTART) {
       Touch touch = getTouches(ne).get(0);
       if (Element.is(ne.getEventTarget())) {
@@ -192,6 +196,20 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     } */ else if (event.getTypeInt() == Event.ONDBLCLICK) {
       handleDoubleClick(event.getNativeEvent());
     }    
+  }
+
+  @Override
+	public void onPointerDown(PointerDownEvent event) {
+    mouseDown(event.getNativeEvent());
+  }
+  
+  private void mouseDown(NativeEvent ne) {
+    if (Element.is(ne.getEventTarget())) {
+      // check is mouse down for surface or it could be some button
+      if (surface.getElement().isOrHasChild(Element.as(ne.getEventTarget()))) {
+        handleMouseDown(ne.getClientX(), ne.getClientY());
+      }
+    }
   }
 
   private native boolean isClassString(Element e)/*-{
@@ -497,5 +515,5 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 	public boolean handling() {
 		return surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE) && surface.getName().equals(ISurfaceHandler.DRAWING_AREA);
 	}
-  
+
 }
