@@ -43,7 +43,7 @@ public class LongPressHandler implements MouseDownHandler,
 	
 	static {
 		if (TouchHelpers.isSupportsTouch()) {
-			THRESHOLD = 7;
+			THRESHOLD = 20;
 		} else {
 			// mouse pointer needs smaller threshold
 			THRESHOLD = 5;
@@ -137,6 +137,7 @@ public class LongPressHandler implements MouseDownHandler,
 	}
 		
 	public void cancel() {
+    // Debug.log("LongPressHandler cancel");
 		if (timer.isScheduled) {
 			timer.cancel();
 		}
@@ -153,7 +154,8 @@ public class LongPressHandler implements MouseDownHandler,
   }
 
 	private void fireLongPress() {
-		logger.info("fireLongPress xy({}, {})...", startX, startY);
+    logger.info("fireLongPress xy({}, {})...", startX, startY);
+    // Debug.log("LongPressHandler fire");
 		surface.fireLongPress(startX, startY);
 		cancel();
 	}
