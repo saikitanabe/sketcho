@@ -24,7 +24,6 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
-import net.sevenscales.editor.uicomponents.CircleElement;
 
 
 
@@ -42,7 +41,8 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 	private boolean isLassoing;
 	private DimensionContext dimensionContext;
 	private MouseState mouseState;
-	private static final Color HIGHLIGHT_COLOR = new Color(0x6B, 0x66, 0x54, 0.8);
+  // private static final Color HIGHLIGHT_COLOR = new Color(0x6B, 0x66, 0x54, 0.8);
+  private static final Color HIGHLIGHT_COLOR = new Color(0xBE, 0x6B, 0xF7, 0.8);
 
 	private class DimensionContext {
 		int x;
@@ -293,11 +293,15 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 
 	@Override
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
-		// logger.debug("onMouseUp isLassoing={}...", isLassoing);
+    // logger.debug("onMouseUp isLassoing={}...", isLassoing);
+    
+    // always set selection tool off, otherwise is not always off
+    // after mouseup
+    surface.getEditorContext().set(EditorProperty.START_SELECTION_TOOL, false);
+
 		if (isLassoing && !GlobalState.isAddSlideMode()) {
 			selectItems(point);
 			
-			surface.getEditorContext().set(EditorProperty.START_SELECTION_TOOL, false);
 			
 			if (surface.getSelectionHandler().getLastMultimodeSelectedDiagram() != null) {
 				Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
