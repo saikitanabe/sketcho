@@ -4,8 +4,9 @@ package net.sevenscales.editor.diagram;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.Timer;
 
+import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -14,7 +15,6 @@ import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
-import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.diagram.drag.MouseDiagramDragHandler;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
@@ -53,6 +53,7 @@ public class MouseDiagramHandlerManager implements
 	private IBirdsEyeView birdsEyeView;
 //	private MouseDiagramHandler connectionModeMouseHandler;
 	private DoubleTapHandler doubleTapHandler;
+	private boolean cancelMouseDown;
 
 	public MouseDiagramHandlerManager(ISurfaceHandler surface, List<Diagram> diagrams, boolean editable, 
 	    IModeManager modeManager, IBirdsEyeView birdsEyeView) {
@@ -149,6 +150,15 @@ public class MouseDiagramHandlerManager implements
   	// logger.start("MouseDiagramHandlerManager.onMouseDown 1");
   	// logger.debug("onMouseDown sender={}...", sender);
   	try {
+
+      if (cancelMouseDown) {
+        // Fix iPad touch double tap after mouse down
+        // now double tap cancels immediate touch/mouse/pointer down
+        return false;
+      }
+
+      Debug.log("MouseDiagramHandlerManager.onMouseDown...");
+
 	    if (Tools.isHandTool() || !surface.getEditorContext().isEditable()) {
 	      // if not editable, background should be still movable
 	  		backgroundMoveHandler.onMouseDown(sender, point, keys);
@@ -542,11 +552,24 @@ public class MouseDiagramHandlerManager implements
 
 	private native void startLassoSelection()/*-{
 		$wnd.globalStreams.contextMenuStream.push({type:'select'})
-	}-*/;
+  }-*/;
+  
+  private Timer releaseCancelMouseDown = new Timer() {
+    @Override
+    public void run() {
+      Debug.log("releaseCancelMouseDown...");
+      cancelMouseDown = false;
+    }
+  };
+
 
 	public void handleDoubleTap(int x, int y, boolean shiftKey, String targetId) {
+    releaseCancelMouseDown.cancel();
     backgroundMoveHandler.cancelBackgroundMove();
     lassoSelectionHandler.cancel();
+
+    cancelMouseDown = true;
+    releaseCancelMouseDown.schedule(200);
 
 		if (surface.getEditorContext().isFreehandMode()) {
 			// double click is disabled on freehand
