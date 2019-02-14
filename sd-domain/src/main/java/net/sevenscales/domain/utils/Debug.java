@@ -25,9 +25,14 @@ public class Debug {
 	public static void println(String text) {
 	  System.out.println(text);
 	}
-	
-  public static native void log(String msg)/*-{
-  	if (typeof $wnd.console != "undefined") $wnd.console.log("Sketchboard.Me: " + msg);
+  
+  public static void log(String msg) {
+    if (LogConfiguration.loggingIsEnabled(Level.FINER)) {
+      _log(msg);
+    }
+  }
+  private static native void _log(String msg)/*-{
+  	if (typeof $wnd.console != "undefined") $wnd.console.log("Sketchboard: " + msg);
   }-*/;
 
   public static native void log(String msg, Object obj)/*-{
