@@ -6,10 +6,8 @@ import java.util.List;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.EventTarget;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Touch;
-import com.google.gwt.event.dom.client.MouseEvent;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
@@ -26,6 +24,8 @@ import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
 import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
 import net.sevenscales.editor.api.event.pointer.PointerDownHandler;
+import net.sevenscales.editor.api.event.pointer.PointerUpEvent;
+import net.sevenscales.editor.api.event.pointer.PointerUpHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.UIKeyHelpers;
 import net.sevenscales.editor.diagram.utils.GridUtils;
@@ -37,7 +37,8 @@ import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 
 public class FreehandDrawerHandler implements
   MouseDiagramHandler, 
-  PointerDownHandler {
+  PointerDownHandler,
+  PointerUpHandler {
   private static SLogger logger = SLogger.createLogger(FreehandDrawerHandler.class);
 
   static {
@@ -140,6 +141,7 @@ public class FreehandDrawerHandler implements
     });
 
     RootPanel.get().addDomHandler(this, PointerDownEvent.getType());
+    RootPanel.get().addDomHandler(this, PointerUpEvent.getType());
 
     handleStreams(this);
   }
@@ -200,6 +202,10 @@ public class FreehandDrawerHandler implements
 
   @Override
 	public void onPointerDown(PointerDownEvent event) {
+    if (!freehandMode()) {
+      return;
+    }
+
     mouseDown(event.getNativeEvent());
   }
   
@@ -284,6 +290,15 @@ public class FreehandDrawerHandler implements
 
   @Override
   public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
+    mouseUp();
+  }
+
+  @Override
+  public void onPointerUp(PointerUpEvent event) {
+    mouseUp();
+  }
+
+  private void mouseUp() {
     if (!staticMovement) {
       endDrawing();
     }
