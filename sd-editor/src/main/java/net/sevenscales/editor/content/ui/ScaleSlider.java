@@ -244,7 +244,12 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 
 	@Override
 	public void on(SurfaceScaleEvent event) {
-		updateSliderState(event.getScaleFactor());
+    if (event.isResetScale()) {
+      // reset scale only sets default zoom index
+      updateSliderState(Constants.ZOOM_DEFAULT_INDEX);
+    } else {
+      updateSliderState(event.getScaleFactor());
+    }
 	}
 
 	private void updateSliderState(int index) {

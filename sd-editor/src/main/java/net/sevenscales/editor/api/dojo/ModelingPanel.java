@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -98,9 +99,13 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
 		editorContext.getEventBus().addHandler(SurfaceScaleEvent.TYPE, new SurfaceScaleEventHandler() {
 			@Override
 			public void on(SurfaceScaleEvent event) {
-				double factor = Constants.ZOOM_FACTORS[event.getScaleFactor()];
-//				surface.invertScale();
-			  surface.scale(factor, event.isWheel(), event.getMiddleX(), event.getMiddleY());
+        if (!event.isResetScale()) {
+          double factor = Constants.ZOOM_FACTORS[event.getScaleFactor()];
+  //				surface.invertScale();
+          surface.scale(factor, event.isWheel(), event.getMiddleX(), event.getMiddleY());
+        } else {
+          resetScaleAt(event.getMiddleX(), event.getMiddleY());
+        }
 //			  int dx = 0;
 //			  int dy = 0;
 //		  	double val = ScaleHelpers.scaleValue(1, factor);
@@ -114,8 +119,8 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
 //	      surface.getRootLayer().setTransform(surface.getRootLayer().getTransformX() + dx, 
 //	      																		surface.getRootLayer().getTransformY() + dy);
 			}
-		});
-
+    });
+    
 		editorContext.getEventBus().addHandler(
 				RelationshipNotAttachedEvent.TYPE, 
 				new RelationshipDragEndHandler(surface));
@@ -242,7 +247,30 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
 		// >>>>>>>>>>> SOLU
 		// scaleOnLoad(this);
 		// <<<<<<<<<<< SOLU
-	}
+  }
+  
+  private void resetScaleAt(int left, int top) {
+    // 1. zero transform to make calculations easy
+    surface.setTransform(0, 0);
+
+    // 2. scale at 0,0
+    // need to scale directly without setting scale slider
+    // index and having call scale like that
+    // because that comes later and iPad doesn't focus
+    // editor any longer.
+    double factor = Constants.ZOOM_FACTORS[Constants.ZOOM_DEFAULT_INDEX];
+//				surface.invertScale();
+    surface.scale(factor, false, left, top);
+
+    // // 3. move mouse point to 0,0 then move half the screen size to right
+    // // 		to center the mouse point
+    double clientWidth = Window.getClientWidth();
+    double clientHeight = Window.getClientHeight();
+
+    int posx = (int) (-left + clientWidth / 2);
+    int posy = (int) (-top + clientHeight / 2);
+    surface.setTransform(posx, posy);
+  }
 
 	// >>>>>>>>>> SOLU
   private native void scaleOnLoad(ModelingPanel me)/*-{

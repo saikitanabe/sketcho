@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import net.sevenscales.domain.IDiagramItemRO;
-import net.sevenscales.domain.constants.Constants;
+import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
@@ -26,8 +26,8 @@ import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
 import net.sevenscales.editor.api.event.ChangeTextSizeEventHandler;
 import net.sevenscales.editor.api.event.ColorSelectedEvent;
-import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorSetType;
+import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
 import net.sevenscales.editor.api.event.ColorSelectedEventHandler;
 import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
 import net.sevenscales.editor.api.event.DiagramElementAddedEventHandler;
@@ -44,7 +44,6 @@ import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.texteditor.ITextEditor;
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
-import net.sevenscales.editor.content.utils.ColorHelpers;
 import net.sevenscales.editor.diagram.ClickDiagramHandler;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.Diagram.SizeChangedHandler;
@@ -52,8 +51,6 @@ import net.sevenscales.editor.diagram.DiagramSelectionHandler;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
-import net.sevenscales.editor.diagram.utils.UiUtils;
-import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.ElementColor;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
@@ -415,6 +412,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 	
 	private void hide() {
+    Debug.log("Properties.hide");
+
 		popup.hide();
 		selectedDiagram = null;
 	}
@@ -599,11 +598,24 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			return;
 		}
 
-		if (surface.getScaleFactor() < 0.8 && !UiUtils.isMobile()) {
+    if (surface.getScaleFactor() < 1
+        // ST 15.2.2019: commented out to enable zooming on iPad.
+        // && !UiUtils.isMobile()
+        ) {
 			// zoom to mouse position
 			// not when using iPad (mobile) focus goes wrong
 			editorContext.getEventBus().fireEvent(
-				new SurfaceScaleEvent(Constants.ZOOM_DEFAULT_INDEX, true)
+				new SurfaceScaleEvent(
+          true,
+          selectedDiagram.getCenterX(),
+          selectedDiagram.getCenterY()
+        )
+				// new SurfaceScaleEvent(
+        //   Constants.ZOOM_DEFAULT_INDEX,
+        //   false,
+        //   selectedDiagram.getCenterX(),
+        //   selectedDiagram.getCenterY()
+        // )
 			);
 		}
 		

@@ -8,16 +8,17 @@ public class SurfaceScaleEvent extends GwtEvent<SurfaceScaleEventHandler> {
 	private boolean wheel;
 	private int middleX;
 	private int middleY;
+	private boolean resetScale;
 
-  public SurfaceScaleEvent(int scaleFactor) {
-  	this.scaleFactor = scaleFactor;
-  	this.wheel = false;
-	}
+  // public SurfaceScaleEvent(int scaleFactor) {
+  // 	this.scaleFactor = scaleFactor;
+  // 	this.wheel = false;
+	// }
 
-  public SurfaceScaleEvent(int scaleFactor, boolean wheel) {
-  	this.scaleFactor = scaleFactor;
-  	this.wheel = wheel;
-  }
+  // public SurfaceScaleEvent(int scaleFactor, boolean wheel) {
+  // 	this.scaleFactor = scaleFactor;
+  // 	this.wheel = wheel;
+  // }
   
   public SurfaceScaleEvent(
     int scaleFactor,
@@ -29,6 +30,30 @@ public class SurfaceScaleEvent extends GwtEvent<SurfaceScaleEventHandler> {
     this.wheel = wheel;
     this.middleX = middleX;
     this.middleY = middleY;
+  }
+
+  public SurfaceScaleEvent(
+    boolean resetScale,
+    int middleX,
+    int middleY
+  ) {
+    this.setResetScale(resetScale);
+    this.middleX = middleX;
+    this.middleY = middleY;
+  }
+
+  /**
+   * @return the resetScale
+   */
+  public boolean isResetScale() {
+    return resetScale;
+  }
+
+  /**
+   * @param resetScale the resetScale to set
+   */
+  public void setResetScale(boolean resetScale) {
+    this.resetScale = resetScale;
   }
   
 	@Override
