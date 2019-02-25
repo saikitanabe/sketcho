@@ -24,7 +24,7 @@ class DoubleTapHandler implements
   private ISurfaceHandler surface;
   private LongPressHandler longPressHandler;
   private static final int DOUBLETAP_MILLIS = 300;
-  private static final int DOUBLETAP_POSITION_MAX_DIFF = 10;
+  private static final int DOUBLETAP_POSITION_MAX_DIFF = 20;
 
   interface IDoubleTapHandler {
     void handleDoubleTap(int x, int y, boolean shiftKey, String targetId);
@@ -58,12 +58,42 @@ class DoubleTapHandler implements
     timer.cancel();
   }
 
-	private void doubleTap(int x, int y, boolean shiftKey, String targetId) {
-		// logger.debug("doubleTap...");
+	private void doubleTouchTap(
+    int tapX,
+    int tapY,
+    int tapClientHeight,
+    int doubleTapX,
+    int doubleTapY,
+    int doubleTapClientHeight,
+    boolean shiftKey,
+    String targetId
+  ) {
+
+    // height of soft keyboard
+    int softKeyboard = Math.abs(doubleTapClientHeight - tapClientHeight);
+
+    if (!checkPass(tapX - doubleTapX, tapY - (softKeyboard + doubleTapY))) {
+      return;
+    }
+
+    // iOS: use tap (not double tap) position to create shape
+    // when soft keyboard was visible
+    doubleTap(
+      tapX,
+      tapY,
+      shiftKey,
+      targetId
+    );
+  }
+	private void doubleTap(int tapX, int tapY, boolean shiftKey, String targetId) {
+		Debug.log("doubleTap...");
     // cannot check connect mode, or will not show property editor
+    itsDoubleTap = true;
     
     longPressHandler.cancel();
-		handler.handleDoubleTap(x, y, shiftKey, targetId);
+    handler.handleDoubleTap(tapX, tapY, shiftKey, targetId);
+    
+    timer.schedule(200);
 	}
 
 	/**
@@ -92,7 +122,7 @@ class DoubleTapHandler implements
   private native void disableTouch(Element elem)/*-{
     $wnd.$(elem).on("touchstart",function(e){
       e.preventDefault()
-      console.log('tap prevent touch default')
+      // console.log('tap prevent touch default')
     })
   }-*/;
 
@@ -102,7 +132,7 @@ class DoubleTapHandler implements
   }
 
   private void supportMouseTouchEvents() {
-    handleDoubleTap(surface.getElement(), this, DOUBLETAP_MILLIS);
+    initDoubleTap(surface.getElement(), this, DOUBLETAP_MILLIS);
     handleMouseDoubleClick(surface.getElement(), this);
   }
 
@@ -116,8 +146,8 @@ class DoubleTapHandler implements
       // Debug.log("single tap...");
     }
   };
-private int tapX;
-private int tapY;
+  private int tapX;
+  private int tapY;
 
   @Override
 	public void onPointerUp(PointerUpEvent event) {
@@ -146,8 +176,7 @@ private int tapY;
       int diffx = event.getClientX() - tapX;
       int diffy = event.getClientY() - tapY;
 
-      if (Math.abs(diffx) < DOUBLETAP_POSITION_MAX_DIFF &&
-          Math.abs(diffy) < DOUBLETAP_POSITION_MAX_DIFF) {
+      if (checkPass(diffx, diffy)) {
 
         // Debug.log("double tap..." + event.isShiftKeyDown());
 
@@ -167,6 +196,11 @@ private int tapY;
     }
   }
 
+  private boolean checkPass(int diffx, int diffy) {
+    return Math.abs(diffx) < DOUBLETAP_POSITION_MAX_DIFF &&
+      Math.abs(diffy) < DOUBLETAP_POSITION_MAX_DIFF;
+  }
+
   private String getTargetId(MouseEvent event) {
     if (Element.is(event.getNativeEvent().getEventTarget())) {
       return Element.as(event.getNativeEvent().getEventTarget()).getId();
@@ -178,7 +212,7 @@ private int tapY;
   /**
    * Used on iPad and Safari. Could be variated for safari and ios and not loaded at all on Chrome.
    */
-  private native void handleDoubleTap(Element elem, DoubleTapHandler me, int millis)/*-{
+  private native void initDoubleTap(Element elem, DoubleTapHandler me, int millis)/*-{
 		// Hammer has performance problems on big boards
 		// e.g. Macbook Air doesn't fire double tap at all
 		// user reported bug
@@ -196,14 +230,25 @@ private int tapY;
 		// 	}
 		// })
 
-		var tapped = null
+    var tapped = null
+    var tapX = 0
+    var tapY = 0
+    var tapClientHeight = 0
 
 		$wnd.$(elem).on("touchstart",function(e){
 	    if (!tapped){ //if tap is not set, set up single tap
 	      tapped = setTimeout(function(){
 	        tapped = null
 	        //insert things you want to do when single tapped
-	      }, millis)   //wait 300ms then run single click code
+        }, millis)   //wait 300ms then run single click code
+				var touches = e.originalEvent.touches
+				if (touches && touches.length == 1) {
+          tapX = touches[0].screenX
+          tapY = touches[0].screenY
+          tapClientHeight = $wnd.innerHeight
+
+          // console.log('on tap: tapX', tapX, 'tapY', tapY, tapClientHeight, touches[0])
+        }        
 	    } else {    //tapped within 300ms of last tap. double tap
 	      clearTimeout(tapped) //stop single tap callback
 	      tapped = null
@@ -212,11 +257,41 @@ private int tapY;
 
 				var touches = e.originalEvent.touches
 				if (touches && touches.length == 1) {
-		      me.@net.sevenscales.editor.diagram.DoubleTapHandler::doubleTap(IIZLjava/lang/String;)(touches[0].clientX, touches[0].clientY, false, e.target.id);
+//          me.@net.sevenscales.editor.diagram.DoubleTapHandler::doubleTap(IIZLjava/lang/String;)(touches[0].clientX, touches[0].clientY, false, e.target.id);
+
+          var doubleTapX = touches[0].screenX
+          var doubleTapY = touches[0].screenY
+          var doubleTapClientHeight = $wnd.innerHeight
+
+          // console.log(
+          //   'on double tap: tapX',
+          //   tapX,
+          //   'tapY',
+          //   tapY,
+          //   'tapClientHeight',
+          //   tapClientHeight,
+          //   'doubleTapX',
+          //   doubleTapX,
+          //   'doubleTapY',
+          //   doubleTapY,
+          //   'doubleTapClientHeight',
+          //   doubleTapClientHeight
+          // )
+
+          me.@net.sevenscales.editor.diagram.DoubleTapHandler::doubleTouchTap(IIIIIIZLjava/lang/String;)(
+            tapX,
+            tapY,
+            tapClientHeight,
+            doubleTapX,
+            doubleTapY,
+            doubleTapClientHeight,
+            false,
+            e.target.id
+          );
 				}
 	    }
 
-	    e.preventDefault()
+      e.preventDefault()
 		})
   }-*/;
   
