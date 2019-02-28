@@ -624,22 +624,25 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		if (colorpopup.isShowing()) {
 			colorpopup.hide();
 		} else {
-			if (TouchHelpers.isSupportsTouch()) {
+      // ST 28.2.2019 no longer touch device have a different
+      // position for showing color selections.
+      // Color buttons are now bigger to be use on iPad
+			// if (TouchHelpers.isSupportsTouch()) {
 
-				Diagram selected = selectionHandler.getOnlyOneSelected();
-				if (selected != null) {
-					colorSelections.setCurrentDiagramColor(
-						selected.getTextColor(),
-						selected.getBackgroundColorAsColor(),
-						selected.getBorderColor()
-					);
-				}
+			// 	Diagram selected = selectionHandler.getOnlyOneSelected();
+			// 	if (selected != null) {
+			// 		colorSelections.setCurrentDiagramColor(
+			// 			selected.getTextColor(),
+			// 			selected.getBackgroundColorAsColor(),
+			// 			selected.getBorderColor()
+			// 		);
+			// 	}
 
-				colorSelections.showHeader();
-				colorpopup.center();
-			} else {
+			// 	colorSelections.showHeader();
+			// 	colorpopup.center();
+			// } else {
 				setColorPopupRelativePosition();
-			}
+			// }
 		}
 		EffectHelpers.tooltipperHide();
 	}
