@@ -24,7 +24,24 @@ public class Debug {
 	
 	public static void println(String text) {
 	  System.out.println(text);
-	}
+  }
+  
+  public static void callstack(String msg) {
+    if (LogConfiguration.loggingIsEnabled(Level.FINER)) {
+      try {
+        if (true) {
+          throw new RuntimeException("test");
+        }
+      } catch (Exception err) {
+        String stack = "";
+        for (StackTraceElement ste : err.getStackTrace()) {
+          stack += ste.getMethodName() + ": " + ste.getFileName() + " " + ste.getLineNumber() + "\n";
+        }
+    
+        Debug.log(msg + "... stack:\n" + stack);
+      }
+    }
+  }
   
   public static void log(String msg) {
     if (LogConfiguration.loggingIsEnabled(Level.FINER)) {
