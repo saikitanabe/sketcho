@@ -206,9 +206,11 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
 
   private void mouseMove(Diagram sender, MatrixPointJS point) {
     // with connection helpers, it is not necessary to have a threshold
-    // if (Math.abs(downX - point.getX()) < 5 && Math.abs(downY - point.getY()) < 5) {
-    //  return;
-    // }
+    // ST 28.2.2019: iPad Pro at least needs this or start to create a self
+    // connection on a click
+    if (Math.abs(downX - point.getX()) < 10 && Math.abs(downY - point.getY()) < 10) {
+     return;
+    }
     
     if (createdRelationship != null && currentAnchorElement != null) {
       logger.debug("SketchDiagramAreaHandler.onMouseMove createdRelationship {}...", createdRelationship);
