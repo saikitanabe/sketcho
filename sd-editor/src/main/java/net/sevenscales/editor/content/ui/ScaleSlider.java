@@ -37,7 +37,7 @@ import net.sevenscales.editor.diagram.utils.UiUtils;
 public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private static SLogger logger = SLogger.createLogger(ScaleSlider.class);
 
-	private static final double TRESHOLD = 10;
+	private static final double TRESHOLD = 5;
 
 	private EditorContext editorContext;
 	private ISurfaceHandler surface;
