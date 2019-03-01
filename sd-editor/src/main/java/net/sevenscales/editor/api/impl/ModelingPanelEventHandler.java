@@ -83,8 +83,10 @@ public class ModelingPanelEventHandler implements
 		int keys = e.getShiftKey() ? IGraphics.SHIFT : 0;
 		keys |= e.getAltKey() ? IGraphics.ALT : 0;
 		if (surface.getElement().isOrHasChild(Element.as(event.getNativeEvent().getEventTarget()))) {
-			surface.onMouseDown((GraphicsEvent) e, keys);
-			event.getNativeEvent().preventDefault();
+      surface.onMouseDown((GraphicsEvent) e, keys);
+      // Pointer down event is not fired
+      // on Hammer2.ts if default is prevented.
+			// event.getNativeEvent().preventDefault();
 		} else if (toolFrame.getToolbar().getElement().isOrHasChild(Element.as(event.getNativeEvent().getEventTarget()))) {
 			toolFrame.getToolbar().onMouseDown((GraphicsEvent) e, keys);
 		}
@@ -112,11 +114,14 @@ public class ModelingPanelEventHandler implements
 
   @Override
 	public void onPointerUp(PointerUpEvent event) {
+    // Debug.log("onPointerUp...");
     mouseUp(event);
 	}
 
 	@Override
 	public void onPointerDown(PointerDownEvent event) {
+    // Debug.log("onPointerDown...");
+    
     mouseDown(event);
 	}
 
