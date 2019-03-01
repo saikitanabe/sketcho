@@ -15,6 +15,7 @@ import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
+import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEventHandler;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.diagram.drag.MouseDiagramDragHandler;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
@@ -112,7 +113,18 @@ public class MouseDiagramHandlerManager implements
 			handleOnline(this);
 		}
 		// addMouseDiagramHandler(sketchDiagramAreaHandler);
-	}
+  }
+  
+  private ShowDiagramPropertyTextEditorEventHandler showEditorHandler = 
+    new ShowDiagramPropertyTextEditorEventHandler() {
+
+    @Override
+    public void on(ShowDiagramPropertyTextEditorEvent event) {
+      cancelMouseDown = true;
+      releaseCancelMouseDown.schedule(200);      
+    }
+
+  };
 
 	private native void handleOnline(MouseDiagramHandlerManager me)/*-{
 		if (typeof $wnd.globalStreams !== 'undefined') {
@@ -339,10 +351,16 @@ public class MouseDiagramHandlerManager implements
 	}
 
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
+    if (cancelMouseDown) {
+      // Fix iPad after quick connection handler created shape editor is closed
+      // now show editor blocks next touch/mouse/pointer up
+      return;
+    }
+
 		if (doubleTapHandler.isDoubleTap()) {
 			// double tap is handling this currently
 			// reset the state
-      doubleTapHandler.resetState();
+      // doubleTapHandler.resetState();
 			return;
 		}
 
@@ -540,7 +558,7 @@ public class MouseDiagramHandlerManager implements
 	 * @param y
 	 */
 	public void fireLongPress(int x, int y) {
-		if (modeManager.isConnectMode() || surface.getEditorContext().isFreehandMode() || Tools.isHandTool()) {
+		if (modeManager.isConnectMode() || surface.getEditorContext().isFreehandMode() || Tools.isHandTool() || isResizing()) {
 			// do not handle long press when connection mode is on. 
 			// User is probably trying to draw connection. 
 			return;
@@ -596,7 +614,7 @@ public class MouseDiagramHandlerManager implements
 		
 		Set<Diagram> selected = selectionHandler.getSelectedItems();
 
-		if (selected.size() == 1 && targetId.equals(ISurfaceHandler.DRAWING_AREA) && quickConnectionHandler.handleSurfaceDoubleTap()) {
+		if (selected.size() == 1 && targetId.equals(ISurfaceHandler.DRAWING_AREA) && quickConnectionHandler.handleSurfaceDoubleTap(x, y)) {
 			// it is double tap on surface not on a shape, so check if shoudl create quick connection
 			// target is always the original root of the event target
 			return;
@@ -607,7 +625,7 @@ public class MouseDiagramHandlerManager implements
 	    MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
 			surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(s, point));
 		} else if (selected.size() == 0) {
-			if (!quickConnectionHandler.handleDoubleTap()) {
+			if (!quickConnectionHandler.handleDoubleTap(x, y)) {
 				surface.getEditorContext().getEventBus().fireEvent(new BoardEmptyAreaClickedEvent(x, y));
 			}
 		}
