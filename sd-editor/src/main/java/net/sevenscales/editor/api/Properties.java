@@ -57,7 +57,11 @@ import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
 public class Properties extends SimplePanel implements DiagramSelectionHandler, ClickDiagramHandler, SizeChangedHandler, IEditor, ITextEditor.TextChanged {
-	private static final SLogger logger = SLogger.createLogger(Properties.class);
+  private static final SLogger logger = SLogger.createLogger(Properties.class);
+  
+	static {
+		SLogger.addFilter(Properties.class);
+	}
 
 	private static final String PROPERTIES_EDITOR_STYLE = "properties-TextArea2";
 	
@@ -89,6 +93,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		public void on(ShowDiagramPropertyTextEditorEvent event) {
 			Diagram diagram = event.getDiagram();
 			if (diagram.supportsTextEditing()) {
+        logger.debug("ShowDiagramPropertyTextEditorEvent...");
 				selectedDiagram = diagram;
 				modifiedAtLeastOnce = event.markAsDirty();
 				surface.getEditorContext().set(EditorProperty.PROPERTY_EDITOR_SELECT_ALL_ENABLED, true);
@@ -406,16 +411,17 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 
 	private void closeIfOpen() {
-		if (popup.isShowing()) {
-			hide();
-		}
-	}
-	
+      hide();
+  }
+  
 	private void hide() {
     Debug.log("Properties.hide");
+    // Debug.callstack("Properties.hide");
 
-		popup.hide();
-		selectedDiagram = null;
+    if (popup.isShowing()) {
+      popup.hide();
+    }
+    selectedDiagram = null;
 	}
 		
 	public void addSurface(ISurfaceHandler surfaceHandler, boolean modifiable) {
