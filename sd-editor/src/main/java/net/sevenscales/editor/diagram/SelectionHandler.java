@@ -20,6 +20,7 @@ import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.KeyboardListener;
 
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.Error;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ActionType;
@@ -52,7 +53,10 @@ import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
 
 public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
-	private static final SLogger logger = SLogger.createLogger(SelectionHandler.class);
+  private static final SLogger logger = SLogger.createLogger(SelectionHandler.class);
+  static {
+    SLogger.addFilter(SelectionHandler.class);
+  }
 	
 //	private Diagram mouseDownSender = null;
 	private List<Diagram> diagrams;
@@ -881,7 +885,9 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   }
 
   public void unselectAll() {
-  	logger.debug("unselectAll...");
+    // Debug.log("SelectionHandler unselectAll...");
+    // Debug.callstack("SelectionHandler unselectAll...");
+
     logger.start("unselectAll");
     for (int i = 0; i < diagrams.size(); ++i) {
       // nobody handled, so unselect all
