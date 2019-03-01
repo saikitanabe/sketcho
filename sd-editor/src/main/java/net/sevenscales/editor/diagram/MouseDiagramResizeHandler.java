@@ -15,7 +15,11 @@ import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Point;
 
 public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiagramDoubleClickHandler, MouseLongPressHandler {
-	private static final SLogger logger = SLogger.createLogger(MouseDiagramResizeHandler.class);
+  private static final SLogger logger = SLogger.createLogger(MouseDiagramResizeHandler.class);
+  
+  static {
+    SLogger.addFilter(MouseDiagramResizeHandler.class);
+  }
 
 	private Diagram sender;
 	private MouseDiagramHandlerManager parent;
@@ -102,7 +106,11 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
     if (!surface.isDragEnabled()) {
       return;
     }
-    
+
+    if (!gridUtils.passTreshold(point, 5)) {
+      return;
+    }
+
 		if (mouseDown && onResizeArea) { 
 //      if (!gridUtils.pass(x, y)) {
 //        return;
@@ -115,8 +123,12 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 
 				this.sender.resizeStart();
 				resizeHandlerCollection.fireResizeStart(this.sender);
-			}
-			resizing = true;
+      }
+      
+      logger.debug("Resizing ON");
+      resizing = true;
+      
+  
 			// resize component
 //			System.out.println("resize component:" + resizeInfo.area);
 			
@@ -158,7 +170,7 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 			
 			// System.out.println("resizing: diffTemp.x" + dx + " diffTemp.y" + dy);
 
-			if (this.sender.resize(diffTemp)) {
+      if (this.sender.resize(diffTemp)) {
 				// returns true if resized; there is minimum resize level for 
 				// components
 				resizeHandlerCollection.fireOnResize(this.sender, diffTemp);
@@ -200,7 +212,8 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 		this.sender = null;
 		mouseDown = false;
 		resizing = false;
-		onResizeArea = false;
+    onResizeArea = false;
+    logger.debug("Resizing OFF");
 	}
 
 	/**
