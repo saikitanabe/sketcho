@@ -200,7 +200,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		// }
 	}
 
-	public boolean handleDoubleTap() {
+	public boolean handleDoubleTap(int x, int y) {
 		logger.debug("handleDoubleTap...");
 		itWasDoubleTap = true;
 
@@ -215,15 +215,16 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		// 			return false;
 		// 		}
 		// 	}, 500);		
-		return maybeStartSuperFlow();
+		return maybeStartSuperFlow(x, y);
 	}
 
-	public boolean handleSurfaceDoubleTap() {
+	public boolean handleSurfaceDoubleTap(int x, int y) {
 		boolean result = false;
 		try {
 			if (mouseUpPoint != null) {
 				boolean fromPreviousIfAny = this.mouseUpKeys == IGraphics.SHIFT;
-				result = createQuickConnection(mouseUpPoint.getScreenX(), mouseUpPoint.getScreenY(), fromPreviousIfAny);
+				// result = createQuickConnection(mouseUpPoint.getScreenX(), mouseUpPoint.getScreenY(), fromPreviousIfAny);
+				result = createQuickConnection(x, y, fromPreviousIfAny);
 			}
 			return result;
 		} catch (Exception e) {
@@ -232,7 +233,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		return result;
 	}
 
-	private boolean maybeStartSuperFlow() {
+	private boolean maybeStartSuperFlow(int x, int y) {
 		boolean result = false;
 		try {
 			// if (Tools.isQuickMode()) {
@@ -244,7 +245,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 					// anyway better to have some optimization
 				if (mouseUpPoint != null) {
 					boolean fromPreviousIfAny = this.mouseUpKeys == IGraphics.SHIFT;
-					result = checkToCreateQuickConnection(mouseUpPoint.getScreenX(), mouseUpPoint.getScreenY(), fromPreviousIfAny);
+					result = checkToCreateQuickConnection(x, y, fromPreviousIfAny);
 				}
 			// }
 
