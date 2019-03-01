@@ -42,7 +42,8 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 	private DimensionContext dimensionContext;
 	private MouseState mouseState;
   // private static final Color HIGHLIGHT_COLOR = new Color(0x6B, 0x66, 0x54, 0.8);
-  private static final Color HIGHLIGHT_COLOR = new Color(0xBE, 0x6B, 0xF7, 0.8);
+  // private static final Color HIGHLIGHT_COLOR = new Color(0xBE, 0x6B, 0xF7, 1);
+  private static final Color HIGHLIGHT_COLOR = new Color(0x00, 0xbf, 0xff, 1);
 
 	private class DimensionContext {
 		int x;
