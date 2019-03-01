@@ -10,7 +10,7 @@ public class GridUtils {
 	* since starting point. More usable with Wacom Bamboo Tablet Pen. Also prevents
 	* mistakes...
 	*/
-	private static final int TRESHOLD = 5;
+	private static final int TRESHOLD = 20;
 
   private Point prevMovePoint = new Point();
 	private int dragStartX = 0;
@@ -48,11 +48,16 @@ public class GridUtils {
   }
 
   public boolean passTreshold(MatrixPointJS point) {
+    return passTreshold(point, TRESHOLD);
+  }
+  
+  public boolean passTreshold(MatrixPointJS point, int treshold) {
   	if (passed) {
   		return true;
   	}
 
-		if (Math.abs(dx(point.getScreenX())) >= TRESHOLD || Math.abs(dy(point.getScreenY())) >= TRESHOLD) {
+    if (Math.abs(dx(point.getScreenX())) >= treshold 
+      || Math.abs(dy(point.getScreenY())) >= treshold) {
 			passed = true;
 			return true;
 		}
