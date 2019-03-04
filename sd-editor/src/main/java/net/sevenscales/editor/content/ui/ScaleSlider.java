@@ -409,12 +409,17 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	@Override
   public void scale(int index) {
   	if (fireEvent) {
-			editorContext.getEventBus().fireEvent(
-        new SurfaceScaleEvent(index,
-        false,
-        middleX,
-        middleY
-      ));
+
+      if (wheel) {
+        editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(index, wheel));
+      } else {
+        editorContext.getEventBus().fireEvent(
+          new SurfaceScaleEvent(index,
+          false,
+          middleX,
+          middleY
+        ));
+      }
 			// unfocus everything, or otherwise shortcuts are not working
 			// that use key press events, focus steals press events and should
 			// handle keydown, but e.g. +, - signs have different keycodes on 
