@@ -3,9 +3,13 @@ package net.sevenscales.editor.diagram;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.js.JsSlideData;
+import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -24,6 +28,7 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 
 
 
@@ -41,6 +46,10 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 	private boolean isLassoing;
 	private DimensionContext dimensionContext;
 	private MouseState mouseState;
+
+	private OrgEvent prevEvent;
+
+	private boolean preventLassoSelection;
   // private static final Color HIGHLIGHT_COLOR = new Color(0x6B, 0x66, 0x54, 0.8);
   // private static final Color HIGHLIGHT_COLOR = new Color(0xBE, 0x6B, 0xF7, 1);
   private static final Color HIGHLIGHT_COLOR = new Color(0x00, 0xbf, 0xff, 1);
@@ -134,7 +143,17 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
   private void select(boolean immediately) {
   	if (surface.isLibrary()) {
   		return;
-  	}
+    }
+    
+    if (preventLassoSelection) {
+      // 1. LassoSelectionHandler gets pointer down first - prevents long press for a shape
+      // 2. LassoSelectionHandler gets bubbled pointer down, but ignores that because
+      // time stamp is the same
+      // 3. select is prevented from LongPressSelection handler
+      // 4. next time pointer down event has different timestamp and passes
+      // surface pointer down event
+      return;
+    }
   	
 		surface.getEditorContext().set(EditorProperty.START_SELECTION_TOOL, true);
 		if (immediately) {
@@ -146,7 +165,34 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 		}
   }
 
-  public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+  @Override
+  public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
+    Debug.log("onMouseDown... sender != null", sender != null);
+
+    if (sender == null &&
+        prevEvent != null &&
+        prevEvent.getTimeStamp() == event.getTimeStamp()) {
+      // lasso selection should not activate when long pressing a shape
+      // now sends two events
+      // 1. event from the shape
+      // 2. event from the surface
+      // if timestamp is the same then this has been already been handled
+      return false;
+    }
+
+    prevEvent = event;
+
+    if (sender != null) {
+      // this event is coming from a shape, ignore long press event
+      // document sends this event as well, and prevent long press
+      // coming from a shape
+      preventLassoSelection = true;
+      return false;
+    }
+
+    // enable lasso selection from the board
+    preventLassoSelection = false;
+
   	if (surface.isLibrary()) {
   		return false;
   	}
@@ -181,7 +227,8 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
   	return keys == IGraphics.SHIFT ? true : false;
 	}
 
-	public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+  @Override
+	public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
 //    mouseDown = false;
 //    backgroundMouseDown = true;
   }
@@ -191,7 +238,8 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 //    backgroundMouseDown = true;
   }
 
-  public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  @Override
+  public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
     if (!surface.isDragEnabled()) {
       return;
     }
@@ -387,11 +435,11 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 	}
 
 	@Override
-	public void onTouchStart(Diagram sender, MatrixPointJS point) {
+	public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
 	}
 	
   @Override
-  public void onTouchMove(Diagram sender, MatrixPointJS point) {
+  public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
