@@ -10,8 +10,8 @@ import java.util.Set;
 
 import com.google.gwt.user.client.Window;
 
-import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
@@ -42,6 +42,7 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
@@ -154,7 +155,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		return line;
 	}
 
-	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+	public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
 		if (sender != null && !parent.isResizing() && !surface.getEditorContext().isFreehandMode()) {
 			// Debug.print("onMouseDown:"+x+"y:"+y);
 			// System.out.println("drag mouse down"+sender);
@@ -177,14 +178,16 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		return false;
 	}
 
-	public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+  @Override
+	public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
 
 	}
 
 	public void onMouseLeave(Diagram sender, MatrixPointJS point) {
 	}
 
-	public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  @Override
+	public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
 		if (sender != null) {
 			// handle only canvas move events
 			return;
@@ -281,7 +284,7 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	}
 
 	private void drag(MatrixPointJS point) {
- 		if (currentDiagram != null && !parent.isResizing() && gridUtils.passTreshold(point)) {
+ 		if (currentDiagram != null && !parent.isResizing() && gridUtils.passTreshold(point, 5)) {
 			// if not resizing area => drag
 			if (mouseDown && !dragging) {
 				// Debug.print("dragstarted");
@@ -466,14 +469,14 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 	}
 
 	@Override
-	public void onTouchStart(Diagram sender, MatrixPointJS point) {
+	public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
   	if (surface.getEditorContext().isEditable()) {
-			onMouseDown(sender, point, 0);
+			onMouseDown(event, sender, point, 0);
 		}
 	}
 	
   @Override
-  public void onTouchMove(Diagram sender, MatrixPointJS point) {
+  public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
   	if (surface.getEditorContext().isEditable()) {
 	  	drag(point);
   	}
