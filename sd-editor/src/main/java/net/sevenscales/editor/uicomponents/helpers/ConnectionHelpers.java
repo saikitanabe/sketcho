@@ -279,7 +279,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		}
 	}
 	private void show(AbstractDiagramItem parent, int left, int top, int width, int height) {
-		if (propertyEditorShown || resizeOn || freehandModeOn || someElementIsDragged) {
+		if (propertyEditorShown || resizeOn || freehandModeOn || someElementIsDragged || surface.getSelectionHandler().getOnlyOneSelected() == null) {
 			// do not show connection helpers if property editor is shown
 			// do not show if resize is on going
 			logger.debug("show propertyEditorShown {} resizeOn {} freehandModeOn {} someElementIsDragged {}", propertyEditorShown, resizeOn, freehandModeOn, someElementIsDragged);
