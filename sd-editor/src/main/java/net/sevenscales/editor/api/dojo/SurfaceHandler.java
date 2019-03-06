@@ -85,6 +85,7 @@ import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.ISurface;
 import net.sevenscales.editor.gfx.domain.JsSvg;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.uicomponents.CircleElement;
 
 
@@ -694,7 +695,7 @@ class SurfaceHandler extends SimplePanel implements
     MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, getScaleFactor());
 //    int x = event.getElementOffsetX(getElement());
 //    int y = event.getElementOffsetY(getElement());
-    mouseDiagramManager.onMouseDown(null, point, keys);
+    mouseDiagramManager.onMouseDown(new OrgEvent(event), null, point, keys);
     
 //    if (properties != null) {
 //      properties.setFocus(true);
@@ -922,11 +923,11 @@ class SurfaceHandler extends SimplePanel implements
     return proxyOnDrag;
   }
 
-  public void addAsDragging(Diagram diagram, boolean ownerComponent, MatrixPointJS point, int keys) {
+  public void addAsDragging(OrgEvent event, Diagram diagram, boolean ownerComponent, MatrixPointJS point, int keys) {
     proxyDragAdd = true;
     add(diagram, ownerComponent);
     mouseDiagramManager.select(diagram);
-    mouseDiagramManager.getDragHandler().onMouseDown(diagram, point, keys);
+    mouseDiagramManager.getDragHandler().onMouseDown(event, diagram, point, keys);
     proxyDragAdd = false;
 //    mouseDiagramManager.onMouseMove(null, x-10, y);
   }

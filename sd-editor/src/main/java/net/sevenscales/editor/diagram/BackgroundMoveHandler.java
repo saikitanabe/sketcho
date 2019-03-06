@@ -14,6 +14,7 @@ import net.sevenscales.editor.api.event.PinchZoomEventHandler;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 
 
 public class BackgroundMoveHandler implements MouseDiagramHandler {
@@ -69,7 +70,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
     backgroundMoving = false;
   }
 
-	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+	public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
   	if (!surface.isDragEnabled()) {
   		return false;
   	}
@@ -111,7 +112,8 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
     return false;
   }
 
-  public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+  @Override
+  public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
 //	    mouseDown = false;
 //	    backgroundMouseDown = true;
   }
@@ -122,7 +124,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
 //	    backgroundMouseDown = true;
   }
 
-  public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
     move(point);
   }
 
@@ -198,11 +200,11 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
   }
   
   @Override
-  public void onTouchStart(Diagram sender, MatrixPointJS point) {
+  public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
   
   @Override
-  public void onTouchMove(Diagram sender, MatrixPointJS point) {
+  public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
   
   @Override

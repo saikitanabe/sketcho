@@ -39,6 +39,7 @@ import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.ISurface;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.gfx.domain.JsSvg;
 
 
@@ -77,7 +78,7 @@ public interface ISurfaceHandler extends OperationTransaction, HasMouseWheelHand
 	void addAsSelected(Diagram diagram, boolean ownerComponent);
 	void addAsSelected(Diagram diagram, boolean ownerComponent, boolean duplicate);
 	void addAsSelected(List<Diagram> diagrams, boolean ownerComponent, boolean duplicate);
-	void addAsDragging(Diagram diagram, boolean ownerComponent, MatrixPointJS point, int keys);
+	void addAsDragging(OrgEvent event, Diagram diagram, boolean ownerComponent, MatrixPointJS point, int keys);
 	boolean isProxyDragAdding();
 	int getCurrentClientX();
 	int getCurrentClientY();

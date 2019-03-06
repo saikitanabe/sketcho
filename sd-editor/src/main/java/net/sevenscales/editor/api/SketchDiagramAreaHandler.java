@@ -19,6 +19,7 @@ import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.diagram.utils.RelationshipHelpers;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
@@ -82,7 +83,7 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
     return !surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE);
   }
 
-  public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+  public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
     boolean result = false;
     try {
       // potentially problematic place, so reloading page if fails
@@ -183,7 +184,8 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
 
   }
 
-  public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+  @Override
+  public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
     // TODO Auto-generated method stub
     
   }
@@ -193,9 +195,9 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
     
   }
 
-  public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
     try {
-      mouseMove(sender, point);
+      mouseMove(event, sender, point);
     } catch (Exception e) {
       net.sevenscales.domain.utils.Error.reload(e);
     } finally {
@@ -204,7 +206,7 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
     }
   }
 
-  private void mouseMove(Diagram sender, MatrixPointJS point) {
+  private void mouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
     // with connection helpers, it is not necessary to have a threshold
     // ST 28.2.2019: iPad Pro at least needs this or start to create a self
     // connection on a click
@@ -215,8 +217,8 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
     if (createdRelationship != null && currentAnchorElement != null) {
       logger.debug("SketchDiagramAreaHandler.onMouseMove createdRelationship {}...", createdRelationship);
       // make surface think that handle is clicked...
-      surface.getMouseDiagramManager().getDragHandler().onMouseDown(currentHandle, point, IGraphics.SHIFT);
-      surface.getSelectionHandler().onMouseDown(currentHandle, point, 0);
+      surface.getMouseDiagramManager().getDragHandler().onMouseDown(event, currentHandle, point, IGraphics.SHIFT);
+      surface.getSelectionHandler().onMouseDown(event, currentHandle, point, 0);
       createdRelationship.setVisible(true);
       createdRelationship.attachAnchor(
           currentAnchorElement, 
@@ -246,12 +248,12 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
   }
   
   @Override
-  public void onTouchStart(Diagram sender, MatrixPointJS point) {
+  public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
   	
   }
   
   @Override
-  public void onTouchMove(Diagram sender, MatrixPointJS point) {
+  public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {

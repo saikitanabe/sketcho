@@ -19,6 +19,7 @@ import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEventHandle
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.diagram.drag.MouseDiagramDragHandler;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 
 
 public class MouseDiagramHandlerManager implements
@@ -153,7 +154,8 @@ public class MouseDiagramHandlerManager implements
 		}
 	}
 
-  public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+  @Override
+  public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
     // if (doubleTapHandler.isDoubleTap()) {
     //   return false;
     // }
@@ -173,12 +175,12 @@ public class MouseDiagramHandlerManager implements
 
 	    if (Tools.isHandTool() || !surface.getEditorContext().isEditable()) {
 	      // if not editable, background should be still movable
-	  		backgroundMoveHandler.onMouseDown(sender, point, keys);
+	  		backgroundMoveHandler.onMouseDown(event, sender, point, keys);
 
 		    if (proxyDragHandler != null) {
 		    	// possibility to disable modes like hand tool when 
 		    	// starting to drag shapes from library
-			    proxyDragHandler.onMouseDown(sender, point, keys);
+			    proxyDragHandler.onMouseDown(event, sender, point, keys);
 			  }
 
 	  	// 	selectionHandler.onMouseDown(sender, point, keys);
@@ -189,7 +191,7 @@ public class MouseDiagramHandlerManager implements
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 2");
 
-	    if (sketchDiagramAreaHandler.onMouseDown(sender, point, keys)) {
+	    if (sketchDiagramAreaHandler.onMouseDown(event, sender, point, keys)) {
 	      currentMouseHandler = sketchDiagramAreaHandler;
 	//      return false;
 	    }
@@ -210,7 +212,7 @@ public class MouseDiagramHandlerManager implements
 	    
 	    // exclusive handlers
 	    if (freehandDrawHandler != null) {
-		    freehandDrawHandler.onMouseDown(sender, point, keys);
+		    freehandDrawHandler.onMouseDown(event, sender, point, keys);
 	    }
 
 	    if (freehandDrawHandler != null) {
@@ -222,9 +224,9 @@ public class MouseDiagramHandlerManager implements
 		    }
 		  }
 
-			resizeHandler.onMouseDown(sender, point, keys);
+			resizeHandler.onMouseDown(event, sender, point, keys);
 
-			lassoSelectionHandler.onMouseDown(sender, point, keys);
+			lassoSelectionHandler.onMouseDown(event, sender, point, keys);
 	    if (lassoSelectionHandler.isLassoOn()) {
 				return true;
 	    }
@@ -232,8 +234,8 @@ public class MouseDiagramHandlerManager implements
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 4");
 
-	    quickConnectionHandler.onMouseDown(sender, point, keys);
-	    selectionHandler.onMouseDown(sender, point, keys);
+	    quickConnectionHandler.onMouseDown(event, sender, point, keys);
+	    selectionHandler.onMouseDown(event, sender, point, keys);
 
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 5");
@@ -241,9 +243,9 @@ public class MouseDiagramHandlerManager implements
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 7");
 	    
-	    handlers.fireMouseDown(sender, point, keys);
+	    handlers.fireMouseDown(event, sender, point, keys);
 	    if (proxyDragHandler != null) {
-		    proxyDragHandler.onMouseDown(sender, point, keys);
+		    proxyDragHandler.onMouseDown(event, sender, point, keys);
 		  }
 
 	    // logger.debugTime();
@@ -252,7 +254,7 @@ public class MouseDiagramHandlerManager implements
 	    if (sender == null) {
 				// do not send diagram events
 				// diagrams register them selves straight if those are draggable
-				dragHandler.onMouseDown(sender, point, keys);
+				dragHandler.onMouseDown(event, sender, point, keys);
 			}
 	    
 	    // logger.debugTime();
@@ -261,7 +263,7 @@ public class MouseDiagramHandlerManager implements
 	//		MatrixPointJS translatedPoint = MatrixPointJS.createScaledPoint
 	//			(point.getX() - surface.getRootLayer().getTransformX(), 
 	//			 point.getY() - surface.getRootLayer().getTransformY(), surface.getScaleFactor());
-			backgroundMoveHandler.onMouseDown(sender, point, keys);
+			backgroundMoveHandler.onMouseDown(event, sender, point, keys);
 			
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 10");
@@ -269,7 +271,7 @@ public class MouseDiagramHandlerManager implements
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 11");
 
-			surfaceClickHandler.onMouseDown(sender, point, keys);
+			surfaceClickHandler.onMouseDown(event, sender, point, keys);
   	} catch (Exception e) {
   		net.sevenscales.domain.utils.Error.reload(e);
   	}
@@ -279,14 +281,15 @@ public class MouseDiagramHandlerManager implements
 		return true;
 	}
 
-	public void onMouseEnter(Diagram sender, MatrixPointJS point) {
-    handlers.fireMouseEnter(sender, point);
+  @Override
+	public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
+    handlers.fireMouseEnter(event, sender, point);
     if (proxyDragHandler != null) {
-	    proxyDragHandler.onMouseEnter(sender, point);
+	    proxyDragHandler.onMouseEnter(event, sender, point);
 	  }
-		resizeHandler.onMouseEnter(sender, point);
-		backgroundMoveHandler.onMouseEnter(sender, point);
-		lassoSelectionHandler.onMouseEnter(sender, point);
+		resizeHandler.onMouseEnter(event, sender, point);
+		backgroundMoveHandler.onMouseEnter(event, sender, point);
+		lassoSelectionHandler.onMouseEnter(event, sender, point);
 	}
 
 	public void onMouseLeave(Diagram sender, MatrixPointJS point) {
@@ -299,50 +302,51 @@ public class MouseDiagramHandlerManager implements
 		backgroundMoveHandler.onMouseLeave(sender, point);
 		lassoSelectionHandler.onMouseLeave(sender, point);
 	}
-	
-	public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  
+  @Override
+	public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
     if (doubleTapHandler.isDoubleTap()) {
       return;
     }
 
 		try {
 	    if (Tools.isHandTool() || !surface.getEditorContext().isEditable()) {
-	  		backgroundMoveHandler.onMouseMove(sender, point);
+	  		backgroundMoveHandler.onMouseMove(event, sender, point);
 				// lassoSelectionHandler.onMouseMove(sender, point);
 	      return;
 	    }
 	    
 	    if (freehandDrawHandler != null) {
-		    freehandDrawHandler.onMouseMove(sender, point);
-				selectionHandler.onMouseMove(sender, point);
+		    freehandDrawHandler.onMouseMove(event, sender, point);
+				selectionHandler.onMouseMove(event, sender, point);
 		    if (freehandDrawHandler.handling()) {
 		    	return;
 		    }
 		  }
 
 		  if (lassoSelectionHandler.isLassoOn()) {
-		  	lassoSelectionHandler.onMouseMove(sender, point);
+		  	lassoSelectionHandler.onMouseMove(event, sender, point);
 		  	return;
 		  }
 	    
-	    handlers.fireMouseMove(sender, point);
+	    handlers.fireMouseMove(event, sender, point);
 	    if (proxyDragHandler != null) {
-		    proxyDragHandler.onMouseMove(sender, point);
+		    proxyDragHandler.onMouseMove(event, sender, point);
 		  }
 
 	    if (currentMouseHandler == sketchDiagramAreaHandler) {
-	      sketchDiagramAreaHandler.onMouseMove(sender, point);
+	      sketchDiagramAreaHandler.onMouseMove(event, sender, point);
 	//      dragHandler.onMouseMove(sender, point);
 	//      return;
 	    }
 
-			resizeHandler.onMouseMove(sender, point);
+			resizeHandler.onMouseMove(event, sender, point);
 			if (sender == null) {
 				// do not send diagram events
 				// diagrams register them selves straight if those are draggable
-				dragHandler.onMouseMove(sender, point);
+				dragHandler.onMouseMove(event, sender, point);
 			}
-			backgroundMoveHandler.onMouseMove(sender, point);
+			backgroundMoveHandler.onMouseMove(event, sender, point);
 			surface.dispatchDiagram(point);
 
 		} catch (Exception e) {
@@ -423,12 +427,12 @@ public class MouseDiagramHandlerManager implements
 	}
 	
 	@Override
-	public void onTouchStart(Diagram sender, MatrixPointJS point) {
-		onMouseDown(sender, point, 0);
+	public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
+		onMouseDown(event, sender, point, 0);
 	}
   @Override
-  public void onTouchMove(Diagram sender, MatrixPointJS point) {
-		onMouseMove(sender, point);
+  public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
+		onMouseMove(event, sender, point);
   }
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {

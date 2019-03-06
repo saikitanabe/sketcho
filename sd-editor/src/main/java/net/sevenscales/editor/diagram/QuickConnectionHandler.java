@@ -42,6 +42,7 @@ import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
@@ -164,12 +165,14 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		lastModel = null;
   }
 
-	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+  @Override
+	public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
 		// checkSelection();
 		return false;
 	}
 
-	public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  @Override
+	public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
 	}
 
 	@Override
@@ -529,15 +532,18 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 	}
 
-	public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+  @Override
+	public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
 
 	}
-	
-	public void onTouchStart(Diagram sender, MatrixPointJS point) {
+  
+  @Override
+	public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
 
 	}
 
-	public void onTouchMove(Diagram sender, MatrixPointJS point) {
+  @Override
+	public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
 
 	}
 

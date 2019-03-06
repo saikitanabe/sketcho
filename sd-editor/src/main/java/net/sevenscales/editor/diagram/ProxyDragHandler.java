@@ -10,6 +10,7 @@ import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 
 /**
  * Handles fully proxy dragging. MouseDiagramDragHandler is not used for dragging proxy.
@@ -52,35 +53,35 @@ public class ProxyDragHandler implements MouseDiagramHandler {
       	}
       }
       @Override
-      public void onMouseMove(Diagram sender, MatrixPointJS point) {
+      public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
       }
       @Override
       public void onMouseLeave(Diagram sender, MatrixPointJS point) {
       }
       @Override
-      public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+      public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
 //        System.out.println("ENTER target");
         // create element on target and move it by width
-      	createTargetProxy(point);
+      	createTargetProxy(event, point);
       }
       @Override
-      public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+      public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
         return false;
       }
       
       @Override
-      public void onTouchStart(Diagram sender, MatrixPointJS point) {
+      public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
       }
       
       @Override
-      public void onTouchMove(Diagram sender, MatrixPointJS point) {
-      	createTargetProxy(point);
+      public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
+      	createTargetProxy(event, point);
       }
       @Override
       public void onTouchEnd(Diagram sender, MatrixPointJS point) {
       }
       
-      private void createTargetProxy(MatrixPointJS point) {
+      private void createTargetProxy(OrgEvent event, MatrixPointJS point) {
         if (sourceproxy != null) {
           Diagram owner = sourceproxy.getOwnerComponent();
           ProxyDragHandler.this.target.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
@@ -99,7 +100,7 @@ public class ProxyDragHandler implements MouseDiagramHandler {
 //      		d.setBackgroundColor(current.getRr(), current.getGg(), current.getBb(), current.getOpacity());
 //      		d.setTextColor(current.getR(), current.getG(), current.getB());
           
-          ProxyDragHandler.this.target.addAsDragging(d, true, point, 0);
+          ProxyDragHandler.this.target.addAsDragging(event, d, true, point, 0);
           sourceproxy.setVisible(false);
           removeProxy();
           targetproxy = d;
@@ -109,7 +110,7 @@ public class ProxyDragHandler implements MouseDiagramHandler {
     });
   }
 
-  public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+  public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
     if (sender != null && source.isProxyOnDrag() && sourceproxy == null) {
       try {
         createProxy(sender, point);
@@ -151,7 +152,8 @@ public class ProxyDragHandler implements MouseDiagramHandler {
     Tools.setHandTool(false);
 	}
 
-	public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  @Override
+	public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
     if (sourceproxy != null && sender == null) {
 //    	logger.debug("onMouseMove point x({}), y({}), screenX({}), screenY({})", 
 //    								point.getX(), point.getY(), point.getScreenX(), point.getScreenY());
@@ -180,12 +182,12 @@ public class ProxyDragHandler implements MouseDiagramHandler {
   }
 
   @Override
-  public void onTouchStart(Diagram sender, MatrixPointJS point) {
-  	onMouseDown(sender, point, 0);
+  public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
+  	onMouseDown(event, sender, point, 0);
   }
   @Override
-  public void onTouchMove(Diagram sender, MatrixPointJS point) {
-  	onMouseMove(sender, point);
+  public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
+  	onMouseMove(event, sender, point);
   }
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
@@ -201,7 +203,7 @@ public class ProxyDragHandler implements MouseDiagramHandler {
   }
 
   @Override
-  public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+  public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
     // Goes quite complex
     // better to try then to change whole design and proxy implementation
     // is easier...

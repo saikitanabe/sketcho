@@ -31,6 +31,7 @@ import net.sevenscales.editor.content.ui.UIKeyHelpers;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 
@@ -281,7 +282,7 @@ public class FreehandDrawerHandler implements
     freehandPahts.add(currentFreehandPath);
   }
 
-  public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+  public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
     // not handled through here!!! handling custom mouse down preview event
     // since when drawing on top of existing element coordinates are wrong
     // and free hand needs to have surface coordinates
@@ -345,14 +346,16 @@ public class FreehandDrawerHandler implements
     surface.getEditorContext().set(EditorProperty.FREEHAND_MOUSE_DOWN, mouseDown);
   }
 
-  public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+  @Override
+  public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
 
   public void onMouseLeave(Diagram sender, MatrixPointJS point) {
     clearPoints();
   }
 
-  public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  @Override
+  public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
     if (!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE) || !surface.getName().equals(ISurfaceHandler.DRAWING_AREA)) {
       return;
     }
@@ -516,11 +519,11 @@ public class FreehandDrawerHandler implements
   }
 	
 	@Override
-	public void onTouchStart(Diagram sender, MatrixPointJS point) {
+	public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
 	}
 	
   @Override
-  public void onTouchMove(Diagram sender, MatrixPointJS point) {
+  public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {

@@ -23,6 +23,7 @@ import net.sevenscales.editor.diagram.MouseDiagramHandler;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 
 public class ModelingPanelEventHandler implements
 	MouseDiagramHandler,
@@ -127,7 +128,7 @@ public class ModelingPanelEventHandler implements
 
 
 	@Override
-	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+	public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
 		toolFrame.hideToolbar();
 		return false;
 	}
@@ -139,7 +140,7 @@ public class ModelingPanelEventHandler implements
 	}
 
 	@Override
-	public void onMouseMove(Diagram sender, MatrixPointJS point) {
+	public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -151,19 +152,19 @@ public class ModelingPanelEventHandler implements
 	}
 
 	@Override
-	public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+	public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void onTouchStart(Diagram sender, MatrixPointJS point) {
+	public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void onTouchMove(Diagram sender, MatrixPointJS point) {
+	public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
 		// TODO Auto-generated method stub
 		
 	}

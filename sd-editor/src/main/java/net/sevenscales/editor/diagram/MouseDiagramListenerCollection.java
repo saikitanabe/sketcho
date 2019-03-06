@@ -3,14 +3,15 @@ package net.sevenscales.editor.diagram;
 import java.util.HashSet;
 
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 
 public class MouseDiagramListenerCollection extends HashSet<MouseDiagramHandler> {
 
 	private static final long serialVersionUID = 1L;
 
-	public void fireMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+	public void fireMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
 		for (MouseDiagramHandler l : this) {
-			l.onMouseDown(sender, point, keys);
+			l.onMouseDown(event, sender, point, keys);
 		}
 	}
 
@@ -20,9 +21,9 @@ public class MouseDiagramListenerCollection extends HashSet<MouseDiagramHandler>
 		}
 	}
 
-	public void fireMouseMove(Diagram sender, MatrixPointJS point) {
+	public void fireMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
 		for (MouseDiagramHandler l : this) {
-			l.onMouseMove(sender, point);
+			l.onMouseMove(event, sender, point);
 		}
 	}
 
@@ -32,22 +33,22 @@ public class MouseDiagramListenerCollection extends HashSet<MouseDiagramHandler>
 		}
 	}
 
-	public void fireMouseEnter(Diagram sender, MatrixPointJS point) {
+	public void fireMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
 		for (MouseDiagramHandler l : this) {
-			l.onMouseEnter(sender, point);
+			l.onMouseEnter(event, sender, point);
 		}
 	}
 
-	public void fireTouchStart(Diagram sender,
+	public void fireTouchStart(OrgEvent event, Diagram sender,
 			MatrixPointJS point) {
 		for (MouseDiagramHandler l : this) {
-			l.onTouchStart(sender, point);
+			l.onTouchStart(event, sender, point);
 		}
 	}
 	
-	public void fireTouchMove(Diagram sender, MatrixPointJS point) {
+	public void fireTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
 		for (MouseDiagramHandler l : this) {
-			l.onTouchMove(sender, point);
+			l.onTouchMove(event, sender, point);
 		}
 	}
 

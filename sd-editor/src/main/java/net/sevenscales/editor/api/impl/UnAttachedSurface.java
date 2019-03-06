@@ -42,12 +42,13 @@ import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.domain.IGroup;
-import net.sevenscales.editor.gfx.domain.JsSvgContainer;
-import net.sevenscales.editor.gfx.domain.JsSvg;
 import net.sevenscales.editor.gfx.domain.ILoadObserver;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.ISurface;
+import net.sevenscales.editor.gfx.domain.JsSvg;
+import net.sevenscales.editor.gfx.domain.JsSvgContainer;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 
 
 public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
@@ -178,7 +179,7 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public void addAsSelected(List<Diagram> diagrams, boolean ownerComponent, boolean duplicate) {
 
 	}
-	public void addAsDragging(Diagram diagram, boolean ownerComponent, MatrixPointJS point, int keys) {
+	public void addAsDragging(OrgEvent event, Diagram diagram, boolean ownerComponent, MatrixPointJS point, int keys) {
 
 	}
 	public boolean isProxyDragAdding() {
