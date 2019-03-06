@@ -15,10 +15,10 @@ public class SurfaceScaleEvent extends GwtEvent<SurfaceScaleEventHandler> {
   // 	this.wheel = false;
 	// }
 
-  // public SurfaceScaleEvent(int scaleFactor, boolean wheel) {
-  // 	this.scaleFactor = scaleFactor;
-  // 	this.wheel = wheel;
-  // }
+  public SurfaceScaleEvent(int scaleFactor, boolean wheel) {
+  	this.scaleFactor = scaleFactor;
+  	this.wheel = wheel;
+  }
   
   public SurfaceScaleEvent(
     int scaleFactor,
