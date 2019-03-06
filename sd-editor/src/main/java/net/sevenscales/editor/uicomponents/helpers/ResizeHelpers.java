@@ -3,6 +3,9 @@ package net.sevenscales.editor.uicomponents.helpers;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -162,6 +165,7 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 			
 			@Override
 			public void dragStart(Diagram sender) {
+        ResizeHelpers.this.hide();
 			}
 			
 			@Override
@@ -239,10 +243,21 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 		line5.setVisibility(value);
 		line6.setVisibility(value);
 	}
-	public void show(AbstractDiagramItem parent) {
-		this.parent = parent;
-		setShape(parent);
-		setVisible(true);
+	public void show(final AbstractDiagramItem parent) {
+    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+
+      @Override
+      public void execute() {
+        if (surface.getSelectionHandler().getSelectedItems().size() != 1) {
+          return;
+        }
+    
+        ResizeHelpers.this.parent = parent;
+        setShape(parent);
+        setVisible(true);
+      }
+
+    });
 	}
 	
 	public void hide(AbstractDiagramItem candidate) {

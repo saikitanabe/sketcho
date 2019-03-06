@@ -12,6 +12,7 @@ import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.gfx.domain.Point;
 
 public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiagramDoubleClickHandler, MouseLongPressHandler {
@@ -47,8 +48,9 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 		resizeHandlerCollection = new ResizeHandlerCollection();
 	}
 
-	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
-    if (!surface.isDragEnabled()) {
+  @Override
+	public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
+    if (!surface.isDragEnabled() || surface.getSelectionHandler().getOnlyOneSelected() == null) {
       return false;
     }
     
@@ -77,7 +79,8 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 		return result;
 	}
 
-	public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+  @Override
+	public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
 //		resizeSender = sender;
 //		System.out.println("enter x:"+x+" y:"+y+sender);
 //		
@@ -102,12 +105,13 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 //		}
 	}
 
-	public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  @Override
+	public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
     if (!surface.isDragEnabled()) {
       return;
     }
 
-    if (!gridUtils.passTreshold(point, 5)) {
+    if (onResizeArea && !gridUtils.passTreshold(point, 5)) {
       return;
     }
 
@@ -234,10 +238,10 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 	}
 	
 	@Override
-	public void onTouchStart(Diagram sender, MatrixPointJS point) {
+	public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
 	}
   @Override
-  public void onTouchMove(Diagram sender, MatrixPointJS point) {
+  public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
