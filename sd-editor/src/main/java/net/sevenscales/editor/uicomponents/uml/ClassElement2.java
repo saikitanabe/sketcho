@@ -148,7 +148,7 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
   }
 
   public void doSetText(String newText) {
-    textUtil.setText(newText, editable);
+    textUtil.setText(newText, editable, isForceTextRendering());
   }
 
   @Override

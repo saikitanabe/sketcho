@@ -310,8 +310,10 @@ public class BoardOTHelpers {
 			logger.debug2("modifyOT {}", diro);
 			Diagram diagram = findDiagramById(diro);
 			if (diagram != null) {
-				diro.compare(diagram.getDiagramItem(), dirtyFields);
-				diagram.copyFrom(diro);
+        diro.compare(diagram.getDiagramItem(), dirtyFields);
+        diagram.setForceTextRendering(true);
+        diagram.copyFrom(diro);
+        diagram.setForceTextRendering(false);
 				reattachHelpers.processDiagram(diagram);
 				
 				applyThemeColors(diagram);

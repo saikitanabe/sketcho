@@ -230,7 +230,7 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 	}
 
 	public void doSetText(String newText) {
-    textUtil.setText(newText, editable);
+    textUtil.setText(newText, editable, isForceTextRendering());
 	}
 
   @Override

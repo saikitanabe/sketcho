@@ -241,7 +241,7 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
   }
 
   public void doSetText(String newText) {
-    textUtil.setText(newText, editable);
+    textUtil.setText(newText, editable, isForceTextRendering());
   }
 
   @Override

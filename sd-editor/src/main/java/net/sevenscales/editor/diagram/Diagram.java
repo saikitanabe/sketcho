@@ -87,6 +87,10 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   void setText(String text);
   // set text to certain area of diagram
   void setText(String text, int x, int y);
+  boolean isForceTextRendering();
+  // If true forces diagram text rendering even if property editor is open
+	void setForceTextRendering(boolean forceTextRendering);
+
   public boolean onResizeArea(int x, int y);
   public JavaScriptObject getResizeElement();
   public void resizeStart();

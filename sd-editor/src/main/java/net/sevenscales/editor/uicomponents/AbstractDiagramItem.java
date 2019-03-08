@@ -138,6 +138,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   protected int factorX = 1;
   protected int factorY = 1;
   private boolean svgExport;
+  private boolean forceTextRendering;
 	
   public static final String EVENT_DOUBLE_CLICK = "ondblclick";
 
@@ -2084,6 +2085,21 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
 	public IGroup getTextGroup() {
 		return null;
+	}
+
+  /**
+	 * @return the forceTextRendering
+	 */
+  @Override
+	public boolean isForceTextRendering() {
+		return forceTextRendering;
+	}
+	/**
+	 * @param forceTextRendering the forceTextRendering to set
+	 */
+  @Override
+	public void setForceTextRendering(boolean forceTextRendering) {
+		this.forceTextRendering = forceTextRendering;
 	}
 
 }

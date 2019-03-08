@@ -225,7 +225,7 @@ public class StorageElement extends AbstractDiagramItem implements SupportsRecta
 	}
 
 	public void doSetText(String newText) {
-    textUtil.setText(newText, editable);
+    textUtil.setText(newText, editable, isForceTextRendering());
 	}
 
   @Override

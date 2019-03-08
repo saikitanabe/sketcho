@@ -167,7 +167,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 
   @Override
   public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
-    Debug.log("onMouseDown... sender != null", sender != null);
+    // Debug.log("onMouseDown... sender != null", sender != null);
 
     if (sender == null &&
         prevEvent != null &&

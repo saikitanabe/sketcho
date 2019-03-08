@@ -79,7 +79,7 @@ public class SvgPath extends SvgLine {
   private static String strokeWidth(Diagram diagram, IPath path) {
     if (!Tools.isSketchMode() && /*isConfluence(diagram.getSurfaceHandler()) && */(diagram instanceof GenericElement)) {
       GenericElement ge = (GenericElement) diagram;
-      return String.valueOf(ge.scaledStrokeWidth(ge.getFactorX(), ge.getFactorY()));
+      return String.valueOf(ge.scaledStrokeWidth(ge.getShapeFactorX(), ge.getShapeFactorY()));
     } else {
       return String.valueOf(path.getStrokeWidth());
     }

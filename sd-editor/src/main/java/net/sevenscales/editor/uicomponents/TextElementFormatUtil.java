@@ -321,7 +321,7 @@ public class TextElementFormatUtil {
     setText(newText, editable);
   }
 
-  public void setText(String newText, boolean editable) {
+  private void setText(String newText, boolean editable) {
   	try {
       _setText(newText, editable);
   	} catch (Exception e) {
