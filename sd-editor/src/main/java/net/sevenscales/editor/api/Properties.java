@@ -323,6 +323,11 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			// this is state from the server, so kept as sent
       buffer.setText(text);
       buffer.markSent();
+
+      // ST 8.3.2019: Close editor if open for the shape or editor window
+      // is not in correct place. Could move editor window to the new location.
+      // But in the end new text is used as well.
+			closeIfOpen();
 		}
 	}
 
