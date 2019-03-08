@@ -81,13 +81,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private EditorCommon editorCommon;
 	private boolean modifiedAtLeastOnce;
 	
-	private static class Buffer {
-		String text;
-		Diagram diagram;
-	}
 	private Buffer buffer = new Buffer();
-	private String lastSentText;
-	
+
 	private ShowDiagramPropertyTextEditorEventHandler showDiagramText = new ShowDiagramPropertyTextEditorEventHandler() {
 		@Override
 		public void on(ShowDiagramPropertyTextEditorEvent event) {
@@ -193,8 +188,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		popup.addCloseHandler(new CloseHandler<PopupPanel>() {
 			@Override
 			public void onClose(CloseEvent<PopupPanel> event) {
-				logger.info("close properties editor...");
-				_doSend();
+        logger.info("close properties editor...");
+        // ST 8.3.2019: Clean sends buffer
+				// _doSendBuffer();
 				boolean forceApplyAlways = true;
 				applyTextToDiagram(forceApplyAlways);
 				Properties.this.editorCommon.fireEditorClosed();
@@ -324,8 +320,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		if (selectedDiagram != null && item.getClientId().equals(selectedDiagram.getDiagramItem().getClientId())) {
 			String text = selectedDiagram.getDiagramItem().getText();
 			setTextAreaText(text);
-			// this is state in the server, so kept as sent
-			buffer.text = text;
+			// this is state from the server, so kept as sent
+      buffer.setText(text);
+      buffer.markSent();
 		}
 	}
 
@@ -457,6 +454,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     if (isEditorOpen()) {
 	    codeMirror.setText("");
     }
+    // send buffer if not sent and clean buffer as well
+    _doSendBuffer();
+    buffer = new Buffer();
 		modifiedAtLeastOnce = false;
 	}
 
@@ -489,6 +489,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			return;
 		}
 
+    // set diagram text synchronously, because editor might be closed
+    // before buffer is saved and would show a wrong state for a while
+    // if set only when buffer is sent
     selectedDiagram.setText(codeMirror.getText(), textEditX, textEditY);
 
     modifiedAtLeastOnce = true;
@@ -499,50 +502,50 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	
 	private void sendBuffer() {
 		if (!sending) {
-			buffer.text = codeMirror.getText();
-			buffer.diagram = selectedDiagram;
+			buffer.setText(codeMirror.getText());
+			buffer.setDiagram(selectedDiagram);
 
-			// do not send update on every key stroke
-			sending = true;
 			sendScheduled();
 		} else {
 			// ensure sending... try at least once more
 //			onceMore = true;
-			if (!bufferTextIsSent()) {
+			if (!buffer.isSent()) {
 				// do not send if check says it is already sent
 				// this is due to automatic chile text element delete when text is empty
 				// text is no longer found for undo/redo
-				buffer.text = codeMirror.getText();
-				buffer.diagram = selectedDiagram;
+				buffer.setText(codeMirror.getText());
+				buffer.setDiagram(selectedDiagram);
 			} else {
-				buffer.text = "";
-				buffer.diagram = null;
+				buffer.setText("");
+				buffer.setDiagram(null);
 			}
 		}
 	}
 
 	private void sendScheduled() {
+    // do not send update on every key stroke
+    sending = true;
+
 		Scheduler.get().scheduleFixedDelay(new RepeatingCommand() {
 			@Override
 			public boolean execute() {
-				_doSend();		    
-				boolean doitagain = !bufferTextIsSent();
+				_doSendBuffer();		    
+				boolean doitagain = !buffer.isSent();
 				return doitagain;
 			}
 		}, 1500);
 	}
 
-	private void _doSend() {
-		if (buffer.diagram != null && !bufferTextIsSent()) {
-			lastSentText = buffer.diagram.getText(textEditX, textEditY);
-			Properties.this.editorCommon.fireChangedWithRelatedRelationships(buffer.diagram);
-	    sending = false;
-		}
+	private void _doSendBuffer() {
+		if (buffer.getDiagram() != null && !buffer.isSent()) {
+      // lastSentText = buffer.diagram.getText(textEditX, textEditY);
+      Properties.this.editorCommon.fireChangedWithRelatedRelationships(buffer.getDiagram());
+      buffer.markSent();
+    }
+    
+    sending = false;
   }
 
-	private boolean bufferTextIsSent() {
-	  return buffer.text.equals(lastSentText);
-	}
 
 	@Override
 	public void onClick(Diagram sender, int x, int y, int keys) {
@@ -592,7 +595,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private void showEditor(Diagram diagram, String text, final int left, final int top, boolean justCreated) {
 		if (popup.isShowing()) {
 			return;
-		}
+    }
+    
 		logger.info("SHOW EDITOR...");
 		if (!selectedDiagram.supportsTextEditing() || !AuthHelpers.allowedToEdit(diagram)) {
 			// if diagram text editing is not supported => return
@@ -809,7 +813,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 	@Override
 	public boolean hasPendingChanges() {
-		return !bufferTextIsSent();
+		// return !bufferTextIsSent();
+		return !buffer.isSent();
 	}
 
 }
