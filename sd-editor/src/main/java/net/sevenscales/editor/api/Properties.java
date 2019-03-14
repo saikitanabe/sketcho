@@ -234,8 +234,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			}
 		});
 
-		editorContext.getEventBus().addHandler(ShowDiagramPropertyTextEditorEvent.TYPE, showDiagramText);
-
+    editorContext.getEventBus().addHandler(ShowDiagramPropertyTextEditorEvent.TYPE, showDiagramText);
+    
 		handleEditorCloseStream(this);
 		handleItemRealTimeModify(this);
 
@@ -376,8 +376,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 					// that is changed based on theme and calculated on runtime.
 					// Color borderColor = ColorHelpers.borderColorByBackground(newbg.red, newbg.green, newbg.blue);
 					if (color.getBackgroundColor().opacity > 0) {
-						// do not apply theme color if color is transparent
-						d.setBorderColor(Theme.THEME_BORDER_COLOR_STORAGE);
+            // do not apply theme color if color is transparent
+            // ST 14.3.2019: Fix markdown line color is not set --
+						// d.setBorderColor(Theme.THEME_BORDER_COLOR_STORAGE);
+						d.setBorderColor(color.getBorderColor());
 					}
 				}
 			}
