@@ -675,12 +675,13 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		}
 
 		MeasurementPanel.setPlainTextAsHtml(text, selectedDiagram.getMeasurementAreaWidth());
-		MeasurementPanel.setPosition(selectedDiagram.getLeft() + selectedDiagram.getWidth() + 20, selectedDiagram.getTop());
+    MeasurementPanel.setPosition(selectedDiagram.getLeft() + selectedDiagram.getWidth() + 20, selectedDiagram.getTop());
+    // MeasurementPanel.setZoom(surface.getScaleFactor());
 
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 			@Override
 			public void execute() {
-				codeMirror.setHeight(MeasurementPanel.getOffsetHeight());
+				codeMirror.setHeight((int) (MeasurementPanel.getOffsetHeight() * surface.getScaleFactor()));
 			}
 		});
 	}
@@ -742,9 +743,13 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		
 		int dFontSize = diagram.getFontSize() != null ? diagram.getFontSize() : 12;
 		int fontSize = ((int) (dFontSize * scaleFactor));
-		codeMirror.setFontSize(fontSize + "px");
-		codeMirror.setLineHeight(lineHeight(fontSize) + "px");
-
+    codeMirror.setFontSize(fontSize + "px");
+    if (codeMirror.isCodeMirror()) {
+      codeMirror.setLineHeight(lineHeight(fontSize) + "px");
+    } else {
+      codeMirror.setLineHeight(17 * scaleFactor + "px");
+    }
+    
 		codeMirror.setWidth((int) (diagram.getTextAreaWidth() * scaleFactor ));
 		setTextAreaHeight();
 		popup.setContentWidth((int) (diagram.getTextAreaWidth() * scaleFactor));
