@@ -746,11 +746,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		int dFontSize = diagram.getFontSize() != null ? diagram.getFontSize() : 12;
 		int fontSize = ((int) (dFontSize * scaleFactor));
     codeMirror.setFontSize(fontSize + "px");
-    if (codeMirror.isCodeMirror()) {
-      codeMirror.setLineHeight(lineHeight(fontSize) + "px");
-    } else {
-      codeMirror.setLineHeight(17 * scaleFactor + "px");
-    }
+    codeMirror.setLineHeight(lineHeight(fontSize) + "px");
     
 		codeMirror.setWidth((int) (diagram.getTextAreaWidth() * scaleFactor ));
 		setTextAreaHeight();
@@ -768,7 +764,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 
 	private int lineHeight(int fontSize) {
-		return ((int) ((fontSize + 5) * surface.getScaleFactor()));
+		// return ((int) ((fontSize) * surface.getScaleFactor())) + 5;
+		return (int) (fontSize + 5 * surface.getScaleFactor());
 	}
 
 	private int rows(String text) {
