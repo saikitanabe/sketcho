@@ -697,16 +697,20 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		}
 
 		if (selectedDiagram != null) {
-			if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
-				// in case dynamically resized text should use measurement panel!!!
-				setMeasurementPanelText(codeMirror.getText());
-			} else {
-				int rows = rows(codeMirror.getText());
-				int dFontSize = selectedDiagram.getFontSize() != null ? selectedDiagram.getFontSize() : 12;
-				int lheight = lineHeight(dFontSize);
-				int textAreaHeight = lheight * rows;
-				codeMirror.setHeight(textAreaHeight + lheight);
-			}
+      // ST 15.3.2019: Use always measurment panel or horizontally scaled editors
+      // don't show big enough text area when zoomed in
+      setMeasurementPanelText(codeMirror.getText());
+
+			// if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
+			// 	// in case dynamically resized text should use measurement panel!!!
+			// 	setMeasurementPanelText(codeMirror.getText());
+			// } else {
+			// 	int rows = rows(codeMirror.getText());
+			// 	int dFontSize = selectedDiagram.getFontSize() != null ? selectedDiagram.getFontSize() : 12;
+			// 	int lheight = lineHeight(dFontSize);
+			// 	int textAreaHeight = lheight * rows;
+			// 	codeMirror.setHeight(textAreaHeight + lheight);
+			// }
 		}
 	}
 

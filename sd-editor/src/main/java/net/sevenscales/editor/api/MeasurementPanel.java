@@ -96,7 +96,7 @@ public class MeasurementPanel {
 	}-*/;
 
 	public static void setPosition(int left, int top) {
-    // ST 14.3.2019: Commented out because otherwise panel is not shown on big screen
+    // ST 14.3.2019: Commented out because otherwise panel is not shown on big board
 		// MeasurementPanel.getMeasurementPanel().getElement().getStyle().setLeft(left, Unit.PX);
 		// MeasurementPanel.getMeasurementPanel().getElement().getStyle().setTop(top, Unit.PX);
 	}
