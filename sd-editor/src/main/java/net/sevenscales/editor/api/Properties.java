@@ -464,7 +464,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     // send buffer if not sent and clean buffer as well
     _doSendBuffer();
     buffer = new Buffer();
-		modifiedAtLeastOnce = false;
+    modifiedAtLeastOnce = false;
+    
+    closeIfOpen();
 	}
 
 	private boolean isEditorOpen() {
