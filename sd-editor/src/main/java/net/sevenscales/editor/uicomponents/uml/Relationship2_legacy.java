@@ -57,6 +57,7 @@ import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.uicomponents.AngleUtil2;
 import net.sevenscales.editor.uicomponents.CardinalDirection;
 import net.sevenscales.editor.uicomponents.CircleElement;
+import net.sevenscales.editor.uicomponents.RelationshipText2;
 import net.sevenscales.editor.uicomponents.RelationshipText2.ClickTextPosition;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers;
@@ -80,9 +81,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   private IPolyline arrow;
   private IPath aggregate;
   private ArrowStartPolyline arrowStartPolyline;
-  // ST 16.3.2019: Removed support for legacy relationship text
-  // current way is to create child text elements
-  // private RelationshipText2 relationshipText;
+  private RelationshipText2 relationshipText;
 //  private List<IShape> elements = new ArrayList<IShape>();
 
   // diamond information
@@ -753,7 +752,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //    anchorPoint.setVisibility(false);
 
     textUtil = new RelationshipTextUtil2();
-    // relationshipText = new RelationshipText2(group, surface, editable);
+    relationshipText = new RelationshipText2(group, surface, editable);
 
     inheritancePoints = new double[6];
     inheritance = IShapeFactory.Util.factory(editable).createPath(group, null);
@@ -788,7 +787,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     shapes.add(arrow);
     shapes.add(aggregate);
     shapes.add(inheritance);
-    // shapes.addAll(relationshipText.getElements());
+    shapes.addAll(relationshipText.getElements());
 
     // needed to speed up relationship construction
     Scheduler.get().scheduleDeferred(new ScheduledCommand() {
@@ -1321,21 +1320,20 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //  	super.endTextEdit();
 //  }
 
-  // public String getTextLabel() {
-  //   return relationshipText.getLabelElement().getText();
-  // }
+  public String getTextLabel() {
+    return relationshipText.getLabelElement().getText();
+  }
 
-  // public String getTextStart() {
-  //   return relationshipText.getStartElement().getText();
-  // }
+  public String getTextStart() {
+    return relationshipText.getStartElement().getText();
+  }
 
-  // public String getTextEnd() {
-  //   return relationshipText.getEndElement().getText();
-  // }
+  public String getTextEnd() {
+    return relationshipText.getEndElement().getText();
+  }
 
   public boolean noText() {
-    // return "".equals(getTextLabel()) && "".equals(getTextStart()) && "".equals(getTextEnd()) && children.size() == 0;
-    return children.size() == 0;
+    return "".equals(getTextLabel()) && "".equals(getTextStart()) && "".equals(getTextEnd()) && children.size() == 0;
   }
 
   public Diagram showEditorForDiagram(int screenX, int screenY) {
@@ -1350,37 +1348,43 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
   @Override
   public String getText(int x, int y) {
-  	// currentTextEditLocation = relationshipText.findClickPosition(x, y, points);
-  	// switch (currentTextEditLocation) {
-  	// case START:
-  	// 	return textUtil.parseLeftText();
-  	// case END:
-  	// 	return textUtil.parseRightText();
-  	// case MIDDLE:
-  	// 	return textUtil.parseLabel();
-  	// }
+  	currentTextEditLocation = relationshipText.findClickPosition(x, y, points);
+  	switch (currentTextEditLocation) {
+  	case START:
+  		return textUtil.parseLeftText();
+  	case END:
+  		return textUtil.parseRightText();
+  	case MIDDLE:
+  		return textUtil.parseLabel();
+      // if (labelChildText != null) {
+      //   return labelChildText.getText();
+      // } else {
+      //   return "";
+      // }
+  	}
   	return text;
   }
   
   @Override
   public void doSetText(String text, int x, int y) {
-  	// currentTextEditLocation = relationshipText.findClickPosition(x, y, points);
-  	// switch (currentTextEditLocation) {
-  	// case START:
-  	// 	setText(textUtil.parseLabel() + "\n" + text + textUtil.parseConnection() + textUtil.parseRightText());
-  	// 	break;
-  	// case END:
-  	// 	setText(textUtil.parseLabel() + "\n" + textUtil.parseLeftText() + textUtil.parseConnection() + text);
-  	// 	break;
-  	// case MIDDLE:
-  	// 	setText(text + "\n" + textUtil.parseArrowLine());
-  	// 	break;
-  	// case ALL:
-  	// 	setText(text);
-  	// 	break;
-    // }
-    
-    setText(text);
+  	currentTextEditLocation = relationshipText.findClickPosition(x, y, points);
+  	switch (currentTextEditLocation) {
+  	case START:
+  		setText(textUtil.parseLabel() + "\n" + text + textUtil.parseConnection() + textUtil.parseRightText());
+  		break;
+  	case END:
+  		setText(textUtil.parseLabel() + "\n" + textUtil.parseLeftText() + textUtil.parseConnection() + text);
+  		break;
+  	case MIDDLE:
+  		setText(text + "\n" + textUtil.parseArrowLine());
+      // setText(textUtil.parseArrowLine());
+      // createChildLabel(text);
+  		break;
+  	case ALL:
+  		setText(text);
+//  		setText(textUtil.parseLabel() + "\n" + textUtil.parseLeftText() + text + textUtil.parseRightText());
+  		break;
+  	}
   }
 
   private ChildTextElement createChildLabel(int screenX, int screenY) {
@@ -1511,8 +1515,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 //    }
 
     setShape(rs);
-    // relationshipText.setText(textUtil, this);
-    // relationshipText.applyTextColor(textColor);
+    relationshipText.setText(textUtil, this);
+    relationshipText.applyTextColor(textColor);
     
     // notify property text area
     fireSizeChanged();
@@ -1819,7 +1823,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 
     conditionallyCalculateDiamond(drawPoints);
 
-    // relationshipText.setShape(this);
+    relationshipText.setShape(this);
     moveChildren();
 
 //    String color = startSelection.getVisibility() ? "blue" : "black";
@@ -2384,27 +2388,27 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   
 	@Override
 	public int getTextAreaLeft() {
-		// switch (currentTextEditLocation) {
-		// case START:
-		// 	return relationshipText.getStartElement().getX() - getTextAreaWidth() / 2;
-		// case END:
-		// 	return relationshipText.getEndElement().getX() - getTextAreaWidth() / 2;
-		// case MIDDLE:
-		// 	return relationshipText.getLabelElement().getX();
-		// }
+		switch (currentTextEditLocation) {
+		case START:
+			return relationshipText.getStartElement().getX() - getTextAreaWidth() / 2;
+		case END:
+			return relationshipText.getEndElement().getX() - getTextAreaWidth() / 2;
+		case MIDDLE:
+			return relationshipText.getLabelElement().getX();
+		}
 		return 0;
 	}
 	
 	@Override
 	public int getTextAreaTop() {
-		// switch (currentTextEditLocation) {
-		// case START:
-		// 	return relationshipText.getStartElement().getY() - TextElementFormatUtil.ROW_HEIGHT + 5;
-		// case END:
-		// 	return relationshipText.getEndElement().getY() - TextElementFormatUtil.ROW_HEIGHT + 5;
-		// case MIDDLE:
-		// 	return relationshipText.getLabelElement().getY() - TextElementFormatUtil.ROW_HEIGHT + 5;
-		// }
+		switch (currentTextEditLocation) {
+		case START:
+			return relationshipText.getStartElement().getY() - TextElementFormatUtil.ROW_HEIGHT + 5;
+		case END:
+			return relationshipText.getEndElement().getY() - TextElementFormatUtil.ROW_HEIGHT + 5;
+		case MIDDLE:
+			return relationshipText.getLabelElement().getY() - TextElementFormatUtil.ROW_HEIGHT + 5;
+		}
 		return 0;
 	}
 	
@@ -2441,34 +2445,34 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
 	
 	@Override
 	public void showText() {
-		// if (currentTextEditLocation != null) {
-		// 	switch (currentTextEditLocation) {
-		// 	case START:
-		// 		relationshipText.getStartElement().setVisibility(true);
-		// 		break;
-		// 	case END:
-		// 		relationshipText.getEndElement().setVisibility(true);
-		// 		break;
-		// 	case MIDDLE:
-		// 		relationshipText.getLabelElement().setVisibility(true);
-		// 		break;
-		// 	}
-		// }
+		if (currentTextEditLocation != null) {
+			switch (currentTextEditLocation) {
+			case START:
+				relationshipText.getStartElement().setVisibility(true);
+				break;
+			case END:
+				relationshipText.getEndElement().setVisibility(true);
+				break;
+			case MIDDLE:
+				relationshipText.getLabelElement().setVisibility(true);
+				break;
+			}
+		}
 	}
 	
 	@Override
 	public void hideText() {
-		// switch (currentTextEditLocation) {
-		// case START:
-		// 	relationshipText.getStartElement().setVisibility(false);
-		// 	break;
-		// case END:
-		// 	relationshipText.getEndElement().setVisibility(false);
-		// 	break;
-		// case MIDDLE:
-		// 	relationshipText.getLabelElement().setVisibility(false);
-		// 	break;
-		// }
+		switch (currentTextEditLocation) {
+		case START:
+			relationshipText.getStartElement().setVisibility(false);
+			break;
+		case END:
+			relationshipText.getEndElement().setVisibility(false);
+			break;
+		case MIDDLE:
+			relationshipText.getLabelElement().setVisibility(false);
+			break;
+		}
 		
 		relationshipHandleHelpers.forceHide();
 	}
@@ -2571,7 +2575,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   
   @Override
   protected void applyTextColor() {
-    // relationshipText.applyTextColor(textColor);
+    relationshipText.applyTextColor(textColor);
   }
   
   @Override
