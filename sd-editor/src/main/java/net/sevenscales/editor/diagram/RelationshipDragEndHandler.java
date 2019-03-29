@@ -234,7 +234,7 @@ public class RelationshipDragEndHandler implements
 	public void on(SwitchElementEvent event) {
 		switchFrom = event.getDiagram();
 		if (!switchFrom.getDiagramItem().getType().equals(ElementType.CHILD_TEXT.getValue())) {
-			Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(event.getDiagram(), surface);
+			Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(event.getDiagram(), surface, false);
 			// >>>>>>> Commented out 4.3.2015
 			// diagramSelections.hideCommentElement();
 			// >>>>>>> Commented out 4.3.2015 end

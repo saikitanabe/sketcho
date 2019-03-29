@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.auth.AuthHelpers;
@@ -44,6 +45,7 @@ import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.texteditor.ITextEditor;
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
+import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.ClickDiagramHandler;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.Diagram.SizeChangedHandler;
@@ -53,6 +55,7 @@ import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
 import net.sevenscales.editor.gfx.domain.ElementColor;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
@@ -621,21 +624,29 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
         // ST 15.2.2019: commented out to enable zooming on iPad.
         // && !UiUtils.isMobile()
         ) {
-			// zoom to mouse position
-			// not when using iPad (mobile) focus goes wrong
-			editorContext.getEventBus().fireEvent(
-				new SurfaceScaleEvent(
-          true,
-          selectedDiagram.getCenterX(),
-          selectedDiagram.getCenterY()
-        )
-				// new SurfaceScaleEvent(
-        //   Constants.ZOOM_DEFAULT_INDEX,
-        //   false,
-        //   selectedDiagram.getCenterX(),
-        //   selectedDiagram.getCenterY()
-        // )
-			);
+          // centers diagram into the middle
+        // editorContext.getEventBus().fireEvent(
+        // 	new SurfaceScaleEvent(
+        //     true,
+        //     selectedDiagram.getCenterX(),
+        //     selectedDiagram.getCenterY()
+        //   )
+        // );
+
+        Point p = ScaleHelpers.diagramPositionToScreenPoint(
+          selectedDiagram,
+          surface,
+          true
+        );
+
+        // ST 29.3.2019: Center into the same and don't put it in the middle
+        editorContext.getEventBus().fireEvent(
+          new SurfaceScaleEvent(
+            Constants.ZOOM_DEFAULT_INDEX,
+            false,
+            p.x,
+            p.y
+        ));
 		}
 		
 		selectedDiagram.hideConnectionHelpers();

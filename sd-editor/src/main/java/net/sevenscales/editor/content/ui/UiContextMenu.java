@@ -211,7 +211,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					Diagram d = event.getLastSelected();
 					// logger.debug("Last Selected type {} x({}) y({})", d.toString(), d.getLeft(), d.getTop());
 
-					Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(d, UiContextMenu.this.surface);
+					Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(d, UiContextMenu.this.surface, false);
 					screenPosition.y += adjustByDiagramType(d);
 										
 					if (UiContextMenu.this.surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE)) {
