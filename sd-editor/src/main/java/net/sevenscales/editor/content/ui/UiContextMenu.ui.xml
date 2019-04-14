@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:net.sevenscales.editor.api.impl">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:net.sevenscales.editor.api.impl"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
 	<ui:style>
 		.wrapper {
 			display: inline;
@@ -13,7 +14,8 @@
 				<i class="context-icon-pen-white2"></i>
 			</a>
 			<a ui:field="duplicate" class="btn btn-custom btn-context-menu tooltipper" data-html="true">
-				<i class="context-icon-duplicate2"></i>
+				<!-- <i class="context-icon-duplicate2"></i> -->
+        <svg class='sprite-menu-ico-tiny wht' style='width:12px;height:12px;'><use xlink:href='#context-menu-duplicate' /></svg>
 			</a>
 			<g:SimplePanel ui:field="changeConnection" styleName="inline-change-connection">
 			</g:SimplePanel>
@@ -21,7 +23,8 @@
 				<i class="context-icon-line-width"></i>
 			</a>
 			<a ui:field="colorize" title="Change Color" class="btn btn-custom btn-context-menu tooltipper">
-				<i class="context-icon-colorize2"></i>
+				<!-- <i class="context-icon-colorize2"></i> -->
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu-colors' /></svg>
 			</a>
 			<a ui:field="reverseConnection" title="Reverse Connection" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-reverse-connection2"></i>
@@ -33,10 +36,12 @@
 				<i class="context-icon-curved-arrow"></i>
 			</a>
 			<a ui:field="switchElement" title="Switch Element to an other" class="btn btn-custom btn-context-menu tooltipper">
-				<i class="context-icon-switch"></i>
+				<!-- <i class="context-icon-switch"></i> -->
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu-switch' /></svg>
 			</a>
 			<a ui:field="layersMenuButton" title="Move element to top or background" class="btn btn-custom btn-context-menu tooltipper">
-				<i class="context-icon-move-back"></i>
+				<!-- <i class="context-icon-move-back"></i> -->
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu-move-bottom' /></svg>
 			</a>
 			<a ui:field="textSize" title="Change Font Size" class="btn btn-custom btn-context-menu tooltipper">
 				&#187;T&#171;
@@ -59,19 +64,22 @@
 			</a>
 
  			<a ui:field="addlink" title="Add Link" class="btn btn-custom btn-context-menu tooltipper">
-				<i class="context-icon-link2"></i>
+				<!-- <i class="context-icon-link2"></i> -->
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu-link' /></svg>
 			</a>
  			<a ui:field="openlink" title="Open/Edit Link" class="btn btn-custom btn-context-menu tooltipper">
-				<i class="context-icon-link2"></i>
+				<!-- <i class="context-icon-link2"></i> -->
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu-link' /></svg>
 			</a>
 			<a ui:field="fileLink" title="Download file" class="btn btn-custom btn-context-menu tooltipper">
 				<i class="context-icon-download"></i>
 			</a>
 			<a ui:field="comment" title="Comment" class="btn btn-custom btn-context-menu tooltipper">
-				<i class="context-icon-comment"></i>
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#menu-icon-comments' /></svg>
 			</a>
 			<a ui:field="delete" title="Delete" class="btn btn-custom btn-context-menu tooltipper">
-				<i class="context-icon-trash2"></i>
+				<!-- <i class="context-icon-trash2"></i> -->
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu-trash' /></svg>
 			</a>
 		</div>
 	</g:HTMLPanel>

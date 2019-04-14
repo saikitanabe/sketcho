@@ -1,12 +1,17 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+  <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"  
+    xmlns:g="urn:import:com.google.gwt.user.client.ui"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
 	<ui:style>
 	</ui:style>
 	<g:HTMLPanel>
 		<ul class="ul-none ul-horizontal">
 			<li ui:field="map">
 				<span class="menu-btn2-big">
-					<a class="menu-btn2"><i class="menu-ico2-world"></i></a>
+					<a class="menu-btn2">
+          <!-- <i class="menu-ico2-world"></i> -->
+          <svg class='sprite-toolbar-icon green'><use xlink:href='#toolbar-icons-world' /></svg>
+          </a>
 				</span>
 			</li>
 			<li ui:field="handtool">
