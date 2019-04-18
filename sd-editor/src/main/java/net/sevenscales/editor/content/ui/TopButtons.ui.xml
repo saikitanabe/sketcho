@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
 	<ui:style>
 		
 	</ui:style>
@@ -8,10 +9,12 @@
 		<div>
 			<!-- <button ui:field="freehandOn" class="btn btn-success tooltipper" style="display: none;" title="Exit Freehand mode | Shortcut F key" data-placement="bottom">Freehand</button> -->
 			<a ui:field="colorize" title="Change freehand drawing color" class="btn-top" data-placement="bottom">
-				<i class="context-icon-colorize2-black"></i>
+				<!-- <i class="context-icon-colorize2-black"></i> -->
+        <svg class='sprite-menu-ico-tiny'><use xlink:href='#icons-keep--colors2' /></svg>
 			</a><!-- needed to remove space between buttons
 			 --><a ui:field="lineWeight" title="Change freehand line weight" class="btn-top" data-placement="bottom">
-				<i class="context-icon-green-line-width"></i>
+				<!-- <i class="context-icon-green-line-width"></i> -->
+        <svg class='sprite-menu-ico-tiny green'><use xlink:href='#context-menu-line-width' /></svg>
 			</a>
 		</div>
 	</g:HTMLPanel>

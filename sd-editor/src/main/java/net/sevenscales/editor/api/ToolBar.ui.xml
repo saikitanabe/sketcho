@@ -10,22 +10,34 @@
 				<span class="menu-btn2-big">
 					<a class="menu-btn2">
           <!-- <i class="menu-ico2-world"></i> -->
-          <svg class='sprite-toolbar-icon green'><use xlink:href='#toolbar-icons-world' /></svg>
+          <svg class='sprite-toolbar-icon green'><use xlink:href='#toolbar-icons--world' /></svg>
           </a>
 				</span>
 			</li>
 			<li ui:field="handtool">
 				<span class="menu-btn2-big">
-					<a class="menu-btn2"><i class="menu-ico2-hand"></i></a>
+					<a class="menu-btn2">
+            <!-- <i class="menu-ico2-hand"></i> -->
+            <svg class='sprite-toolbar-icon green'><use xlink:href='#toolbar-icons--hand' /></svg>
+          </a>
 				</span>
 			</li>
 			<li ui:field="freehand" title="Draw Freehand">
 				<span class="menu-btn2-big">
-					<a class="menu-btn2"><i class="menu-ico2-freehand"></i></a>
+					<a class="menu-btn2">
+            <!-- <i class="menu-ico2-freehand"></i> -->
+            <svg class='sprite-toolbar-icon green'><use xlink:href='#toolbar-icons--pen' /></svg>
+          </a>
 				</span>
 			</li>
-			<li ui:field="undo" title="Undo"><a class="menu-btn2 menu-btn2-left menu-btn2-left-inactive"><i class="menu-ico2-undo menu-ico2-undo-inactive"></i></a></li>
-			<li ui:field="redo" title="Redo"><a class="menu-btn2-join"><i class="menu-ico2-redo menu-ico2-redo-inactive"></i></a></li>
+			<li ui:field="undo" title="Undo"><a class="menu-btn2 menu-btn2-left menu-btn2-left-inactive">
+        <!-- <i class="menu-ico2-undo menu-ico2-undo-inactive"></i> -->
+        <svg class='sprite-toolbar-icon'><use xlink:href='#toolbar-icons--undo' /></svg>
+      </a></li>
+			<li ui:field="redo" title="Redo"><a class="menu-btn2-join">
+        <!-- <i class="menu-ico2-redo menu-ico2-redo-inactive"></i> -->
+        <svg class='sprite-toolbar-icon'><use xlink:href='#toolbar-icons--redo' /></svg>
+      </a></li>
 		</ul>
 	</g:HTMLPanel>
 </ui:UiBinder>

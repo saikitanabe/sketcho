@@ -252,7 +252,7 @@ public class ToolBar extends Composite {
 	private native void toggleButton(Element e, String type)/*-{
 		$wnd.$(e).find('span').toggleClass('menu-btn2-big-active')
 		$wnd.$(e).find('a').toggleClass('menu-btn2-active')
-		$wnd.$(e).find('i').toggleClass('menu-ico2-' + type + '-active')
+		// $wnd.$(e).find('svg').toggleClass('menu-ico2-' + type + '-active')
 	}-*/;
 
 	private void enabled(FreehandModeChangedEvent event) {

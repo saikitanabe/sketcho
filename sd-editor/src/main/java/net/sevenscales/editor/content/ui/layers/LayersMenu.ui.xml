@@ -9,19 +9,19 @@
 		<div class="btn-group">
 			<a ui:field="moveBack" title="Move element to background" class="btn btn-custom btn-context-menu tooltipper block-link">
 				<!-- <i class="context-icon-move-back"></i> -->
-        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu-move-bottom' /></svg>
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#icons-keep--move-bottom' /></svg>
 			</a>
 			<a ui:field="moveFront" title="Move element to top" class="btn btn-custom btn-context-menu tooltipper block-link">
 				<!-- <i class="context-icon-move-front"></i> -->
-        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu-move-top' /></svg>
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#icons-keep--move-top' /></svg>
 			</a>
 			<a ui:field="moveBackward" title="Move element backward" class="btn btn-custom btn-context-menu tooltipper block-link">
 				<!-- <i class="context-icon-move-backward"></i> -->
-        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu-move-backward' /></svg>
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#icons-keep--move-backward' /></svg>
 			</a>
 			<a ui:field="moveForward" title="Move element forward" class="btn btn-custom btn-context-menu tooltipper block-link">
 				<!-- <i class="context-icon-move-forward"></i> -->
-        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu-move-forward' /></svg>
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#icons-keep--move-forward' /></svg>
 			</a>
 		</div>
 	</g:HTMLPanel>
