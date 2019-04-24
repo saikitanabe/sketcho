@@ -14,7 +14,7 @@
 			</a><!-- needed to remove space between buttons
 			 --><a ui:field="lineWeight" title="Change freehand line weight" class="btn-top" data-placement="bottom">
 				<!-- <i class="context-icon-green-line-width"></i> -->
-        <svg class='sprite-menu-ico-tiny green'><use xlink:href='#context-menu-line-width' /></svg>
+        <svg class='sprite-menu-ico-tiny green'><use xlink:href='#context-menu--line-width' /></svg>
 			</a>
 		</div>
 	</g:HTMLPanel>

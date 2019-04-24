@@ -15,7 +15,7 @@
 			</a>
 			<a ui:field="duplicate" class="btn btn-custom btn-context-menu tooltipper" data-html="true">
 				<!-- <i class="context-icon-duplicate2"></i> -->
-        <svg class='sprite-menu-ico-tiny wht' style='width:12px;height:12px;'><use xlink:href='#context-menu--duplicate' /></svg>
+        <svg class='sprite-menu-ico-tiny wht stroke' style='width:12px;height:12px;'><use xlink:href='#context-menu--duplicate' /></svg>
 			</a>
 			<g:SimplePanel ui:field="changeConnection" styleName="inline-change-connection">
 			</g:SimplePanel>
@@ -29,11 +29,11 @@
 			</a>
 			<a ui:field="reverseConnection" title="Reverse Connection" class="btn btn-custom btn-context-menu tooltipper">
 				<!-- <i class="context-icon-reverse-connection2"></i> -->
-        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu--reverse' /></svg>
+        <svg class='sprite-menu-ico-tiny wht stroke'><use xlink:href='#context-menu--reverse' /></svg>
 			</a>
 			<a ui:field="rectifiedArrow" title="Rectified arrow" class="btn btn-custom btn-context-menu tooltipper">
 				<!-- <i class="context-icon-rectified-arrow"></i> -->
-        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu--conn-rectify' /></svg>
+        <svg class='sprite-menu-ico-tiny wht stroke'><use xlink:href='#context-menu--conn-rectify' /></svg>
 			</a>
 			<a ui:field="curvedArrow" title="Curved arrow" class="btn btn-custom btn-context-menu tooltipper">
 				<!-- <i class="context-icon-curved-arrow"></i> -->
@@ -71,22 +71,22 @@
 
  			<a ui:field="addlink" title="Add Link" class="btn btn-custom btn-context-menu tooltipper">
 				<!-- <i class="context-icon-link2"></i> -->
-        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu--link' /></svg>
+        <svg class='sprite-menu-ico-tiny wht stroke'><use xlink:href='#context-menu--link' /></svg>
 			</a>
  			<a ui:field="openlink" title="Open/Edit Link" class="btn btn-custom btn-context-menu tooltipper">
 				<!-- <i class="context-icon-link2"></i> -->
-        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu--link' /></svg>
+        <svg class='sprite-menu-ico-tiny wht stroke'><use xlink:href='#context-menu--link' /></svg>
 			</a>
 			<a ui:field="fileLink" title="Download file" class="btn btn-custom btn-context-menu tooltipper">
 				<!-- <i class="context-icon-download"></i> -->
-        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu--download' /></svg>
+        <svg class='sprite-menu-ico-tiny wht stroke'><use xlink:href='#context-menu--download' /></svg>
 			</a>
 			<a ui:field="comment" title="Comment" class="btn btn-custom btn-context-menu tooltipper">
         <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#menu-icon--comments' /></svg>
 			</a>
 			<a ui:field="delete" title="Delete" class="btn btn-custom btn-context-menu tooltipper">
 				<!-- <i class="context-icon-trash2"></i> -->
-        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu--trash' /></svg>
+        <svg class='sprite-menu-ico-tiny wht stroke'><use xlink:href='#context-menu--trash' /></svg>
 			</a>
 		</div>
 	</g:HTMLPanel>
