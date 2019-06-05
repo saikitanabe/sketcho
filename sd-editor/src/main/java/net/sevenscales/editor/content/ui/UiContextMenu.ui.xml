@@ -66,7 +66,7 @@
  -->			
  			<a ui:field="group" title="Group shapes together" class="btn btn-custom btn-context-menu tooltipper">
 				<!-- <i class="context-icon-group"></i> -->
-        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu--group' /></svg>
+        <svg class='sprite-menu-ico-tiny wht stroke'><use xlink:href='#context-menu--group' /></svg>
 			</a>
 
  			<a ui:field="addlink" title="Add Link" class="btn btn-custom btn-context-menu tooltipper">
