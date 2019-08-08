@@ -14,6 +14,7 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyEvent;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -696,7 +697,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 			@Override
 			public void execute() {
-				codeMirror.setHeight((int) (MeasurementPanel.getOffsetHeight() * surface.getScaleFactor()));
+        int height = (int) (MeasurementPanel.getOffsetHeight() * surface.getScaleFactor());
+				codeMirror.setHeight(height);
 			}
 		});
 	}
@@ -731,9 +733,21 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		
 		MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
 		int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
-		int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop();
+    int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop();
+    
+    int posx = x;
+    int posy = y;
 
-		popup.setPopupPosition(x, y);
+    // move popup position to a visible area
+    if (posx < Window.getScrollLeft()) {
+      // add padding
+      posx = Window.getScrollLeft() + 60;
+    }
+    if (posy < Window.getScrollTop()) {
+      // add padding
+      posy = Window.getScrollTop() + 60;
+    }
+		popup.setPopupPosition(posx, posy);
 
 		// textArea.setVisible(true);
 
@@ -752,8 +766,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		} else {
 			codeMirror.setColor("#" + diagram.getTextColor().toHexString());
 			codeMirror.setBackgroundColor(diagram.getTextAreaBackgroundColor());
-		}
-
+    }
+    
 		// ST 14.11.2018: Fix code mirror cursor not visible on black background
 		// set cursor color based on background, black or white
 		codeMirror.setCursorColorByBgColor(diagram.getTextAreaBackgroundColor());
@@ -765,9 +779,62 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     codeMirror.setFontSize(fontSize + "px");
     codeMirror.setLineHeight(lineHeight(fontSize) + "px");
     
-		codeMirror.setWidth((int) (diagram.getTextAreaWidth() * scaleFactor ));
-		setTextAreaHeight();
-		popup.setContentWidth((int) (diagram.getTextAreaWidth() * scaleFactor));
+    int editorWidth = (int) (diagram.getTextAreaWidth() * scaleFactor);
+    // if (editorWidth > Window.getClientWidth()) {
+    //   editorWidth = Window.getClientWidth();
+    // }
+    codeMirror.setWidth(editorWidth);
+    
+    // codeMirror.setHeight("100vh");
+
+    Point p = ScaleHelpers.diagramPositionToScreenPoint(
+      diagram,
+      surface,
+      false
+    );
+    
+    int clientHeight = Window.getClientHeight();
+    int clientWidth = Window.getClientWidth();
+
+    // take zoom into calculation, it might not fit if board is zoomed
+    int posHeight = p.y + (int) (diagram.getHeight() * scaleFactor);
+    int posWidth = p.x + (int) (diagram.getWidth() * scaleFactor);
+
+    // restore default height
+    codeMirror.setHeight("auto");
+
+    // remove diagram dialog editor by default
+    codeMirror.removeClass("diagram-dialog-editor");
+
+    if (posWidth > clientWidth
+        || diagram.getWidth() > clientWidth
+        || posHeight > clientHeight) {
+      // open editor as a modal dialog
+
+      int popupTop = 160;
+      int popupLeft = 160;
+      int popupMarginRigth = 160;
+      int diagramDialogPadding = 22;
+
+      codeMirror.setHeight(clientHeight - diagramDialogPadding - 20 - popupLeft * 2);
+      codeMirror.setWidth(clientWidth - diagramDialogPadding - popupMarginRigth * 2);
+      popup.setContentWidth(clientWidth - popupMarginRigth * 2);
+
+      popup.setPopupPosition(popupTop, popupLeft);
+
+      if ("transparent".equals(codeMirror.getBackgroundColor())) {
+        // dialog editor needs to have a solid background always
+        codeMirror.setBackgroundColor(
+          Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash()
+        );
+      }
+
+      codeMirror.addClass("diagram-dialog-editor");
+    } else {
+      // use legacy editor height setup      
+      setTextAreaHeight();
+      popup.setContentWidth((int) (diagram.getTextAreaWidth() * scaleFactor));
+    }
 
 		if (surface.getScaleFactor() > 1) {
 			String paddingTop = ((int) (2 * surface.getScaleFactor())) + "";
