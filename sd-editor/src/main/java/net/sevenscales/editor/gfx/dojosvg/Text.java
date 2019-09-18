@@ -287,7 +287,9 @@ class Text extends Shape implements IText {
   }-*/;
   
   @Override
-  public void addText(JavaScriptObject tokens, int x, int width, boolean textAlignCenter, boolean textAlignRight) {
+  public void addText(JavaScriptObject tokens, int x,
+    int width, boolean textAlignCenter, boolean textAlignRight
+  ) {
 	  Element r = getRawNode(rawNode);
 
 	  if (textAlignCenter) {
@@ -295,13 +297,6 @@ class Text extends Shape implements IText {
 	  } else if (textAlignRight) {
 	  	x += width;
     }
-
-    // Fix 18.9.2019 ST: Firefox doesn't have this as a default value
-    // and without this Firefox has different baseline than in Chrome.
-    // There was special handling in svg-textarea.js for Firefox
-    // to add extra line for the fist tspan, but that is not available
-    // in exported static SVG.
-    r.setAttribute("dominant-baseline", "text-before-edge");
 
 	  addText(r, tokens, x, width, baselineBottom, UiUtils.isFirefox(), UiUtils.isIE());
 	  tspanMode = true;
