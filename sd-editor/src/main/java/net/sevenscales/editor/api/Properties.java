@@ -83,7 +83,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private int textEditY;
 	private CommentEditor commentEditor;
 	private EditorCommon editorCommon;
-	private boolean modifiedAtLeastOnce;
+  private boolean modifiedAtLeastOnce;
+	private boolean dialogMode;
 	
 	private Buffer buffer = new Buffer();
 
@@ -709,7 +710,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			return;
 		}
 
-		if (selectedDiagram != null) {
+		if (selectedDiagram != null && !this.dialogMode) {
       // ST 15.3.2019: Use always measurment panel or horizontally scaled editors
       // don't show big enough text area when zoomed in
       setMeasurementPanelText(codeMirror.getText());
@@ -805,6 +806,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
     // remove diagram dialog editor by default
     codeMirror.removeClass("diagram-dialog-editor");
+    this.dialogMode = false;
 
     if (posWidth > clientWidth
         || diagram.getWidth() > clientWidth
@@ -830,6 +832,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
       }
 
       codeMirror.addClass("diagram-dialog-editor");
+
+      this.dialogMode = true;
     } else {
       // use legacy editor height setup      
       setTextAreaHeight();
