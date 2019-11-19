@@ -1,8 +1,5 @@
 package net.sevenscales.editor.content.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Touch;
@@ -322,13 +319,13 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 
 		$wnd.globalStreams.scaleRestoreStream.onValue(function(value) {
 			me.@net.sevenscales.editor.content.ui.ScaleSlider::scaleToFactor(D)(value)
-		})
+    })
     
     $wnd.globalStreams.userMessagePropsStream.onValue(function(value) {
       me.@net.sevenscales.editor.content.ui.ScaleSlider::userMessagePropsStream(I)(value)
     })
-	}-*/;
-
+  }-*/;
+  
   private void userMessagePropsStream(int extraHeight) {
     this.scaleSlider.getElement().getStyle().setTop(58 + extraHeight, Unit.PX);
   }
@@ -360,7 +357,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
   }
 
 	private void createVisibleSlider() {
-		final SimplePanel scaleSlider = new SimplePanel();
+		this.scaleSlider = new SimplePanel();
 		scaleSlider.setStyleName("scaleSlider");
 		scaleSlider.getElement().setTitle("Zoom Out - | Zoom In +");
     EffectHelpers.tooltip(scaleSlider.getElement(), "right");
@@ -379,7 +376,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	 * using the same pinch and surface jumps randomly.
 	 */
 	private void startPinching(double distance) {
-		EffectHelpers.fadeIn(innerScaleSlider.getElement());
+    EffectHelpers.fadeOut(innerScaleSlider.getElement());
     currentDistance = distance;
 		firePinchStarted();
 	}
@@ -389,7 +386,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	}
 
 	private void endPinch() {
-    EffectHelpers.fadeOut(innerScaleSlider.getElement());
+		EffectHelpers.fadeIn(innerScaleSlider.getElement());
     surface.getEditorContext().getEventBus().fireEvent(new PinchZoomEvent(false));
 	}
 	
