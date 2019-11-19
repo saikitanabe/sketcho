@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Touch;
 import com.google.gwt.event.dom.client.TouchEndEvent;
 import com.google.gwt.event.dom.client.TouchEndHandler;
@@ -12,7 +13,8 @@ import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
-
+import java.util.ArrayList;
+import java.util.List;
 import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
@@ -34,6 +36,8 @@ import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.content.utils.EffectHelpers;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 
+
+
 public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private static SLogger logger = SLogger.createLogger(ScaleSlider.class);
 
@@ -44,6 +48,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private int currentIndex = Constants.ZOOM_DEFAULT_INDEX;
 	private double currentDistance;
 
+  private SimplePanel scaleSlider;
 	private SimplePanel innerScaleSlider;
 	private BirdsEye birdsEye;
 	private int deltaSum = 0;
@@ -318,7 +323,15 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 		$wnd.globalStreams.scaleRestoreStream.onValue(function(value) {
 			me.@net.sevenscales.editor.content.ui.ScaleSlider::scaleToFactor(D)(value)
 		})
+    
+    $wnd.globalStreams.userMessagePropsStream.onValue(function(value) {
+      me.@net.sevenscales.editor.content.ui.ScaleSlider::userMessagePropsStream(I)(value)
+    })
 	}-*/;
+
+  private void userMessagePropsStream(int extraHeight) {
+    this.scaleSlider.getElement().getStyle().setTop(58 + extraHeight, Unit.PX);
+  }
 
 	private boolean freehandMode() {
 		return surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE);		
