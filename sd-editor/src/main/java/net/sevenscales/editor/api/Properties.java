@@ -1,11 +1,5 @@
 package net.sevenscales.editor.api;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -17,11 +11,17 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.EditorContext;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
@@ -59,6 +59,9 @@ import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
+
+
+
 
 public class Properties extends SimplePanel implements DiagramSelectionHandler, ClickDiagramHandler, SizeChangedHandler, IEditor, ITextEditor.TextChanged {
   private static final SLogger logger = SLogger.createLogger(Properties.class);
@@ -738,15 +741,18 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     
     int posx = x;
     int posy = y;
+    boolean showAsDialog = false;
 
     // move popup position to a visible area
     if (posx < Window.getScrollLeft()) {
       // add padding
-      posx = Window.getScrollLeft() + 60;
+      // posx = Window.getScrollLeft() + 60;
+      showAsDialog = true;
     }
     if (posy < Window.getScrollTop()) {
       // add padding
-      posy = Window.getScrollTop() + 60;
+      // posy = Window.getScrollTop() + 60;
+      showAsDialog = true;
     }
 		popup.setPopupPosition(posx, posy);
 
@@ -805,24 +811,20 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     codeMirror.setHeight("auto");
 
     // remove diagram dialog editor by default
-    codeMirror.removeClass("diagram-dialog-editor");
-    this.dialogMode = false;
+    setDialogMode(false);
 
     if (posWidth > clientWidth
         || diagram.getWidth() > clientWidth
-        || posHeight > clientHeight) {
+        || posHeight > clientHeight
+        || showAsDialog) {
       // open editor as a modal dialog
 
-      int popupTop = 160;
-      int popupLeft = 160;
-      int popupMarginRigth = 160;
-      int diagramDialogPadding = 22;
-
-      codeMirror.setHeight(clientHeight - diagramDialogPadding - 20 - popupLeft * 2);
-      codeMirror.setWidth(clientWidth - diagramDialogPadding - popupMarginRigth * 2);
-      popup.setContentWidth(clientWidth - popupMarginRigth * 2);
-
-      popup.setPopupPosition(popupTop, popupLeft);
+      int maxDialoagWidth = 700;
+      if (maxDialoagWidth > clientWidth) {
+        showDynamicDialog(clientWidth, clientHeight);
+      } else {
+        showFixedDialog(clientWidth, clientHeight, maxDialoagWidth);
+      }
 
       if ("transparent".equals(codeMirror.getBackgroundColor())) {
         // dialog editor needs to have a solid background always
@@ -831,9 +833,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
         );
       }
 
-      codeMirror.addClass("diagram-dialog-editor");
-
-      this.dialogMode = true;
+      setDialogMode(true);
     } else {
       // use legacy editor height setup      
       setTextAreaHeight();
@@ -849,7 +849,56 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		if (surface.getScaleFactor() != 1.0f && !"transparent".equals(diagram.getTextAreaBackgroundColor())) {
 			codeMirror.setBackgroundColor("#" + diagram.getBackgroundColor());
 		}
-	}
+  }
+
+  private void showDynamicDialog(
+    int clientWidth,
+    int clientHeight
+  ) {
+
+    int popupLeft = 60;
+    int popupTop = 60;
+    int popupMarginRigth = 60;
+    int diagramDialogPadding = 22;
+
+    codeMirror.setHeight(clientHeight - diagramDialogPadding - 40 - popupLeft * 2);
+    codeMirror.setWidth(clientWidth - diagramDialogPadding - popupMarginRigth * 2);
+    popup.setContentWidth(clientWidth - popupMarginRigth * 2);
+
+    popup.setPopupPosition(popupLeft, popupTop);
+  }
+
+  private void showFixedDialog(
+    int clientWidth,
+    int clientHeight,
+    int maxDialoagWidth
+  ) {
+    int popupLeft = clientWidth / 2 - maxDialoagWidth / 2;
+    int popupTop = 80;
+    int popupMarginRigth = 160;
+    int diagramDialogPadding = 30;
+  
+    // codeMirror.setHeight(clientHeight - diagramDialogPadding - 20 - popupLeft * 2);
+    int bottomMargin = (int) (popupTop * 3);
+    codeMirror.setHeight(clientHeight - bottomMargin);
+    // codeMirror.setWidth(clientWidth - diagramDialogPadding - popupMarginRigth * 2);
+    codeMirror.setWidth(maxDialoagWidth - diagramDialogPadding);
+    // popup.setContentWidth(clientWidth - popupMarginRigth * 2);
+    popup.setContentWidth(maxDialoagWidth);
+  
+    popup.setPopupPosition(popupLeft, popupTop);
+  }
+  
+  private void setDialogMode(boolean enable) {
+    if (enable) {
+      codeMirror.addClass("diagram-dialog-editor");
+      this.dialogMode = true;
+    } else {
+      codeMirror.removeClass("diagram-dialog-editor");
+      this.dialogMode = false;
+    }
+
+  }
 
 	private int lineHeight(int fontSize) {
 		// return ((int) ((fontSize) * surface.getScaleFactor())) + 5;
