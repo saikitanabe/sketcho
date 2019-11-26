@@ -866,6 +866,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     popup.setContentWidth(clientWidth - popupMarginRigth * 2);
 
     popup.setPopupPosition(popupLeft, popupTop);
+    
+    firePropertyEditorOpenPosition(popupLeft, popupTop);
   }
 
   private void showFixedDialog(
@@ -875,11 +877,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
   ) {
     int popupLeft = clientWidth / 2 - maxDialoagWidth / 2;
     int popupTop = 80;
-    int popupMarginRigth = 160;
     int diagramDialogPadding = 30;
   
     // codeMirror.setHeight(clientHeight - diagramDialogPadding - 20 - popupLeft * 2);
-    int bottomMargin = (int) (popupTop * 3);
+    int bottomMargin = 200;
     codeMirror.setHeight(clientHeight - bottomMargin);
     // codeMirror.setWidth(clientWidth - diagramDialogPadding - popupMarginRigth * 2);
     codeMirror.setWidth(maxDialoagWidth - diagramDialogPadding);
@@ -887,7 +888,18 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     popup.setContentWidth(maxDialoagWidth);
   
     popup.setPopupPosition(popupLeft, popupTop);
+    firePropertyEditorOpenPosition(popupLeft, popupTop);
   }
+
+  private native void firePropertyEditorOpenPosition(int popupLeft, int popupTop)/*-{
+    $wnd.setTimeout(function() {
+      $wnd.globalStreams.contextMenuStream.push({
+        type: 'property-editor-pos',
+        x: popupLeft,
+        y: popupTop,
+      })
+    }, 100)
+  }-*/;
   
   private void setDialogMode(boolean enable) {
     if (enable) {

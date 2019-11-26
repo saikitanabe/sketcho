@@ -229,7 +229,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 						EffectHelpers.tooltipper();
 					}
 				}
-			}
+      }
 		});
 		
 		editorContext.getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
@@ -438,8 +438,26 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				// do not allow to show switch if editor is open
 				me.@net.sevenscales.editor.content.ui.UiContextMenu::switchElement()();
 			}
+    })
+    
+    $wnd.globalStreams.contextMenuStream.filter(function(e) {
+			return e && e.type === 'property-editor-pos'
+		}).onValue(function(v) {
+			me.@net.sevenscales.editor.content.ui.UiContextMenu::onShowPropertyEditor(II)(v.x, v.y)
 		})
-	}-*/;
+
+  }-*/;
+  
+  private void onShowPropertyEditor(final int x, final int y) {
+    popup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+      @Override
+      public void setPosition(int offsetWidth, int offsetHeight) {
+        int top = y - (offsetHeight + 7);
+        popup.setPopupPosition(x, top);
+      }
+    });
+
+  }
 
 	private native void tapCurvedArrow(Element e, UiContextMenu me)/*-{
 		$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
@@ -555,17 +573,23 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 	private Point fixPosition(int left, int top, int offsetWidth, int offsetHeight) {
 		popupPosition.x = left;
-		popupPosition.y = top;
+    popupPosition.y = top;
+    
+    // ST 26.11.2019: Prevent to show where pointer double clicked
+    // and removes accidental clicks to context menu, which
+    // could be delete.
+    int marginTop = 20;
+
 		if (left <= Window.getScrollLeft()) {
 			// use mouse left
 			popupPosition.x = surface.getCurrentClientX();
 			// use mouse top
-			popupPosition.y = surface.getCurrentClientY() - offsetHeight;
+			popupPosition.y = surface.getCurrentClientY() - (offsetHeight + marginTop);
 		} else if (top <= Window.getScrollTop()) {
 			// use mouse left
 			popupPosition.x = surface.getCurrentClientX();
 			// use mouse top
-			popupPosition.y = surface.getCurrentClientY() - offsetHeight;
+			popupPosition.y = surface.getCurrentClientY() - (offsetHeight + marginTop);
 		}
 
 		if ((popupPosition.x + offsetWidth) >= Window.getClientWidth()) {

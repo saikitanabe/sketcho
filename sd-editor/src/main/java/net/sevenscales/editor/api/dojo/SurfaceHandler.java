@@ -1,9 +1,5 @@
 package net.sevenscales.editor.api.dojo;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayString;
@@ -29,7 +25,9 @@ import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.js.JsDimension;
 import net.sevenscales.domain.js.JsShape;
@@ -87,6 +85,8 @@ import net.sevenscales.editor.gfx.domain.JsSvg;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.uicomponents.CircleElement;
+
+
 
 
 class SurfaceHandler extends SimplePanel implements 
@@ -199,18 +199,19 @@ class SurfaceHandler extends SimplePanel implements
             currentClientMouseMoveY = ne.getClientY();
             break;
           }
-          case Event.ONMOUSEDOWN:
-          case Event.ONMOUSEUP: {
-            // store mouse up event location before it happens
-            // on surface, then possible to pass this location
-            // together with OTs.
-            // mouse up location through surface is the location of mouse down
-            // at least when dragging an element, most probably element prevents
-            // getting mouse up location
-            currentClientX = ne.getClientX();
-            currentClientY = ne.getClientY();
-            break;
-          }
+          // NOTE: retrieved from global sketchboard-current-pointer.ts
+          // case Event.ONMOUSEDOWN:
+          // case Event.ONMOUSEUP: {
+          //   // store mouse up event location before it happens
+          //   // on surface, then possible to pass this location
+          //   // together with OTs.
+          //   // mouse up location through surface is the location of mouse down
+          //   // at least when dragging an element, most probably element prevents
+          //   // getting mouse up location
+          //   currentClientX = ne.getClientX();
+          //   currentClientY = ne.getClientY();
+          //   break;
+          // }
         }
       }
     });
@@ -389,12 +390,21 @@ class SurfaceHandler extends SimplePanel implements
   }
 
   public int getCurrentClientX() {
-    return currentClientX;
+    // return currentClientX;
+    return nativeCurrentPointerDownX();
   }
 
   public int getCurrentClientY() {
-    return currentClientY;
+    // return currentClientY;
+    return nativeCurrentPointerDownY();
   }
+
+  private native int nativeCurrentPointerDownX()/*-{
+    return $wnd.currentPointerDownX()
+  }-*/;
+  private native int nativeCurrentPointerDownY()/*-{
+    return $wnd.currentPointerDownY()
+  }-*/;
 
   public int getCurrentClientMouseMoveX() {
     return currentClientMouseMoveX;
