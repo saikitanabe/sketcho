@@ -292,7 +292,11 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 				delta = -1
 			} else if (delta > 0) {
 				delta = 1
-			}
+      }
+      
+      // ST 27.11.2019: Prevent surface element area two finger browser zoom
+      // on MacOS
+      e.preventDefault()
 
 			me.@net.sevenscales.editor.content.ui.ScaleSlider::handlMouseWheel(I)(delta)
 		}
