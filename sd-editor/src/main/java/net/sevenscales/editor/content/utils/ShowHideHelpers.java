@@ -4,6 +4,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -16,6 +17,13 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.Library;
+import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
+import net.sevenscales.editor.api.event.pointer.PointerDownHandler;
+import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
+import net.sevenscales.editor.api.event.pointer.PointerOutEvent;
+import net.sevenscales.editor.api.event.pointer.PointerOutHandler;
+import net.sevenscales.editor.api.event.pointer.PointerOverEvent;
+import net.sevenscales.editor.api.event.pointer.PointerOverHandler;
 
 
 public class ShowHideHelpers {
@@ -52,42 +60,86 @@ public class ShowHideHelpers {
 			Scheduler.get().scheduleFixedDelay(hideslider, delay);
 		}
 
+    if (PointerEventsSupport.isSupported()) {
+      supportPointerEvents();
+    } else {
+      supportMouseTouchEvents();
+    }
+
+    handleLibraryStreams(this);
+  }
+  
+  private void supportPointerEvents() {
+		outer.addDomHandler(new PointerOverHandler() {
+			@Override
+			public void onPointerOver(PointerOverEvent event) {
+        mouseOver();
+			}
+    }, PointerOverEvent.getType());
+
+		outer.addDomHandler(new PointerOutHandler() {
+			@Override
+			public void onPointerOut(PointerOutEvent event) {
+        mouseOut();
+			}
+		}, PointerOutEvent.getType());
+		
+		outer.addDomHandler(new PointerDownHandler() {
+			@Override
+			public void onPointerDown(PointerDownEvent event) {
+        mouseDown(event);
+			}
+		}, PointerDownEvent.getType());
+  }
+
+  private void supportMouseTouchEvents() {
 		listenTouch();
 		outer.addDomHandler(new MouseOverHandler() {
 			@Override
 			public void onMouseOver(MouseOverEvent event) {
-				if (!ngIsLibraryManualShowHide()) {
-					show();
-				}
+        mouseOver();
 			}
 		}, MouseOverEvent.getType());
 		outer.addDomHandler(new MouseOutHandler() {
 			@Override
 			public void onMouseOut(MouseOutEvent event) {
-				// System.out.println(Element.as(event.getNativeEvent().getEventTarget()).getId());
-//				if (!Element.as(event.getNativeEvent().getEventTarget()).isOrHasChild(inner.getElement())) {
-					onOuterElement = false;
-					// Scheduler.get().scheduleFixedDelay(hideslider, 2000);
-//				}
+        mouseOut();
 			}
 		}, MouseOutEvent.getType());
 		
 		outer.addDomHandler(new MouseDownHandler() {
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
-				event.preventDefault();
-				event.stopPropagation();
-				// if (!TouchHelpers.isSupportsTouch()) {
-					show();
-				// }
+        mouseDown(event);
+			}
+		}, MouseDownEvent.getType());
+  }
+
+  private void mouseDown(MouseEvent event) {
+    event.preventDefault();
+    event.stopPropagation();
+    // if (!TouchHelpers.isSupportsTouch()) {
+      show();
+    // }
 //				if (!Element.as(event.getNativeEvent().getEventTarget()).isOrHasChild(inner.getElement())) {
 //					Scheduler.get().scheduleFixedDelay(hideslider, 2000);
 //				}
-			}
-		}, MouseDownEvent.getType());
 
-		handleLibraryStreams(this);
-	}
+  }
+
+  private void mouseOver() {
+    if (!ngIsLibraryManualShowHide()) {
+      show();
+    }
+  }
+
+  private void mouseOut() {
+    // System.out.println(Element.as(event.getNativeEvent().getEventTarget()).getId());
+    //				if (!Element.as(event.getNativeEvent().getEventTarget()).isOrHasChild(inner.getElement())) {
+              onOuterElement = false;
+              // Scheduler.get().scheduleFixedDelay(hideslider, 2000);
+    //				}
+  }
 
 	private native void handleLibraryStreams(ShowHideHelpers me)/*-{
 		$wnd.globalStreams.closeLibraryStram.onValue(function(value) {

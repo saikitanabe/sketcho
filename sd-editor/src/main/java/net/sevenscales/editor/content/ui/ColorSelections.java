@@ -3,6 +3,7 @@ package net.sevenscales.editor.content.ui;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -12,6 +13,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -21,6 +23,8 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
+import net.sevenscales.editor.api.event.hammer.Hammer2;
+import net.sevenscales.editor.api.event.hammer.Hammer2TapEventHandler;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorSetType;
 import net.sevenscales.editor.api.impl.FastButton;
 import net.sevenscales.editor.api.impl.FastElementButton;
@@ -298,21 +302,35 @@ public class ColorSelections extends Composite {
 			}
 		});
 
-		tapDefaultColor(defaultColor, this);
-		tapTransparent(transparent, this);
+    // tapDefaultColor(defaultColor, this);
+    new Hammer2(defaultColor).on("tap", new Hammer2TapEventHandler(){
+      @Override
+      public void onHammerTap(Event event) {
+        onRestoreDefaults();
+      }
+    });
+
+    // tapTransparent(transparent, this);
+    new Hammer2(transparent).on("tap", new Hammer2TapEventHandler(){
+      @Override
+      public void onHammerTap(Event event) {
+        onTransparent();
+      }
+    });
+
 	}
 
-	private native void tapDefaultColor(Element e, ColorSelections me)/*-{
-		$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
-			me.@net.sevenscales.editor.content.ui.ColorSelections::onRestoreDefaults()();
-		})
-	}-*/;
+	// private native void tapDefaultColor(Element e, ColorSelections me)/*-{
+	// 	$wnd.Hammer2(e, {preventDefault: true}).on('tap', function() {
+	// 		me.@net.sevenscales.editor.content.ui.ColorSelections::onRestoreDefaults()();
+	// 	})
+	// }-*/;
 
-	private native void tapTransparent(Element e, ColorSelections me)/*-{
-		$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
-			me.@net.sevenscales.editor.content.ui.ColorSelections::onTransparent()();
-		})
-	}-*/;
+	// private native void tapTransparent(Element e, ColorSelections me)/*-{
+	// 	$wnd.Hammer2(e, {preventDefault: true}).on('tap', function() {
+	// 		me.@net.sevenscales.editor.content.ui.ColorSelections::onTransparent()();
+	// 	})
+	// }-*/;
 
 	public void backgroundMode() {
 		colorTarget = ColorTarget.BACKGROUND;
@@ -358,11 +376,11 @@ public class ColorSelections extends Composite {
 		FastButton color = new FastButton(focus);
 //		color.addMouseOverHandler(mouseOverHandler);
 		color.addClickHandler(clickHandler);
-		color.setStyleName("focuspanel");
+		color.setStyleName("focuspanel color-btn");
 		
 		
-		int width = 10;
-		int height = 10;
+		int width = 16;
+		int height = 16;
 		if (TouchHelpers.isSupportsTouch()) {
 			width = 20;
 			height = 20;
@@ -372,6 +390,8 @@ public class ColorSelections extends Composite {
 //		System.out.println(hex);
 		color.getElement().setAttribute("data-hexcolor", hexcolor);
 		color.getElement().getStyle().setBackgroundColor(hexcolor);
+		color.getElement().getStyle().setLineHeight(height, Unit.PX);
+		color.getElement().getStyle().setFontSize(height - 1, Unit.PX);
 		return color;
 	}
 

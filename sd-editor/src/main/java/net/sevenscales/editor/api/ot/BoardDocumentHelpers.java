@@ -63,8 +63,10 @@ public class BoardDocumentHelpers {
 
 
 	public static List<? extends IDiagramItemRO> diagramsToItems(Iterable<Diagram> diagrams) {
-		List<Diagram> filteredDiagrams = net.sevenscales.editor.content.utils.DiagramHelpers.filterOwnerDiagramsAsListKeepOrder(diagrams, net.sevenscales.editor.api.ActionType.NONE);
-		List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.getDiagramsAsDTOKeepOrder(filteredDiagrams, true);
+    List<Diagram> filteredDiagrams = net.sevenscales.editor.content.utils.DiagramHelpers.filterOwnerDiagramsAsListKeepOrder(diagrams, net.sevenscales.editor.api.ActionType.NONE);
+    
+    List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.getDiagramsAsDTOKeepOrder(filteredDiagrams, true);
+    
 		return operationItems;
 	}
 

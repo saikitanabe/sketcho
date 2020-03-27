@@ -26,7 +26,7 @@ public class MindCentralElement extends ActivityElement implements SupportsRecta
 		}
 		
 		// set text again to format shape correctly
-		textUtil.setText(text, editable);
+		textUtil.setText(text, editable, isForceTextRendering());
 		
     super.constructorDone();
 	}

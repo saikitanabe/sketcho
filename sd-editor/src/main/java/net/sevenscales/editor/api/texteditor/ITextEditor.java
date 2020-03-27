@@ -25,8 +25,11 @@ public interface ITextEditor {
 	void selectAll();
 	void cursorEnd();
 	String getText();
-	void setText(String text);
+  void setText(String text);
+  void addClass(String styleClass);
+  void removeClass(String styleClass);
 	void setBackgroundColor(String color);
+	String getBackgroundColor();
 	void setColor(String color);
 	void setCursorColorByBgColor(String bgcolor);
 	void setFontSize(String fontSize);
@@ -34,5 +37,6 @@ public interface ITextEditor {
 	void setTextAlign(String textAlign);
 	void setWidth(int width);
 	void setHeight(int height);
+	void setHeight(String height);
 	boolean isCodeMirror();
 }

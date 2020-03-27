@@ -1,9 +1,5 @@
 package net.sevenscales.editor.api.dojo;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayString;
@@ -29,11 +25,12 @@ import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.js.JsDimension;
 import net.sevenscales.domain.js.JsShape;
-import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.BoardDimensions;
 import net.sevenscales.editor.api.EditorContext;
@@ -84,9 +81,12 @@ import net.sevenscales.editor.gfx.domain.ILoadObserver;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.ISurface;
-import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.JsSvg;
+import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.uicomponents.CircleElement;
+
+
 
 
 class SurfaceHandler extends SimplePanel implements 
@@ -199,18 +199,19 @@ class SurfaceHandler extends SimplePanel implements
             currentClientMouseMoveY = ne.getClientY();
             break;
           }
-          case Event.ONMOUSEDOWN:
-          case Event.ONMOUSEUP: {
-            // store mouse up event location before it happens
-            // on surface, then possible to pass this location
-            // together with OTs.
-            // mouse up location through surface is the location of mouse down
-            // at least when dragging an element, most probably element prevents
-            // getting mouse up location
-            currentClientX = ne.getClientX();
-            currentClientY = ne.getClientY();
-            break;
-          }
+          // NOTE: retrieved from global sketchboard-current-pointer.ts
+          // case Event.ONMOUSEDOWN:
+          // case Event.ONMOUSEUP: {
+          //   // store mouse up event location before it happens
+          //   // on surface, then possible to pass this location
+          //   // together with OTs.
+          //   // mouse up location through surface is the location of mouse down
+          //   // at least when dragging an element, most probably element prevents
+          //   // getting mouse up location
+          //   currentClientX = ne.getClientX();
+          //   currentClientY = ne.getClientY();
+          //   break;
+          // }
         }
       }
     });
@@ -389,12 +390,21 @@ class SurfaceHandler extends SimplePanel implements
   }
 
   public int getCurrentClientX() {
-    return currentClientX;
+    // return currentClientX;
+    return nativeCurrentPointerDownX();
   }
 
   public int getCurrentClientY() {
-    return currentClientY;
+    // return currentClientY;
+    return nativeCurrentPointerDownY();
   }
+
+  private native int nativeCurrentPointerDownX()/*-{
+    return $wnd.currentPointerDownX()
+  }-*/;
+  private native int nativeCurrentPointerDownY()/*-{
+    return $wnd.currentPointerDownY()
+  }-*/;
 
   public int getCurrentClientMouseMoveX() {
     return currentClientMouseMoveX;
@@ -695,7 +705,7 @@ class SurfaceHandler extends SimplePanel implements
     MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, getScaleFactor());
 //    int x = event.getElementOffsetX(getElement());
 //    int y = event.getElementOffsetY(getElement());
-    mouseDiagramManager.onMouseDown(null, point, keys);
+    mouseDiagramManager.onMouseDown(new OrgEvent(event), null, point, keys);
     
 //    if (properties != null) {
 //      properties.setFocus(true);
@@ -815,8 +825,8 @@ class SurfaceHandler extends SimplePanel implements
     
     diagrams.clear();
     loadEventListenerCollection.fireLoadedEvent();
-    Debug.log("SurfaceHandler::loaded (callback)");
-    logger.debug("loaded {}... done", name);
+    // Debug.log("SurfaceHandler::loaded (callback)");
+    // logger.debug("loaded {}... done", name);
   }
 
   @Override
@@ -923,11 +933,11 @@ class SurfaceHandler extends SimplePanel implements
     return proxyOnDrag;
   }
 
-  public void addAsDragging(Diagram diagram, boolean ownerComponent, MatrixPointJS point, int keys) {
+  public void addAsDragging(OrgEvent event, Diagram diagram, boolean ownerComponent, MatrixPointJS point, int keys) {
     proxyDragAdd = true;
     add(diagram, ownerComponent);
     mouseDiagramManager.select(diagram);
-    mouseDiagramManager.getDragHandler().onMouseDown(diagram, point, keys);
+    mouseDiagramManager.getDragHandler().onMouseDown(event, diagram, point, keys);
     proxyDragAdd = false;
 //    mouseDiagramManager.onMouseMove(null, x-10, y);
   }
@@ -1122,7 +1132,7 @@ class SurfaceHandler extends SimplePanel implements
 //  }
   
   public void scale() {
-    scale(scaleFactor, false);
+    scale(scaleFactor, false, 0, 0);
   }
   
   public void invertScale() {
@@ -1134,10 +1144,13 @@ class SurfaceHandler extends SimplePanel implements
   }
   
   @Override
-  public void scale(double value, boolean wheel) {
+  public void scale(double value, boolean wheel, int middleX, int middleY) {
     if (wheel) {
       // wheel zoom zooms to mouse point
       scaleAtPoint(value, currentClientMouseMoveX, currentClientMouseMoveY);
+    } else if (middleX != 0 || middleY != 0) {
+      // wheel zoom zooms to mouse point
+      scaleAtPoint(value, middleX, middleY);
     } else {
       // NOTE
       // - e.g. touch device should calculate center point between fingers

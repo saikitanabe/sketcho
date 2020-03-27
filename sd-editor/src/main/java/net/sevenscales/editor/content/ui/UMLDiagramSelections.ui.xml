@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:net.sevenscales.editor.api.impl">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:c="urn:import:net.sevenscales.editor.api.impl"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
 	<ui:style>		
 				
 		.simple {
@@ -60,7 +61,8 @@
 			<c:child>
 				<g:HTML>
 					<a title="Select a diagram element" class="btn btn-custom download-btn tooltipper">
-						<i class="context-icon-add-diagram"></i>
+						<!-- <i class="context-icon-add-diagram"></i> -->
+            <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu-add-diagram' /></svg>
 					</a>
 				</g:HTML>
 			</c:child>

@@ -13,6 +13,7 @@ import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.RootPanel;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
@@ -21,16 +22,24 @@ import net.sevenscales.editor.api.event.ColorSelectedEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEventHandler;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
+import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
+import net.sevenscales.editor.api.event.pointer.PointerDownHandler;
+import net.sevenscales.editor.api.event.pointer.PointerUpEvent;
+import net.sevenscales.editor.api.event.pointer.PointerUpHandler;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.content.ui.UIKeyHelpers;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 
 
-public class FreehandDrawerHandler implements MouseDiagramHandler {
+public class FreehandDrawerHandler implements
+  MouseDiagramHandler, 
+  PointerDownHandler,
+  PointerUpHandler {
   private static SLogger logger = SLogger.createLogger(FreehandDrawerHandler.class);
 
   static {
@@ -132,6 +141,9 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
       }
     });
 
+    RootPanel.get().addDomHandler(this, PointerDownEvent.getType());
+    RootPanel.get().addDomHandler(this, PointerUpEvent.getType());
+
     handleStreams(this);
   }
 
@@ -166,12 +178,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     }
 
     if (event.getTypeInt() == Event.ONMOUSEDOWN) {
-      if (Element.is(ne.getEventTarget())) {
-        // check is mouse down for surface or it could be some button
-        if (surface.getElement().isOrHasChild(Element.as(ne.getEventTarget()))) {
-          handleMouseDown(ne.getClientX(), ne.getClientY());
-        }
-      }
+      mouseDown(ne);
     } else if (event.getTypeInt() == Event.ONTOUCHSTART) {
       Touch touch = getTouches(ne).get(0);
       if (Element.is(ne.getEventTarget())) {
@@ -192,6 +199,24 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     } */ else if (event.getTypeInt() == Event.ONDBLCLICK) {
       handleDoubleClick(event.getNativeEvent());
     }    
+  }
+
+  @Override
+	public void onPointerDown(PointerDownEvent event) {
+    if (!freehandMode()) {
+      return;
+    }
+
+    mouseDown(event.getNativeEvent());
+  }
+  
+  private void mouseDown(NativeEvent ne) {
+    if (Element.is(ne.getEventTarget())) {
+      // check is mouse down for surface or it could be some button
+      if (surface.getElement().isOrHasChild(Element.as(ne.getEventTarget()))) {
+        handleMouseDown(ne.getClientX(), ne.getClientY());
+      }
+    }
   }
 
   private native boolean isClassString(Element e)/*-{
@@ -257,7 +282,7 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     freehandPahts.add(currentFreehandPath);
   }
 
-  public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+  public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
     // not handled through here!!! handling custom mouse down preview event
     // since when drawing on top of existing element coordinates are wrong
     // and free hand needs to have surface coordinates
@@ -266,6 +291,15 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 
   @Override
   public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
+    mouseUp();
+  }
+
+  @Override
+  public void onPointerUp(PointerUpEvent event) {
+    mouseUp();
+  }
+
+  private void mouseUp() {
     if (!staticMovement) {
       endDrawing();
     }
@@ -312,14 +346,16 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
     surface.getEditorContext().set(EditorProperty.FREEHAND_MOUSE_DOWN, mouseDown);
   }
 
-  public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+  @Override
+  public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
 
   public void onMouseLeave(Diagram sender, MatrixPointJS point) {
     clearPoints();
   }
 
-  public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  @Override
+  public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
     if (!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE) || !surface.getName().equals(ISurfaceHandler.DRAWING_AREA)) {
       return;
     }
@@ -483,11 +519,11 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
   }
 	
 	@Override
-	public void onTouchStart(Diagram sender, MatrixPointJS point) {
+	public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
 	}
 	
   @Override
-  public void onTouchMove(Diagram sender, MatrixPointJS point) {
+  public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
@@ -497,5 +533,5 @@ public class FreehandDrawerHandler implements MouseDiagramHandler {
 	public boolean handling() {
 		return surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE) && surface.getName().equals(ISurfaceHandler.DRAWING_AREA);
 	}
-  
+
 }

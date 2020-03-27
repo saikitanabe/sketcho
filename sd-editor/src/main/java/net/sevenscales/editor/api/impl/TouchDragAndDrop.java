@@ -33,12 +33,6 @@ public class TouchDragAndDrop implements TouchStartHandler, TouchMoveHandler, To
 	private HandlerRegistration touchStartHandlerRegistration;
 	private TouchContext context;
 	
-	public interface ITouchToMouseHandler {
-		void onTouchToMouseMove(MouseMoveEvent event);
-		void onTouchToMouseUp(MouseUpEvent e);
-		void onTouchToMouseDown(MouseDownEvent e);
-	}
-	
 	public TouchDragAndDrop(ITouchToMouseHandler touchHandler, HasTouchStartHandlers dragHandle) {
 //		RootPanel.get().addDomHandler(this, TouchStartEvent.getType());
 //		RootPanel.get().addDomHandler(this, TouchMoveEvent.getType());
@@ -50,6 +44,7 @@ public class TouchDragAndDrop implements TouchStartHandler, TouchMoveHandler, To
 //      touchStartHandlerRegistration = ((HasTouchStartHandlers) dragHandle).addTouchStartHandler(TouchManager.this);
 //    }
 		dragHandle.addTouchStartHandler(TouchDragAndDrop.this);
+
 		initCapturingWidget();
 	}
 	

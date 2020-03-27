@@ -204,7 +204,7 @@ public class ComponentElement extends AbstractDiagramItem implements SupportsRec
   }
 
   public void doSetText(String newText) {
-    textUtil.setText(newText, editable);
+    textUtil.setText(newText, editable, isForceTextRendering());
   }
 
   @Override

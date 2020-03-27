@@ -113,6 +113,22 @@ class CodeMirror extends Composite implements ITextEditor {
 	}
 	private native String getText(JavaScriptObject editor)/*-{
 		return editor.getValue()
+  }-*/;
+  
+  @Override
+	public void addClass(String styleClass) {
+		addClass(styleClass, cm);
+	}
+	private native void addClass(String styleClass, JavaScriptObject cm)/*-{
+		$wnd.$(cm.getTextArea().parentNode).addClass(styleClass)
+  }-*/;
+
+  @Override
+	public void removeClass(String styleClass) {
+		removeClass(styleClass, cm);
+	}
+	private native void removeClass(String styleClass, JavaScriptObject cm)/*-{
+		$wnd.$(cm.getTextArea().parentNode).removeClass(styleClass)
 	}-*/;
 
 	@Override
@@ -121,6 +137,14 @@ class CodeMirror extends Composite implements ITextEditor {
 	}
 	private native void setBackgroundColor(String color, JavaScriptObject cm)/*-{
 		$wnd.$(cm.getTextArea().parentNode).css("backgroundColor", color)
+  }-*/;
+  
+	@Override
+	public String getBackgroundColor() {
+		return getBackgroundColor(cm);
+	}
+	private native String getBackgroundColor(JavaScriptObject cm)/*-{
+		return $wnd.$(cm.getTextArea().parentNode).css("backgroundColor")
 	}-*/;
 
 	public void setCursorColorByBgColor(String bgcolor) {
@@ -179,10 +203,23 @@ class CodeMirror extends Composite implements ITextEditor {
 
 	@Override
 	public void setWidth(int width) {
-	}
+    this.setWidth(cm, width + "px");
+  }
+  private native void setWidth(JavaScriptObject cm, String width)/*-{
+    $wnd.$(cm.getTextArea().parentNode).find(".CodeMirror").css("width", width)
+  }-*/;
+
 	@Override
 	public void setHeight(int height) {
-	}
+    this.setHeight(cm, height + "px");
+  }
+	@Override
+	public void setHeight(String height) {
+    this.setHeight(cm, height);
+  }
+  private native void setHeight(JavaScriptObject cm, String height)/*-{
+    $wnd.$(cm.getTextArea().parentNode).find(".CodeMirror").css("height", height)
+  }-*/;
 	@Override
 	public boolean isCodeMirror() {
 		return true;

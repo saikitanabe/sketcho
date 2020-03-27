@@ -66,7 +66,6 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private GenericHasTextElement hasTextElement;
   private boolean pathsSetAtLeastOnce;
   private boolean tosvg;
-	private boolean forceTextRendering;
 	private boolean legacy = false;
   
   private static final String BOUNDARY_COLOR 					= "#aaaaaa";
@@ -189,9 +188,9 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
     	// force to render text even if property editor is open on 
     	// shape creation always, case: onboarding new shape property editor
     	// is open when inserting shapes in delay
-    	this.forceTextRendering = true;
+    	this.setForceTextRendering(true);
 	    setText(text);
-	    this.forceTextRendering = false;
+	    this.setForceTextRendering(false);
     } else {
     	textUtil.setStoreText("");
     }
@@ -367,9 +366,9 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
 	public void doSetText(String newText) {
 		if (textUtil instanceof TextElementVerticalFormatUtil) {
-			((TextElementVerticalFormatUtil) textUtil).setText(newText, editable, forceTextRendering);
+			((TextElementVerticalFormatUtil) textUtil).setText(newText, editable, isForceTextRendering());
 		} else {
-	    textUtil.setText(newText, editable);
+	    textUtil.setText(newText, editable, isForceTextRendering());
 		}
 	}
 
@@ -503,8 +502,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	    background.setShape(left, top, width == 0 ? 4 : width, height == 0 ? 4 : height, 0);
 
 			// cannot divide with zero!!
-			double factorX = getFactorX();
-			double factorY = getFactorY();
+			double factorX = getShapeFactorX();
+			double factorY = getShapeFactorY();
 
 			// if (shape.getSvgData() != null) {
 			// 	// freehand and any custom svg case
@@ -589,7 +588,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   	return strokeWidth;
   }
 
-  public double getFactorX() {
+  public double getShapeFactorX() {
 		double factorX = 1;
 		if (width > 0) {
 			factorX = (width / shapeWidth());
@@ -602,7 +601,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		return factorX;
 	}
 
-	public double getFactorY() {
+	public double getShapeFactorY() {
 		double factorY = 1; 
 		if (height > 0) {
 			factorY = (height / shapeHeight());

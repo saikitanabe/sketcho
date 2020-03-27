@@ -10,6 +10,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.gfx.base.GraphicsEvent;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 
 class SurfaceHandlerImplFirefox extends SurfaceHandler {
 	private static final SLogger logger = SLogger.createLogger(SurfaceHandlerImplFirefox.class);
@@ -65,9 +66,16 @@ class SurfaceHandlerImplFirefox extends SurfaceHandler {
     int x = event.getNativeEvent().getClientX();
     int y = event.getNativeEvent().getClientY();
 
-    mouseDiagramManager.onMouseDown(null, MatrixPointJS.createScaledPoint(x, y, getScaleFactor()), 0);
+    OrgEvent origEvent = new OrgEvent(event.getNativeEvent());
+
+    mouseDiagramManager.onMouseDown(
+      origEvent,
+      null,
+      MatrixPointJS.createScaledPoint(x, y, getScaleFactor()),
+      0
+    );
   }
-  
+
   @Override
   public void fireMouseOnEnter(MouseMoveEvent event) {
     Element e = SurfaceHandlerImplFirefox.this.getElement();
@@ -75,7 +83,7 @@ class SurfaceHandlerImplFirefox extends SurfaceHandler {
 //    int y = event.getRelativeY(e) - getRootLayer().getTransformY();
     int x = event.getRelativeX(e);
     int y = event.getRelativeY(e);
-    mouseDiagramManager.onMouseEnter(null, MatrixPointJS.createScaledPoint(x, y, getScaleFactor()));
+    mouseDiagramManager.onMouseEnter(new OrgEvent(event.getNativeEvent()), null, MatrixPointJS.createScaledPoint(x, y, getScaleFactor()));
   }
   
   @Override
@@ -112,7 +120,7 @@ class SurfaceHandlerImplFirefox extends SurfaceHandler {
     
     // hack to prevent showing surface context menu => fire click will reset this
 		cancelSurfaceClickEvent = mouseDiagramManager.isMovingBackground();
-    mouseDiagramManager.onMouseMove(null, MatrixPointJS.createScaledPoint(x, y, getScaleFactor()));
+    mouseDiagramManager.onMouseMove(new OrgEvent(event.getNativeEvent()), null, MatrixPointJS.createScaledPoint(x, y, getScaleFactor()));
   }
   
   @Override

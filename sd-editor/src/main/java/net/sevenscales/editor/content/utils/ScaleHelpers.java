@@ -55,10 +55,18 @@ public class ScaleHelpers {
 		return result;
 	}
 
-	public static Point diagramPositionToScreenPoint(Diagram d, ISurfaceHandler surface) {
-		int left = ScaleHelpers.unscaleValue(surface.getAbsoluteLeft() + d.getLeft(), surface.getScaleFactor()) + 
+	public static Point diagramPositionToScreenPoint(
+    Diagram d,
+    ISurfaceHandler surface,
+    boolean center
+  ) {
+
+    int valueX = center ? d.getCenterX() : d.getLeft();
+    int valueY = center ? d.getCenterY() : d.getTop();
+
+		int left = ScaleHelpers.unscaleValue(surface.getAbsoluteLeft() + valueX, surface.getScaleFactor()) + 
 				surface.getRootLayer().getTransformX(); 
-		int top = ScaleHelpers.unscaleValue(surface.getAbsoluteTop() + d.getTop(), surface.getScaleFactor()) + 
+		int top = ScaleHelpers.unscaleValue(surface.getAbsoluteTop() + valueY, surface.getScaleFactor()) + 
 				surface.getRootLayer().getTransformY();
 		return new Point(left, top);
 	}

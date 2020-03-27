@@ -1,22 +1,27 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-						 xmlns:g="urn:import:com.google.gwt.user.client.ui">
+						 xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
 	<ui:style>
 	</ui:style>
 	
 	<g:HTMLPanel>
 		<div class="btn-group">
 			<a ui:field="moveBack" title="Move element to background" class="btn btn-custom btn-context-menu tooltipper block-link">
-				<i class="context-icon-move-back"></i>
+				<!-- <i class="context-icon-move-back"></i> -->
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#icons-keep--move-bottom' /></svg>
 			</a>
 			<a ui:field="moveFront" title="Move element to top" class="btn btn-custom btn-context-menu tooltipper block-link">
-				<i class="context-icon-move-front"></i>
+				<!-- <i class="context-icon-move-front"></i> -->
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#icons-keep--move-top' /></svg>
 			</a>
 			<a ui:field="moveBackward" title="Move element backward" class="btn btn-custom btn-context-menu tooltipper block-link">
-				<i class="context-icon-move-backward"></i>
+				<!-- <i class="context-icon-move-backward"></i> -->
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#icons-keep--move-backward' /></svg>
 			</a>
 			<a ui:field="moveForward" title="Move element forward" class="btn btn-custom btn-context-menu tooltipper block-link">
-				<i class="context-icon-move-forward"></i>
+				<!-- <i class="context-icon-move-forward"></i> -->
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#icons-keep--move-forward' /></svg>
 			</a>
 		</div>
 	</g:HTMLPanel>

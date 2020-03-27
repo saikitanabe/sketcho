@@ -46,13 +46,17 @@ import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.IRelationship;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.silver.KeyCodeMap;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
 
 public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
-	private static final SLogger logger = SLogger.createLogger(SelectionHandler.class);
+  private static final SLogger logger = SLogger.createLogger(SelectionHandler.class);
+  static {
+    SLogger.addFilter(SelectionHandler.class);
+  }
 	
 //	private Diagram mouseDownSender = null;
 	private List<Diagram> diagrams;
@@ -154,7 +158,8 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   }
 		
 ////////////////////////////////////
-	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+  @Override
+	public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
     if (mouseState.isResizing()) {
       return false;
     }
@@ -178,7 +183,8 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 		return false;
 	}
 
-  public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+  @Override
+  public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -188,7 +194,8 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 		
 	}
 
-	public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  @Override
+	public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -229,11 +236,11 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 	}
 	
 	@Override
-	public void onTouchStart(Diagram sender, MatrixPointJS point) {
+	public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
 	}
 	
   @Override
-  public void onTouchMove(Diagram sender, MatrixPointJS point) {
+  public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
@@ -881,7 +888,9 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   }
 
   public void unselectAll() {
-  	logger.debug("unselectAll...");
+    // Debug.log("SelectionHandler unselectAll...");
+    // Debug.callstack("SelectionHandler unselectAll...");
+
     logger.start("unselectAll");
     for (int i = 0; i < diagrams.size(); ++i) {
       // nobody handled, so unselect all

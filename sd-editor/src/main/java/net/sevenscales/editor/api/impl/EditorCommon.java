@@ -1,22 +1,21 @@
 package net.sevenscales.editor.api.impl;
 
 import net.sevenscales.domain.utils.SLogger;
-
+import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.event.SelectionEvent;
-import net.sevenscales.editor.api.event.SelectionEventHandler;
-import net.sevenscales.editor.api.event.EditorClosedEvent;
-import net.sevenscales.editor.api.event.EditorClosedEventHandler;
-import net.sevenscales.editor.api.event.UnselectAllEvent;
 import net.sevenscales.editor.api.event.BackgroundMoveStartedEvent;
 import net.sevenscales.editor.api.event.BackgroundMoveStartedEventHandler;
-import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesEndedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
-import net.sevenscales.editor.api.ActionType;
-import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
+import net.sevenscales.editor.api.event.EditorClosedEvent;
+import net.sevenscales.editor.api.event.EditorClosedEventHandler;
+import net.sevenscales.editor.api.event.SelectionEvent;
+import net.sevenscales.editor.api.event.SelectionEventHandler;
+import net.sevenscales.editor.api.event.UnselectAllEvent;
+import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
 import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
 
 
 
@@ -37,6 +36,7 @@ public class EditorCommon {
 		surface.getEditorContext().getEventBus().addHandler(SelectionEvent.TYPE, new SelectionEventHandler() {
 			@Override
 			public void onSelection(SelectionEvent event) {
+        // Debug.callstack("EditorCommon.onSelection...");
 				EditorCommon.this.hideEditor.hide();
 			}
 		});

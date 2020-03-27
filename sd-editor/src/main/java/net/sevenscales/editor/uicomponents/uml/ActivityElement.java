@@ -161,7 +161,7 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
 	}
 
 	public void doSetText(String newText) {
-    textUtil.setText(newText, editable);
+    textUtil.setText(newText, editable, isForceTextRendering());
 	}
 
   @Override

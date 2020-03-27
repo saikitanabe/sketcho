@@ -5,10 +5,10 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-
 import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.gfx.domain.IContainer;
 import net.sevenscales.editor.gfx.domain.IText;
+
 
 class Text extends Shape implements IText {
   public static final String ALIGN_LEFT = "start";
@@ -28,10 +28,11 @@ class Text extends Shape implements IText {
   
 	Text(IContainer container, boolean baselineBottom) {
 		this.baselineBottom = baselineBottom;
-		rawNode = createText(container.getContainer());
+    rawNode = createText(container.getContainer());
 		setFontWeight(WEIGHT_NORMAL);
 	}
 	
+ @Override
 	public int getX() {
 		return getX(rawNode);
 	}
@@ -39,6 +40,7 @@ class Text extends Shape implements IText {
 		return parseInt(rawNode.getShape().x);
 	}-*/;
 
+ @Override
 	public int getY() {
 		return getY(rawNode);
 	}
@@ -64,6 +66,7 @@ class Text extends Shape implements IText {
 		rawNode.setFont(f)
 	}-*/;
 	
+  @Override
   public String getFontWeight() {
     return nativeGetFontWeight(rawNode);
   }
@@ -71,6 +74,7 @@ class Text extends Shape implements IText {
     return text.getFont().weight;
   }-*/;
   
+ @Override
 	public void setFontWeight(String weight) {
 	  nativeSetFontWeight(rawNode, weight);
 	}
@@ -85,6 +89,7 @@ class Text extends Shape implements IText {
 		}
 	}-*/;
 	
+ @Override
 	public void setAlignment(String alignment) {
 	  setAlignment(rawNode, alignment);
 	}
@@ -92,6 +97,7 @@ class Text extends Shape implements IText {
 	  rawNode.setShape( {align:alignment} );
 	}-*/;
 	
+  @Override
   public String getAlignment() {
     return nativeGetAlignment(rawNode);
   }
@@ -108,6 +114,7 @@ class Text extends Shape implements IText {
 		setAttribute("class", "svg-txt-right");
   }
 
+ @Override
 	public void setText(String text) {
 		setText(rawNode, text);
 	}
@@ -115,6 +122,7 @@ class Text extends Shape implements IText {
 		rawNode.setShape( {text:text} );
 	}-*/;
 	
+ @Override
 	public String getText() {
 	  return nativeGetText(rawNode);
 	}
@@ -122,6 +130,7 @@ class Text extends Shape implements IText {
 	  return rawNode.getShape().text;
 	}-*/;
 	
+ @Override
 	public void setShape(int x, int y) {
 		// TODO if created as tspan child nodes => update x attribute to all that have x attribute!!
 		// if (justTextNoTspan(rawNode)) {
@@ -163,10 +172,11 @@ class Text extends Shape implements IText {
 //			 .setFont({family: "Arial", size: "12", weight: "bold"} )
 			.setFill("#444444");
 			text.setFont({family: "sans-serif", size: "12px"});
-//			text.setAttribute("xml:space", "preserve");
+//			text.setAttribute("xml:space", "preserve");    
 	  return text;
 	}-*/;
 
+ @Override
 	public double getTextWidth() {
 		// if ((UiUtils.isSafari() || UiUtils.isFirefox() || UiUtils.isIE()) && !tspanMode) {
 		// 	int fontSize = parseFontSize(getFontSize());
@@ -187,6 +197,7 @@ class Text extends Shape implements IText {
 		return result;
 	}
 	
+ @Override
 	public double getLastSpanWidth() {
 		return _lastSpanWidth(rawNode);
 	}
@@ -225,6 +236,7 @@ class Text extends Shape implements IText {
 //		return 0;
 	}-*/;
 	
+ @Override
 	public double getTextHeight() {
 		// return 0;
 	  return getTextHeight(rawNode);
@@ -274,14 +286,17 @@ class Text extends Shape implements IText {
   	return rawNode.getFont().family;
   }-*/;
   
-  public void addText(JavaScriptObject tokens, int x, int width, boolean textAlignCenter, boolean textAlignRight) {
+  @Override
+  public void addText(JavaScriptObject tokens, int x,
+    int width, boolean textAlignCenter, boolean textAlignRight
+  ) {
 	  Element r = getRawNode(rawNode);
 
 	  if (textAlignCenter) {
 	  	x += width / 2;
 	  } else if (textAlignRight) {
 	  	x += width;
-	  }
+    }
 
 	  addText(r, tokens, x, width, baselineBottom, UiUtils.isFirefox(), UiUtils.isIE());
 	  tspanMode = true;
@@ -308,6 +323,7 @@ class Text extends Shape implements IText {
   	return rawNode.rawNode;
   }-*/;
     
+  @Override
   public String getChildElements(int dx) {
   	String children = getChildElementsEscaped(dx);
   	return children;

@@ -33,8 +33,8 @@ import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.content.utils.ColorHelpers;
-import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.content.utils.ContainerAttachHelpers;
+import net.sevenscales.editor.content.utils.DiagramItemFactory;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramProxy;
 import net.sevenscales.editor.diagram.DiagramSelectionHandler;
@@ -61,6 +61,7 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.uicomponents.AnchorUtils.AnchorProperties;
@@ -137,6 +138,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   protected int factorX = 1;
   protected int factorY = 1;
   private boolean svgExport;
+  private boolean forceTextRendering;
 	
   public static final String EVENT_DOUBLE_CLICK = "ondblclick";
 
@@ -371,7 +373,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       int x = event.getElementOffsetX(surface.getElement());
       int y = event.getElementOffsetY(surface.getElement());
       MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
-      mouseListeners.fireMouseDown(this, point, keys);
+      mouseListeners.fireMouseDown(new OrgEvent(event), this, point, keys);
       mouseDown = true;
     } catch (Exception e) {
       net.sevenscales.domain.utils.Error.reload(e);
@@ -397,7 +399,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       int x = SurfaceUtil.eventGetElementOffsetX(surface.getElement(), event);
       int y = SurfaceUtil.eventGetElementOffsetY(surface.getElement(), event);
       MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
-      mouseListeners.fireMouseMove(this, point);
+      mouseListeners.fireMouseMove(new OrgEvent(event), this, point);
     } catch (Exception e) {
       net.sevenscales.domain.utils.Error.reload(e);
     }
@@ -416,7 +418,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     int x = SurfaceUtil.eventGetElementOffsetX(surface.getElement(), event);
     int y = SurfaceUtil.eventGetElementOffsetY(surface.getElement(), event);
     MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
-    mouseListeners.fireMouseEnter(this, point);
+    mouseListeners.fireMouseEnter(new OrgEvent(event), this, point);
     
     // if (!connectionHelpers.isShownFor(this)) {
     // 	connectionHelpers.show(this);
@@ -433,7 +435,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     int x = SurfaceUtil.eventGetElementOffsetX(surface.getElement(), event);
     int y = SurfaceUtil.eventGetElementOffsetY(surface.getElement(), event);
     MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
-    mouseListeners.fireTouchMove(this, point);
+    mouseListeners.fireTouchMove(new OrgEvent(event), this, point);
   }
   
   @Override
@@ -446,7 +448,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     int x = SurfaceUtil.eventGetElementOffsetX(surface.getElement(), event);
     int y = SurfaceUtil.eventGetElementOffsetY(surface.getElement(), event);
     MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
-    mouseListeners.fireTouchStart(this, point);
+    mouseListeners.fireTouchStart(new OrgEvent(event), this, point);
   }
   
   @Override
@@ -1083,7 +1085,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 /////////////////////////////////
 
 // From MouseDiagramListener
-  public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+  @Override
+  public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
 //    if ((ctrlDown && getLink() != null) || (!editable && getLink() != null)) {
 //      // on read only state mouse click is enough
 //      String token = History.getToken();
@@ -1100,19 +1103,21 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     return false;
   }
 
-  public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+  @Override
+  public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
   public void onMouseLeave(Diagram sender, MatrixPointJS point) {
   }
-  public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  @Override
+  public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
   public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
   }
   @Override
-  public void onTouchMove(Diagram sender, MatrixPointJS point) {
+  public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
   @Override
-  public void onTouchStart(Diagram sender, MatrixPointJS point) {
+  public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
@@ -2080,6 +2085,21 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
 	public IGroup getTextGroup() {
 		return null;
+	}
+
+  /**
+	 * @return the forceTextRendering
+	 */
+  @Override
+	public boolean isForceTextRendering() {
+		return forceTextRendering;
+	}
+	/**
+	 * @param forceTextRendering the forceTextRendering to set
+	 */
+  @Override
+	public void setForceTextRendering(boolean forceTextRendering) {
+		this.forceTextRendering = forceTextRendering;
 	}
 
 }

@@ -1,6 +1,9 @@
 package net.sevenscales.editor.api.impl;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
+import net.sevenscales.editor.api.event.pointer.PointerEvent;
+import net.sevenscales.editor.api.event.pointer.PointerMoveEvent;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
@@ -35,8 +38,22 @@ public class TouchHelpers {
 	  return result;
 	}
 	
+	public static MouseDownEvent createMouseDownEvent(PointerDownEvent event) {
+	  NativeEvent evt = Document.get().createMouseDownEvent(1, event.getScreenX(), event.getScreenY(), event.getClientX(), event.getClientY(), false, false, false, false, 0);
+	  MouseDownEvent result = new MouseDownEventImpl();
+	  result.setNativeEvent(evt);
+	  return result;
+	}
+	
 	public static MouseMoveEvent createMouseMoveEvent(Touch touch) {
 	  NativeEvent evt = Document.get().createMouseMoveEvent(1, touch.getScreenX(), touch.getScreenY(), touch.getClientX(), touch.getClientY(), false, false, false, false, 0);
+	  MouseMoveEventImpl result = new MouseMoveEventImpl();
+	  result.setNativeEvent(evt);
+	  return result;
+	}
+
+	public static MouseMoveEvent createMouseMoveEvent(PointerMoveEvent event) {
+	  NativeEvent evt = Document.get().createMouseMoveEvent(1, event.getScreenX(), event.getScreenY(), event.getClientX(), event.getClientY(), false, false, false, false, 0);
 	  MouseMoveEventImpl result = new MouseMoveEventImpl();
 	  result.setNativeEvent(evt);
 	  return result;
@@ -65,13 +82,33 @@ public class TouchHelpers {
 		context.screenX = touch.getScreenX();
 		context.screenY = touch.getScreenY();
 	}
+
+	public static void fillContext(PointerEvent event, TouchContext context) {
+		context.clientX = event.getClientX();
+		context.clientY = event.getClientY();
+		context.screenX = event.getScreenX();
+		context.screenY = event.getScreenY();
+	}
 	
 	public static double distance(Touch first, Touch second) {
-		int a = Math.abs(first.getClientX() - second.getClientX());
-		int b = Math.abs(first.getClientY() - second.getClientY());
+    return distance(
+      first.getClientX(),
+      first.getClientY(),
+      second.getClientX(),
+      second.getClientY()
+    );
+  }
+  
+  public static double distance(
+    int valueX1, 
+    int valueY1,
+    int valueX2,
+    int valueY2) {
+		int a = Math.abs(valueX1 - valueX2);
+		int b = Math.abs(valueY1 - valueY2);
 		
 		return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-	}
+  }
 	
 	public static boolean isSupportsTouch() {
 		return supportsTouch;

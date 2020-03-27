@@ -253,7 +253,7 @@ public class TextElement extends AbstractDiagramItem implements
 
 	@Override
 	public void doSetText(String text) {
-		textUtil.setText(text, editable);
+		textUtil.setText(text, editable, isForceTextRendering());
 	}
 
   @Override

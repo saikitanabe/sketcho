@@ -321,7 +321,7 @@ public class TextElementFormatUtil {
     setText(newText, editable);
   }
 
-  public void setText(String newText, boolean editable) {
+  private void setText(String newText, boolean editable) {
   	try {
       _setText(newText, editable);
   	} catch (Exception e) {
@@ -378,8 +378,9 @@ public class TextElementFormatUtil {
         // on windows line feeds are \r\n
         t = t.substring(0, t.length()-1);
       }
-      if (t.equals("--")) {
+      if (t.equals("--") || t.equals("—")) {
         // create separator line
+        // iPad converts -- to —
         ILine separator = IShapeFactory.Util.factory(editable).createLine(textGroup);
         separator.setStroke(parent.getBorderColor());
         // TODO isSketchiness()

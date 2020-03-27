@@ -104,9 +104,24 @@ class TextEditor extends Composite implements ITextEditor {
 	}
 
 	@Override
+	public void addClass(String className) {
+		textArea.getElement().addClassName(className);
+  }
+  
+	@Override
+	public void removeClass(String className) {
+		textArea.getElement().removeClassName(className);
+  }
+  
+	@Override
 	public void setBackgroundColor(String color) {
 		textArea.getElement().getStyle().setBackgroundColor(color);
-	}
+  }
+  
+  @Override
+  public String getBackgroundColor() {
+    return textArea.getElement().getStyle().getBackgroundColor();
+  }
 
 	@Override
 	public void setColor(String color) {
@@ -140,6 +155,10 @@ class TextEditor extends Composite implements ITextEditor {
 	@Override
 	public void setHeight(int height) {
 		textArea.getElement().getStyle().setHeight(height, Style.Unit.PX);
+	}
+	@Override
+	public void setHeight(String height) {
+		textArea.getElement().getStyle().setProperty("height", height);
 	}
 
 	@Override

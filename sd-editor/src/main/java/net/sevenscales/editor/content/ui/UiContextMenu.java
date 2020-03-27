@@ -35,6 +35,9 @@ import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
+import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
+import net.sevenscales.editor.api.event.pointer.PointerDownHandler;
+import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorSetType;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
@@ -173,14 +176,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		lineWeightPopup = new LineWeightPopup(surface, lineWeight);
 		textAlignPopup = new TextAlignPopup(surface, textAlign);
 
-		surface.addDomHandler(new TouchStartHandler() {
-			@Override
-			public void onTouchStart(TouchStartEvent event) {
-				if (popup.isShowing()) {
-					hide();
-				}
-			}
-		}, TouchStartEvent.getType());
+    if (PointerEventsSupport.isSupported()) {
+      supportPointerEvents();
+    } else {
+      supportMouseTouchEvents();
+    }
 
 		changeConnection.setWidget(new SelectButtonBox(new SelectButtonBox.IParent() {
 			public void show() {
@@ -211,7 +211,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					Diagram d = event.getLastSelected();
 					// logger.debug("Last Selected type {} x({}) y({})", d.toString(), d.getLeft(), d.getTop());
 
-					Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(d, UiContextMenu.this.surface);
+					Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(d, UiContextMenu.this.surface, false);
 					screenPosition.y += adjustByDiagramType(d);
 										
 					if (UiContextMenu.this.surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE)) {
@@ -229,7 +229,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 						EffectHelpers.tooltipper();
 					}
 				}
-			}
+      }
 		});
 		
 		editorContext.getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
@@ -382,7 +382,31 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		tapCurvedArrow(curvedArrow, this);
 		tapRectifiedArrow(rectifiedArrow, this);
 		tapGroup(group, this);
-	}
+  }
+
+  private void supportPointerEvents() {
+		surface.addDomHandler(new PointerDownHandler() {
+			@Override
+			public void onPointerDown(PointerDownEvent event) {
+        touchStart();
+			}
+		}, PointerDownEvent.getType());
+  }
+  
+  private void supportMouseTouchEvents() {
+		surface.addDomHandler(new TouchStartHandler() {
+			@Override
+			public void onTouchStart(TouchStartEvent event) {
+        touchStart();
+			}
+		}, TouchStartEvent.getType());
+  }
+
+  private void touchStart() {
+    if (popup.isShowing()) {
+      hide();
+    }
+  }
 
 	private void showContextMenu() {
 		popup.setPopupPositionAndShow(mainContextPosition);
@@ -414,8 +438,26 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				// do not allow to show switch if editor is open
 				me.@net.sevenscales.editor.content.ui.UiContextMenu::switchElement()();
 			}
+    })
+    
+    $wnd.globalStreams.contextMenuStream.filter(function(e) {
+			return e && e.type === 'property-editor-pos'
+		}).onValue(function(v) {
+			me.@net.sevenscales.editor.content.ui.UiContextMenu::onShowPropertyEditor(II)(v.x, v.y)
 		})
-	}-*/;
+
+  }-*/;
+  
+  private void onShowPropertyEditor(final int x, final int y) {
+    popup.setPopupPositionAndShow(new PopupPanel.PositionCallback() {
+      @Override
+      public void setPosition(int offsetWidth, int offsetHeight) {
+        int top = y - (offsetHeight + 7);
+        popup.setPopupPosition(x, top);
+      }
+    });
+
+  }
 
 	private native void tapCurvedArrow(Element e, UiContextMenu me)/*-{
 		$wnd.Hammer(e, {preventDefault: true}).on('tap', function() {
@@ -531,17 +573,23 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
 	private Point fixPosition(int left, int top, int offsetWidth, int offsetHeight) {
 		popupPosition.x = left;
-		popupPosition.y = top;
+    popupPosition.y = top;
+    
+    // ST 26.11.2019: Prevent to show where pointer double clicked
+    // and removes accidental clicks to context menu, which
+    // could be delete.
+    int marginTop = 20;
+
 		if (left <= Window.getScrollLeft()) {
 			// use mouse left
 			popupPosition.x = surface.getCurrentClientX();
 			// use mouse top
-			popupPosition.y = surface.getCurrentClientY() - offsetHeight;
+			popupPosition.y = surface.getCurrentClientY() - (offsetHeight + marginTop);
 		} else if (top <= Window.getScrollTop()) {
 			// use mouse left
 			popupPosition.x = surface.getCurrentClientX();
 			// use mouse top
-			popupPosition.y = surface.getCurrentClientY() - offsetHeight;
+			popupPosition.y = surface.getCurrentClientY() - (offsetHeight + marginTop);
 		}
 
 		if ((popupPosition.x + offsetWidth) >= Window.getClientWidth()) {
@@ -600,22 +648,25 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		if (colorpopup.isShowing()) {
 			colorpopup.hide();
 		} else {
-			if (TouchHelpers.isSupportsTouch()) {
+      // ST 28.2.2019 no longer touch device have a different
+      // position for showing color selections.
+      // Color buttons are now bigger to be use on iPad
+			// if (TouchHelpers.isSupportsTouch()) {
 
-				Diagram selected = selectionHandler.getOnlyOneSelected();
-				if (selected != null) {
-					colorSelections.setCurrentDiagramColor(
-						selected.getTextColor(),
-						selected.getBackgroundColorAsColor(),
-						selected.getBorderColor()
-					);
-				}
+			// 	Diagram selected = selectionHandler.getOnlyOneSelected();
+			// 	if (selected != null) {
+			// 		colorSelections.setCurrentDiagramColor(
+			// 			selected.getTextColor(),
+			// 			selected.getBackgroundColorAsColor(),
+			// 			selected.getBorderColor()
+			// 		);
+			// 	}
 
-				colorSelections.showHeader();
-				colorpopup.center();
-			} else {
+			// 	colorSelections.showHeader();
+			// 	colorpopup.center();
+			// } else {
 				setColorPopupRelativePosition();
-			}
+			// }
 		}
 		EffectHelpers.tooltipperHide();
 	}

@@ -42,6 +42,7 @@ import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
@@ -164,12 +165,14 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		lastModel = null;
   }
 
-	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+  @Override
+	public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
 		// checkSelection();
 		return false;
 	}
 
-	public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  @Override
+	public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
 	}
 
 	@Override
@@ -200,7 +203,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		// }
 	}
 
-	public boolean handleDoubleTap() {
+	public boolean handleDoubleTap(int x, int y) {
 		logger.debug("handleDoubleTap...");
 		itWasDoubleTap = true;
 
@@ -215,15 +218,16 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		// 			return false;
 		// 		}
 		// 	}, 500);		
-		return maybeStartSuperFlow();
+		return maybeStartSuperFlow(x, y);
 	}
 
-	public boolean handleSurfaceDoubleTap() {
+	public boolean handleSurfaceDoubleTap(int x, int y) {
 		boolean result = false;
 		try {
 			if (mouseUpPoint != null) {
 				boolean fromPreviousIfAny = this.mouseUpKeys == IGraphics.SHIFT;
-				result = createQuickConnection(mouseUpPoint.getScreenX(), mouseUpPoint.getScreenY(), fromPreviousIfAny);
+				// result = createQuickConnection(mouseUpPoint.getScreenX(), mouseUpPoint.getScreenY(), fromPreviousIfAny);
+				result = createQuickConnection(x, y, fromPreviousIfAny);
 			}
 			return result;
 		} catch (Exception e) {
@@ -232,7 +236,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		return result;
 	}
 
-	private boolean maybeStartSuperFlow() {
+	private boolean maybeStartSuperFlow(int x, int y) {
 		boolean result = false;
 		try {
 			// if (Tools.isQuickMode()) {
@@ -244,7 +248,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 					// anyway better to have some optimization
 				if (mouseUpPoint != null) {
 					boolean fromPreviousIfAny = this.mouseUpKeys == IGraphics.SHIFT;
-					result = checkToCreateQuickConnection(mouseUpPoint.getScreenX(), mouseUpPoint.getScreenY(), fromPreviousIfAny);
+					result = checkToCreateQuickConnection(x, y, fromPreviousIfAny);
 				}
 			// }
 
@@ -278,9 +282,9 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 	private boolean checkToCreateQuickConnection(int screenX, int screenY, boolean fromPreviousIfAny) {
 		boolean result = false;
-		Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
-		if (notAddedFromLibrary &&
-			  selected.size() == 0 && 
+    Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();
+    if (notAddedFromLibrary &&
+        selected.size() == 0 &&
 				previouslySelected != null && 
 				exists(previouslySelected)) {
 			result = createQuickConnection(screenX, screenY, fromPreviousIfAny);
@@ -289,8 +293,8 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 		// remembers what has been dragged and dropped
 		notAddedFromLibrary = true;
 		return result;
-	}
-
+  }
+  
 	private boolean createQuickConnection(int screenX, int screenY, boolean fromPreviousIfAny) {
 		ScaledAndTranslatedPoint stp = ScaleHelpers.scaleAndTranslateScreenpoint(screenX, screenY, surface);
 		int x = stp.scaledAndTranslatedPoint.x;
@@ -528,15 +532,18 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 
 	}
 
-	public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+  @Override
+	public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
 
 	}
-	
-	public void onTouchStart(Diagram sender, MatrixPointJS point) {
+  
+  @Override
+	public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
 
 	}
 
-	public void onTouchMove(Diagram sender, MatrixPointJS point) {
+  @Override
+	public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
 
 	}
 

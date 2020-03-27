@@ -1,11 +1,5 @@
 package net.sevenscales.editor.api;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -14,20 +8,28 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyEvent;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.constants.Constants;
+import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.EditorContext;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
 import net.sevenscales.editor.api.event.ChangeTextSizeEventHandler;
 import net.sevenscales.editor.api.event.ColorSelectedEvent;
-import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorSetType;
+import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
 import net.sevenscales.editor.api.event.ColorSelectedEventHandler;
 import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
 import net.sevenscales.editor.api.event.DiagramElementAddedEventHandler;
@@ -44,7 +46,7 @@ import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.texteditor.ITextEditor;
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
-import net.sevenscales.editor.content.utils.ColorHelpers;
+import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.ClickDiagramHandler;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.Diagram.SizeChangedHandler;
@@ -52,15 +54,21 @@ import net.sevenscales.editor.diagram.DiagramSelectionHandler;
 import net.sevenscales.editor.diagram.SelectionHandler;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
-import net.sevenscales.editor.diagram.utils.UiUtils;
-import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.ElementColor;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
+
+
+
 public class Properties extends SimplePanel implements DiagramSelectionHandler, ClickDiagramHandler, SizeChangedHandler, IEditor, ITextEditor.TextChanged {
-	private static final SLogger logger = SLogger.createLogger(Properties.class);
+  private static final SLogger logger = SLogger.createLogger(Properties.class);
+  
+	static {
+		SLogger.addFilter(Properties.class);
+	}
 
 	private static final String PROPERTIES_EDITOR_STYLE = "properties-TextArea2";
 	
@@ -78,20 +86,17 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private int textEditY;
 	private CommentEditor commentEditor;
 	private EditorCommon editorCommon;
-	private boolean modifiedAtLeastOnce;
+  private boolean modifiedAtLeastOnce;
+	private boolean dialogMode;
 	
-	private static class Buffer {
-		String text;
-		Diagram diagram;
-	}
 	private Buffer buffer = new Buffer();
-	private String lastSentText;
-	
+
 	private ShowDiagramPropertyTextEditorEventHandler showDiagramText = new ShowDiagramPropertyTextEditorEventHandler() {
 		@Override
 		public void on(ShowDiagramPropertyTextEditorEvent event) {
 			Diagram diagram = event.getDiagram();
 			if (diagram.supportsTextEditing()) {
+        logger.debug("ShowDiagramPropertyTextEditorEvent...");
 				selectedDiagram = diagram;
 				modifiedAtLeastOnce = event.markAsDirty();
 				surface.getEditorContext().set(EditorProperty.PROPERTY_EDITOR_SELECT_ALL_ENABLED, true);
@@ -191,8 +196,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		popup.addCloseHandler(new CloseHandler<PopupPanel>() {
 			@Override
 			public void onClose(CloseEvent<PopupPanel> event) {
-				logger.info("close properties editor...");
-				_doSend();
+        logger.info("close properties editor...");
+        // ST 8.3.2019: Clean sends buffer
+				// _doSendBuffer();
 				boolean forceApplyAlways = true;
 				applyTextToDiagram(forceApplyAlways);
 				Properties.this.editorCommon.fireEditorClosed();
@@ -236,8 +242,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			}
 		});
 
-		editorContext.getEventBus().addHandler(ShowDiagramPropertyTextEditorEvent.TYPE, showDiagramText);
-
+    editorContext.getEventBus().addHandler(ShowDiagramPropertyTextEditorEvent.TYPE, showDiagramText);
+    
 		handleEditorCloseStream(this);
 		handleItemRealTimeModify(this);
 
@@ -322,8 +328,14 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		if (selectedDiagram != null && item.getClientId().equals(selectedDiagram.getDiagramItem().getClientId())) {
 			String text = selectedDiagram.getDiagramItem().getText();
 			setTextAreaText(text);
-			// this is state in the server, so kept as sent
-			buffer.text = text;
+			// this is state from the server, so kept as sent
+      buffer.setText(text);
+      buffer.markSent();
+
+      // ST 8.3.2019: Close editor if open for the shape or editor window
+      // is not in correct place. Could move editor window to the new location.
+      // But in the end new text is used as well.
+			closeIfOpen();
 		}
 	}
 
@@ -372,8 +384,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 					// that is changed based on theme and calculated on runtime.
 					// Color borderColor = ColorHelpers.borderColorByBackground(newbg.red, newbg.green, newbg.blue);
 					if (color.getBackgroundColor().opacity > 0) {
-						// do not apply theme color if color is transparent
-						d.setBorderColor(Theme.THEME_BORDER_COLOR_STORAGE);
+            // do not apply theme color if color is transparent
+            // ST 14.3.2019: Fix markdown line color is not set --
+						// d.setBorderColor(Theme.THEME_BORDER_COLOR_STORAGE);
+						d.setBorderColor(color.getBorderColor());
 					}
 				}
 			}
@@ -409,14 +423,17 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 
 	private void closeIfOpen() {
-		if (popup.isShowing()) {
-			hide();
-		}
-	}
-	
+      hide();
+  }
+  
 	private void hide() {
-		popup.hide();
-		selectedDiagram = null;
+    Debug.log("Properties.hide");
+    // Debug.callstack("Properties.hide");
+
+    if (popup.isShowing()) {
+      popup.hide();
+    }
+    selectedDiagram = null;
 	}
 		
 	public void addSurface(ISurfaceHandler surfaceHandler, boolean modifiable) {
@@ -452,7 +469,12 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     if (isEditorOpen()) {
 	    codeMirror.setText("");
     }
-		modifiedAtLeastOnce = false;
+    // send buffer if not sent and clean buffer as well
+    _doSendBuffer();
+    buffer = new Buffer();
+    modifiedAtLeastOnce = false;
+    
+    closeIfOpen();
 	}
 
 	private boolean isEditorOpen() {
@@ -484,6 +506,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			return;
 		}
 
+    // set diagram text synchronously, because editor might be closed
+    // before buffer is saved and would show a wrong state for a while
+    // if set only when buffer is sent
     selectedDiagram.setText(codeMirror.getText(), textEditX, textEditY);
 
     modifiedAtLeastOnce = true;
@@ -494,50 +519,50 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	
 	private void sendBuffer() {
 		if (!sending) {
-			buffer.text = codeMirror.getText();
-			buffer.diagram = selectedDiagram;
+			buffer.setText(codeMirror.getText());
+			buffer.setDiagram(selectedDiagram);
 
-			// do not send update on every key stroke
-			sending = true;
 			sendScheduled();
 		} else {
 			// ensure sending... try at least once more
 //			onceMore = true;
-			if (!bufferTextIsSent()) {
+			if (!buffer.isSent()) {
 				// do not send if check says it is already sent
 				// this is due to automatic chile text element delete when text is empty
 				// text is no longer found for undo/redo
-				buffer.text = codeMirror.getText();
-				buffer.diagram = selectedDiagram;
+				buffer.setText(codeMirror.getText());
+				buffer.setDiagram(selectedDiagram);
 			} else {
-				buffer.text = "";
-				buffer.diagram = null;
+				buffer.setText("");
+				buffer.setDiagram(null);
 			}
 		}
 	}
 
 	private void sendScheduled() {
+    // do not send update on every key stroke
+    sending = true;
+
 		Scheduler.get().scheduleFixedDelay(new RepeatingCommand() {
 			@Override
 			public boolean execute() {
-				_doSend();		    
-				boolean doitagain = !bufferTextIsSent();
+				_doSendBuffer();		    
+				boolean doitagain = !buffer.isSent();
 				return doitagain;
 			}
 		}, 1500);
 	}
 
-	private void _doSend() {
-		if (buffer.diagram != null && !bufferTextIsSent()) {
-			lastSentText = buffer.diagram.getText(textEditX, textEditY);
-			Properties.this.editorCommon.fireChangedWithRelatedRelationships(buffer.diagram);
-	    sending = false;
-		}
+	private void _doSendBuffer() {
+		if (buffer.getDiagram() != null && !buffer.isSent()) {
+      // lastSentText = buffer.diagram.getText(textEditX, textEditY);
+      Properties.this.editorCommon.fireChangedWithRelatedRelationships(buffer.getDiagram());
+      buffer.markSent();
+    }
+    
+    sending = false;
   }
 
-	private boolean bufferTextIsSent() {
-	  return buffer.text.equals(lastSentText);
-	}
 
 	@Override
 	public void onClick(Diagram sender, int x, int y, int keys) {
@@ -587,7 +612,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private void showEditor(Diagram diagram, String text, final int left, final int top, boolean justCreated) {
 		if (popup.isShowing()) {
 			return;
-		}
+    }
+    
 		logger.info("SHOW EDITOR...");
 		if (!selectedDiagram.supportsTextEditing() || !AuthHelpers.allowedToEdit(diagram)) {
 			// if diagram text editing is not supported => return
@@ -599,12 +625,33 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			return;
 		}
 
-		if (surface.getScaleFactor() < 0.8 && !UiUtils.isMobile()) {
-			// zoom to mouse position
-			// not when using iPad (mobile) focus goes wrong
-			editorContext.getEventBus().fireEvent(
-				new SurfaceScaleEvent(Constants.ZOOM_DEFAULT_INDEX, true)
-			);
+    if (surface.getScaleFactor() < 1
+        // ST 15.2.2019: commented out to enable zooming on iPad.
+        // && !UiUtils.isMobile()
+        ) {
+          // centers diagram into the middle
+        // editorContext.getEventBus().fireEvent(
+        // 	new SurfaceScaleEvent(
+        //     true,
+        //     selectedDiagram.getCenterX(),
+        //     selectedDiagram.getCenterY()
+        //   )
+        // );
+
+        Point p = ScaleHelpers.diagramPositionToScreenPoint(
+          selectedDiagram,
+          surface,
+          true
+        );
+
+        // ST 29.3.2019: Center into the same and don't put it in the middle
+        editorContext.getEventBus().fireEvent(
+          new SurfaceScaleEvent(
+            Constants.ZOOM_DEFAULT_INDEX,
+            false,
+            p.x,
+            p.y
+        ));
 		}
 		
 		selectedDiagram.hideConnectionHelpers();
@@ -648,12 +695,14 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		}
 
 		MeasurementPanel.setPlainTextAsHtml(text, selectedDiagram.getMeasurementAreaWidth());
-		MeasurementPanel.setPosition(selectedDiagram.getLeft() + selectedDiagram.getWidth() + 20, selectedDiagram.getTop());
+    MeasurementPanel.setPosition(selectedDiagram.getLeft() + selectedDiagram.getWidth() + 20, selectedDiagram.getTop());
+    // MeasurementPanel.setZoom(surface.getScaleFactor());
 
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 			@Override
 			public void execute() {
-				codeMirror.setHeight(MeasurementPanel.getOffsetHeight());
+        int height = (int) (MeasurementPanel.getOffsetHeight() * surface.getScaleFactor());
+				codeMirror.setHeight(height);
 			}
 		});
 	}
@@ -664,17 +713,21 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			return;
 		}
 
-		if (selectedDiagram != null) {
-			if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
-				// in case dynamically resized text should use measurement panel!!!
-				setMeasurementPanelText(codeMirror.getText());
-			} else {
-				int rows = rows(codeMirror.getText());
-				int dFontSize = selectedDiagram.getFontSize() != null ? selectedDiagram.getFontSize() : 12;
-				int lheight = lineHeight(dFontSize);
-				int textAreaHeight = lheight * rows;
-				codeMirror.setHeight(textAreaHeight + lheight);
-			}
+		if (selectedDiagram != null && !this.dialogMode) {
+      // ST 15.3.2019: Use always measurment panel or horizontally scaled editors
+      // don't show big enough text area when zoomed in
+      setMeasurementPanelText(codeMirror.getText());
+
+			// if (selectedDiagram.supportsOnlyTextareaDynamicHeight()) {
+			// 	// in case dynamically resized text should use measurement panel!!!
+			// 	setMeasurementPanelText(codeMirror.getText());
+			// } else {
+			// 	int rows = rows(codeMirror.getText());
+			// 	int dFontSize = selectedDiagram.getFontSize() != null ? selectedDiagram.getFontSize() : 12;
+			// 	int lheight = lineHeight(dFontSize);
+			// 	int textAreaHeight = lheight * rows;
+			// 	codeMirror.setHeight(textAreaHeight + lheight);
+			// }
 		}
 	}
 
@@ -684,9 +737,24 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		
 		MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
 		int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
-		int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop();
+    int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop();
+    
+    int posx = x;
+    int posy = y;
+    boolean showAsDialog = false;
 
-		popup.setPopupPosition(x, y);
+    // move popup position to a visible area
+    if (posx < Window.getScrollLeft()) {
+      // add padding
+      // posx = Window.getScrollLeft() + 60;
+      showAsDialog = true;
+    }
+    if (posy < Window.getScrollTop()) {
+      // add padding
+      // posy = Window.getScrollTop() + 60;
+      showAsDialog = true;
+    }
+		popup.setPopupPosition(posx, posy);
 
 		// textArea.setVisible(true);
 
@@ -705,8 +773,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		} else {
 			codeMirror.setColor("#" + diagram.getTextColor().toHexString());
 			codeMirror.setBackgroundColor(diagram.getTextAreaBackgroundColor());
-		}
-
+    }
+    
 		// ST 14.11.2018: Fix code mirror cursor not visible on black background
 		// set cursor color based on background, black or white
 		codeMirror.setCursorColorByBgColor(diagram.getTextAreaBackgroundColor());
@@ -715,12 +783,62 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		
 		int dFontSize = diagram.getFontSize() != null ? diagram.getFontSize() : 12;
 		int fontSize = ((int) (dFontSize * scaleFactor));
-		codeMirror.setFontSize(fontSize + "px");
-		codeMirror.setLineHeight(lineHeight(fontSize) + "px");
+    codeMirror.setFontSize(fontSize + "px");
+    codeMirror.setLineHeight(lineHeight(fontSize) + "px");
+    
+    int editorWidth = (int) (diagram.getTextAreaWidth() * scaleFactor);
+    // if (editorWidth > Window.getClientWidth()) {
+    //   editorWidth = Window.getClientWidth();
+    // }
+    codeMirror.setWidth(editorWidth);
+    
+    // codeMirror.setHeight("100vh");
 
-		codeMirror.setWidth((int) (diagram.getTextAreaWidth() * scaleFactor ));
-		setTextAreaHeight();
-		popup.setContentWidth((int) (diagram.getTextAreaWidth() * scaleFactor));
+    Point p = ScaleHelpers.diagramPositionToScreenPoint(
+      diagram,
+      surface,
+      false
+    );
+    
+    int clientHeight = Window.getClientHeight();
+    int clientWidth = Window.getClientWidth();
+
+    // take zoom into calculation, it might not fit if board is zoomed
+    int posHeight = p.y + (int) (diagram.getHeight() * scaleFactor);
+    int posWidth = p.x + (int) (diagram.getWidth() * scaleFactor);
+
+    // restore default height
+    codeMirror.setHeight("auto");
+
+    // remove diagram dialog editor by default
+    setDialogMode(false);
+
+    if (posWidth > clientWidth
+        || diagram.getWidth() > clientWidth
+        || posHeight > clientHeight
+        || showAsDialog) {
+      // open editor as a modal dialog
+
+      int maxDialoagWidth = 700;
+      if (maxDialoagWidth > clientWidth) {
+        showDynamicDialog(clientWidth, clientHeight);
+      } else {
+        showFixedDialog(clientWidth, clientHeight, maxDialoagWidth);
+      }
+
+      if ("transparent".equals(codeMirror.getBackgroundColor())) {
+        // dialog editor needs to have a solid background always
+        codeMirror.setBackgroundColor(
+          Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash()
+        );
+      }
+
+      setDialogMode(true);
+    } else {
+      // use legacy editor height setup      
+      setTextAreaHeight();
+      popup.setContentWidth((int) (diagram.getTextAreaWidth() * scaleFactor));
+    }
 
 		if (surface.getScaleFactor() > 1) {
 			String paddingTop = ((int) (2 * surface.getScaleFactor())) + "";
@@ -731,10 +849,72 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		if (surface.getScaleFactor() != 1.0f && !"transparent".equals(diagram.getTextAreaBackgroundColor())) {
 			codeMirror.setBackgroundColor("#" + diagram.getBackgroundColor());
 		}
-	}
+  }
+
+  private void showDynamicDialog(
+    int clientWidth,
+    int clientHeight
+  ) {
+
+    int popupLeft = 60;
+    int popupTop = 60;
+    int popupMarginRigth = 60;
+    int diagramDialogPadding = 22;
+
+    codeMirror.setHeight(clientHeight - diagramDialogPadding - 40 - popupLeft * 2);
+    codeMirror.setWidth(clientWidth - diagramDialogPadding - popupMarginRigth * 2);
+    popup.setContentWidth(clientWidth - popupMarginRigth * 2);
+
+    popup.setPopupPosition(popupLeft, popupTop);
+    
+    firePropertyEditorOpenPosition(popupLeft, popupTop);
+  }
+
+  private void showFixedDialog(
+    int clientWidth,
+    int clientHeight,
+    int maxDialoagWidth
+  ) {
+    int popupLeft = clientWidth / 2 - maxDialoagWidth / 2;
+    int popupTop = 80;
+    int diagramDialogPadding = 30;
+  
+    // codeMirror.setHeight(clientHeight - diagramDialogPadding - 20 - popupLeft * 2);
+    int bottomMargin = 200;
+    codeMirror.setHeight(clientHeight - bottomMargin);
+    // codeMirror.setWidth(clientWidth - diagramDialogPadding - popupMarginRigth * 2);
+    codeMirror.setWidth(maxDialoagWidth - diagramDialogPadding);
+    // popup.setContentWidth(clientWidth - popupMarginRigth * 2);
+    popup.setContentWidth(maxDialoagWidth);
+  
+    popup.setPopupPosition(popupLeft, popupTop);
+    firePropertyEditorOpenPosition(popupLeft, popupTop);
+  }
+
+  private native void firePropertyEditorOpenPosition(int popupLeft, int popupTop)/*-{
+    $wnd.setTimeout(function() {
+      $wnd.globalStreams.contextMenuStream.push({
+        type: 'property-editor-pos',
+        x: popupLeft,
+        y: popupTop,
+      })
+    }, 100)
+  }-*/;
+  
+  private void setDialogMode(boolean enable) {
+    if (enable) {
+      codeMirror.addClass("diagram-dialog-editor");
+      this.dialogMode = true;
+    } else {
+      codeMirror.removeClass("diagram-dialog-editor");
+      this.dialogMode = false;
+    }
+
+  }
 
 	private int lineHeight(int fontSize) {
-		return ((int) ((fontSize + 5) * surface.getScaleFactor()));
+		// return ((int) ((fontSize) * surface.getScaleFactor())) + 5;
+		return (int) (fontSize + 5 * surface.getScaleFactor());
 	}
 
 	private int rows(String text) {
@@ -791,7 +971,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
 	@Override
 	public boolean hasPendingChanges() {
-		return !bufferTextIsSent();
+		// return !bufferTextIsSent();
+		return !buffer.isSent();
 	}
 
 }

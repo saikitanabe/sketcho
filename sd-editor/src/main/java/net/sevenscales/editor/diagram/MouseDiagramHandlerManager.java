@@ -4,8 +4,9 @@ package net.sevenscales.editor.diagram;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.Timer;
 
+import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -14,12 +15,18 @@ import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
+import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEventHandler;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.diagram.drag.MouseDiagramDragHandler;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 
 
-public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDiagramHandler, MouseState {
+public class MouseDiagramHandlerManager implements
+  MouseDiagramHandler,
+  ClickDiagramHandler,
+  MouseState,
+  DoubleTapHandler.IDoubleTapHandler {
 	private static final SLogger logger = SLogger.createLogger(MouseDiagramHandlerManager.class);
 
 	static {
@@ -46,8 +53,9 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	// current handler gets events after mouse down if registered
 	private MouseDiagramHandler currentMouseHandler;
 	private IBirdsEyeView birdsEyeView;
-	private boolean itsDoubleTap;
 //	private MouseDiagramHandler connectionModeMouseHandler;
+	private DoubleTapHandler doubleTapHandler;
+	private boolean cancelMouseDown;
 
 	public MouseDiagramHandlerManager(ISurfaceHandler surface, List<Diagram> diagrams, boolean editable, 
 	    IModeManager modeManager, IBirdsEyeView birdsEyeView) {
@@ -73,7 +81,8 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 				selectionHandler.movedMaybeGroup(dx, dy);
       }
     });
-		selectionHandler = new SelectionHandler(surface, diagrams, dragHandler.getDragHandlers(), this);
+    selectionHandler = new SelectionHandler(surface, diagrams, dragHandler.getDragHandlers(), this);
+    doubleTapHandler = new DoubleTapHandler(editable, surface, selectionHandler, this);
 		resizeHandler = new MouseDiagramResizeHandler(this, surface, modeManager);
 		backgroundMoveHandler = new BackgroundMoveHandler(diagrams, surface);
 		lassoSelectionHandler = new LassoSelectionHandler(surface, this);
@@ -98,15 +107,25 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 
 		// new code handles both separately and doesn't use hammer
 		// due to performance problems
-		// always handling both double tap and double click
-		handleDoubleTap(surface.getElement(), this);
-		handleMouseDoubleClick(surface.getElement(), this);
+    // always handling both double tap and double click
+    
 
 		if (!surface.isLibrary()) {
 			handleOnline(this);
 		}
 		// addMouseDiagramHandler(sketchDiagramAreaHandler);
-	}
+  }
+  
+  private ShowDiagramPropertyTextEditorEventHandler showEditorHandler = 
+    new ShowDiagramPropertyTextEditorEventHandler() {
+
+    @Override
+    public void on(ShowDiagramPropertyTextEditorEvent event) {
+      cancelMouseDown = true;
+      releaseCancelMouseDown.schedule(200);      
+    }
+
+  };
 
 	private native void handleOnline(MouseDiagramHandlerManager me)/*-{
 		if (typeof $wnd.globalStreams !== 'undefined') {
@@ -135,19 +154,33 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		}
 	}
 
-  public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+  @Override
+  public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
+    // if (doubleTapHandler.isDoubleTap()) {
+    //   return false;
+    // }
+
    //  logger.start("MouseDiagramHandlerManager.onMouseDown SUM");
   	// logger.start("MouseDiagramHandlerManager.onMouseDown 1");
   	// logger.debug("onMouseDown sender={}...", sender);
   	try {
+
+      if (cancelMouseDown) {
+        // Fix iPad touch double tap after mouse down
+        // now double tap cancels immediate touch/mouse/pointer down
+        return false;
+      }
+
+      Debug.log("MouseDiagramHandlerManager.onMouseDown...");
+
 	    if (Tools.isHandTool() || !surface.getEditorContext().isEditable()) {
 	      // if not editable, background should be still movable
-	  		backgroundMoveHandler.onMouseDown(sender, point, keys);
+	  		backgroundMoveHandler.onMouseDown(event, sender, point, keys);
 
 		    if (proxyDragHandler != null) {
 		    	// possibility to disable modes like hand tool when 
 		    	// starting to drag shapes from library
-			    proxyDragHandler.onMouseDown(sender, point, keys);
+			    proxyDragHandler.onMouseDown(event, sender, point, keys);
 			  }
 
 	  	// 	selectionHandler.onMouseDown(sender, point, keys);
@@ -158,7 +191,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 2");
 
-	    if (sketchDiagramAreaHandler.onMouseDown(sender, point, keys)) {
+	    if (sketchDiagramAreaHandler.onMouseDown(event, sender, point, keys)) {
 	      currentMouseHandler = sketchDiagramAreaHandler;
 	//      return false;
 	    }
@@ -179,7 +212,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	    
 	    // exclusive handlers
 	    if (freehandDrawHandler != null) {
-		    freehandDrawHandler.onMouseDown(sender, point, keys);
+		    freehandDrawHandler.onMouseDown(event, sender, point, keys);
 	    }
 
 	    if (freehandDrawHandler != null) {
@@ -191,9 +224,9 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		    }
 		  }
 
-			resizeHandler.onMouseDown(sender, point, keys);
+			resizeHandler.onMouseDown(event, sender, point, keys);
 
-			lassoSelectionHandler.onMouseDown(sender, point, keys);
+			lassoSelectionHandler.onMouseDown(event, sender, point, keys);
 	    if (lassoSelectionHandler.isLassoOn()) {
 				return true;
 	    }
@@ -201,8 +234,8 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 4");
 
-	    quickConnectionHandler.onMouseDown(sender, point, keys);
-	    selectionHandler.onMouseDown(sender, point, keys);
+	    quickConnectionHandler.onMouseDown(event, sender, point, keys);
+	    selectionHandler.onMouseDown(event, sender, point, keys);
 
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 5");
@@ -210,9 +243,9 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 7");
 	    
-	    handlers.fireMouseDown(sender, point, keys);
+	    handlers.fireMouseDown(event, sender, point, keys);
 	    if (proxyDragHandler != null) {
-		    proxyDragHandler.onMouseDown(sender, point, keys);
+		    proxyDragHandler.onMouseDown(event, sender, point, keys);
 		  }
 
 	    // logger.debugTime();
@@ -221,7 +254,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	    if (sender == null) {
 				// do not send diagram events
 				// diagrams register them selves straight if those are draggable
-				dragHandler.onMouseDown(sender, point, keys);
+				dragHandler.onMouseDown(event, sender, point, keys);
 			}
 	    
 	    // logger.debugTime();
@@ -230,7 +263,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	//		MatrixPointJS translatedPoint = MatrixPointJS.createScaledPoint
 	//			(point.getX() - surface.getRootLayer().getTransformX(), 
 	//			 point.getY() - surface.getRootLayer().getTransformY(), surface.getScaleFactor());
-			backgroundMoveHandler.onMouseDown(sender, point, keys);
+			backgroundMoveHandler.onMouseDown(event, sender, point, keys);
 			
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 10");
@@ -238,7 +271,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	    // logger.debugTime();
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 11");
 
-			surfaceClickHandler.onMouseDown(sender, point, keys);
+			surfaceClickHandler.onMouseDown(event, sender, point, keys);
   	} catch (Exception e) {
   		net.sevenscales.domain.utils.Error.reload(e);
   	}
@@ -248,14 +281,15 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		return true;
 	}
 
-	public void onMouseEnter(Diagram sender, MatrixPointJS point) {
-    handlers.fireMouseEnter(sender, point);
+  @Override
+	public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
+    handlers.fireMouseEnter(event, sender, point);
     if (proxyDragHandler != null) {
-	    proxyDragHandler.onMouseEnter(sender, point);
+	    proxyDragHandler.onMouseEnter(event, sender, point);
 	  }
-		resizeHandler.onMouseEnter(sender, point);
-		backgroundMoveHandler.onMouseEnter(sender, point);
-		lassoSelectionHandler.onMouseEnter(sender, point);
+		resizeHandler.onMouseEnter(event, sender, point);
+		backgroundMoveHandler.onMouseEnter(event, sender, point);
+		lassoSelectionHandler.onMouseEnter(event, sender, point);
 	}
 
 	public void onMouseLeave(Diagram sender, MatrixPointJS point) {
@@ -268,46 +302,51 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		backgroundMoveHandler.onMouseLeave(sender, point);
 		lassoSelectionHandler.onMouseLeave(sender, point);
 	}
-	
-	public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  
+  @Override
+	public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
+    if (doubleTapHandler.isDoubleTap()) {
+      return;
+    }
+
 		try {
 	    if (Tools.isHandTool() || !surface.getEditorContext().isEditable()) {
-	  		backgroundMoveHandler.onMouseMove(sender, point);
+	  		backgroundMoveHandler.onMouseMove(event, sender, point);
 				// lassoSelectionHandler.onMouseMove(sender, point);
 	      return;
 	    }
 	    
 	    if (freehandDrawHandler != null) {
-		    freehandDrawHandler.onMouseMove(sender, point);
-				selectionHandler.onMouseMove(sender, point);
+		    freehandDrawHandler.onMouseMove(event, sender, point);
+				selectionHandler.onMouseMove(event, sender, point);
 		    if (freehandDrawHandler.handling()) {
 		    	return;
 		    }
 		  }
 
 		  if (lassoSelectionHandler.isLassoOn()) {
-		  	lassoSelectionHandler.onMouseMove(sender, point);
+		  	lassoSelectionHandler.onMouseMove(event, sender, point);
 		  	return;
 		  }
 	    
-	    handlers.fireMouseMove(sender, point);
+	    handlers.fireMouseMove(event, sender, point);
 	    if (proxyDragHandler != null) {
-		    proxyDragHandler.onMouseMove(sender, point);
+		    proxyDragHandler.onMouseMove(event, sender, point);
 		  }
 
 	    if (currentMouseHandler == sketchDiagramAreaHandler) {
-	      sketchDiagramAreaHandler.onMouseMove(sender, point);
+	      sketchDiagramAreaHandler.onMouseMove(event, sender, point);
 	//      dragHandler.onMouseMove(sender, point);
 	//      return;
 	    }
 
-			resizeHandler.onMouseMove(sender, point);
+			resizeHandler.onMouseMove(event, sender, point);
 			if (sender == null) {
 				// do not send diagram events
 				// diagrams register them selves straight if those are draggable
-				dragHandler.onMouseMove(sender, point);
+				dragHandler.onMouseMove(event, sender, point);
 			}
-			backgroundMoveHandler.onMouseMove(sender, point);
+			backgroundMoveHandler.onMouseMove(event, sender, point);
 			surface.dispatchDiagram(point);
 
 		} catch (Exception e) {
@@ -316,10 +355,16 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	}
 
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
-		if (itsDoubleTap) {
+    if (cancelMouseDown) {
+      // Fix iPad after quick connection handler created shape editor is closed
+      // now show editor blocks next touch/mouse/pointer up
+      return;
+    }
+
+		if (doubleTapHandler.isDoubleTap()) {
 			// double tap is handling this currently
 			// reset the state
-			itsDoubleTap = false;
+      // doubleTapHandler.resetState();
 			return;
 		}
 
@@ -382,22 +427,23 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	}
 	
 	@Override
-	public void onTouchStart(Diagram sender, MatrixPointJS point) {
-		onMouseDown(sender, point, 0);
+	public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
+		onMouseDown(event, sender, point, 0);
 	}
   @Override
-  public void onTouchMove(Diagram sender, MatrixPointJS point) {
-		onMouseMove(sender, point);
+  public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
+		onMouseMove(event, sender, point);
   }
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
-  	if (!itsDoubleTap) {
+  	if (!doubleTapHandler.isDoubleTap()) {
   		// double tap is handling touch end already
 	  	// net.sevenscales.domain.utils.Debug.log("onTouchEnd", itsDoubleTap);
 			onMouseUp(sender, point, 0);
   	}
   	// reset the state
-  	itsDoubleTap = true;
+    // itsDoubleTap = true;
+    doubleTapHandler.resetState();
   }
 
 	public void makeDraggable(Diagram diagram) {
@@ -508,73 +554,6 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		return lassoSelectionHandler.isLassoing();
 	}
 
-	private native void handleDoubleTap(Element elem, MouseDiagramHandlerManager me)/*-{
-		// Hammer has performance problems on big boards
-		// e.g. Macbook Air doesn't fire double tap at all
-		// user reported bug
-
-		// $wnd.Hammer(elem, {
-		// 	preventDefault: true
-		// }).on('doubletap', function(event) {
-		// 	// console.log('handleDoubleTap', event)
-		// 	if (event.gesture.center.clientX && event.gesture.center.clientY) {
-		// 		event.stopPropagation()
-		// 		event.preventDefault()
-		// 		console.info('doubletap...')
-
-		// 		me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZLjava/lang/String;)(event.gesture.center.clientX, event.gesture.center.clientY, event.gesture.srcEvent.shiftKey, event.target.id);
-		// 	}
-		// })
-
-		var tapped = null
-
-		$wnd.$(elem).on("touchstart",function(e){
-	    if (!tapped){ //if tap is not set, set up single tap
-	      tapped = setTimeout(function(){
-	        tapped = null
-	        //insert things you want to do when single tapped
-	      }, 300)   //wait 300ms then run single click code
-	    } else {    //tapped within 300ms of last tap. double tap
-	      clearTimeout(tapped) //stop single tap callback
-	      tapped = null
-	      //insert things you want to do when double tapped
-	      // console.log('double tap', e)
-
-				var touches = e.originalEvent.touches
-				if (touches && touches.length == 1) {
-		      me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleTap(IIZLjava/lang/String;)(touches[0].clientX, touches[0].clientY, false, e.target.id);
-				}
-	    }
-
-	    e.preventDefault()
-		})
-	}-*/;
-
-	private native void handleMouseDoubleClick(Element e, MouseDiagramHandlerManager me)/*-{
-		$wnd.$(e).on('dblclick', function(e) {
-			e.stopPropagation()
-			e.preventDefault()
-
-			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::doubleClick(IIZLjava/lang/String;)(e.clientX, e.clientY, false, e.target.id);
-		})
-	}-*/;
-
-	private void doubleTap(int x, int y, boolean shiftKey, String targetId) {
-		logger.debug("doubleTap...");
-		itsDoubleTap = true;
-		// cannot check connect mode, or will not show property editor
-		handleDoubleTap(x, y, shiftKey, targetId);
-	}
-
-	/**
-	* doubleClick should not prevent next mouse up! Thats' why separated.
-	*/
-	private void doubleClick(int x, int y, boolean shiftKey, String targetId) {
-		logger.debug("doubleClick...");
-		// cannot check connect mode, or will not show property editor
-		handleDoubleTap(x, y, shiftKey, targetId);
-	}
-
 	/**
 	 * TODO this is not very good design that mouse manager knows what kind of events will be fired...
 	 * better would be that concrete handlers register for long press and acts accordingly.
@@ -583,7 +562,7 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 	 * @param y
 	 */
 	public void fireLongPress(int x, int y) {
-		if (modeManager.isConnectMode() || surface.getEditorContext().isFreehandMode() || Tools.isHandTool()) {
+		if (modeManager.isConnectMode() || surface.getEditorContext().isFreehandMode() || Tools.isHandTool() || isResizing()) {
 			// do not handle long press when connection mode is on. 
 			// User is probably trying to draw connection. 
 			return;
@@ -595,9 +574,25 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 
 	private native void startLassoSelection()/*-{
 		$wnd.globalStreams.contextMenuStream.push({type:'select'})
-	}-*/;
+  }-*/;
+  
+  private Timer releaseCancelMouseDown = new Timer() {
+    @Override
+    public void run() {
+      Debug.log("releaseCancelMouseDown...");
+      cancelMouseDown = false;
+    }
+  };
 
-	private void handleDoubleTap(int x, int y, boolean shiftKey, String targetId) {
+
+	public void handleDoubleTap(int x, int y, boolean shiftKey, String targetId) {
+    releaseCancelMouseDown.cancel();
+    backgroundMoveHandler.cancelBackgroundMove();
+    lassoSelectionHandler.cancel();
+
+    cancelMouseDown = true;
+    releaseCancelMouseDown.schedule(200);
+
 		if (surface.getEditorContext().isFreehandMode()) {
 			// double click is disabled on freehand
 			return;
@@ -623,18 +618,18 @@ public class MouseDiagramHandlerManager implements MouseDiagramHandler, ClickDia
 		
 		Set<Diagram> selected = selectionHandler.getSelectedItems();
 
-		if (selected.size() == 1 && targetId.equals(ISurfaceHandler.DRAWING_AREA) && quickConnectionHandler.handleSurfaceDoubleTap()) {
+		if (selected.size() == 1 && targetId.equals(ISurfaceHandler.DRAWING_AREA) && quickConnectionHandler.handleSurfaceDoubleTap(x, y)) {
 			// it is double tap on surface not on a shape, so check if shoudl create quick connection
 			// target is always the original root of the event target
 			return;
 		}
 
-		if (selected.size() == 1) {
+    if (selected.size() == 1) {
 			Diagram s = selected.iterator().next().getOwnerComponent();
 	    MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
 			surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(s, point));
 		} else if (selected.size() == 0) {
-			if (!quickConnectionHandler.handleDoubleTap()) {
+			if (!quickConnectionHandler.handleDoubleTap(x, y)) {
 				surface.getEditorContext().getEventBus().fireEvent(new BoardEmptyAreaClickedEvent(x, y));
 			}
 		}

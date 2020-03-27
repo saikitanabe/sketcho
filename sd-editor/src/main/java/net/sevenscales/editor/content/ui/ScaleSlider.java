@@ -1,6 +1,8 @@
 package net.sevenscales.editor.content.ui;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Touch;
 import com.google.gwt.event.dom.client.TouchEndEvent;
 import com.google.gwt.event.dom.client.TouchEndHandler;
 import com.google.gwt.event.dom.client.TouchMoveEvent;
@@ -8,35 +10,66 @@ import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
-
+import java.util.ArrayList;
+import java.util.List;
 import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.event.PinchZoomStartedEvent;
+import net.sevenscales.editor.api.event.PinchZoomEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
+import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
+import net.sevenscales.editor.api.event.pointer.PointerDownHandler;
+import net.sevenscales.editor.api.event.pointer.PointerEvent;
+import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
+import net.sevenscales.editor.api.event.pointer.PointerMoveEvent;
+import net.sevenscales.editor.api.event.pointer.PointerMoveHandler;
+import net.sevenscales.editor.api.event.pointer.PointerUpEvent;
+import net.sevenscales.editor.api.event.pointer.PointerUpHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.content.utils.EffectHelpers;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 
+
+
 public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private static SLogger logger = SLogger.createLogger(ScaleSlider.class);
 
-	private static final double TRESHOLD = 40;
+	private static final double TRESHOLD = 5;
 
 	private EditorContext editorContext;
 	private ISurfaceHandler surface;
 	private int currentIndex = Constants.ZOOM_DEFAULT_INDEX;
 	private double currentDistance;
 
+  private SimplePanel scaleSlider;
 	private SimplePanel innerScaleSlider;
 	private BirdsEye birdsEye;
 	private int deltaSum = 0;
 	private boolean wheel;
-	private boolean fireEvent = true;
+  private boolean fireEvent = true;
+  private List<PointerSnapShot> pointerEvents;
+  private int middleX;
+  private int middleY;
+
+  private static class PointerSnapShot {
+    int pointerId;
+    int clientX;
+    int clientY;
+
+    PointerSnapShot(
+      int pointerId,
+      int clientX,
+      int clientY
+    ) {
+      this.pointerId = pointerId;
+      this.clientX = clientX;
+      this.clientY = clientY;
+    }
+  }
 
 	public ScaleSlider(ISurfaceHandler surface) {
 		this.surface = surface;
@@ -44,8 +77,123 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 		
 		// just pinch is used
 		createVisibleSlider();
-		innerScaleSlider.setVisible(!UiUtils.isMobile());
+    innerScaleSlider.setVisible(!UiUtils.isMobile());
+    
+    if (PointerEventsSupport.isSupported()) {
+      supportPointerEvents();
+    } else {
+      supportTouchEvents();
+    }
 		
+		_initMouseWheel(surface.getElement(), this);
+		
+//		new ShowHideHelpers(scaleSlider, innerScaleSlider, 6000);
+		birdsEye = new BirdsEye(surface, editorContext, this);
+
+		surface.getEditorContext().getEventBus().addHandler(SurfaceScaleEvent.TYPE, this);
+
+		listen(this);
+  }
+
+  private void supportPointerEvents() {
+    if (pointerEvents == null) {
+      pointerEvents = new ArrayList<PointerSnapShot>();
+    }
+
+    surface.addDomHandler(new PointerDownHandler(){
+      @Override
+      public void onPointerDown(PointerDownEvent event) {
+        addPointerEvent(event);
+
+        if (pointerEvents.size() == 2) {
+          int x1 = pointerEvents.get(0).clientX;
+          int y1 = pointerEvents.get(0).clientY;
+          int x2 = pointerEvents.get(1).clientX;
+          int y2 = pointerEvents.get(1).clientY;
+
+          double distance = TouchHelpers.distance(
+            x1,
+            y1,
+            x2,
+            y2
+          );
+
+          startPinching(distance);
+        }
+      }
+    }, PointerDownEvent.getType());
+
+    surface.addDomHandler(new PointerMoveHandler(){
+      @Override
+      public void onPointerMove(PointerMoveEvent event) {
+        if (pointerEvents.size() == 2) {
+          replacePointerEvent(event);
+
+          int x1 = pointerEvents.get(0).clientX;
+          int y1 = pointerEvents.get(0).clientY;
+          int x2 = pointerEvents.get(1).clientX;
+          int y2 = pointerEvents.get(1).clientY;
+
+          double distance = TouchHelpers.distance(
+            x1,
+            y1,
+            x2,
+            y2
+          );
+
+          updateMiddlePoint(x1, y1, x2, y2);
+          pinch(distance);
+        }
+      }
+    }, PointerMoveEvent.getType());
+
+    surface.addDomHandler(new PointerUpHandler() {
+      @Override
+      public void onPointerUp(PointerUpEvent event) {
+        // Debug.log("pinch pointer up: ", event.getPointerId());
+
+        if (pointerEvents.size() == 2) {
+          endPinch();
+        }
+
+        // better to remove all to make sure that memory is not reserved
+        pointerEvents.clear();
+      }
+    }, PointerUpEvent.getType());
+  }
+
+  private void updateMiddlePoint(
+    int x1, 
+    int y1,
+    int x2,
+    int y2
+  ) {
+    middleX = (x1 + x2) / 2;
+    middleY = (y1 + y2) / 2;
+  }
+
+  private void addPointerEvent(PointerEvent event) {
+    pointerEvents.add(new PointerSnapShot(
+      event.getPointerId(),
+      event.getClientX(),
+      event.getClientY()
+    ));
+  }
+
+  private void replacePointerEvent(PointerEvent event) {
+    for (int i = 0; i < pointerEvents.size(); ++i) {
+      if (pointerEvents.get(i).pointerId == event.getPointerId()) {
+        pointerEvents.set(i, new PointerSnapShot(
+          event.getPointerId(),
+          event.getClientX(),
+          event.getClientY()
+        ));
+        return;
+      }
+    }
+  }
+
+  private void supportTouchEvents() {
 		surface.addTouchStartHandler(new TouchStartHandler() {
 			@Override
 			public void onTouchStart(TouchStartEvent event) {
@@ -53,8 +201,11 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 						event.getTouches().length() != 2) {
 					// handle only pinch
 					return;
-				}
-				startPinching(event);
+        }
+        
+        double distance = TouchHelpers.distance(event.getTouches().get(0), event.getTouches().get(1));
+
+				startPinching(distance);
 			}
 		});
 		
@@ -65,9 +216,23 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 						event.getTouches().length() != 2) {
 					// handle only pinch
 					return;
-				}
-				
-				pinch(event);
+        }
+        
+        event.preventDefault();
+        
+        Touch t1 = event.getTouches().get(0);
+        Touch t2 = event.getTouches().get(1);
+
+        double distance = TouchHelpers.distance(t1, t2);
+
+        updateMiddlePoint(
+          t1.getClientX(),
+          t1.getClientY(), 
+          t2.getClientX(),
+          t2.getClientY()
+        );
+
+        pinch(distance);
 			}
 		});
 		
@@ -77,20 +242,16 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 				endPinch();
 			}
 		});
-
-		_initMouseWheel(surface.getElement(), this);
-		
-//		new ShowHideHelpers(scaleSlider, innerScaleSlider, 6000);
-		birdsEye = new BirdsEye(surface, editorContext, this);
-
-		surface.getEditorContext().getEventBus().addHandler(SurfaceScaleEvent.TYPE, this);
-
-		listen(this);
-	}
+  }
 
 	@Override
 	public void on(SurfaceScaleEvent event) {
-		updateSliderState(event.getScaleFactor());
+    if (event.isResetScale()) {
+      // reset scale only sets default zoom index
+      updateSliderState(Constants.ZOOM_DEFAULT_INDEX);
+    } else {
+      updateSliderState(event.getScaleFactor());
+    }
 	}
 
 	private void updateSliderState(int index) {
@@ -131,7 +292,11 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 				delta = -1
 			} else if (delta > 0) {
 				delta = 1
-			}
+      }
+      
+      // ST 27.11.2019: Prevent surface element area two finger browser zoom
+      // on MacOS
+      e.preventDefault()
 
 			me.@net.sevenscales.editor.content.ui.ScaleSlider::handlMouseWheel(I)(delta)
 		}
@@ -158,8 +323,16 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 
 		$wnd.globalStreams.scaleRestoreStream.onValue(function(value) {
 			me.@net.sevenscales.editor.content.ui.ScaleSlider::scaleToFactor(D)(value)
-		})
-	}-*/;
+    })
+    
+    $wnd.globalStreams.userMessagePropsStream.onValue(function(value) {
+      me.@net.sevenscales.editor.content.ui.ScaleSlider::userMessagePropsStream(I)(value)
+    })
+  }-*/;
+  
+  private void userMessagePropsStream(int extraHeight) {
+    this.scaleSlider.getElement().getStyle().setTop(58 + extraHeight, Unit.PX);
+  }
 
 	private boolean freehandMode() {
 		return surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE);		
@@ -188,7 +361,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
   }
 
 	private void createVisibleSlider() {
-		final SimplePanel scaleSlider = new SimplePanel();
+		this.scaleSlider = new SimplePanel();
 		scaleSlider.setStyleName("scaleSlider");
 		scaleSlider.getElement().setTitle("Zoom Out - | Zoom In +");
     EffectHelpers.tooltip(scaleSlider.getElement(), "right");
@@ -206,23 +379,22 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	 * Halts surface touch events, otherwise e.g. background move will continue
 	 * using the same pinch and surface jumps randomly.
 	 */
-	private void startPinching(TouchStartEvent event) {
-		EffectHelpers.fadeIn(innerScaleSlider.getElement());
-
-		currentDistance = TouchHelpers.distance(event.getTouches().get(0), event.getTouches().get(1));
+	private void startPinching(double distance) {
+    EffectHelpers.fadeOut(innerScaleSlider.getElement());
+    currentDistance = distance;
 		firePinchStarted();
 	}
 	
 	private void firePinchStarted() {
-		surface.getEditorContext().getEventBus().fireEvent(new PinchZoomStartedEvent());
+		surface.getEditorContext().getEventBus().fireEvent(new PinchZoomEvent(true));
 	}
 
 	private void endPinch() {
-		EffectHelpers.fadeOut(innerScaleSlider.getElement());
+		EffectHelpers.fadeIn(innerScaleSlider.getElement());
+    surface.getEditorContext().getEventBus().fireEvent(new PinchZoomEvent(false));
 	}
 	
-	private void pinch(TouchMoveEvent event) {
-		double distance = TouchHelpers.distance(event.getTouches().get(0), event.getTouches().get(1));
+	private void pinch(double distance) {
 		boolean exceedTreshold = Math.abs(currentDistance - distance) > TRESHOLD; 
 		if (exceedTreshold) {
 			int index = currentIndex;
@@ -251,7 +423,17 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	@Override
   public void scale(int index) {
   	if (fireEvent) {
-			editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(index, wheel));
+
+      if (wheel) {
+        editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(index, wheel));
+      } else {
+        editorContext.getEventBus().fireEvent(
+          new SurfaceScaleEvent(index,
+          false,
+          middleX,
+          middleY
+        ));
+      }
 			// unfocus everything, or otherwise shortcuts are not working
 			// that use key press events, focus steals press events and should
 			// handle keydown, but e.g. +, - signs have different keycodes on 

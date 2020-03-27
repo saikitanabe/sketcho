@@ -17,7 +17,7 @@ public interface IGraphics {
   public static final String ON_MOUSE_ENTER = "onmouseover";
   public static final String ON_MOUSE_MOVE = "onmousemove";
   public static final String ON_DOUBLE_CLICK = "dblclick";
-  public static final String ON_MOUSE_DOWN = "mousedown";
+  public static final String ON_MOUSE_DOWN = "onmousedown";
   public static final String ON_MOUSE_UP = "onmouseup";
   public static final String ON_TOUCH_START = "ontouchstart";
   public static final String ON_TOUCH_MOVE = "ontouchmove";

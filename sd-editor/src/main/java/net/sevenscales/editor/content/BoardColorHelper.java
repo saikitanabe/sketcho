@@ -1,9 +1,7 @@
 package net.sevenscales.editor.content;
 
-import java.util.List;
-
 import com.google.gwt.event.shared.HandlerManager;
-
+import java.util.List;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -16,6 +14,8 @@ import net.sevenscales.editor.api.ot.BoardDocument;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.CircleElement;
+
+
 
 public class BoardColorHelper {
   private static final SLogger logger = SLogger.createLogger(BoardColorHelper.class);
@@ -104,9 +104,14 @@ public class BoardColorHelper {
         d.setBorderColor(d.getDefaultBorderColor(newColorScheme));
       }
       if (d.usesSchemeDefaultBackgroundColor(currentColorScheme)) {
-        d.setBackgroundColor(d.getDefaultBackgroundColor(newColorScheme));
+        if (d.getSurfaceHandler().isExporting()) {
+          // Fix 18.9.2019 ST: when exporting background color should be white
+          d.setBackgroundColor(ThemeName.WHITE.getBoardBackgroundColor());
+        } else {
+          d.setBackgroundColor(d.getDefaultBackgroundColor(newColorScheme));
+        }
       }
-    } 
+    }
     // else if (notCircleElement && d.isTextElementBackgroundTransparent()) {
     //   // need to switch text color since it might not be visible, e.g. white on white, see actor
     //   d.setTextColor(d.getDefaultTextColor(newColorScheme));

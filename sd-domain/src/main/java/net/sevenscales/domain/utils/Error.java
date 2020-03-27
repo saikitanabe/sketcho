@@ -36,17 +36,7 @@ public class Error {
       // make sure that doesn't break
       stack = Error.addStackTrace(stack, e);
 
-      if (e instanceof UmbrellaException) {
-        // try to get more information about UmbrellaException
-        UmbrellaException u = (UmbrellaException) e;
-        stack += "Add UmbrellaException message\n";
-        stack += u.getMessage();
-
-        // this might need to be recursive!
-        for (Throwable th : u.getCauses()) {
-          stack = Error.addStackTrace(stack, th);
-        }
-      }
+      stack = writeUmbrellaException(stack, e);
     } catch(Exception ex) {
       // make sure execution continues
     }
@@ -69,7 +59,25 @@ public class Error {
       // production reloads page
       Window.Location.reload();
     }
+  }
 
+  private static String writeUmbrellaException(String stack, Throwable e) {
+    if (e instanceof UmbrellaException) {
+      // try to get more information about UmbrellaException
+      UmbrellaException u = (UmbrellaException) e;
+      stack += "Add UmbrellaException message\n";
+      stack += u.getMessage();
+
+      // this might need to be recursive!
+      for (Throwable th : u.getCauses()) {
+        if (th instanceof UmbrellaException) {
+          stack = writeUmbrellaException(stack, th);
+        }
+        stack = Error.addStackTrace(stack, th);
+      }
+    }
+
+    return stack;
   }
 
   private static String addStackTrace(String stack, Throwable th) {

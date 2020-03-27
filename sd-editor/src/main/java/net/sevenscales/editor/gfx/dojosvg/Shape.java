@@ -288,10 +288,21 @@ abstract class Shape extends Graphics implements IShape {
 	}
 	
 	final public void setVisibility(boolean visibility) {
-		this.visibility = visibility;
-		String visibilityValue = visibility ? "visible" : "hidden";
-		nativeSetVisibility(rawNode, visibilityValue);
-	}
+    this.visibility = visibility;
+    // ST 16.3.2019: Fix too big export area
+    // Relationship shape is calculated from zero
+    // if arrow head was hidden, it still was part of g.shapebase
+
+		// String visibilityValue = visibility ? "visible" : "hidden";
+    // nativeSetVisibility(rawNode, visibilityValue);
+
+    // This fixes the problem
+    String visibilityValue = visibility ? "inline" : "none";
+    nativeSetDisplay(rawNode, visibilityValue);
+  }
+  private native void nativeSetDisplay(JavaScriptObject rawNode, String visibility)/*-{
+    rawNode.rawNode.style.display = visibility
+  }-*/;
 	
 	private native void nativeSetVisibility(JavaScriptObject rawNode, String visibility)/*-{
 //		if ($wnd.dojo._hasResource["dojox.gfx.svg"]) {

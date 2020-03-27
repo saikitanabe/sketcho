@@ -1,10 +1,8 @@
 package net.sevenscales.editor.uicomponents;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gwt.core.client.JavaScriptObject;
-
 import net.sevenscales.domain.ShapeProperty;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
@@ -23,6 +21,8 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
+
+
 
 
 public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
@@ -121,6 +121,7 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
     }
   }
 
+  @Override
   public void setText(String newText, boolean editable, boolean force) {
   	// convert json text line (\\n) breaks to line breaks
 //  	newText = newText.replaceAll("\\\\n", "\n");
@@ -174,7 +175,15 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
 //    hasTextElement.addShape(text);
     text.setFill(hasTextElement.getTextColor());
     text.setAttribute("xml:space", "preserve");
-
+    // Fix 18.9.2019 ST: Firefox doesn't have this as a default value
+    // and without this Firefox has different baseline than in Chrome.
+    // There was special handling in svg-textarea.js for Firefox
+    // to add extra line for the fist tspan, but that is not available
+    // in exported static SVG.
+    text.setAttribute(
+      "dominant-baseline",
+      "text-before-edge"
+    );
 
     if (textAnchor != null) {
       setTextAnchor(text, textAnchor);

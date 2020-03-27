@@ -3,6 +3,7 @@ package net.sevenscales.editor.diagram;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 
 public class SurfaceClickHandler implements MouseDiagramHandler, ClickDiagramHandler {
 	private Diagram currentDiagram;
@@ -13,7 +14,7 @@ public class SurfaceClickHandler implements MouseDiagramHandler, ClickDiagramHan
 	}
 
 	@Override
-	public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+	public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
 		if (currentDiagram == null) {
 			// first there will be a diagram event; and after that a surface event
 			// do not let surface event override current diagram
@@ -36,7 +37,7 @@ public class SurfaceClickHandler implements MouseDiagramHandler, ClickDiagramHan
 	}
 
 	@Override
-	public void onMouseMove(Diagram sender, MatrixPointJS point) {
+	public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
 	}
 
 	@Override
@@ -44,14 +45,14 @@ public class SurfaceClickHandler implements MouseDiagramHandler, ClickDiagramHan
 	}
 
 	@Override
-	public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+	public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
 	}
 	
 	@Override
-	public void onTouchStart(Diagram sender, MatrixPointJS point) {
+	public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
 	}
   @Override
-  public void onTouchMove(Diagram sender, MatrixPointJS point) {
+  public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {

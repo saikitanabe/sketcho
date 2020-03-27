@@ -16,6 +16,7 @@ import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
 import net.sevenscales.editor.api.event.UndoEvent;
 import net.sevenscales.editor.api.event.UndoEventHandler;
+import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.diagram.Diagram;
@@ -70,8 +71,8 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	
 	static {
 		instances = new HashMap<ISurfaceHandler, IConnectionHelpers>();
-		if (TouchHelpers.isSupportsTouch()) {
-			RADIUS = 25;
+		if (TouchHelpers.isSupportsTouch() || PointerEventsSupport.isSupported()) {
+			RADIUS = 15;
 		} else {
 			// mouse pointer needs smaller attach area
 			RADIUS = 7;
@@ -278,7 +279,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		}
 	}
 	private void show(AbstractDiagramItem parent, int left, int top, int width, int height) {
-		if (propertyEditorShown || resizeOn || freehandModeOn || someElementIsDragged) {
+		if (propertyEditorShown || resizeOn || freehandModeOn || someElementIsDragged || surface.getSelectionHandler().getOnlyOneSelected() == null) {
 			// do not show connection helpers if property editor is shown
 			// do not show if resize is on going
 			logger.debug("show propertyEditorShown {} resizeOn {} freehandModeOn {} someElementIsDragged {}", propertyEditorShown, resizeOn, freehandModeOn, someElementIsDragged);

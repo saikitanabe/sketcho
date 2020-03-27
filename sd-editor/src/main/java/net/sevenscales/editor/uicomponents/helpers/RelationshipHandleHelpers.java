@@ -24,6 +24,7 @@ import net.sevenscales.editor.diagram.utils.BezierHelpers;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.PointDouble;
 import net.sevenscales.editor.gfx.domain.SegmentPoint;
@@ -524,12 +525,12 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   @Override
-  public boolean onMouseDown(Diagram sender, MatrixPointJS point, int keys) {
+  public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
 //    if (parentRelationship == null) {
 //      return false;
 //    }
 
-    parentRelationship.onMouseDown(sender, point, keys);
+    parentRelationship.onMouseDown(event, sender, point, keys);
     return false;
   }
 
@@ -543,12 +544,12 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   @Override
-  public void onMouseMove(Diagram sender, MatrixPointJS point) {
+  public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
 //    if (parentRelationship == null) {
 //      return;
 //    }
 
-    parentRelationship.onMouseMove(sender, point);
+    parentRelationship.onMouseMove(event, sender, point);
   }
 
   @Override
@@ -561,30 +562,30 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   @Override
-  public void onMouseEnter(Diagram sender, MatrixPointJS point) {
+  public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
 //    if (parentRelationship == null) {
 //      return;
 //    }
 
-    parentRelationship.onMouseEnter(sender, point);
+    parentRelationship.onMouseEnter(event, sender, point);
   }
 
   @Override
-  public void onTouchStart(Diagram sender, MatrixPointJS point) {
+  public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
 //    if (parentRelationship == null) {
 //      return;
 //    }
 
-    parentRelationship.onTouchStart(sender, point);
+    parentRelationship.onTouchStart(event, sender, point);
   }
 
   @Override
-  public void onTouchMove(Diagram sender, MatrixPointJS point) {
+  public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
 //    if (parentRelationship == null) {
 //      return;
 //    }
 
-    parentRelationship.onTouchMove(sender, point);
+    parentRelationship.onTouchMove(event, sender, point);
   }
 
   @Override

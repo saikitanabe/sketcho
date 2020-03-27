@@ -117,7 +117,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
   }
 
   public void doSetText(String newText) {
-    textUtil.setText(newText, editable);
+    textUtil.setText(newText, editable, isForceTextRendering());
   }
 
   @Override

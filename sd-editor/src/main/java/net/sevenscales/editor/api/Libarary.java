@@ -1,18 +1,19 @@
 package net.sevenscales.editor.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-
+import java.util.ArrayList;
+import java.util.List;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
+import net.sevenscales.editor.api.EditorContext;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.LibrarySelections.LibrarySelectedHandler;
 import net.sevenscales.editor.api.LibraryShapes.LibraryShape;
 import net.sevenscales.editor.api.dojo.FactoryDoJo;
@@ -51,6 +52,8 @@ import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.utils.DiagramItemConfiguration;
+
+
 
 
 public class Libarary extends SimplePanel implements SurfaceLoadedEventListener, ClickDiagramHandler, IToolSelection {
@@ -227,8 +230,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     if (TouchHelpers.isSupportsTouch()) {
       factor = 0.7f;
     }
-    toolpool.scale(factor, false);
-
+    toolpool.scale(factor, false, 0, 0);
   }
 
   private native boolean ngIsLibraryManualShowHide()/*-{

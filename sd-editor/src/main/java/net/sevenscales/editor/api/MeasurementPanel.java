@@ -96,7 +96,13 @@ public class MeasurementPanel {
 	}-*/;
 
 	public static void setPosition(int left, int top) {
-		MeasurementPanel.getMeasurementPanel().getElement().getStyle().setLeft(left, Unit.PX);
-		MeasurementPanel.getMeasurementPanel().getElement().getStyle().setTop(top, Unit.PX);
+    // ST 14.3.2019: Commented out because otherwise panel is not shown on big board
+		// MeasurementPanel.getMeasurementPanel().getElement().getStyle().setLeft(left, Unit.PX);
+		// MeasurementPanel.getMeasurementPanel().getElement().getStyle().setTop(top, Unit.PX);
 	}
+
+	public static void setZoom(double scaleFactor) {
+    MeasurementPanel.getMeasurementPanel().getElement().getStyle().setProperty("zoom", scaleFactor + "");
+	}
+
 }

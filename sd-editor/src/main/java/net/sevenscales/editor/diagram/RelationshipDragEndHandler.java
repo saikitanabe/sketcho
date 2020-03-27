@@ -23,6 +23,9 @@ import net.sevenscales.editor.api.event.SwitchElementEvent;
 import net.sevenscales.editor.api.event.SwitchElementEventHandler;
 import net.sevenscales.editor.api.event.SwitchElementToEvent;
 import net.sevenscales.editor.api.event.SwitchElementToEventHandler;
+import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
+import net.sevenscales.editor.api.event.pointer.PointerDownHandler;
+import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
 import net.sevenscales.editor.content.ClientIdHelpers;
 // import net.sevenscales.editor.content.ui.UMLDiagramSelections;
 // import net.sevenscales.editor.content.ui.ShapeContextMenu;
@@ -65,14 +68,11 @@ public class RelationshipDragEndHandler implements
 		popup.setAutoHideEnabled(true);
 		popup.setAnimationEnabled(true);
 
-		surface.addDomHandler(new TouchStartHandler() {
-			@Override
-			public void onTouchStart(TouchStartEvent event) {
-				if (popup.isShowing()) {
-					hide();
-				}
-			}
-		}, TouchStartEvent.getType());
+    if (PointerEventsSupport.isSupported()) {
+      supportPointerEvents();
+    } else {
+      supportMouseTouchEvents();
+    }
 		
 		surface.getEditorContext().getEventBus().addHandler(SurfaceMouseUpNoHandlingYetEvent.TYPE, this);
 		surface.getEditorContext().getEventBus().addHandler(LibrarySelectionEvent.TYPE, this);
@@ -85,7 +85,31 @@ public class RelationshipDragEndHandler implements
 		});
 
 		init(this);
-	}
+  }
+  
+  private void supportPointerEvents() {
+		surface.addDomHandler(new PointerDownHandler() {
+			@Override
+			public void onPointerDown(PointerDownEvent event) {
+        touchStart();
+			}
+		}, PointerDownEvent.getType());
+  }
+
+  private void supportMouseTouchEvents() {
+		surface.addDomHandler(new TouchStartHandler() {
+			@Override
+			public void onTouchStart(TouchStartEvent event) {
+        touchStart();
+			}
+		}, TouchStartEvent.getType());
+  }
+
+  private void touchStart() {
+    if (popup.isShowing()) {
+      hide();
+    }
+  }
 
 	private native void init(RelationshipDragEndHandler me)/*-{
 		$wnd.globalStreams.newShapeStream.onValue(function(data) {
@@ -210,7 +234,7 @@ public class RelationshipDragEndHandler implements
 	public void on(SwitchElementEvent event) {
 		switchFrom = event.getDiagram();
 		if (!switchFrom.getDiagramItem().getType().equals(ElementType.CHILD_TEXT.getValue())) {
-			Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(event.getDiagram(), surface);
+			Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(event.getDiagram(), surface, false);
 			// >>>>>>> Commented out 4.3.2015
 			// diagramSelections.hideCommentElement();
 			// >>>>>>> Commented out 4.3.2015 end

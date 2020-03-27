@@ -1,15 +1,16 @@
 package net.sevenscales.editor.gfx.base;
 
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-
-import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.gfx.base.GraphicsEventBase.Type;
-import net.sevenscales.editor.gfx.domain.IGraphics;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Event;
+
+import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
+import net.sevenscales.editor.gfx.base.GraphicsEventBase.Type;
+import net.sevenscales.editor.gfx.domain.IGraphics;
 
 public abstract class GraphicsBase implements IGraphics {
 	private static final SLogger logger = SLogger.createLogger(GraphicsBase.class); 
@@ -152,56 +153,106 @@ public abstract class GraphicsBase implements IGraphics {
 	}
 
 	public void addGraphicsMouseDownHandler(GraphicsMouseDownHandler handler) {
-		if (map.get(GraphicsMouseDownEvent.getType()) == null) {
-			connectMouse(GraphicsMouseDownEvent.getType().getEventName());
-		}
-		addGraphicsHandler(handler, GraphicsMouseDownEvent.getType());
+    String eventName = GraphicsMouseDownEvent.getType().getEventName();
+
+    if (PointerEventsSupport.isSupported()) {
+      // router mouse down to receive pointer down event
+      eventName = GraphicsPointerDownEvent.getType().getEventName();
+    }
+
+    if (map.get(GraphicsMouseDownEvent.getType()) == null) {
+      connectMouse(eventName);
+    }
+    addGraphicsHandler(handler, GraphicsMouseDownEvent.getType());
 	}
 
 	public void addGraphicsMouseUpHandler(GraphicsMouseUpHandler handler) {
-		if (map.get(GraphicsMouseUpEvent.getType()) == null) {
-			connectMouse(GraphicsMouseUpEvent.getType().getEventName());
-		}
-		addGraphicsHandler(handler, GraphicsMouseUpEvent.getType());
+    String eventName = GraphicsMouseUpEvent.getType().getEventName();
+
+    if (PointerEventsSupport.isSupported()) {
+      // router mouse up to receive pointer up event
+      eventName = GraphicsPointerUpEvent.getType().getEventName();
+    }
+
+    if (map.get(GraphicsMouseUpEvent.getType()) == null) {
+      connectMouse(eventName);
+    }
+    addGraphicsHandler(handler, GraphicsMouseUpEvent.getType());
 	}
 
 	public void addGraphicsMouseEnterHandler(GraphicsMouseEnterHandler handler) {
-		if (map.get(GraphicsMouseOverEvent.getType()) == null) {
-			connectMouse(GraphicsMouseOverEvent.getType().getEventName());
-		}
-		addGraphicsHandler(handler, GraphicsMouseOverEvent.getType());
+    String eventName = GraphicsMouseOverEvent.getType().getEventName();
+
+    if (PointerEventsSupport.isSupported()) {
+      // router mouse enter to receive pointer enter event
+      eventName = GraphicsPointerEnterEvent.getType().getEventName();
+    }
+
+    if (map.get(GraphicsMouseOverEvent.getType()) == null) {
+      connectMouse(eventName);
+    }
+    addGraphicsHandler(handler, GraphicsMouseOverEvent.getType());
 	}
 
 	public void addGraphicsMouseLeaveHandler(GraphicsMouseLeaveHandler handler) {
-		if (map.get(GraphicsMouseLeaveEvent.getType()) == null) {
-			connectMouse(GraphicsMouseLeaveEvent.getType().getEventName());
-		}
-		addGraphicsHandler(handler, GraphicsMouseLeaveEvent.getType());
+    String eventName = GraphicsMouseLeaveEvent.getType().getEventName();
+
+    if (PointerEventsSupport.isSupported()) {
+      // router mouse leave to receive pointer leave event
+      eventName = GraphicsPointerLeaveEvent.getType().getEventName();
+    }
+
+    if (map.get(GraphicsMouseLeaveEvent.getType()) == null) {
+      connectMouse(eventName);
+    }
+    addGraphicsHandler(handler, GraphicsMouseLeaveEvent.getType());
 	}
 
 	public void addGraphicsMouseMoveHandler(GraphicsMouseMoveHandler handler) {
-		if (map.get(GraphicsMouseMoveEvent.getType()) == null) {
-			connectMouse(GraphicsMouseMoveEvent.getType().getEventName());
-		}
-		addGraphicsHandler(handler, GraphicsMouseMoveEvent.getType());
+    String eventName = GraphicsMouseMoveEvent.getType().getEventName();
+
+    if (PointerEventsSupport.isSupported()) {
+      // router mouse move to receive pointer move event
+      eventName = GraphicsPointerMoveEvent.getType().getEventName();
+    }
+
+    if (map.get(GraphicsMouseMoveEvent.getType()) == null) {
+      connectMouse(eventName);
+    }
+    addGraphicsHandler(handler, GraphicsMouseMoveEvent.getType());
 	};
 
 	public void addGraphicsTouchMoveHandler(GraphicsTouchMoveHandler handler) {
-		if (map.get(GraphicsTouchMoveEvent.getType()) == null) {
+    if (PointerEventsSupport.isSupported()) {
+      // do not listen touch events if pointer events are supported
+      return;
+    }
+
+    if (map.get(GraphicsTouchMoveEvent.getType()) == null) {
 			connectMouse(GraphicsTouchMoveEvent.getType().getEventName());
 		}
 		addGraphicsHandler(handler, GraphicsTouchMoveEvent.getType());
 	};
 
 	public void addGraphicsTouchStartHandler(GraphicsTouchStartHandler handler) {
-		if (map.get(GraphicsTouchStartEvent.getType()) == null) {
+    if (PointerEventsSupport.isSupported()) {
+      // do not listen touch events if pointer events are supported
+      return;
+    }
+
+    if (map.get(GraphicsTouchStartEvent.getType()) == null) {
 			connectMouse(GraphicsTouchStartEvent.getType().getEventName());
 		}
 		addGraphicsHandler(handler, GraphicsTouchStartEvent.getType());
 	};
 
 	public void addGraphicsTouchEndHandler(GraphicsTouchEndHandler handler) {
-		if (map.get(GraphicsTouchEndEvent.getType()) == null) {
+    if (PointerEventsSupport.isSupported()) {
+      // do not listen touch events if pointer events are supported
+      return;
+    }
+
+    if (map.get(GraphicsTouchEndEvent.getType()) == null) {
 			connectMouse(GraphicsTouchEndEvent.getType().getEventName());
 		}
 		addGraphicsHandler(handler, GraphicsTouchEndEvent.getType());

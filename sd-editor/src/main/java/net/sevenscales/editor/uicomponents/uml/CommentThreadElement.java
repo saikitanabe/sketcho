@@ -343,7 +343,7 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	private void removeConnections(boolean include) {
 		for (AnchorElement ae : getAnchors()) {
 			if (ae.getRelationship() != null && ae.getRelationship().noText()) {
-				logger.debug("ae.getHandler().connection().getTextLabel() {}", ae.getRelationship().getTextLabel());
+				// logger.debug("ae.getHandler().connection().getTextLabel() {}", ae.getRelationship().getTextLabel());
 				if (include) {
 					surface.getSelectionHandler().addToBeRemovedCycle(ae.getRelationship());
 				} else {
