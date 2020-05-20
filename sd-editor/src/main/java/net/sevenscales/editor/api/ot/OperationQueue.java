@@ -162,7 +162,7 @@ public class OperationQueue {
 		boolean filterOutUserOperations = true;
 		JsArray<JsSendOperation> joperations = toJson(queuedOperations, filterOutUserOperations);
 		if (joperations.length() > 0) {
-      JavaScriptObject tabOperations = tabQueue(tabId, joperations);
+      JsOperationQueueStorageItem tabOperations = tabQueue(tabId, joperations);
 
 			WebStorage.setJson(queueName(boardName), tabOperations);
 		} else {
@@ -173,7 +173,7 @@ public class OperationQueue {
 		checkSaveStatus();
   }
   
-  private native JavaScriptObject tabQueue(
+  private native JsOperationQueueStorageItem tabQueue(
     String tabId,
     JsArray<JsSendOperation> operations
   )/*-{
