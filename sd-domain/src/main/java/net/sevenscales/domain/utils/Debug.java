@@ -66,6 +66,14 @@ public class Debug {
     }));
   }-*/;
 
+  public static native final void error(String msg, String error)/*-{
+    if (typeof $wnd.console != "undefined") $wnd.console.error(msg + ": " + error)
+  }-*/;
+
+  public static native final void error(String msg, Exception error)/*-{
+    if (typeof $wnd.console != "undefined") $wnd.console.error(msg + ": " + error)
+  }-*/;
+
   public static class Profile {
     String title;
     Long time;
