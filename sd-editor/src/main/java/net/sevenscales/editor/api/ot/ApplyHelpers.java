@@ -20,10 +20,24 @@ public class ApplyHelpers {
 		result.userOperations = new ArrayList<BoardUserApplyOperation>();
 
 		// JsArray<OperationJS> ops = JsonUtils.safeEval(operations);
-		JSONValue jvalue = JSONParser.parseStrict(operations);
-		if (jvalue.isArray() != null) {
-			parseOperations(jvalue.isArray(), result);
-		}
+    JSONValue jvalue = JSONParser.parseStrict(operations);
+    if (jvalue.isArray() != null) {
+      // comes from the server, and doesn't contain tab id
+      parseOperations(jvalue.isArray(), result);
+    } else if (jvalue.isObject() != null) {
+      // comes from the localstorage (from a different tab) and contains also tab_id
+
+      JSONValue jTabId = jvalue.isObject().get("tab_id");
+      if (jTabId.isString() != null) {
+        result.tabId = jTabId.isString().stringValue();
+      }
+
+      JSONValue jops = jvalue.isObject().get("operations");
+      if (jops.isArray() != null) {
+        parseOperations(jops.isArray(), result);
+      }
+      
+    }
 
 		// for (int i = 0; i < ops.length(); ++i) {
 		// 	OperationJS opjs = ops.get(i);
@@ -167,6 +181,7 @@ public class ApplyHelpers {
 	}
 
 	public static class ApplyOperations {
+    public String tabId;
 		public List<DiagramApplyOperation> diagramOperations;
 		public List<BoardUserApplyOperation> userOperations;
 	}

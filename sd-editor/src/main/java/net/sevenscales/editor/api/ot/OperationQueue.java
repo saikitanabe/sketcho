@@ -35,13 +35,20 @@ public class OperationQueue {
 	private LinkedList<SendOperation> queuedOperations;
 	private Acknowledged acknowledged;
 	private IEditor editor;
-	private String boardName;
+  private String boardName;
+  private String tabId;
 	private String checksum;
 
-	public OperationQueue(Acknowledged acknowledged, IEditor editor, String boardName) {
+	public OperationQueue(
+    Acknowledged acknowledged,
+    IEditor editor,
+    String boardName,
+    String tabId
+) {
 		this.acknowledged = acknowledged;
 		this.editor = editor;
-		this.boardName = boardName;
+    this.boardName = boardName;
+    this.tabId = tabId;
 		queuedOperations = new LinkedList<SendOperation>();
 	}
 	
@@ -153,16 +160,28 @@ public class OperationQueue {
 
 	private void storeQueue() {
 		boolean filterOutUserOperations = true;
-		JsArray<JsSendOperation> json = toJson(queuedOperations, filterOutUserOperations);
-		if (json.length() > 0) {
-			WebStorage.setJson(queueName(boardName), json);
+		JsArray<JsSendOperation> joperations = toJson(queuedOperations, filterOutUserOperations);
+		if (joperations.length() > 0) {
+      JavaScriptObject tabOperations = tabQueue(tabId, joperations);
+
+			WebStorage.setJson(queueName(boardName), tabOperations);
 		} else {
 			// nothing so remove whole queue
 			WebStorage.remove(queueName(boardName));
 		}
 
 		checkSaveStatus();
-	}
+  }
+  
+  private native JavaScriptObject tabQueue(
+    String tabId,
+    JsArray<JsSendOperation> operations
+  )/*-{
+    return {
+      "tab_id": tabId,
+      "operations": operations
+    }
+  }-*/;
 
 	private void checkSaveStatus() {
 		GlobalState.notifySaveStatusChanged();
