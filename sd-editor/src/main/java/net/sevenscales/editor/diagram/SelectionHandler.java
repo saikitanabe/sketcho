@@ -773,7 +773,22 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     }
   }
 
-  public void focusShapes(JsArrayString shapeIds, boolean select) {
+  public void focusShapes(
+    JsArrayString shapeIds,
+    boolean select
+  ) {
+    focusShapes(
+      shapeIds,
+      select,
+      false
+    );
+  }
+
+  public void focusShapes(
+    JsArrayString shapeIds,
+    boolean select,
+    boolean center
+  ) {
     if (select) {
       unselectAll();
     }
@@ -822,7 +837,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 
     // needed to center shapes
     int commentsSectionWidth = clientWidth;
-    if (select) {
+    if (select && !center) {
       commentsSectionWidth = 460;
     }
 
