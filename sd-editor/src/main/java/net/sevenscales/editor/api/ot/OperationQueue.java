@@ -285,20 +285,37 @@ public class OperationQueue {
 	}
 
 	private void fromJsonStr(String jsonStr) {
-		JSONValue jvalue = JSONParser.parseStrict(jsonStr);
+    JSONValue jvalue = JSONParser.parseStrict(jsonStr);
+    
 		JSONArray jqueue = jvalue.isArray();
 		if (jqueue != null) {
-			for (int i = 0; i < jqueue.size(); ++i) {
-				JSONObject obj = jqueue.get(i).isObject();
-				if (obj != null) {
-					SendOperation so = SendOperation.fromJson(obj);
-					if (so != null) {
-						queuedOperations.add(so);
-					}
-				}
-			}
-		}
-	}
+      parseOperations(jqueue);
+		} else if (jvalue.isObject() != null) {
+      JSONValue jTabId = jvalue.isObject().get("tab_id");
+      if (jTabId.isString() != null) {
+        // nothing to do with tab_id
+        // result.tabId = jTabId.isString().stringValue();
+      }
+
+      JSONValue jops = jvalue.isObject().get("operations");
+      if (jops.isArray() != null) {
+        // restore operations
+        parseOperations(jops.isArray());
+      }
+    }
+  }
+  
+  private void parseOperations(JSONArray jqueue) {
+    for (int i = 0; i < jqueue.size(); ++i) {
+      JSONObject obj = jqueue.get(i).isObject();
+      if (obj != null) {
+        SendOperation so = SendOperation.fromJson(obj);
+        if (so != null) {
+          queuedOperations.add(so);
+        }
+      }
+    }
+  }
 
 	public boolean ack(JsArrayString guids) {
 		boolean result = false;
