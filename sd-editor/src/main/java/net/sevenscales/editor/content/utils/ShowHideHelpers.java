@@ -222,7 +222,7 @@ public class ShowHideHelpers {
 	}
 
 	private native boolean ngIsLibraryManualShowHide()/*-{
-		if (typeof $wnd.ngIsLibraryManualShowHide !== 'underfined') {
+		if (typeof $wnd.ngIsLibraryManualShowHide !== 'undefined') {
 			return $wnd.ngIsLibraryManualShowHide()
 		}
 		return false
