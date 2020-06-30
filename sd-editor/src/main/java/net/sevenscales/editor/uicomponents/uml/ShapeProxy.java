@@ -38,8 +38,13 @@ class ShapeProxy implements IShapeGroup {
 	}
 
 	private native void _fetch(String elementType, int shapeType, ShapeProxy me)/*-{
-		if (typeof $wnd.currentBoard !== 'undefined') {
-			var boardId = $wnd.currentBoard().boardId
+
+    var boardId = 'tutorial'
+    if (typeof $wnd.currentBoard !== 'undefined' && $wnd.currentBoard()) {
+      boardId = $wnd.currentBoard().boardId
+    }
+
+		if (typeof $wnd.libraryService !== 'undefined') {
 			$wnd.libraryService.loadBoardShape({
 				board_id: boardId,
 				element_type: elementType,
