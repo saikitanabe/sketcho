@@ -809,7 +809,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     }
 
     if (selected.size() == 0) {
-      // don't do anything if now shapes are found.
+      // don't do anything if no shapes are found.
       return;
     }
 
