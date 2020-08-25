@@ -808,6 +808,11 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
       }
     }
 
+    if (selected.size() == 0) {
+      // don't do anything if now shapes are found.
+      return;
+    }
+
     BoardDimensions.resolveDimensions(selected);
 
     int left = BoardDimensions.getLeftmost();
