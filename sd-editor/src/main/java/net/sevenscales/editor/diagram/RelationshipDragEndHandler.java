@@ -1,7 +1,9 @@
 package net.sevenscales.editor.diagram;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
+import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import net.sevenscales.domain.ElementType;
@@ -312,7 +314,7 @@ public class RelationshipDragEndHandler implements
 
 	public void switchElement(String elementType, JsShapeConfig shapeConfig, ImageInfo imageInfo, int x, int y) {
 		hide();
-		Diagram src = switchFrom;
+		final Diagram src = switchFrom;
 		switchFrom = null;
 
 		surface.beginTransaction();
@@ -323,7 +325,7 @@ public class RelationshipDragEndHandler implements
 
 		int initialShapeProperties = src.getDiagramItem().getShapeProperties() != null ? src.getDiagramItem().getShapeProperties() : 0;
 
-		Diagram to = DiagramFactory.getFactory(surface)
+		final Diagram to = DiagramFactory.getFactory(surface)
 			.createDiagram(elementType, shapeConfig, imageInfo, src.getLeft(), src.getTop(), src.getWidth(), src.getHeight(), initialShapeProperties);
 
 		to.setBackgroundColor(src.getBackgroundColorAsColor());
@@ -373,8 +375,39 @@ public class RelationshipDragEndHandler implements
 
 		boolean markAsDirty = true;
 		boolean selectText = true;
-		surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(to, selectText, markAsDirty));
-	}
+    surface.getEditorContext().getEventBus().fireEvent(new ShowDiagramPropertyTextEditorEvent(to, selectText, markAsDirty));
+    
+    // ST 24.8.2020: Fix switch shape looses comment reference
+    Scheduler.get().scheduleFixedDelay(
+      new Scheduler.RepeatingCommand(){
+        @Override
+        public boolean execute() {
+          nativeSwitchShape(
+            src.getDiagramItem().getClientId(),
+            to.getDiagramItem().getClientId()
+          );
+
+          return false;
+        }
+      },
+      // Let's add a delay to send id switch after
+      // switch: insert + delete has been sent, though
+      // seems to work even if the order is different.
+      1000
+    );
+  }
+  
+  private native void nativeSwitchShape(
+    String fromClientId,
+    String toClientId
+  )/*-{
+    if (typeof $wnd.switchCommentShapeIds === 'function') {
+      $wnd.switchCommentShapeIds(
+        fromClientId, 
+        toClientId
+      )
+    }
+  }-*/;
 
 	private void applyClosestPath(Relationship2 rel) {
     if (!rel.isOneOfEndSequenceElement()) {
