@@ -9,6 +9,7 @@ import com.google.gwt.core.client.JsArray;
 
 import net.sevenscales.domain.js.JsShape;
 import net.sevenscales.domain.js.JsPath;
+import net.sevenscales.domain.js.JsGradient;
 import net.sevenscales.domain.js.JsShapeConfig;
 
 public class ShapeGroup {
@@ -21,13 +22,22 @@ public class ShapeGroup {
 	public Integer properties;
 	public Integer fontSize;
 	private JsShapeConfig config;
+	public JsArray<JsGradient> gradients;
 
-	public ShapeGroup(String elementType, ShapeProto[] protos, double width, double height, Integer properties) {
+	public ShapeGroup(
+    String elementType,
+    ShapeProto[] protos,
+    double width,
+    double height,
+    Integer properties,
+    JsArray<JsGradient> gradients
+  ) {
 		this.elementType = elementType;
 		this.protos = protos;
 		this.width = width;
 		this.height = height;
 		this.properties = properties;
+		this.gradients = gradients;
 	}
 
 	public void setShapeConfig(JsShapeConfig config) {
@@ -50,7 +60,16 @@ public class ShapeGroup {
 			return true;
 		}
 		return false;
-	}
+  }
+  
+  public void setStyleGradientId(
+    String oldId,
+    String newId
+  ) {
+    for (ShapeProto p : protos) {
+      p.style = p.style.replace("#" + oldId, "#" + newId);
+    }
+  }
 
 	public JsShape scaleToShape(double factorX, double factorY) {
 		JSONObject result = new JSONObject();

@@ -11,8 +11,11 @@ import com.google.gwt.core.client.JavaScriptObject;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.js.JsShape;
 import net.sevenscales.domain.js.JsPath;
+import net.sevenscales.domain.js.JsGradient;
 import net.sevenscales.domain.js.JsShapeConfig;
 import net.sevenscales.domain.utils.SLogger;
+
+import net.sevenscales.editor.content.ClientIdHelpers;
 
 
 public class ShapeCache {
@@ -138,12 +141,53 @@ public class ShapeCache {
 	}
 
 	private static void addShape(JsShape shape, ShapeGroup shapeGroup) {
-		if (shape.getShapeType() == 0) {
+    boolean found = sketchShapes.get(shape.getElementType()) != null || shapes.get(shape.getElementType()) != null;
+
+    if (!found) {
+      addGradients(shape, shapeGroup);
+    }
+
+		if (!found && shape.getShapeType() == 0) {
 			sketchShapes.put(shape.getElementType(), shapeGroup);
-		} else if (shape.getShapeType() == 1) {
+		} else if (!found && shape.getShapeType() == 1) {
 			shapes.put(shape.getElementType(), shapeGroup);
-		}
-	}
+    }
+    
+  }
+  
+  private static void addGradients(
+    JsShape shape,
+    ShapeGroup shapeGroup
+  ) {
+
+    // generate unique gradient id
+    // update style for the shape to use gradient id
+    for (int i = 0; i < shape.getGradients().length(); ++i) {
+    	JsGradient g = shape.getGradients().get(i);
+      String gradientId = ClientIdHelpers.guid();
+      String currentId = g.getId();
+      g.setId(gradientId);
+
+      shapeGroup.setStyleGradientId(currentId, gradientId);
+    }
+
+    _addGradients(
+    	net.sevenscales.editor.api.ISurfaceHandler.DRAWING_AREA,
+    	shape.getGradients()
+    );
+  }
+
+  private native static void _addGradients(
+    String drawingareaId,
+    JsArray<JsGradient> gradients
+  )/*-{
+    if (typeof $wnd.__addGradients__ === 'function') {
+      $wnd.__addGradients__(
+        drawingareaId,
+        gradients
+      )
+    }
+  }-*/;
 
 	private static ShapeGroup extractShapeGroup(JsShape shape) {
 		List<ShapeProto> protos = new ArrayList<ShapeProto>();
@@ -154,7 +198,14 @@ public class ShapeCache {
 		}
 		ShapeProto[] prots = new ShapeProto[protos.size()];
 		protos.toArray(prots);
-		ShapeGroup result = new ShapeGroup(shape.getElementType(), prots, shape.getWidth(), shape.getHeight(), shape.getProperties());
+		ShapeGroup result = new ShapeGroup(
+			shape.getElementType(),
+			prots,
+			shape.getWidth(),
+			shape.getHeight(),
+			shape.getProperties(),
+			shape.getGradients()
+		);
 		JsShapeConfig c = shape.getConfig();
 		if (c != null) {
 			result.setShapeConfig(c);
