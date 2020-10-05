@@ -19,6 +19,9 @@ public class JsShape extends JavaScriptObject {
 	}-*/;
 	public final native JsArray<JsPath> getShape()/*-{
 		return this.s
+  }-*/;
+  public final native JsArray<JsGradient> getGradients()/*-{
+		return this.g || []
 	}-*/;
 	public final native double getWidth()/*-{
 		return this.w
