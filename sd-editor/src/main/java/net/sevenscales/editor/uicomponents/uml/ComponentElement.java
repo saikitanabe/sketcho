@@ -317,8 +317,8 @@ public class ComponentElement extends AbstractDiagramItem implements SupportsRec
   }
   
   @Override
-	public void setBackgroundColor(int red, int green, int blue, double opacity) {
-  	super.setBackgroundColor(red, green, blue, opacity);
+  public void setBackgroundColor(Color color) {
+  	super.setBackgroundColor(color);
     rectSurface.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     small1.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     small2.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);

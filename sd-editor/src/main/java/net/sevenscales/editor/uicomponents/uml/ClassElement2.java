@@ -242,8 +242,8 @@ public class ClassElement2 extends AbstractDiagramItem implements SupportsRectan
   }
   
   @Override
-	public void setBackgroundColor(int red, int green, int blue, double opacity) {
-  	super.setBackgroundColor(red, green, blue, opacity);
+  public void setBackgroundColor(Color color) {
+  	super.setBackgroundColor(color);
     rectSurface.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }
   

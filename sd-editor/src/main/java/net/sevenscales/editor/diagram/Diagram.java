@@ -171,7 +171,7 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   boolean canSetBackgroundColor();
   boolean hasDefaultColors();
   void restoreDefaultColors();
-	public void setBackgroundColor(int red, int green, int blue, double opacity);
+	// public void setBackgroundColor(int red, int green, int blue, double opacity);
 	void setBackgroundColor(Color color);
 	String getBackgroundColor();
 	String getBackgroundColorRgba();

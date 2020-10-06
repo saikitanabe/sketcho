@@ -284,13 +284,13 @@ public class ChildTextElement extends TextElement implements IChildElement {
   }
 
   @Override
-	public void setBackgroundColor(int red, int green, int blue, double opacity) {
-		if (opacity == 0) {
+	public void setBackgroundColor(Color color) {
+		if (color.opacity == 0) {
 			// if setting transparent color, use theme board background color
 			// to have some background to hide relationship
 			super.setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor().create());
 		} else {
-			super.setBackgroundColor(red, green, blue, opacity);
+			super.setBackgroundColor(color);
 		}
 	  getAttachBoundary().setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }

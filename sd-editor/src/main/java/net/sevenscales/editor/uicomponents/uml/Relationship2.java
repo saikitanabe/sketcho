@@ -2263,7 +2263,7 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
   
   @Override
-  public void setBackgroundColor(int red, int green, int blue, double opacity) {
+  public void setBackgroundColor(Color color) {
   	// relationship doesn't have bgcolor at the moment
   }
   

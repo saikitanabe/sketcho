@@ -1146,19 +1146,27 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public void restoreDefaultColors() {
   }
   
-  @Override
-  public void setBackgroundColor(int red, int green, int blue, double opacity) {
-  	backgroundColor.red = red;
-  	backgroundColor.green = green;
-  	backgroundColor.blue = blue;
-  	backgroundColor.opacity = opacity;
+  // @Override
+  // public void setBackgroundColor(int red, int green, int blue, double opacity) {
+  // 	backgroundColor.red = red;
+  // 	backgroundColor.green = green;
+  // 	backgroundColor.blue = blue;
+  // 	backgroundColor.opacity = opacity;
 
-    setShapeCssClass();
-  }
+  //   setShapeCssClass();
+  // }
   
   @Override
   public void setBackgroundColor(Color color) {
-    setBackgroundColor(color.red, color.green, color.blue, color.opacity);
+    // setBackgroundColor(color.red, color.green, color.blue, color.opacity);
+
+    backgroundColor.red = color.red;
+    backgroundColor.green = color.green;
+    backgroundColor.blue = color.blue;
+    backgroundColor.opacity = color.opacity;
+    backgroundColor.gradient = color.gradient;
+
+    setShapeCssClass();
   }
 
   protected void setShapeCssClass() {
@@ -1432,7 +1440,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   		}
 
       Color bgColor = DiagramItemFactory.parseBackgroundColor(diagramItem);
-      setBackgroundColor(bgColor.red, bgColor.green, bgColor.blue, bgColor.opacity);
+      // setBackgroundColor(bgColor.red, bgColor.green, bgColor.blue, bgColor.opacity);
+      setBackgroundColor(bgColor);
     }
 
     logger.debugTime();

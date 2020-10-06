@@ -492,8 +492,8 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   }
 
   @Override
-	public void setBackgroundColor(int red, int green, int blue, double opacity) {
-  	super.setBackgroundColor(red, green, blue, opacity);
+	public void setBackgroundColor(Color color) {
+  	super.setBackgroundColor(color);
   	
 //		leftShadow.setVisibility(!(opacity == 0));
 //		rightShadow.setVisibility(!(opacity == 0));

@@ -344,8 +344,8 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
   }
   
   @Override
-	public void setBackgroundColor(int red, int green, int blue, double opacity) {
-  	super.setBackgroundColor(red, green, blue, opacity);
+	public void setBackgroundColor(Color color) {
+  	super.setBackgroundColor(color);
     path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 	  path.setAttribute("stroke-linecap", "square");
 	  path.setAttribute("stroke-linejoin", "round");

@@ -420,8 +420,8 @@ public class ServerElement extends AbstractDiagramItem implements SupportsRectan
   }
   
   @Override
-	public void setBackgroundColor(int red, int green, int blue, double opacity) {
-  	super.setBackgroundColor(red, green, blue, opacity);
+  public void setBackgroundColor(Color color) {
+  	super.setBackgroundColor(color);
     front.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
     roof.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }

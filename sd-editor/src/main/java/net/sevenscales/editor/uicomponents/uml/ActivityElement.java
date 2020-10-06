@@ -234,8 +234,8 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
   }
   
   @Override
-	public void setBackgroundColor(int red, int green, int blue, double opacity) {
-  	super.setBackgroundColor(red, green, blue, opacity);
+	public void setBackgroundColor(Color color) {
+  	super.setBackgroundColor(color);
   	boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
   }
   
