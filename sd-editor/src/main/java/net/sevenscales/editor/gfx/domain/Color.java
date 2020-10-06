@@ -8,12 +8,17 @@ public class Color {
   public int green;
   public int blue;
   public double opacity;
+  public String gradient;
   
   public Color(int red, int green, int blue, double opacity) {
 		this.red = red;
 		this.green = green;
 		this.blue = blue;
 		this.opacity = opacity;
+  }
+  
+  public Color(String gradient) {
+    this.gradient = gradient;
 	}
 
 	public Color() {
@@ -31,6 +36,10 @@ public class Color {
 	}
 
   public static Color hexToColor(String color) {
+    if (color.startsWith("url")) {
+      return new Color(color);
+    }
+
 		Rgb rgb = Rgb.toRgb(color);
 		Color result = new Color(rgb.red, rgb.green, rgb.blue, rgb.a);
 		return result;
@@ -78,6 +87,7 @@ public class Color {
     green = color.green;
     blue = color.blue;
     opacity = color.opacity;
+    gradient = color.gradient;
 	}
 	
 	public Color create() {
@@ -127,7 +137,11 @@ public class Color {
 	}
 	public void setOpacity(double opacity) {
 		this.opacity = opacity;
-	}
+  }
+  
+  public boolean isGradient() {
+    return gradient != null && gradient.length() > 0;
+  }
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -144,7 +158,17 @@ public class Color {
 	    }
 	    if (c.opacity != opacity) {
 	      return false;
-	    }
+      }
+      if (c.gradient == null && gradient != null) {
+        return false;
+      }
+      if (c.gradient != null && gradient == null) {
+        return false;
+      }
+      if (c.gradient != null && !c.gradient.equals(gradient)) {
+        return false;
+      }
+
 	    return true;
 	  }
 	  return false;
