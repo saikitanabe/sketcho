@@ -312,7 +312,39 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			style = style.replace(FILL_BG_COLOR_DARK, "");
 		}
 		return style;
-	}
+  }
+  
+  private void disableGradient(
+    IPath path
+  ) {
+    String style = path.getAttribute("style");
+    if (style != null && style.matches(".*fill:url\\([^)]+\\).*")) {
+      // note needs to match full style string therefore .* in the beginning and in the end
+      
+      // this path supports gradients, e.g. fill:url(#9669320a-32d6-7208-0c6b-17322336ba99);fill-opacity:1;stroke:none"
+      // do not replace any fixed fills e.g. fill:none that is set on style
+
+      // style = style.replaceAll("fill:url\\([^;]+\\);", "");
+      // could also store original url but this is easier
+      style = style.replace("fill:", "fill-disabled:");
+      path.setAttribute("style", style);
+    }
+  }
+
+  private void enableGradient(
+    IPath path,
+    Color color
+  ) {
+    String style = path.getAttribute("style");
+
+    if (style != null) {
+	    style = style.replace("fill-disabled:", "fill:");
+
+	    // fill:url(#9669320a-32d6-7208-0c6b-17322336ba99);fill-opacity:1;stroke:none"
+	    // style = color.gradient + ";" + style;
+	    path.setAttribute("style", style);
+	  }
+  }
 
 	private void createCustomPaths(List<? extends IPathRO> pathros) {
 		for (IPathRO p : pathros) {
@@ -647,12 +679,25 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   }
   
   @Override
-  public void setBackgroundColor(int red, int green, int blue, double opacity) {
-  	super.setBackgroundColor(red, green, blue, opacity);
+  // public void SetBackgroundColor(int red, int green, int blue, double opacity) {
+  public void setBackgroundColor(Color clr) {
+  	super.setBackgroundColor(clr);
   	for (PathWrapper path : paths) {
   		if (!path.path.isFillAsBorderColor() && !path.path.isFillAsBoardBackgroundColor()) {
-			    path.path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
-			  }
+        path.path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
+
+        if (backgroundColor.opacity > 0) {
+          // uses rbg background color that is set as attribute instead of fill
+          disableGradient(path.path);
+        } else if (backgroundColor.isGradient()) {
+          // it's gradient, enable gradient
+          enableGradient(
+          	path.path,
+          	backgroundColor
+          );
+        }
+
+      }
 
 			if (path.path.isFillAsBackgroundColorLight()) {
 				Color color = getBackgroundColorAsColor();
@@ -661,7 +706,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 				Color color = getBackgroundColorAsColor();
   			path.path.setFill(color.toDarker());
   		} else if (path.path.isFillAsShapeBackgroundColor()) {
-  			path.path.setFill(red, green, blue, opacity);
+  			path.path.setFill(clr.red, clr.green, clr.blue, clr.opacity);
 			}
   	}
   }
