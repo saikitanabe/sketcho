@@ -14,6 +14,7 @@ import net.sevenscales.domain.js.JsShapeConfig;
 
 public class ShapeGroup {
 	public String elementType;
+	public int shapeType;
 	public ShapeProto[] protos;
 
 		// NOTE: important to keep as float or double; int will be really slow!
@@ -26,6 +27,7 @@ public class ShapeGroup {
 
 	public ShapeGroup(
     String elementType,
+    int shapeType,
     ShapeProto[] protos,
     double width,
     double height,
@@ -33,11 +35,23 @@ public class ShapeGroup {
     JsArray<JsGradient> gradients
   ) {
 		this.elementType = elementType;
+		this.shapeType = shapeType;
 		this.protos = protos;
 		this.width = width;
 		this.height = height;
 		this.properties = properties;
-		this.gradients = gradients;
+		this.gradients = copyGradients(gradients);
+	}
+
+	private JsArray<JsGradient> copyGradients(JsArray<JsGradient> gradients) {
+		JsArray<JsGradient> result = JsArray.createArray().cast();
+
+		for (int i = 0; i < gradients.length(); ++i) {
+			JsGradient clone = JsGradient.copy(gradients.get(i));
+			result.push(clone);
+		}
+
+		return result;
 	}
 
 	public void setShapeConfig(JsShapeConfig config) {

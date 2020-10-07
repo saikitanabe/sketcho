@@ -118,8 +118,8 @@ public class ShapeCache {
 	}
 
 	public static void addShape(JsShape shape) {
-		ShapeGroup sg = extractShapeGroup(shape);
-		addShape(shape, sg);
+    ShapeGroup sg = extractShapeGroup(shape);
+		addShape(sg);
 	}
 
 	private static native JsArray<JsShape> loadLibraryContext()/*-{
@@ -140,30 +140,31 @@ public class ShapeCache {
 		return sg.scaleToShape(scale, scale);
 	}
 
-	private static void addShape(JsShape shape, ShapeGroup shapeGroup) {
-    boolean found = sketchShapes.get(shape.getElementType()) != null || shapes.get(shape.getElementType()) != null;
+	private static void addShape(ShapeGroup shapeGroup) {
+    boolean found = sketchShapes.get(shapeGroup.elementType) != null || shapes.get(shapeGroup.elementType) != null;
 
     if (!found) {
-      addGradients(shape, shapeGroup);
+      addGradients(shapeGroup);
     }
 
-		if (!found && shape.getShapeType() == 0) {
-			sketchShapes.put(shape.getElementType(), shapeGroup);
-		} else if (!found && shape.getShapeType() == 1) {
-			shapes.put(shape.getElementType(), shapeGroup);
+		if (!found && shapeGroup.shapeType == 0) {
+			sketchShapes.put(shapeGroup.elementType, shapeGroup);
+		} else if (!found && shapeGroup.shapeType == 1) {
+			shapes.put(shapeGroup.elementType, shapeGroup);
     }
     
   }
   
   private static void addGradients(
-    JsShape shape,
     ShapeGroup shapeGroup
   ) {
 
     // generate unique gradient id
     // update style for the shape to use gradient id
-    for (int i = 0; i < shape.getGradients().length(); ++i) {
-    	JsGradient g = shape.getGradients().get(i);
+    // need to operate with copied objects not to update id of all gradient instances
+    // also in context menu.
+    for (int i = 0; i < shapeGroup.gradients.length(); ++i) {
+    	JsGradient g = shapeGroup.gradients.get(i);
       String gradientId = ClientIdHelpers.guid();
       String currentId = g.getId();
       g.setId(gradientId);
@@ -173,7 +174,7 @@ public class ShapeCache {
 
     _addGradients(
     	net.sevenscales.editor.api.ISurfaceHandler.DRAWING_AREA,
-    	shape.getGradients()
+    	shapeGroup.gradients
     );
   }
 
@@ -200,6 +201,7 @@ public class ShapeCache {
 		protos.toArray(prots);
 		ShapeGroup result = new ShapeGroup(
 			shape.getElementType(),
+			shape.getShapeType(),
 			prots,
 			shape.getWidth(),
 			shape.getHeight(),
