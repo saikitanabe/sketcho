@@ -106,7 +106,7 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 		return null;
 	}
 	public void setId(String id) {
-		
+		getElement().setId(id);
 	}
 	public boolean isLibrary() {
 		return false;
