@@ -558,5 +558,10 @@ abstract class Shape extends Graphics implements IShape {
   public boolean isFillAsBackgroundColorDark() {
   	return fillAsBackgroundColorDark;
   }
+
+  public boolean isFillGradient() {
+    String style = this.getAttribute("style");
+    return style != null && style.matches(".*fill:url\\([^)]+\\).*");
+  }
 	
 }

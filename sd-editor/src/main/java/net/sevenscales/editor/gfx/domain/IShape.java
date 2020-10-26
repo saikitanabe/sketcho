@@ -83,4 +83,6 @@ public interface IShape extends IGraphics {
   
   void setFillAsBackgroundColorDark(boolean value);
   boolean isFillAsBackgroundColorDark();
+
+  boolean isFillGradient();
 }
