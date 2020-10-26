@@ -172,10 +172,12 @@ public class ShapeCache {
       shapeGroup.setStyleGradientId(currentId, gradientId);
     }
 
-    _addGradients(
-    	net.sevenscales.editor.api.ISurfaceHandler.DRAWING_AREA,
-    	shapeGroup.gradients
-    );
+    if (shapeGroup.gradients.length() > 0) {
+      _addGradients(
+        net.sevenscales.editor.api.ISurfaceHandler.DRAWING_AREA,
+        shapeGroup.gradients
+      );
+    }
   }
 
   private native static void _addGradients(
