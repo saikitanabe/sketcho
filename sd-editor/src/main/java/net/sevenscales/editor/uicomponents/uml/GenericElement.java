@@ -37,7 +37,7 @@ import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
-
+import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 
 public class GenericElement extends AbstractDiagramItem implements IGenericElement, SupportsRectangleShape, IShapeGroup.ShapeLoaded {
 	private static SLogger logger = SLogger.createLogger(GenericElement.class);
@@ -317,8 +317,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private void disableGradient(
     IPath path
   ) {
-    String style = path.getAttribute("style");
-    if (style != null && style.matches(".*fill:url\\([^)]+\\).*")) {
+    net.sevenscales.domain.utils.Debug.log("disableGradient");
+    if (path.isFillGradient()) {
       // note needs to match full style string therefore .* in the beginning and in the end
       
       // this path supports gradients, e.g. fill:url(#9669320a-32d6-7208-0c6b-17322336ba99);fill-opacity:1;stroke:none"
@@ -326,6 +326,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
       // style = style.replaceAll("fill:url\\([^;]+\\);", "");
       // could also store original url but this is easier
+      String style = path.getAttribute("style");
       style = style.replace("fill:", "fill-disabled:");
       path.setAttribute("style", style);
     }
@@ -957,5 +958,21 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	  	}
 
 	  }
-	}
+  }
+  
+  @Override
+  public boolean usesSchemeDefaultBackgroundColor(
+    ElementColorScheme colorScheme
+  ) {
+
+    for (PathWrapper pw : paths) {
+      if (pw.path.isFillGradient()) {
+        // gradient fill color, so
+        // not using scheme default backround color
+        return false;
+      }
+    }
+
+    return super.usesSchemeDefaultBackgroundColor(colorScheme);
+  }  
 }
