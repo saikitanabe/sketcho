@@ -140,16 +140,25 @@ public class ShapeCache {
 		return sg.scaleToShape(scale, scale);
 	}
 
+  // private static void addShape(JsShape shape, ShapeGroup shapeGroup) {
+	// 	if (shape.getShapeType() == 0) {
+	// 		sketchShapes.put(shape.getElementType(), shapeGroup);
+	// 	} else if (shape.getShapeType() == 1) {
+	// 		shapes.put(shape.getElementType(), shapeGroup);
+	// 	}
+  // }
+  
 	private static void addShape(ShapeGroup shapeGroup) {
+    
     boolean found = sketchShapes.get(shapeGroup.elementType) != null || shapes.get(shapeGroup.elementType) != null;
 
     if (!found) {
       addGradients(shapeGroup);
     }
 
-		if (!found && shapeGroup.shapeType == 0) {
+		if (shapeGroup.shapeType == 0) {
 			sketchShapes.put(shapeGroup.elementType, shapeGroup);
-		} else if (!found && shapeGroup.shapeType == 1) {
+		} else if (shapeGroup.shapeType == 1) {
 			shapes.put(shapeGroup.elementType, shapeGroup);
     }
     
