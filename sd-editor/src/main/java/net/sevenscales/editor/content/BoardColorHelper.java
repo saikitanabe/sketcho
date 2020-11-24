@@ -14,6 +14,7 @@ import net.sevenscales.editor.api.ot.BoardDocument;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.CircleElement;
+import net.sevenscales.editor.uicomponents.uml.ChildTextElement;
 
 
 
@@ -104,7 +105,7 @@ public class BoardColorHelper {
         d.setBorderColor(d.getDefaultBorderColor(newColorScheme));
       }
       if (d.usesSchemeDefaultBackgroundColor(currentColorScheme)) {
-        if (d.getSurfaceHandler().isExporting()) {
+        if (d.getSurfaceHandler().isExporting() && d instanceof ChildTextElement) {
           // Fix 18.9.2019 ST: when exporting background color should be white
           d.setBackgroundColor(ThemeName.WHITE.getBoardBackgroundColor());
         } else {
