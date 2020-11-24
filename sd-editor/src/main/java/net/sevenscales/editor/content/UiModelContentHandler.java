@@ -197,6 +197,11 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
     editorContext.set(EditorProperty.HOLD_ARROW_DRAWING, true);
 
     for (IDiagramItem item : items) {
+      if (surface.isExporting() && 
+          "o_slide".equals(item.getType())) {
+        // on export skip slide
+        continue;
+      }
     	// client id cannot clash because single user environment and done only for 
     	// legacy Confluence boards that didn't use client id for diagram items.
     	ClientIdHelpers.generateClientIdIfNotSet(item, ++i, null, null);
