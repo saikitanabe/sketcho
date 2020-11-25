@@ -38,6 +38,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
   private Point coords = new Point();
   private IGroup group;
   private IGroup subgroup;
+  private IGroup textGroup;
   private TextElementFormatUtil textUtil;
   private GenericHasTextElement hasTextElement;
   private boolean legacy = false;
@@ -69,6 +70,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
 
     group = IShapeFactory.Util.factory(editable).createGroup(surface.getContainerLayer());
     subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
+    textGroup = IShapeFactory.Util.factory(editable).createGroup(group);
     // group.setAttribute("cursor", "default");
 
     // set clipping area => text is visible only within canvas boundary
@@ -81,7 +83,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
     hasTextElement = new GenericHasTextElement(this, shape);
     hasTextElement.setMarginLeft(getMarginLeft());
-    textUtil = new TextElementFormatUtil(this, hasTextElement, subgroup, surface.getEditorContext());
+    textUtil = new TextElementFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
     // textUtil.setMarginTop(0);
     // textUtil.setRotate(-90);
 
@@ -145,6 +147,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
 
     setPathShapes(0, 0, width, height);
     subgroup.setTransform(left, top);
+    textGroup.setTransform(left, top);
 
     if (legacy) {
       textUtil.setTextShape();
@@ -239,6 +242,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
   }
 
   public void resizeEnd() {
+    super.resizeEnd();
   }
 
   public Info getInfo() {
@@ -322,6 +326,11 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
 	@Override
 	public IGroup getSubgroup() {
 		return subgroup;
+  }
+  
+	@Override
+	public IGroup getTextGroup() {
+		return textGroup;
 	}
 
 	@Override
