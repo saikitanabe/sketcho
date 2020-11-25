@@ -13,8 +13,6 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 
 
 public class GenericSlideElement extends GenericElement {
-  // private IPath tape;
-
 	public GenericSlideElement(
     ISurfaceHandler surface,
     GenericShape newShape,
