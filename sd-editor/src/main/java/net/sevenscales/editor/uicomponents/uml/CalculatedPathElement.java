@@ -217,6 +217,7 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
   public boolean resize(int left, int top, int width, int height) {
     if (width >= minimumWidth && height >= minimumHeight) {
       setShape(getRelativeLeft(), getRelativeTop(), width, height);
+      textUtil.setTextShape();
       super.applyHelpersShape();
       dispatchAndRecalculateAnchorPositions();
       return true;
