@@ -120,11 +120,16 @@ class SurfaceHandler extends SimplePanel implements
   private IModeManager modeManager;
   private boolean disabedOnAreaCheck;
   private double scaleFactor = 1.0f;
+
+  // when there is going to be a user added layers
+  // each user added layer can contain these same layers.
   private IGroup connectionLayer3;
   private IGroup interactionLayer4;
   private IGroup elementLayer2;
   private IGroup containerLayer1;
+  private IGroup slideLayer;
   private IGroup rootLayer0;
+
   private Integer width;
   private Integer height;
   private int currentClientX;
@@ -563,6 +568,10 @@ class SurfaceHandler extends SimplePanel implements
     return containerLayer1;
   }
   
+  public IGroup getSlideLayer() {
+    return slideLayer;
+  }
+  
   public IGroup getRootLayer() {
     return rootLayer0;
   }
@@ -774,6 +783,7 @@ class SurfaceHandler extends SimplePanel implements
     logger.debug("loaded {}...", name);
     // layers in order
     rootLayer0 = IShapeFactory.Util.factory(editable).createGroup(surface);
+    slideLayer = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
     containerLayer1 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
     elementLayer2 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
     connectionLayer3 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);

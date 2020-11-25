@@ -33,6 +33,7 @@ import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
+import net.sevenscales.domain.ElementType;
 
 public class UiModelContentHandler implements SurfaceLoadedEventListener {
 	private static final SLogger logger = SLogger.createLogger(UiModelContentHandler.class);
@@ -198,7 +199,7 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 
     for (IDiagramItem item : items) {
       if (surface.isExporting() && 
-          "o_slide".equals(item.getType())) {
+          ElementType.SLIDE.getValue().equals(item.getType())) {
         // on export skip slide
         continue;
       }

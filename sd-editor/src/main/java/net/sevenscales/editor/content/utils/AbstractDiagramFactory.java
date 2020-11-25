@@ -52,6 +52,7 @@ import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
 import net.sevenscales.editor.uicomponents.uml.GenericFreehandElement;
 import net.sevenscales.editor.uicomponents.uml.GenericNoteElement;
+import net.sevenscales.editor.uicomponents.uml.GenericSlideElement;
 // import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement;
 import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement4;
 import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElementCorporate;
@@ -540,6 +541,15 @@ public interface AbstractDiagramFactory {
       //     DiagramItemFactory.parseTextColor(item),
       //     editable,
       //     item);
+      } else if (item.getType().equals(ElementType.SLIDE.getValue())) {
+        return new GenericSlideElement(surface,
+          gh,
+          item.getText(), 
+          DiagramItemFactory.parseBackgroundColor(item),
+          DiagramItemFactory.parseBorderColor(item),
+          DiagramItemFactory.parseTextColor(item),
+          editable,
+          item);
       } else {
         // if (item.getShapeProperties() == null) {
         // }
@@ -721,7 +731,6 @@ public interface AbstractDiagramFactory {
       }
 		}
 	}
-
 
 	public class ForkFactory implements AbstractDiagramFactory {
 		public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {

@@ -92,6 +92,7 @@ public interface ISurfaceHandler extends OperationTransaction, HasMouseWheelHand
 	IGroup getElementLayer();
 	IGroup getConnectionLayer();
 	IGroup getContainerLayer();
+	IGroup getSlideLayer();
 	IGroup getRootLayer();
 	IGroup getInteractionLayer();
 	/**

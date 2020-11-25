@@ -63,6 +63,7 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	private IGroup interactionLayer4;
 	private IGroup elementLayer2;
 	private IGroup containerLayer1;
+	private IGroup slideLayer;
 	private IGroup rootLayer0;
 	private List<Diagram> diagrams;
 	private ILoadObserver loadObserver;
@@ -92,6 +93,7 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 
 	private void loaded() {
 		rootLayer0 = IShapeFactory.Util.factory(editable).createGroup(surface);
+		slideLayer = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
 		containerLayer1 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
 		elementLayer2 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
 		connectionLayer3 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
@@ -220,7 +222,10 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	}
 	public IGroup getContainerLayer() {
 		return containerLayer1;
-	}
+  }
+  public IGroup getSlideLayer() {
+    return slideLayer;
+  }
 	public IGroup getRootLayer() {
 		return rootLayer0;
 	}

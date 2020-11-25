@@ -105,7 +105,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		this.shape = newShape;
 		getDiagramItem().setShapeProperties(newShape.getShapeProperties());
 
-		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
+		group = IShapeFactory.Util.factory(editable).createGroup(getLayer(surface));
     // group.setAttribute("cursor", "default");
 
 		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
@@ -210,7 +210,13 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 	public void onError() {
 
-	}
+  }
+  
+  // ST 25.11.2020: Possible to inherited generic elements deside which layer it will be
+  // created. See GenericSlideElement.
+  protected IGroup getLayer(ISurfaceHandler surface) {
+    return surface.getElementLayer();
+  }
 
 	protected GenericHasTextElement getHasTextElement() {
 		return hasTextElement;
