@@ -54,7 +54,6 @@ import net.sevenscales.editor.uicomponents.uml.IShapeGroup;
 import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
 import net.sevenscales.editor.uicomponents.uml.NoteElement;
 import net.sevenscales.editor.uicomponents.uml.PackageElementCorporate;
-import net.sevenscales.editor.uicomponents.uml.SequenceElement;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
 import net.sevenscales.editor.uicomponents.uml.ShapeCache;
 import net.sevenscales.editor.uicomponents.uml.ShapeGroup;
@@ -175,12 +174,12 @@ public class DiagramFactory {
 					1), // auto resizes
 					defaultText, background, borderColor, color, true, new DiagramItemDTO());
 			result = ce;
-		} else if (ElementType.SEQUENCE.getValue().equals(elementType)) {
-			SequenceElement se = new SequenceElement(surface, 
-	        new SequenceShape(x, y, 1, 1, 25),
-	        defaultText,
-	        background, borderColor, color, true, new DiagramItemDTO());
-			result = se;
+		// } else if (ElementType.SEQUENCE.getValue().equals(elementType)) {
+		// 	SequenceElement se = new SequenceElement(surface, 
+	  //       new SequenceShape(x, y, 1, 1, 25),
+	  //       defaultText,
+	  //       background, borderColor, color, true, new DiagramItemDTO());
+		// 	result = se;
 		// } else if (ElementType.ACTOR.getValue().equals(elementType)) {
     //   Actor actor = new Actor(surface,
     //       new ActorShape(x, 

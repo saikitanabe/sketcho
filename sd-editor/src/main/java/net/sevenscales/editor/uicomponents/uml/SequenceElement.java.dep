@@ -26,6 +26,7 @@ import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.ILine;
 import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.silver.SilverUtils;
@@ -38,7 +39,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 	private static SLogger logger = SLogger.createLogger(SequenceElement.class);
 	private static final int RADIUS_EXTRA = 12;
 	private static final int SELECTION_AREA_WIDTH = 12;
-		
+    
   private ILine line;
   private ILifeLineEditor lifeLineEditor;
   private ISurfaceHandler surface;
@@ -58,25 +59,26 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 	public SequenceElement(
 	      ISurfaceHandler parent, SequenceShape shape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
 		super(parent, shape.rectShape, text, backgroundColor, borderColor, textColor, editable, true, item);
-		this.surface = parent;
+    this.surface = parent;
+    
 // 		this.seqShape = shape;
 //		lineShape.x1 = shape.rectShape.left + shape.rectShape.width/2;
 //		lineShape.y1 = shape.rectShape.top + shape.rectShape.height;
 //		lineShape.x2 = lineShape.x1;
 //		lineShape.y2 = lineShape.y1 + shape.lifeLineHeight;
-    int x1 = GridUtils.align(shape.rectShape.left + shape.rectShape.width/2);
-    int y1 = shape.rectShape.top + shape.rectShape.height;
-    int x2 = x1;
-    int y2 = y1 + shape.lifeLineHeight;
+    // int x1 = GridUtils.align(shape.rectShape.width/2);
+    // int y1 = shape.rectShape.top + shape.rectShape.height;
+    // int x2 = x1;
+    // int y2 = y1 + shape.lifeLineHeight;
 
-		line = IShapeFactory.Util.factory(editable).createLine(getGroup());
+		line = IShapeFactory.Util.factory(editable).createLine(getSubgroup());
 //		line.setShape(x1, y1, x2, y2);
 		line.setStroke(borderColor);
 		line.setStyle(ILine.DASHED);
 		
 		addEvents(line);
 		
-		selectionArea = IShapeFactory.Util.factory(editable).createRectangle(getGroup());
+		selectionArea = IShapeFactory.Util.factory(editable).createRectangle(getSubgroup());
 //		selectionArea.setShape(x1-5, y1, 5*2, y2-y1, 0);
 	  selectionArea.setFill(200, 200, 200, 0);
 //	  selectionArea.setFill("transparent");
@@ -127,8 +129,8 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
     	// IE hack, selectionArea and line are after canvas Rectangle
     	surface.moveToBack();
     }
-	}
-	
+  }
+
   private void removeExtraConnectionHandles() {
 		connectionHelpers.removeExtraConnectionHandles();
 	}
@@ -173,14 +175,14 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
     width = GridUtils.align(width);
     height = GridUtils.align(height);
 
-	  int x1 = GridUtils.align(left + width/2);
+	  int x1 = GridUtils.align(width/2);
 //	  int dy = top + height - line.getY1();
-	  int y1 = top + height;
+	  int y1 = height;
 	  int x2 = x1;
 	  int y2 = y1 + lifelineheight;
 	  
 	  line.setShape(x1, y1, x2, y2);
-		selectionArea.setShape(x1 - SELECTION_AREA_WIDTH, y1, SELECTION_AREA_WIDTH * 2, y2-y1, 0);
+		// selectionArea.setShape(x1 - SELECTION_AREA_WIDTH, y1, SELECTION_AREA_WIDTH * 2, y2-y1, 0);
     
     makeFixedAnchorPoints();
     lifeLineEditor.setShape(this);
@@ -198,12 +200,12 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
 	private void iterateLifelinePoints(LifelineCall call) {
     call.begin();
     // This would be correct implementation, but due to early bug data is already attached to different points!
-		for (int y = getTop() + getHeight() + CONNECT_DISTANCE - 4; y < line.getY2() + getTransformY() - CONNECT_DISTANCE; y += CONNECT_DISTANCE) {
+		for (int y = getTop() + getHeight() + CONNECT_DISTANCE - 4; y < line.getY2() + getTop() - CONNECT_DISTANCE; y += CONNECT_DISTANCE) {
       // after all putting more stable version for the future, this could lead to some feedback... that not aligning correctly...
     // for (int y = getCenterY() + (CONNECT_DISTANCE * 2); y < line.getY2() + getTransformY() - CONNECT_DISTANCE; y += CONNECT_DISTANCE) {
     //   if (y > getTop() + getHeight()) {
     //    // HACK: do not create circles if not over the edge
-        call.makeCircle(line.getX1() + getTransformX(), y);
+        call.makeCircle(line.getX1() + getLeft(), y);
       // }
 		}
 	}
@@ -395,7 +397,7 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
   	if (onDynamicAttachArea(anchor, x, y)) {
       result = makeDynamicTempAnchorProperties(anchor, x, y);
   	}
-    if (AnchorUtils.onAttachArea(x, y, selectionArea.getX() + getTransformX(), selectionArea.getY() + getTransformY(),
+    if (AnchorUtils.onAttachArea(x, y, selectionArea.getX() + getLeft(), selectionArea.getY() + getTop(),
       selectionArea.getWidth(), selectionArea.getHeight())) {
     	// anchor to life line if on selection area
     	result = makeFixedTempAnchorProperties(anchor, x, y);
@@ -423,10 +425,10 @@ public class SequenceElement extends ClassElement2 implements DiagramDragHandler
   public boolean onArea(int left, int top, int right, int bottom) {
   	if (super.onArea(left, top, right, bottom)) {
   		// check first rectangle area
-  		int x = line.getX1() + getTransformX();
-  		int y = line.getY1() + getTransformY();
-  		int bx = line.getX2() + getTransformX();
-  		int by = line.getY2() + getTransformY();
+  		int x = line.getX1() + getLeft();
+  		int y = line.getY1() + getTop();
+  		int bx = line.getX2() + getLeft();
+  		int by = line.getY2() + getTop();
   		return AreaUtils.onArea(x, y, bx, by, left, top, right, bottom);
   	}
   	return false;

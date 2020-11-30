@@ -144,8 +144,8 @@ public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
   @Override
   public void setShape(ISequenceElement parent) {
     this.parent = parent;
-    circleShape.centerX = parent.getLine().getX2() + parent.getTransformX();
-    circleShape.centerY = parent.getLine().getY2() + parent.getTransformY();
+    circleShape.centerX = parent.getLine().getX2() + parent.getLeft();
+    circleShape.centerY = parent.getLine().getY2() + parent.getTop();
     circleShape.radius = 10;
     startSelection.setShape(circleShape);
     startSelection.setStroke(parent.getBorderColor());

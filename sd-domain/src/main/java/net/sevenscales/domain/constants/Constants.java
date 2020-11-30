@@ -14,6 +14,7 @@ public class Constants {
 	public static final int SKETCH_SEPARATOR_WEIGHT = 2;
 
 	public static final int CORPORATE_MODE_LINE_WEIGHT = 2;
+	public static final int CORPORATE_SEQUENCE_LINE_WEIGHT = 1;
 
 	public static final int ELLIPSE_RECT_SHAPE_VERSION = 7;
 

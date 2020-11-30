@@ -8,5 +8,7 @@ public interface ISequenceElement {
 	ILine getLine();
 	int getTransformX();
   int getTransformY();
+	int getLeft();
+  int getTop();
   Color getBorderColor();
 }

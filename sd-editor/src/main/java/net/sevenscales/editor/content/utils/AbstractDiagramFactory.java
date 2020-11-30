@@ -62,7 +62,6 @@ import net.sevenscales.editor.uicomponents.uml.NoteElement;
 import net.sevenscales.editor.uicomponents.uml.PackageElement;
 import net.sevenscales.editor.uicomponents.uml.PackageElementCorporate;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
-import net.sevenscales.editor.uicomponents.uml.SequenceElement;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement2;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
 import net.sevenscales.editor.uicomponents.uml.StorageElement;
@@ -107,7 +106,7 @@ public interface AbstractDiagramFactory {
 		}
 
 		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
-      if (Tools.isSketchMode()) {
+      // if (Tools.isSketchMode()) {
         return new SequenceElement2(surface,
                 (SequenceShape) shape,
                 item.getText(),
@@ -116,17 +115,17 @@ public interface AbstractDiagramFactory {
                 DiagramItemFactory.parseTextColor(item),
                 editable,
                 item);
-      } else {
-        return new SequenceElement(surface,
-                (SequenceShape) shape,
-                item.getText(),
-                DiagramItemFactory.parseBackgroundColor(item),
-                DiagramItemFactory.parseBorderColor(item),
-                DiagramItemFactory.parseTextColor(item),
-                editable,
-                item);
+      // } else {
+      //   return new SequenceElement(surface,
+      //           (SequenceShape) shape,
+      //           item.getText(),
+      //           DiagramItemFactory.parseBackgroundColor(item),
+      //           DiagramItemFactory.parseBorderColor(item),
+      //           DiagramItemFactory.parseTextColor(item),
+      //           editable,
+      //           item);
       }
-		}
+		// }
 	}
 
 
