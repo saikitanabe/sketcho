@@ -119,7 +119,7 @@ public class Shapes {
 	  	} else if ("v".equals(code)) {
 		  	result += (getY() * factorY);
 	  	} else if ("h".equals(code)) {
-		  	result += (getX() * factorY);
+		  	result += (getX() * factorX);
 	  	}
 	  	// else if (!"z".equals(code)) {
 		  // 	result += (getX() * factorX) + "," + (getY() * factorY);
