@@ -13,6 +13,7 @@ import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.LibraryShapes;
+import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.utils.AreaUtils;
 import net.sevenscales.editor.diagram.Diagram;
@@ -41,7 +42,7 @@ import net.sevenscales.editor.uicomponents.helpers.ILifeLineEditor;
 import net.sevenscales.editor.uicomponents.helpers.LifeLineEditorHelper;
 
 public class SequenceElement2 extends GenericElement implements DiagramDragHandler, SupportsRectangleShape, IExtraConnectionHandler, ISequenceElement {
-	private static SLogger logger = SLogger.createLogger(SequenceElement.class);
+	private static SLogger logger = SLogger.createLogger(SequenceElement2.class);
 	private static final int RADIUS_EXTRA = 12;
 	private static final int SELECTION_AREA_WIDTH = 12;
 	
@@ -83,20 +84,25 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
 //		lineShape.y1 = shape.rectShape.top + shape.rectShape.height;
 //		lineShape.x2 = lineShape.x1;
 //		lineShape.y2 = lineShape.y1 + shape.lifeLineHeight;
-    int x1 = GridUtils.align(shape.rectShape.left + shape.rectShape.width/2);
-    int y1 = shape.rectShape.top + shape.rectShape.height;
-    int x2 = x1;
-    int y2 = y1 + shape.lifeLineHeight;
+    // int x1 = GridUtils.align(shape.rectShape.width/2);
+    // int y1 = shape.rectShape.height;
+    // int x2 = x1;
+    // int y2 = y1 + shape.lifeLineHeight;
 
-		line = IShapeFactory.Util.factory(editable).createLine(getGroup());
-//		line.setShape(x1, y1, x2, y2);
+		line = IShapeFactory.Util.factory(editable).createLine(getSubgroup());
+		// line.setShape(x1, y1, x2, y2);
     line.setStroke(borderColor);
     line.setStyle(ILine.DASHED);
-		line.setStrokeWidth(Constants.SKETCH_MODE_REL_LINE_WEIGHT);
+
+    if (Tools.isSketchMode()) {
+      line.setStrokeWidth(Constants.SKETCH_MODE_REL_LINE_WEIGHT);
+    } else {
+      line.setStrokeWidth(Constants.CORPORATE_SEQUENCE_LINE_WEIGHT);
+    }
 		
 		addEvents(line);
 		
-		selectionArea = IShapeFactory.Util.factory(editable).createRectangle(getGroup());
+		selectionArea = IShapeFactory.Util.factory(editable).createRectangle(getSubgroup());
 //		selectionArea.setShape(x1-5, y1, 5*2, y2-y1, 0);
 	  selectionArea.setFill(200, 200, 200, 0);
 //	  selectionArea.setFill("transparent");
@@ -109,7 +115,7 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
 	  addTouchSupport();
 	  lifeLineEditor = LifeLineEditorHelper.createLifeLineEditorHelper(surface, this, getEditable());
     
-    // shapes.add(line);
+    shapes.add(line);
     // shapes.add(selectionArea);
 
     setReadOnly(!editable);
@@ -125,19 +131,19 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
   * Line is absolute element and not relative at the moment so passed to svg 
   * generation as absolute shape as text shapes are as well.
   */
-  @Override
-  public List<List<IShape>> getTextElements() {
-    List<List<IShape>> texts = super.getTextElements();
-    List<List<IShape>> result = new ArrayList<List<IShape>>();
-    for (List<IShape> l : texts) {
-      result.add(l);
-    }
+  // @Override
+  // public List<List<IShape>> getTextElements() {
+  //   List<List<IShape>> texts = super.getTextElements();
+  //   List<List<IShape>> result = new ArrayList<List<IShape>>();
+  //   for (List<IShape> l : texts) {
+  //     result.add(l);
+  //   }
 
-    List<IShape> lineShapes = new ArrayList<IShape>();
-    lineShapes.add(line);
-    result.add(lineShapes);
-    return result;
-  }
+  //   List<IShape> lineShapes = new ArrayList<IShape>();
+  //   lineShapes.add(line);
+  //   result.add(lineShapes);
+  //   return result;
+  // }
 	
 	private void addTouchSupport() {
 	  selectionArea.addGraphicsTouchStartHandler(this);
@@ -212,9 +218,9 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
     width = GridUtils.align(width);
     height = GridUtils.align(height);
 
-	  int x1 = GridUtils.align(left + width/2);
+	  int x1 = GridUtils.align(width/2);
 //	  int dy = top + height - line.getY1();
-	  int y1 = top + height;
+	  int y1 = height;
 	  int x2 = x1;
 	  int y2 = y1 + lifelineheight;
 	  
@@ -231,6 +237,8 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
     makeFixedAnchorPoints();
     lifeLineEditor.setShape(this);
 
+
+
 //    ++this.dispatchSequence;
 //    for (AnchorElement a : anchorMap.values()) {
 //      a.setAx(x1);
@@ -244,12 +252,12 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
 	private void iterateLifelinePoints(LifelineCall call) {
     call.begin();
     // This would be correct implementation, but due to early bug data is already attached to different points!
-		for (int y = getTop() + getHeight() + CONNECT_DISTANCE - 4; y < line.getY2() + getTransformY() - CONNECT_DISTANCE; y += CONNECT_DISTANCE) {
+		for (int y = getTop() + getHeight() + CONNECT_DISTANCE - 4; y < line.getY2() + getTop() - CONNECT_DISTANCE; y += CONNECT_DISTANCE) {
       // after all putting more stable version for the future, this could lead to some feedback... that not aligning correctly...
     // for (int y = getCenterY() + (CONNECT_DISTANCE * 2); y < line.getY2() + getTransformY() - CONNECT_DISTANCE; y += CONNECT_DISTANCE) {
     //   if (y > getTop() + getHeight()) {
     //    // HACK: do not create circles if not over the edge
-        call.makeCircle(line.getX1() + getTransformX(), y);
+        call.makeCircle(line.getX1() + getLeft(), y);
       // }
 		}
 	}
@@ -448,7 +456,7 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
   	if (onDynamicAttachArea(anchor, x, y)) {
       result = makeDynamicTempAnchorProperties(anchor, x, y);
   	}
-    if (AnchorUtils.onAttachArea(x, y, selectionArea.getX() + getTransformX(), selectionArea.getY() + getTransformY(),
+    if (AnchorUtils.onAttachArea(x, y, selectionArea.getX() + getLeft(), selectionArea.getY() + getTop(),
       selectionArea.getWidth(), selectionArea.getHeight())) {
     	// anchor to life line if on selection area
     	result = makeFixedTempAnchorProperties(anchor, x, y);
@@ -495,10 +503,10 @@ public class SequenceElement2 extends GenericElement implements DiagramDragHandl
   public boolean onArea(int left, int top, int right, int bottom) {
   	if (super.onArea(left, top, right, bottom)) {
   		// check first rectangle area
-  		int x = line.getX1() + getTransformX();
-  		int y = line.getY1() + getTransformY();
-  		int bx = line.getX2() + getTransformX();
-  		int by = line.getY2() + getTransformY();
+  		int x = line.getX1() + getLeft();
+  		int y = line.getY1() + getTop();
+  		int bx = line.getX2() + getLeft();
+  		int by = line.getY2() + getTop();
   		return AreaUtils.onArea(x, y, bx, by, left, top, right, bottom);
   	}
   	return false;
