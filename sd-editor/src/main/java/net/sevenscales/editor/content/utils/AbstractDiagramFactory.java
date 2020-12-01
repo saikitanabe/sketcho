@@ -596,6 +596,7 @@ public interface AbstractDiagramFactory {
     public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
       return new ImageElement(surface,
               (ImageShape)shape,
+              item.getText(),
               DiagramItemFactory.parseBackgroundColor(item),
               DiagramItemFactory.parseBorderColor(item),
               DiagramItemFactory.parseTextColor(item),

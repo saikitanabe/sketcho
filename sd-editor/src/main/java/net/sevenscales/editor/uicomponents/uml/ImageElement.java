@@ -8,13 +8,18 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.ElementType;
+import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
+import net.sevenscales.editor.api.LibraryShapes;
+import net.sevenscales.editor.api.LibraryShapes.ShapeProps;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.shape.ImageShape;
+import net.sevenscales.editor.diagram.shape.GenericShape;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IGroup;
@@ -24,10 +29,11 @@ import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
+import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 
 
-public class ImageElement extends AbstractDiagramItem implements SupportsRectangleShape {
+public class ImageElement extends AbstractDiagramItem implements IGenericElement, SupportsRectangleShape {
 	private static SLogger logger = SLogger.createLogger(ImageElement.class);
 
 	public static double FREEHAND_STROKE_WIDTH = 2;
@@ -39,12 +45,24 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   private IRectangle background;
   private IGroup group;
   private IGroup subgroup;
+  private IGroup textGroup;
   private IImage image;
   private Image imageLoader;
   private boolean loaded;
+  private TextElementFormatUtil textUtil;
+  private GenericHasTextElement hasTextElement;
 
-	public ImageElement(ISurfaceHandler surface, ImageShape newShape, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
-		super(editable, surface, backgroundColor, borderColor, textColor, item);
+	public ImageElement(
+    ISurfaceHandler surface,
+    ImageShape newShape,
+    String text,
+    Color backgroundColor,
+    Color borderColor,
+    Color textColor,
+    boolean editable,
+    IDiagramItemRO item
+  ) {
+		super(editable, surface, backgroundColor, borderColor, textColor, ImageElement.copyWithTextProperties(item));
 
 		this.shape = newShape;
 
@@ -58,11 +76,26 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
     background.setFill(0, 0 , 0, 0); // transparent
     // background.setStroke("#363636");
 
+    textGroup = IShapeFactory.Util.factory(editable).createGroup(group);
+
     // ST 16.1.2018 not the best way to use global state, better would be to
     // pass it by parameter, but that affects so many places
     // but this doesn't break anything
     // used from SvgHandler to enable export mode specifically
     createImage(Tools.isExport());
+
+    hasTextElement = new GenericHasTextElement(this, new GenericShape(
+      shape.getElementType(),
+      shape.getLeft(),
+      shape.getTop(),
+      shape.getWidth(),
+      shape.getHeight()
+    ));
+    hasTextElement.setMarginLeft(0);
+    hasTextElement.setMarginTop(0);
+		hasTextElement.setMarginBottom(0);
+
+    textUtil = new TextElementFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
 
 		addEvents(background);
 		
@@ -78,8 +111,28 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
 
     setBorderColor(borderColor);
 
+    // note needs to be after setShape or text will be initially in a wrong position
+    if (!"".equals(text)) {
+      this.setForceTextRendering(true);
+	    setText(text);
+	    this.setForceTextRendering(false);
+    } else {
+      textUtil.setStoreText("");
+    }
+
     super.constructorDone();
-	}
+  }
+  
+  private static IDiagramItemRO copyWithTextProperties(
+    IDiagramItemRO item
+  ) {
+    IDiagramItem result = item.copy();
+    ShapeProps sp = LibraryShapes.getShapeProps(ElementType.IMAGE.getValue());
+
+    result.setShapeProperties(sp.properties);
+
+    return result;
+  }
 
   private void createImage(boolean export) {
     image = IShapeFactory.Util.factory(true).createImage(subgroup, 
@@ -201,7 +254,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
     ImageShape newShape = new ImageShape(x, y, getWidth() * factorX, getHeight() * factorY, shape.getUrl(), shape.getFilename());
-    Diagram result = new ImageElement(surface, newShape, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
+    Diagram result = new ImageElement(surface, newShape, getText(), new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
     return result;
   }
 	
@@ -209,8 +262,9 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
     return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);
   }
 
-  protected boolean resize(int left, int top, int width, int height) {
+  public boolean resize(int left, int top, int width, int height) {
     setShape(getRelativeLeft(), getRelativeTop(), width, height);
+    textUtil.setTextShape();
     dispatchAndRecalculateAnchorPositions();
     return true;
   }
@@ -250,6 +304,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
       }
 
       subgroup.setTransform(left, top);
+      textGroup.setTransform(left, top);
 
       background.setShape(left, top, width, height, 0);
 			super.applyHelpersShape();
@@ -270,9 +325,19 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
     return subgroup;
   }
 
+  @Override
+  public IGroup getTextGroup() {
+    return textGroup;
+  }  
+
+	@Override
+	protected TextElementFormatUtil getTextFormatter() {
+		return textUtil;
+	}
+
 	@Override
   public boolean supportsTextEditing() {
-  	return false;
+  	return true;
   }
   
   @Override
@@ -281,6 +346,7 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
            ContextMenuItem.DUPLICATE.getValue() |
            ContextMenuItem.URL_LINK.getValue() | 
            ContextMenuItem.LAYERS.getValue() |
+           ContextMenuItem.FONT_SIZE.getValue() |
            ContextMenuItem.DELETE.getValue();
   }
 
@@ -314,5 +380,50 @@ public class ImageElement extends AbstractDiagramItem implements SupportsRectang
   public String getUrl() {
     return shape.getUrl();
   }
+
+  @Override
+  public String getText() {
+    return textUtil.getText();
+  }  
+
+  @Override
+  public void doSetText(String newText) {
+    textUtil.setText(newText, editable, isForceTextRendering());
+  }  
+
+  @Override
+  public AbstractDiagramItem getDiagram() {
+    return this;
+  }  
+
+  @Override
+	public double getTextHeight() {
+  	return textUtil.getTextHeight();
+  }  
+
+  @Override
+  public int getTextAreaLeft() {
+      return getLeftText();
+  }
+
+  private int getLeftText() {
+    return (int) (getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2);
+  }  
+
+  @Override
+  public int getTextAreaTop() {
+    return getTop() + getHeight() - 1;
+  }
+
+  @Override
+  public int getTextAreaHeight() {
+    return (int) textUtil.getTextHeight();
+  }
+  
+  @Override
+  public int getTextAreaWidth() {
+    return (int) textUtil.getTextWidth();
+  }
+
 
 }

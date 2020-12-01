@@ -90,6 +90,7 @@ public class LibraryShapes {
     shapes.put(ElementType.OLD_PHONE.getValue(), new LibraryShape(ElementType.OLD_PHONE, 24, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.ANDROID.getValue(), new LibraryShape(ElementType.ANDROID, 28, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
     shapes.put(ElementType.LIGHTBULB.getValue(), new LibraryShape(ElementType.LIGHTBULB, 45, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
+    shapes.put(ElementType.IMAGE.getValue(), new LibraryShape(ElementType.LIGHTBULB, 45, 50, BOTTOM_CLASS_LIKE_PROPERTIES, 2, 2));
 	}
 
   public static LibraryShape getDefaultShape(String type) {

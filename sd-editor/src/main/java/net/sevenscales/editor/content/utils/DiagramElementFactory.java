@@ -14,6 +14,7 @@ public class DiagramElementFactory {
 		ImageShape shape = new ImageShape(x, y, width, height, url, filename);
 		return new ImageElement(surface, 
 														shape, 
+														"",
 														Theme.createDefaultBackgroundColor(), 
 														new Color(0, 0, 0, 0), // Theme.createDefaultBorderColor(), 
 														Theme.createDefaultTextColor(),
