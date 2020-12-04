@@ -50,6 +50,7 @@ import net.sevenscales.editor.uicomponents.uml.EllipseElement;
 import net.sevenscales.editor.uicomponents.uml.ForkElement;
 import net.sevenscales.editor.uicomponents.uml.FreehandElement;
 import net.sevenscales.editor.uicomponents.uml.GenericElement;
+import net.sevenscales.editor.uicomponents.uml.GenericContainerElement;
 import net.sevenscales.editor.uicomponents.uml.GenericFreehandElement;
 import net.sevenscales.editor.uicomponents.uml.GenericNoteElement;
 import net.sevenscales.editor.uicomponents.uml.GenericSlideElement;
@@ -549,6 +550,17 @@ public interface AbstractDiagramFactory {
           DiagramItemFactory.parseTextColor(item),
           editable,
           item);
+      } else if (item.getType().startsWith("e_container_")) {
+        return new GenericContainerElement(
+          surface,
+          gh,
+          item.getText(), 
+          DiagramItemFactory.parseBackgroundColor(item),
+          DiagramItemFactory.parseBorderColor(item),
+          DiagramItemFactory.parseTextColor(item),
+          editable,
+          item
+        );
       } else {
         // if (item.getShapeProperties() == null) {
         // }

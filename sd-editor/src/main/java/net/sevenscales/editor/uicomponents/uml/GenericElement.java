@@ -46,7 +46,6 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		SLogger.addFilter(GenericElement.class);
 	}
 
-	public static double FREEHAND_STROKE_WIDTH = 2;
 	public static int ACTIVITY_START_RADIUS = 10;
 	public static int FREEHAND_TOUCH_WIDTH = 20;
 
@@ -68,37 +67,6 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private boolean tosvg;
 	private boolean legacy = false;
   
-  private static final String BOUNDARY_COLOR 					= "#aaaaaa";
-  private static final String FILL_BORDER_COLOR 			= "fill:bordercolor;";
-  private static final String FILL_BORDER_COLOR_DARK 	= "fill:bordercolor-dark;";
-  private static final String FILL_SHAPE_BG_COLOR 		= "fill:shape-bgcolor;";
-  private static final String FILL_BG_COLOR 					= "fill:bgcolor;";
-  private static final String FILL_BG_COLOR_LIGHT			= "fill:bgcolor-light;";
-  private static final String FILL_BG_COLOR_DARK			= "fill:bgcolor-dark;";
-
-  private IPath.PathTransformer pathTransformer = new IPath.PathTransformer() {
-  	public String getShapeStr(int dx, int dy) {
-  		return null;
-  	}
-  };
-
-  private static class PathWrapper {
-  	IPath path;
-  	ShapeProto proto;
-
-  	PathWrapper(IPath path) {
-  		this(path, null);
-  	}
-  	PathWrapper(IPath path, ShapeProto proto) {
-  		this.path = path;
-  		this.proto = proto;
-  	}
-
-  	boolean isProto() {
-  		return this.proto != null;
-  	}
-  }
-
 	public GenericElement(ISurfaceHandler surface, GenericShape newShape, String text, Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
 		super(editable, surface, backgroundColor, borderColor, textColor, item);
 
@@ -240,126 +208,57 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 
 	private void createSubPaths(ShapeGroup groupData) {
-		if (paths.size() == 0) {
-			// just in case make sure that initialized only once
-			for (ShapeProto p : groupData.protos) {
-				IPath path = createSubPath(p);
-				paths.add(new PathWrapper(path, p));
-			}
-
-			addPaths();
-		}
+    GenericElementUtil.createSubPaths(
+    	groupData,
+    	new GenericElementUtil.ElementData(
+	      paths,
+	      shapes,
+	      subgroup,
+	      backgroundColor,
+	      borderColor,
+	      getDiagramItem(),
+	      surface,
+	      editable
+    	)
+    );
 	}
 
 	private void addPaths() {
-		for (PathWrapper path : paths) {
-	    shapes.add(path.path);
-		}
+    GenericElementUtil.addPaths(paths, shapes);
 	}
 
-	private IPath createSubPath(ShapeProto proto) {
-		return createSubPath(/*proto.toPath(1, 1)*/ null, proto.style);
-	}	
+	// private IPath createSubPath(ShapeProto proto) {
+ //    return createSubPath(/*proto.toPath(1, 1)*/ null, proto.style);
+	// }	
 
-	private IPath createSubPath(String path, String style) {
-    IPath result = IShapeFactory.Util.factory(editable).createPath(subgroup, pathTransformer);
-    result.setStroke(borderColor);
-    if (getDiagramItem().getLineWeight() != null) {
-			result.setStrokeWidth(getDiagramItem().getLineWeight());
-    } else {
-    	if (Tools.isSketchMode()) {
-    		if (surface.isLibrary()) {
-					result.setStrokeWidth(Constants.SKETCH_MODE_LINE_WEIGHT_LIBRARY);
-    		} else {
-    			result.setStrokeWidth(Constants.SKETCH_MODE_LINE_WEIGHT);
-    		}
-    	} else {
-		    result.setStrokeWidth(FREEHAND_STROKE_WIDTH);
-    	}
-    }
-    // result.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
-    // path.setStrokeCap("round");
-    if (style != null && !"".equals(style)) {
-    	style = handleStyle(result, style);
-	    result.setAttribute("style", style);
-    }
-
-		// >>>>>>>>>>> Commented out 4.11.2014 - can be deleted after half a year :)
-		// now scaling down line width and each point as inkscape
-		// if (!surface.isLibrary()) {
-	   //  result.setAttribute("vector-effect", "non-scaling-stroke");
-    // }
-    // <<<<<<<<<<< Commented out 4.11.2014
-    if (path != null) {
-	  	result.setShape(path);
-    }
-  	return result;
-	}
+	// private IPath createSubPath(String path, String style) {
+ //    return GenericElementUtil.createSubPath(path, style);
+	// }
 
 	private String handleStyle(IPath path, String style) {
-		if (style.contains(FILL_BORDER_COLOR)) {
-			path.setFillAsBorderColor(true);
-			// need to clear or will contain invalid fill valud since bordercolor is not hex code or pre color code
-			style = style.replace(FILL_BORDER_COLOR, "");
-		} else if (style.contains(FILL_SHAPE_BG_COLOR)) {
-			path.setFillAsShapeBackgroundColor(true);
-			style = style.replace(FILL_SHAPE_BG_COLOR, "");
-		} else if (style.contains(FILL_BG_COLOR)) {
-			path.setFillAsBoardBackgroundColor(true);
-			style = style.replace(FILL_BG_COLOR, "");
-		} else if (style.contains(FILL_BORDER_COLOR_DARK)) {
-			path.setFillAsBorderColorDark(true);
-			style = style.replace(FILL_BORDER_COLOR_DARK, "");
-		} else if (style.contains(FILL_BG_COLOR_LIGHT)) {
-			path.setFillAsBackgroundColorLight(true);
-			style = style.replace(FILL_BG_COLOR_LIGHT, "");
-		} else if (style.contains(FILL_BG_COLOR_DARK)) {
-			path.setFillAsBackgroundColorDark(true);
-			style = style.replace(FILL_BG_COLOR_DARK, "");
-		}
-		return style;
+    return GenericElementUtil.handleStyle(path, style);
   }
   
-  private void disableGradient(
-    IPath path
-  ) {
-    net.sevenscales.domain.utils.Debug.log("disableGradient");
-    if (path.isFillGradient()) {
-      // note needs to match full style string therefore .* in the beginning and in the end
-      
-      // this path supports gradients, e.g. fill:url(#9669320a-32d6-7208-0c6b-17322336ba99);fill-opacity:1;stroke:none"
-      // do not replace any fixed fills e.g. fill:none that is set on style
-
-      // style = style.replaceAll("fill:url\\([^;]+\\);", "");
-      // could also store original url but this is easier
-      String style = path.getAttribute("style");
-      style = style.replace("fill:", "fill-disabled:");
-      path.setAttribute("style", style);
-    }
-  }
-
-  private void enableGradient(
-    IPath path,
-    Color color
-  ) {
-    String style = path.getAttribute("style");
-
-    if (style != null) {
-	    style = style.replace("fill-disabled:", "fill:");
-
-	    // fill:url(#9669320a-32d6-7208-0c6b-17322336ba99);fill-opacity:1;stroke:none"
-	    // style = color.gradient + ";" + style;
-	    path.setAttribute("style", style);
-	  }
-  }
-
 	private void createCustomPaths(List<? extends IPathRO> pathros) {
 		for (IPathRO p : pathros) {
-			IPath path = createSubPath(p.getPath(), p.getStyle());
+			IPath path = GenericElementUtil.createSubPath(
+				p.getPath(),
+				p.getStyle(),
+	    	new GenericElementUtil.ElementData(
+		      paths,
+		      shapes,
+		      subgroup,
+		      backgroundColor,
+		      borderColor,
+		      getDiagramItem(),
+		      surface,
+		      editable
+	    	)
+			);
 			paths.add(new PathWrapper(path, null));
 		}
 	}
-	
+
 	@Override
 	public int getRelativeLeft() {
 		return background.getX();
@@ -594,20 +493,17 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 
   private void scalePaths(double factorX, double factorY) {
-  	if (theshape.isReady()) {
-	  	for (PathWrapper pw : paths) {
-	  		if (pw.isProto()) {
-		  		pw.path.setShape(pw.proto.toPath(factorX, factorY, theshape.getShape().width));
-	  		}
-	  	}
-	  	pathsSetAtLeastOnce = true;
-  	}
-		// for (ShapeProto p : groupData.protos) {
-  // 	for (IPath path : paths) {
-  // 		result.setShape(proto.toPath());
+    boolean result = GenericElementUtil.scalePaths(
+      factorX,
+      factorY,
+      theshape,
+      paths
+    );
 
-	 //  	// path.scale(factorX, factorY);
-  // 	}
+    if (result) {
+      // will not be able to set it false if once set to true
+      pathsSetAtLeastOnce = result;
+    }
   }
 
   protected void doSetStrokeWidth() {
@@ -620,7 +516,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   public double scaledStrokeWidth(double factorX, double factorY) {
   	double factor = Math.max(factorX, factorY);
 
-		double strokeWidth = FREEHAND_STROKE_WIDTH / factor;
+		double strokeWidth = GenericElementUtil.FREEHAND_STROKE_WIDTH / factor;
   	if (getDiagramItem().getLineWeight() != null) {
 	  	strokeWidth = getDiagramItem().getLineWeight() / factor;
   	}
@@ -689,33 +585,19 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   // public void SetBackgroundColor(int red, int green, int blue, double opacity) {
   public void setBackgroundColor(Color clr) {
   	super.setBackgroundColor(clr);
-  	for (PathWrapper path : paths) {
-  		if (!path.path.isFillAsBorderColor() && !path.path.isFillAsBoardBackgroundColor()) {
-        path.path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
-
-        if (backgroundColor.opacity > 0) {
-          // uses rbg background color that is set as attribute instead of fill
-          disableGradient(path.path);
-        } else if (backgroundColor.isGradient()) {
-          // it's gradient, enable gradient
-          enableGradient(
-          	path.path,
-          	backgroundColor
-          );
-        }
-
-      }
-
-			if (path.path.isFillAsBackgroundColorLight()) {
-				Color color = getBackgroundColorAsColor();
-  			path.path.setFill(color.toLighter());
-  		} else if (path.path.isFillAsBackgroundColorDark()) {
-				Color color = getBackgroundColorAsColor();
-  			path.path.setFill(color.toDarker());
-  		} else if (path.path.isFillAsShapeBackgroundColor()) {
-  			path.path.setFill(clr.red, clr.green, clr.blue, clr.opacity);
-			}
-  	}
+  	GenericElementUtil.setBackgroundColor(
+  		clr,
+  		new GenericElementUtil.ElementData(
+	      paths,
+	      shapes,
+	      subgroup,
+	      backgroundColor,
+	      borderColor,
+	      getDiagramItem(),
+	      surface,
+	      editable
+	  	)
+		);
   }
 
   @Override

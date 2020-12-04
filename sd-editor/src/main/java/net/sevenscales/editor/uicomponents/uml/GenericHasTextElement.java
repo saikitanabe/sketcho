@@ -19,6 +19,9 @@ class GenericHasTextElement extends AbstractHasTextElement {
 	private int marginTop;
 	private int marginBottom;
 
+	private boolean yDefined;
+	private int y;
+
 	private IGenericElement parent;
 	private GenericShape shape;
 	private String elementType;
@@ -56,8 +59,17 @@ class GenericHasTextElement extends AbstractHasTextElement {
     return getMarginLeft();
   }
 
+  public void setY(int y) {
+  	yDefined = true;
+  	this.y = y;
+  }
+
 	@Override
   public int getY() {
+  	if (yDefined) {
+  		return y;
+  	}
+
   	if (Tools.isSketchMode() && ElementType.BUBBLE_R.getValue().equals(shape.getElementType())) {
 			// ST 20.11.2017: text moved with a subgroup transformation
 			if (legacy) {
