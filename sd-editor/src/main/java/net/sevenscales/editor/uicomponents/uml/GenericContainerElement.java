@@ -84,8 +84,8 @@ public class GenericContainerElement extends AbstractDiagramItem implements Supp
     hasTextElement = new GenericHasTextElement(this, shape);
     hasTextElement.setMarginLeft(getMarginLeft());
     textUtil = new TextElementFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
-    hasTextElement.setY(7);
-    textUtil.setMarginTop(0);
+    hasTextElement.setY(0);
+    // textUtil.setMarginTop(0);
     // textUtil.setRotate(-90);
 
     theshape = Shapes.get(getDiagramItem().getType(), Tools.isSketchMode());
