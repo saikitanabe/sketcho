@@ -192,6 +192,8 @@ public class ShowHideHelpers {
 			trigger("library-show-" + value.toString().toLowerCase());
 		}
 
+    trigger("library-show");
+
 		onOuterElement = true;
 
 		inner.setVisible(true);
