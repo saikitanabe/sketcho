@@ -14,7 +14,7 @@ import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.ISurfaceHandler;
-import net.sevenscales.editor.api.LibrarySelections.LibrarySelectedHandler;
+// import net.sevenscales.editor.api.LibrarySelections.LibrarySelectedHandler;
 import net.sevenscales.editor.api.LibraryShapes.LibraryShape;
 import net.sevenscales.editor.api.dojo.FactoryDoJo;
 import net.sevenscales.editor.api.event.LibrarySelectionEvent;
@@ -89,61 +89,73 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
   private static final int GENERAL_GROUP_HEIGHT = 260;
 
 	
-	private LibrarySelectedHandler librarySelectedHandler = new LibrarySelectedHandler() {
-		@Override
-		public void onSelected(Library library) {
-			toolpool.getRootLayer().resetTransform();
-      getWidget().getElement().setScrollTop(0);
-      toolpool.show();
-      panel.getElement().getStyle().setOverflowY(Style.Overflow.SCROLL);
-      ngHideImageLibrary();
-      ngHideLibrarySettings();
-      ngHideLibrary("team");
-      ngHideLibrary("extra");
+	// private LibrarySelectedHandler librarySelectedHandler = new LibrarySelectedHandler() {
+	// 	@Override
+	// 	public void onSelected(Library library) {
+	// 		toolpool.getRootLayer().resetTransform();
+  //     getWidget().getElement().setScrollTop(0);
+  //     toolpool.show();
+  //     panel.getElement().getStyle().setOverflowY(Style.Overflow.SCROLL);
+  //     ngHideImageLibrary();
+  //     ngHideLibrarySettings();
+  //     ngHideLibrary("team");
+  //     ngHideLibrary("extra");
+  //     ngHideLibrary("aws");
+  //     ngHideLibrary("electronic");
 			
-			switch (library) {
-      case LIBRARY_SETTINGS:
-        ngShowLibrarySettings();
-        panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
-        toolpool.hide();
-        break;
-			case SOFTWARE:
-				break;
-			case MINDMAP:
-				toolpool.getRootLayer().applyTransform(0, -MINDMAP_GROUP + 20);
-        // getWidget().getElement().setScrollTop(MINDMAP_GROUP - 220);
-				break;
-			case ROADMAP:
-        // getWidget().getElement().setScrollTop(ROADMAP_GROUP - 220);
-        toolpool.getRootLayer().applyTransform(0, -ROADMAP_GROUP + 23);
-				break;
-      case GENERAL:
-        // getWidget().getElement().setScrollTop(GENERAL_GROUP - 220);
-        toolpool.getRootLayer().applyTransform(0, -GENERAL_GROUP + 23);
-        break;
-      case IMAGES:
-        // getWidget().getElement().setScrollTop(GENERAL_GROUP - 220);
-        // toolpool.getRootLayer().applyTransform(0, -GENERAL_GROUP + 23);
-        ngShowImageLibrary();
-        panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
-        toolpool.hide();
-        break;
-      case TEAM:
-        ngShowLibrary("team");
-        panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
-        toolpool.hide();
-        break;
-      case EXTRA:
-        ngShowLibrary("extra");
-        panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
-        toolpool.hide();
-        break;
-			}
+	// 		switch (library) {
+  //     case LIBRARY_SETTINGS:
+  //       ngShowLibrarySettings();
+  //       panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+  //       toolpool.hide();
+  //       break;
+	// 		case SOFTWARE:
+	// 			break;
+	// 		case MINDMAP:
+	// 			toolpool.getRootLayer().applyTransform(0, -MINDMAP_GROUP + 20);
+  //       // getWidget().getElement().setScrollTop(MINDMAP_GROUP - 220);
+	// 			break;
+	// 		case ROADMAP:
+  //       // getWidget().getElement().setScrollTop(ROADMAP_GROUP - 220);
+  //       toolpool.getRootLayer().applyTransform(0, -ROADMAP_GROUP + 23);
+	// 			break;
+  //     case GENERAL:
+  //       // getWidget().getElement().setScrollTop(GENERAL_GROUP - 220);
+  //       toolpool.getRootLayer().applyTransform(0, -GENERAL_GROUP + 23);
+  //       break;
+  //     case IMAGES:
+  //       // getWidget().getElement().setScrollTop(GENERAL_GROUP - 220);
+  //       // toolpool.getRootLayer().applyTransform(0, -GENERAL_GROUP + 23);
+  //       ngShowImageLibrary();
+  //       panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+  //       toolpool.hide();
+  //       break;
+  //     case TEAM:
+  //       ngShowLibrary("team");
+  //       panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+  //       toolpool.hide();
+  //       break;
+  //     case AWS:
+  //       ngShowLibrary("aws");
+  //       panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+  //       toolpool.hide();
+  //       break;
+  //     case ELECTRONIC:
+  //       ngShowLibrary("electronic");
+  //       panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+  //       toolpool.hide();
+  //       break;
+  //     case EXTRA:
+  //       ngShowLibrary("extra");
+  //       panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+  //       toolpool.hide();
+  //       break;
+	// 		}
 
-			editorContext.getEventBus().fireEvent(new LibrarySelectionEvent(library));
-			editorContext.set(EditorProperty.CURRENT_LIBRARY, library);
-		}
-	};
+	// 		editorContext.getEventBus().fireEvent(new LibrarySelectionEvent(library));
+	// 		editorContext.set(EditorProperty.CURRENT_LIBRARY, library);
+	// 	}
+	// };
 
 	public Libarary(ISurfaceHandler asurface, int height, IModeManager modeManager, EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction) {
 		this.surface = asurface;
@@ -184,10 +196,12 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     panel.setHeight(Window.getClientHeight() + "px");
     panel.setStyleName("library");
 		panel.add(toolpool.getWidget());
-		panel.add(new LibrarySelections(librarySelectedHandler, editorContext));
+		// panel.add(new LibrarySelections(librarySelectedHandler, editorContext));
     // panel.add(new CloseLibrary());
     closeLibrary = new CloseLibrary();
     RootPanel.get().add(closeLibrary);
+
+    trigger("library-show");
 		
 		Window.addResizeHandler(new ResizeHandler() {
 			@Override
@@ -202,7 +216,58 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     proxyDragHandler = new ProxyDragHandler(toolpool, surface);
 
     createLibraryOnBoardReady(this);
+    gwtAPI(this);
 	}
+
+  private native void gwtAPI(net.sevenscales.editor.api.Libarary me)/*-{
+    $wnd.gwtSelectLibrary = function(libraryName) {
+      me.@net.sevenscales.editor.api.Libarary::gwtSelectLibrary(Ljava/lang/String;)(libraryName);
+    }
+  }-*/;
+
+  private void gwtSelectLibrary(
+    String libraryName
+  ) {
+
+    toolpool.getRootLayer().resetTransform();
+    getWidget().getElement().setScrollTop(0);
+    toolpool.show();
+    panel.getElement().getStyle().setOverflowY(Style.Overflow.SCROLL);
+    ngHideImageLibrary();
+    ngHideLibrarySettings();
+    ngHideLibrary("team");
+    ngHideLibrary("extra");
+    ngHideLibrary("aws");
+    ngHideLibrary("electronic");
+
+    // string switch not supported
+    // switch (libraryName) {
+
+    if (libraryName.equals("library_settings")) {
+      ngShowLibrarySettings();
+      panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+      toolpool.hide();
+    } else if (libraryName.equals("software")) {
+    } else if (libraryName.equals("mindmap")) {
+      toolpool.getRootLayer().applyTransform(0, -MINDMAP_GROUP + 20);
+    } else if (libraryName.equals("roadmap")) {
+      toolpool.getRootLayer().applyTransform(0, -ROADMAP_GROUP + 23);
+    } else if (libraryName.equals("general")) {
+      toolpool.getRootLayer().applyTransform(0, -GENERAL_GROUP + 23);
+    } else if (libraryName.equals("images")) {
+      ngShowImageLibrary();
+      panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+      toolpool.hide();
+    } else {
+      ngShowLibrary(libraryName);
+      panel.getElement().getStyle().setOverflowY(Style.Overflow.HIDDEN);
+      toolpool.hide();
+    }
+  }
+
+	private native void trigger(String event)/*-{
+		$wnd.$($doc).trigger(event)
+	}-*/;
 
   private native void createLibraryOnBoardReady(Libarary me)/*-{
     $wnd.boardReadyStream.onValue(function() {

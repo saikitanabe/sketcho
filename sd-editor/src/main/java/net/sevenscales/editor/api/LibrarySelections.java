@@ -38,6 +38,8 @@ public class LibrarySelections extends Composite {
 	@UiField Element general;
 	@UiField Element images;
 	@UiField Element team;
+	@UiField Element aws;
+	@UiField Element electronic;
 	@UiField Element extra;
 	@UiField DivElement btnGroup;
 //	@UiField AnchorElement roadmap;
@@ -181,6 +183,38 @@ public class LibrarySelections extends Composite {
 						case Event.ONMOUSEDOWN:
 							LibrarySelections.this.librarySelectedHandler.onSelected(Library.EXTRA);
 							applyActive(extra);
+							break;
+						}
+					}
+				});
+
+		DOM.sinkEvents((com.google.gwt.user.client.Element) aws.cast(),
+				Event.ONMOUSEDOWN);
+		DOM.setEventListener(
+				(com.google.gwt.user.client.Element) aws.cast(),
+				new EventListener() {
+					@Override
+					public void onBrowserEvent(Event event) {
+						switch (DOM.eventGetType(event)) {
+						case Event.ONMOUSEDOWN:
+							LibrarySelections.this.librarySelectedHandler.onSelected(Library.AWS);
+							applyActive(aws);
+							break;
+						}
+					}
+				});
+
+		DOM.sinkEvents((com.google.gwt.user.client.Element) electronic.cast(),
+				Event.ONMOUSEDOWN);
+		DOM.setEventListener(
+				(com.google.gwt.user.client.Element) electronic.cast(),
+				new EventListener() {
+					@Override
+					public void onBrowserEvent(Event event) {
+						switch (DOM.eventGetType(event)) {
+						case Event.ONMOUSEDOWN:
+							LibrarySelections.this.librarySelectedHandler.onSelected(Library.ELECTRONIC);
+							applyActive(electronic);
 							break;
 						}
 					}

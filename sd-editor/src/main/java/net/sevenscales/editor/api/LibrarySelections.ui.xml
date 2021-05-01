@@ -14,6 +14,9 @@
 		  	<li ui:field="general">General</li>
 		  	<li ui:field="images">Images</li>
 		  	<li ui:field="team" style="display:none;">Team</li>
+		  	<li ui:field="containers">Containers</li>
+		  	<li ui:field="aws">AWS</li>
+		  	<li ui:field="electronic">Electronic</li>
 		  	<li ui:field="extra">Extras</li>
 		  </ul>
 		</div>
