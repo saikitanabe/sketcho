@@ -108,7 +108,7 @@ class GenericElementUtil {
           result.setStrokeWidth(Constants.SKETCH_MODE_LINE_WEIGHT);
         }
       } else {
-        result.setStrokeWidth(FREEHAND_STROKE_WIDTH);
+        result.setStrokeWidth(FREEHAND_STROKE_WIDTH); 
       }
     }
     // result.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
@@ -190,7 +190,7 @@ class GenericElementUtil {
   private static void disableGradient(
     IPath path
   ) {
-    // net.sevenscales.domain.utils.Debug.log("disableGradient");
+    net.sevenscales.domain.utils.Debug.log("disableGradient");
     if (path.isFillGradient()) {
       // note needs to match full style string therefore .* in the beginning and in the end
       
