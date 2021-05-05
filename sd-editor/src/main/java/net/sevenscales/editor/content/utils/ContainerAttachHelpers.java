@@ -10,11 +10,51 @@ import net.sevenscales.editor.uicomponents.AnchorUtils.AnchorProperties;
 public class ContainerAttachHelpers {
 //	private AbstractDiagramItem diagram;
 
+  // >>>>>>>>> Debugging
+  // private static net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  // <<<<<<<<< Debugging
+
 	public ContainerAttachHelpers() {
 //		this.diagram = diagram;
 	}
 
-  public static AnchorElement onAttachArea(AbstractDiagramItem diagram, Anchor anchor, int x, int y) {
+	// Returns 1 if the lines intersect, otherwise 0. In addition, if the lines 
+	// intersect the intersection point may be stored in the floats i_x and i_y.
+
+	public static AnchorElement onAttachAreaRotated(
+  	AbstractDiagramItem diagram,
+  	Anchor anchor,
+  	int x,
+  	int y,
+    net.sevenscales.editor.gfx.domain.IGroup layer
+  ) {
+
+    // >>>>>>> DEBUGGING
+    // if (tempCircle == null) {
+    //   tempCircle = net.sevenscales.editor.gfx.domain.IShapeFactory.Util.factory(true).createCircle(layer);
+    //   tempCircle.setShape(0, 0, 10);
+    //   tempCircle.setStroke(218, 57, 57, 1);
+    //   // tempCircle.setFill(218, 57, 57, 1);
+    //   tempCircle.setStrokeWidth(2);
+    // }
+
+    // tempCircle.setShape(x, y, 10);
+    // <<<<<<<< DEBUGGING
+
+  	return ContainerAttachHelpers.onAttachArea(
+  		diagram,
+  		anchor,
+  		x,
+  		y
+  	);
+	}
+
+  public static AnchorElement onAttachArea(
+  	AbstractDiagramItem diagram, 
+  	Anchor anchor, 
+  	int x,
+  	int y
+  ) {
 		// container attach is different only border areas can attach
 		// TODO make this as utility to be used by other container elements
 	//	return super.onAttachArea(anchor, x, y, rectSurface.getX(), rectSurface.getY() - CORNER_HEIGHT, rectSurface.getWidth(), rectSurface.getHeight() + CORNER_HEIGHT);
@@ -71,15 +111,34 @@ public class ContainerAttachHelpers {
 	}
 	
 	public static AnchorElement onAttachAreaManualOnly(
-		AbstractDiagramItem diagram, Anchor anchor, int x, int y
+		AbstractDiagramItem diagram, 
+		Anchor anchor, 
+		int x, 
+		int y
 	) {
-		if (AnchorUtils.onAttachAreaManual(x, y, diagram.getLeft(), diagram.getTop(), diagram.getWidth(),
-				diagram.getHeight(), diagram.getSurfaceHandler())) {
+		if (AnchorUtils.onAttachAreaManual(
+			x,
+			y,
+			diagram.getLeft(),
+			diagram.getTop(),
+			diagram.getWidth(),
+			diagram.getHeight(),
+			diagram.getRotate(),
+			diagram.getSurfaceHandler()
+		)) {
 
 			AnchorElement result = diagram.getAnchorElement(anchor);
 			AnchorProperties tempAnchorProperties = diagram.getTempAnchorProperties();
-			AnchorUtils.anchorPoint(x, y, tempAnchorProperties, diagram.getLeft(), diagram.getTop(), diagram.getWidth(),
-					diagram.getHeight());
+			AnchorUtils.anchorPointRotated(
+				x, 
+				y,
+				tempAnchorProperties,
+				diagram.getLeft(),
+				diagram.getTop(),
+				diagram.getWidth(),
+				diagram.getHeight(),
+				diagram.getRotate()
+			);
 
 			result.setAx(tempAnchorProperties.x);
 			result.setAy(tempAnchorProperties.y);
