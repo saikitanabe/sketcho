@@ -13,6 +13,7 @@ class Group extends Graphics implements IContainer, IGroup {
   private JavaScriptObject group;
   private IGroup layer;
 	private boolean visible = true;
+  private int rotateDegree;
 
   Group(IContainer container) {
     group = nativeCreateGroup(container.getContainer());
@@ -278,7 +279,8 @@ class Group extends Graphics implements IContainer, IGroup {
 	
 	@Override
 	public void rotate(int degree, int x, int y) {
-		_rotate(group, degree, x, y);
+    this.rotateDegree = degree;
+		ShapeUtils._rotate2(group, degree, x, y);
 	}
 	private native void _rotate(JavaScriptObject rawNode, int degree, int a, int b)/*-{
 		var m = $wnd.dojox.gfx.matrix;
