@@ -14,6 +14,8 @@ import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
+import net.sevenscales.editor.api.event.RotateEvent;
+import net.sevenscales.editor.api.event.RotateEventHandler;
 import net.sevenscales.editor.api.event.UndoEvent;
 import net.sevenscales.editor.api.event.UndoEventHandler;
 import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
@@ -160,6 +162,14 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 			public void onResize(Diagram sender, Point diff) {
 			}
 		});
+
+		surface.getEditorContext().getEventBus().addHandler(RotateEvent.TYPE, new RotateEventHandler() {
+			@Override
+			public void on(RotateEvent event) {
+        hide();
+			}
+		});
+
 
 		listen(this);
 	}
