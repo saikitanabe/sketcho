@@ -55,6 +55,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private IRectangle background;
   private IGroup group;
   private IGroup subgroup;
+  private IGroup rotategroup;
   private IGroup textGroup;
   private int left;
   private int top;
@@ -76,7 +77,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		group = IShapeFactory.Util.factory(editable).createGroup(getLayer(surface));
     // group.setAttribute("cursor", "default");
 
-		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
+		rotategroup = IShapeFactory.Util.factory(editable).createGroup(group);
+		subgroup = IShapeFactory.Util.factory(editable).createGroup(rotategroup);
     // sub// group.setAttribute("cursor", "default");
 
 		// order is important or cannot move shape with background
@@ -628,6 +630,10 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		return false;
 	}
 
+	@Override
+	public IGroup getRotategroup() {
+		return rotategroup;
+	}
 	@Override
 	public IGroup getSubgroup() {
 		return subgroup;

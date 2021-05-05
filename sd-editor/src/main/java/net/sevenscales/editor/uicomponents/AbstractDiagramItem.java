@@ -1253,9 +1253,19 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   ) {
     // TODO clear with 0
     if (degree != 0) {
-      IGroup group = getSubgroup();
+      // FIX: rotate doesn't work correctly if using resized
+      // shape and then rotate for AWS shapes.
+      // Rotation gets skewed if matrix and rotation are applied
+      // on a same group. Now there is a new rotate group for a shape.
+      IGroup group = getRotategroup();
       if (group != null) {
-        group.rotate(degree, getWidth() / 2, getHeight() / 2);
+        // this works with sub group
+        // group.rotate(degree, getWidth() / 2, getHeight() / 2);
+        group.rotate(
+          degree, 
+          getLeft() - getTransformX() + getWidth() / 2, 
+          getTop() - getTransformY() + getHeight() / 2
+        );
       }
 
       IRectangle rect = getBackground();
@@ -2128,6 +2138,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   public IGroup getGroup() {
+    return null;
+  }
+
+  public IGroup getRotategroup() {
     return null;
   }
 
