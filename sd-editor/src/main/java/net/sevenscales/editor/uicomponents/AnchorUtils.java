@@ -23,6 +23,12 @@ public class AnchorUtils {
 	private static final Color COLOR_TRANSPARENT = new Color(0x6A, 0xCA, 0x00, 0);
 	private static IRectangle anchorPoint;
 
+  // >>>>>>>>> Debugging
+  // private static net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  // draw rotated rectangle
+  private static net.sevenscales.editor.gfx.domain.IPolyline tempRect;
+  // <<<<<<<<< Debugging
+
   public static class AnchorProperties {
     public int x;
     public int y;
@@ -41,6 +47,24 @@ public class AnchorUtils {
 			AnchorUtils.anchorPoint.setStrokeWidth(2);
 			AnchorUtils.anchorPoint.setVisibility(false);
 		}
+
+    // >>>>>>>>>> DEBUGGING
+    // if (tempCircle == null) {
+    //   tempCircle = net.sevenscales.editor.gfx.domain.IShapeFactory.Util.factory(true).createCircle(surface.getInteractionLayer());
+    //   tempCircle.setShape(0, 0, 10);
+    //   tempCircle.setStroke(218, 57, 57, 1);
+    //   // tempCircle.setFill(218, 57, 57, 1);
+    //   tempCircle.setStrokeWidth(2);
+    // }
+
+    if (tempRect == null) {
+      tempRect = net.sevenscales.editor.gfx.domain.IShapeFactory.Util.factory(true).createPolyline(surface.getInteractionLayer());
+      // tempRect.setShape(0);
+      tempRect.setStroke(218, 57, 57, 1);
+      // tempRect.setFill(218, 57, 57, 1);
+      tempRect.setStrokeWidth(2);
+    }
+    // <<<<<<<<<<< DEBUGGING
   }
   
   public static void hide() {
@@ -65,11 +89,22 @@ public class AnchorUtils {
     }
     return false;
   }
-  
-	public static boolean onAttachAreaManual(int x, int y, int left, int top, int width, int height, ISurfaceHandler surface) {
+
+	public static boolean onAttachAreaManual(
+    int x,
+    int y,
+    int left,
+    int top,
+    int width,
+    int height,
+    int rotateDegree,
+    ISurfaceHandler surface
+  ) {
 
     // small shapes have smaller inner magnet
     int distance = calcDistance(width, height);
+
+    AnchorUtils.Init(surface);
 
     boolean result = AnchorUtils.onAttachArea(
       x,
@@ -79,10 +114,10 @@ public class AnchorUtils {
       width,
       height,
       distance,
-      MAGNETIC_VALUE
+      MAGNETIC_VALUE,
+      rotateDegree
     );
 
-    AnchorUtils.Init(surface);
 
     if (result) {
 			// net.sevenscales.domain.utils.Debug.log("", left + ", ", top + ", ", width + ", ", height + "");
@@ -145,33 +180,174 @@ public class AnchorUtils {
     return distance;
   }
 
-	private static boolean onAttachArea(int x, int y, int left, int top, int width, int height, int distance, int magneticValue) {
+	private static boolean onAttachArea(
+    int x, 
+    int y, 
+    int left,
+    int top,
+    int width,
+    int height,
+    int distance,
+    int magneticValue,
+    int rotateDegree
+  ) {
+
+    int right = left + width;
+    int bottom = top + height;
+    double cx = left + width / 2;
+    double cy = top + height / 2;
+
+    com.google.gwt.touch.client.Point leftTop = rotatePoint(
+      left,
+      top,
+      cx,
+      cy,
+      rotateDegree
+    );
+
+    com.google.gwt.touch.client.Point rightTop = rotatePoint(
+      right,
+      top,
+      cx,
+      cy,
+      rotateDegree
+    );
+
+    com.google.gwt.touch.client.Point rightBottom = rotatePoint(
+      right,
+      bottom,
+      cx,
+      cy,
+      rotateDegree
+    );
+
+    com.google.gwt.touch.client.Point leftBottom = rotatePoint(
+      left,
+      bottom,
+      cx,
+      cy,
+      rotateDegree
+    );
+
+
+    // >>>>>>>>> DEBUGGING
+    debugArea(x, y, leftTop, rightTop, rightBottom, leftBottom);
+    // <<<<<<<<< DEBUGGING
+
+  // 
+    com.google.gwt.touch.client.Point point = unrotatePointToOriginalRectCenter(x, y, cx, cy, rotateDegree);
+
+    int rotx = ((int) point.getX());
+    int roty = ((int) point.getY());
 		
 		// top line
-    if ( (x >= (left - magneticValue) && x <= (left + width + magneticValue)) &&
-    		 (y >= (top - magneticValue) && y <= (top + distance))) {
+    if ( (rotx >= (left - magneticValue) && rotx <= (left + width + magneticValue)) &&
+    		 (roty >= (top - magneticValue) && roty <= (top + distance))) {
     	return true;
     }
     		
     // right line
-    if ((x <= (left + width + magneticValue) && x >= (left + width - distance)) &&
-        (y >= (top - magneticValue) && y <= (top + height + magneticValue))) {
+    if ((rotx <= (left + width + magneticValue) && rotx >= (left + width - distance)) &&
+        (roty >= (top - magneticValue) && roty <= (top + height + magneticValue))) {
       return true;
     }
     
 		// bottom line
-    if ( (x >= (left - magneticValue) && x <= (left + width + magneticValue)) &&
-    		 (y <= (top + height + magneticValue) && y >= (top + height - distance))) {
+    if ( (rotx >= (left - magneticValue) && rotx <= (left + width + magneticValue)) &&
+    		 (roty <= (top + height + magneticValue) && roty >= (top + height - distance))) {
     	return true;
     }
     
     // left line
-    if ((x >= (left - magneticValue) && x <= (left + distance)) &&
-        (y >= (top - magneticValue) && y <= (top + height + magneticValue))) {
+    if ((rotx >= (left - magneticValue) && rotx <= (left + distance)) &&
+        (roty >= (top - magneticValue) && roty <= (top + height + magneticValue))) {
       return true;
     }
 
 		return false;
+  }
+
+  // >>>>>>> DEBUGGING
+  private static void debugArea(
+    int x,
+    int y,
+    com.google.gwt.touch.client.Point leftTop,
+    com.google.gwt.touch.client.Point rightTop,
+    com.google.gwt.touch.client.Point rightBottom,
+    com.google.gwt.touch.client.Point leftBottom
+    // int rotate
+  ) {
+    if (tempRect != null) {
+      tempRect.setShape(new int[]{
+        ((int)leftTop.getX()), ((int)leftTop.getY()),
+        ((int)rightTop.getX()), ((int)rightTop.getY()),
+        ((int)rightBottom.getX()), ((int)rightBottom.getY()),
+        ((int)leftBottom.getX()), ((int)leftBottom.getY()),
+        ((int)leftTop.getX()), ((int)leftTop.getY())
+      });
+    }
+  }
+  // <<<<<<< DEBUGGING
+
+  /**
+  * Rotate point x, y around cx, cy.
+  */
+  private static com.google.gwt.touch.client.Point rotatePoint(
+    double x,
+    double y,
+    double cx,
+    double cy,
+    int angleDegree
+  ) {
+    double s = Math.sin(Math.toRadians(angleDegree));
+    double c = Math.cos(Math.toRadians(angleDegree));
+
+    // translate point back to origin:
+    x -= cx;
+    y -= cy;
+
+    // rotate point
+    double xnew = x * c - y * s;
+    double ynew = x * s + y * c;
+
+    // translate point back:
+    double dx = xnew + cx;
+    double dy = ynew + cy;
+
+    return new com.google.gwt.touch.client.Point(dx, dy);
+  }
+
+  // Unrotates x, y to original rect rotated to unrotated rect.
+  private static com.google.gwt.touch.client.Point unrotatePointToOriginalRectCenter(
+    int x,
+    int y,
+    double cx,
+    double cy,
+    // int width,
+    // int height,
+    int angleDegree
+  ) {
+    double radians = Math.toRadians(angleDegree);
+
+    // tranlate point to origin
+    double relx = x - cx;
+    double rely = y - cy;
+
+    // rotate point
+    double rotx = relx * Math.cos(-radians) - rely * Math.sin(-radians);
+    double roty = relx * Math.sin(-radians) + rely * Math.cos(-radians);
+
+    // double dx = Math.max(Math.abs(rotx) - width / 2, 0);
+    // double dy = Math.max(Math.abs(roty) - height / 2, 0);
+
+    // double result = dx * dx + dy * dy;
+    // net.sevenscales.domain.utils.Debug.log("distance", result);
+
+    // translate point back to its correct position
+    rotx += cx;
+    roty += cy;
+
+    return new com.google.gwt.touch.client.Point(rotx, roty);
   }
 
 	private static boolean pointOnArea(int x, int y, int left, int top, int width, int height) {
@@ -189,7 +365,15 @@ public class AnchorUtils {
     anchorPoint(x, y, ap, rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
   }
   
-  public static void anchorPoint(int x, int y, AnchorProperties ap, int left, int top, int width, int height) {
+  public static void anchorPoint(
+    int x,
+    int y,
+    AnchorProperties ap,
+    int left,
+    int top,
+    int width,
+    int height
+  ) {
 //    tempax = GridUtils.align(tempax);
 //    tempay = GridUtils.align(tempay);
     int tempax = 0;
@@ -233,7 +417,95 @@ public class AnchorUtils {
     makeRelativeValue(cd, ap, sharpX, sharpY, left, top, width, height);
   }
 
-  public static CardinalDirection findCardinalDirection(int x, int y, int left, int top, int width, int height) {
+  public static void anchorPointRotated(
+    int x,
+    int y,
+    AnchorProperties ap,
+    int left,
+    int top,
+    int width,
+    int height,
+    int rotateDegree
+  ) {
+    double cx = left + width / 2;
+    double cy = top + height / 2;
+      // 
+    com.google.gwt.touch.client.Point point = unrotatePointToOriginalRectCenter(x, y, cx, cy, rotateDegree);
+
+    int rotx = ((int) point.getX());
+    int roty = ((int) point.getY());
+
+    // tempCircle.setShape(rotx, roty, 10);
+
+    // use rotated point to see how it would be for original rect
+    x = rotx;
+    y = roty;
+
+//    tempax = GridUtils.align(tempax);
+//    tempay = GridUtils.align(tempay);
+    int tempax = 0;
+    int tempay = 0;
+
+    // Sharp values are without extra distance, used just for relative calculation
+    // to have as accurate relative result from real element dimension.
+    int sharpX = 0;
+    int sharpY = 0;
+
+    CardinalDirection cd = findCardinalDirection(x, y, left, top, width, height);
+    switch (cd) {
+      case WEST:
+        tempax = left - ATTACH_EXTRA_DISTANCE;
+        tempay = y;
+        sharpX = left;
+        sharpY = y;
+      break;
+      case NORTH:
+        tempax = x;
+        tempay = top - ATTACH_EXTRA_DISTANCE;
+        sharpX = x;
+        sharpY = top;
+      break;
+      case EAST:
+        tempax = left + width + ATTACH_EXTRA_DISTANCE;
+        tempay = y;
+        sharpX = left + width;
+        sharpY = y;
+      break;
+      case SOUTH:
+        tempax = x;
+        tempay = top + height + ATTACH_EXTRA_DISTANCE;
+        sharpX = x;
+        sharpY = top + height;
+      break;
+    }
+
+    ap.x = tempax;
+    ap.y = tempay;
+    makeRelativeValue(cd, ap, sharpX, sharpY, left, top, width, height);
+
+    // rotate attach point
+    com.google.gwt.touch.client.Point p = rotatePoint(
+      ap.x,
+      ap.y,
+      cx,
+      cy,
+      rotateDegree
+    );
+
+    ap.x = ((int) p.getX());
+    ap.y = ((int) p.getY());
+
+    // tempCircle.setShape(p.getX(), p.getY(), 10);
+  }
+
+  public static CardinalDirection findCardinalDirection(
+    int x,
+    int y,
+    int left,
+    int top,
+    int width,
+    int height
+  ) {
     int dx = Math.abs(x - left);
     int dy = Math.abs(y - top);
     int dxw = Math.abs(x - (left + width));
