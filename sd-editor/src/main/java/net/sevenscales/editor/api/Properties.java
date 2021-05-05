@@ -27,6 +27,8 @@ import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 import net.sevenscales.editor.api.event.ChangeTextSizeEvent;
 import net.sevenscales.editor.api.event.ChangeTextSizeEventHandler;
+import net.sevenscales.editor.api.event.RotateEvent;
+import net.sevenscales.editor.api.event.RotateEventHandler;
 import net.sevenscales.editor.api.event.ColorSelectedEvent;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorSetType;
 import net.sevenscales.editor.api.event.ColorSelectedEvent.ColorTarget;
@@ -182,6 +184,17 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 				changeFontSize(event.getFontSize());
 			}
 		});
+
+		editorContext.getEventBus().addHandler(
+      RotateEvent.TYPE, 
+      new RotateEventHandler() {
+        @Override
+        public void on(RotateEvent event) {
+          logger.debug("rotate {}", Properties.this.selectionHandler.getSelectedItems());
+          rotate(event.getRotateDeg());
+        }
+		  }
+    );
 
 		commentEditor = new CommentEditor(surface);
 
@@ -346,7 +359,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		}
 	}
 
-	private void changeFontSize(Integer fontSize) {
+  private void changeFontSize(Integer fontSize) {
 		Set<Diagram> modified = new HashSet<Diagram>();
 		for (Diagram d : Properties.this.selectionHandler.getSelectedItems()) {
 			if (ContextMenuItem.supportsFontSize(d.supportedMenuItems())) {
@@ -355,6 +368,19 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			}
 		}
 		MouseDiagramEventHelpers.fireDiagramsChangedEvenet(modified, surface, ActionType.FONT_CHANGE);
+	}  
+
+	private void rotate(Integer rotateDeg) {
+		Set<Diagram> modified = new HashSet<Diagram>();
+		for (Diagram d : Properties.this.selectionHandler.getSelectedItems()) {
+			if (ContextMenuItem.supportsRotate(d.supportedMenuItems())) {
+				d.rotate(
+          rotateDeg
+        );
+				modified.add(d);
+			}
+		}
+		MouseDiagramEventHelpers.fireDiagramsChangedEvenet(modified, surface, ActionType.ROTATE);
 	}
 
 	private void setColors(Diagram d, ColorTarget colorTarget, ElementColor color, ColorSetType colorSetType) {
