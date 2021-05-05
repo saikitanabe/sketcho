@@ -259,6 +259,11 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		}
 	}
 
+  @Override
+  public IRectangle getBackground() {
+    return background;
+  }
+
 	@Override
 	public int getRelativeLeft() {
 		return background.getX();
@@ -795,7 +800,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   public int supportedMenuItems() {
     int result = super.supportedMenuItems() |
 			ContextMenuItem.FONT_SIZE.getValue() |
-			ContextMenuItem.LAYERS.getValue();
+			ContextMenuItem.LAYERS.getValue() |
+      ContextMenuItem.ROTATE.getValue();
 		result |= extraSupportedMenuItemsByType();
 		return result;
   }
