@@ -60,6 +60,7 @@ import net.sevenscales.editor.gfx.domain.ICircle;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.gfx.domain.Point;
@@ -139,6 +140,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   protected int factorY = 1;
   private boolean svgExport;
   private boolean forceTextRendering;
+
+  private int rotateDegree;
 	
   public static final String EVENT_DOUBLE_CLICK = "ondblclick";
 
@@ -609,7 +612,13 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   
   public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
     // return onAttachArea(anchor, x, y, getLeft(), getTop(), getWidth(), getHeight());
-    return ContainerAttachHelpers.onAttachArea(this, anchor, x, y);
+    return ContainerAttachHelpers.onAttachAreaRotated(
+      this,
+      anchor,
+      x,
+      y,
+      surface.getInteractionLayer()
+    );
   }
   
   protected boolean onDynamicAttachArea(Anchor anchor, int x, int y) {
@@ -1236,6 +1245,40 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
         }
       }
     }
+  }
+
+  @Override
+  public void rotate(
+    int degree
+  ) {
+    // TODO clear with 0
+    if (degree != 0) {
+      IGroup group = getSubgroup();
+      if (group != null) {
+        group.rotate(degree, getWidth() / 2, getHeight() / 2);
+      }
+
+      IRectangle rect = getBackground();
+      if (rect != null) {
+        rect.rotate2(
+          degree, 
+          getLeft() - getTransformX() + getWidth() / 2, 
+          getTop() - getTransformY() + getHeight() / 2
+        );
+      }
+
+      IGroup textGroup = getTextGroup();
+      if (textGroup != null) {
+        textGroup.rotate(degree, getWidth() / 2, getHeight() / 2);
+      }
+
+      this.rotateDegree = degree;
+    }
+  }
+
+  @Override
+  public int getRotate() {
+    return this.rotateDegree;
   }
 
   @Override
@@ -2095,6 +2138,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	public IGroup getTextGroup() {
 		return null;
 	}
+
+  public IRectangle getBackground() {
+    return null;
+  }
 
   /**
 	 * @return the forceTextRendering
