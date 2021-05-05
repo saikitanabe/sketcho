@@ -369,6 +369,12 @@ abstract class Shape extends Graphics implements IShape {
 		rawNode.applyTransform(r);
 	}-*/;
 
+	@Override
+	public void rotate2(int degree, int x, int y) {
+		this.rotateDegree = degree;
+		ShapeUtils._rotate2(rawNode, degree, x, y);
+	}
+
 	private native void _rotate(JavaScriptObject rawNode, int degree, int centerX, int centerY, int translateX, int translateY)/*-{
 		var m = $wnd.dojox.gfx.matrix;
 		var r = m.multiply(m.rotategAt(degree, centerX, centerY), m.translate(translateX, translateY));
