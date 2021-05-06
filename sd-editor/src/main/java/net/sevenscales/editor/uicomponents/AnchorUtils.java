@@ -26,7 +26,7 @@ public class AnchorUtils {
   // >>>>>>>>> Debugging
   // private static net.sevenscales.editor.gfx.domain.ICircle tempCircle;
   // draw rotated rectangle
-  private static net.sevenscales.editor.gfx.domain.IPolyline tempRect;
+  // private static net.sevenscales.editor.gfx.domain.IPolyline tempRect;
   // <<<<<<<<< Debugging
 
   public static class AnchorProperties {
@@ -57,13 +57,13 @@ public class AnchorUtils {
     //   tempCircle.setStrokeWidth(2);
     // }
 
-    if (tempRect == null) {
-      tempRect = net.sevenscales.editor.gfx.domain.IShapeFactory.Util.factory(true).createPolyline(surface.getInteractionLayer());
-      // tempRect.setShape(0);
-      tempRect.setStroke(218, 57, 57, 1);
-      // tempRect.setFill(218, 57, 57, 1);
-      tempRect.setStrokeWidth(2);
-    }
+    // if (tempRect == null) {
+    //   tempRect = net.sevenscales.editor.gfx.domain.IShapeFactory.Util.factory(true).createPolyline(surface.getInteractionLayer());
+    //   // tempRect.setShape(0);
+    //   tempRect.setStroke(218, 57, 57, 1);
+    //   // tempRect.setFill(218, 57, 57, 1);
+    //   tempRect.setStrokeWidth(2);
+    // }
     // <<<<<<<<<<< DEBUGGING
   }
   
@@ -231,7 +231,7 @@ public class AnchorUtils {
 
 
     // >>>>>>>>> DEBUGGING
-    debugArea(x, y, leftTop, rightTop, rightBottom, leftBottom);
+    // debugArea(x, y, leftTop, rightTop, rightBottom, leftBottom);
     // <<<<<<<<< DEBUGGING
 
   // 
@@ -268,25 +268,25 @@ public class AnchorUtils {
   }
 
   // >>>>>>> DEBUGGING
-  private static void debugArea(
-    int x,
-    int y,
-    com.google.gwt.touch.client.Point leftTop,
-    com.google.gwt.touch.client.Point rightTop,
-    com.google.gwt.touch.client.Point rightBottom,
-    com.google.gwt.touch.client.Point leftBottom
-    // int rotate
-  ) {
-    if (tempRect != null) {
-      tempRect.setShape(new int[]{
-        ((int)leftTop.getX()), ((int)leftTop.getY()),
-        ((int)rightTop.getX()), ((int)rightTop.getY()),
-        ((int)rightBottom.getX()), ((int)rightBottom.getY()),
-        ((int)leftBottom.getX()), ((int)leftBottom.getY()),
-        ((int)leftTop.getX()), ((int)leftTop.getY())
-      });
-    }
-  }
+  // private static void debugArea(
+  //   int x,
+  //   int y,
+  //   com.google.gwt.touch.client.Point leftTop,
+  //   com.google.gwt.touch.client.Point rightTop,
+  //   com.google.gwt.touch.client.Point rightBottom,
+  //   com.google.gwt.touch.client.Point leftBottom
+  //   // int rotate
+  // ) {
+  //   if (tempRect != null) {
+  //     tempRect.setShape(new int[]{
+  //       ((int)leftTop.getX()), ((int)leftTop.getY()),
+  //       ((int)rightTop.getX()), ((int)rightTop.getY()),
+  //       ((int)rightBottom.getX()), ((int)rightBottom.getY()),
+  //       ((int)leftBottom.getX()), ((int)leftBottom.getY()),
+  //       ((int)leftTop.getX()), ((int)leftTop.getY())
+  //     });
+  //   }
+  // }
   // <<<<<<< DEBUGGING
 
   /**
