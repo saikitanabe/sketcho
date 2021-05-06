@@ -76,8 +76,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
 		group = IShapeFactory.Util.factory(editable).createGroup(getLayer(surface));
     // group.setAttribute("cursor", "default");
-
-		rotategroup = IShapeFactory.Util.factory(editable).createGroup(group);
+    
+    rotategroup = IShapeFactory.Util.factory(editable).createGroup(group);
 		subgroup = IShapeFactory.Util.factory(editable).createGroup(rotategroup);
     // sub// group.setAttribute("cursor", "default");
 
