@@ -224,6 +224,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     //   // net.sevenscales.domain.utils.Debug.log("add shapebase...");
     //   group.setAttribute("class", "shapebase");
     // }
+
+
+    rotate(getDiagramItem().getRotateDegrees());
   }
 
   protected void applyLink() {
@@ -1253,41 +1256,42 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   @Override
   public void rotate(
-    int degree
+    Integer degrees
   ) {
-    // TODO clear with 0
-    if (degree != 0) {
-      // FIX: rotate doesn't work correctly if using resized
-      // shape and then rotate for AWS shapes.
-      // Rotation gets skewed if matrix and rotation are applied
-      // on a same group. Now there is a new rotate group for a shape.
-      IGroup group = getRotategroup();
-      if (group != null) {
-        // this works with sub group
-        // group.rotate(degree, getWidth() / 2, getHeight() / 2);
-        group.rotate(
-          degree, 
-          getLeft() - getTransformX() + getWidth() / 2, 
-          getTop() - getTransformY() + getHeight() / 2
-        );
-      }
+    // 0 clears rotation
+    int rdeg = degrees != null ? degrees : 0;
 
-      IRectangle rect = getBackground();
-      if (rect != null) {
-        rect.rotate2(
-          degree, 
-          getLeft() - getTransformX() + getWidth() / 2, 
-          getTop() - getTransformY() + getHeight() / 2
-        );
-      }
-
-      IGroup textGroup = getTextGroup();
-      if (textGroup != null) {
-        textGroup.rotate(degree, getWidth() / 2, getHeight() / 2);
-      }
-
-      this.rotateDegree = degree;
+    // FIX: rotate doesn't work correctly if using resized
+    // shape and then rotate for AWS shapes.
+    // Rotation gets skewed if matrix and rotation are applied
+    // on a same group. Now there is a new rotate group for a shape.
+    IGroup group = getRotategroup();
+    if (group != null) {
+      // this works with sub group
+      // group.rotate(degrees, getWidth() / 2, getHeight() / 2);
+      group.rotate(
+        rdeg, 
+        getLeft() - getTransformX() + getWidth() / 2, 
+        getTop() - getTransformY() + getHeight() / 2
+      );
     }
+
+    IRectangle rect = getBackground();
+    if (rect != null) {
+      rect.rotate2(
+        rdeg, 
+        getLeft() - getTransformX() + getWidth() / 2, 
+        getTop() - getTransformY() + getHeight() / 2
+      );
+    }
+
+    IGroup textGroup = getTextGroup();
+    if (textGroup != null) {
+      textGroup.rotate(rdeg, getWidth() / 2, getHeight() / 2);
+    }
+
+    this.rotateDegree = rdeg;
+    this.data.setRotateDegrees(rdeg);
   }
 
   @Override
