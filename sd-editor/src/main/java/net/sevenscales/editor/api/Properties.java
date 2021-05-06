@@ -259,6 +259,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     
 		handleEditorCloseStream(this);
 		handleItemRealTimeModify(this);
+		initAPI(this);
 
 		// >>>>>>>>>>>> SOLU
 		// handleExternalKeyCode(this);
@@ -336,6 +337,20 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 			me.@net.sevenscales.editor.api.Properties::onItemRealTimeDelete(Lnet/sevenscales/domain/IDiagramItemRO;)(dataItem)
 		})
 	}-*/;
+
+	private native void initAPI(Properties me)/*-{
+		$wnd.gwtSetShapesAngle = function(client_id, angle) {
+			me.@net.sevenscales.editor.api.Properties::gwtSetShapesAngle(Ljava/lang/String;I)(client_id, angle)
+		}
+	}-*/;
+
+  private void gwtSetShapesAngle(
+    String clientId,
+    int angle
+  ) {
+    // no need to pass selected shape, since rotate gets selected shape
+    rotate(angle);
+  }
 
 	private void onItemRealTimeModify(IDiagramItemRO item) {
 		if (selectedDiagram != null && item.getClientId().equals(selectedDiagram.getDiagramItem().getClientId())) {
