@@ -178,10 +178,23 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		$wnd.globalStreams.dataItemDeleteStream.onValue(function(dataItem) {
 			me.@net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers::onItemRealTimeDelete(Lnet/sevenscales/domain/IDiagramItemRO;)(dataItem)
 		})
+
+		$wnd.globalStreams.contextMenuStream.filter(function(v) {
+	    return v && v.type==='rotate'
+	  }).onValue(function(v) {
+			me.@net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers::onRotate(Ljava/lang/String;)(v.value)
+		})
 	}-*/;
 
 	private void onItemRealTimeDelete(IDiagramItemRO item) {
 		if (parent != null && parent.getDiagramItem().getClientId().equals(item.getClientId())) {
+			parent = null;
+			hide();
+		}
+	}
+
+	private void onRotate(String clientId) {
+		if (parent != null && parent.getDiagramItem().getClientId().equals(clientId)) {
 			parent = null;
 			hide();
 		}
