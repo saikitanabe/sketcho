@@ -94,6 +94,11 @@ public class JsonExtraction {
     result.put("id", new JSONNumber(item.getId()));
     result.put("clientId", new JSONString(safeJsonString(item.getClientId())));
     result.put("cd", new JSONString(safeJsonString(item.getCustomData())));
+
+    if (item.getRotateDegrees() != null) {
+      result.put(DiagramItemField.ROTATE_DEGREES.getValue(), new JSONNumber(item.getRotateDegrees()));
+    }
+
     result.put("crc", new JSONNumber(item.getCrc32()));
 
     if (item.getCreatedAt() != null) {
