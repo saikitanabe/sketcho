@@ -30,6 +30,7 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
   private int version = DATA_VERSION;
 	private String clientId;
 	private String customData;
+	private Integer rotateDegrees;
 	private double crc32;
 	private String group;
 	private int annotation;
@@ -57,13 +58,31 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 				+ ", annotation=" + annotation 
 				+ ", resolved=" + resolved
 				+ ", group=" + group
+				+ ", rotateDegrees=" + rotateDegrees
 				+ ", links=" + links
 				+ ", parentId=" + parentId
 				+ "]";
 	}
   
-	public DiagramItemDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer fontSize, Integer shapeProperties, Integer displayOrder, int version, Long id, String clientId, String customData, List<UrlLinkDTO> links, String parentId) {
-    this(text, type, shape, extension, backgroundColor, textColor, fontSize, shapeProperties, displayOrder, version, id, clientId, customData, 0, /*group*/ null, 0, 0, links, parentId, /* data */ null);
+	public DiagramItemDTO(
+		String text,
+		String type,
+		String shape,
+		IExtension extension,
+		String backgroundColor,
+		String textColor,
+		Integer fontSize,
+		Integer shapeProperties,
+		Integer displayOrder,
+		int version,
+		Long id,
+		String clientId,
+		String customData,
+		Integer rotateDegrees,
+		List<UrlLinkDTO> links,
+		String parentId
+	) {
+    this(text, type, shape, extension, backgroundColor, textColor, fontSize, shapeProperties, displayOrder, version, id, clientId, customData, rotateDegrees, 0, /*group*/ null, 0, 0, links, parentId, /* data */ null);
   }
 
 //	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
@@ -71,8 +90,29 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 //		this(text, type, shape, backgroundColor, textColor, version, id, clientId, customData, crc32, 0, 0, null);
 //	}
 
-	public DiagramItemDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer fontSize, Integer shapeProperties, Integer displayOrder, Integer version, Long id, String clientId, String customData, double crc32, String group, int annotation, int resolved, List<UrlLinkDTO> links, String parentId, JavaScriptObject data
-			) {
+	public DiagramItemDTO(
+		String text,
+		String type,
+		String shape,
+		IExtension extension,
+		String backgroundColor,
+		String textColor,
+		Integer fontSize,
+		Integer shapeProperties,
+		Integer displayOrder,
+		Integer version,
+		Long id,
+		String clientId,
+		String customData,
+		Integer rotateDegrees,
+		double crc32,
+		String group,
+		int annotation,
+		int resolved,
+		List<UrlLinkDTO> links,
+		String parentId,
+		JavaScriptObject data
+	) {
 		super();
 		this.text = text;
 		this.type = type;
@@ -87,6 +127,7 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 		this.id = id;
 		this.clientId = clientId;
 		this.customData = customData;
+		this.rotateDegrees = rotateDegrees;
 		this.crc32 = crc32;
 		this.group = group;
 		this.annotation = annotation;
@@ -97,7 +138,7 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 	}
 	
 	public DiagramItemDTO(String clientId) {
-		this("", "", "", /* extension */ null, "", "", null, /* shapeProperties */null, /* displayOrder */ null, 0, 0L, clientId, "", 0, /*group*/ null, 0, 0, null, /* parentId */ null, /* data */null);
+		this("", "", "", /* extension */ null, "", "", null, /* shapeProperties */null, /* displayOrder */ null, 0, 0L, clientId, "", /*rotateDegrees*/  null, 0, /*group*/ null, 0, 0, null, /* parentId */ null, /* data */null);
 	}
 
 	public DiagramItemDTO(IDiagramItemRO di) {
@@ -294,6 +335,13 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 		return group != null && !"".equals(group);
 	}
 
+	public Integer getRotateDegrees() {
+		return this.rotateDegrees;
+	}
+	public void setRotateDegrees(Integer degrees) {
+		this.rotateDegrees = degrees;
+	}
+
 	// @Override
 	public Long getCreatedAt() {
 		return createdAt;
@@ -423,6 +471,7 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 		version = dit.version;
 		clientId = dit.clientId;
 		customData = dit.customData;
+		rotateDegrees = dit.rotateDegrees;
 		crc32 = dit.crc32;
 		group = dit.group;
 		data = dit.data;
@@ -519,6 +568,10 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 		if (DiagramItemUtils.checkIfNotSame(customData, item.getCustomData())) {
 			result = false;
 			updateDirtyFields(dirtyFields, DiagramItemField.CUSTOM_DATA);
+		}
+		if (DiagramItemUtils.checkIfNotSame(rotateDegrees, item.getRotateDegrees())) {
+			result = false;
+			updateDirtyFields(dirtyFields, DiagramItemField.ROTATE_DEGREES);
 		}
 		// TODO how to compare! Could use underscore to compare object
 		if (DiagramItemUtils.checkIfNotSame(data, item.getData())) {

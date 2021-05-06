@@ -9,9 +9,51 @@ public class CommentDTO extends DiagramItemDTO {
 	private String username;
 	private String userDisplayName;
 
-	public CommentDTO(String text, String type, String shape, IExtension extension, String backgroundColor, String textColor, Integer tsize,
-			Integer version, Long id, String clientId, String customData, double crc32, int annotation, int resolved, List<UrlLinkDTO> links, String parentThreadId, String username, String userDisplayName, long createdAt, long updatedAt) {
-		super(text, type, shape, extension, backgroundColor, textColor, tsize, /* shapeProperties */null, /* displayOrder */ null, version, id, clientId, customData, crc32, /*group*/ null, annotation, resolved, links, parentThreadId, /* data */ null);
+	public CommentDTO(
+		String text,
+		String type,
+		String shape,
+		IExtension extension,
+		String backgroundColor,
+		String textColor,
+		Integer tsize,
+		Integer version,
+		Long id,
+		String clientId,
+		String customData,
+		Integer rotateDegrees,
+		double crc32,
+		int annotation,
+		int resolved,
+		List<UrlLinkDTO> links,
+		String parentThreadId,
+		String username,
+		String userDisplayName,
+		long createdAt,
+		long updatedAt
+) {
+		super(text,
+			type,
+			shape,
+			extension,
+			backgroundColor,
+			textColor,
+			tsize,
+			/* shapeProperties */null,
+			/* displayOrder */ null,
+			version,
+			id,
+			clientId,
+			customData,
+			rotateDegrees,
+			crc32,
+			/*group*/ null,
+			annotation,
+			resolved,
+			links,
+			parentThreadId,
+			/* data */ null
+		);
 		this.username = username;
 		this.userDisplayName = userDisplayName;
 		setCreatedAt(createdAt);
@@ -29,15 +71,15 @@ public class CommentDTO extends DiagramItemDTO {
 
 
 	public CommentDTO(String parentThreadId, String username, String userDisplayName) {
-		this("", "", "", /* svg */ null, "", "", null, 0, 0L, "", "", 0, 1, 0, null, parentThreadId, username, userDisplayName, 0L, 0L);
+		this("", "", "", /* svg */ null, "", "", null, 0, 0L, "", "", /*rotateDegrees*/ null, 0, 1, 0, null, parentThreadId, username, userDisplayName, 0L, 0L);
 	}	
 
 	public CommentDTO(String parentThreadId, String username, String userDisplayName, long createdAt, long updatedAt) {
-		this("", "", "", /* svg */ null, "", "", null, 0, 0L, "", "", 0, 1, 0, null, parentThreadId, username, userDisplayName, createdAt, updatedAt);
+		this("", "", "", /* svg */ null, "", "", null, 0, 0L, "", "", /*rotateDegrees*/ null, 0, 1, 0, null, parentThreadId, username, userDisplayName, createdAt, updatedAt);
 	}	
 
 	public CommentDTO(String clientId, String parentThreadId) {
-		this("", "", "", /* svg */ null, "", "", null, 0, 0L, clientId, "", 0, 1, 0, null, parentThreadId, "", "", 0L ,0L);
+		this("", "", "", /* svg */ null, "", "", null, 0, 0L, clientId, "", /*rotateDegrees*/ null , 0, 1, 0, null, parentThreadId, "", "", 0L ,0L);
 	}
 
 	public CommentDTO(IDiagramItemRO di) {
