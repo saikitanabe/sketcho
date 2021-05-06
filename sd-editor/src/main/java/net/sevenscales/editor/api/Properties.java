@@ -191,7 +191,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
         @Override
         public void on(RotateEvent event) {
           logger.debug("rotate {}", Properties.this.selectionHandler.getSelectedItems());
-          rotate(event.getRotateDeg());
+          rotate(event.getRotateDeg(), true);
         }
 		  }
     );
@@ -339,17 +339,18 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}-*/;
 
 	private native void initAPI(Properties me)/*-{
-		$wnd.gwtSetShapesAngle = function(client_id, angle) {
-			me.@net.sevenscales.editor.api.Properties::gwtSetShapesAngle(Ljava/lang/String;I)(client_id, angle)
+		$wnd.gwtSetShapesAngle = function(client_id, angle, save) {
+			me.@net.sevenscales.editor.api.Properties::gwtSetShapesAngle(Ljava/lang/String;IZ)(client_id, angle, save)
 		}
 	}-*/;
 
   private void gwtSetShapesAngle(
     String clientId,
-    int angle
+    int angle,
+    boolean save
   ) {
     // no need to pass selected shape, since rotate gets selected shape
-    rotate(angle);
+    rotate(angle, save);
   }
 
 	private void onItemRealTimeModify(IDiagramItemRO item) {
@@ -385,17 +386,26 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		MouseDiagramEventHelpers.fireDiagramsChangedEvenet(modified, surface, ActionType.FONT_CHANGE);
 	}  
 
-	private void rotate(Integer rotateDeg) {
+	private void rotate(
+		Integer rotateDeg,
+		boolean save
+	) {
 		Set<Diagram> modified = new HashSet<Diagram>();
 		for (Diagram d : Properties.this.selectionHandler.getSelectedItems()) {
 			if (ContextMenuItem.supportsRotate(d.supportedMenuItems())) {
 				d.rotate(
           rotateDeg
         );
-				modified.add(d);
+
+        if (save) {
+					modified.add(d);
+				}
 			}
 		}
-		MouseDiagramEventHelpers.fireDiagramsChangedEvenet(modified, surface, ActionType.ROTATE);
+
+		if (save) {
+			MouseDiagramEventHelpers.fireDiagramsChangedEvenet(modified, surface, ActionType.ROTATE);
+		}
 	}
 
 	private void setColors(Diagram d, ColorTarget colorTarget, ElementColor color, ColorSetType colorSetType) {
