@@ -969,6 +969,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   public void setDiagramItem(IDiagramItem data) {
     this.data = data;
+    IGroup group = getGroup();
+    if (group != null) {
+      group.setAttribute("id", "s"+data.getClientId());
+    }
   }
   
   public IDiagramItem getDiagramItem() {
