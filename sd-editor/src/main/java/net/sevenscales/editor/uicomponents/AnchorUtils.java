@@ -292,7 +292,7 @@ public class AnchorUtils {
   /**
   * Rotate point x, y around cx, cy.
   */
-  private static com.google.gwt.touch.client.Point rotatePoint(
+  public static com.google.gwt.touch.client.Point rotatePoint(
     double x,
     double y,
     double cx,

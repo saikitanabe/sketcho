@@ -2025,7 +2025,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 			resizeHelpers.setShape();
 		}
     if (connectionHelpers != null) {
-      connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
+      connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight(), getDiagramItem().getRotateDegrees());
     }
 
     applyLink();
