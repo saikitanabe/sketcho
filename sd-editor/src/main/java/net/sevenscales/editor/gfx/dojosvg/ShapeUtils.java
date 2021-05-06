@@ -15,9 +15,15 @@ class ShapeUtils {
     if (!t) {
       t = ''
     } else {
-      var reg = /rotate\(\d+\s\d+\s\d+\)/i
+      var reg = /rotate\(\d+\s[-]*\d+\s[-]*\d+\)/i
       t = t.replace(reg, '').trim()
       t = t + ' '
+    }
+
+    if (degree == 0) {
+      // clear rotate
+      rotate = ''
+      t = t.trim()
     }
     t = t + rotate
     rawNode.rawNode.setAttribute('transform', t)
