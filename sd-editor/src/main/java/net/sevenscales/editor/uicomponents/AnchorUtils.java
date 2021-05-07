@@ -753,10 +753,13 @@ public class AnchorUtils {
         start.getTop(),
         start.getWidth(),
         start.getHeight(),
+        start.getDiagramItem().getRotateDegrees(),
         end.getLeft(),
         end.getTop(),
         end.getWidth(),
-        end.getHeight());
+        end.getHeight(),
+        end.getDiagramItem().getRotateDegrees()
+      );
 
         int startx = points[0];
         int starty = points[1];
@@ -772,147 +775,147 @@ public class AnchorUtils {
     return false;
   }
 
+  // public static ClosestSegment closestSegment(
+  //   int left,
+  //   int top,
+  //   int width,
+  //   int height,
+  //   int left2,
+  //   int top2,
+  //   int width2,
+  //   int height2
+  // ) {
+  //   ClosestSegment result = new ClosestSegment();
+
+  //   int distLeftLeft =      distance(left, top + height / 2, left2, top2 + height2 / 2);
+  //   int distLeftRigth =     distance(left, top + height / 2, left2 + width2, top2 + height2 / 2);
+  //   int distLeftTop =       distance(left, top + height / 2, left2 + width2 / 2, top2);
+  //   int distLeftBottom =    distance(left, top + height / 2, left2 + width2 / 2, top2 + height2);
+
+  //   int distRightLeft =     distance(left + width, top + height / 2, left2, top2 + height2 / 2);
+  //   int distRightRight =    distance(left + width, top + height / 2, left2 + width2, top2 + height2 / 2);
+  //   int distRightTop =      distance(left + width, top + height / 2, left2 + width2 / 2, top2);
+  //   int distRightBottom =   distance(left + width, top + height / 2, left2 + width2 / 2, top2 + height2);
+
+  //   int distTopTop =        distance(left + width / 2, top, left2 + width2 / 2, top2);
+  //   int distTopBottom =     distance(left + width / 2, top, left2 + width2 / 2, top2 + height2);
+  //   int distTopLeft =       distance(left + width / 2, top, left2, top2 + height2 / 2);
+  //   int distTopRight =      distance(left + width / 2, top, left2 + width2, top2 + height2 / 2);
+
+  //   int distBottomTop =     distance(left + width / 2, top + height, left2 + width2 / 2, top2);
+  //   int distBottomBottom =  distance(left + width / 2, top + height, left2 + width2 / 2, top2 + height2);
+  //   int distBottomLeft =    distance(left + width / 2, top + height, left2, top2 + height2 / 2);
+  //   int distBottomRight =   distance(left + width / 2, top + height, left2 + width2, top2 + height2 / 2);
+
+  //   int smallest = Math.min(distLeftLeft, distLeftRigth);
+  //   smallest = Math.min(smallest, distLeftTop);
+  //   smallest = Math.min(smallest, distLeftBottom);
+
+  //   smallest = Math.min(smallest, distRightLeft);
+  //   smallest = Math.min(smallest, distRightRight);
+  //   smallest = Math.min(smallest, distRightTop);
+  //   smallest = Math.min(smallest, distRightBottom);
+
+  //   // horizontal edges
+  //   smallest = Math.min(smallest, distTopTop);
+  //   smallest = Math.min(smallest, distTopBottom);
+  //   smallest = Math.min(smallest, distTopLeft);
+  //   smallest = Math.min(smallest, distTopRight);
+
+  //   smallest = Math.min(smallest, distBottomTop);
+  //   smallest = Math.min(smallest, distBottomBottom);
+  //   smallest = Math.min(smallest, distBottomLeft);
+  //   smallest = Math.min(smallest, distBottomRight);
+
+  //   if (smallest == distLeftLeft) {
+  //     result.start.x = left;
+  //     result.start.y = top + height / 2;
+  //     result.end.x = left2;
+  //     result.end.y = top2 + height2 / 2;
+  //   } else if (smallest == distLeftRigth) {
+  //     result.start.x = left;
+  //     result.start.y = top + height / 2;
+  //     result.end.x = left2 + width2;
+  //     result.end.y = top2 + height2 / 2;
+  //   } else if (smallest == distLeftTop) {
+  //     result.start.x = left;
+  //     result.start.y = top + height / 2;
+  //     result.end.x = left2 + width2 / 2;
+  //     result.end.y = top2;
+  //   } else if (smallest == distLeftBottom) {
+  //     result.start.x = left;
+  //     result.start.y = top + height / 2;
+  //     result.end.x = left2 + width2 / 2;
+  //     result.end.y = top2 + height2;
+  //   } else if (smallest == distRightLeft) {
+  //     result.start.x = left + width;
+  //     result.start.y = top + height / 2;
+  //     result.end.x = left2;
+  //     result.end.y = top2 + height2 / 2;
+  //   } else if (smallest == distRightRight) {
+  //     result.start.x = left + width;
+  //     result.start.y = top + height / 2;
+  //     result.end.x = left2 + width2;
+  //     result.end.y = top2 + height2 / 2;
+  //   } else if (smallest == distRightTop) {
+  //     result.start.x = left + width;
+  //     result.start.y = top + height / 2;
+  //     result.end.x = left2 + width2 / 2;
+  //     result.end.y = top2;
+  //   } else if (smallest == distRightBottom) {
+  //     result.start.x = left + width;
+  //     result.start.y = top + height / 2;
+  //     result.end.x = left2 + width2 / 2;
+  //     result.end.y = top2 + height2;
+  //   } else if (smallest == distTopTop) {
+  //     result.start.x = left + width / 2;
+  //     result.start.y = top;
+  //     result.end.x = left2 + width2 / 2;
+  //     result.end.y = top2;
+  //   } else if (smallest == distTopBottom) {
+  //     result.start.x = left + width / 2;
+  //     result.start.y = top;
+  //     result.end.x = left2 + width2 / 2;
+  //     result.end.y = top2 + height2;
+  //   } else if (smallest == distTopLeft) {
+  //     result.start.x = left + width / 2;
+  //     result.start.y = top;
+  //     result.end.x = left2;
+  //     result.end.y = top2 + height2 / 2;
+  //   } else if (smallest == distTopRight) {
+  //     result.start.x = left + width / 2;
+  //     result.start.y = top;
+  //     result.end.x = left2 + width2;
+  //     result.end.y = top2 + height2 / 2;
+  //   } else if (smallest == distBottomTop) {
+  //     result.start.x = left + width / 2;
+  //     result.start.y = top + height;
+  //     result.end.x = left2 + width2 / 2;
+  //     result.end.y = top2;
+  //   } else if (smallest == distBottomBottom) {
+  //     result.start.x = left + width / 2;
+  //     result.start.y = top + height;
+  //     result.end.x = left2 + width2 / 2;
+  //     result.end.y = top2 + height2;
+  //   } else if (smallest == distBottomLeft) {
+  //     result.start.x = left + width / 2;
+  //     result.start.y = top + height;
+  //     result.end.x = left2;
+  //     result.end.y = top2 + height2 / 2;
+  //   } else if (smallest == distBottomRight) {
+  //     result.start.x = left + width / 2;
+  //     result.start.y = top + height;
+  //     result.end.x = left2 + width2;
+  //     result.end.y = top2 + height2 / 2;
+  //   }
+
+  //   extraDistance(result.start, left, top, width, height);
+  //   extraDistance(result.end, left2, top2, width2, height2);
+
+  //   return result;
+  // }
+
   public static ClosestSegment closestSegment(
-    int left,
-    int top,
-    int width,
-    int height,
-    int left2,
-    int top2,
-    int width2,
-    int height2
-  ) {
-    ClosestSegment result = new ClosestSegment();
-
-    int distLeftLeft =      distance(left, top + height / 2, left2, top2 + height2 / 2);
-    int distLeftRigth =     distance(left, top + height / 2, left2 + width2, top2 + height2 / 2);
-    int distLeftTop =       distance(left, top + height / 2, left2 + width2 / 2, top2);
-    int distLeftBottom =    distance(left, top + height / 2, left2 + width2 / 2, top2 + height2);
-
-    int distRightLeft =     distance(left + width, top + height / 2, left2, top2 + height2 / 2);
-    int distRightRight =    distance(left + width, top + height / 2, left2 + width2, top2 + height2 / 2);
-    int distRightTop =      distance(left + width, top + height / 2, left2 + width2 / 2, top2);
-    int distRightBottom =   distance(left + width, top + height / 2, left2 + width2 / 2, top2 + height2);
-
-    int distTopTop =        distance(left + width / 2, top, left2 + width2 / 2, top2);
-    int distTopBottom =     distance(left + width / 2, top, left2 + width2 / 2, top2 + height2);
-    int distTopLeft =       distance(left + width / 2, top, left2, top2 + height2 / 2);
-    int distTopRight =      distance(left + width / 2, top, left2 + width2, top2 + height2 / 2);
-
-    int distBottomTop =     distance(left + width / 2, top + height, left2 + width2 / 2, top2);
-    int distBottomBottom =  distance(left + width / 2, top + height, left2 + width2 / 2, top2 + height2);
-    int distBottomLeft =    distance(left + width / 2, top + height, left2, top2 + height2 / 2);
-    int distBottomRight =   distance(left + width / 2, top + height, left2 + width2, top2 + height2 / 2);
-
-    int smallest = Math.min(distLeftLeft, distLeftRigth);
-    smallest = Math.min(smallest, distLeftTop);
-    smallest = Math.min(smallest, distLeftBottom);
-
-    smallest = Math.min(smallest, distRightLeft);
-    smallest = Math.min(smallest, distRightRight);
-    smallest = Math.min(smallest, distRightTop);
-    smallest = Math.min(smallest, distRightBottom);
-
-    // horizontal edges
-    smallest = Math.min(smallest, distTopTop);
-    smallest = Math.min(smallest, distTopBottom);
-    smallest = Math.min(smallest, distTopLeft);
-    smallest = Math.min(smallest, distTopRight);
-
-    smallest = Math.min(smallest, distBottomTop);
-    smallest = Math.min(smallest, distBottomBottom);
-    smallest = Math.min(smallest, distBottomLeft);
-    smallest = Math.min(smallest, distBottomRight);
-
-    if (smallest == distLeftLeft) {
-      result.start.x = left;
-      result.start.y = top + height / 2;
-      result.end.x = left2;
-      result.end.y = top2 + height2 / 2;
-    } else if (smallest == distLeftRigth) {
-      result.start.x = left;
-      result.start.y = top + height / 2;
-      result.end.x = left2 + width2;
-      result.end.y = top2 + height2 / 2;
-    } else if (smallest == distLeftTop) {
-      result.start.x = left;
-      result.start.y = top + height / 2;
-      result.end.x = left2 + width2 / 2;
-      result.end.y = top2;
-    } else if (smallest == distLeftBottom) {
-      result.start.x = left;
-      result.start.y = top + height / 2;
-      result.end.x = left2 + width2 / 2;
-      result.end.y = top2 + height2;
-    } else if (smallest == distRightLeft) {
-      result.start.x = left + width;
-      result.start.y = top + height / 2;
-      result.end.x = left2;
-      result.end.y = top2 + height2 / 2;
-    } else if (smallest == distRightRight) {
-      result.start.x = left + width;
-      result.start.y = top + height / 2;
-      result.end.x = left2 + width2;
-      result.end.y = top2 + height2 / 2;
-    } else if (smallest == distRightTop) {
-      result.start.x = left + width;
-      result.start.y = top + height / 2;
-      result.end.x = left2 + width2 / 2;
-      result.end.y = top2;
-    } else if (smallest == distRightBottom) {
-      result.start.x = left + width;
-      result.start.y = top + height / 2;
-      result.end.x = left2 + width2 / 2;
-      result.end.y = top2 + height2;
-    } else if (smallest == distTopTop) {
-      result.start.x = left + width / 2;
-      result.start.y = top;
-      result.end.x = left2 + width2 / 2;
-      result.end.y = top2;
-    } else if (smallest == distTopBottom) {
-      result.start.x = left + width / 2;
-      result.start.y = top;
-      result.end.x = left2 + width2 / 2;
-      result.end.y = top2 + height2;
-    } else if (smallest == distTopLeft) {
-      result.start.x = left + width / 2;
-      result.start.y = top;
-      result.end.x = left2;
-      result.end.y = top2 + height2 / 2;
-    } else if (smallest == distTopRight) {
-      result.start.x = left + width / 2;
-      result.start.y = top;
-      result.end.x = left2 + width2;
-      result.end.y = top2 + height2 / 2;
-    } else if (smallest == distBottomTop) {
-      result.start.x = left + width / 2;
-      result.start.y = top + height;
-      result.end.x = left2 + width2 / 2;
-      result.end.y = top2;
-    } else if (smallest == distBottomBottom) {
-      result.start.x = left + width / 2;
-      result.start.y = top + height;
-      result.end.x = left2 + width2 / 2;
-      result.end.y = top2 + height2;
-    } else if (smallest == distBottomLeft) {
-      result.start.x = left + width / 2;
-      result.start.y = top + height;
-      result.end.x = left2;
-      result.end.y = top2 + height2 / 2;
-    } else if (smallest == distBottomRight) {
-      result.start.x = left + width / 2;
-      result.start.y = top + height;
-      result.end.x = left2 + width2;
-      result.end.y = top2 + height2 / 2;
-    }
-
-    extraDistance(result.start, left, top, width, height);
-    extraDistance(result.end, left2, top2, width2, height2);
-
-    return result;
-  }
-
-  public static ClosestSegment closestSegmentWithRotation(
     double left,
     double top,
     double width,

@@ -84,7 +84,7 @@ public class ContainerAttachHelpers {
 
 			Diagram second = anchor.getTheOtherEnd().getDiagram();
 			if (second != null) {
-				AnchorUtils.ClosestSegment closestSegment = AnchorUtils.closestSegment(diagram.getLeft(), diagram.getTop(), diagram.getWidth(), diagram.getHeight(), second.getLeft(), second.getTop(), second.getWidth(), second.getHeight());
+				AnchorUtils.ClosestSegment closestSegment = AnchorUtils.closestSegment(diagram.getLeft(), diagram.getTop(), diagram.getWidth(), diagram.getHeight(), diagram.getDiagramItem().getRotateDegrees(), second.getLeft(), second.getTop(), second.getWidth(), second.getHeight(), second.getDiagramItem().getRotateDegrees());
 							
 				tempAnchorProperties.x = closestSegment.start.x;
 				tempAnchorProperties.y = closestSegment.start.y;
