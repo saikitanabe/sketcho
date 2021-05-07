@@ -1,9 +1,13 @@
 package net.sevenscales.editor.uicomponents;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+
+import com.google.gwt.touch.client.Point;
 
 import net.sevenscales.editor.gfx.domain.IRectangle;
-import net.sevenscales.editor.gfx.domain.Point;
+// import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.Diagram;
@@ -39,7 +43,7 @@ public class AnchorUtils {
   
   private static final int MAGNETIC_VALUE = 15;
   private static final int MAGNETIC_AUTO_VALUE = 0;
-  public static final int ATTACH_EXTRA_DISTANCE = 0;
+  public static final int ATTACH_EXTRA_DISTANCE = 1;
 
 	private static void Init(ISurfaceHandler surface) {
 		if (AnchorUtils.anchorPoint == null) {
@@ -197,37 +201,39 @@ public class AnchorUtils {
     double cx = left + width / 2;
     double cy = top + height / 2;
 
-    com.google.gwt.touch.client.Point leftTop = rotatePoint(
-      left,
-      top,
-      cx,
-      cy,
-      rotateDegree
-    );
+    // >>>>>> DEBUGGING
+    // com.google.gwt.touch.client.Point leftTop = rotatePoint(
+    //   left,
+    //   top,
+    //   cx,
+    //   cy,
+    //   rotateDegree
+    // );
 
-    com.google.gwt.touch.client.Point rightTop = rotatePoint(
-      right,
-      top,
-      cx,
-      cy,
-      rotateDegree
-    );
+    // com.google.gwt.touch.client.Point rightTop = rotatePoint(
+    //   right,
+    //   top,
+    //   cx,
+    //   cy,
+    //   rotateDegree
+    // );
 
-    com.google.gwt.touch.client.Point rightBottom = rotatePoint(
-      right,
-      bottom,
-      cx,
-      cy,
-      rotateDegree
-    );
+    // com.google.gwt.touch.client.Point rightBottom = rotatePoint(
+    //   right,
+    //   bottom,
+    //   cx,
+    //   cy,
+    //   rotateDegree
+    // );
 
-    com.google.gwt.touch.client.Point leftBottom = rotatePoint(
-      left,
-      bottom,
-      cx,
-      cy,
-      rotateDegree
-    );
+    // com.google.gwt.touch.client.Point leftBottom = rotatePoint(
+    //   left,
+    //   bottom,
+    //   cx,
+    //   cy,
+    //   rotateDegree
+    // );
+    // <<<<<<< DEBUGGING
 
 
     // >>>>>>>>> DEBUGGING
@@ -659,8 +665,36 @@ public class AnchorUtils {
   }
 
   public static class ClosestSegment {
+    public net.sevenscales.editor.gfx.domain.Point start = new net.sevenscales.editor.gfx.domain.Point();
+    public net.sevenscales.editor.gfx.domain.Point end = new net.sevenscales.editor.gfx.domain.Point();
+
+    ClosestSegment() {
+    }
+
+    ClosestSegment(
+      Point start,
+      Point end
+    ) {
+      this.start.x = ((int) start.getX());
+      this.start.y = ((int) start.getY());
+      this.end.x = ((int) end.getX());
+      this.end.y = ((int) end.getY());
+    }
+
+  }
+
+  public static class ClosestSegment2 {
     public Point start = new Point();
     public Point end = new Point();
+
+    ClosestSegment2() {
+    }
+
+    ClosestSegment2(Point start, Point end) {
+      this.start = start;
+      this.end = end;      
+    }
+
   }
 
   public static int distance(int x, int y, int x1, int y1) {
@@ -669,8 +703,14 @@ public class AnchorUtils {
     return (int) Math.sqrt(dx * dx + dy * dy);
   }
 
-  public static Point centerEndPoint(int x, int y, int left, int top, int width, int height) {
-    Point result = new Point(x, y);
+  public static double distance2(double x, double y, double x1, double y1) {
+    double dx = Math.abs(x - x1);
+    double dy = Math.abs(y - y1);
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  public static net.sevenscales.editor.gfx.domain.Point centerEndPoint(int x, int y, int left, int top, int width, int height) {
+    net.sevenscales.editor.gfx.domain.Point result = new net.sevenscales.editor.gfx.domain.Point(x, y);
     // which edge
     int leftdist = Math.abs(x - left);
     int rightdist = Math.abs(x - (left + width));
@@ -732,7 +772,16 @@ public class AnchorUtils {
     return false;
   }
 
-  public static ClosestSegment closestSegment(int left, int top, int width, int height, int left2, int top2, int width2, int height2) {
+  public static ClosestSegment closestSegment(
+    int left,
+    int top,
+    int width,
+    int height,
+    int left2,
+    int top2,
+    int width2,
+    int height2
+  ) {
     ClosestSegment result = new ClosestSegment();
 
     int distLeftLeft =      distance(left, top + height / 2, left2, top2 + height2 / 2);
@@ -863,7 +912,159 @@ public class AnchorUtils {
     return result;
   }
 
-  private static void extraDistance(Point point, int left, int top, int width, int height) {
+  public static ClosestSegment closestSegmentWithRotation(
+    double left,
+    double top,
+    double width,
+    double height,
+    Integer rotateDegrees,
+    double left2,
+    double top2,
+    double width2,
+    double height2,
+    Integer rotateDegrees2
+  ) {
+
+    rotateDegrees = rotateDegrees != null ? rotateDegrees : 0;
+    rotateDegrees2 = rotateDegrees2 != null ? rotateDegrees2 : 0;
+
+    double right = left + width;
+    double bottom = top + height;
+    double cx = left + width / 2;
+    double cy = top + height / 2;
+
+    double n1x = left + width / 2;
+    double n1y = top;
+    double e1x = right;
+    double e1y = top + height / 2;
+    double s1x = left + width / 2;
+    double s1y = bottom;
+    double w1x = left;
+    double w1y = top + height / 2;
+
+    // To find middle rotated point,
+    // first calculate normal middle point
+    // then rotate that middle point againts cx, cy
+
+    Point n1 = rotatePoint(
+      n1x,
+      n1y,
+      cx,
+      cy,
+      rotateDegrees
+    );
+    Point e1 = rotatePoint(
+      e1x,
+      e1y,
+      cx,
+      cy,
+      rotateDegrees
+    );
+    Point s1 = rotatePoint(
+      s1x,
+      s1y,
+      cx,
+      cy,
+      rotateDegrees
+    );
+    Point w1 = rotatePoint(
+      w1x,
+      w1y,
+      cx,
+      cy,
+      rotateDegrees
+    );
+
+    Point[] middlePoints = new Point[]{
+      n1,
+      e1,
+      s1,
+      w1
+    };
+
+    double right2 = left2 + width2;
+    double bottom2 = top2 + height2;
+    double cx2 = left2 + width2 / 2;
+    double cy2 = top2 + height2 / 2;
+
+    double n2x = left2 + width2 / 2;
+    double n2y = top2;
+    double e2x = right2;
+    double e2y = top2 + height2 / 2;
+    double s2x = left2 + width2 / 2;
+    double s2y = bottom2;
+    double w2x = left2;
+    double w2y = top2 + height2 / 2;
+
+    // To find middle rotated point,
+    // first calculate normal middle point
+    // then rotate that middle point againts cx, cy
+
+    Point n2 = rotatePoint(
+      n2x,
+      n2y,
+      cx2,
+      cy2,
+      rotateDegrees2
+    );
+    Point e2 = rotatePoint(
+      e2x,
+      e2y,
+      cx2,
+      cy2,
+      rotateDegrees2
+    );
+    Point s2 = rotatePoint(
+      s2x,
+      s2y,
+      cx2,
+      cy2,
+      rotateDegrees2
+    );
+    Point w2 = rotatePoint(
+      w2x,
+      w2y,
+      cx2,
+      cy2,
+      rotateDegrees2
+    );
+
+    Point[] middlePoints2 = new Point[]{
+      n2,
+      e2,
+      s2,
+      w2
+    };
+
+    Map<Double, ClosestSegment> distances = new HashMap<Double, ClosestSegment>();
+
+    for (Point m1 : middlePoints) {
+
+      for (Point m2 : middlePoints2) {
+        double dist = distance2(m1.getX(), m1.getY(), m2.getX(), m2.getY());
+
+        distances.put(Math.abs(dist), new ClosestSegment(m1, m2));
+      }
+
+    }
+
+    double smallest = Double.MAX_VALUE;
+    ClosestSegment result = new ClosestSegment();
+    for (Map.Entry<Double, ClosestSegment> entry : distances.entrySet()) {
+      if (entry.getKey() < smallest) {
+        smallest = entry.getKey();
+        result = entry.getValue();
+      }
+    }
+
+    // TODO
+    // extraDistance(result.start, left, top, width, height);
+    // extraDistance(result.end, left2, top2, width2, height2);
+
+    return result;
+  }
+
+  private static void extraDistance(net.sevenscales.editor.gfx.domain.Point point, int left, int top, int width, int height) {
     CardinalDirection cd = findCardinalDirection(point.x, point.y, left, top, width, height);
     switch (cd) {
       case WEST:
