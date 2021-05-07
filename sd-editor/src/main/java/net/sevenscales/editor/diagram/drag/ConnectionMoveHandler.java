@@ -2,9 +2,19 @@ package net.sevenscales.editor.diagram.drag;
 
 import java.util.List;
 
+import com.google.gwt.touch.client.Point;
+
+import net.sevenscales.editor.diagram.Diagram;
+import net.sevenscales.editor.uicomponents.AnchorUtils;
+import net.sevenscales.editor.gfx.domain.ISurface;
+
 
 public class ConnectionMoveHandler implements AnchorMoveHandler {
   private int lastDispachSequence = Integer.MAX_VALUE;
+
+  // >>>>>>>>> Debugging
+  private static net.sevenscales.editor.gfx.domain.ICircle tempCircle;
+  // <<<<<<<<< Debugging
 
   public ConnectionMoveHandler() {
 	}
