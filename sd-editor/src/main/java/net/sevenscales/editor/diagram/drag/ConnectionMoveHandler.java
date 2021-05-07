@@ -118,6 +118,10 @@ public class ConnectionMoveHandler implements AnchorMoveHandler {
     int indexY,
     List<Integer> points
   ) {
+
+    oldRotate = oldRotate != null ? oldRotate : 0;
+    newRotate = newRotate != null ? newRotate : 0;
+
     Diagram source = anchorElement.getSource();
 
     if (source.getRotate() != null) {
