@@ -86,6 +86,17 @@ public class AnchorElement {
     // }
   }
 
+  public void dispatchRotate(
+    boolean save,
+    Integer oldRotate,
+    Integer newRotate,    
+    // >>>>>> DEBUGGING
+    net.sevenscales.editor.api.ISurfaceHandler surface
+    // <<<<<< DEBUGGING
+  ) {
+    anchor.rotate(this, save, oldRotate, newRotate, surface);
+  }
+
   public void dispatch(int dispachSequence) {
 //  for (AnchorMoveHandler h : handlers) {
 //    h.moving(this, dx, dy);

@@ -141,7 +141,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   private boolean svgExport;
   private boolean forceTextRendering;
 
-  private int rotateDegree;
+  private Integer rotateDegree;
 	
   public static final String EVENT_DOUBLE_CLICK = "ondblclick";
 
@@ -226,7 +226,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     // }
 
 
-    rotate(getDiagramItem().getRotateDegrees());
+    rotate(getDiagramItem().getRotateDegrees(), false);
   }
 
   protected void applyLink() {
@@ -1256,7 +1256,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   @Override
   public void rotate(
-    Integer degrees
+    Integer degrees,
+    boolean save
   ) {
     // 0 clears rotation
     int rdeg = degrees != null ? degrees : 0;
@@ -1290,12 +1291,34 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       textGroup.rotate(rdeg, getWidth() / 2, getHeight() / 2);
     }
 
+    // notify relationships that the diagram is rotated
+    dispatchRotate(save, data.getRotateDegrees(), rdeg);
+
+    // store current runtime rotation, this is not yet
+    // send to the server.
     this.rotateDegree = rdeg;
-    this.data.setRotateDegrees(rdeg);
+
+    if (save) {
+      // save rotation to the data model, to be
+      // sent to the server.
+      // If saving every time old rotation degree is lost
+      // and cannot restore old rotation point position.
+      this.data.setRotateDegrees(rdeg);
+    }
+  }
+
+  private void dispatchRotate(
+    boolean save,
+    Integer oldRotate,
+    Integer newRotate
+  ) {
+    for (AnchorElement a : anchorMap.values()) {
+      a.dispatchRotate(save, oldRotate, newRotate, surface);
+    }
   }
 
   @Override
-  public int getRotate() {
+  public Integer getRotate() {
     return this.rotateDegree;
   }
 

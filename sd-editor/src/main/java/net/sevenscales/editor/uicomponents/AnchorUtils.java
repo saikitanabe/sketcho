@@ -39,7 +39,7 @@ public class AnchorUtils {
   
   private static final int MAGNETIC_VALUE = 15;
   private static final int MAGNETIC_AUTO_VALUE = 0;
-  public static final int ATTACH_EXTRA_DISTANCE = 2;
+  public static final int ATTACH_EXTRA_DISTANCE = 0;
 
 	private static void Init(ISurfaceHandler surface) {
 		if (AnchorUtils.anchorPoint == null) {
@@ -234,7 +234,7 @@ public class AnchorUtils {
     // debugArea(x, y, leftTop, rightTop, rightBottom, leftBottom);
     // <<<<<<<<< DEBUGGING
 
-  // 
+    // unrotate, so possible to use old comparisons
     com.google.gwt.touch.client.Point point = unrotatePointToOriginalRectCenter(x, y, cx, cy, rotateDegree);
 
     int rotx = ((int) point.getX());
@@ -318,7 +318,7 @@ public class AnchorUtils {
   }
 
   // Unrotates x, y to original rect rotated to unrotated rect.
-  private static com.google.gwt.touch.client.Point unrotatePointToOriginalRectCenter(
+  public static com.google.gwt.touch.client.Point unrotatePointToOriginalRectCenter(
     int x,
     int y,
     double cx,

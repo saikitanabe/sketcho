@@ -151,6 +151,18 @@ public class Anchor implements AnchorMoveHandler {
 		relationship.getAnchorMoveHandler().moving(anchorElement, dx, dy, dispachSequence);
 	}
 
+	public void rotate(
+		AnchorElement anchorElement,
+		boolean save,
+    Integer oldRotate,
+    Integer newRotate,		
+		// >>>>>> DEBUGGING
+		net.sevenscales.editor.api.ISurfaceHandler surface
+		// <<<<<< DEBUGGING
+	) {
+		relationship.getAnchorMoveHandler().rotate(anchorElement, save, oldRotate, newRotate, surface);
+	}
+
 	public void dragEnd() {
 		relationship.anchorDragEnd();
 	}
