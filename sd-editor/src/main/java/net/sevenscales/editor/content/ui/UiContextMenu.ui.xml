@@ -37,7 +37,7 @@
 			</a>
 			<a ui:field="curvedArrow" title="Curved arrow" class="btn btn-custom btn-context-menu tooltipper">
 				<!-- <i class="context-icon-curved-arrow"></i> -->
-        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu--conn-curve' /></svg>        
+        <svg class='sprite-menu-ico-tiny wht stroke'><use xlink:href='#context-menu--conn-curve' /></svg>        
 			</a>
 			<a ui:field="switchElement" title="Switch Element to an other" class="btn btn-custom btn-context-menu tooltipper">
 				<!-- <i class="context-icon-switch"></i> -->
