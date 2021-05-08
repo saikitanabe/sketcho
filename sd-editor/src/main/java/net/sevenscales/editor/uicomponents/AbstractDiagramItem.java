@@ -1571,6 +1571,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     getDiagramItem().copyFrom(diagramItem);
 
     setFontSize(getDiagramItem().getFontSize());
+    rotate(getDiagramItem().getRotateDegrees(), false);
 
     logger.debugTime();
     logger.debugTime();
