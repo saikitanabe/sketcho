@@ -865,6 +865,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   public void resizeEnd() {
+    rotate(getDiagramItem().getRotateDegrees(), false);
   }
 
   @Override
