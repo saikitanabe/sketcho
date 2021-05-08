@@ -89,7 +89,7 @@ public class ContainerAttachHelpers {
 				tempAnchorProperties.x = closestSegment.start.x;
 				tempAnchorProperties.y = closestSegment.start.y;
 			} else {
-				AnchorUtils.anchorPoint(x, y, tempAnchorProperties, diagram.getLeft(), diagram.getTop(), diagram.getWidth(), diagram.getHeight());
+				AnchorUtils.anchorPoint(x, y, tempAnchorProperties, diagram.getLeft(), diagram.getTop(), diagram.getWidth(), diagram.getHeight(), diagram.getDiagramItem().getRotateDegrees());
 
 				result.setAx(tempAnchorProperties.x);
 				result.setAy(tempAnchorProperties.y);
@@ -129,7 +129,7 @@ public class ContainerAttachHelpers {
 
 			AnchorElement result = diagram.getAnchorElement(anchor);
 			AnchorProperties tempAnchorProperties = diagram.getTempAnchorProperties();
-			AnchorUtils.anchorPointRotated(
+			AnchorUtils.anchorPoint(
 				x, 
 				y,
 				tempAnchorProperties,
@@ -137,7 +137,7 @@ public class ContainerAttachHelpers {
 				diagram.getTop(),
 				diagram.getWidth(),
 				diagram.getHeight(),
-				diagram.getRotate()
+				diagram.getDiagramItem().getRotateDegrees()
 			);
 
 			result.setAx(tempAnchorProperties.x);

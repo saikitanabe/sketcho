@@ -367,10 +367,62 @@ public class AnchorUtils {
 		return false;
 	}
 
-  public static void anchorPoint(int x, int y, AnchorProperties ap, IRectangle rect) {
-    anchorPoint(x, y, ap, rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
-  }
+  // public static void anchorPoint(int x, int y, AnchorProperties ap, IRectangle rect) {
+  //   anchorPoint(x, y, ap, rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+  // }
   
+//   public static void anchorPoint(
+//     int x,
+//     int y,
+//     AnchorProperties ap,
+//     int left,
+//     int top,
+//     int width,
+//     int height
+//   ) {
+// //    tempax = GridUtils.align(tempax);
+// //    tempay = GridUtils.align(tempay);
+//     int tempax = 0;
+//     int tempay = 0;
+
+//     // Sharp values are without extra distance, used just for relative calculation
+//     // to have as accurate relative result from real element dimension.
+//     int sharpX = 0;
+//     int sharpY = 0;
+
+//     CardinalDirection cd = findCardinalDirection(x, y, left, top, width, height);
+//     switch (cd) {
+//       case WEST:
+//         tempax = left - ATTACH_EXTRA_DISTANCE;
+//         tempay = y;
+//         sharpX = left;
+//         sharpY = y;
+//       break;
+//       case NORTH:
+//         tempax = x;
+//         tempay = top - ATTACH_EXTRA_DISTANCE;
+//         sharpX = x;
+//         sharpY = top;
+//       break;
+//       case EAST:
+//         tempax = left + width + ATTACH_EXTRA_DISTANCE;
+//         tempay = y;
+//         sharpX = left + width;
+//         sharpY = y;
+//       break;
+//       case SOUTH:
+//         tempax = x;
+//         tempay = top + height + ATTACH_EXTRA_DISTANCE;
+//         sharpX = x;
+//         sharpY = top + height;
+//       break;
+//     }
+
+//     ap.x = tempax;
+//     ap.y = tempay;
+//     makeRelativeValue(cd, ap, sharpX, sharpY, left, top, width, height);
+//   }
+
   public static void anchorPoint(
     int x,
     int y,
@@ -378,61 +430,12 @@ public class AnchorUtils {
     int left,
     int top,
     int width,
-    int height
-  ) {
-//    tempax = GridUtils.align(tempax);
-//    tempay = GridUtils.align(tempay);
-    int tempax = 0;
-    int tempay = 0;
-
-    // Sharp values are without extra distance, used just for relative calculation
-    // to have as accurate relative result from real element dimension.
-    int sharpX = 0;
-    int sharpY = 0;
-
-    CardinalDirection cd = findCardinalDirection(x, y, left, top, width, height);
-    switch (cd) {
-      case WEST:
-        tempax = left - ATTACH_EXTRA_DISTANCE;
-        tempay = y;
-        sharpX = left;
-        sharpY = y;
-      break;
-      case NORTH:
-        tempax = x;
-        tempay = top - ATTACH_EXTRA_DISTANCE;
-        sharpX = x;
-        sharpY = top;
-      break;
-      case EAST:
-        tempax = left + width + ATTACH_EXTRA_DISTANCE;
-        tempay = y;
-        sharpX = left + width;
-        sharpY = y;
-      break;
-      case SOUTH:
-        tempax = x;
-        tempay = top + height + ATTACH_EXTRA_DISTANCE;
-        sharpX = x;
-        sharpY = top + height;
-      break;
-    }
-
-    ap.x = tempax;
-    ap.y = tempay;
-    makeRelativeValue(cd, ap, sharpX, sharpY, left, top, width, height);
-  }
-
-  public static void anchorPointRotated(
-    int x,
-    int y,
-    AnchorProperties ap,
-    int left,
-    int top,
-    int width,
     int height,
-    int rotateDegree
+    Integer rotateDegree
   ) {
+
+    rotateDegree = rotateDegree != null ? rotateDegree : 0;
+
     double cx = left + width / 2;
     double cy = top + height / 2;
       // 

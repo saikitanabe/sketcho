@@ -656,7 +656,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
   
   protected AnchorElement makeDynamicTempAnchorProperties(Anchor anchor, int x, int y) {
-  	AnchorUtils.anchorPoint(x, y, tempAnchorProperties , getLeft(), getTop(), getWidth(), getHeight());
+  	AnchorUtils.anchorPoint(x, y, tempAnchorProperties , getLeft(), getTop(), getWidth(), getHeight(), getDiagramItem().getRotateDegrees());
   	AnchorElement result = makeAnchorElementFromTemp(anchor);
     result.setFixedPoint(false);
     return result;
