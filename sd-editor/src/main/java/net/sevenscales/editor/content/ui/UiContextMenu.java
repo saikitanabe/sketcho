@@ -105,7 +105,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	@UiField AnchorElement colorize;
 	@UiField AnchorElement delete;
 	@UiField AnchorElement comment;
-	@UiField AnchorElement rotate;
+	// @UiField AnchorElement rotate;
 	// @UiField AnchorElement annotate;
 	// @UiField AnchorElement unannotate;
 	@UiField AnchorElement addlink;
@@ -365,13 +365,13 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			}
 		});
 
-		new FastElementButton(rotate).addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				stopEvent(event);
-				rotate();
-			}
-		});
+		// new FastElementButton(rotate).addClickHandler(new ClickHandler() {
+		// 	@Override
+		// 	public void onClick(ClickEvent event) {
+		// 		stopEvent(event);
+		// 		rotate();
+		// 	}
+		// });
 
 		// do not handle undo/redo if property editor is open
 		Event.addNativePreviewHandler(new NativePreviewHandler() {
@@ -927,10 +927,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		})
 	}-*/;
 
-  private void rotate() {
-		hide();
-		editorContext.getEventBus().fireEvent(new RotateEvent(45));
-  }
+  // private void rotate() {
+		// hide();
+		// editorContext.getEventBus().fireEvent(new RotateEvent(45));
+  // }
 	
 	private void stopEvent(ClickEvent event) {
 		event.stopPropagation();
@@ -962,7 +962,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		Display addLinkMenuVisibility = Display.NONE;
 		Display openEditLinkMenuVisibility = Display.NONE;
 		Display changeFontSizeVisibility = Display.NONE;
-		Display rotateVisibility = Display.NONE;
+		// Display rotateVisibility = Display.NONE;
 		Display layersMenuVisibility = Display.NONE;
 		Display switchElementVisibility = Display.NONE;
 		Display lineWeightVisibility = Display.NONE;
@@ -992,9 +992,9 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			changeFontSizeVisibility = Display.INLINE_BLOCK;
 		}
 
-		if (allSupports(selected, ContextMenuItem.ROTATE)) {
-			rotateVisibility = Display.INLINE_BLOCK;
-		}
+		// if (allSupports(selected, ContextMenuItem.ROTATE)) {
+		// 	rotateVisibility = Display.INLINE_BLOCK;
+		// }
 
 		if (allSupports(selected, ContextMenuItem.LAYERS)) {
 			layersMenuVisibility = Display.INLINE_BLOCK;
@@ -1077,7 +1077,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		addlink.getStyle().setDisplay(addLinkMenuVisibility);
 		openlink.getStyle().setDisplay(openEditLinkMenuVisibility);
 		textSize.getStyle().setDisplay(changeFontSizeVisibility);
-		rotate.getStyle().setDisplay(rotateVisibility);
+		// rotate.getStyle().setDisplay(rotateVisibility);
 		layersMenuButton.getStyle().setDisplay(layersMenuVisibility);
 		switchElement.getStyle().setDisplay(switchElementVisibility);
 		lineWeight.getStyle().setDisplay(lineWeightVisibility);

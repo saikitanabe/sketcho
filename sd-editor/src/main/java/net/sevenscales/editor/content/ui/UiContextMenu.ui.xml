@@ -84,9 +84,9 @@
 			<a ui:field="comment" title="Comment" class="btn btn-custom btn-context-menu tooltipper">
         <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#menu-icon--comments' /></svg>
 			</a>
-			<a ui:field="rotate" title="Rotate" class="btn btn-custom btn-context-menu tooltipper">
-        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu--rotate' /></svg>
-			</a>
+			<!-- <a ui:field="rotate" title="Rotate" class="btn btn-custom btn-context-menu tooltipper">
+        <svg class='sprite-menu-ico-tiny wht'><use xlink:href='#context-menu- -rotate' /></svg>
+			</a> -->
 			<a ui:field="delete" title="Delete" class="btn btn-custom btn-context-menu tooltipper">
 				<!-- <i class="context-icon-trash2"></i> -->
         <svg class='sprite-menu-ico-tiny wht stroke'><use xlink:href='#context-menu--trash' /></svg>
