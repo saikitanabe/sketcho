@@ -1260,6 +1260,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     Integer degrees,
     boolean save
   ) {
+
+    // hide resize helpers when rotating
+    resizeHelpers.hide(this);
+
     // 0 clears rotation
     int rdeg = degrees != null ? degrees : 0;
 

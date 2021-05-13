@@ -408,7 +408,8 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 	}
 	
 	public void hide(AbstractDiagramItem candidate) {
-		ElementHelpers.hide(this, candidate);
+		// ElementHelpers.hide(this, candidate);
+    hide();
 	}
 
 	private void hide() {
