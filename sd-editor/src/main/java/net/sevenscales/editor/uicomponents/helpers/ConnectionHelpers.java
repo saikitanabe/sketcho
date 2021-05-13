@@ -181,7 +181,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		})
 
 		$wnd.globalStreams.contextMenuStream.filter(function(v) {
-	    return v && v.type==='rotate'
+	    return v && v.type==='rotate-start'
 	  }).onValue(function(v) {
 			me.@net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers::onRotate(Ljava/lang/String;)(v.value)
 		})
