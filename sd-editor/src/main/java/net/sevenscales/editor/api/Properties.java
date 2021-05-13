@@ -339,18 +339,18 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}-*/;
 
 	private native void initAPI(Properties me)/*-{
-		$wnd.gwtSetShapesAngle = function(client_id, angle, save) {
-			me.@net.sevenscales.editor.api.Properties::gwtSetShapesAngle(Ljava/lang/String;IZ)(client_id, angle, save)
+		$wnd.gwtSetShapesRotateDegrees = function(client_id, angle, save) {
+			me.@net.sevenscales.editor.api.Properties::gwtSetShapesRotateDegrees(Ljava/lang/String;IZ)(client_id, angle, save)
 		}
 	}-*/;
 
-  private void gwtSetShapesAngle(
+  private void gwtSetShapesRotateDegrees(
     String clientId,
-    int angle,
+    int rotateDegrees,
     boolean save
   ) {
     // no need to pass selected shape, since rotate gets selected shape
-    rotate(angle, save);
+    rotate(rotateDegrees, save);
   }
 
 	private void onItemRealTimeModify(IDiagramItemRO item) {
@@ -394,7 +394,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		for (Diagram d : Properties.this.selectionHandler.getSelectedItems()) {
 			if (ContextMenuItem.supportsRotate(d.supportedMenuItems())) {
 				d.rotate(
-          rotateDeg
+          rotateDeg,
+          save
         );
 
         if (save) {
