@@ -456,6 +456,12 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			me.@net.sevenscales.editor.content.ui.UiContextMenu::onShowPropertyEditor(II)(v.x, v.y)
 		})
 
+		$wnd.globalStreams.contextMenuStream.filter(function(v) {
+	    return v && v.type==='rotate-start'
+	  }).onValue(function(v) {
+			me.@net.sevenscales.editor.content.ui.UiContextMenu::cancel()();
+		})
+
   }-*/;
   
   private void onShowPropertyEditor(final int x, final int y) {
