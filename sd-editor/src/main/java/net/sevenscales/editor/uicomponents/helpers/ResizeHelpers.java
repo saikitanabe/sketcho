@@ -95,6 +95,9 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 
 		resizeElement = IShapeFactory.Util.factory(true).createCircle(surface.getInteractionLayer());
 		resizeElement.setFill(200, 200, 200, 0);
+    // >>>>>> DEBUGGING
+		// resizeElement.setStroke(200, 200, 200, 1);
+    // <<<<<< DEBUGGING
 		
 		// resize support
 		resizeElement.addGraphicsMouseEnterHandler(new GraphicsMouseEnterHandler() {
@@ -153,8 +156,15 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 			@Override
 			public void onDrag(Diagram sender, int dx, int dy) {
 				if (sender != null && sender.equals(parent)) {
-					setShape(parent.getLeft(), parent.getTop(), parent.getWidth(), parent.getHeight(),
-							parent.getResizeIndentX(), parent.getResizeIndentY());
+					setShape(
+						parent.getLeft(),
+						parent.getTop(),
+						parent.getWidth(),
+						parent.getHeight(),
+						parent.getResizeIndentX(),
+						parent.getResizeIndentY(),
+						parent.getDiagramItem().getRotateDegrees()
+					);
 				}
 			}
 			
@@ -217,20 +227,157 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 	}
 
 	private void setShape(AbstractDiagramItem parent) {
-		setShape(parent.getLeft(), parent.getTop(), parent.getWidth(), parent.getHeight(), parent.getResizeIndentX(), parent.getResizeIndentY());
+		setShape(parent.getLeft(), parent.getTop(), parent.getWidth(), parent.getHeight(), parent.getResizeIndentX(), parent.getResizeIndentY(), parent.getDiagramItem().getRotateDegrees());
 	}
 
-	private void setShape(int left, int top, int width, int height, int indentX, int indentY) {
-//    resizeElement.setShape(left + width - THE_SIZE, top + height - THE_SIZE, THE_SIZE, THE_SIZE, 0);
-		resizeElement.setShape(left + width - (cornerwidth - 9) - indentX + (0), top + height - indentY + (0), THE_SIZE);
-		
-    line1.setShape(left + width - cornerwidth - indentX, top + height - indentY, left + width - indentX, top + height - cornerwidth - indentY);
-    line2.setShape(left + width - (cornerwidth - 4) - indentX, top + height - indentY, left + width - indentX, top + height - (cornerwidth - 4) - indentY);
-    line3.setShape(left + width - (cornerwidth - 8) - indentX, top + height - indentY, left + width - indentX, top + height - (cornerwidth - 8) - indentY);
+	private void setShape(int left, int top, int width, int height, int indentX, int indentY, Integer rotateDegrees) {
 
-    line4.setShape(left + width - (cornerwidth - 1) - indentX, top + height - indentY, left + width - indentX, top + height - (cornerwidth - 1) - indentY);
-    line5.setShape(left + width - (cornerwidth - 5) - indentX, top + height - indentY, left + width - indentX, top + height - (cornerwidth - 5) - indentY);
-    line6.setShape(left + width - (cornerwidth - 9) - indentX, top + height - indentY, left + width - indentX, top + height - (cornerwidth - 9) - indentY);
+		rotateDegrees = rotateDegrees != null ? rotateDegrees : 0;
+
+		double cx = left + width / 2;
+		double cy = top + height / 2;
+
+		double circleX = left + width - (cornerwidth - 9) - indentX + (0);
+		double circleY = top + height - indentY + (0);
+
+		com.google.gwt.touch.client.Point leftTop = net.sevenscales.editor.uicomponents.AnchorUtils.rotatePoint(
+			circleX, 
+			circleY,
+			cx, 
+			cy,
+			rotateDegrees
+		);
+
+		circleX = ((int) leftTop.getX());
+		circleY = ((int) leftTop.getY());
+
+		Line lineRot1 = rotateLine(
+			left + width - cornerwidth - indentX,
+			top + height - indentY,
+			left + width - indentX,
+			top + height - cornerwidth - indentY,
+			cx, 
+			cy,
+			rotateDegrees
+		);
+
+		Line lineRot2 = rotateLine(
+			left + width - (cornerwidth - 4) - indentX,
+			top + height - indentY,
+			left + width - indentX,
+			top + height - (cornerwidth - 4) - indentY,
+			cx, 
+			cy,
+			rotateDegrees
+		);
+
+		Line lineRot3 = rotateLine(
+			left + width - (cornerwidth - 8) - indentX,
+			top + height - indentY,
+			left + width - indentX,
+			top + height - (cornerwidth - 8) - indentY,
+			cx, 
+			cy,
+			rotateDegrees
+		);
+
+		Line lineRot4 = rotateLine(
+			left + width - (cornerwidth - 1) - indentX,
+			top + height - indentY,
+			left + width - indentX,
+			top + height - (cornerwidth - 1) - indentY,
+			cx, 
+			cy,
+			rotateDegrees
+		);
+
+		Line lineRot5 = rotateLine(
+			left + width - (cornerwidth - 5) - indentX,
+			top + height - indentY,
+			left + width - indentX,
+			top + height - (cornerwidth - 5) - indentY,
+			cx, 
+			cy,
+			rotateDegrees
+		);
+
+		Line lineRot6 = rotateLine(
+			left + width - (cornerwidth - 9) - indentX,
+			top + height - indentY,
+			left + width - indentX,
+			top + height - (cornerwidth - 9) - indentY,
+			cx, 
+			cy,
+			rotateDegrees
+		);
+
+//    resizeElement.setShape(left + width - THE_SIZE, top + height - THE_SIZE, THE_SIZE, THE_SIZE, 0);
+		resizeElement.setShape(circleX, circleY, THE_SIZE);
+		
+    line1.setShape(lineRot1.startX, lineRot1.startY, lineRot1.endX, lineRot1.endY);
+    line2.setShape(lineRot2.startX, lineRot2.startY, lineRot2.endX, lineRot2.endY);
+    line3.setShape(lineRot3.startX, lineRot3.startY, lineRot3.endX, lineRot3.endY);
+
+    line4.setShape(lineRot4.startX, lineRot4.startY, lineRot4.endX, lineRot4.endY);
+    line5.setShape(lineRot5.startX, lineRot5.startY, lineRot5.endX, lineRot5.endY);
+    line6.setShape(lineRot6.startX, lineRot6.startY, lineRot6.endX, lineRot6.endY);
+	}
+
+	class Line {
+		int startX;
+		int startY;
+		int endX;
+		int endY;
+
+		Line(
+			int startX,
+			int startY,
+			int endX,
+			int endY
+		) {
+			this.startX = startX;
+			this.startY = startY;
+			this.endX = endX;
+			this.endY = endY;
+		}
+	}
+
+	private Line rotateLine(
+		int startX,
+		int startY,
+		int endX,
+		int endY,
+		double cx,
+		double cy,
+		Integer rotateDegrees
+	) {
+		com.google.gwt.touch.client.Point line1Start = net.sevenscales.editor.uicomponents.AnchorUtils.rotatePoint(
+			startX, 
+			startY,
+			cx, 
+			cy,
+			rotateDegrees
+		);
+
+		com.google.gwt.touch.client.Point line1End = net.sevenscales.editor.uicomponents.AnchorUtils.rotatePoint(
+			endX, 
+			endY,
+			cx, 
+			cy,
+			rotateDegrees
+		);
+
+		startX = ((int) line1Start.getX());
+		startY = ((int) line1Start.getY());
+		endX = ((int) line1End.getX());
+		endY = ((int) line1End.getY());
+
+		return new Line(
+			startX,
+			startY,
+			endX,
+			endY
+		);
 	}
 
 	private void setVisible(boolean value) {
