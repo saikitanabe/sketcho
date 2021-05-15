@@ -510,17 +510,17 @@ public class AnchorUtils {
   public static CardinalDirection findCardinalDirection(
     int x,
     int y,
-    int left,
-    int top,
-    int width,
-    int height
+    double left,
+    double top,
+    double width,
+    double height
   ) {
-    int dx = Math.abs(x - left);
-    int dy = Math.abs(y - top);
-    int dxw = Math.abs(x - (left + width));
-    int dyh = Math.abs(y - (top + height));
+    double dx = Math.abs(x - left);
+    double dy = Math.abs(y - top);
+    double dxw = Math.abs(x - (left + width));
+    double dyh = Math.abs(y - (top + height));
     
-    int smallest = Math.min(dx, dy);
+    double smallest = Math.min(dx, dy);
     smallest = Math.min(smallest, dxw); 
     smallest = Math.min(smallest, dyh);
     if (smallest == dx) {
@@ -939,50 +939,50 @@ public class AnchorUtils {
     double cx = left + width / 2;
     double cy = top + height / 2;
 
-    double n1x = left + width / 2;
-    double n1y = top;
-    double e1x = right;
-    double e1y = top + height / 2;
-    double s1x = left + width / 2;
-    double s1y = bottom;
-    double w1x = left;
-    double w1y = top + height / 2;
+    double north1x = left + width / 2;
+    double north1y = top;
+    double east1x = right;
+    double east1y = top + height / 2;
+    double south1x = left + width / 2;
+    double south1y = bottom;
+    double west1x = left;
+    double west1y = top + height / 2;
 
     // To find middle rotated point,
     // first calculate normal middle point
     // then rotate that middle point againts cx, cy
 
-    Point n1 = rotatePoint(
-      n1x,
-      n1y,
+    Point north1 = rotatePoint(
+      north1x,
+      north1y,
       cx,
       cy,
       rotateDegrees
     );
     Point e1 = rotatePoint(
-      e1x,
-      e1y,
+      east1x,
+      east1y,
       cx,
       cy,
       rotateDegrees
     );
     Point s1 = rotatePoint(
-      s1x,
-      s1y,
+      south1x,
+      south1y,
       cx,
       cy,
       rotateDegrees
     );
     Point w1 = rotatePoint(
-      w1x,
-      w1y,
+      west1x,
+      west1y,
       cx,
       cy,
       rotateDegrees
     );
 
     Point[] middlePoints = new Point[]{
-      n1,
+      north1,
       e1,
       s1,
       w1
@@ -993,53 +993,53 @@ public class AnchorUtils {
     double cx2 = left2 + width2 / 2;
     double cy2 = top2 + height2 / 2;
 
-    double n2x = left2 + width2 / 2;
-    double n2y = top2;
-    double e2x = right2;
-    double e2y = top2 + height2 / 2;
-    double s2x = left2 + width2 / 2;
-    double s2y = bottom2;
-    double w2x = left2;
-    double w2y = top2 + height2 / 2;
+    double north2x = left2 + width2 / 2;
+    double north2y = top2;
+    double east2x = right2;
+    double east2y = top2 + height2 / 2;
+    double south2x = left2 + width2 / 2;
+    double south2y = bottom2;
+    double west2x = left2;
+    double west2y = top2 + height2 / 2;
 
     // To find middle rotated point,
     // first calculate normal middle point
     // then rotate that middle point againts cx, cy
 
-    Point n2 = rotatePoint(
-      n2x,
-      n2y,
+    Point north2 = rotatePoint(
+      north2x,
+      north2y,
       cx2,
       cy2,
       rotateDegrees2
     );
-    Point e2 = rotatePoint(
-      e2x,
-      e2y,
+    Point east2 = rotatePoint(
+      east2x,
+      east2y,
       cx2,
       cy2,
       rotateDegrees2
     );
-    Point s2 = rotatePoint(
-      s2x,
-      s2y,
+    Point south2 = rotatePoint(
+      south2x,
+      south2y,
       cx2,
       cy2,
       rotateDegrees2
     );
-    Point w2 = rotatePoint(
-      w2x,
-      w2y,
+    Point west2 = rotatePoint(
+      west2x,
+      west2y,
       cx2,
       cy2,
       rotateDegrees2
     );
 
     Point[] middlePoints2 = new Point[]{
-      n2,
-      e2,
-      s2,
-      w2
+      north2,
+      east2,
+      south2,
+      west2
     };
 
     Map<Double, ClosestSegment> distances = new HashMap<Double, ClosestSegment>();
@@ -1063,15 +1063,27 @@ public class AnchorUtils {
       }
     }
 
-    // TODO
-    // extraDistance(result.start, left, top, width, height);
-    // extraDistance(result.end, left2, top2, width2, height2);
+    extraDistance(result.start, left, top, width, height);
+    extraDistance(result.end, left2, top2, width2, height2);
 
     return result;
   }
 
-  private static void extraDistance(net.sevenscales.editor.gfx.domain.Point point, int left, int top, int width, int height) {
-    CardinalDirection cd = findCardinalDirection(point.x, point.y, left, top, width, height);
+  private static void extraDistance(
+    net.sevenscales.editor.gfx.domain.Point point,
+    double left,
+    double top,
+    double width,
+    double height
+  ) {
+    CardinalDirection cd = findCardinalDirection(
+      point.x,
+      point.y,
+      left,
+      top,
+      width,
+      height
+    );
     switch (cd) {
       case WEST:
         point.x -= ATTACH_EXTRA_DISTANCE;
