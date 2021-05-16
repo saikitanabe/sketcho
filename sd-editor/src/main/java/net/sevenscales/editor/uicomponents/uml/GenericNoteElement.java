@@ -44,6 +44,14 @@ public class GenericNoteElement extends GenericElement {
   }
 
   @Override
+  public void editingEnded(boolean modified) {
+    super.editingEnded(modified);
+
+    rotate(getDiagramItem().getRotateDegrees(), false);    
+  }
+
+
+  @Override
   public int supportedMenuItems() {
     return ContextMenuItem.NO_MENU.getValue() | 
            ContextMenuItem.DUPLICATE.getValue() |
@@ -51,7 +59,8 @@ public class GenericNoteElement extends GenericElement {
            ContextMenuItem.URL_LINK.getValue() | 
            ContextMenuItem.LAYERS.getValue() |
            ContextMenuItem.DELETE.getValue() |
-           ContextMenuItem.TEXT_ALIGN.getValue();
+           ContextMenuItem.TEXT_ALIGN.getValue() |
+           ContextMenuItem.ROTATE.getValue();
   }
 
 }

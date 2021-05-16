@@ -414,7 +414,7 @@ public class NoteElement extends AbstractDiagramItem implements SupportsRectangl
 	protected boolean resize(int left, int top, int width, int height) {
 	   if (width >= minimumWidth && height >= minimumHeight) {
        setShape(left, top, width, height);
-       connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
+       connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight(), getDiagramItem().getRotateDegrees());
        dispatchAndRecalculateAnchorPositions();
        return true;
 	   }

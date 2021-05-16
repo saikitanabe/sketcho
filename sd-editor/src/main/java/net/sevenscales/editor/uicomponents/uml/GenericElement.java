@@ -101,6 +101,9 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
     hasTextElement.setMarginLeft(getMarginLeft());
     hasTextElement.setMarginTop(getMarginTop());
 		hasTextElement.setMarginBottom(getMarginBottom());
+    if (hasTextYPosition()) {
+      hasTextElement.setY(getTextYPosition());
+    }
 
 		// ST 20.11.2017: Commented out due to SVG text moved under subgroup
 		// and text layer was under background color
@@ -191,6 +194,14 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	protected GenericHasTextElement getHasTextElement() {
 		return hasTextElement;
 	}
+
+  protected boolean hasTextYPosition() {
+    return false;
+  }
+
+  protected int getTextYPosition() {
+    return 0;
+  }
 
 	protected int getMarginLeft() {
 		if (ShapeProperty.isTextResizeDimVerticalResize(getDiagramItem().getShapeProperties())) {
@@ -379,11 +390,13 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 
 	public void resizeEnd() {
-		super.resizeEnd();
-
 		if (textUtil instanceof TextElementVerticalFormatUtil) {
 			((TextElementVerticalFormatUtil)textUtil).setText(getText(), editable, true);
 		}
+
+		// NOTE the order. Resize => rotate after calculating text position, or 
+		// text will not be rotated.
+		super.resizeEnd();
 	}
 
   public Info getInfo() {

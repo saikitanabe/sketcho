@@ -52,12 +52,12 @@ import net.sevenscales.editor.uicomponents.uml.ForkElement;
 import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElementCorporate;
 import net.sevenscales.editor.uicomponents.uml.IShapeGroup;
 import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
-import net.sevenscales.editor.uicomponents.uml.NoteElement;
+// import net.sevenscales.editor.uicomponents.uml.NoteElement;
 import net.sevenscales.editor.uicomponents.uml.PackageElementCorporate;
 import net.sevenscales.editor.uicomponents.uml.ServerElement;
 import net.sevenscales.editor.uicomponents.uml.ShapeCache;
 import net.sevenscales.editor.uicomponents.uml.ShapeGroup;
-import net.sevenscales.editor.uicomponents.uml.StorageElement;
+// import net.sevenscales.editor.uicomponents.uml.StorageElement;
 import net.sevenscales.editor.uicomponents.uml.TextElement;
 import net.sevenscales.editor.uicomponents.uml.VerticalPartitionElementCorporate;
 import net.sevenscales.editor.utils.DiagramItemConfiguration;
@@ -191,27 +191,29 @@ public class DiagramFactory {
     //           true,
     //           new DiagramItemDTO());
 		// 	result = actor;
-		} else if (ElementType.NOTE.getValue().equals(elementType)) {
-			int cwidth = 150;
-			int cheight = 45;
+		}
+		// else if (ElementType.NOTE.getValue().equals(elementType)) {
+		// 	int cwidth = 150;
+		// 	int cheight = 45;
 
-			if (width != null) {
-				cwidth = width;
-			}
-			if (height != null) {
-				cheight = height;
-			}
+		// 	if (width != null) {
+		// 		cwidth = width;
+		// 	}
+		// 	if (height != null) {
+		// 		cheight = height;
+		// 	}
 
-			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
-			NoteElement ne = new NoteElement(surface,
-	        new NoteShape(x, y, cwidth, cheight),
-	        defaultText,
-	        background, borderColor, color,
-	        true, 
-	        new DiagramItemDTO());
-			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
-			result = ne;
-		} else if (ElementType.COMMENT_THREAD.getValue().equals(elementType)) {
+		// 	surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
+		// 	NoteElement ne = new NoteElement(surface,
+	 //        new NoteShape(x, y, cwidth, cheight),
+	 //        defaultText,
+	 //        background, borderColor, color,
+	 //        true, 
+	 //        new DiagramItemDTO());
+		// 	surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
+		// 	result = ne;
+		// }
+		else if (ElementType.COMMENT_THREAD.getValue().equals(elementType)) {
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 			Tools.setCommentTool(true);
 			CommentThreadElement ne = new CommentThreadElement(surface,
@@ -254,13 +256,16 @@ public class DiagramFactory {
 	        defaultText,
 	        background, borderColor, color, true, new DiagramItemDTO());
 			result = ae;
-		} else if (ElementType.STORAGE.getValue().equals(elementType)) {
-			StorageElement ae = new StorageElement(surface,
-	        new DbShape(x, y, 1, 1),
-	        defaultText,
-	        background, borderColor, color, true, new DiagramItemDTO());
-			result = ae;
-		} else if (ElementType.PACKAGE.getValue().equals(elementType)) {
+		}
+		// ST 16.5.2021: change storage element to generic one due to rotation
+		// else if (ElementType.STORAGE.getValue().equals(elementType)) {
+		// 	StorageElement ae = new StorageElement(surface,
+	 //        new DbShape(x, y, 1, 1),
+	 //        defaultText,
+	 //        background, borderColor, color, true, new DiagramItemDTO());
+		// 	result = ae;
+		// }
+		else if (ElementType.PACKAGE.getValue().equals(elementType)) {
 			// ST 14.12.2018: Fix package corporate element creation.
 			// Failed to add corporate package element, and reloaded a board.
 			result = createGenericDiagram2(
