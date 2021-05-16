@@ -1311,6 +1311,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       // If saving every time old rotation degree is lost
       // and cannot restore old rotation point position.
       this.data.setRotateDegrees(rdeg);
+
+      // apply e.g. relationship closest path when rotate ends
+      // the best would be if there would be no save attribute
+      // and there would be rotate-end event.
+      AnchorElement.dragEndAnchors(this);
     }
   }
 
