@@ -44,14 +44,6 @@ public class GenericNoteElement extends GenericElement {
   }
 
   @Override
-  public void editingEnded(boolean modified) {
-    super.editingEnded(modified);
-
-    rotate(getDiagramItem().getRotateDegrees(), false);    
-  }
-
-
-  @Override
   public int supportedMenuItems() {
     return ContextMenuItem.NO_MENU.getValue() | 
            ContextMenuItem.DUPLICATE.getValue() |

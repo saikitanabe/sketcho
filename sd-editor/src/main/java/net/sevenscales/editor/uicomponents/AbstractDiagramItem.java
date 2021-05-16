@@ -1752,6 +1752,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   @Override
   public void editingEnded(boolean modified) {
     showText();
+    rotate(getDiagramItem().getRotateDegrees(), false);
   }
 
   @Override
