@@ -487,7 +487,7 @@ class QuickConnectionHandler implements MouseDiagramHandler {
 	}
 
 	private Relationship2 createRelationshipInBetween(Diagram start, Diagram end) {
-		AnchorUtils.ClosestSegment closestPoints = AnchorUtils.closestSegment(start.getLeft(), start.getTop(), start.getWidth(), start.getHeight(), end.getLeft(), end.getTop(), end.getWidth(), end.getHeight());
+		AnchorUtils.ClosestSegment closestPoints = AnchorUtils.closestSegment(start.getLeft(), start.getTop(), start.getWidth(), start.getHeight(), start.getDiagramItem().getRotateDegrees(), end.getLeft(), end.getTop(), end.getWidth(), end.getHeight(), end.getDiagramItem().getRotateDegrees());
 		IDiagramItem item = createRelationshipDTO(closestPoints, start, end);
     AbstractDiagramFactory factory = ShapeParser.factory(item);
     Info shape = factory.parseShape(item, 0, 0);

@@ -11,7 +11,7 @@ import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.utils.DiagramDisplayOrderList;
 import net.sevenscales.editor.diagram.utils.DiagramList;
-import net.sevenscales.editor.uicomponents.uml.NoteElement;
+// import net.sevenscales.editor.uicomponents.uml.NoteElement;
 import net.sevenscales.editor.utils.ElementTypeComparator;
 
 
@@ -29,11 +29,11 @@ public class DiagramHelpers {
 		
 		public void showComplexElements(Iterable<Diagram> diagrams) {
 			if (complexElementsHidden) {
-				for (Diagram d : diagrams) {
-					if (d instanceof NoteElement) {
-						((NoteElement) d).hideProxy();
-					}
-				}
+				// for (Diagram d : diagrams) {
+				// 	if (d instanceof NoteElement) {
+				// 		((NoteElement) d).hideProxy();
+				// 	}
+				// }
 			}
 			complexElementsHidden = false;
 		}
@@ -47,9 +47,9 @@ public class DiagramHelpers {
 		}
 
 		public void hideComplexElement(Diagram diagram) {
-			if (diagram instanceof NoteElement) {
-				((NoteElement) diagram).showProxy();
-			}
+			// if (diagram instanceof NoteElement) {
+			// 	((NoteElement) diagram).showProxy();
+			// }
 			hideComplexElements = false;
 			complexElementsHidden = true;
 		}

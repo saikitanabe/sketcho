@@ -6,6 +6,7 @@ import java.util.Map;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONNumber;
 
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.ElementColor;
@@ -91,6 +92,36 @@ public class Theme {
       result.put("background_color", new JSONString(backgroundColor.toHexStringWithHash()));
       result.put("border_color", new JSONString(borderColor.toHexStringWithHash()));
       result.put("text_color", new JSONString(textColor.toHexStringWithHash()));
+      return result;
+    }
+    
+    public JSONObject toJsonRGB() {
+      JSONObject result = new JSONObject();
+
+      JSONObject bgcolor = new JSONObject();
+      bgcolor.put("red", new JSONNumber(backgroundColor.red));
+      bgcolor.put("green", new JSONNumber(backgroundColor.green));
+      bgcolor.put("blue", new JSONNumber(backgroundColor.blue));
+      bgcolor.put("opacity", new JSONNumber(backgroundColor.opacity));
+
+      result.put("background_color", bgcolor);
+
+      JSONObject bcolor = new JSONObject();
+      bcolor.put("red", new JSONNumber(borderColor.red));
+      bcolor.put("green", new JSONNumber(borderColor.green));
+      bcolor.put("blue", new JSONNumber(borderColor.blue));
+      bcolor.put("opacity", new JSONNumber(borderColor.opacity));
+
+      result.put("border_color", bcolor);
+
+      JSONObject tcolor = new JSONObject();
+      tcolor.put("red", new JSONNumber(textColor.red));
+      tcolor.put("green", new JSONNumber(textColor.green));
+      tcolor.put("blue", new JSONNumber(textColor.blue));
+      tcolor.put("opacity", new JSONNumber(textColor.opacity));
+
+      result.put("text_color", tcolor);
+
       return result;
     }
     
@@ -246,6 +277,14 @@ public class Theme {
   }
 	public static JavaScriptObject getCurrentColorSchemeAsJson() {
 		return instance().currentColorScheme.toJson().getJavaScriptObject();
+	}
+
+	public static JavaScriptObject gwtGetColorSchemeAsJsonRGB(
+    String name
+  ) {
+    ElementColorScheme result = instance().defaultColorMap.get(name);
+
+		return result.toJsonRGB().getJavaScriptObject();
 	}
 
   public static ElementColorScheme getCommentColorScheme() {

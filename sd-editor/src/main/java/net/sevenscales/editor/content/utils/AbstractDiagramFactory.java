@@ -43,9 +43,9 @@ import net.sevenscales.editor.uicomponents.uml.ActivityElement;
 import net.sevenscales.editor.uicomponents.uml.ActivityEnd;
 import net.sevenscales.editor.uicomponents.uml.ActivityStart;
 import net.sevenscales.editor.uicomponents.uml.ChildTextElement;
-import net.sevenscales.editor.uicomponents.uml.ClassElement2;
+// import net.sevenscales.editor.uicomponents.uml.ClassElement2;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
-import net.sevenscales.editor.uicomponents.uml.ComponentElement;
+// import net.sevenscales.editor.uicomponents.uml.ComponentElement;
 import net.sevenscales.editor.uicomponents.uml.EllipseElement;
 import net.sevenscales.editor.uicomponents.uml.ForkElement;
 import net.sevenscales.editor.uicomponents.uml.FreehandElement;
@@ -54,18 +54,19 @@ import net.sevenscales.editor.uicomponents.uml.GenericContainerElement;
 import net.sevenscales.editor.uicomponents.uml.GenericFreehandElement;
 import net.sevenscales.editor.uicomponents.uml.GenericNoteElement;
 import net.sevenscales.editor.uicomponents.uml.GenericSlideElement;
+import net.sevenscales.editor.uicomponents.uml.GenericStorageElement;
 // import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement;
 import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElement4;
 import net.sevenscales.editor.uicomponents.uml.HorizontalPartitionElementCorporate;
 import net.sevenscales.editor.uicomponents.uml.ImageElement;
-import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
-import net.sevenscales.editor.uicomponents.uml.NoteElement;
+// import net.sevenscales.editor.uicomponents.uml.MindCentralElement;
+// import net.sevenscales.editor.uicomponents.uml.NoteElement;
 import net.sevenscales.editor.uicomponents.uml.PackageElement;
 import net.sevenscales.editor.uicomponents.uml.PackageElementCorporate;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.uicomponents.uml.SequenceElement2;
-import net.sevenscales.editor.uicomponents.uml.ServerElement;
-import net.sevenscales.editor.uicomponents.uml.StorageElement;
+// import net.sevenscales.editor.uicomponents.uml.ServerElement;
+// import net.sevenscales.editor.uicomponents.uml.StorageElement;
 import net.sevenscales.editor.uicomponents.uml.TextElement;
 import net.sevenscales.editor.uicomponents.uml.VerticalPartitionElement;
 import net.sevenscales.editor.uicomponents.uml.VerticalPartitionElementCorporate;
@@ -130,87 +131,87 @@ public interface AbstractDiagramFactory {
 	}
 
 
-	public class ComponentFactory implements AbstractDiagramFactory {
-		public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
-			String[] s = item.getShape().split(",");
-			return new ComponentShape(s).move(moveX, moveY);
-		}
+	// public class ComponentFactory implements AbstractDiagramFactory {
+	// 	public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
+	// 		String[] s = item.getShape().split(",");
+	// 		return new ComponentShape(s).move(moveX, moveY);
+	// 	}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
-      return new ComponentElement(surface,
-          (ComponentShape) shape, 
-          item.getText(), 
-          DiagramItemFactory.parseBackgroundColor(item),
-          DiagramItemFactory.parseBorderColor(item),
-          DiagramItemFactory.parseTextColor(item), 
-          editable,
-          item);
-		}
-	}
-
-
-	public class ServerFactory implements AbstractDiagramFactory {
-		public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
-			String[] s = item.getShape().split(",");
-			return new ServerShape(s).move(moveX, moveY);
-		}
-
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
-      return new ServerElement(surface,
-          (ServerShape) shape,
-          item.getText(), 
-          DiagramItemFactory.parseBackgroundColor(item),
-          DiagramItemFactory.parseBorderColor(item),
-          DiagramItemFactory.parseTextColor(item),
-          editable,
-          item);
-		}
-	}
+	// 	public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
+ //      return new ComponentElement(surface,
+ //          (ComponentShape) shape, 
+ //          item.getText(), 
+ //          DiagramItemFactory.parseBackgroundColor(item),
+ //          DiagramItemFactory.parseBorderColor(item),
+ //          DiagramItemFactory.parseTextColor(item), 
+ //          editable,
+ //          item);
+	// 	}
+	// }
 
 
-	public class ClassFactory implements AbstractDiagramFactory {
-		public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
-			String[] s = item.getShape().split(",");
-			return new RectShape(s).move(moveX, moveY);
-		}
+	// public class ServerFactory implements AbstractDiagramFactory {
+	// 	public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
+	// 		String[] s = item.getShape().split(",");
+	// 		return new ServerShape(s).move(moveX, moveY);
+	// 	}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
-      return new ClassElement2(surface,
-          (RectShape) shape, 
-          item.getText(), 
-          DiagramItemFactory.parseBackgroundColor(item),
-          DiagramItemFactory.parseBorderColor(item),
-          DiagramItemFactory.parseTextColor(item),
-          editable,
-          item);
-		}
-	}
+	// 	public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
+ //      return new ServerElement(surface,
+ //          (ServerShape) shape,
+ //          item.getText(), 
+ //          DiagramItemFactory.parseBackgroundColor(item),
+ //          DiagramItemFactory.parseBorderColor(item),
+ //          DiagramItemFactory.parseTextColor(item),
+ //          editable,
+ //          item);
+	// 	}
+	// }
 
 
-	public class NoteFactory implements AbstractDiagramFactory {
-		public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
-      String[] s = item.getShape().split(",");
-      int x = Integer.valueOf(s[0]);
-      int y = Integer.valueOf(s[1]);
-      int width = Integer.valueOf(s[2]);
-      int height = Integer.valueOf(s[3]);
-      return new NoteShape(x, 
-              y,
-              width,
-              height).move(moveX, moveY);
-		}
+	// public class ClassFactory implements AbstractDiagramFactory {
+	// 	public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
+	// 		String[] s = item.getShape().split(",");
+	// 		return new RectShape(s).move(moveX, moveY);
+	// 	}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
-      return new NoteElement(surface,
-          		(NoteShape) shape,
-              item.getText(),
-              DiagramItemFactory.parseBackgroundColor(item),
-              DiagramItemFactory.parseBorderColor(item),
-              DiagramItemFactory.parseTextColor(item),
-          editable,
-          item);
-		}
-	}
+	// 	public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
+  //     return new ClassElement2(surface,
+  //         (RectShape) shape, 
+  //         item.getText(), 
+  //         DiagramItemFactory.parseBackgroundColor(item),
+  //         DiagramItemFactory.parseBorderColor(item),
+  //         DiagramItemFactory.parseTextColor(item),
+  //         editable,
+  //         item);
+	// 	}
+	// }
+
+
+	// public class NoteFactory implements AbstractDiagramFactory {
+	// 	public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
+ //      String[] s = item.getShape().split(",");
+ //      int x = Integer.valueOf(s[0]);
+ //      int y = Integer.valueOf(s[1]);
+ //      int width = Integer.valueOf(s[2]);
+ //      int height = Integer.valueOf(s[3]);
+ //      return new NoteShape(x, 
+ //              y,
+ //              width,
+ //              height).move(moveX, moveY);
+	// 	}
+
+	// 	public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
+ //      return new NoteElement(surface,
+ //          		(NoteShape) shape,
+ //              item.getText(),
+ //              DiagramItemFactory.parseBackgroundColor(item),
+ //              DiagramItemFactory.parseBorderColor(item),
+ //              DiagramItemFactory.parseTextColor(item),
+ //          editable,
+ //          item);
+	// 	}
+	// }
 
 
 	public class CommentThreadFactory implements AbstractDiagramFactory {
@@ -340,49 +341,49 @@ public interface AbstractDiagramFactory {
     }
 	}
 
-	public class MindCentralFactory implements AbstractDiagramFactory {
-		public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
-      String[] s = item.getShape().split(",");
-      int x = Integer.valueOf(s[0]);
-      int y = Integer.valueOf(s[1]);
-      int width = Integer.valueOf(s[2]);
-      int height = Integer.valueOf(s[3]);
-      return new MindCentralShape(x, y, width, height).move(moveX, moveY);
-		}
+	// public class MindCentralFactory implements AbstractDiagramFactory {
+	// 	public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
+ //      String[] s = item.getShape().split(",");
+ //      int x = Integer.valueOf(s[0]);
+ //      int y = Integer.valueOf(s[1]);
+ //      int width = Integer.valueOf(s[2]);
+ //      int height = Integer.valueOf(s[3]);
+ //      return new MindCentralShape(x, y, width, height).move(moveX, moveY);
+	// 	}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
-			return new MindCentralElement(surface,
-          		(MindCentralShape) shape,
-              item.getText(),
-              DiagramItemFactory.parseBackgroundColor(item),
-              DiagramItemFactory.parseBorderColor(item),
-              DiagramItemFactory.parseTextColor(item),
-          editable,
-          item);			
-		}
-	}
+	// 	public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
+	// 		return new MindCentralElement(surface,
+ //          		(MindCentralShape) shape,
+ //              item.getText(),
+ //              DiagramItemFactory.parseBackgroundColor(item),
+ //              DiagramItemFactory.parseBorderColor(item),
+ //              DiagramItemFactory.parseTextColor(item),
+ //          editable,
+ //          item);			
+	// 	}
+	// }
 
-	public class StorageFactory implements AbstractDiagramFactory {
-		public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
-      String[] s = item.getShape().split(",");
-      int x = Integer.valueOf(s[0]);
-      int y = Integer.valueOf(s[1]);
-      int width = Integer.valueOf(s[2]);
-      int height = Integer.valueOf(s[3]);
-      return new DbShape(x, y, width, height).move(moveX, moveY);
-		}
+	// public class StorageFactory implements AbstractDiagramFactory {
+	// 	public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
+  //     String[] s = item.getShape().split(",");
+  //     int x = Integer.valueOf(s[0]);
+  //     int y = Integer.valueOf(s[1]);
+  //     int width = Integer.valueOf(s[2]);
+  //     int height = Integer.valueOf(s[3]);
+  //     return new DbShape(x, y, width, height).move(moveX, moveY);
+	// 	}
 
-		public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
-			return new StorageElement(surface,
-          		(DbShape)shape,
-              item.getText(),
-              DiagramItemFactory.parseBackgroundColor(item),
-              DiagramItemFactory.parseBorderColor(item),
-              DiagramItemFactory.parseTextColor(item),
-          editable,
-          item);			
-		}
-	}
+	// 	public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {
+	// 		return new GenericStorageElement(surface,
+  //         		(DbShape)shape,
+  //             item.getText(),
+  //             DiagramItemFactory.parseBackgroundColor(item),
+  //             DiagramItemFactory.parseBorderColor(item),
+  //             DiagramItemFactory.parseTextColor(item),
+  //         editable,
+  //         item);			
+	// 	}
+	// }
 
 	public class TextItemFactory implements AbstractDiagramFactory {
 		public Info parseShape(IDiagramItemRO item, int moveX, int moveY) {
@@ -550,7 +551,29 @@ public interface AbstractDiagramFactory {
           DiagramItemFactory.parseTextColor(item),
           editable,
           item);
-      } else if (item.getType().startsWith("e_container_")) {
+      } else if (item.getType().equals(ElementType.STORAGE.getValue())) {
+          return new GenericStorageElement(
+            surface,
+            gh,
+            item.getText(), 
+            DiagramItemFactory.parseBackgroundColor(item),
+            DiagramItemFactory.parseBorderColor(item),
+            DiagramItemFactory.parseTextColor(item),
+            editable,
+            item
+          );
+      } /*else if (item.getType().equals(ElementType.MIND_CENTRAL.getValue())) {
+          return new GenericMindCentralElement(
+            surface,
+            gh,
+            item.getText(), 
+            DiagramItemFactory.parseBackgroundColor(item),
+            DiagramItemFactory.parseBorderColor(item),
+            DiagramItemFactory.parseTextColor(item),
+            editable,
+            item
+          );
+      }*/ else if (item.getType().startsWith("e_container_")) {
         return new GenericContainerElement(
           surface,
           gh,

@@ -14,6 +14,8 @@ import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.FreehandModeChangedEventHandler;
+import net.sevenscales.editor.api.event.RotateEvent;
+import net.sevenscales.editor.api.event.RotateEventHandler;
 import net.sevenscales.editor.api.event.UndoEvent;
 import net.sevenscales.editor.api.event.UndoEventHandler;
 import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
@@ -36,6 +38,7 @@ import net.sevenscales.editor.gfx.domain.ICircle;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
+import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.Color;
 
@@ -109,7 +112,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 				someElementIsDragged = false;
 				// TODO doesn't place connection helpers always to correct place, better to hide...				
 				if (sender != null && sender.equals(parent)) {
-					setShape(parent.getLeft(), parent.getTop(), parent.getWidth(), parent.getHeight());
+					setShape(parent.getLeft(), parent.getTop(), parent.getWidth(), parent.getHeight(), parent.getDiagramItem().getRotateDegrees());
 					setVisibility(true);
 				}
 			}
@@ -161,6 +164,14 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 			}
 		});
 
+		surface.getEditorContext().getEventBus().addHandler(RotateEvent.TYPE, new RotateEventHandler() {
+			@Override
+			public void on(RotateEvent event) {
+        hide();
+			}
+		});
+
+
 		listen(this);
 	}
 
@@ -168,10 +179,23 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		$wnd.globalStreams.dataItemDeleteStream.onValue(function(dataItem) {
 			me.@net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers::onItemRealTimeDelete(Lnet/sevenscales/domain/IDiagramItemRO;)(dataItem)
 		})
+
+		$wnd.globalStreams.contextMenuStream.filter(function(v) {
+	    return v && v.type==='rotate-start'
+	  }).onValue(function(v) {
+			me.@net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers::onRotate(Ljava/lang/String;)(v.value)
+		})
 	}-*/;
 
 	private void onItemRealTimeDelete(IDiagramItemRO item) {
 		if (parent != null && parent.getDiagramItem().getClientId().equals(item.getClientId())) {
+			parent = null;
+			hide();
+		}
+	}
+
+	private void onRotate(String clientId) {
+		if (parent != null && parent.getDiagramItem().getClientId().equals(clientId)) {
 			parent = null;
 			hide();
 		}
@@ -206,7 +230,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		}
 
 		@Override
-		public void setShape(int left, int top, int width, int height) {
+		public void setShape(int left, int top, int width, int height, Integer rotateDegrees) {
 		}
 
 		@Override
@@ -287,7 +311,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		}
 		
 		this.parent = parent;
-		setShape(left, top, width, height);
+		setShape(left, top, width, height, parent.getDiagramItem().getRotateDegrees());
 		logger.debug("ConnectionHelpers.show...");
 		
 		this.shown = true;
@@ -547,40 +571,108 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		}
 	}
 
-	public void setShape(int left, int top, int width, int height) {
-		setLeft(connectionHandles.get(0), left, top, width, height);
-		setTop(connectionHandles.get(1), left, top, width, height);
-		setRight(connectionHandles.get(2), left, top, width, height);
-		setBottom(connectionHandles.get(BOTTOM_INDEX), left, top, width, height);
+	public void setShape(int left, int top, int width, int height, Integer rotateDegrees) {
+		setLeft(connectionHandles.get(0), left, top, width, height, rotateDegrees);
+		setTop(connectionHandles.get(1), left, top, width, height, rotateDegrees);
+		setRight(connectionHandles.get(2), left, top, width, height, rotateDegrees);
+		setBottom(connectionHandles.get(BOTTOM_INDEX), left, top, width, height, rotateDegrees);
 	}
 
-	private void setLeft(ConnectionHandle connectionHandle, int left, int top, int widht, int height) {
-		int centerY = top + height / 2;
-		connectionHandle.visibleHandle.setShape(left, centerY, RADIUS_VISIBLE);
-		connectionHandle.connectionHandle.setShape(left - RADIUS + TO_CENTER, centerY, RADIUS);
+	private void setLeft(ConnectionHandle connectionHandle, int left, int top, int width, int height, Integer rotateDegrees) {
+		int cx = left + width / 2;
+		int cy = top + height / 2;
+
+    int centerX = left;
+    int centerY = cy;
+
+		int handleCx = left - RADIUS + TO_CENTER;
+		int hanleCy = centerY;
+
+		setHandlePosition(connectionHandle, centerX, centerY, handleCx, hanleCy, cx, cy, rotateDegrees);
 //		connectionHandle.connectionHandle.setShape(left - RADIUS - AWAY_FROM_CENTER, top + RADIUS, RADIUS* 2, height - RADIUS * 2, 0);
 	}
 
-	private void setTop(ConnectionHandle connectionHandle, int left, int top, int width, int height) {
-		int centerX = left + width / 2;
-		connectionHandle.visibleHandle.setShape(centerX, top, RADIUS_VISIBLE);
-		connectionHandle.connectionHandle.setShape(centerX, top - RADIUS + TO_CENTER, RADIUS);
+	private void setTop(ConnectionHandle connectionHandle, int left, int top, int width, int height, Integer rotateDegrees) {
+		int cx = left + width / 2;
+		int cy = top + height / 2;
+
+    int centerX = cx;
+    int centerY = top;
+
+		int handleCx = centerX;
+		int hanleCy = top - RADIUS + TO_CENTER;
+
+		setHandlePosition(connectionHandle, centerX, centerY, handleCx, hanleCy, cx, cy, rotateDegrees);
 //		connectionHandle.connectionHandle.setShape(left + RADIUS, top - RADIUS - AWAY_FROM_CENTER, width - RADIUS * 2, RADIUS * 2, 0);
 	}
 	
-	private void setRight(ConnectionHandle connectionHandle, int left, int top, int width, int height) {
-		int centerY = top + height / 2;
-		connectionHandle.visibleHandle.setShape(left + width, centerY, RADIUS_VISIBLE);
-		connectionHandle.connectionHandle.setShape(left + width + RADIUS - TO_CENTER, centerY, RADIUS);
+	private void setRight(ConnectionHandle connectionHandle, int left, int top, int width, int height, Integer rotateDegrees) {
+		int cx = left + width / 2;
+		int cy = top + height / 2;
+
+    int centerX = left + width;
+    int centerY = cy;
+
+		int handleCx = left + width + RADIUS - TO_CENTER;
+		int hanleCy = cy;
+
+		setHandlePosition(connectionHandle, centerX, centerY, handleCx, hanleCy, cx, cy, rotateDegrees);
 //		connectionHandle.connectionHandle.setShape(left + width - RADIUS + AWAY_FROM_CENTER, top + RADIUS, RADIUS * 2, height - RADIUS * 2, 0);
 	}
 	
-	private void setBottom(ConnectionHandle connectionHandle, int left, int top, int width, int height) {
-		int centerX = left + width / 2;
+	private void setBottom(ConnectionHandle connectionHandle, int left, int top, int width, int height, Integer rotateDegrees) {
+		int cx = left + width / 2;
+		int cy = top + height / 2;
+
+		int centerX = cx;
 		int centerY = top + height;
-		connectionHandle.visibleHandle.setShape(centerX, centerY, RADIUS_VISIBLE);
-		connectionHandle.connectionHandle.setShape(centerX, centerY + RADIUS - TO_CENTER, RADIUS);
+
+		int handleCx = cx;
+		int hanleCy = centerY + RADIUS - TO_CENTER;
+
+		setHandlePosition(connectionHandle, centerX, centerY, handleCx, hanleCy, cx, cy, rotateDegrees);
 //		connectionHandle.connectionHandle.setShape(left + RADIUS, top + height - RADIUS + AWAY_FROM_CENTER, width - RADIUS * 2, RADIUS * 2, 0);
+	}
+
+	private void setHandlePosition(
+		ConnectionHandle connectionHandle,
+		int centerX,
+		int centerY,
+		int handleCx,
+		int hanleCy,
+		int cx, 
+		int cy,
+		Integer rotateDegrees
+	) {
+		com.google.gwt.touch.client.Point point = AnchorUtils.rotatePoint(
+			centerX, 
+			centerY,
+			cx,
+			cy,
+			rotateDegrees != null ? rotateDegrees : 0
+		);
+
+		com.google.gwt.touch.client.Point hpoint = AnchorUtils.rotatePoint(
+			handleCx, 
+			hanleCy,
+			cx,
+			cy,
+			rotateDegrees != null ? rotateDegrees : 0
+		);
+
+
+		handleCx = ((int) hpoint.getX());
+		hanleCy = ((int) hpoint.getY());
+
+		centerX = ((int) point.getX());
+		centerY = ((int) point.getY());
+
+		// >>>>>> DEBUG
+		// connectionHandle.connectionHandle.setStroke(new Color(127, 127, 127, 1));
+		// <<<<<< DEBUGGING
+
+		connectionHandle.visibleHandle.setShape(centerX, centerY, RADIUS_VISIBLE);
+		connectionHandle.connectionHandle.setShape(handleCx, hanleCy, RADIUS);
 	}
 
 	public ICircle onMouseOverConnectionInitiator() {

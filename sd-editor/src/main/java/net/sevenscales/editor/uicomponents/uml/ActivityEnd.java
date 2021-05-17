@@ -117,14 +117,14 @@ public class ActivityEnd extends AbstractDiagramItem implements SupportsRectangl
     visible.setShape(cx, cy, radius);
     boundary.setShape(cx, cy, BOUNDARY_RADIUS);
     innerCircle.setShape(cx, cy, radius - 3);
-    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
+    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight(), getDiagramItem().getRotateDegrees());
 	}
 
 	public void setShape(int cx, int cy, int radius) {
     visible.setShape(cx, cy, radius);
     boundary.setShape(cx, cy, BOUNDARY_RADIUS);
     innerCircle.setShape(cx, cy, radius - 3);
-    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
+    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight(), getDiagramItem().getRotateDegrees());
 //    resizeElement.setShape(cx + radius * 2, cy, 10, 10, 0);
     
 //    relationshipHandle.setShape(left+width/2, top);

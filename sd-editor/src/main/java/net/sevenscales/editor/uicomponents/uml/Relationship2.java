@@ -2608,11 +2608,23 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     }
 
     if (isClosestPath() && start != null && end != null) {
-      AnchorUtils.ClosestSegment closestSegment = AnchorUtils.closestSegment(start.getLeft(), start.getTop(), start.getWidth(), start.getHeight(), end.getLeft(), end.getTop(), end.getWidth(), end.getHeight());
+      AnchorUtils.ClosestSegment closestSegment = AnchorUtils.closestSegment(
+        start.getLeft(),
+        start.getTop(),
+        start.getWidth(),
+        start.getHeight(),
+        start.getDiagramItem().getRotateDegrees(),
+        end.getLeft(),
+        end.getTop(),
+        end.getWidth(),
+        end.getHeight(),
+        end.getDiagramItem().getRotateDegrees()
+      );
       int[] newpoints = new int[]{closestSegment.start.x,
                   closestSegment.start.y,
                   closestSegment.end.x,
                   closestSegment.end.y};
+
       setAnchorElementPosition(closestSegment.start.x, closestSegment.start.y, startAnchor.getAnchorElement());
       setAnchorElementPosition(closestSegment.end.x, closestSegment.end.y, endAnchor.getAnchorElement());
       doSetShape(newpoints);

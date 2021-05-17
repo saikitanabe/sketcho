@@ -201,7 +201,7 @@ public class FreehandElement extends AbstractDiagramItem {
   	this.top = DiagramHelpers.getTopCoordinate(shape);
   	this.width = DiagramHelpers.getWidth(shape);
   	this.height = DiagramHelpers.getHeight(shape);
-    connectionHelpers.setShape(left, top, width, height);
+    connectionHelpers.setShape(left, top, width, height, getDiagramItem().getRotateDegrees());
 	}
 
 	private int mid(int val1, int val2) {

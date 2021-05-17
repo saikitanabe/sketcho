@@ -12,7 +12,8 @@ public enum ContextMenuItem {
 	URL_LINK									(0x0080),
 	DELETE										(0x0100),
 	LINE_WEIGHT								(0x0200),
-	TEXT_ALIGN								(0x0400);
+	TEXT_ALIGN								(0x0400),
+	ROTATE								    (0x0800);
 
 	private int value;
 
@@ -30,5 +31,9 @@ public enum ContextMenuItem {
 
 	public static boolean supportsFontSize(int value) {
 		return supported(value, FONT_SIZE);
+	}
+
+	public static boolean supportsRotate(int value) {
+		return supported(value, ROTATE);
 	}
 }

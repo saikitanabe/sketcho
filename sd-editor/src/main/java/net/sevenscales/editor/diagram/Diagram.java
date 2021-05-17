@@ -179,6 +179,8 @@ public interface Diagram extends SourcesMouseDiagramEvents {
 	public void setTextColor(int red, int green, int blue);
 	void setTextColor(Color color);
   void setFontSize(Integer fontSize);
+  void rotate(Integer rotateDeg, boolean save);
+  Integer getRotate();
   void setTextAlign(ShapeProperty textAlign);
   boolean isTextAlignLeft();
   boolean isTextAlignCenter();

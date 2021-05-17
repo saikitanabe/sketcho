@@ -16,7 +16,7 @@ public interface IConnectionHelpers extends IGlobalElement {
 	boolean isShown();
 	void hide(AbstractDiagramItem diagram);
 	void setVisibility(boolean visibility);
-	void setShape(int left, int top, int width, int height);
+	void setShape(int left, int top, int width, int height, Integer rotateDegrees);
 	void removeExtraConnectionHandles();
 	List<ConnectionHandle> getExtraConnectionHandles();
 	void addExtraConnectionHandle(AbstractDiagramItem parent, int x, int y, int radius);

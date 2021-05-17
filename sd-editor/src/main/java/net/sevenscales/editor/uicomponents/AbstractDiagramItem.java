@@ -60,6 +60,7 @@ import net.sevenscales.editor.gfx.domain.ICircle;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.gfx.domain.Point;
@@ -139,6 +140,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   protected int factorY = 1;
   private boolean svgExport;
   private boolean forceTextRendering;
+
+  private Integer rotateDegree;
 	
   public static final String EVENT_DOUBLE_CLICK = "ondblclick";
 
@@ -221,6 +224,9 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     //   // net.sevenscales.domain.utils.Debug.log("add shapebase...");
     //   group.setAttribute("class", "shapebase");
     // }
+
+
+    rotate(getDiagramItem().getRotateDegrees(), false);
   }
 
   protected void applyLink() {
@@ -609,7 +615,13 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   
   public AnchorElement onAttachArea(Anchor anchor, int x, int y) {
     // return onAttachArea(anchor, x, y, getLeft(), getTop(), getWidth(), getHeight());
-    return ContainerAttachHelpers.onAttachArea(this, anchor, x, y);
+    return ContainerAttachHelpers.onAttachAreaRotated(
+      this,
+      anchor,
+      x,
+      y,
+      surface.getInteractionLayer()
+    );
   }
   
   protected boolean onDynamicAttachArea(Anchor anchor, int x, int y) {
@@ -644,7 +656,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
   
   protected AnchorElement makeDynamicTempAnchorProperties(Anchor anchor, int x, int y) {
-  	AnchorUtils.anchorPoint(x, y, tempAnchorProperties , getLeft(), getTop(), getWidth(), getHeight());
+  	AnchorUtils.anchorPoint(x, y, tempAnchorProperties , getLeft(), getTop(), getWidth(), getHeight(), getDiagramItem().getRotateDegrees());
   	AnchorElement result = makeAnchorElementFromTemp(anchor);
     result.setFixedPoint(false);
     return result;
@@ -853,6 +865,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   public void resizeEnd() {
+    rotate(getDiagramItem().getRotateDegrees(), false);
   }
 
   @Override
@@ -960,6 +973,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   public void setDiagramItem(IDiagramItem data) {
     this.data = data;
+    IGroup group = getGroup();
+    if (group != null) {
+      group.setAttribute("id", "s"+data.getClientId());
+    }
   }
   
   public IDiagramItem getDiagramItem() {
@@ -1239,6 +1256,85 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   @Override
+  public void rotate(
+    Integer degrees,
+    boolean save
+  ) {
+
+    // hide resize helpers when rotating
+    if (resizeHelpers != null) {
+      resizeHelpers.hide(this);
+    }
+
+    // 0 clears rotation
+    int rdeg = degrees != null ? degrees : 0;
+
+    // FIX: rotate doesn't work correctly if using resized
+    // shape and then rotate for AWS shapes.
+    // Rotation gets skewed if matrix and rotation are applied
+    // on a same group. Now there is a new rotate group for a shape.
+    IGroup group = getRotategroup();
+    if (group != null) {
+      // this works with sub group
+      // group.rotate(degrees, getWidth() / 2, getHeight() / 2);
+      group.rotate(
+        rdeg, 
+        getLeft() - getTransformX() + getWidth() / 2, 
+        getTop() - getTransformY() + getHeight() / 2
+      );
+    }
+
+    IRectangle rect = getBackground();
+    if (rect != null) {
+      rect.rotate2(
+        rdeg, 
+        getLeft() - getTransformX() + getWidth() / 2, 
+        getTop() - getTransformY() + getHeight() / 2
+      );
+    }
+
+    IGroup textGroup = getTextGroup();
+    if (textGroup != null) {
+      textGroup.rotate(rdeg, getWidth() / 2, getHeight() / 2);
+    }
+
+    // notify relationships that the diagram is rotated
+    dispatchRotate(save, data.getRotateDegrees(), rdeg);
+
+    // store current runtime rotation, this is not yet
+    // send to the server.
+    this.rotateDegree = rdeg;
+
+    if (save) {
+      // save rotation to the data model, to be
+      // sent to the server.
+      // If saving every time old rotation degree is lost
+      // and cannot restore old rotation point position.
+      this.data.setRotateDegrees(rdeg);
+
+      // apply e.g. relationship closest path when rotate ends
+      // the best would be if there would be no save attribute
+      // and there would be rotate-end event.
+      AnchorElement.dragEndAnchors(this);
+    }
+  }
+
+  private void dispatchRotate(
+    boolean save,
+    Integer oldRotate,
+    Integer newRotate
+  ) {
+    for (AnchorElement a : anchorMap.values()) {
+      a.dispatchRotate(save, oldRotate, newRotate, surface);
+    }
+  }
+
+  @Override
+  public Integer getRotate() {
+    return this.rotateDegree;
+  }
+
+  @Override
   public void setTextAlign(ShapeProperty textAlign) {
     getDiagramItem().setTextAlign(textAlign);
     TextElementFormatUtil formatter = getTextFormatter();
@@ -1487,6 +1583,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     getDiagramItem().copyFrom(diagramItem);
 
     setFontSize(getDiagramItem().getFontSize());
+    rotate(getDiagramItem().getRotateDegrees(), false);
 
     logger.debugTime();
     logger.debugTime();
@@ -1655,6 +1752,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   @Override
   public void editingEnded(boolean modified) {
     showText();
+    rotate(getDiagramItem().getRotateDegrees(), false);
   }
 
   @Override
@@ -1964,7 +2062,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 			resizeHelpers.setShape();
 		}
     if (connectionHelpers != null) {
-      connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
+      connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight(), getDiagramItem().getRotateDegrees());
     }
 
     applyLink();
@@ -2088,6 +2186,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     return null;
   }
 
+  public IGroup getRotategroup() {
+    return null;
+  }
+
   public IGroup getSubgroup() {
     return null;
   }
@@ -2095,6 +2197,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	public IGroup getTextGroup() {
 		return null;
 	}
+
+  public IRectangle getBackground() {
+    return null;
+  }
 
   /**
 	 * @return the forceTextRendering

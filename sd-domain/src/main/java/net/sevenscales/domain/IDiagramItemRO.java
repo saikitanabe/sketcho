@@ -31,6 +31,7 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	 * @return
 	 */
 	String getCustomData();
+  Integer getRotateDegrees();
 	double getCrc32();
 	String getGroup();
 	JavaScriptObject getData();
@@ -49,5 +50,4 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	boolean isComment();
 	boolean compare(IDiagramItemRO diro, Map<String, Boolean> dirtyFields);
   boolean isSketchiness();
-  
 }

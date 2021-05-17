@@ -35,6 +35,7 @@ public class TextElement extends AbstractDiagramItem implements
 	private TextShape shape;
 	private Point coords = new Point();
 	private IGroup group;
+	private IGroup rotategroup;
 	private IGroup subgroup;
   private IGroup textGroup;
 	private TextElementFormatUtil textUtil;
@@ -49,7 +50,8 @@ public class TextElement extends AbstractDiagramItem implements
 
 		group = IShapeFactory.Util.factory(editable).createGroup(
 				surface.getElementLayer());
-		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
+    rotategroup = IShapeFactory.Util.factory(editable).createGroup(group);        
+		subgroup = IShapeFactory.Util.factory(editable).createGroup(rotategroup);
 		// group.setAttribute("cursor", "default");
 
 		attachBoundary = IShapeFactory.Util.factory(editable)
@@ -238,9 +240,12 @@ public class TextElement extends AbstractDiagramItem implements
 		return false;
 	}
 
+	@Override
 	public void resizeEnd() {
-		super.resizeEnd();
 		textUtil.setText(getText(), editable, true);
+		// NOTE the order. Resize => rotate after calculating text position, or 
+		// text will not be rotated.
+		super.resizeEnd();
 	}
 
 	public String getText() {
@@ -394,6 +399,10 @@ public class TextElement extends AbstractDiagramItem implements
 		return group;
 	}
 	@Override
+	public IGroup getRotategroup() {
+		return rotategroup;
+	}
+	@Override
 	public IGroup getSubgroup() {
 		return subgroup;
 	}
@@ -449,6 +458,8 @@ public class TextElement extends AbstractDiagramItem implements
 	 		// 	}
 	 		// });
 	  }
+
+    rotate(getDiagramItem().getRotateDegrees(), false);
 	  
 	  // need to call as last to make sure attached relationships use
 	  // closest path if set
@@ -480,7 +491,8 @@ public class TextElement extends AbstractDiagramItem implements
   public int supportedMenuItems() {
   	return super.supportedMenuItems() |
            ContextMenuItem.LAYERS.getValue() |
-           ContextMenuItem.TEXT_ALIGN.getValue();
+           ContextMenuItem.TEXT_ALIGN.getValue() |
+           ContextMenuItem.ROTATE.getValue();
   }
 
   protected IRectangle getAttachBoundary() {

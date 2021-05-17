@@ -420,7 +420,9 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
 	protected boolean resize(int left, int top, int width, int height) {
 	  if (width >= MINIMUM_WIDTH && height >= MINIMUM_HEIGHT) {
       setShape(left, top, width, height);
-      connectionHelpers.setShape(getLeft(), getTop(), getWidth(), height);
+      // rotateDegrees is not used on old comments, and maybe these could be completely removed
+      // at some point...
+      connectionHelpers.setShape(getLeft(), getTop(), getWidth(), height, /*rotateDegrees*/ null);
 
       dispatchAndRecalculateAnchorPositions();
       return true;

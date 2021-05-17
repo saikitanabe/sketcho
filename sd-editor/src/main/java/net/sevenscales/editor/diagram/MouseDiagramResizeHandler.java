@@ -26,7 +26,7 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 	private MouseDiagramHandlerManager parent;
 	boolean mouseDown = false;
 	boolean resizing = false;
-//	private Point mouseDownPoint;
+	private Point mouseDownPoint;
 	private ResizeHandlerCollection resizeHandlerCollection;
   private GridUtils gridUtils = new GridUtils();
   private Point diffTemp = new Point();
@@ -38,13 +38,15 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 	private int prevDX;
 	private int prevDY;
 	private boolean keepAspectRatio;	
+
+  private static net.sevenscales.editor.gfx.domain.IPolyline tempRect;
 	
 	public MouseDiagramResizeHandler(MouseDiagramHandlerManager parent, ISurfaceHandler surface, 
 	    IModeManager modeManager) {
 		this.parent = parent;
 		this.surface = surface;
 		this.modeManager = modeManager;
-//		mouseDownPoint = new Point();
+		mouseDownPoint = new Point();
 		resizeHandlerCollection = new ResizeHandlerCollection();
 	}
 
@@ -65,8 +67,8 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 			if (onResizeArea) {
 				this.sender = sender;
 				mouseDown = true;
-//				mouseDownPoint.x = point.getX();
-//				mouseDownPoint.y = point.getY();
+				mouseDownPoint.x = point.getX();
+				mouseDownPoint.y = point.getY();
 				
 //				gridUtils.init(point.getX(), point.getY(), surface.getScaleFactor());
 //				prevX = point.getX();
@@ -74,6 +76,9 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 				
 				gridUtils.init(point.getScreenX(), point.getScreenY(), surface.getScaleFactor());
 				result = true;
+
+        initRect();
+        tempRect.setVisibility(true);
 			}
 		}
 		return result;
@@ -127,6 +132,7 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 
 				this.sender.resizeStart();
 				resizeHandlerCollection.fireResizeStart(this.sender);
+        notifyResizeStart();
       }
       
       logger.debug("Resizing ON");
@@ -174,13 +180,83 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 			
 			// System.out.println("resizing: diffTemp.x" + dx + " diffTemp.y" + dy);
 
+      // NOTE should not use this if calculating using polyline rect
+      // then should set resize(left, top, width, height)
       if (this.sender.resize(diffTemp)) {
 				// returns true if resized; there is minimum resize level for 
 				// components
 				resizeHandlerCollection.fireOnResize(this.sender, diffTemp);
 			}
+
+      // >>>>> ALTERNATIVE
+      // Alternative way to calculate resize
+      // then should set resize(left, top, width, height)
+      // double left = this.sender.getLeft();
+      // double top = this.sender.getTop();
+      // double width = this.sender.getWidth();
+      // double height = this.sender.getHeight();
+      // Integer rotateDegree = this.sender.getDiagramItem().getRotateDegrees();
+
+      // double cx = left + width / 2;
+      // double cy = top + height / 2;
+
+
+      // com.google.gwt.touch.client.Point move = net.sevenscales.editor.uicomponents.AnchorUtils.rotatePoint(
+      //   point.getX(),
+      //   point.getY(),
+      //   cx,
+      //   cy,
+      //   rotateDegree
+      // );
+
+      // double diffX = point.getX() - mouseDownPoint.x;
+      // double diffY = point.getY() - mouseDownPoint.y;
+
+      // width = diffX + width;
+      // height = diffY + height;
+
+      // double right = left + width;
+      // double bottom = top + height;
+
+      // com.google.gwt.touch.client.Point leftTop = net.sevenscales.editor.uicomponents.AnchorUtils.rotatePoint(
+      //   left,
+      //   top,
+      //   cx,
+      //   cy,
+      //   rotateDegree
+      // );
+
+      // com.google.gwt.touch.client.Point rightTop = net.sevenscales.editor.uicomponents.AnchorUtils.rotatePoint(
+      //   right,
+      //   top,
+      //   cx,
+      //   cy,
+      //   rotateDegree
+      // );
+
+      // com.google.gwt.touch.client.Point rightBottom = net.sevenscales.editor.uicomponents.AnchorUtils.rotatePoint(
+      //   right,
+      //   bottom,
+      //   cx,
+      //   cy,
+      //   rotateDegree
+      // );
+
+      // com.google.gwt.touch.client.Point leftBottom = net.sevenscales.editor.uicomponents.AnchorUtils.rotatePoint(
+      //   left,
+      //   bottom,
+      //   cx,
+      //   cy,
+      //   rotateDegree
+      // );
+
+      // debugArea(leftTop, rightTop, rightBottom, leftBottom);
+      // <<<<<< ALTERNATIVE
 		}
 	}
+  private native void notifyResizeStart()/*-{
+    $wnd.globalStreams.contextMenuStream.push({type:'resize-start'})
+  }-*/;
 
 	@Override
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
@@ -206,7 +282,41 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 		}
 
 		clearResize();
+
+    initRect();
+    tempRect.setVisibility(false);
 	}
+
+  private void initRect() {
+    if (tempRect == null) {
+      tempRect = net.sevenscales.editor.gfx.domain.IShapeFactory.Util.factory(true).createPolyline(surface.getInteractionLayer());
+      // tempRect.setShape(0);
+      tempRect.setStroke(218, 57, 57, 1);
+      // tempRect.setFill(218, 57, 57, 1);
+      tempRect.setStrokeWidth(2);
+    }
+
+    tempRect.setShape(new int[]{0, 0});
+  }
+
+  private void debugArea(
+    com.google.gwt.touch.client.Point leftTop,
+    com.google.gwt.touch.client.Point rightTop,
+    com.google.gwt.touch.client.Point rightBottom,
+    com.google.gwt.touch.client.Point leftBottom
+    // int rotate
+  ) {
+
+    if (tempRect != null) {
+      tempRect.setShape(new int[]{
+        ((int)leftTop.getX()), ((int)leftTop.getY()),
+        ((int)rightTop.getX()), ((int)rightTop.getY()),
+        ((int)rightBottom.getX()), ((int)rightBottom.getY()),
+        ((int)leftBottom.getX()), ((int)leftBottom.getY()),
+        ((int)leftTop.getX()), ((int)leftTop.getY())
+      });
+    }
+  }
 
 	private native void _notifyResizeEnd()/*-{
 		$wnd.globalStreams.shapeResizeStream.push()

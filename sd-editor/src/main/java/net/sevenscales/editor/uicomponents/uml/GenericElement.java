@@ -55,6 +55,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private IRectangle background;
   private IGroup group;
   private IGroup subgroup;
+  private IGroup rotategroup;
   private IGroup textGroup;
   private int left;
   private int top;
@@ -75,8 +76,9 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
 		group = IShapeFactory.Util.factory(editable).createGroup(getLayer(surface));
     // group.setAttribute("cursor", "default");
-
-		subgroup = IShapeFactory.Util.factory(editable).createGroup(group);
+    
+    rotategroup = IShapeFactory.Util.factory(editable).createGroup(group);
+		subgroup = IShapeFactory.Util.factory(editable).createGroup(rotategroup);
     // sub// group.setAttribute("cursor", "default");
 
 		// order is important or cannot move shape with background
@@ -99,6 +101,9 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
     hasTextElement.setMarginLeft(getMarginLeft());
     hasTextElement.setMarginTop(getMarginTop());
 		hasTextElement.setMarginBottom(getMarginBottom());
+    if (hasTextYPosition()) {
+      hasTextElement.setY(getTextYPosition());
+    }
 
 		// ST 20.11.2017: Commented out due to SVG text moved under subgroup
 		// and text layer was under background color
@@ -190,6 +195,14 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		return hasTextElement;
 	}
 
+  protected boolean hasTextYPosition() {
+    return false;
+  }
+
+  protected int getTextYPosition() {
+    return 0;
+  }
+
 	protected int getMarginLeft() {
 		if (ShapeProperty.isTextResizeDimVerticalResize(getDiagramItem().getShapeProperties())) {
 			return 10;
@@ -258,6 +271,11 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			paths.add(new PathWrapper(path, null));
 		}
 	}
+
+  @Override
+  public IRectangle getBackground() {
+    return background;
+  }
 
 	@Override
 	public int getRelativeLeft() {
@@ -372,11 +390,13 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 
 	public void resizeEnd() {
-		super.resizeEnd();
-
 		if (textUtil instanceof TextElementVerticalFormatUtil) {
 			((TextElementVerticalFormatUtil)textUtil).setText(getText(), editable, true);
 		}
+
+		// NOTE the order. Resize => rotate after calculating text position, or 
+		// text will not be rotated.
+		super.resizeEnd();
 	}
 
   public Info getInfo() {
@@ -624,6 +644,10 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 
 	@Override
+	public IGroup getRotategroup() {
+		return rotategroup;
+	}
+	@Override
 	public IGroup getSubgroup() {
 		return subgroup;
 	}
@@ -795,7 +819,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   public int supportedMenuItems() {
     int result = super.supportedMenuItems() |
 			ContextMenuItem.FONT_SIZE.getValue() |
-			ContextMenuItem.LAYERS.getValue();
+			ContextMenuItem.LAYERS.getValue() |
+      ContextMenuItem.ROTATE.getValue();
 		result |= extraSupportedMenuItemsByType();
 		return result;
   }

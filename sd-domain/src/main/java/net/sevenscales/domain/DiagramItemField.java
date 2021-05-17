@@ -24,6 +24,7 @@ public enum DiagramItemField {
 	CRC("crc"),
 	GROUP("group"),
 	DATA("data"),
+	ROTATE_DEGREES("rdeg"),
 	ANNOTATION("a"),
 	RESOLVED("r"),
 	LINKS("links"),
