@@ -107,13 +107,13 @@ public class ActivityStart extends AbstractDiagramItem implements SupportsRectan
 	public void setShape(int left, int top, int width, int height) {
     visible.setShape(left + width / 2, top + height / 2, width / 2);
     boundary.setShape(left + width / 2, top + height / 2, BOUNDARY_RADIUS);
-    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
+    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight(), getDiagramItem().getRotateDegrees());
 	}
 	
 	public void setShape(int cx, int cy, int radius) {
     visible.setShape(cx, cy, radius);
     boundary.setShape(cx, cy, BOUNDARY_RADIUS);
-    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight());
+    connectionHelpers.setShape(getLeft(), getTop(), getWidth(), getHeight(), getDiagramItem().getRotateDegrees());
 //    resizeElement.setShape(cx + radius * 2, cy, 10, 10, 0);
     
 //    relationshipHandle.setShape(left+width/2, top);
