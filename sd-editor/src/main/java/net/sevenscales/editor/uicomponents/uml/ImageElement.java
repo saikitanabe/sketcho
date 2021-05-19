@@ -44,6 +44,7 @@ public class ImageElement extends AbstractDiagramItem implements IGenericElement
 	private Point coords = new Point();
   private IRectangle background;
   private IGroup group;
+  private IGroup rotategroup;  
   private IGroup subgroup;
   private IGroup textGroup;
   private IImage image;
@@ -69,7 +70,8 @@ public class ImageElement extends AbstractDiagramItem implements IGenericElement
     fetchSignedUrlIfMissing();
 
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
-    subgroup = IShapeFactory.Util.factory(editable).createGroup(group);    
+    rotategroup = IShapeFactory.Util.factory(editable).createGroup(group);    
+    subgroup = IShapeFactory.Util.factory(editable).createGroup(rotategroup);    
     // group.setAttribute("cursor", "default");
 
     background = IShapeFactory.Util.factory(editable).createRectangle(group);
@@ -321,6 +323,11 @@ public class ImageElement extends AbstractDiagramItem implements IGenericElement
 	}
 
   @Override
+  public IGroup getRotategroup() {
+    return rotategroup;
+  }
+
+  @Override
   public IGroup getSubgroup() {
     return subgroup;
   }
@@ -329,6 +336,11 @@ public class ImageElement extends AbstractDiagramItem implements IGenericElement
   public IGroup getTextGroup() {
     return textGroup;
   }  
+
+  @Override
+  public IRectangle getBackground() {
+    return background;
+  }
 
 	@Override
 	protected TextElementFormatUtil getTextFormatter() {
@@ -347,6 +359,7 @@ public class ImageElement extends AbstractDiagramItem implements IGenericElement
            ContextMenuItem.URL_LINK.getValue() | 
            ContextMenuItem.LAYERS.getValue() |
            ContextMenuItem.FONT_SIZE.getValue() |
+           ContextMenuItem.ROTATE.getValue() |
            ContextMenuItem.DELETE.getValue();
   }
 
