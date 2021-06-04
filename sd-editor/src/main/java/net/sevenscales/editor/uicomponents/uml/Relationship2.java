@@ -1201,7 +1201,9 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
           anchorElement.getRelationship().isClosestPath()) {
         anchorElement.getRelationship().applyClosestPath();
         result = true;
-      } else if (modifyEndToCenter(ax, ay)) {
+        // ST 4.6.2021: simplify connections and have 
+        // fixed connection always on edge.
+      // } else if (modifyEndToCenter(ax, ay)) {
         // hack to center just created connections aligned in center
         // modified separately with new points
       } else {
@@ -2633,7 +2635,10 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return result;
   }
 
-  public boolean modifyEndToCenter(int x, int y) {
+  /**
+   * This is now deprecated for simplicity.
+   */
+  private boolean modifyEndToCenter(int x, int y) {
     // Diagram start = null;
     Diagram end = null;
     if (/*startAnchor != null && */endAnchor != null) {
