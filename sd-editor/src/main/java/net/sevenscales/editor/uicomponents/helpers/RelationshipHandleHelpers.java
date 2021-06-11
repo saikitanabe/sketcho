@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sevenscales.domain.DiagramItemDTO;
+import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.RelationshipNotAttachedEvent;
@@ -76,11 +77,29 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
       }
     });
 
+    handleItemRealTimeModify(this);
+
     initDefaults();
 
     // fix: sometimes handle helpers are shown after initialization
     forceHide();
   }
+
+	private native void handleItemRealTimeModify(RelationshipHandleHelpers me)/*-{
+		$wnd.globalStreams.dataItemModifyStream.onValue(function(dataItem) {
+			me.@net.sevenscales.editor.uicomponents.helpers.RelationshipHandleHelpers::onItemRealTimeModify(Lnet/sevenscales/domain/IDiagramItemRO;)(dataItem)
+		})
+	}-*/;
+
+	private void onItemRealTimeModify(IDiagramItemRO item) {
+		if (parentRelationship != null &&
+        item.getClientId().equals(parentRelationship.getDiagramItem().getClientId())
+       ) {
+
+      forceHide();
+
+		}
+	}  
 
   private String createDebugId() {
     ++debugIdIndex;
