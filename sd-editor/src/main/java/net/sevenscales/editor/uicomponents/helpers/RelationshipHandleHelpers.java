@@ -607,7 +607,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
 
   @Override
   public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
->    if (parentRelationship == null) {
+    if (parentRelationship == null) {
       return;
     }
 
