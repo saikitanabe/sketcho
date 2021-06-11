@@ -12,6 +12,7 @@ import net.sevenscales.editor.api.event.RelationshipNotAttachedEvent;
 import net.sevenscales.editor.api.event.UndoEvent;
 import net.sevenscales.editor.api.event.UndoEventHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
+import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramDragHandler;
@@ -102,7 +103,15 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
         // currently library doesn't have relationships
       }
     }
-    result.setParentRelationship(parentRelationship);
+
+    if (!surface.getEditorContext().isTrue(EditorProperty.ON_OT_OPERATION)) {
+      // FIX ST 10.6.2021: realtime insert connection insert starts to move newly inserted
+      // connection
+      // do not switch parent relationship if this is realtime insert/edit
+      // otherwise would continue to modify new relationship instead of
+      // currently edited connection!
+      result.setParentRelationship(parentRelationship);
+    }
     return result;
   }
   
@@ -137,10 +146,16 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   private void setPoints() {
-    this.points = parentRelationship.getPoints();
+    if (parentRelationship != null) {
+      this.points = parentRelationship.getPoints();
+    }
   }
   
   private void applyPositionByParent(boolean show) {
+    if (parentRelationship == null) {
+      return;
+    }
+
     if (parentRelationship.getDiagramItem().isGroup()) {
       return;
     }
@@ -171,6 +186,11 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   private void straightBendPoints(int parentRelHandlesCount, boolean show) {
+
+    if (parentRelationship == null) {
+      return;
+    }
+
     for (int i = 0; i < bendHandles.size(); ++i) {
       CircleElement bh = bendHandles.get(i);
       if (i < parentRelHandlesCount - 1) {
@@ -185,6 +205,11 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   private void curvedBendPoints(int parentRelHandlesCount, boolean show) {
+
+    if (parentRelationship == null) {
+      return;
+    }
+
     for (int i = 0; i < bendHandles.size(); ++i) {
       CircleElement bh = bendHandles.get(i);
       if (i < parentRelHandlesCount - 1) {
@@ -313,6 +338,11 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   private void resetClosestPathIfEndPointDragged(Diagram sender) {
+
+    if (parentRelationship == null) {
+      return;
+    }
+
     int parentRelHandlesCount = parentHandlesCount();
     for (int i = 0; i < handles.size(); ++i) {
       CircleElement h = handles.get(i);
@@ -323,6 +353,11 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   private void splitRelationshipShapeIfBendPointDragged(Diagram sender) {
+
+    if (parentRelationship == null) {
+      return;
+    }
+
     int parentRelHandlesCount = parentHandlesCount();
     boolean morePoints = false;
 
@@ -365,6 +400,11 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   private void preHighlightTargetAnchor(Diagram sender) {
+
+    if (parentRelationship == null) {
+      return;
+    }
+
     int parentRelHandlesCount = parentHandlesCount();
     
     int diffx = 0;
@@ -436,6 +476,10 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   }
 
   public void dragEnd(Diagram sender) {
+    if (parentRelationship == null) {
+      return;
+    }
+
    if (parentRelationship != sender && parentRelationship != sender.getOwnerComponent()) {
       // if either of these are parentRelationship then skip
      return;
@@ -526,9 +570,9 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
 
   @Override
   public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
-//    if (parentRelationship == null) {
-//      return false;
-//    }
+    if (parentRelationship == null) {
+      return false;
+    }
 
     parentRelationship.onMouseDown(event, sender, point, keys);
     return false;
@@ -536,63 +580,63 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
 
   @Override
   public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
-//    if (parentRelationship == null) {
-//      return;
-//    }
+    if (parentRelationship == null) {
+      return;
+    }
 
     parentRelationship.onMouseUp(sender, point, keys);
   }
 
   @Override
   public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
-//    if (parentRelationship == null) {
-//      return;
-//    }
+    if (parentRelationship == null) {
+      return;
+    }
 
     parentRelationship.onMouseMove(event, sender, point);
   }
 
   @Override
   public void onMouseLeave(Diagram sender, MatrixPointJS point) {
-//    if (parentRelationship == null) {
-//      return;
-//    }
+    if (parentRelationship == null) {
+      return;
+    }
 
     parentRelationship.onMouseLeave(sender, point);
   }
 
   @Override
   public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
-//    if (parentRelationship == null) {
-//      return;
-//    }
+>    if (parentRelationship == null) {
+      return;
+    }
 
     parentRelationship.onMouseEnter(event, sender, point);
   }
 
   @Override
   public void onTouchStart(OrgEvent event, Diagram sender, MatrixPointJS point) {
-//    if (parentRelationship == null) {
-//      return;
-//    }
+    if (parentRelationship == null) {
+      return;
+    }
 
     parentRelationship.onTouchStart(event, sender, point);
   }
 
   @Override
   public void onTouchMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
-//    if (parentRelationship == null) {
-//      return;
-//    }
+    if (parentRelationship == null) {
+      return;
+    }
 
     parentRelationship.onTouchMove(event, sender, point);
   }
 
   @Override
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
-//    if (parentRelationship == null) {
-//      return;
-//    }
+    if (parentRelationship == null) {
+      return;
+    }
 
     parentRelationship.onTouchEnd(sender, point);
   }
@@ -604,6 +648,10 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
 
   @Override
   public boolean isSelected() {
+    if (parentRelationship == null) {
+      return false;
+    }
+
     return parentRelationship.isSelected();
   }
 
@@ -640,6 +688,11 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     // ce.removeFromParent();
     int index = handles.indexOf(ce);
     ce.setVisible(false);
+
+    if (parentRelationship == null) {
+      return;
+    }
+
     parentRelationship.removePoint(index);
     parentRelationship.doSetShape();
   }

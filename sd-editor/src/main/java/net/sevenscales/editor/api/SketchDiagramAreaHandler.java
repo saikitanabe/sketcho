@@ -169,6 +169,9 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
         // - then just normal mouse move and MouseDiagramDragHandler handles that and rest goes naturally
         // if however relationship is not attached to anywhere, remove it
         this.currentHandle = createdRelationship.getEndHandler();
+        if (currentHandle == null) {
+          return false;
+        }
         currentHandle.setVisible(false);
 
         // guarantee that handle is dragged and not bubbled diagram itself
