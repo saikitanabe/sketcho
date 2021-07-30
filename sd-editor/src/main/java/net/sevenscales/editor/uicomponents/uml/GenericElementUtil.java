@@ -190,7 +190,7 @@ class GenericElementUtil {
   private static void disableGradient(
     IPath path
   ) {
-    net.sevenscales.domain.utils.Debug.log("disableGradient");
+    // net.sevenscales.domain.utils.Debug.log("disableGradient");
     if (path.isFillGradient()) {
       // note needs to match full style string therefore .* in the beginning and in the end
       
