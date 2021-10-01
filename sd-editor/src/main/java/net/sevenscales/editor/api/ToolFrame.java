@@ -14,6 +14,8 @@ import net.sevenscales.editor.api.ot.OperationTransaction;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.utils.ShowHideHelpers;
 import net.sevenscales.editor.diagram.DiagramSelectionHandler;
+import net.sevenscales.editor.api.event.ThemeChangedEvent;
+import net.sevenscales.editor.api.event.ThemeChangedEventHandler;
 
 public class ToolFrame extends SimplePanel {
 	private Properties properties;
@@ -48,6 +50,18 @@ public class ToolFrame extends SimplePanel {
 		} else {
 			justBacgkround.setWidget(new HTML("<img src='/static/images/menu_open_white.svg' class='library-show-ide-button'>"));
 		}
+
+    editorContext.getEventBus().addHandler(ThemeChangedEvent.TYPE, new ThemeChangedEventHandler() {
+      @Override
+      public void on(ThemeChangedEvent event) {
+        if (Theme.isBlackTheme()) {
+          justBacgkround.setWidget(new HTML("<img src='/static/images/menu_open_black_01.svg' class='library-show-ide-button'>"));
+        } else {
+          justBacgkround.setWidget(new HTML("<img src='/static/images/menu_open_white.svg' class='library-show-ide-button'>"));
+        }
+      }
+    });
+
 		justBacgkround.setStyleName("library-showhide-area");
 		
 		// justBacgkround.setWidget(panel);
