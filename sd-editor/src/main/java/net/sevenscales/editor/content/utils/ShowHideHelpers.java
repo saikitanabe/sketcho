@@ -24,6 +24,8 @@ import net.sevenscales.editor.api.event.pointer.PointerOutEvent;
 import net.sevenscales.editor.api.event.pointer.PointerOutHandler;
 import net.sevenscales.editor.api.event.pointer.PointerOverEvent;
 import net.sevenscales.editor.api.event.pointer.PointerOverHandler;
+import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
+import net.sevenscales.editor.api.event.DiagramElementAddedEventHandler;
 
 
 public class ShowHideHelpers {
@@ -67,6 +69,14 @@ public class ShowHideHelpers {
     }
 
     handleLibraryStreams(this);
+
+		editorContext.getEventBus().addHandler(DiagramElementAddedEvent.TYPE, new DiagramElementAddedEventHandler() {
+			@Override
+			public void onAdded(DiagramElementAddedEvent event) {
+        hide();
+			}
+		});
+
   }
   
   private void supportPointerEvents() {
