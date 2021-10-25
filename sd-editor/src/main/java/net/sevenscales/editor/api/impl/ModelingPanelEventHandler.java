@@ -88,6 +88,9 @@ public class ModelingPanelEventHandler implements
       // Pointer down event is not fired
       // on Hammer2.ts if default is prevented.
 			// event.getNativeEvent().preventDefault();
+
+      // surface mousedown hides toolbar in auto mode
+      toolFrame.hideToolbar();
 		} else if (toolFrame.getToolbar().getElement().isOrHasChild(Element.as(event.getNativeEvent().getEventTarget()))) {
 			toolFrame.getToolbar().onMouseDown((GraphicsEvent) e, keys);
 		}
