@@ -176,6 +176,17 @@ public class ShowHideHelpers {
     if (ngIsLibraryManualShowHide()) {
    		hide();
     }
+
+    if (!ngIsLibraryManualShowHide() &&
+        isWebex() &&
+        editorContext.getGraphicalDocumentCache().getDocument().size() > 0) {
+      // ST 25.10.2021: on webex hide library automaticallly when board is empty
+      // on desktop that is not done at this point, to prevent
+      // that joining users don't find library at all, because it is not appearing
+      // as first
+      hide();
+    }
+
   }
 
 	private void onLibraryStream(boolean value) {
@@ -236,6 +247,13 @@ public class ShowHideHelpers {
 	private native boolean ngIsLibraryManualShowHide()/*-{
 		if (typeof $wnd.ngIsLibraryManualShowHide !== 'undefined') {
 			return $wnd.ngIsLibraryManualShowHide()
+		}
+		return false
+	}-*/;
+
+	private native boolean isWebex()/*-{
+		if (typeof $wnd.isWebex !== 'undefined') {
+			return $wnd.isWebex()
 		}
 		return false
 	}-*/;
