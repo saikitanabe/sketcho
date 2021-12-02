@@ -50,7 +50,8 @@ public class BoardColorHelper {
   }
 
   private native void trigger(String colorName)/*-{
-    $wnd.$($doc).trigger('theme-changed', colorName)
+    // $wnd.$($doc).trigger('theme-changed', colorName)
+    $wnd.themeChangedStream.push(colorName)
   }-*/;
 
   public void setSurface(ISurfaceHandler surface, ISurfaceHandler toolbar, BoardDocument boardDocument) {
