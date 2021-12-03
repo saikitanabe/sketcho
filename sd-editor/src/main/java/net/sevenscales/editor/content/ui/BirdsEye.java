@@ -127,6 +127,11 @@ class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
 				me.@net.sevenscales.editor.content.ui.BirdsEye::zoomResetShortcut()();
 			})
 
+
+      $wnd.gwtIsBirdsEyeOn = function() {
+        return me.@net.sevenscales.editor.content.ui.BirdsEye::isBirdsEyeViewOn()();
+      }
+
 		}-*/;
 
 		private void mapView(boolean value) {
@@ -224,11 +229,15 @@ class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
 
 	    // how much space (width) board takes when zoomed, visible for eye
 	    double boardWidthSameUnitWithClientWindow = width * ratio;
+	    double boardHeightSameUnitWithClientWindow = height * ratio;
 	    // move board to left by half of its width => board center is in the middle
 	    // move board right to half of cliend window width => move whole thing towards center
-	    double moveToCenter = (clientWidth - boardWidthSameUnitWithClientWindow) / 2;
-	    surface.setTransform((int)((-leftmost * ratio) + 10 * ratio + moveToCenter), 
-	    																		(int)((-topmost * ratio) + 10 * ratio));
+	    double moveToCenterX = (clientWidth - boardWidthSameUnitWithClientWindow) / 2;
+	    double moveToCenterY = (clientHeight - boardHeightSameUnitWithClientWindow) / 2;
+
+      int x = (int)((-leftmost * ratio) + 5 * ratio + moveToCenterX);
+      int y = (int)((-topmost * ratio) + 10 * ratio + moveToCenterY);
+	    surface.setTransform(x, y);
 
 	  	birdsEyeDown = true;
 	  	followMouse();
