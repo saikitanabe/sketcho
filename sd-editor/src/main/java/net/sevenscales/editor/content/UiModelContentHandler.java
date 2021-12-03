@@ -337,7 +337,8 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 
   private native void setMapView(boolean on)/*-{
 		var value = on ? 'start' : null
-  	$wnd.$($doc).trigger('map-view', value)	
+  	// $wnd.$($doc).trigger('map-view', value)	
+    $wnd.mapViewStream.push(value)
   }-*/;
 
   private native void scaleTo(float value)/*-{
@@ -356,7 +357,8 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
   }
 
   private native void mapView()/*-{
-  	$wnd.$($doc).trigger("map-view");
+  	// $wnd.$($doc).trigger("map-view");
+    $wnd.mapViewStream.push()
   }-*/;
 
   private void center(ISurfaceHandler surface, int left, int top, int width, int height, int bottom, int right) {

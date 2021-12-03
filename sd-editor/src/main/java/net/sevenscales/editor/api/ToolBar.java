@@ -194,7 +194,8 @@ public class ToolBar extends Composite {
 		// $wnd.Hammer(elem[0], {holdTimeout: 100, preventDefault: true}).on('hold', function(event) {
 		$wnd.Hammer($elem[0], {preventDefault: true}).on('tap', function(event) {
 			// elem.find('i').attr('class', 'menu-icon-map-view-dark')
-			$wnd.$($doc).trigger('map-view', 'start')
+			// $wnd.$($doc).trigger('map-view', 'start')
+      $wnd.mapViewStream.push('start')
 		})
 
 
