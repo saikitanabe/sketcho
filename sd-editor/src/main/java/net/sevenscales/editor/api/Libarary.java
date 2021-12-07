@@ -232,7 +232,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     toolpool.getRootLayer().resetTransform();
     getWidget().getElement().setScrollTop(0);
     toolpool.show();
-    panel.getElement().getStyle().setOverflowY(Style.Overflow.SCROLL);
+    // panel.getElement().getStyle().setOverflowY(Style.Overflow.SCROLL);
     ngHideImageLibrary();
     ngHideLibrarySettings();
     ngHideLibrary("team");
