@@ -211,6 +211,13 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
 		});
 		
 //		surface.add(new Circle(surface, 30, 30, 10), true);		
+
+    boolean readonly = !editorContext.isEditable();
+    if (readonly) {
+      // do not show library if not editable, blocks view for the board content
+      closeLibrary.setVisible(false);
+      return;
+    }
 		
 		setWidget(panel);
     proxyDragHandler = new ProxyDragHandler(toolpool, surface);

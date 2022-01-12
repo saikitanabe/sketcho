@@ -1,6 +1,6 @@
 package net.sevenscales.editor.api.event;
 
-import net.sevenscales.editor.api.LibrarySelections;
+// import net.sevenscales.editor.api.LibrarySelections;
 import net.sevenscales.editor.api.Library;
 
 import com.google.gwt.event.shared.GwtEvent;

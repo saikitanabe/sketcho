@@ -65,13 +65,16 @@ public class ToolFrame extends SimplePanel {
 		justBacgkround.setStyleName("library-showhide-area");
 		
 		// justBacgkround.setWidget(panel);
-		RootPanel.get().add(toolbar);
-		
-		
+    RootPanel.get().add(toolbar);
+
 		if (editorContext.isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {
 			// currently enabled only on Sketchboard.Me
 			showHideHelpers = new ShowHideHelpers(justBacgkround, toolbar, editorContext.isEditable(), editorContext);
 		}
+
+    if (!editorContext.isEditable()) {
+      return;
+    }
 
 		if (editorContext.isTrue(EditorProperty.SKETCHO_BOARD_MODE)) {
 			editorContext.registerAndAddToRootPanel(justBacgkround);
