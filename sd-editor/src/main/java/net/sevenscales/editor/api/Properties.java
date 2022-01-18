@@ -806,6 +806,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
       // posy = Window.getScrollTop() + 60;
       showAsDialog = true;
     }
+
 		popup.setPopupPosition(posx, posy);
 
 		// textArea.setVisible(true);
@@ -865,10 +866,13 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     // remove diagram dialog editor by default
     setDialogMode(false);
 
-    if (posWidth > clientWidth
+    if ((posWidth > clientWidth
         || diagram.getWidth() > clientWidth
         || posHeight > clientHeight
-        || showAsDialog) {
+        || showAsDialog) &&
+        // prevent opening modal dialog on mobile layout
+        // especially on tutorial
+        clientWidth > 400) {
       // open editor as a modal dialog
 
       int maxDialoagWidth = 700;
