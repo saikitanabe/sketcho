@@ -869,6 +869,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   }-*/;
 
   private native void animate(com.google.gwt.core.client.JavaScriptObject el, int stx, int sty, int tx, int ty, SelectionHandler me)/*-{
+    $wnd.globalStreams.animateStream.push('start')
     $wnd.animate({
       el: el.rawNode,
       translateX: [stx, tx],
@@ -879,6 +880,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
       complete: function() {
         el.rawNode.style.transform = ''
         me.@net.sevenscales.editor.diagram.SelectionHandler::setRootTransform(II)(tx,ty)
+        $wnd.globalStreams.animateStream.push('end')
       }
     })
 
