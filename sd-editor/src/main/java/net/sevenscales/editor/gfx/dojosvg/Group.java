@@ -249,7 +249,7 @@ class Group extends Graphics implements IContainer, IGroup {
     _scaleAt(group, z, px, py);
   }
   private native void _scaleAt(JavaScriptObject rawNode, double z, double px, double py)/*-{
-    rawNode.setTransform($wnd.dojox.gfx.matrix.scaleAt(z, z, px, py))
+    // rawNode.setTransform($wnd.dojox.gfx.matrix.scaleAt(z, z, px, py))
   }-*/;
 
 	@Override

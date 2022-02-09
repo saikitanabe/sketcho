@@ -7,6 +7,7 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.FreehandModeChangedEvent;
 import net.sevenscales.editor.api.event.ShowDiagramPropertyTextEditorEvent;
+import net.sevenscales.editor.api.dojo.Matrix;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
@@ -85,9 +86,12 @@ public class ProxyDragHandler implements MouseDiagramHandler {
         if (sourceproxy != null) {
           Diagram owner = sourceproxy.getOwnerComponent();
           ProxyDragHandler.this.target.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
+
+          Matrix matrix = ProxyDragHandler.this.target.getMatrix();
+
           Diagram d = owner.duplicate(ProxyDragHandler.this.target, 
-          		point.getX() - ScaleHelpers.scaleValue(ProxyDragHandler.this.target.getRootLayer().getTransformX(), ProxyDragHandler.this.target.getScaleFactor()), 
-          		point.getY() - ScaleHelpers.scaleValue(ProxyDragHandler.this.target.getRootLayer().getTransformY(), ProxyDragHandler.this.target.getScaleFactor()));
+          		point.getX() - ScaleHelpers.scaleValue(matrix.getDXInt(), ProxyDragHandler.this.target.getScaleFactor()), 
+          		point.getY() - ScaleHelpers.scaleValue(matrix.getDYInt(), ProxyDragHandler.this.target.getScaleFactor()));
 
           ProxyDragHandler.this.target.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
           
@@ -158,9 +162,11 @@ public class ProxyDragHandler implements MouseDiagramHandler {
 //    	logger.debug("onMouseMove point x({}), y({}), screenX({}), screenY({})", 
 //    								point.getX(), point.getY(), point.getScreenX(), point.getScreenY());
 //    	System.out.println("sender: " + sender);
+
+      Matrix matrix = source.getMatrix();
 			MatrixPointJS dp = MatrixPointJS.createScaledTransform(
-					gridUtils.dx(point.getScreenX() - source.getAbsoluteLeft() - source.getRootLayer().getTransformX()), 
-					gridUtils.dy(point.getScreenY() - source.getAbsoluteTop() - source.getRootLayer().getTransformY()), 
+					gridUtils.dx(point.getScreenX() - source.getAbsoluteLeft() - matrix.getDXInt()), 
+					gridUtils.dy(point.getScreenY() - source.getAbsoluteTop() - matrix.getDYInt()), 
 					source.getScaleFactor());
 			int dx = dp.getDX() - prevDX;
 			int dy = dp.getDY() - prevDY;

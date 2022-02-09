@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.dojo.Matrix;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
@@ -61,8 +62,10 @@ public class RelationshipText2 {
 
   public ClickTextPosition findClickPosition(int x, int y, List<Integer> points) {
   	// diminish root layer transform
-		x -= surface.getRootLayer().getTransformX();
-		y -= surface.getRootLayer().getTransformY();
+
+    Matrix matrix = surface.getMatrix();
+		x -= matrix.getDX();
+		y -= matrix.getDY();
 
 		// unscale text element coordinates; could be done other way around => scale screen x and screen y and root layer tranforms
 		MatrixPointJS startPoint = MatrixPointJS.createUnscaledPoint(startElement.getX(), startElement.getY(), surface.getScaleFactor());

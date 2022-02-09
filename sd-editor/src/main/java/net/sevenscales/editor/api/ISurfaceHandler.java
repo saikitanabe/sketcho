@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.js.JsDimension;
+import net.sevenscales.editor.api.dojo.Matrix;
 import net.sevenscales.editor.api.ot.IBoardUserHandler;
 import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.api.ot.OperationTransaction;
@@ -99,6 +100,7 @@ public interface ISurfaceHandler extends OperationTransaction, HasMouseWheelHand
 	* This should be used always when transforming root layer. Notifies automatically HTML Layer.
 	*/
 	void setTransform(double tx, double ty);
+  Matrix getMatrix();
 	void scale(double value, boolean wheel, int middleX, int middleY);
 	double getScaleFactor();
 	int scaleClientX(int clientX);

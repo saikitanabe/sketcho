@@ -3,6 +3,7 @@ package net.sevenscales.editor.content.utils;
 import com.google.gwt.core.client.JavaScriptObject;
 
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.dojo.Matrix;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Point;
@@ -50,8 +51,9 @@ public class ScaleHelpers {
 		result.scaledPoint = MatrixPointJS.createScaledPoint(screenX, screenY, surface.getScaleFactor());
 		
 		// translate by root layer location
-		result.scaledAndTranslatedPoint.x = result.scaledPoint.getX() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformX(), surface.getScaleFactor()); 
-		result.scaledAndTranslatedPoint.y = result.scaledPoint.getY() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor());
+    Matrix matrix = surface.getMatrix();
+		result.scaledAndTranslatedPoint.x = result.scaledPoint.getX() - ScaleHelpers.scaleValue(matrix.getDXInt(), surface.getScaleFactor()); 
+		result.scaledAndTranslatedPoint.y = result.scaledPoint.getY() - ScaleHelpers.scaleValue(matrix.getDYInt(), surface.getScaleFactor());
 		return result;
 	}
 
@@ -64,19 +66,20 @@ public class ScaleHelpers {
     int valueX = center ? d.getCenterX() : d.getLeft();
     int valueY = center ? d.getCenterY() : d.getTop();
 
+    Matrix matrix = surface.getMatrix();
 		int left = ScaleHelpers.unscaleValue(surface.getAbsoluteLeft() + valueX, surface.getScaleFactor()) + 
-				surface.getRootLayer().getTransformX(); 
+				matrix.getDXInt(); 
 		int top = ScaleHelpers.unscaleValue(surface.getAbsoluteTop() + valueY, surface.getScaleFactor()) + 
-				surface.getRootLayer().getTransformY();
+				matrix.getDYInt();
 		return new Point(left, top);
 	}
 	
 	public static int scaleAndTranslateY(int scaledY, ISurfaceHandler surface) {
-		return unscaleValue(scaledY, surface.getScaleFactor()) + surface.getRootLayer().getTransformY();
+		return unscaleValue(scaledY, surface.getScaleFactor()) + surface.getMatrix().getDXInt();
 	}
 
 	public static int scaleAndTranslateX(int scaledX, ISurfaceHandler surface) {
-		return unscaleValue(scaledX, surface.getScaleFactor()) + surface.getRootLayer().getTransformX();
+		return unscaleValue(scaledX, surface.getScaleFactor()) + surface.getMatrix().getDYInt();
 	}
 
 

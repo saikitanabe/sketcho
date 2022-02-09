@@ -24,6 +24,7 @@ import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.SurfaceLoadedEventListener;
+import net.sevenscales.editor.api.dojo.Matrix;
 import net.sevenscales.editor.api.ot.IBoardUserHandler;
 import net.sevenscales.editor.api.ot.OTBuffer;
 import net.sevenscales.editor.api.ot.OperationTransaction;
@@ -68,12 +69,14 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	private List<Diagram> diagrams;
 	private ILoadObserver loadObserver;
 	private boolean editable;
+  private Matrix matrix;
 
 	public UnAttachedSurface(EditorContext editorContext, ILoadObserver loadObserver) {
 		this.editorContext = editorContext;
 		this.loadObserver = loadObserver;
 		this.editable = false;
 		this.diagrams = new ArrayList<Diagram>();
+    this.matrix = Matrix.create();
 		setPixelSize(0, 0);
 	}
 
@@ -400,5 +403,10 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	@Override
 	public void setSvgClassName(String classname) {
 	}
+
+  @Override
+  public Matrix getMatrix() {
+    return matrix;
+  }
 
 }

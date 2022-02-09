@@ -18,6 +18,7 @@ import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.StartSelectToolEvent;
 import net.sevenscales.editor.api.event.StartSelectToolEventHandler;
+import net.sevenscales.editor.api.dojo.Matrix;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.content.utils.ShapeParser;
 import net.sevenscales.editor.diagram.shape.GenericShape;
@@ -314,8 +315,9 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 	}
 
 	private void selectItems(int x, int y, int width, int height) {
-		x = x - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformX(), surface.getScaleFactor());
-		y = y - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor());
+    Matrix matrix = surface.getMatrix();
+		x = x - ScaleHelpers.scaleValue(matrix.getDXInt(), surface.getScaleFactor());
+		y = y - ScaleHelpers.scaleValue(matrix.getDYInt(), surface.getScaleFactor());
 
 		for (Diagram d : surface.getDiagrams()) {
 			if (d.onArea(x, y, x + width, y + height)) {

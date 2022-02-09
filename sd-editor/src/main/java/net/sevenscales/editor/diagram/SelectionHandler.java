@@ -40,6 +40,7 @@ import net.sevenscales.editor.api.event.SelectionEvent;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.UnselectAllEvent;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
+import net.sevenscales.editor.api.dojo.Matrix;
 import net.sevenscales.editor.content.ui.UIKeyHelpers;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.gfx.domain.IChildElement;
@@ -856,12 +857,13 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     }
 
     resetScale();
-    int stx = surface.getRootLayer().getTransformX();
-    int sty = surface.getRootLayer().getTransformY();
+    Matrix matrix = surface.getMatrix();
+    int stx = matrix.getDXInt();
+    int sty = matrix.getDYInt();
     int tx = extrax + (int) ((-left + centerDiffX) * surface.getScaleFactor());
     int ty = (int) ((-top + centerDiffY - 40) * surface.getScaleFactor());
 
-    animate(surface.getRootLayer().getContainer(), stx, sty, tx, ty, this);
+    animate(surface.getElement(), stx, sty, tx, ty, this);
   }
 
   private native void resetScale()/*-{

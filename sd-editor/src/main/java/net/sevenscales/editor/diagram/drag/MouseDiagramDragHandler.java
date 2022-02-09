@@ -26,6 +26,7 @@ import net.sevenscales.editor.api.event.SelectionEvent;
 import net.sevenscales.editor.api.event.SelectionEventHandler;
 import net.sevenscales.editor.api.event.UnselectAllEvent;
 import net.sevenscales.editor.api.event.UnselecteAllEventHandler;
+import net.sevenscales.editor.api.dojo.Matrix;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramDragHandler;
@@ -397,12 +398,14 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		if (oneSelected != null) {
 			int centerX = oneSelected.getCenterX();
 			int centerY = oneSelected.getCenterY();
-			int vy1 = ScaleHelpers.scaleValue(0 - surface.getRootLayer().getTransformY(), surface.getScaleFactor());
-			int vy2 = ScaleHelpers.scaleValue(windowHeight - surface.getRootLayer().getTransformY(), surface.getScaleFactor());
+
+      Matrix matrix = surface.getMatrix();
+			int vy1 = ScaleHelpers.scaleValue(0 - matrix.getDYInt(), surface.getScaleFactor());
+			int vy2 = ScaleHelpers.scaleValue(windowHeight - matrix.getDYInt(), surface.getScaleFactor());
 	    verticalLine.setShape(centerX, vy1, centerX, vy2);
 	    
-	    int hx1 = ScaleHelpers.scaleValue(0 - surface.getRootLayer().getTransformX(), surface.getScaleFactor());
-	    int hx2 = ScaleHelpers.scaleValue(windowWidth - surface.getRootLayer().getTransformX(), surface.getScaleFactor());
+	    int hx1 = ScaleHelpers.scaleValue(0 - matrix.getDXInt(), surface.getScaleFactor());
+	    int hx2 = ScaleHelpers.scaleValue(windowWidth - matrix.getDXInt(), surface.getScaleFactor());
 	    horizontalLine.setShape(hx1, centerY, hx2, centerY);
 	    
 	    highlightSameCenters(oneSelected, centerX, centerY, dpx, dpy);

@@ -23,6 +23,7 @@ import net.sevenscales.editor.api.event.BoardRemoveDiagramsEventHandler;
 import net.sevenscales.editor.api.event.DiagramsLoadedEvent;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.Theme.ThemeName;
+import net.sevenscales.editor.api.dojo.Matrix;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.utils.DiagramDisplaySorter;
 import net.sevenscales.editor.content.utils.DiagramItemFactory;
@@ -380,15 +381,15 @@ public class UiModelContentHandler implements SurfaceLoadedEventListener {
 
 	  	// surface.getRootLayer().setTransform(-(left - width / 2), -(top - height / 2));
 	  	surface.setTransform(-left + centerDiffX, -top + centerDiffY - 40); // toolbar
-	  	notifyBackgroundMove(surface.getRootLayer().getContainer());
+	  	notifyBackgroundMove(surface.getMatrix());
   	}
   }
 
-  private native void notifyBackgroundMove(com.google.gwt.core.client.JavaScriptObject group)/*-{
+  private native void notifyBackgroundMove(Matrix matrix)/*-{
 		if (typeof $wnd.globalStreams !== 'undefined') {
 	    $wnd.globalStreams.backgroundMoveStream.push({
 	      type:'end',
-	      matrix: group.getTransform()
+	      matrix: matrix
 	    })
   	}
   }-*/;

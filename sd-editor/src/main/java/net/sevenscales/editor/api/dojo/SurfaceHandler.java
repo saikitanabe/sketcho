@@ -24,6 +24,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Widget;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,6 +105,7 @@ class SurfaceHandler extends SimplePanel implements
               ISurfaceHandler {
   private static final SLogger logger = SLogger.createLogger(SurfaceHandler.class);
     
+  private Matrix matrix;
   private ISurface surface;
   private DiagramDisplayOrderList diagrams;
   protected MouseDiagramHandlerManager mouseDiagramManager;
@@ -153,6 +155,28 @@ class SurfaceHandler extends SimplePanel implements
   // private net.sevenscales.editor.gfx.domain.ICircle tempCircle2;
   // private net.sevenscales.editor.gfx.domain.IRectangle tempRect;
   // <<<<<<<<< Debugging
+
+  public SurfaceHandler() {
+    _setStyle(this.getElement());
+    this.matrix = Matrix.create();
+  }
+
+  private native void _setStyle(
+    Element elem
+  )/*-{
+    var $elem = $wnd.jQuery(elem)
+    $elem.css({
+      // border: '5px solid AliceBlue',
+      // width: $(window).width(),
+      // height: $(window).height(),
+      // zIndex: 5,
+      position: 'fixed',
+      left: 0,
+      top: 0,
+      // pointerEvents: 'none',
+      transformOrigin: '0 0'
+    })
+  }-*/;
 
   public void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
       EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction, IBirdsEyeView birdsEyeView) {
@@ -294,7 +318,9 @@ class SurfaceHandler extends SimplePanel implements
 //      surface.init(this.panel);
       surface.init(this, this);
       surface.setAttribute("id", name);
-      surface.setAttribute("class", svgClassName);
+      if (svgClassName != null) {
+        surface.setAttribute("class", svgClassName);
+      }
       mouseDiagramManager.reset();
       surface.load();
       logger.debug("onLoad {}... done", name);
@@ -586,15 +612,22 @@ class SurfaceHandler extends SimplePanel implements
   // }
 
   public void setTransform(double tx, double ty) {
-    getRootLayer().setTransform(tx, ty);
-    _notifyTrasform(rootLayer0.getContainer());
+    // getRootLayer().setTransform(tx, ty);
+    matrix.setDX(tx);
+    matrix.setDY(ty);
+    applyMatrix(this.getElement(), matrix);
+    _notifyTrasform(matrix);
   }
 
-  private native void _notifyTrasform(JavaScriptObject group)/*-{
+  public Matrix getMatrix() {
+    return matrix;
+  }
+
+  private native void _notifyTrasform(Matrix matrix)/*-{
     if (typeof $wnd.globalStreams !== 'undefined') {
       $wnd.globalStreams.backgroundMoveStream.push({
         type: 'move',
-        matrix: group.getTransform()
+        matrix: matrix
       })
     }
   }-*/;
@@ -684,11 +717,11 @@ class SurfaceHandler extends SimplePanel implements
   }-*/;
   
   public int scaleClientX(int clientX) {
-     return ScaleHelpers.scaleValue(clientX, getScaleFactor()) - getRootLayer().getTransformX();
+     return ScaleHelpers.scaleValue(clientX, getScaleFactor()) - matrix.getDXInt();
   }
 
   public int scaleClientY(int clientY) {
-     return ScaleHelpers.scaleValue(clientY, getScaleFactor()) - getRootLayer().getTransformY();
+     return ScaleHelpers.scaleValue(clientY, getScaleFactor()) - matrix.getDYInt();
   }
 
   public void onDoubleClick(IGraphics graphics, Event event) {
@@ -1166,7 +1199,8 @@ class SurfaceHandler extends SimplePanel implements
       // - e.g. touch device should calculate center point between fingers
       // - clicking slider or using short cuts zooms to center
       scaleAtCenter(
-       rootLayer0.getContainer(),
+       this.getElement(),
+       matrix,
        scaleFactor,
        value,
        com.google.gwt.user.client.Window.getClientWidth(),
@@ -1220,11 +1254,17 @@ class SurfaceHandler extends SimplePanel implements
     // rootLayer0.scale(value, value);
     // rootLayer0.translate(-mousePosX, -mousePosY);
 
-    rootLayer0.scaleAt(value, mousePosX, mousePosY);
+    // rootLayer0.scaleAt(value, mousePosX, mousePosY);
+
+    this.matrix = scaleAtMatrix(value, mousePosX, mousePosY);
+
+    applyMatrix(this.getElement(), matrix);
 
     // NOTE: transition is always with scale(1)
-    double tx = rootLayer0.getTransformDoubleX();
-    double ty = rootLayer0.getTransformDoubleY();
+    // double tx = rootLayer0.getTransformDoubleX();
+    // double ty = rootLayer0.getTransformDoubleY();
+    double tx = matrix.getDX();
+    double ty = matrix.getDY();
 
     // what is the mouse point with new zoom value
     double mousePosX2 = px / value - tx / value;
@@ -1239,6 +1279,33 @@ class SurfaceHandler extends SimplePanel implements
     // to notify transform as well
     this.setTransform(tx + diffx, ty + diffy);
   }
+
+  private native Matrix scaleAtMatrix(
+    double z,
+    double px,
+    double py
+  )/*-{
+    return $wnd.dojox.gfx.matrix.scaleAt(z, z, px, py)
+  }-*/;
+
+  private native void applyMatrix(
+    Element elem,
+    Matrix matrix
+  )/*-{
+    var dx = matrix.dx.toFixed(8)
+    var dy = matrix.dy.toFixed(8)
+
+    var m = "matrix(" +
+      matrix.xx.toFixed(8) + "," + matrix.yx.toFixed(8) + "," +
+      matrix.xy.toFixed(8) + "," + matrix.yy.toFixed(8) + "," +
+      dx + "," + dy + ")"
+
+    // $wnd.console.log('scala at matrix:', m)
+
+    var $elem = $wnd.jQuery(elem)
+
+    $elem.css({"transform": m})
+  }-*/;
 
   private native void _notifyScale(double value)/*-{
     $wnd.globalStreams.boardScaledStream.push(value);
@@ -1283,14 +1350,14 @@ class SurfaceHandler extends SimplePanel implements
     }
   }
 
-  private native void scaleAtCenter(JavaScriptObject element, double prevScaleFactor, double value, int width, int height/*, net.sevenscales.editor.gfx.domain.ICircle circle, net.sevenscales.editor.gfx.domain.IRectangle rect*/)/*-{
+  private native void scaleAtCenter(Element elem, Matrix matrix, double prevScaleFactor, double value, int width, int height/*, net.sevenscales.editor.gfx.domain.ICircle circle, net.sevenscales.editor.gfx.domain.IRectangle rect*/)/*-{
     var m3 = new $wnd.dojox.gfx.Matrix2D(value)
-    var t = element.getTransform()
-    if (t != null) {
+    // var t = element.getTransform()
+    if (matrix != null) {
       // calculate visible area center point that is visible on screen
       // calculation is done with current scale factor (previous)
-      var left = t.dx / prevScaleFactor
-      var top = t.dy / prevScaleFactor
+      var left = matrix.dx / prevScaleFactor
+      var top = matrix.dy / prevScaleFactor
       var cx = -left + width / 2 / prevScaleFactor
       var cy = -top + height / 2 / prevScaleFactor
 
@@ -1301,17 +1368,34 @@ class SurfaceHandler extends SimplePanel implements
       // <<<<<<< debug center point
 
       // scale at center point to zoom it
-      element.setTransform($wnd.dojox.gfx.matrix.scaleAt(value, value, cx, cy))
+      var center = $wnd.dojox.gfx.matrix.scaleAt(value, value, cx, cy)
+
+      var m0 = "matrix(" +
+					center.xx.toFixed(8) + "," + center.yx.toFixed(8) + "," +
+					center.xy.toFixed(8) + "," + center.yy.toFixed(8) + "," +
+					center.dx.toFixed(8) + "," + center.dy.toFixed(8) + ")"
+
+      var $elem = $wnd.jQuery(elem)
+
+      $elem.css({"transform": m0})
+
+      // element.setTransform($wnd.dojox.gfx.matrix.scaleAt(value, value, cx, cy))
 
       $wnd.globalStreams.scaleAtStream.push()
 
       // // translate to center point to be visible area center again
-      t = element.getTransform()
-      t.dx = t.dx - cx + width / 2
-      t.dy = t.dy - cy + height / 2
+      // t = element.getTransform()
+      center.dx = center.dx - cx + width / 2
+      center.dy = center.dy - cy + height / 2
 
+      m0 = "matrix(" +
+      center.xx.toFixed(8) + "," + center.yx.toFixed(8) + "," +
+      center.xy.toFixed(8) + "," + center.yy.toFixed(8) + "," +
+      center.dx.toFixed(8) + "," + center.dy.toFixed(8) + ")"
 
-      element.setTransform(t)
+      $elem.css({"transform": m0})
+
+      // element.setTransform(matrix)
       $wnd.globalStreams.surfaceTransformStream.push()
     } else {
       element.setTransform($wnd.dojox.gfx.matrix.scale({ x: m3.xx, y: m3.yy}))

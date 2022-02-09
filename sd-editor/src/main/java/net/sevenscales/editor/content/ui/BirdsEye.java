@@ -15,6 +15,7 @@ import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.SurfaceScaleEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
+import net.sevenscales.editor.api.dojo.Matrix;
 
 
 class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
@@ -181,8 +182,9 @@ class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
 		  // }
 			// <<<<<<<< Debug
 
-    	int tx = surface.getRootLayer().getTransformX();
-    	int ty = surface.getRootLayer().getTransformY();
+      Matrix matrix = surface.getMatrix();
+    	int tx = matrix.getDXInt();
+    	int ty = matrix.getDYInt();
 
       mousePosX = (int) (x / ratio - tx / ratio);
       mousePosY = (int) (y / ratio - ty / ratio);

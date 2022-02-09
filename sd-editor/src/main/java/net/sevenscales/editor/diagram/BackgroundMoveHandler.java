@@ -11,6 +11,7 @@ import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.BackgroundMoveStartedEvent;
 import net.sevenscales.editor.api.event.PinchZoomEvent;
 import net.sevenscales.editor.api.event.PinchZoomEventHandler;
+import net.sevenscales.editor.api.dojo.Matrix;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
@@ -106,8 +107,9 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
 //    System.out.println("onMouseDown: x("+x+") y("+y+") prevX("+prevX+") prevY("+prevY+")");
     gridUtils.init(point.getScreenX(), point.getScreenY(), surface.getScaleFactor());
     
-    prevTransformDX = surface.getRootLayer().getTransformX();
-    prevTransformDY = surface.getRootLayer().getTransformY();
+    Matrix matrix = surface.getMatrix();
+    prevTransformDX = matrix.getDXInt();
+    prevTransformDY = matrix.getDYInt();
 //    complexElementHandler.reset();
     return false;
   }
@@ -178,16 +180,16 @@ public class BackgroundMoveHandler implements MouseDiagramHandler {
 	public void onMouseUp(Diagram sender, MatrixPointJS point, int keys) {
 //  	complexElementHandler.showComplexElements(diagrams);
     if (backgroundMoving) {
-      notifyBackgroundMoveEnd(surface.getRootLayer().getContainer());
+      notifyBackgroundMoveEnd(surface.getMatrix());
     }
 
     clear();
   }
 
-  private native void notifyBackgroundMoveEnd(com.google.gwt.core.client.JavaScriptObject group)/*-{
+  private native void notifyBackgroundMoveEnd(Matrix matrix)/*-{
     $wnd.globalStreams.backgroundMoveStream.push({
       type:'move-end',
-      matrix: group.getTransform()
+      matrix: matrix
     })
   }-*/;
 

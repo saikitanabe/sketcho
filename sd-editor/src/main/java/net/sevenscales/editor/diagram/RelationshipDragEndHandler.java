@@ -171,7 +171,7 @@ public class RelationshipDragEndHandler implements
 //			ScaleHelpers.scaleValue(surface.getRootLayer().getTransformX(), surface.getScaleFactor())
 //			ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor())
 			MatrixPointJS point = MatrixPointJS.createUnscaledPoint(event.getX(), event.getY(), surface.getScaleFactor());
-			setCurrentPosition(point.getX() + surface.getRootLayer().getTransformX(), point.getY() + surface.getRootLayer().getTransformY());
+			setCurrentPosition(point.getX() + surface.getRootLayer().getTransformX(), point.getY() + surface.getMatrix().getDYInt());
 
 			currentAnchor = event.getAnchor();
 			currentRel = event.getRelationship();

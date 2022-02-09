@@ -46,6 +46,7 @@ import net.sevenscales.editor.api.impl.EditorCommon;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.texteditor.ITextEditor;
+import net.sevenscales.editor.api.dojo.Matrix;
 import net.sevenscales.editor.content.RelationShipType;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
@@ -479,7 +480,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
   }
   
 	private void hide() {
-    Debug.log("Properties.hide");
+    // Debug.log("Properties.hide");
     // Debug.callstack("Properties.hide");
 
     if (popup.isShowing()) {
@@ -788,8 +789,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		// diagram.hideText();
 		
 		MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
-		int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
-    int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop();
+    Matrix matrix = surface.getMatrix();
+		int x = point.getX() + matrix.getDXInt()  + surface.getAbsoluteLeft();
+    int y = point.getY() + matrix.getDYInt() + surface.getAbsoluteTop();
     
     int posx = x;
     int posy = y;

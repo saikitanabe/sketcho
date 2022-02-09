@@ -8,6 +8,7 @@ import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEvent;
 import net.sevenscales.editor.api.event.EditDiagramPropertiesStartedEventHandler;
 import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.api.dojo.Matrix;
 import net.sevenscales.editor.content.ui.IModeManager;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
 import net.sevenscales.editor.diagram.Diagram;
@@ -116,8 +117,9 @@ public class SketchDiagramAreaHandler implements MouseDiagramHandler {
       
       // create relationship
       // - just 1 pixel length relationship
-      int xx = GridUtils.align(point.getX() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformX(), surface.getScaleFactor()));
-      int yy = GridUtils.align(point.getY() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor()));
+      Matrix matrix = surface.getMatrix();
+      int xx = GridUtils.align(point.getX() - ScaleHelpers.scaleValue(matrix.getDXInt(), surface.getScaleFactor()));
+      int yy = GridUtils.align(point.getY() - ScaleHelpers.scaleValue(matrix.getDYInt(), surface.getScaleFactor()));
 
       if (modeManager.isForceConnectionPoint()) {
         // force connection point to earlier specified location => currently connection helpers sets this

@@ -19,7 +19,11 @@ public class JsTransform extends JavaScriptObject {
 		return this.matrix
 	}-*/;
 
-	public static JsTransform create(int transformX, int transformY, JavaScriptObject matrix) {
+	public static JsTransform create(
+    int transformX,
+    int transformY,
+    JavaScriptObject matrix
+  ) {
 		JSONObject result = new JSONObject();
 
 		result.put("transformX", new JSONNumber(transformX));

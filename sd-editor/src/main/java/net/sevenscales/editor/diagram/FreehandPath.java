@@ -11,6 +11,7 @@ import net.sevenscales.domain.SvgDataDTO;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.api.dojo.Matrix;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
 import net.sevenscales.editor.content.utils.IntegerHelpers;
 import net.sevenscales.editor.content.utils.ScaleHelpers;
@@ -104,8 +105,9 @@ class FreehandPath {
 
   private void addTranslatedPoint(int x, int y, List<Integer> points) {
     MatrixPointJS point = MatrixPointJS.createScaledPoint(x, y, surface.getScaleFactor());
-    points.add(point.getX() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformX(), surface.getScaleFactor()));
-    points.add(point.getY() - ScaleHelpers.scaleValue(surface.getRootLayer().getTransformY(), surface.getScaleFactor()));
+    Matrix matrix = surface.getMatrix();
+    points.add(point.getX() - ScaleHelpers.scaleValue(matrix.getDXInt(), surface.getScaleFactor()));
+    points.add(point.getY() - ScaleHelpers.scaleValue(matrix.getDYInt(), surface.getScaleFactor()));
   }
 
   private Diagram plotGeneric() {
