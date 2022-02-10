@@ -60,7 +60,7 @@ class Surface extends Graphics implements IContainer, ISurface {
 		// height
 		// are zero if using e.g. deck panel => other panel is not loaded and size
 		// is 0, 0
-		nativeSetSize(surface, width, height);
+		nativeSetSize(surface, width, height, "px");
 
 		// to support canvas events outside diagram items on safari
 //		canvas = new Rectangle(this);
@@ -131,19 +131,19 @@ class Surface extends Graphics implements IContainer, ISurface {
 //		//object.rawNode.background = brush;
 //	}-*/;
 
-	public void setSize(int width, int height) {
+	public void setSize(int width, int height, String unit) {
 		if (surface != null) {
-			nativeSetSize(surface, width, height);
+			nativeSetSize(surface, width, height, unit);
 //			canvas.setShape(0, 0, uiObject.getOffsetWidth(),
 //					uiObject.getOffsetHeight());
 		}
 	}
 
 	private native void nativeSetSize(JavaScriptObject surface, int width,
-			int height)/*-{
+			int height, String unit)/*-{
 		//  	surface.setDimensions(width, height);
-		surface._parent.firstChild.style.width = width + "px";
-		surface._parent.firstChild.style.height = height + "px";
+		surface._parent.firstChild.style.width = width + unit;
+		surface._parent.firstChild.style.height = height + unit;
 	}-*/;
 
 	protected native void nativeConnect(JavaScriptObject surface, String event)/*-{

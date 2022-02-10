@@ -4,6 +4,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
 import com.google.gwt.event.dom.client.HasTouchEndHandlers;
 import com.google.gwt.event.dom.client.HasTouchMoveHandlers;
@@ -104,6 +105,7 @@ class SurfaceHandler extends SimplePanel implements
               ISurfaceHandler {
   private static final SLogger logger = SLogger.createLogger(SurfaceHandler.class);
     
+  private SimplePanel wrapper;
   private ISurface surface;
   private DiagramDisplayOrderList diagrams;
   protected MouseDiagramHandlerManager mouseDiagramManager;
@@ -153,6 +155,17 @@ class SurfaceHandler extends SimplePanel implements
   // private net.sevenscales.editor.gfx.domain.ICircle tempCircle2;
   // private net.sevenscales.editor.gfx.domain.IRectangle tempRect;
   // <<<<<<<<< Debugging
+
+  public SurfaceHandler() {
+    this.wrapper = new SimplePanel();
+    // this.wrapper.getElement().getStyle().setPosition(Style.Position.FIXED);
+    // this.wrapper.getElement().getStyle().setLeft(0);
+    // this.wrapper.getElement().getStyle().setTop(0);
+    // this.wrapper.getElement().getStyle().setRight(0);
+    // this.wrapper.getElement().getStyle().setBottom(0, Style.Unit.);
+    this.wrapper.setStyleName("svg-box");
+    this.setWidget(wrapper);
+  }
 
   public void init(int width, int height, boolean editable, IModeManager modeManager, boolean deleteSupported, 
       EditorContext editorContext, OTBuffer otBuffer, OperationTransaction operationTransaction, IBirdsEyeView birdsEyeView) {
@@ -292,9 +305,11 @@ class SurfaceHandler extends SimplePanel implements
       surface = IShapeFactory.Util.factory(editable).createSurface();
   // new Surface();
 //      surface.init(this.panel);
-      surface.init(this, this);
+      surface.init(this.wrapper, this);
       surface.setAttribute("id", name);
-      surface.setAttribute("class", svgClassName);
+      if (svgClassName != null) {
+        surface.setAttribute("class", svgClassName);
+      }
       mouseDiagramManager.reset();
       surface.load();
       logger.debug("onLoad {}... done", name);
@@ -882,7 +897,7 @@ class SurfaceHandler extends SimplePanel implements
     this.height = height;
     setPixelSize(width, height);
     if (surface != null) {
-      surface.setSize(width, height);
+      surface.setSize(100, 100, "%");
     }
   }
 

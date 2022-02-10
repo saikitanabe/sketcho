@@ -7,7 +7,7 @@ public interface ISurface extends IContainer, IGraphics {
   public void load();
   public boolean isLoaded();
   public void setKeyEventHandler(IKeyEventHandler handler);
-  public void setSize(int width, int height);
+  public void setSize(int width, int height, String unit);
   public void setAttribute(String name, String value);
   public void setBackground(String color);
   public void suspendRedraw();

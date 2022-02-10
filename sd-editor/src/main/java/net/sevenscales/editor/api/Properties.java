@@ -479,7 +479,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
   }
   
 	private void hide() {
-    Debug.log("Properties.hide");
+    // Debug.log("Properties.hide");
     // Debug.callstack("Properties.hide");
 
     if (popup.isShowing()) {
