@@ -3,6 +3,7 @@ package net.sevenscales.editor.uicomponents.uml;
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.api.ActionType;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ot.BoardOTHelpers;
@@ -58,6 +59,8 @@ public class TextElement extends AbstractDiagramItem implements
 				.createRectangle(group);
 		// attachBoundary.setFill(255, 255, 255, 0.1);
 		attachBoundary.setFill(new Color(0, 0, 0, 0));
+
+    attachBoundary.setAttribute("class", "stext");
 
 		// separate text group is needed or can't interact with links that are behind
 		// background rectangle
