@@ -269,11 +269,14 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 		deltaSum += delta;
 		boolean update = deltaSum % 2 == 0;
 
+    // ST 11.2.2022: performance improvements
+    // after Chrome 97, skip some (3) steps to have
+    // faster zoom experience though it jumps a bit
 		int index = currentIndex;
-		if (update && up && (index -1 ) >= 0) {
-			currentIndex = index - 1;
-		} else if (update && down && (index + 1) < Constants.ZOOM_FACTORS.length) {
-			currentIndex = index + 1;
+		if (update && up && (index - 3 ) >= 0) {
+			currentIndex = index - 3;
+		} else if (update && down && (index + 3) < Constants.ZOOM_FACTORS.length) {
+			currentIndex = index + 3;
 		}
 
 		scaleAndSlide(currentIndex, index, true);
