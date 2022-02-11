@@ -26,6 +26,8 @@ import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Timer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -106,6 +108,8 @@ class SurfaceHandler extends SimplePanel implements
   private static final SLogger logger = SLogger.createLogger(SurfaceHandler.class);
     
   private SimplePanel wrapper;
+  private Timer timer;
+  // private Matrix matrix;
   private ISurface surface;
   private DiagramDisplayOrderList diagrams;
   protected MouseDiagramHandlerManager mouseDiagramManager;
@@ -157,6 +161,7 @@ class SurfaceHandler extends SimplePanel implements
   // <<<<<<<<< Debugging
 
   public SurfaceHandler() {
+    // this.matrix = Matrix.create();
     this.wrapper = new SimplePanel();
     // this.wrapper.getElement().getStyle().setPosition(Style.Position.FIXED);
     // this.wrapper.getElement().getStyle().setLeft(0);
@@ -897,7 +902,8 @@ class SurfaceHandler extends SimplePanel implements
     this.height = height;
     setPixelSize(width, height);
     if (surface != null) {
-      surface.setSize(100, 100, "%");
+      surface.setSize(width, height, "px");
+      // surface.setSize(100, 100, "%");
     }
   }
 
@@ -1182,11 +1188,21 @@ class SurfaceHandler extends SimplePanel implements
       // - clicking slider or using short cuts zooms to center
       scaleAtCenter(
        rootLayer0.getContainer(),
-       scaleFactor,
-       value,
-       com.google.gwt.user.client.Window.getClientWidth(),
-       com.google.gwt.user.client.Window.getClientHeight()
-      );
+        scaleFactor,
+        value,
+        com.google.gwt.user.client.Window.getClientWidth(),
+        com.google.gwt.user.client.Window.getClientHeight()
+       );
+
+      //  scaleAtCenter2(
+      //   this.wrapper.getElement(),
+      //   matrix,
+      //   scaleFactor,
+      //   value,
+      //   com.google.gwt.user.client.Window.getClientWidth(),
+      //   com.google.gwt.user.client.Window.getClientHeight()
+      //  );
+
     }
 
     scaleBackground(value);
@@ -1235,7 +1251,24 @@ class SurfaceHandler extends SimplePanel implements
     // rootLayer0.scale(value, value);
     // rootLayer0.translate(-mousePosX, -mousePosY);
 
+    // ST 11.2.2022: disable svg text shapes when scaling
+    this.wrapper.addStyleName("disable-text");
+
+    if (this.timer == null) {
+      this.timer = new Timer() {
+        public void run() {
+          // enable text just after the scaling ended
+          wrapper.removeStyleName("disable-text");
+        }
+      };
+    }
+
+    // cancels previous schedule automatically when next is called
+    this.timer.schedule(50);
+
     rootLayer0.scaleAt(value, mousePosX, mousePosY);
+    // this.matrix = scaleAtMatrix(value, mousePosX, mousePosY);
+    // applyMatrix(this.wrapper.getElement(), matrix);
 
     // NOTE: transition is always with scale(1)
     double tx = rootLayer0.getTransformDoubleX();
@@ -1254,6 +1287,31 @@ class SurfaceHandler extends SimplePanel implements
     // to notify transform as well
     this.setTransform(tx + diffx, ty + diffy);
   }
+
+  // ST 11.2.2022: These are not used at the moment. This was a test
+  // for html div scaling
+  // private native Matrix scaleAtMatrix(
+  //   double z,
+  //   double px,
+  //   double py
+  // )/*-{
+  //   return $wnd.dojox.gfx.matrix.scaleAt(z, z, px, py)
+  // }-*/;
+
+  // private native void applyMatrix(
+  //   Element elem,
+  //   Matrix matrix
+  // )/*-{
+  //   var dx = matrix.dx.toFixed(0)
+  //   var dy = matrix.dy.toFixed(0)
+  //   var m = "matrix(" +
+  //     matrix.xx.toFixed(8) + "," + matrix.yx.toFixed(8) + "," +
+  //     matrix.xy.toFixed(8) + "," + matrix.yy.toFixed(8) + "," +
+  //     dx + "," + dy + ")"
+  //   // $wnd.console.log('scala at matrix:', m)
+  //   var $elem = $wnd.jQuery(elem)
+  //   $elem.css({"transform": m})
+  // }-*/;  
 
   private native void _notifyScale(double value)/*-{
     $wnd.globalStreams.boardScaledStream.push(value);
@@ -1332,6 +1390,48 @@ class SurfaceHandler extends SimplePanel implements
       element.setTransform($wnd.dojox.gfx.matrix.scale({ x: m3.xx, y: m3.yy}))
     }
   }-*/;
+
+  // ST 11.2.2022: HTML div scaling doesn't work correctly.
+  // private native void scaleAtCenter2(Element elem, Matrix matrix, double prevScaleFactor, double value, int width, int height/*, net.sevenscales.editor.gfx.domain.ICircle circle, net.sevenscales.editor.gfx.domain.IRectangle rect*/)/*-{
+  //   var m3 = new $wnd.dojox.gfx.Matrix2D(value)
+  //   // var t = element.getTransform()
+  //   if (matrix != null) {
+  //     // calculate visible area center point that is visible on screen
+  //     // calculation is done with current scale factor (previous)
+  //     var left = matrix.dx / prevScaleFactor
+  //     var top = matrix.dy / prevScaleFactor
+  //     var cx = -left + width / 2 / prevScaleFactor
+  //     var cy = -top + height / 2 / prevScaleFactor
+  //     // >>>>>>> debug center point
+  //  //    rect.@net.sevenscales.editor.gfx.domain.IRectangle::setShape(IIIII)((-left), (-top), width / prevScaleFactor, height / prevScaleFactor, 0)
+  //  //    circle.@net.sevenscales.editor.gfx.domain.ICircle::setFill(IIID)(218, 57, 57, 1)
+  //     // circle.@net.sevenscales.editor.gfx.domain.ICircle::setShape(III)(cx, cy, 10)
+  //     // <<<<<<< debug center point
+  //     // scale at center point to zoom it
+  //     var center = $wnd.dojox.gfx.matrix.scaleAt(value, value, cx, cy)
+  //     var m0 = "matrix(" +
+	// 				center.xx.toFixed(2) + "," + center.yx.toFixed(0) + "," +
+	// 				center.xy.toFixed(0) + "," + center.yy.toFixed(2) + "," +
+	// 				center.dx.toFixed(0) + "," + center.dy.toFixed(0) + ")"
+  //     var $elem = $wnd.jQuery(elem)
+  //     $elem.css({"transform": m0})
+  //     // element.setTransform($wnd.dojox.gfx.matrix.scaleAt(value, value, cx, cy))
+  //     $wnd.globalStreams.scaleAtStream.push()
+  //     // // translate to center point to be visible area center again
+  //     // t = element.getTransform()
+  //     center.dx = center.dx - cx + width / 2
+  //     center.dy = center.dy - cy + height / 2
+  //     m0 = "matrix(" +
+  //     center.xx.toFixed(2) + "," + center.yx.toFixed(0) + "," +
+  //     center.xy.toFixed(0) + "," + center.yy.toFixed(2) + "," +
+  //     center.dx.toFixed(0) + "," + center.dy.toFixed(0) + ")"
+  //     $elem.css({"transform": m0})
+  //     // element.setTransform(matrix)
+  //     $wnd.globalStreams.surfaceTransformStream.push()
+  //   } else {
+  //     element.setTransform($wnd.dojox.gfx.matrix.scale({ x: m3.xx, y: m3.yy}))
+  //   }
+  // }-*/;
 
   private native void scaleDiagram(JavaScriptObject element, double value, int x, int y)/*-{
     var m3 = new $wnd.dojox.gfx.Matrix2D(value);
