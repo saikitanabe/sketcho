@@ -39,6 +39,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private static SLogger logger = SLogger.createLogger(ScaleSlider.class);
 
 	private static final double TRESHOLD = 5;
+  private static final int wheelSteps = UiUtils.isWindows() ? 1 : 1;
 
 	private EditorContext editorContext;
 	private ISurfaceHandler surface;
@@ -275,10 +276,10 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
     // rolled back, because now it is too fast on Mac OS
     // on Windows it probably should be 3.
 		int index = currentIndex;
-		if (update && up && (index - 1 ) >= 0) {
-			currentIndex = index - 1;
-		} else if (update && down && (index + 1) < Constants.ZOOM_FACTORS.length) {
-			currentIndex = index + 1;
+		if (update && up && (index - wheelSteps ) >= 0) {
+			currentIndex = index - wheelSteps;
+		} else if (update && down && (index + wheelSteps) < Constants.ZOOM_FACTORS.length) {
+			currentIndex = index + wheelSteps;
 		}
 
 		scaleAndSlide(currentIndex, index, true);
