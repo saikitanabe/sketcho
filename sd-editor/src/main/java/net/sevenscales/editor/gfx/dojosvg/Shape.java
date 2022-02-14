@@ -47,7 +47,7 @@ abstract class Shape extends Graphics implements IShape {
 	}-*/;
 	
 	
-	private native void nativeSetStroke(
+	protected native void nativeSetStroke(
 			JavaScriptObject rawNode, int red, int green, int blue, double opacity)/*-{
 		var color = new $wnd.dojox.color.Color( {r:red, g:green, b:blue, a: opacity} );
 //		var stroke = rawNode.getStroke();
@@ -202,7 +202,7 @@ abstract class Shape extends Graphics implements IShape {
 		rawNode.setFill( color );
 	}-*/;
 	
-	private native void nativeSetFill(
+	protected native void nativeSetFill(
 			JavaScriptObject rawNode, int red, int green, int blue, double opacity)/*-{
 		var color = new $wnd.dojo.Color( {r:red,g:green,b:blue,a:opacity} );
 		rawNode.setFill(color);
@@ -341,7 +341,7 @@ abstract class Shape extends Graphics implements IShape {
 		setAttribute(rawNode, name, value);
 	}
 	
-	private native void setAttribute(JavaScriptObject rawNode, String name, String value)/*-{
+	protected native void setAttribute(JavaScriptObject rawNode, String name, String value)/*-{
 		rawNode.rawNode.setAttribute(name, value);
 	}-*/;
 	
