@@ -48,6 +48,7 @@ import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.DiagramElementAddedEvent;
 import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.impl.SurfaceDiagramSearch;
+import net.sevenscales.editor.api.impl.TouchHelpers;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.editor.api.ot.IBoardUserHandler;
 import net.sevenscales.editor.api.ot.OTBuffer;
@@ -88,9 +89,7 @@ import net.sevenscales.editor.gfx.domain.JsSvg;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.uicomponents.CircleElement;
-
-
-
+import net.sevenscales.editor.diagram.utils.UiUtils;
 
 class SurfaceHandler extends SimplePanel implements 
               ILoadObserver, 
@@ -109,6 +108,7 @@ class SurfaceHandler extends SimplePanel implements
     
   private SimplePanel wrapper;
   private Timer timer;
+  private static final int timeoutToEnableText = UiUtils.isWindows() ? 50 : 50;
   // private Matrix matrix;
   private ISurface surface;
   private DiagramDisplayOrderList diagrams;
@@ -606,6 +606,10 @@ class SurfaceHandler extends SimplePanel implements
   // }
 
   public void setTransform(double tx, double ty) {
+    if (tx != 0 && ty != 0) {
+      debounceDisableText();
+    }
+
     getRootLayer().setTransform(tx, ty);
     _notifyTrasform(rootLayer0.getContainer());
   }
@@ -1251,20 +1255,7 @@ class SurfaceHandler extends SimplePanel implements
     // rootLayer0.scale(value, value);
     // rootLayer0.translate(-mousePosX, -mousePosY);
 
-    // ST 11.2.2022: disable svg text shapes when scaling
-    this.wrapper.addStyleName("disable-text");
-
-    if (this.timer == null) {
-      this.timer = new Timer() {
-        public void run() {
-          // enable text just after the scaling ended
-          wrapper.removeStyleName("disable-text");
-        }
-      };
-    }
-
-    // cancels previous schedule automatically when next is called
-    this.timer.schedule(50);
+    debounceDisableText();
 
     rootLayer0.scaleAt(value, mousePosX, mousePosY);
     // this.matrix = scaleAtMatrix(value, mousePosX, mousePosY);
@@ -1286,6 +1277,25 @@ class SurfaceHandler extends SimplePanel implements
 
     // to notify transform as well
     this.setTransform(tx + diffx, ty + diffy);
+  }
+
+  // ST 14.12.2022: now using this only to change shape-rendering to optimizespeed;
+  private void debounceDisableText() {
+    // ST 11.2.2022: disable svg text shapes when scaling
+    this.wrapper.addStyleName("disable-text");
+
+    if (this.timer == null) {
+      this.timer = new Timer() {
+        public void run() {
+          // enable text just after the scaling ended
+          wrapper.removeStyleName("disable-text");
+          net.sevenscales.domain.utils.Debug.log("disable-text...");
+        }
+      };
+    }
+
+    // cancels previous schedule automatically when next is called
+    this.timer.schedule(timeoutToEnableText);
   }
 
   // ST 11.2.2022: These are not used at the moment. This was a test
