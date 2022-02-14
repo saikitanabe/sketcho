@@ -102,6 +102,10 @@ public class UiUtils {
   public native static boolean _isOpera()/*-{
 		return $wnd.navigator.userAgent.toLowerCase().indexOf('opera') > -1;
 	}-*/;
+
+  public static native boolean isWindows()/*-{
+    return navigator.appVersion.indexOf("Win") != -1;
+  }-*/;
   
 }
 
