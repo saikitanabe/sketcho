@@ -26,7 +26,7 @@ import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
-import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
+import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtilFO;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 
 
@@ -97,9 +97,9 @@ public class TextElement extends AbstractDiagramItem implements
 
 	protected TextElementFormatUtil createTextFormatter(HasTextElement hasTextElement) {
 		if (legacy) {
-			return new TextElementVerticalFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
+			return new TextElementVerticalFormatUtilFO(this, hasTextElement, textGroup, surface.getEditorContext());
 		}
-		return new TextElementVerticalFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
+		return new TextElementVerticalFormatUtilFO(this, hasTextElement, textGroup, surface.getEditorContext());
 	}
 
 	// nice way to clearly separate interface methods :)

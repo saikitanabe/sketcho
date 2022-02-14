@@ -45,9 +45,9 @@ public class TextElementFormatUtil {
 
   // private int rowHeight = ROW_HEIGHT;
   private static final Map<Integer, FontProperty> fontToRowSizeMap;
-  private FontProperty fontProperty;
+  protected FontProperty fontProperty;
 
-  private static class FontProperty {
+  protected static class FontProperty {
     public int rowHeight;
     public int marginTop;
     public int marginBottom;
@@ -668,6 +668,9 @@ public class TextElementFormatUtil {
 
   public boolean isMarkdownEditor() {
     return false;
+  }
+
+  public void setSize(int width, int height) {
   }
 
 }

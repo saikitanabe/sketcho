@@ -35,7 +35,7 @@ import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
-import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtil;
+import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtilFO;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.api.impl.Theme.ElementColorScheme;
 
@@ -63,7 +63,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private int height;
   private IShapeGroup theshape;
   private TextElementFormatUtil textUtil;
-  private GenericHasTextElement hasTextElement;
+  private GenericHasTextElementFO hasTextElement;
   private boolean pathsSetAtLeastOnce;
   private boolean tosvg;
 	private boolean legacy = false;
@@ -97,7 +97,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		addMouseDiagramHandler(this);
 
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
-    hasTextElement = new GenericHasTextElement(this, shape);
+    hasTextElement = new GenericHasTextElementFO(this, shape);
     hasTextElement.setMarginLeft(getMarginLeft());
     hasTextElement.setMarginTop(getMarginTop());
 		hasTextElement.setMarginBottom(getMarginBottom());
@@ -109,7 +109,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		// and text layer was under background color
 		if (legacy) {
 			if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
-				textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, group, surface.getEditorContext());
+				textUtil = new TextElementVerticalFormatUtilFO(this, hasTextElement, group, surface.getEditorContext());
 				textUtil.setMarginTop(0);
 			} else {
 				textUtil = new TextElementFormatUtil(this, hasTextElement, group, surface.getEditorContext());
@@ -138,10 +138,14 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			// order changed due to text is now part of subgroup
 			// and moved with the subgroup
 			if (ShapeProperty.isTextResizeDimVerticalResize(shape.getShapeProperties())) {
-				textUtil = new TextElementVerticalFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
+				textUtil = new TextElementVerticalFormatUtilFO(this, hasTextElement, textGroup, surface.getEditorContext());
 				textUtil.setMarginTop(0);
+        // need to set initial size for foreign object
+        textUtil.setSize(shape.rectShape.width, shape.rectShape.height);
 			} else {
 				textUtil = new TextElementFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
+        // need to set initial size for foreign object
+        textUtil.setSize(shape.rectShape.width, shape.rectShape.height);
 			}
 		}
 
@@ -191,7 +195,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
     return surface.getElementLayer();
   }
 
-	protected GenericHasTextElement getHasTextElement() {
+	protected GenericHasTextElementFO getHasTextElement() {
 		return hasTextElement;
 	}
 
@@ -321,8 +325,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 
 	public void doSetText(String newText) {
-		if (textUtil instanceof TextElementVerticalFormatUtil) {
-			((TextElementVerticalFormatUtil) textUtil).setText(newText, editable, isForceTextRendering());
+		if (textUtil instanceof TextElementVerticalFormatUtilFO) {
+			((TextElementVerticalFormatUtilFO) textUtil).setText(newText, editable, isForceTextRendering());
 		} else {
 	    textUtil.setText(newText, editable, isForceTextRendering());
 		}
@@ -390,8 +394,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 
 	public void resizeEnd() {
-		if (textUtil instanceof TextElementVerticalFormatUtil) {
-			((TextElementVerticalFormatUtil)textUtil).setText(getText(), editable, true);
+		if (textUtil instanceof TextElementVerticalFormatUtilFO) {
+			((TextElementVerticalFormatUtilFO)textUtil).setText(getText(), editable, true);
 		}
 
 		// NOTE the order. Resize => rotate after calculating text position, or 
@@ -494,6 +498,12 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	  		// ie8 - ie10 doesn't support vector-effect
 	  		doSetStrokeWidth();
 	  	}
+
+      // ST 14.2.2022: added to set foreignobject
+      // size due to Safari not showing foreignobject content
+      if (textUtil != null) {
+        textUtil.setSize(width, height);
+      }
 
 			// ST 15.11.2017: commented out after text moved under subgroup
 			// and is moved with the subgroup
@@ -637,7 +647,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
 	@Override
 	public boolean supportsOnlyTextareaDynamicHeight() {
-		if (textUtil instanceof TextElementVerticalFormatUtil) {
+		if (textUtil instanceof TextElementVerticalFormatUtilFO) {
 			return true;
 		}
 		return false;
@@ -664,7 +674,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 
   @Override
   public void editingEnded(boolean modified) {
-		if (textUtil instanceof TextElementVerticalFormatUtil) {
+		if (textUtil instanceof TextElementVerticalFormatUtilFO) {
 	  	if (modified) {
 		  	// Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 		 		// 	public void execute() {
@@ -834,7 +844,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   }
 
   private int extraSupportedMenuItemsByType() {
-		if (textUtil instanceof TextElementVerticalFormatUtil) {
+		if (textUtil instanceof TextElementVerticalFormatUtilFO) {
 			return ContextMenuItem.TEXT_ALIGN.getValue();
 		}
 		return 0;
