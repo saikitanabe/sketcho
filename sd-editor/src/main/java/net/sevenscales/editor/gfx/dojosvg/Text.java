@@ -378,4 +378,17 @@ class Text extends Shape implements IText {
 	  return elem.attributes;
 	}-*/;
 
+  public void setProperties(
+    int marginLeft,
+    int marginTop,
+    int marginBottom,
+    int width
+  ) {
+  }
+
+  public void setHeight(int height) {
+  }
+  public void setSize(int widht, int height) {
+  }
+
 }
