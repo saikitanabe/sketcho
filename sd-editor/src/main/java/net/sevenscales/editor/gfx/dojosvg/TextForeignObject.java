@@ -6,6 +6,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import net.sevenscales.editor.diagram.utils.UiUtils;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IContainer;
 import net.sevenscales.editor.gfx.domain.IText;
 
@@ -413,27 +414,73 @@ class TextForeignObject extends Shape implements IText {
     });
   }-*/;
 
-  public void setHeight(int height) {
-    _setHeight(rawNode, height);
+  public void setShapeSize(int width, int height) {
+    _setShapeSize(rawNode, width, height);
   }
 
-  private native void _setHeight(
-    JavaScriptObject rawNode,
-    int height
-  )/*-{
-    rawNode.setHeight(height);
-  }-*/;
-
-  public void setSize(int width, int height) {
-    _setSize(rawNode, width, height);
-  }
-
-  private native void _setSize(
+  private native void _setShapeSize(
     JavaScriptObject rawNode,
     int width,
     int height
   )/*-{
     rawNode.setSize(width, height);
+  }-*/;
+
+  public void setHorizontal(boolean horizontal) {
+    _setHorizontal(rawNode, horizontal);
+  }
+
+  private native void _setHorizontal(
+    JavaScriptObject rawNode,
+    boolean horizontal
+  )/*-{
+    rawNode.setHorizontal(horizontal);
+  }-*/;
+
+  public void setColor(Color color) {
+    _setColor(rawNode, color.red, color.green, color.blue, color.opacity);
+  }
+  private native void _setColor(
+    JavaScriptObject rawNode,
+    int red,
+    int green,
+    int blue,
+    double opacity
+  )/*-{
+    rawNode.setColor({
+      r: red,
+      g: green,
+      b: blue,
+      a: opacity
+    });
+  }-*/;
+
+  public void setBorderColor(Color color) {
+    _setBorderColor(rawNode, color.red, color.green, color.blue, color.opacity);
+  }
+  private native void _setBorderColor(
+    JavaScriptObject rawNode,
+    int red,
+    int green,
+    int blue,
+    double opacity
+  )/*-{
+    rawNode.setBorderColor({
+      r: red,
+      g: green,
+      b: blue,
+      a: opacity
+    });
+  }-*/;
+
+  public void setShapeProperties(int properties) {
+    _setShapeProperties(rawNode, properties);
+  }  
+  private native void _setShapeProperties(
+    JavaScriptObject rawNode,
+    int properties
+  )/*-{
+    rawNode.setShapeProperties(properties);
   }-*/;
 
 }

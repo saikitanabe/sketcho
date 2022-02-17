@@ -1,6 +1,7 @@
 package net.sevenscales.editor.gfx.domain;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import net.sevenscales.editor.gfx.domain.Color;
 
 public interface IText extends IShape {
   public static final String ALIGN_LEFT = "start";
@@ -40,6 +41,9 @@ public interface IText extends IShape {
   );
   // Safari needs width and height for foreignobject
   // to show it on page
-  void setHeight(int height);
-  void setSize(int widht, int height);
+  void setShapeSize(int widht, int height);
+  void setHorizontal(boolean horizontal);
+  void setColor(Color color);
+  void setBorderColor(Color color);
+  void setShapeProperties(int properties);
 }

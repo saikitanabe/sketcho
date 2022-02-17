@@ -63,7 +63,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   private int height;
   private IShapeGroup theshape;
   private TextElementFormatUtil textUtil;
-  private GenericHasTextElementFO hasTextElement;
+  private GenericHasTextElement hasTextElement;
   private boolean pathsSetAtLeastOnce;
   private boolean tosvg;
 	private boolean legacy = false;
@@ -97,7 +97,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		addMouseDiagramHandler(this);
 
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
-    hasTextElement = new GenericHasTextElementFO(this, shape);
+    hasTextElement = new GenericHasTextElement(this, shape);
     hasTextElement.setMarginLeft(getMarginLeft());
     hasTextElement.setMarginTop(getMarginTop());
 		hasTextElement.setMarginBottom(getMarginBottom());
@@ -141,11 +141,11 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 				textUtil = new TextElementVerticalFormatUtilFO(this, hasTextElement, textGroup, surface.getEditorContext());
 				textUtil.setMarginTop(0);
         // need to set initial size for foreign object
-        textUtil.setSize(shape.rectShape.width, shape.rectShape.height);
+        textUtil.setShapeSize(shape.rectShape.width, shape.rectShape.height);
 			} else {
 				textUtil = new TextElementFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
         // need to set initial size for foreign object
-        textUtil.setSize(shape.rectShape.width, shape.rectShape.height);
+        textUtil.setShapeSize(shape.rectShape.width, shape.rectShape.height);
 			}
 		}
 
@@ -195,7 +195,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
     return surface.getElementLayer();
   }
 
-	protected GenericHasTextElementFO getHasTextElement() {
+	protected GenericHasTextElement getHasTextElement() {
 		return hasTextElement;
 	}
 
@@ -368,7 +368,12 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   }
 	
   public boolean resize(Point diff) {
-    return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);
+    int width = getWidth() + diff.x;
+    int height = getHeight() + diff.y;
+
+    textUtil.setShapeSize(width, height);
+
+    return resize(getRelativeLeft(), getRelativeTop(), width, height);
   }
 
   @Override
@@ -397,6 +402,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		if (textUtil instanceof TextElementVerticalFormatUtilFO) {
 			((TextElementVerticalFormatUtilFO)textUtil).setText(getText(), editable, true);
 		}
+
+    textUtil.resizeEnd();
 
 		// NOTE the order. Resize => rotate after calculating text position, or 
 		// text will not be rotated.
@@ -502,7 +509,7 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
       // ST 14.2.2022: added to set foreignobject
       // size due to Safari not showing foreignobject content
       if (textUtil != null) {
-        textUtil.setSize(width, height);
+        textUtil.setShapeSize(width, height);
       }
 
 			// ST 15.11.2017: commented out after text moved under subgroup

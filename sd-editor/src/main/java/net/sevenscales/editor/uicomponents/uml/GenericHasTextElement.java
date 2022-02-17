@@ -47,7 +47,7 @@ class GenericHasTextElement extends AbstractHasTextElement {
 
 	@Override
   public int getWidth() {
-    return parent.getWidth() - getMarginLeft() * 2;
+    return parent.getWidth();// - getMarginLeft() * 2;
   }
 
 	@Override

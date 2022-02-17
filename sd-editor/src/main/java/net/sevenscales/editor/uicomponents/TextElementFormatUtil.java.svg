@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.HashMap;
 
 import java.util.logging.Level;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.logging.client.LogConfiguration;
 
 import net.sevenscales.domain.utils.SLogger;
@@ -212,7 +211,6 @@ public class TextElementFormatUtil {
 	// private int marginBottom;
 	private int fontSize = 12;
   private int degrees;
-  protected IText textElement;
   
   public TextElementFormatUtil(Diagram parent, HasTextElement hasTextElement, IGroup group, EditorContext editorContext) {
   	this.parent = parent;
@@ -227,46 +225,23 @@ public class TextElementFormatUtil {
     textGroup = IShapeFactory.Util.factory(true).createGroup(group);
     textGroup.setAttribute("class", "shapebase");
     fontProperty = fontToRowSizeMap.get(12);
-
-    textElement = IShapeFactory.Util.factory(true).createText(textGroup, false);
-    textElement.setHorizontal(isHorizontal());
-    textElement.setText(parent.getDiagramItem().getText());
-    // textElement.setPosition(hasTextElement.getX(), hasTextElement.getY());
-
-    // textElement.setProperties(
-    //   10,
-    //   11,
-    //   getMarginBottom(),
-    //   hasTextElement.getWidth()
-    // );
-    
-    textElement.setShapeProperties(parent.getDiagramItem().getShapeProperties());
-    textElement.setShapeSize(hasTextElement.getWidth(), hasTextElement.getHeight());
-
-    if (editorContext.isEditable()) {
-      textElement.addGraphicsMouseDownHandler((GraphicsMouseDownHandler) hasTextElement.getGraphicsMouseHandler());
-      textElement.addGraphicsMouseUpHandler((GraphicsMouseUpHandler) hasTextElement.getGraphicsMouseHandler());
-      textElement.addGraphicsMouseMoveHandler((GraphicsMouseMoveHandler) hasTextElement.getGraphicsMouseHandler());
-      textElement.addGraphicsMouseEnterHandler((GraphicsMouseEnterHandler) hasTextElement.getGraphicsMouseHandler());
-      textElement.addGraphicsMouseLeaveHandler((GraphicsMouseLeaveHandler) hasTextElement.getGraphicsMouseHandler());
-      
-      textElement.addGraphicsTouchStartHandler((GraphicsTouchStartHandler) hasTextElement.getGraphicsMouseHandler());
-      textElement.addGraphicsTouchMoveHandler((GraphicsTouchMoveHandler) hasTextElement.getGraphicsMouseHandler());
-      textElement.addGraphicsTouchEndHandler((GraphicsTouchEndHandler) hasTextElement.getGraphicsMouseHandler());
-    }
-  }
-
-  protected boolean isHorizontal() {
-    return true;
   }
   
   public void applyTextColor() {
-    textElement.setColor(hasTextElement.getTextColor());
-  	// for (List<IShape> line : lines) {
-  	// 	for (IShape s : line) {
-    //     s.setFill(hasTextElement.getTextColor());
-  	// 	}
-  	// }
+  	for (List<IShape> line : lines) {
+  		for (IShape s : line) {
+//	  		if (s instanceof IText) {
+//			    IText t = (IText) s;
+	//		    t.setStroke("#" + color.toHexString());
+			    s.setFill(hasTextElement.getTextColor());
+//	  		}
+	  		
+	  		// difficult to see use default line color
+//	  		else if (s instanceof ILine) {
+//	  			s.setStroke(parent.getBorderColor());
+//	  		}
+  		}
+  	}
   }
 
   protected void applyTextAlignment(IText text, int x) {
@@ -341,7 +316,7 @@ public class TextElementFormatUtil {
     }
     return 0;
 	}
-
+  
   public void setText(String newText, boolean editable, boolean force) {
     setText(newText, editable);
   }
@@ -364,28 +339,12 @@ public class TextElementFormatUtil {
     return text != null && text.equals(newText) ? false : true;
   }
 
-  protected void setText(String text) {
-  	// this.text = text;
-
-    text = handleLineBreaks(text);
-
-    textElement.setText(text);
-    textElement.setColor(hasTextElement.getTextColor());
-    textElement.setBorderColor(parent.getBorderColor());
-    textElement.setShapeProperties(parent.getDiagramItem().getShapeProperties());
-  }
-
   private void _setText(String newText, boolean editable) {
     // convert json text line (\\n) breaks to line breaks
-    // newText = handleLineBreaks(newText);
-
-    // textElement.setText(newText);
-    // textElement.setColor(hasTextElement.getTextColor());
-    // textElement.setBorderColor(parent.getBorderColor());
-    // textElement.setShapeProperties(parent.getDiagramItem().getShapeProperties());
-    setText(newText);
-
+    newText = handleLineBreaks(newText);
     boolean changed = textChanged(newText);
+    
+    createRows(newText, editable);
 
     if ((changed || hasTextElement.forceAutoResize()) && 
   		 editorContext.isTrue(EditorProperty.AUTO_RESIZE_ENABLED)) {
@@ -394,122 +353,118 @@ public class TextElementFormatUtil {
       }
     }
      
-    // setTextShape();
+    setTextShape();
 	}
 
-//   private void createRows(String newText, boolean editable) {
-//     text = newText;
-//     clearLines();
-//     widestWidth = 0;
-//     newText += " ";
-//     String[] texts = newText.split("\n");
-//     for (String t : texts) {
-//       t = t.trim();
-//       List<IShape> currentline = new ArrayList<IShape>();
-//       if (t.length()>0 && t.charAt(t.length()-1) == '\r') {
-//         // on windows line feeds are \r\n
-//         t = t.substring(0, t.length()-1);
-//       }
-//       if (t.equals("--") || t.equals("—")) {
-//         // create separator line
-//         // iPad converts -- to —
-//         ILine separator = IShapeFactory.Util.factory(editable).createLine(textGroup);
-//         separator.setStroke(parent.getBorderColor());
-//         // TODO isSketchiness()
-//         if (Tools.isSketchMode()) {
-//           separator.setStrokeWidth(Constants.SKETCH_SEPARATOR_WEIGHT);
-//         }
-// //        separator.setFill(250, 250, 200, 2);
+  private void createRows(String newText, boolean editable) {
+    text = newText;
+    clearLines();
+    widestWidth = 0;
+    // rowHeight = fontToRowSizeMap.get(fontSize);
+    // if (rowHeight == null) {
+    //   // fall back to default row height if bug that fontsize is not found from mappings
+    //   rowHeight = ROW_HEIGHT;
+    // }
+
+    // split with \n
+    // convert text to shapes
+    // space is to keep last line if last is \n
+    newText += " ";
+    String[] texts = newText.split("\n");
+    for (String t : texts) {
+      t = t.trim();
+      List<IShape> currentline = new ArrayList<IShape>();
+      if (t.length()>0 && t.charAt(t.length()-1) == '\r') {
+        // on windows line feeds are \r\n
+        t = t.substring(0, t.length()-1);
+      }
+      if (t.equals("--") || t.equals("—")) {
+        // create separator line
+        // iPad converts -- to —
+        ILine separator = IShapeFactory.Util.factory(editable).createLine(textGroup);
+        separator.setStroke(parent.getBorderColor());
+        // TODO isSketchiness()
+        if (Tools.isSketchMode()) {
+          separator.setStrokeWidth(Constants.SKETCH_SEPARATOR_WEIGHT);
+        }
+//        separator.setFill(250, 250, 200, 2);
         
-//         separator.addGraphicsMouseDownHandler((GraphicsMouseDownHandler) hasTextElement.getGraphicsMouseHandler());
-//         separator.addGraphicsMouseUpHandler((GraphicsMouseUpHandler) hasTextElement.getGraphicsMouseHandler());
-//         separator.addGraphicsMouseMoveHandler((GraphicsMouseMoveHandler) hasTextElement.getGraphicsMouseHandler());
-//         separator.addGraphicsMouseEnterHandler((GraphicsMouseEnterHandler) hasTextElement.getGraphicsMouseHandler());
-//         separator.addGraphicsMouseLeaveHandler((GraphicsMouseLeaveHandler) hasTextElement.getGraphicsMouseHandler());
+        separator.addGraphicsMouseDownHandler((GraphicsMouseDownHandler) hasTextElement.getGraphicsMouseHandler());
+        separator.addGraphicsMouseUpHandler((GraphicsMouseUpHandler) hasTextElement.getGraphicsMouseHandler());
+        separator.addGraphicsMouseMoveHandler((GraphicsMouseMoveHandler) hasTextElement.getGraphicsMouseHandler());
+        separator.addGraphicsMouseEnterHandler((GraphicsMouseEnterHandler) hasTextElement.getGraphicsMouseHandler());
+        separator.addGraphicsMouseLeaveHandler((GraphicsMouseLeaveHandler) hasTextElement.getGraphicsMouseHandler());
         
-//         separator.addGraphicsTouchStartHandler((GraphicsTouchStartHandler) hasTextElement.getGraphicsMouseHandler());
-//         separator.addGraphicsTouchMoveHandler((GraphicsTouchMoveHandler) hasTextElement.getGraphicsMouseHandler());
-//         separator.addGraphicsTouchEndHandler((GraphicsTouchEndHandler) hasTextElement.getGraphicsMouseHandler());
+        separator.addGraphicsTouchStartHandler((GraphicsTouchStartHandler) hasTextElement.getGraphicsMouseHandler());
+        separator.addGraphicsTouchMoveHandler((GraphicsTouchMoveHandler) hasTextElement.getGraphicsMouseHandler());
+        separator.addGraphicsTouchEndHandler((GraphicsTouchEndHandler) hasTextElement.getGraphicsMouseHandler());
 
-//         currentline.add(separator);
-// //        hasTextElement.addShape(separator);
-// //        shapes.add(separator);
-//       } else {
-//         // method or argument section
-//          IText text = IShapeFactory.Util.factory(editable).createText(textGroup);
-// //         text.setFontWeight(IText.WEIGHT_NORMAL);
-//          text.setFontFamily(IText.SANS);
-//          text.setFontSize(fontSize + "px");
-//          t = t.replaceAll("<<", Character.toString('\u00AB'));
-//          t = t.replaceAll(">>", Character.toString('\u00BB'));
+        currentline.add(separator);
+//        hasTextElement.addShape(separator);
+//        shapes.add(separator);
+      } else {
+        // method or argument section
+         IText text = IShapeFactory.Util.factory(editable).createText(textGroup);
+//         text.setFontWeight(IText.WEIGHT_NORMAL);
+         text.setFontFamily(IText.SANS);
+         text.setFontSize(fontSize + "px");
+         t = t.replaceAll("<<", Character.toString('\u00AB'));
+         t = t.replaceAll(">>", Character.toString('\u00BB'));
          
-//          text.setText(t);
-//          currentline.add(text);
-// //         hasTextElement.addShape(text);
-//          text.setFill(hasTextElement.getTextColor());
-// //         shapes.add(text);
+         text.setText(t);
+         currentline.add(text);
+//         hasTextElement.addShape(text);
+         text.setFill(hasTextElement.getTextColor());
+//         shapes.add(text);
          
-//          double textWidth = text.getTextWidth();
+         double textWidth = text.getTextWidth();
 
-//          widestWidth = textWidth > widestWidth ? textWidth : widestWidth;
+         widestWidth = textWidth > widestWidth ? textWidth : widestWidth;
 
-//          if (editorContext.isEditable()) {
-//            text.addGraphicsMouseDownHandler((GraphicsMouseDownHandler) hasTextElement.getGraphicsMouseHandler());
-//            text.addGraphicsMouseUpHandler((GraphicsMouseUpHandler) hasTextElement.getGraphicsMouseHandler());
-//            text.addGraphicsMouseMoveHandler((GraphicsMouseMoveHandler) hasTextElement.getGraphicsMouseHandler());
-//            text.addGraphicsMouseEnterHandler((GraphicsMouseEnterHandler) hasTextElement.getGraphicsMouseHandler());
-//            text.addGraphicsMouseLeaveHandler((GraphicsMouseLeaveHandler) hasTextElement.getGraphicsMouseHandler());
+         if (editorContext.isEditable()) {
+           text.addGraphicsMouseDownHandler((GraphicsMouseDownHandler) hasTextElement.getGraphicsMouseHandler());
+           text.addGraphicsMouseUpHandler((GraphicsMouseUpHandler) hasTextElement.getGraphicsMouseHandler());
+           text.addGraphicsMouseMoveHandler((GraphicsMouseMoveHandler) hasTextElement.getGraphicsMouseHandler());
+           text.addGraphicsMouseEnterHandler((GraphicsMouseEnterHandler) hasTextElement.getGraphicsMouseHandler());
+           text.addGraphicsMouseLeaveHandler((GraphicsMouseLeaveHandler) hasTextElement.getGraphicsMouseHandler());
            
-//            text.addGraphicsTouchStartHandler((GraphicsTouchStartHandler) hasTextElement.getGraphicsMouseHandler());
-//            text.addGraphicsTouchMoveHandler((GraphicsTouchMoveHandler) hasTextElement.getGraphicsMouseHandler());
-//            text.addGraphicsTouchEndHandler((GraphicsTouchEndHandler) hasTextElement.getGraphicsMouseHandler());
-//          }
-//       }
-//       lines.add(currentline);
-//     }
-//   }
+           text.addGraphicsTouchStartHandler((GraphicsTouchStartHandler) hasTextElement.getGraphicsMouseHandler());
+           text.addGraphicsTouchMoveHandler((GraphicsTouchMoveHandler) hasTextElement.getGraphicsMouseHandler());
+           text.addGraphicsTouchEndHandler((GraphicsTouchEndHandler) hasTextElement.getGraphicsMouseHandler());
+         }
+      }
+      lines.add(currentline);
+    }
+  }
 
   public void applyBorderColor(Color color) {
-    textElement.setBorderColor(parent.getBorderColor());
-
-    // for (List<IShape> line : lines) {
-    //   for (IShape s : line) {
-    //     if (s instanceof ILine) {
-    //       s.setStroke(color);
-    //     }
-    //   }
-    // }
+    for (List<IShape> line : lines) {
+      for (IShape s : line) {
+        if (s instanceof ILine) {
+          s.setStroke(color);
+        }
+      }
+    }
   }
 
   public void reapplyText() {
-    // createRows(text, true);
+    createRows(text, true);
     resizeElement();
-    // setTextShape();
+    setTextShape();
   }
 
-  protected void resizeElement() {
+  private void resizeElement() {
+    double width = getTextWidth();
+    int rows = lines.size();
+    int height = getMarginTop() + rows * fontProperty.rowHeight + fontProperty.marginBottom + getMarginBottom();
+
     // only resize when size increases; currently disabled
 //      width = width > rectSurface.getWidth() ? width : rectSurface.getWidth();
 //      height = height > rectSurface.getHeight() ? height : rectSurface.getHeight();
     if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION) && hasTextElement.supportElementResize()) {
       // during OT operation element is not resized and everything is 
       // copied as is, element size and text
-      // double width = getTextWidth() + getMargin();
-
-      // resize parent as deferred since
-      // react component has not yet updated its
-      // content, this appears when switching
-      // shape in place
-      // - first new shape text is set, like default 'Activity'
-      // - then custom text is set but it is not yet on DOM
-      Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-				public void execute() {
-          double width = getTextWidth();
-          // double height = getMarginTop() + getTextHeight() + fontProperty.marginBottom + getMarginBottom();
-          double height = getTextHeight();
-          hasTextElement.resize(0, 0, (int) width, (int) height);
-        }
-			});
+      hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), (int) width, height);
     }
   }
 
@@ -518,85 +473,81 @@ public class TextElementFormatUtil {
   }
 
   public int middleY(int row) {
-    // return hasTextElement.getY() + hasTextElement.getMarginTop() + hasTextElement.getHeight() / 2 - (lines.size() * fontProperty.rowHeight / 2) + (row * fontProperty.rowHeight);
-    return hasTextElement.getY() + 
-           hasTextElement.getMarginTop() + 
-           hasTextElement.getHeight() / 2 + //(lines.size() * fontProperty.rowHeight / 2) + 
-           (row * fontProperty.rowHeight);
+    return hasTextElement.getY() + hasTextElement.getMarginTop() + hasTextElement.getHeight() / 2 - (lines.size() * fontProperty.rowHeight / 2) + (row * fontProperty.rowHeight);
   }
 
 	public void setTextShape() {
-//     int row = 1;
-// //    double rowHeight = 13.0;
-//     int separated = -1;
-//     for (List<IShape> line : lines) {
-//       IText prevtext = null;
-// 	    for (IShape s : line) {
-// 	      if (s instanceof ILine) {
-// 	        ILine l = (ILine) s;
-//           int y = hasTextElement.getY() + (row * fontProperty.rowHeight) + 4;
-//           if (hasTextElement.verticalAlignMiddle()) {
-//             // some mystical - 8 to get line little bit higher
-//             y = middleY(row) - 8;
-//           }
-// 	        l.setShape(hasTextElement.getX() + 1, 
-// 	        					 y, 
-// 	        				   hasTextElement.getX() + hasTextElement.getWidth() - 1, 
-// 	        				   y);
-// 	        if (separated == -1) {
-// 	          separated = row;
-// 	        }
-// 	      } else {
-// 	        IText t = (IText) s;
-// 	//        rowHeight = t.getTextHeight();
-// 	        int x = hasTextElement.getX();
-// 	        String align = IText.ALIGN_LEFT;
-// 	        String weight = IText.WEIGHT_NORMAL;
-// 	        if ((separated == -1 && hasTextElement.supportsTitleCenter()) || forceTextAlign) {
-// 	          x += hasTextElement.getWidth()/2;
-// 	          align = IText.ALIGN_CENTER;
-// 	          // bold first segment if not stereo type
-// 	          if (!t.getText().matches("\u00AB.*\u00BB") && hasTextElement.boldText()) {
-// 	            weight = IText.WEIGHT_BOLD;
-// 	  	        t.setFontWeight(weight);
-// 	          }
-// 	        } else if (hasTextElement.centeredText()) {
-//             x += hasTextElement.getWidth()/2;
-//             align = IText.ALIGN_CENTER;
-//           } else {
-// 	          x += getStartX();
-// 	        }
+    int row = 1;
+//    double rowHeight = 13.0;
+    int separated = -1;
+    for (List<IShape> line : lines) {
+      IText prevtext = null;
+	    for (IShape s : line) {
+	      if (s instanceof ILine) {
+	        ILine l = (ILine) s;
+          int y = hasTextElement.getY() + (row * fontProperty.rowHeight) + 4;
+          if (hasTextElement.verticalAlignMiddle()) {
+            // some mystical - 8 to get line little bit higher
+            y = middleY(row) - 8;
+          }
+	        l.setShape(hasTextElement.getX() + 1, 
+	        					 y, 
+	        				   hasTextElement.getX() + hasTextElement.getWidth() - 1, 
+	        				   y);
+	        if (separated == -1) {
+	          separated = row;
+	        }
+	      } else {
+	        IText t = (IText) s;
+	//        rowHeight = t.getTextHeight();
+	        int x = hasTextElement.getX();
+	        String align = IText.ALIGN_LEFT;
+	        String weight = IText.WEIGHT_NORMAL;
+	        if ((separated == -1 && hasTextElement.supportsTitleCenter()) || forceTextAlign) {
+	          x += hasTextElement.getWidth()/2;
+	          align = IText.ALIGN_CENTER;
+	          // bold first segment if not stereo type
+	          if (!t.getText().matches("\u00AB.*\u00BB") && hasTextElement.boldText()) {
+	            weight = IText.WEIGHT_BOLD;
+	  	        t.setFontWeight(weight);
+	          }
+	        } else if (hasTextElement.centeredText()) {
+            x += hasTextElement.getWidth()/2;
+            align = IText.ALIGN_CENTER;
+          } else {
+	          x += getStartX();
+	        }
 	        
-// 	        if (prevtext != null) {
-// 	        	x = prevtext.getX() + (int) prevtext.getTextWidth() + 4;
-// 	        }
-// 	        int y = 0;
-// 	        if (!hasTextElement.verticalAlignMiddle()) {
-//             y = getTextTop(row);
-// 	        } else {
-// 	        	// find middle and then find start y based on all lines
-// 	        	y = middleY(row);
-// 	        	y -= 5; // some base line align
-// 	        }
+	        if (prevtext != null) {
+	        	x = prevtext.getX() + (int) prevtext.getTextWidth() + 4;
+	        }
+	        int y = 0;
+	        if (!hasTextElement.verticalAlignMiddle()) {
+            y = getTextTop(row);
+	        } else {
+	        	// find middle and then find start y based on all lines
+	        	y = middleY(row);
+	        	y -= 5; // some base line align
+	        }
 	        		
-// 	        t.setShape(x, y);
-// 	        t.setAlignment(align);
-//           if (degrees != 0) {
-//             if (hasTextElement.boldText()) {
-//               t.setFontWeight(IText.WEIGHT_BOLD);
-//             }
+	        t.setShape(x, y);
+	        t.setAlignment(align);
+          if (degrees != 0) {
+            if (hasTextElement.boldText()) {
+              t.setFontWeight(IText.WEIGHT_BOLD);
+            }
 
-//             int twidth = (int) t.getTextWidth();
-//             align = IText.ALIGN_LEFT;
-//             // + 1 to y align little bit higher
-//             t.rotatedxdy(degrees, hasTextElement.getX(), hasTextElement.getY() + 1, -(hasTextElement.getHeight() / 2 + twidth / 2 + 5) , 0);
-//           }
-// 	        prevtext = t;
-// 	      }
-// 	    }
-// 	    prevtext = null;
-//       ++row;
-//     }
+            int twidth = (int) t.getTextWidth();
+            align = IText.ALIGN_LEFT;
+            // + 1 to y align little bit higher
+            t.rotatedxdy(degrees, hasTextElement.getX(), hasTextElement.getY() + 1, -(hasTextElement.getHeight() / 2 + twidth / 2 + 5) , 0);
+          }
+	        prevtext = t;
+	      }
+	    }
+	    prevtext = null;
+      ++row;
+    }
      
     // by default last line
 //    int linkLine = lines.size() - 1;
@@ -619,20 +570,24 @@ public class TextElementFormatUtil {
   }
   
   public String getText() {
-    return textElement.getText();
+    return text;
   }
 
   public void setStoreText(String text) {
-    // setText(text);
+    setText(text);
   }
-    
+  
+  protected void setText(String text) {
+  	this.text = text;
+  }
+  
   protected void clearLines() {
-  	// for (List<IShape> line : lines) {
-	  //   for (IShape ltext : line) {
-	  //   	ltext.remove();
-		//   }
-  	// }
-	  // lines.clear();
+  	for (List<IShape> line : lines) {
+	    for (IShape ltext : line) {
+	    	ltext.remove();
+		  }
+  	}
+	  lines.clear();
   }
 
 	public void hide() {
@@ -648,11 +603,11 @@ public class TextElementFormatUtil {
   }
 
 	public void applyTransformToShape(int dx, int dy) {
-  	// for (List<IShape> line : lines) {
-	  //   for (IShape ltext : line) {
-	  //   	ltext.applyTransformToShape(dx, dy);
-	  //   }
-  	// }
+  	for (List<IShape> line : lines) {
+	    for (IShape ltext : line) {
+	    	ltext.applyTransformToShape(dx, dy);
+	    }
+  	}
 	}
 
 	public void setForceTextAlign(boolean forceTextAlign) {
@@ -660,13 +615,11 @@ public class TextElementFormatUtil {
 	}
 
 	public double getTextWidth() {
-		// return widestWidth + getMargin(); // +margin
-    return textElement.getTextWidth();
+		return widestWidth + getMargin(); // +margin
 	}
 	
 	public double getTextHeight() {
-		// return (lines.size() + 1) * fontProperty.rowHeight;
-    return textElement.getTextHeight();
+		return (lines.size() + 1) * fontProperty.rowHeight;
   }
   
   public boolean isSupportFontSize() {
@@ -701,7 +654,7 @@ public class TextElementFormatUtil {
   }
 
   public void remove() {
-    // clearLines();
+    clearLines();
     textGroup.remove();
   }
 
@@ -717,13 +670,7 @@ public class TextElementFormatUtil {
     return false;
   }
 
-  public void resizeEnd() {
-    // textElement.resizeEnd();
-  }
-
-  public void setShapeSize(int width, int height) {
-    textElement.setShapeProperties(parent.getDiagramItem().getShapeProperties());
-    textElement.setShapeSize(width, height);
+  public void setSize(int width, int height) {
   }
 
 }

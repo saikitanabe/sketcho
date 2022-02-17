@@ -25,7 +25,7 @@ import net.sevenscales.editor.gfx.domain.IText;
 
 
 public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
-  private static final SLogger logger = SLogger.createLogger(TextElementVerticalFormatUtil.class);
+  private static final SLogger logger = SLogger.createLogger(TextElementVerticalFormatUtilFO.class);
 
   public static int DEFAULT_VERTICAL_TEXT_MARGIN = 0;
   // 11 is just the begging
@@ -41,6 +41,11 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
   ) {
   	super(parent, hasTextElement, group, editorContext);
   }
+
+  @Override
+  protected boolean isHorizontal() {
+    return false;
+  }  
 
   public void setText(String newText, boolean editable) {
   	setText(newText, editable, false);
@@ -64,30 +69,23 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
       // this.tokens = TokenParser.parse2(getText());
       // token to be reused in html formatting
       
-      clearLines();
-      List<IShape> currentline = new ArrayList<IShape>();
-      lines.add(currentline);
+      // clearLines();
+      // List<IShape> currentline = new ArrayList<IShape>();
+      // lines.add(currentline);
       
-      IText text = createText(true);
+      // IText text = createText(true);
 
-      applyTextAlignment(text, hasTextElement.getX());
+      // applyTextAlignment(text, hasTextElement.getX());
 
-      currentline.add(text);
-      // text.addText(
-      //   tokens,
-      //   hasTextElement.getX(),
-      //   hasTextElement.getWidth(),
-      //   parent.isTextAlignCenter(),
-      //   parent.isTextAlignRight()
+      // currentline.add(text);
+      // textElement.setProperties(
+      //   hasTextElement.getMarginLeft(),
+      //   13,
+      //   getMarginBottom(),
+      //   hasTextElement.getWidth()
       // );
-      text.setProperties(
-        hasTextElement.getMarginLeft(),
-        13,
-        getMarginBottom(),
-        hasTextElement.getWidth()
-      );
-      text.setText(getText());
-      text.setSize(
+      textElement.setText(getText());
+      textElement.setShapeSize(
         hasTextElement.getWidth(), 
         hasTextElement.getHeight()
       );
@@ -113,13 +111,13 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
     double textHeight = getTextHeight();
     if (/*textHeight != prevTextHeight && */textHeight > 0) {
       int theight = (int) (textHeight / parent.getSurfaceHandler().getScaleFactor());
-      int height = ((int) theight) + DEFAULT_TOP_MARGIN + hasTextElement.getMarginTop() + hasTextElement.getMarginBottom();
+      // int height = ((int) theight) + DEFAULT_TOP_MARGIN + hasTextElement.getMarginTop() + hasTextElement.getMarginBottom();
       // parent.setHeight();
-      hasTextElement.resizeHeight(height);
-      IText text = getTextShape();
-      if (text != null) {
-        text.setHeight(height);
-      }
+      hasTextElement.resizeHeight(theight);
+      // IText text = getTextShape();
+      // if (text != null) {
+      //   text.setHeight(height);
+      // }
     }
     // prevTextHeight = textHeight;
     // MeasurementHelpers.setMeasurementPanelTextAndResizeDiagram(parent, getText());
@@ -178,9 +176,9 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
 
 	private IText createText(boolean editable) {
     IText text = IShapeFactory.Util.factory(editable).createText(textGroup);
-    text.setFontFamily(IText.SANS);
-    text.setFill(hasTextElement.getTextColor());
-    text.setAttribute("xml:space", "preserve");
+    // text.setFontFamily(IText.SANS);
+    // text.setFill(hasTextElement.getTextColor());
+    // text.setAttribute("xml:space", "preserve");
     
     text.addGraphicsMouseDownHandler((GraphicsMouseDownHandler) hasTextElement.getGraphicsMouseHandler());
     text.addGraphicsMouseUpHandler((GraphicsMouseUpHandler) hasTextElement.getGraphicsMouseHandler());
@@ -197,14 +195,16 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
 
   @Override
   public double getTextHeight() {
-    double result = 0;
-    if (lines.size() == 1 && lines.get(0).size() == 1) {
-      IShape s = lines.get(0).get(0);
-      if (s instanceof IText) {
-        result = ((IText)s).getTextHeight();
-      }
-    }
-    return result;
+    // double result = 0;
+    // if (lines.size() == 1 && lines.get(0).size() == 1) {
+    //   IShape s = lines.get(0).get(0);
+    //   if (s instanceof IText) {
+    //     result = ((IText)s).getTextHeight();
+    //   }
+    // }
+    // return result;
+
+    return textElement.getTextHeight();
   }
 
   @Override
@@ -213,23 +213,34 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
   }
 
   @Override
-  public void setSize(int width, int height) {
+  public void setShapeSize(int width, int height) {
     IText text = getTextShape();
     if (text != null) {
-      text.setSize(width, height);
+      text.setShapeSize(width, height);
     }
   }
 
   private IText getTextShape() {
-    IText result = null;
-    if (lines.size() == 1 && lines.get(0).size() == 1) {
-      IShape s = lines.get(0).get(0);
-      if (s instanceof IText) {
-        result = (IText)s;
-      }
-    }
+    // IText result = null;
+    // if (lines.size() == 1 && lines.get(0).size() == 1) {
+    //   IShape s = lines.get(0).get(0);
+    //   if (s instanceof IText) {
+    //     result = (IText)s;
+    //   }
+    // }
 
-    return result;
+    // return result;
+
+    return textElement;
+  }
+
+  @Override
+  public void resizeEnd() {
+    calculateAndNotifyHeight(hasTextElement.getWidth());
+  }
+
+  @Override
+  protected void resizeElement() {
   }
 
 }

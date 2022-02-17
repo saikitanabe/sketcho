@@ -8,6 +8,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.gfx.domain.IContainer;
 import net.sevenscales.editor.gfx.domain.IText;
+import net.sevenscales.editor.gfx.domain.Color;
 
 
 class Text extends Shape implements IText {
@@ -378,17 +379,14 @@ class Text extends Shape implements IText {
 	  return elem.attributes;
 	}-*/;
 
-  public void setProperties(
-    int marginLeft,
-    int marginTop,
-    int marginBottom,
-    int width
-  ) {
+  public void setShapeSize(int widht, int height) {
   }
-
-  public void setHeight(int height) {
+  public void setHorizontal(boolean horizontal) {
   }
-  public void setSize(int widht, int height) {
+  public void setColor(Color color) {
   }
-
+  public void setBorderColor(Color color) {
+  }
+  public void setShapeProperties(int properties) {
+  }
 }

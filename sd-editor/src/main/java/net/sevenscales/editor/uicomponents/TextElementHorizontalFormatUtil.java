@@ -110,7 +110,7 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
     return hasTextElement.getY();
   }
 
-  private void resizeElement() {
+  protected void resizeElement() {
     double width = text.getTextWidth();
     double height = text.getTextHeight();
 
