@@ -83,8 +83,6 @@ public class GenericContainerElement extends AbstractDiagramItem implements Supp
     resizeHelpers = ResizeHelpers.createResizeHelpers(surface);
     hasTextElement = new GenericHasTextElement(this, shape);
     hasTextElement.setMarginLeft(getMarginLeft());
-    textUtil = new TextElementFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
-    hasTextElement.setY(0);
     // textUtil.setMarginTop(0);
     // textUtil.setRotate(-90);
 
@@ -92,6 +90,8 @@ public class GenericContainerElement extends AbstractDiagramItem implements Supp
     theshape.fetch(this);
 
     setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
+    textUtil = new TextElementFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
+    hasTextElement.setY(0);
     setText(text);
     
     setReadOnly(!editable);
@@ -192,8 +192,14 @@ public class GenericContainerElement extends AbstractDiagramItem implements Supp
     return resizeHelpers.isOnResizeArea();
   }
   
+  @Override
   public boolean resize(Point diff) {
-    return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight() + diff.y);     
+    int width = getWidth() + diff.x;
+    int height = getHeight() + diff.y;
+
+    textUtil.setShapeSize(width, height);
+
+    return resize(getRelativeLeft(), getRelativeTop(), width, height);
   }
 
   public void setShape(int left, int top, int width, int height) {

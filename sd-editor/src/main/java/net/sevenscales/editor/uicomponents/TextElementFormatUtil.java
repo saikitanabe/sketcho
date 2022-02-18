@@ -230,7 +230,7 @@ public class TextElementFormatUtil {
 
     textElement = IShapeFactory.Util.factory(true).createText(textGroup, false);
     textElement.setHorizontal(isHorizontal());
-    textElement.setText(parent.getDiagramItem().getText());
+    textElement.initializeText(parent.getDiagramItem().getText());
     // textElement.setPosition(hasTextElement.getX(), hasTextElement.getY());
 
     // textElement.setProperties(
@@ -240,7 +240,10 @@ public class TextElementFormatUtil {
     //   hasTextElement.getWidth()
     // );
     
-    textElement.setShapeProperties(parent.getDiagramItem().getShapeProperties());
+    textElement.setShapeProperties(
+      parent.getDiagramItem().getShapeProperties(),
+      parent.getDiagramItem().getType()
+    );
     textElement.setShapeSize(hasTextElement.getWidth(), hasTextElement.getHeight());
 
     if (editorContext.isEditable()) {
@@ -372,7 +375,11 @@ public class TextElementFormatUtil {
     textElement.setText(text);
     textElement.setColor(hasTextElement.getTextColor());
     textElement.setBorderColor(parent.getBorderColor());
-    textElement.setShapeProperties(parent.getDiagramItem().getShapeProperties());
+    textElement.setFontSize(fontSize + "px");
+    textElement.setShapeProperties(
+      parent.getDiagramItem().getShapeProperties(),
+      parent.getDiagramItem().getType()
+    );
   }
 
   private void _setText(String newText, boolean editable) {
@@ -722,7 +729,10 @@ public class TextElementFormatUtil {
   }
 
   public void setShapeSize(int width, int height) {
-    textElement.setShapeProperties(parent.getDiagramItem().getShapeProperties());
+    textElement.setShapeProperties(
+      parent.getDiagramItem().getShapeProperties(),
+      parent.getDiagramItem().getType()
+    );
     textElement.setShapeSize(width, height);
   }
 

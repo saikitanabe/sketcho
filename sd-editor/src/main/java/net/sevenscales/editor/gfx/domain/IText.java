@@ -33,17 +33,12 @@ public interface IText extends IShape {
 	public String getFontFamily();
 	void addText(JavaScriptObject tokens, int x, int width, boolean textAlignCenter, boolean textAlignRight);
 	String getChildElements(int dx);
-  void setProperties(
-    int marginLeft,
-    int marginTop,
-    int marginBottom,
-    int width
-  );
   // Safari needs width and height for foreignobject
   // to show it on page
   void setShapeSize(int widht, int height);
+  void initializeText(String text);
   void setHorizontal(boolean horizontal);
   void setColor(Color color);
   void setBorderColor(Color color);
-  void setShapeProperties(int properties);
+  void setShapeProperties(int properties, String parentType);
 }

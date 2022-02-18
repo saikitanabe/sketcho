@@ -384,36 +384,6 @@ class TextForeignObject extends Shape implements IText {
 	  return elem.attributes;
 	}-*/;
 
-  @Override
-  public void setProperties(
-    int marginLeft,
-    int marginTop,
-    int marginBottom,
-    int width
-  ) {
-    _setProperties(
-      rawNode,
-      marginLeft,
-      marginTop,
-      marginBottom,
-      width
-    );
-  }
-  private native void _setProperties(
-    JavaScriptObject rawNode,
-    int marginLeft,
-    int marginTop,
-    int marginBottom,
-    int width
-  )/*-{
-    rawNode.setProperties({
-      marginLeft: marginLeft,
-      marginTop: marginTop,
-      marginBottom: marginBottom,
-      width: width
-    });
-  }-*/;
-
   public void setShapeSize(int width, int height) {
     _setShapeSize(rawNode, width, height);
   }
@@ -423,7 +393,17 @@ class TextForeignObject extends Shape implements IText {
     int width,
     int height
   )/*-{
-    rawNode.setSize(width, height);
+    rawNode.setShapeSize(width, height);
+  }-*/;
+
+  public void initializeText(String text) {
+    _initializeText(rawNode, text);
+  }
+  private native void _initializeText(
+    JavaScriptObject rawNode,
+    String text
+  )/*-{
+    rawNode.initializeText(text)
   }-*/;
 
   public void setHorizontal(boolean horizontal) {
@@ -473,14 +453,18 @@ class TextForeignObject extends Shape implements IText {
     });
   }-*/;
 
-  public void setShapeProperties(int properties) {
-    _setShapeProperties(rawNode, properties);
+  public void setShapeProperties(int properties, String parentType) {
+    _setShapeProperties(rawNode, properties, parentType);
   }  
   private native void _setShapeProperties(
     JavaScriptObject rawNode,
-    int properties
+    int properties,
+    String parentType
   )/*-{
-    rawNode.setShapeProperties(properties);
+    rawNode.setShapeProperties({
+      properties: properties,
+      parentType: parentType
+    });
   }-*/;
 
 }

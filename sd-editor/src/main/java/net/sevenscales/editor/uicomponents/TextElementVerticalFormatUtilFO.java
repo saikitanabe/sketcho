@@ -84,7 +84,7 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
       //   getMarginBottom(),
       //   hasTextElement.getWidth()
       // );
-      textElement.setText(getText());
+      // textElement.setText(getText());
       textElement.setShapeSize(
         hasTextElement.getWidth(), 
         hasTextElement.getHeight()
