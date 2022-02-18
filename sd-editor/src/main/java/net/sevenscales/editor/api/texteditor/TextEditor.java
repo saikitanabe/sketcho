@@ -148,8 +148,15 @@ class TextEditor extends Composite implements ITextEditor {
 	}
 
 	@Override
-	public void setWidth(int width) {
-		textArea.getElement().getStyle().setWidth(width, Style.Unit.PX);
+	public void setWidth(int width, String unit) {
+    // default to px
+    Style.Unit u = Style.Unit.PX;
+    if ("%".equals(unit)) {
+      u = Style.Unit.PC;
+    }
+
+    textArea.getElement().getStyle().setWidth(width, u);
+
 	}
 
 	@Override

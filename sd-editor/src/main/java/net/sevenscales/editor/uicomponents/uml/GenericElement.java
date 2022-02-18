@@ -731,7 +731,8 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	@Override
 	public int getTextAreaTop() {
 		// cannot find enum since user custom types will not be part of enums!!
-		if (hasTextElement.verticalAlignMiddle()) {
+		// if (hasTextElement.verticalAlignMiddle()) {
+		if (ShapeProperty.isTextPositionMiddle(shape.getShapeProperties())) {
 			// ST 8.6.2018: subgroup needs to be taken into count on textarea position
 			// calculation
 			return textUtil.middleY(0) + getTransformY() + getTransformY(getSubgroup());

@@ -1780,7 +1780,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	
 	@Override
 	public int getTextAreaWidth() {
-		return getWidth() - 5;
+    TextElementFormatUtil formatter = getTextFormatter();
+    if (formatter != null) {
+      return (int) formatter.getTextWidth();
+    }
+
+    return getWidth() - 5;
 	}
 	
 	@Override
