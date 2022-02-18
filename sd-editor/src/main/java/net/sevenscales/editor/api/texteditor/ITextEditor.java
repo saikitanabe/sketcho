@@ -35,7 +35,7 @@ public interface ITextEditor {
 	void setFontSize(String fontSize);
 	void setLineHeight(String lineHeight);
 	void setTextAlign(String textAlign);
-	void setWidth(int width);
+	void setWidth(int width, String unit);
 	void setHeight(int height);
 	void setHeight(String height);
 	boolean isCodeMirror();

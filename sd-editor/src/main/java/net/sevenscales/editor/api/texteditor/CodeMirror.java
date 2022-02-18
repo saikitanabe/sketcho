@@ -202,8 +202,8 @@ class CodeMirror extends Composite implements ITextEditor {
 
 
 	@Override
-	public void setWidth(int width) {
-    this.setWidth(cm, width + "px");
+	public void setWidth(int width, String unit) {
+    this.setWidth(cm, width + unit);
   }
   private native void setWidth(JavaScriptObject cm, String width)/*-{
     $wnd.$(cm.getTextArea().parentNode).find(".CodeMirror").css("width", width)

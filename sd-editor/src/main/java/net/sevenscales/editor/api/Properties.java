@@ -843,7 +843,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     // if (editorWidth > Window.getClientWidth()) {
     //   editorWidth = Window.getClientWidth();
     // }
-    codeMirror.setWidth(editorWidth);
+    codeMirror.setWidth(editorWidth, "px");
     
     // codeMirror.setHeight("100vh");
 
@@ -918,7 +918,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     int diagramDialogPadding = 22;
 
     codeMirror.setHeight(clientHeight - diagramDialogPadding - 40 - popupLeft * 2);
-    codeMirror.setWidth(clientWidth - diagramDialogPadding - popupMarginRigth * 2);
+    codeMirror.setWidth(clientWidth - diagramDialogPadding - popupMarginRigth * 2, "px");
     popup.setContentWidth(clientWidth - popupMarginRigth * 2);
 
     popup.setPopupPosition(popupLeft, popupTop);
@@ -939,7 +939,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     int bottomMargin = 200;
     codeMirror.setHeight(clientHeight - bottomMargin);
     // codeMirror.setWidth(clientWidth - diagramDialogPadding - popupMarginRigth * 2);
-    codeMirror.setWidth(maxDialoagWidth - diagramDialogPadding);
+    codeMirror.setWidth(maxDialoagWidth - diagramDialogPadding, "px");
     // popup.setContentWidth(clientWidth - popupMarginRigth * 2);
     popup.setContentWidth(maxDialoagWidth);
   
