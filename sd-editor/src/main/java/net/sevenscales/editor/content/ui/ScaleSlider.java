@@ -39,7 +39,9 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private static SLogger logger = SLogger.createLogger(ScaleSlider.class);
 
 	private static final double TRESHOLD = 5;
-  private static final int wheelSteps = UiUtils.isWindows() ? 1 : 1;
+  // Windows is still slow so take every 5th step on zoom
+  // to keep it smooth
+  private static final int wheelSteps = UiUtils.isWindows() ? 5 : 1;
 
 	private EditorContext editorContext;
 	private ISurfaceHandler surface;
