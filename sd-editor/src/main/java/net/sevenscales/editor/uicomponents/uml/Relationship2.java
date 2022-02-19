@@ -17,6 +17,7 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.constants.Constants;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.utils.StringUtil;
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.Tools;
@@ -1421,6 +1422,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     ts.rectShape.top = (int) point.y - 18;
     
     DiagramItemDTO tdto = new DiagramItemDTO();
+    tdto.setType(ElementType.RELATIONSHIP.getValue());
+    tdto.setShapeProperties(0);
     // hmm, vois aina olla tama moodi, jolloin keskittaa 
     // tai voi myos paivittaa taman jos siirretaan pois keskelta...
     // tdto.setShapeProperties(AUTO_CENTER);

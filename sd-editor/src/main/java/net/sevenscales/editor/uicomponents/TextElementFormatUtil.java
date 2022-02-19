@@ -230,6 +230,10 @@ public class TextElementFormatUtil {
 
     textElement = IShapeFactory.Util.factory(true).createText(textGroup, false);
     textElement.setHorizontal(isHorizontal());
+    textElement.setShapeProperties(
+      parent.getDiagramItem().getShapeProperties(),
+      parent.getDiagramItem().getType()
+    );
     textElement.initializeText(parent.getDiagramItem().getText());
     // textElement.setPosition(hasTextElement.getX(), hasTextElement.getY());
 
@@ -240,11 +244,7 @@ public class TextElementFormatUtil {
     //   hasTextElement.getWidth()
     // );
     
-    textElement.setShapeProperties(
-      parent.getDiagramItem().getShapeProperties(),
-      parent.getDiagramItem().getType()
-    );
-    textElement.setShapeSize(hasTextElement.getWidth(), hasTextElement.getHeight());
+    // textElement.setShapeSize(hasTextElement.getWidth(), hasTextElement.getHeight());
 
     if (editorContext.isEditable()) {
       textElement.addGraphicsMouseDownHandler((GraphicsMouseDownHandler) hasTextElement.getGraphicsMouseHandler());

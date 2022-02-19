@@ -41,6 +41,11 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
   	super(parent, hasTextElement, group, editorContext);
   }
 
+  @Override
+  protected boolean isHorizontal() {
+    return false;
+  }  
+
   public void setText(String newText, boolean editable) {
   	setText(newText, editable, false);
   }
@@ -61,33 +66,39 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
 
   private void calculateLines2() {
     try {
-      this.tokens = TokenParser.parse2(getText());
-      clearLines();
-      List<IShape> currentline = new ArrayList<IShape>();
-      lines.add(currentline);
+      // this.tokens = TokenParser.parse2(getText());
+      // clearLines();
+      // List<IShape> currentline = new ArrayList<IShape>();
+      // lines.add(currentline);
 
-      text = createText(true);
+      // text = createText(true);
 
-      currentline.add(text);
-      text.addText(
-        tokens,
-        hasTextElement.getX(),
-        0,
-        parent.isTextAlignCenter(),
-        parent.isTextAlignRight()
+      // currentline.add(text);
+      // text.addText(
+      //   tokens,
+      //   hasTextElement.getX(),
+      //   0,
+      //   parent.isTextAlignCenter(),
+      //   parent.isTextAlignRight()
+      // );
+
+      textElement.setShapeSize(
+        hasTextElement.getWidth(), 
+        hasTextElement.getHeight()
       );
+
     } catch (Exception e) {
       logger.error("tokens: " + tokens, e);
     }
   }
 
-  @Override
-  public void setTextShape() {
-    super.setTextShape();
-    if (text != null) {
-      applyTextAlignment(text, hasTextElement.getX());
-    }
-  }
+  // @Override
+  // public void setTextShape() {
+  //   super.setTextShape();
+  //   if (text != null) {
+  //     applyTextAlignment(text, hasTextElement.getX());
+  //   }
+  // }
 
   @Override
   protected void updateXPosition(IText text, ShapeProperty textAlign, int x, int width) {
@@ -111,10 +122,10 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
   }
 
   protected void resizeElement() {
-    double width = text.getTextWidth();
-    double height = text.getTextHeight();
-
     if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION) && hasTextElement.supportElementResize()) {
+      double width = textElement.getTextWidth();
+      double height = textElement.getTextHeight();
+  
       // during OT operation element is not resized and everything is 
       // copied as is, element size and text
       hasTextElement.resizeWidthHeight((int) width, (int) height);
@@ -209,22 +220,22 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
 		return text;
 	}
 
-  @Override
-  public double getTextHeight() {
-    double result = 0;
-    if (lines.size() == 1 && lines.get(0).size() == 1) {
-      IShape s = lines.get(0).get(0);
-      if (s instanceof IText) {
-        result = ((IText)s).getTextHeight();
-      }
-    }
-    return result;
-  }
+  // @Override
+  // public double getTextHeight() {
+  //   double result = 0;
+  //   if (lines.size() == 1 && lines.get(0).size() == 1) {
+  //     IShape s = lines.get(0).get(0);
+  //     if (s instanceof IText) {
+  //       result = ((IText)s).getTextHeight();
+  //     }
+  //   }
+  //   return result;
+  // }
 
-  @Override
-  public double getTextWidth() {
-    return text.getTextWidth();
-  }
+  // @Override
+  // public double getTextWidth() {
+  //   return text.getTextWidth();
+  // }
 
   @Override
   public void alignMiddle() {
