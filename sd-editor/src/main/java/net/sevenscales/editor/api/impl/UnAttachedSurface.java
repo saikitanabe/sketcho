@@ -74,8 +74,13 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 		this.loadObserver = loadObserver;
 		this.editable = false;
 		this.diagrams = new ArrayList<Diagram>();
-		setPixelSize(0, 0);
+		// setPixelSize(100, 100);
 	}
+
+  public void setSize(int width, int height) {
+    surface.setSize(width, height, "px");
+    setPixelSize(width, height);
+  }
 
 	@Override
 	protected void onLoad() {

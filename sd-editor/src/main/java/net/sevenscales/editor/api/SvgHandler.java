@@ -97,6 +97,7 @@ public class SvgHandler {
 				if (jsSvg != null) {
 					// jsSvg could be null, e.g. now on normal SurfaceHandler
 					data.svg = jsSvg.getSvg();
+          surface.setSize(jsSvg.getWidth(), jsSvg.getHeight());
 					this.svg = data.svg;
 				}
 				nativeReady(handler, jsSvg);
@@ -107,12 +108,14 @@ public class SvgHandler {
 		}
 
 		// synchronous from RootPanel.get().add, so break out
+    // >>>>> DEBUG comment out to debug board content
 		Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			@Override
 			public void execute() {
 				surface.removeFromParent();
 			}
 		});
+    // >>>>> DEBUG board content END
 
 		// RootPanel.get().remove(surface);
 	}
