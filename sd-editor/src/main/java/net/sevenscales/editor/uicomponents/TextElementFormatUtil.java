@@ -378,7 +378,8 @@ public class TextElementFormatUtil {
     textElement.setFontSize(fontSize + "px");
     textElement.setShapeProperties(
       parent.getDiagramItem().getShapeProperties(),
-      parent.getDiagramItem().getType()
+      parent.getDiagramItem().getType(),
+      Tools.isSketchMode()
     );
   }
 

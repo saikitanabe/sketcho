@@ -389,6 +389,6 @@ class Text extends Shape implements IText {
   }
   public void setBorderColor(Color color) {
   }
-  public void setShapeProperties(int properties, String parentType) {
+  public void setShapeProperties(int properties, String parentType, boolean awesome) {
   }
 }

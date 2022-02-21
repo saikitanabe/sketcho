@@ -453,17 +453,19 @@ class TextForeignObject extends Shape implements IText {
     });
   }-*/;
 
-  public void setShapeProperties(int properties, String parentType) {
-    _setShapeProperties(rawNode, properties, parentType);
+  public void setShapeProperties(int properties, String parentType, boolean awesome) {
+    _setShapeProperties(rawNode, properties, parentType, awesome);
   }  
   private native void _setShapeProperties(
     JavaScriptObject rawNode,
     int properties,
-    String parentType
+    String parentType,
+    boolean awesome
   )/*-{
     rawNode.setShapeProperties({
       properties: properties,
-      parentType: parentType
+      parentType: parentType,
+      awesome: awesome,
     });
   }-*/;
 

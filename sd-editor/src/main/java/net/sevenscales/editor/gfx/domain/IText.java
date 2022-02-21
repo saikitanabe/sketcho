@@ -40,5 +40,5 @@ public interface IText extends IShape {
   void setHorizontal(boolean horizontal);
   void setColor(Color color);
   void setBorderColor(Color color);
-  void setShapeProperties(int properties, String parentType);
+  void setShapeProperties(int properties, String parentType, boolean awesome);
 }
