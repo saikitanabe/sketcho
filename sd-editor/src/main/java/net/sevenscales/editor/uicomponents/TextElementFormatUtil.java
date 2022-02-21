@@ -232,7 +232,8 @@ public class TextElementFormatUtil {
     textElement.setHorizontal(isHorizontal());
     textElement.setShapeProperties(
       parent.getDiagramItem().getShapeProperties(),
-      parent.getDiagramItem().getType()
+      parent.getDiagramItem().getType(),
+      Tools.isSketchMode()
     );
     textElement.initializeText(parent.getDiagramItem().getText());
     // textElement.setPosition(hasTextElement.getX(), hasTextElement.getY());
@@ -391,9 +392,9 @@ public class TextElementFormatUtil {
     // textElement.setColor(hasTextElement.getTextColor());
     // textElement.setBorderColor(parent.getBorderColor());
     // textElement.setShapeProperties(parent.getDiagramItem().getShapeProperties());
-    setText(newText);
-
     boolean changed = textChanged(newText);
+
+    setText(newText);
 
     if ((changed || hasTextElement.forceAutoResize()) && 
   		 editorContext.isTrue(EditorProperty.AUTO_RESIZE_ENABLED)) {
@@ -732,7 +733,8 @@ public class TextElementFormatUtil {
   public void setShapeSize(int width, int height) {
     textElement.setShapeProperties(
       parent.getDiagramItem().getShapeProperties(),
-      parent.getDiagramItem().getType()
+      parent.getDiagramItem().getType(),
+      Tools.isSketchMode()
     );
     textElement.setShapeSize(width, height);
   }
