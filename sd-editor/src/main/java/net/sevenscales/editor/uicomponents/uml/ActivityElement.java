@@ -27,207 +27,40 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasText
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 
-public class ActivityElement extends AbstractDiagramItem implements SupportsRectangleShape {
+public class ActivityElement extends BaseCorporateElement {
 //	private Rectangle rectSurface;
-  private IRectangle boundary;
-	private int minimumWidth = 25;
-	private int minimumHeight = 25;
-	private HasRectShape shape;
-	private Point coords = new Point();
-  // utility shape container to align text and make separators
-  private List<IShape> innerShapes = new ArrayList<IShape>();
-  private IGroup group;
-  private int[] points;
-  protected TextElementFormatUtil textUtil;
-  private long dispachSequence;
   
-	public ActivityElement(ISurfaceHandler surface, HasRectShape newShape, String text, 
-												 Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
-		super(editable, surface, backgroundColor, borderColor, textColor, item);
-		this.shape = newShape;
+	public ActivityElement(
+    ISurfaceHandler surface,
+    HasRectShape newShape,
+    String text, 
+    Color backgroundColor,
+    Color borderColor,
+    Color textColor,
+    boolean editable,
+    IDiagramItemRO item
+  ) {
+		super(surface, newShape, text, backgroundColor, borderColor, textColor, editable, item);
 		
-		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
     // group.setAttribute("cursor", "default");
 
-		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
+		// boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
+
+    // sub class customizations
 		boundary.setStroke(borderColor);
 		boundary.setStrokeWidth(getStrokeWidth());
 		boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 		
-		addEvents(boundary);
-
-		addMouseDiagramHandler(this);
-		
-    shapes.add(boundary);
-    
-    resizeHelpers = createResizeHelpers();
-    setReadOnly(!editable);
-    setDimensions(shape.rectShape.left, shape.rectShape.top, 
-             shape.rectShape.width, shape.rectShape.height);
-    textUtil = new TextElementFormatUtil(this, hasTextElement, group, surface.getEditorContext());
-    
-    setText(text);
-    setBorderColor(borderColor);
-    
     super.constructorDone();
 	}
-	
-	protected ResizeHelpers createResizeHelpers() {
-		return ResizeHelpers.createResizeHelpers(surface);
-	}
 
-	protected double getStrokeWidth() {
-		return STROKE_WIDTH;
-	}
-
-	private void setDimensions(int left, int top, int width, int height) {
+  @Override
+	protected void setDimensions(int left, int top, int width, int height) {
     // group.setTransform(left, top);
     boundary.setShape(left, top, width, height, 9);
-	}
-
-	public void setShape(int left, int top, int width, int height) {
-    setDimensions(left, top, width, height);
-    textUtil.setTextShape();
-    super.applyHelpersShape();
-	}
+	}  
 	
   // nice way to clearly separate interface methods :)
-  private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
-    public int getWidth() {
-      return boundary.getWidth();
-    }
-    public int getX() {
-    	return boundary.getX();
-    }
-    public int getY() {
-    	return boundary.getY();
-    }
-    
-    public int getHeight() {
-    	return boundary.getHeight();
-    }
-    
-    public void removeShape(IShape shape) {
-      group.remove(shape);
-      shapes.remove(shape);
-    }
-
-    public String getLink() {
-      return ActivityElement.this.getLink();
-    }
-
-    public boolean isAutoResize() {
-      return ActivityElement.this.isAutoResize();
-    }
-
-    public void resize(int x, int y, int width, int height) {
-      // Text Element doesn't support resize
-      ActivityElement.this.resize(x, y, width, height);
-      fireSizeChanged();
-    }
-
-    public void setLink(String link) {
-      ActivityElement.this.setLink(link);      
-    }
-    public boolean supportsTitleCenter() {
-      return true;
-    }
-    public boolean forceAutoResize() {
-      return true;
-    }
-    
-    public GraphicsEventHandler getGraphicsMouseHandler() {
-      return ActivityElement.this;
-    };
-    
-		@Override
-		public Color getTextColor() {
-			return textColor;
-		};
-
-  };
-
-	public Point getDiffFromMouseDownLocation() {
-		return new Point(diffFromMouseDownX, diffFromMouseDownY);
-	}
-	
-	public void accept(ISurfaceHandler surface) {
-	  super.accept(surface);
-		surface.makeDraggable(this);
-	}
-  
-	public String getText() {
-		return textUtil.getText();
-	}
-
-	public void doSetText(String newText) {
-    textUtil.setText(newText, editable, isForceTextRendering());
-	}
-
-  @Override
-	public Diagram duplicate(boolean partOfMultiple) {
-		return duplicate(surface, partOfMultiple);
-	}
-	
-  @Override
-	public Diagram duplicate(ISurfaceHandler surface, boolean partOfMultiple) {
-		Point p = getCoords();
-		return duplicate(surface, p.x + 20, p.y + 20);
-	}
-	
-  @Override
-  public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-    ActivityShape newShape = new ActivityShape(x, y, 
-    		boundary.getWidth(), boundary.getHeight());
-    Diagram result = createDiagram(surface, newShape, getText(), getEditable());
-    return result;
-  }
-	
-  protected Diagram createDiagram(ISurfaceHandler surface, ActivityShape newShape,
-      String text, boolean editable) {
-    return new ActivityElement(surface, newShape, text, new Color(backgroundColor), new Color(borderColor), new Color(textColor), editable, new DiagramItemDTO());
-  }
-	
-//////////////////////////////////////////////////////////////////////
-	
-	public boolean onResizeArea(int x, int y) {
-		return resizeHelpers.isOnResizeArea();
-	}
-
-	public boolean resize(Point diff) {
-		return resize(boundary.getX(), boundary.getY(), boundary.getWidth() + diff.x, boundary.getHeight() + diff.y);			
-	}
-
-	protected boolean resize(int left, int top, int width, int height) {
-    if (width >= minimumWidth && height >= minimumHeight) {
-      setShape(left, top, width, height);
-      dispatchAndRecalculateAnchorPositions();
-      return true;
-    }
-	   return false;
-	}
-
-	public void resizeEnd() {
-	}
-
-	public Info getInfo() {
-    super.fillInfo(shape);
-		return this.shape;
-	}
-
-	public void setShape(Info shape) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void setReadOnly(boolean value) {
-	  super.setReadOnly(value);
-	}
-	
-  public String getDefaultRelationship() {
-    return "->";
-  }
-  
   @Override
   public UMLDiagramType getDiagramType() {
   	return UMLDiagramType.ACTIVITY;
@@ -240,59 +73,8 @@ public class ActivityElement extends AbstractDiagramItem implements SupportsRect
   }
   
   @Override
-	public void setTextColor(int red, int green, int blue) {
-  	super.setTextColor(red, green, blue);
-  	textUtil.applyTextColor();
-  }
-  
-  @Override
-  public int getRelativeLeft() {
-  	return boundary.getX();
-  }
-  
-  @Override
-  public int getRelativeTop() {
-  	return boundary.getY();
-  }
-  
-  @Override
-  public int getWidth() {
-  	return boundary.getWidth();
-  }
-  @Override
-  public int getHeight() {
-  	return boundary.getHeight();
-  }
-  
-  @Override
-	protected void doSetShape(int[] shape) {
-  	setShape(shape[0], shape[1], shape[2], shape[3]);
-	}
-  
-  @Override
 	public void setHighlightColor(Color color) {
 		boundary.setStroke(color);
 	}
 	
-	@Override
-	public IGroup getGroup() {
-		return group;
-	}
-
-	@Override
-	protected TextElementFormatUtil getTextFormatter() {
-		return textUtil;
-	}
-	
-  @Override
-  public boolean supportsTextEditing() {
-  	return true;
-  }
-
-  @Override
-  public int supportedMenuItems() {
-    return super.supportedMenuItems() | ContextMenuItem.FONT_SIZE.getValue() |
-           ContextMenuItem.LAYERS.getValue();
-  }
-
 }
