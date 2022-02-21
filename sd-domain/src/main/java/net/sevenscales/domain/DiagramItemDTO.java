@@ -244,6 +244,10 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 
 	// @Override
 	public Integer getShapeProperties() {
+    if (shapeProperties == null) {
+      // getting unnecessary null pointer exceptions
+      return 0;
+    }
 		return shapeProperties;
 	}
 
