@@ -2,6 +2,7 @@ package net.sevenscales.editor.api.ot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 
 import com.google.gwt.logging.client.LogConfiguration;
@@ -39,6 +40,7 @@ import net.sevenscales.editor.uicomponents.helpers.LifeLineEditorHelper;
 import net.sevenscales.editor.uicomponents.helpers.RelationshipHandleHelpers;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 import net.sevenscales.editor.utils.GoogleAnalyticsHelper;
+import net.sevenscales.editor.gfx.domain.Promise;
 
 public abstract class AbstractBoardHandlerBase implements Acknowledged, OperationTransaction {
 	private static final SLogger logger = SLogger.createLogger(AbstractBoardHandlerBase.class);
@@ -271,14 +273,40 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
 //	}
 
 	protected final void sendOperation(String boardName, String originator, String operation, Iterable<Diagram> diagrams)  {
-		List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.diagramsToItems(diagrams);
-		applyLocalSendOperation(operation, operationItems);
-		if (notUndoOrRedo(operation)) {
-			// undo and redo are always translated to change operation (insert, move, delete...)
-			// client is responsible to do undo/redo operations, for server those are just normal
-			// change operations
-			sendLocalOperation(boardName, originator, operation, operationItems);
-		}
+
+    // ST 23.02.2022: defer sending for added diagrams to have a correct size for elements
+    // This is due to asynchronous size because of React foreign object that is
+    // rendered asynchronosely. Proper implementation is to run getTextSize
+    // for each diagram and send only after all Promises have returned.
+
+    int size = 0;
+    if (diagrams instanceof List) {
+      size = ((List)diagrams).size();
+    } else if (diagrams instanceof Set) {
+      size = ((Set) diagrams).size();
+    } else {
+      // finally calculate the size if not available
+      for (Diagram d : diagrams) {
+        ++size;
+      }
+    }
+
+    Promise[] promises = new Promise[size];
+    int index = 0;
+    for (Diagram diagram : diagrams) {
+      promises[index++] = diagram.getTextSize();
+    }
+
+    Promise.all(promises).then(p -> {
+      List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.diagramsToItems(diagrams);
+      applyLocalSendOperation(operation, operationItems);
+      if (notUndoOrRedo(operation)) {
+        // undo and redo are always translated to change operation (insert, move, delete...)
+        // client is responsible to do undo/redo operations, for server those are just normal
+        // change operations
+        sendLocalOperation(boardName, originator, operation, operationItems);
+      }
+    });
 	}
 	protected abstract void sendLocalOperation(String name, String originator, String operation, List<? extends IDiagramItemRO> operationItems);
 

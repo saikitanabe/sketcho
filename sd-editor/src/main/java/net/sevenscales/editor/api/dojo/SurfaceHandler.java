@@ -90,7 +90,6 @@ import net.sevenscales.editor.gfx.domain.ISurface;
 import net.sevenscales.editor.gfx.domain.JsSvg;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.OrgEvent;
-import net.sevenscales.editor.gfx.domain.Promise;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 
@@ -386,26 +385,14 @@ class SurfaceHandler extends SimplePanel implements
       diagram.accept(this);
     }
     
-    // ST 23.02.2022: defer sending for added diagrams to have a correct size for elements
-    // This is due to asynchronous size because of React foreign object that is
-    // rendered asynchronosely. Proper implementation is to run getTextSize
-    // for each diagram and send only after all Promises have returned.
-    Promise[] promises = new Promise[toAddDiagrams.size()];
-    int index = 0;
-    for (Diagram diagram : toAddDiagrams) {
-      promises[index++] = diagram.getTextSize();
-    }
+    if (editorContext.isTrue(EditorProperty.ON_CHANGE_ENABLED)) {
+      editorContext.getEventBus().fireEvent(new DiagramElementAddedEvent(toAddDiagrams, duplicate));
 
-    Promise.all(promises).then(p -> {
-      if (editorContext.isTrue(EditorProperty.ON_CHANGE_ENABLED)) {
-        editorContext.getEventBus().fireEvent(new DiagramElementAddedEvent(toAddDiagrams, duplicate));
-  
-        JsArrayString ids = BoardDocumentHelpers.getDiagramClientIds(toAddDiagrams);
-        if (ids.length() > 0) {
-          notifyShapesAdded(BoardDocumentHelpers.getDiagramClientIds(toAddDiagrams));
-        }
+      JsArrayString ids = BoardDocumentHelpers.getDiagramClientIds(toAddDiagrams);
+      if (ids.length() > 0) {
+        notifyShapesAdded(BoardDocumentHelpers.getDiagramClientIds(toAddDiagrams));
       }
-    });
+    }
 
     // this works as well, but above should be more safe...
     // Scheduler.get().scheduleDeferred(new ScheduledCommand() {
