@@ -573,13 +573,16 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     }
   }
 
-  private void addSection(String title, RectContainerShape shape) {
-    IText sectionTitle = IShapeFactory.Util.factory(true).createText(toolpool.getRootLayer());
+  private void addSection(String title, final RectContainerShape shape) {
+    final IText sectionTitle = IShapeFactory.Util.factory(true).createText(toolpool.getRootLayer());
     sectionTitle.setText(title);
     sectionTitle.setFontSize("18px");
     // sectionTitle.setFontFamily("Roboto");
 
-    double width = sectionTitle.getTextWidth();
+    sectionTitle.getTextSize().then(new Promise.FunctionParam<ElementSize>() {
+      public void accept(ElementSize size) {
+        double width = size.getWidth();
+
     double left = shape.getLeft() + shape.getWidth() / 2 - width / 2;
     sectionTitle.setShape((int) left, shape.getTop() + 30);
 
@@ -592,6 +595,8 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     Section s = new Section(sectionTitle, section);
     sections.add(s);
     updateSectionStyle(s);
+      }
+    });
   }
 
   private void updateSectionStyle(Section section) {
