@@ -485,13 +485,14 @@ class TextForeignObject extends Shape implements IText {
   }-*/;
 
   @Override
-  public void recalculate() {
-    _recalculate(rawNode);
+  public void setRotate(int degrees) {
+    _setRotate(rawNode, degrees);
   }
-  private native void _recalculate(
-    JavaScriptObject rawNode
+  private native void _setRotate(
+    JavaScriptObject rawNode,
+    int degrees
   )/*-{
-    rawNode.recalculate()
+    rawNode.setRotate(degrees);
   }-*/;
 
 }

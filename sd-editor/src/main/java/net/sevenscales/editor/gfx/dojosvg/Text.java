@@ -403,7 +403,7 @@ class Text extends Shape implements IText {
     return null;
   }
   @Override
-  public void recalculate() {
+  public void setRotate(int degrees) {
   }
 
 }

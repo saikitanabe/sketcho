@@ -536,6 +536,7 @@ public class TextElementFormatUtil {
 
   public void setRotate(int degrees) {
     this.degrees = degrees;
+    textElement.setRotate(degrees);
   }
 
   public int middleY(int row) {
@@ -665,7 +666,7 @@ public class TextElementFormatUtil {
     // show is called after editingEnded and
     // shape shape size needs to be updated according to 
     // text size.
-    textElement.recalculate();
+    textElement.setShapeSize(parent.getWidth(), parent.getHeight());
 	}
 
   public void setVisible(boolean visible) {
