@@ -1,5 +1,6 @@
 package net.sevenscales.editor.gfx.dojosvg;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
@@ -9,7 +10,8 @@ import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IContainer;
 import net.sevenscales.editor.gfx.domain.IText;
-
+import net.sevenscales.editor.gfx.domain.Promise;
+import net.sevenscales.editor.gfx.domain.ElementSize;
 
 class TextForeignObject extends Shape implements IText {
   public static final String ALIGN_LEFT = "start";
@@ -208,14 +210,27 @@ class TextForeignObject extends Shape implements IText {
     return $wnd.createTextForeignObject(surface);
 	}-*/;
 
- @Override
-	public double getTextWidth() {
-		// if ((UiUtils.isSafari() || UiUtils.isFirefox() || UiUtils.isIE()) && !tspanMode) {
-		// 	int fontSize = parseFontSize(getFontSize());
-		// 	return MeasurementPanel.getOffsetWidth(getText(), fontSize);
-		// }
-		return getTextWidth(rawNode);
-	}
+//  @Override
+// 	public double getTextWidth() {
+// 		// if ((UiUtils.isSafari() || UiUtils.isFirefox() || UiUtils.isIE()) && !tspanMode) {
+// 		// 	int fontSize = parseFontSize(getFontSize());
+// 		// 	return MeasurementPanel.getOffsetWidth(getText(), fontSize);
+// 		// }
+// 		return getTextWidth(rawNode);
+// 	}
+
+  @Override
+  // public void getTextSize(Promise.FunctionParam<ElementSize> promise) {
+  //   _getTextSize(rawNode).then(promise);
+  // }
+  public Promise getTextSize() {
+    return _getTextSize(rawNode);
+  }
+  private native Promise _getTextSize(
+    JavaScriptObject rawNode
+  )/*-{
+    return rawNode.getTextSize();
+  }-*/;
 
 	private int parseFontSize(String fontSize) {
 		int result = 12;
@@ -238,19 +253,19 @@ class TextForeignObject extends Shape implements IText {
 		return text.rawNode.lastChild.getComputedTextLength();
 	}-*/;
 
-	public native double getTextWidth(JavaScriptObject rawNode)/*-{
-    return rawNode.getTextWidth();
-	}-*/;
+	// public native double getTextWidth(JavaScriptObject rawNode)/*-{
+  //   return rawNode.getTextWidth();
+	// }-*/;
 	
- @Override
-	public double getTextHeight() {
-		// return 0;
-	  return getTextHeight(rawNode);
-	}
+//  @Override
+// 	public double getTextHeight() {
+// 		// return 0;
+// 	  return getTextHeight(rawNode);
+// 	}
 
-	private native double getTextHeight(JavaScriptObject rawNode)/*-{
-    return rawNode.getTextHeight();
-	}-*/;
+	// private native double getTextHeight(JavaScriptObject rawNode)/*-{
+  //   return rawNode.getTextHeight();
+	// }-*/;
 	  
   @Override
   public void applyTransformToShape(int dx, int dy) {
@@ -467,6 +482,16 @@ class TextForeignObject extends Shape implements IText {
       parentType: parentType,
       awesome: awesome,
     });
+  }-*/;
+
+  @Override
+  public void recalculate() {
+    _recalculate(rawNode);
+  }
+  private native void _recalculate(
+    JavaScriptObject rawNode
+  )/*-{
+    rawNode.recalculate()
   }-*/;
 
 }

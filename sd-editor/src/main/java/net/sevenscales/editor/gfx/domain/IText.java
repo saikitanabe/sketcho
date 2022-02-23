@@ -1,5 +1,6 @@
 package net.sevenscales.editor.gfx.domain;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.core.client.JavaScriptObject;
 import net.sevenscales.editor.gfx.domain.Color;
 
@@ -26,9 +27,9 @@ public interface IText extends IShape {
 	public String getText();
 	void updateTspanX(int x);
 	public void setShape(int x, int y);
-	public double getTextWidth();
+	// public double getTextWidth();
 	public double getLastSpanWidth();
-	public double getTextHeight();
+	// public double getTextHeight();
 	public void setFontFamily(String family);
 	public String getFontFamily();
 	void addText(JavaScriptObject tokens, int x, int width, boolean textAlignCenter, boolean textAlignRight);
@@ -41,4 +42,6 @@ public interface IText extends IShape {
   void setColor(Color color);
   void setBorderColor(Color color);
   void setShapeProperties(int properties, String parentType, boolean awesome);
+  Promise getTextSize();
+  void recalculate();
 }

@@ -1,5 +1,6 @@
 package net.sevenscales.editor.gfx.dojosvg;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
@@ -9,7 +10,7 @@ import net.sevenscales.editor.diagram.utils.UiUtils;
 import net.sevenscales.editor.gfx.domain.IContainer;
 import net.sevenscales.editor.gfx.domain.IText;
 import net.sevenscales.editor.gfx.domain.Color;
-
+import net.sevenscales.editor.gfx.domain.Promise;
 
 class Text extends Shape implements IText {
   public static final String ALIGN_LEFT = "start";
@@ -177,14 +178,14 @@ class Text extends Shape implements IText {
 	  return text;
 	}-*/;
 
- @Override
-	public double getTextWidth() {
-		// if ((UiUtils.isSafari() || UiUtils.isFirefox() || UiUtils.isIE()) && !tspanMode) {
-		// 	int fontSize = parseFontSize(getFontSize());
-		// 	return MeasurementPanel.getOffsetWidth(getText(), fontSize);
-		// }
-		return getTextWidth(rawNode);
-	}
+//  @Override
+// 	public double getTextWidth() {
+// 		// if ((UiUtils.isSafari() || UiUtils.isFirefox() || UiUtils.isIE()) && !tspanMode) {
+// 		// 	int fontSize = parseFontSize(getFontSize());
+// 		// 	return MeasurementPanel.getOffsetWidth(getText(), fontSize);
+// 		// }
+// 		return getTextWidth(rawNode);
+// 	}
 
 	private int parseFontSize(String fontSize) {
 		int result = 12;
@@ -237,11 +238,11 @@ class Text extends Shape implements IText {
 //		return 0;
 	}-*/;
 	
- @Override
-	public double getTextHeight() {
-		// return 0;
-	  return getTextHeight(rawNode);
-	}
+//  @Override
+// 	public double getTextHeight() {
+// 		// return 0;
+// 	  return getTextHeight(rawNode);
+// 	}
 
 	private native double getTextHeight(JavaScriptObject rawNode)/*-{
 		return rawNode.rawNode.getBBox().height;
@@ -379,16 +380,30 @@ class Text extends Shape implements IText {
 	  return elem.attributes;
 	}-*/;
 
+  @Override
   public void setShapeSize(int widht, int height) {
   }
+  @Override
   public void initializeText(String text) {
   }
+  @Override
   public void setHorizontal(boolean horizontal) {
   }
+  @Override
   public void setColor(Color color) {
   }
+  @Override
   public void setBorderColor(Color color) {
   }
+  @Override
   public void setShapeProperties(int properties, String parentType, boolean awesome) {
   }
+  @Override
+  public Promise getTextSize() {
+    return null;
+  }
+  @Override
+  public void recalculate() {
+  }
+
 }
