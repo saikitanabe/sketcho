@@ -31,6 +31,8 @@ import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
 import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.Promise;
+import net.sevenscales.editor.gfx.domain.ElementSize;
 
 public class TextElementFormatUtil {
 	private static final SLogger logger = SLogger.createLogger(TextElementFormatUtil.class);
@@ -273,7 +275,7 @@ public class TextElementFormatUtil {
   	// }
   }
 
-  protected void applyTextAlignment(IText text, int x) {
+  protected void applyTextAlignment(final IText text, final int x) {
     ShapeProperty textAlign = null;
     if (ShapeProperty.isTextAlignCenter(parent.getDiagramItem().getShapeProperties())) {
       text.setTextTspanAlignCenter();
@@ -285,8 +287,14 @@ public class TextElementFormatUtil {
       textAlign = ShapeProperty.TXT_ALIGN_LEFT;
     }
 
+    final ShapeProperty _textAlign = textAlign;
+
     if (textAlign != null) {
-      updateXPosition(text, textAlign, x, (int) text.getTextWidth());
+      text.getTextSize().then(new Promise.FunctionParam<ElementSize>() {
+        public void accept(ElementSize size) {
+          updateXPosition(text, _textAlign, x, (int) size.getWidth());
+        }
+      });
     }
   }
 
@@ -511,14 +519,18 @@ public class TextElementFormatUtil {
       // shape in place
       // - first new shape text is set, like default 'Activity'
       // - then custom text is set but it is not yet on DOM
-      Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-				public void execute() {
-          double width = getTextWidth();
-          // double height = getMarginTop() + getTextHeight() + fontProperty.marginBottom + getMarginBottom();
-          double height = getTextHeight();
-          hasTextElement.resize(0, 0, (int) width, (int) height);
-        }
-			});
+      // Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+			// 	public void execute() {
+
+        textElement.getTextSize().then(new Promise.FunctionParam<ElementSize>() {
+          public void accept(ElementSize size) {
+            // double height = getMarginTop() + getTextHeight() + fontProperty.marginBottom + getMarginBottom();
+            // double height = getTextHeight();
+            hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), (int) size.getWidth(), (int) size.getHeight());
+          }
+        });
+      //   }
+			// });
     }
   }
 
@@ -650,6 +662,10 @@ public class TextElementFormatUtil {
 
 	public void show() {
     textGroup.setVisible(true);
+    // show is called after editingEnded and
+    // shape shape size needs to be updated according to 
+    // text size.
+    textElement.recalculate();
 	}
 
   public void setVisible(boolean visible) {
@@ -668,15 +684,15 @@ public class TextElementFormatUtil {
 		this.forceTextAlign = forceTextAlign;
 	}
 
-	public double getTextWidth() {
+	public Promise getTextSize() {
 		// return widestWidth + getMargin(); // +margin
-    return textElement.getTextWidth();
+    return textElement.getTextSize();
 	}
 	
-	public double getTextHeight() {
-		// return (lines.size() + 1) * fontProperty.rowHeight;
-    return textElement.getTextHeight();
-  }
+	// public double getTextHeight() {
+	// 	// return (lines.size() + 1) * fontProperty.rowHeight;
+  //   return textElement.getTextHeight();
+  // }
   
   public boolean isSupportFontSize() {
     return true;

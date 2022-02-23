@@ -21,8 +21,8 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
-
-
+import net.sevenscales.editor.gfx.domain.Promise;
+import net.sevenscales.editor.gfx.domain.ElementSize;
 
 
 public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
@@ -123,12 +123,18 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
 
   protected void resizeElement() {
     if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION) && hasTextElement.supportElementResize()) {
-      double width = textElement.getTextWidth();
-      double height = textElement.getTextHeight();
-  
-      // during OT operation element is not resized and everything is 
-      // copied as is, element size and text
-      hasTextElement.resizeWidthHeight((int) width, (int) height);
+
+      textElement.getTextSize().then(new Promise.FunctionParam<ElementSize>() {
+        public void accept(ElementSize size) {
+          double width = size.getWidth();
+          double height = size.getHeight();
+      
+          // during OT operation element is not resized and everything is 
+          // copied as is, element size and text
+          hasTextElement.resizeWidthHeight((int) width, (int) height);
+        }
+      });
+
     }
   }
 

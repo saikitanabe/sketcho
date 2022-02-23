@@ -22,6 +22,8 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
+import net.sevenscales.editor.gfx.domain.Promise;
+import net.sevenscales.editor.gfx.domain.ElementSize;
 
 
 public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
@@ -95,12 +97,17 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
 		// MeasurementPanel.setTokens(tokens, width - getMarginLeft());
 		// MeasurementPanel.setPosition(hasTextElement.getX() + parent.getWidth() + 20, hasTextElement.getY());
   //   hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + DEFAULT_VERTICAL_TEXT_MARGIN);
-    double textHeight = getTextHeight();
-    if (/*textHeight != prevTextHeight && */textHeight > 0) {
-      int height = ((int) textHeight) + DEFAULT_TOP_MARGIN + hasTextElement.getMarginTop() + hasTextElement.getMarginBottom();
-      // parent.setHeight();
-      hasTextElement.resizeHeight(height);
+
+  getTextSize().then(new Promise.FunctionParam<ElementSize>() {
+    public void accept(ElementSize size) {
+      double textHeight = size.getHeight();
+      if (/*textHeight != prevTextHeight && */textHeight > 0) {
+        int height = ((int) textHeight) + DEFAULT_TOP_MARGIN + hasTextElement.getMarginTop() + hasTextElement.getMarginBottom();
+        // parent.setHeight();
+        hasTextElement.resizeHeight(height);
+      }
     }
+  });
     // prevTextHeight = textHeight;
     // MeasurementHelpers.setMeasurementPanelTextAndResizeDiagram(parent, getText());
   }
@@ -183,17 +190,17 @@ public class TextElementVerticalFormatUtil extends TextElementFormatUtil {
 		return text;
 	}
 
-  @Override
-  public double getTextHeight() {
-    double result = 0;
-    if (lines.size() == 1 && lines.get(0).size() == 1) {
-      IShape s = lines.get(0).get(0);
-      if (s instanceof IText) {
-        result = ((IText)s).getTextHeight();
-      }
-    }
-    return result;
-  }
+  // @Override
+  // public double getTextHeight() {
+  //   double result = 0;
+  //   if (lines.size() == 1 && lines.get(0).size() == 1) {
+  //     IShape s = lines.get(0).get(0);
+  //     if (s instanceof IText) {
+  //       result = ((IText)s).getTextHeight();
+  //     }
+  //   }
+  //   return result;
+  // }
 
   @Override
   public boolean isMarkdownEditor() {

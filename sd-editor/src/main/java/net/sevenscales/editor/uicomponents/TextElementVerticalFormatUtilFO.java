@@ -22,6 +22,8 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
+import net.sevenscales.editor.gfx.domain.Promise;
+import net.sevenscales.editor.gfx.domain.ElementSize;
 
 
 public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
@@ -108,17 +110,22 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
 		// MeasurementPanel.setTokens(tokens, width - getMarginLeft());
 		// MeasurementPanel.setPosition(hasTextElement.getX() + parent.getWidth() + 20, hasTextElement.getY());
   //   hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), hasTextElement.getWidth(), MeasurementPanel.getOffsetHeight() + DEFAULT_VERTICAL_TEXT_MARGIN);
-    double textHeight = getTextHeight();
-    if (/*textHeight != prevTextHeight && */textHeight > 0) {
-      int theight = (int) (textHeight / parent.getSurfaceHandler().getScaleFactor());
-      // int height = ((int) theight) + DEFAULT_TOP_MARGIN + hasTextElement.getMarginTop() + hasTextElement.getMarginBottom();
-      // parent.setHeight();
-      hasTextElement.resizeHeight(theight);
-      // IText text = getTextShape();
-      // if (text != null) {
-      //   text.setHeight(height);
-      // }
-    }
+
+    getTextSize().then(new Promise.FunctionParam<ElementSize>() {
+      public void accept(ElementSize size) {
+        double textHeight = size.getHeight();
+        if (/*textHeight != prevTextHeight && */textHeight > 0) {
+          int theight = (int) (textHeight / parent.getSurfaceHandler().getScaleFactor());
+          // int height = ((int) theight) + DEFAULT_TOP_MARGIN + hasTextElement.getMarginTop() + hasTextElement.getMarginBottom();
+          // parent.setHeight();
+          hasTextElement.resizeHeight(theight);
+          // IText text = getTextShape();
+          // if (text != null) {
+          //   text.setHeight(height);
+          // }
+        }
+      }
+    });
     // prevTextHeight = textHeight;
     // MeasurementHelpers.setMeasurementPanelTextAndResizeDiagram(parent, getText());
   }
@@ -193,19 +200,19 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
 		return text;
 	}
 
-  @Override
-  public double getTextHeight() {
-    // double result = 0;
-    // if (lines.size() == 1 && lines.get(0).size() == 1) {
-    //   IShape s = lines.get(0).get(0);
-    //   if (s instanceof IText) {
-    //     result = ((IText)s).getTextHeight();
-    //   }
-    // }
-    // return result;
+  // @Override
+  // public double getTextHeight() {
+  //   // double result = 0;
+  //   // if (lines.size() == 1 && lines.get(0).size() == 1) {
+  //   //   IShape s = lines.get(0).get(0);
+  //   //   if (s instanceof IText) {
+  //   //     result = ((IText)s).getTextHeight();
+  //   //   }
+  //   // }
+  //   // return result;
 
-    return textElement.getTextHeight();
-  }
+  //   return textElement.getTextHeight();
+  // }
 
   @Override
   public boolean isMarkdownEditor() {
