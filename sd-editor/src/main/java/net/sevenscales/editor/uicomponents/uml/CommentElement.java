@@ -23,6 +23,7 @@ import net.sevenscales.editor.diagram.shape.CommentShape;
 import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.gfx.base.GraphicsEventHandler;
 import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.ElementSize;
 import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.IContainer;
 import net.sevenscales.editor.gfx.domain.IGroup;
@@ -34,6 +35,8 @@ import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.SegmentPoint;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
+import net.sevenscales.editor.gfx.domain.Promise;
+import net.sevenscales.editor.gfx.domain.ElementSize;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
@@ -419,9 +422,13 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
 		parentThread.sort();
 	}
 
-	private void setHeightAddTitleHeight(int height) {
+	private void setHeightAddTitleHeight(final int height) {
 		// 3 some magic margin
-		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height + (int) title.getTextHeight() + 3);
+    title.getTextSize().then(new Promise.FunctionParam<ElementSize>() {
+      public void accept(ElementSize size) {
+        setShape(getRelativeLeft(), getRelativeTop(), getWidth(), height + (int) size.getHeight() + 3);
+      }
+    });
 	}
 
 	public void setTopDiff(int diff) {
@@ -604,20 +611,21 @@ public class CommentElement extends AbstractDiagramItem implements SupportsRecta
   	return true;
   }
 
-  @Override
-  public int getTextAreaWidth() {
-  	return getWidth() - 21;
-  }
+  // @Override
+  // public int getTextAreaWidth() {
+  // 	return getWidth() - 21;
+  // }
   
-  @Override
-	public int getMeasurementAreaWidth() {
-  	return getWidth() - textUtil.getMargin() - 3;
-	}
+  // @Override
+	// public Promise getMeasurementAreaSize() {
+  //   int width = getWidth() - textUtil.getMargin() - 3;
+  // 	return Promise.resolve(ElementSize.create(width, 0));
+	// }
   
-	@Override
-	public int getTextAreaLeft() {
-		return getLeft() + 7;
-	}
+	// @Override
+	// public int getTextAreaLeft() {
+	// 	return getLeft() + 7;
+	// }
 
 	public void setTitle() {
 		if (getDiagramItem() instanceof CommentDTO) {

@@ -24,6 +24,7 @@ import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
+import net.sevenscales.editor.gfx.domain.Promise;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
@@ -120,6 +121,11 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
 
   public void doSetText(String newText) {
     textUtil.setText(newText, editable, isForceTextRendering());
+  }
+
+  @Override
+  public Promise getTextSize() {
+    return textUtil.getTextSize();
   }
 
   @Override
@@ -338,10 +344,10 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
 		return textUtil;
 	}
 		
-	@Override
-	public int getTextAreaTop() {
-		return getTop() + 5;
-	}
+	// @Override
+	// public int getTextAreaTop() {
+	// 	return getTop() + 5;
+	// }
 	
 	@Override
 	public String getTextAreaAlign() {
@@ -358,10 +364,10 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     return false;
   }
 
-  @Override
-  public double getTextHeight() {
-    return textUtil.getTextHeight();
-  }  
+  // @Override
+  // public double getTextHeight() {
+  //   return textUtil.getTextHeight();
+  // }  
 
   @Override
   public AbstractDiagramItem getDiagram() {

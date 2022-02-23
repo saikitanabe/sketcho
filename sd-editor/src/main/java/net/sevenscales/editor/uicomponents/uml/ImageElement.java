@@ -28,6 +28,7 @@ import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
+import net.sevenscales.editor.gfx.domain.Promise;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
@@ -405,38 +406,43 @@ public class ImageElement extends AbstractDiagramItem implements IGenericElement
   }  
 
   @Override
+  public Promise getTextSize() {
+    return textUtil.getTextSize();
+  }
+
+  @Override
   public AbstractDiagramItem getDiagram() {
     return this;
   }  
 
-  @Override
-	public double getTextHeight() {
-  	return textUtil.getTextHeight();
-  }  
+  // @Override
+	// public double getTextHeight() {
+  // 	return textUtil.getTextHeight();
+  // }  
 
-  @Override
-  public int getTextAreaLeft() {
-      return getLeftText();
-  }
+  // @Override
+  // public int getTextAreaLeft() {
+  //     return getLeftText();
+  // }
 
-  private int getLeftText() {
-    return (int) (getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2);
-  }  
+  // private int getLeftText() {
+  //   return (int) (getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2);
+  // }  
 
-  @Override
-  public int getTextAreaTop() {
-    return getTop() + getHeight() - 1;
-  }
+  // @Override
+  // public int getTextAreaTop() {
+  //   return getTop() + getHeight() - 1;
+  // }
 
-  @Override
-  public int getTextAreaHeight() {
-    return (int) textUtil.getTextHeight();
-  }
+  // @Override
+  // public int getTextAreaHeight() {
+  //   return (int) textUtil.getTextHeight();
+  // }
   
-  @Override
-  public int getTextAreaWidth() {
-    return (int) textUtil.getTextWidth();
-  }
+  // @Override
+  // public int getTextAreaWidth() {
+  //   return (int) textUtil.getTextWidth();
+  // }
 
 
 }

@@ -33,6 +33,7 @@ import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
+import net.sevenscales.editor.gfx.domain.Promise;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementVerticalFormatUtilFO;
@@ -291,16 +292,19 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 	@Override
 	public int getLeftWithText() {
-		int twidth = (int) textUtil.getTextWidth();
-		int width = getWidth();
-		if (twidth > width) {
-			return getLeftText();
-		}
+		// int twidth = (int) textUtil.getTextWidth();
+		// int width = getWidth();
+		// if (twidth > width) {
+		// 	return getLeftText();
+		// }
 
+    // NOTE THIS IS NOT CORRECT IMPL ANY LONGER, but not used any longer
 		return getLeft();
 	}
 	private int getLeftText() {
-		return (int) (getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2);
+		// return (int) (getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2);
+    // NOTE THIS IS NOT CORRECT IMPL ANY LONGER, but not used any longer
+    return getLeft();
 	}
 	@Override
 	public int getWidth() {
@@ -308,12 +312,15 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 	}
 	@Override
 	public int getWidthWithText() {
-		int twidth = (int) textUtil.getTextWidth();
-		int width = getWidth();
-		if (twidth > width) {
-			return twidth;
-		}
-    return width;
+		// int twidth = (int) textUtil.getTextWidth();
+		// int width = getWidth();
+		// if (twidth > width) {
+		// 	return twidth;
+		// }
+    // return width;
+
+    // NOTE THIS IS NOT CORRECT IMPL ANY LONGER, but not used any longer
+    return getWidth();
   }
 	@Override
 	public int getHeight() {
@@ -701,48 +708,49 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   	MouseDiagramEventHelpers.fireChangedWithRelatedRelationships(surface, this, ActionType.TEXT_CHANGED);
   }
 
-	@Override
-	public int getTextAreaLeft() {
-  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-			return getLeftText();
-		} else {
-			return super.getTextAreaLeft();
-		}
-	}
+	// @Override
+	// public int getTextAreaLeft() {
+  // 	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+	// 		return (int) (getLeft() + getWidth() / 2 - textUtil.getTextWidth() / 2);;
+	// 	} else {
+	// 		return super.getTextAreaLeft();
+	// 	}
+	// }
 
-	@Override
-	public int getTextAreaHeight() {
-		if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-    	return (int) textUtil.getTextHeight();
-    } else {
-			return super.getTextAreaHeight();
-  	}
-	}
+  // TODO now this can go wrong :)
+	// @Override
+	// public int getTextAreaHeight() {
+	// 	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+  //   	return (int) textUtil.getTextHeight();
+  //   } else {
+	// 		return super.getTextAreaHeight();
+  // 	}
+	// }
 	
-	@Override
-	public int getTextAreaWidth() {
-  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-    	return (int) textUtil.getTextWidth();
-    } else {
-			return super.getTextAreaWidth();
-  	}
-	}
+	// @Override
+	// public int getTextAreaWidth() {
+  // 	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+  //   	return (int) textUtil.getTextWidth();
+  //   } else {
+	// 		return super.getTextAreaWidth();
+  // 	}
+	// }
 	
-	@Override
-	public int getTextAreaTop() {
-		// cannot find enum since user custom types will not be part of enums!!
-		// if (hasTextElement.verticalAlignMiddle()) {
-		if (ShapeProperty.isTextPositionMiddle(shape.getShapeProperties())) {
-			// ST 8.6.2018: subgroup needs to be taken into count on textarea position
-			// calculation
-			return textUtil.middleY(0) + getTransformY() + getTransformY(getSubgroup());
-		}
-  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-			return getTop() + getHeight() - 1;
-		} else {
-			return super.getTextAreaTop();
-  	}
-	}
+	// @Override
+	// public int getTextAreaTop() {
+	// 	// cannot find enum since user custom types will not be part of enums!!
+	// 	// if (hasTextElement.verticalAlignMiddle()) {
+	// 	if (ShapeProperty.isTextPositionMiddle(shape.getShapeProperties())) {
+	// 		// ST 8.6.2018: subgroup needs to be taken into count on textarea position
+	// 		// calculation
+	// 		return textUtil.middleY(0) + getTransformY() + getTransformY(getSubgroup());
+	// 	}
+  // 	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+	// 		return getTop() + getHeight() - 1;
+	// 	} else {
+	// 		return super.getTextAreaTop();
+  // 	}
+	// }
 
 	@Override
 	public String getTextAreaAlign() {
@@ -779,20 +787,23 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   	}
   }
 
-  @Override
-  public int getHeightWithText() {
-  	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
-	  TextElementFormatUtil textFormatter = getTextFormatter();
-    return getHeight() + (int) textFormatter.getTextHeight();
-	  } else {
-			return super.getHeightWithText();
-  	}
-  }
+  // @Override
+  // public int getHeightWithText() {
+  // 	if (ShapeProperty.isTextPositionBottom(shape.getShapeProperties())) {
+	//   TextElementFormatUtil textFormatter = getTextFormatter();
+  //   return getHeight() + (int) textFormatter.getTextHeight();
+	//   } else {
+	// 		return super.getHeightWithText();
+  // 	}
+  // }
 
   @Override
-	public double getTextHeight() {
-  	return textUtil.getTextHeight();
-  }  
+	// public double getTextHeight() {
+  // 	return textUtil.getTextHeight();
+  // }  
+  public Promise getTextSize() {
+    return textUtil.getTextSize();
+  }
 
   @Override
   public void select() {

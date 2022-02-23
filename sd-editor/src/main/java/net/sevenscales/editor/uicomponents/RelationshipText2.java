@@ -13,6 +13,8 @@ import net.sevenscales.editor.gfx.domain.IText;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.PointDouble;
 import net.sevenscales.editor.gfx.domain.IRelationship;
+import net.sevenscales.editor.gfx.domain.Promise;
+import net.sevenscales.editor.gfx.domain.ElementSize;
 import net.sevenscales.editor.uicomponents.impl.RelationshipTextUtil2;
 import net.sevenscales.editor.diagram.utils.BezierHelpers;
 
@@ -59,41 +61,41 @@ public class RelationshipText2 {
   	return (int) Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
   }
 
-  public ClickTextPosition findClickPosition(int x, int y, List<Integer> points) {
-  	// diminish root layer transform
-		x -= surface.getRootLayer().getTransformX();
-		y -= surface.getRootLayer().getTransformY();
+//   public ClickTextPosition findClickPosition(int x, int y, List<Integer> points) {
+//   	// diminish root layer transform
+// 		x -= surface.getRootLayer().getTransformX();
+// 		y -= surface.getRootLayer().getTransformY();
 
-		// unscale text element coordinates; could be done other way around => scale screen x and screen y and root layer tranforms
-		MatrixPointJS startPoint = MatrixPointJS.createUnscaledPoint(startElement.getX(), startElement.getY(), surface.getScaleFactor());
-  	int startDist = pointDistance(x, y, startPoint.getX(), startPoint.getY());
+// 		// unscale text element coordinates; could be done other way around => scale screen x and screen y and root layer tranforms
+// 		MatrixPointJS startPoint = MatrixPointJS.createUnscaledPoint(startElement.getX(), startElement.getY(), surface.getScaleFactor());
+//   	int startDist = pointDistance(x, y, startPoint.getX(), startPoint.getY());
   	
-		MatrixPointJS endPoint = MatrixPointJS.createUnscaledPoint(endElement.getX(), endElement.getY(), surface.getScaleFactor());
-  	int endDist = pointDistance(x, y, endPoint.getX(), endPoint.getY());
+// 		MatrixPointJS endPoint = MatrixPointJS.createUnscaledPoint(endElement.getX(), endElement.getY(), surface.getScaleFactor());
+//   	int endDist = pointDistance(x, y, endPoint.getX(), endPoint.getY());
   	
-		MatrixPointJS middlePoint = MatrixPointJS.createUnscaledPoint(labelElement.getX(), labelElement.getY(), surface.getScaleFactor());
-  	int middleDist = pointDistance(x, y, middlePoint.getX() + (int) labelElement.getTextWidth()/2, middlePoint.getY());
+// 		MatrixPointJS middlePoint = MatrixPointJS.createUnscaledPoint(labelElement.getX(), labelElement.getY(), surface.getScaleFactor());
+//   	int middleDist = pointDistance(x, y, middlePoint.getX() + (int) labelElement.getTextWidth()/2, middlePoint.getY());
   	
-//  	int zeroDist = pointDistance(x, y, 0, 0);
+// //  	int zeroDist = pointDistance(x, y, 0, 0);
   	
-  	logger.debug("point({}, {})", x, y);
-  	logger.debug("startPoint({}, {})", startElement.getX(), startElement.getY());
-  	logger.debug("middlePoint({}, {})", labelElement.getX(), labelElement.getY());
-  	logger.debug("endPoint({}, {})", endElement.getX(), endElement.getY());
+//   	logger.debug("point({}, {})", x, y);
+//   	logger.debug("startPoint({}, {})", startElement.getX(), startElement.getY());
+//   	logger.debug("middlePoint({}, {})", labelElement.getX(), labelElement.getY());
+//   	logger.debug("endPoint({}, {})", endElement.getX(), endElement.getY());
   	
-  	int minDist = Math.min(startDist, endDist);
-  	minDist = Math.min(minDist, middleDist);
-//  	minDist = Math.min(minDist, zeroDist); // if there is no position then it is connection
-  	if (minDist == startDist) {
-  		return ClickTextPosition.START;
-  	} else if (minDist == endDist) {
-  		return ClickTextPosition.END;
-  	} else if (minDist == middleDist) {
-    	return ClickTextPosition.MIDDLE;
-  	}
+//   	int minDist = Math.min(startDist, endDist);
+//   	minDist = Math.min(minDist, middleDist);
+// //  	minDist = Math.min(minDist, zeroDist); // if there is no position then it is connection
+//   	if (minDist == startDist) {
+//   		return ClickTextPosition.START;
+//   	} else if (minDist == endDist) {
+//   		return ClickTextPosition.END;
+//   	} else if (minDist == middleDist) {
+//     	return ClickTextPosition.MIDDLE;
+//   	}
   	
-  	return ClickTextPosition.ALL;
-  }
+//   	return ClickTextPosition.ALL;
+//   }
 
   public void setText(RelationshipTextUtil2 textUtil, IRelationship parent) {
     start = textUtil.parseLeftText();
@@ -160,12 +162,11 @@ public class RelationshipText2 {
 //    SilverUtils.resetRenderTransform(endElement);
   }
 
-  public void setShape(IRelationship parent) {
+  public void setShape(final IRelationship parent) {
     int startLine = 0;
     int endLine = parent.getPoints().size() - 4;
-    int lineCount = parent.getPoints().size()/2-1;
-    int middleLine = lineCount/2*2;
-    double actualHeight = 12;
+    final int lineCount = parent.getPoints().size()/2-1;
+    final int middleLine = lineCount/2*2;
     
     {
       // start
@@ -189,28 +190,34 @@ public class RelationshipText2 {
 
     {
     // middle
-    double actualWidth = labelElement.getTextWidth();
+    labelElement.getTextSize().then(new Promise.FunctionParam<ElementSize>() {
+      public void accept(ElementSize size) {
+        double actualWidth = size.getWidth();
+        // final double actualHeight = 12;
+        double actualHeight = size.getHeight();
 
-    int x = 0;
-    int y = 0;
-    if (parent.isCurved() && parent.getPoints().size() == 4) {
-      // applies only when only two points; otherwise can calculate normally
-      PointDouble point = BezierHelpers.bezierMiddlePoint(0, parent.getSegments());
-      if (point != null) {
-        x = (int) point.x - (int) (actualWidth / 2);
-        y = (int) point.y;
+        int x = 0;
+        int y = 0;
+        if (parent.isCurved() && parent.getPoints().size() == 4) {
+          // applies only when only two points; otherwise can calculate normally
+          PointDouble point = BezierHelpers.bezierMiddlePoint(0, parent.getSegments());
+          if (point != null) {
+            x = (int) point.x - (int) (actualWidth / 2);
+            y = (int) point.y;
+          }
+        } else if (lineCount % 2 == 0) {
+          x = parent.getPoints().get(middleLine);
+          y = parent.getPoints().get(middleLine+1) - (int) actualHeight;
+        } else {
+          x = (parent.getPoints().get(middleLine) + parent.getPoints().get(middleLine+2) - (int)actualWidth) / 2;
+          int align = parent.getPoints().get(middleLine+1) >= parent.getPoints().get(middleLine+3) ? - (int) actualHeight : 0;
+    //      y = (parent.getPoints().get(middleLine+1) + parent.getPoints().get(middleLine+3)) / 2 + align;
+          y = (parent.getPoints().get(middleLine+1) + parent.getPoints().get(middleLine+3)) / 2 + align/2;
+        }
+        
+        labelElement.setShape(x, y);
       }
-    } else if (lineCount % 2 == 0) {
-      x = parent.getPoints().get(middleLine);
-      y = parent.getPoints().get(middleLine+1) - (int) actualHeight;
-    } else {
-      x = (parent.getPoints().get(middleLine) + parent.getPoints().get(middleLine+2) - (int)actualWidth) / 2;
-      int align = parent.getPoints().get(middleLine+1) >= parent.getPoints().get(middleLine+3) ? - (int) actualHeight : 0;
-//      y = (parent.getPoints().get(middleLine+1) + parent.getPoints().get(middleLine+3)) / 2 + align;
-      y = (parent.getPoints().get(middleLine+1) + parent.getPoints().get(middleLine+3)) / 2 + align/2;
-    }
-    
-    labelElement.setShape(x, y);
+    });
     }
   }
   

@@ -1,6 +1,7 @@
 package net.sevenscales.editor.uicomponents.uml;
 
 import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.editor.gfx.domain.Promise;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 
 
@@ -13,7 +14,7 @@ interface IGenericElement {
 	int getTop();
 	int getWidth();
 	int getHeight();
-	double getTextHeight();
+	Promise getTextSize();
 	boolean resize(int left, int top, int width, int height);
 	void fireSizeChanged();
 }

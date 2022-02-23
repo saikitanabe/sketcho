@@ -65,6 +65,8 @@ import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.OrgEvent;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
+import net.sevenscales.editor.gfx.domain.Promise;
+import net.sevenscales.editor.gfx.domain.ElementSize;
 import net.sevenscales.editor.uicomponents.AnchorUtils.AnchorProperties;
 import net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers;
 import net.sevenscales.editor.uicomponents.helpers.IConnectionHelpers;
@@ -1768,30 +1770,42 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 		return "#" + getBackgroundColor();
 	}
 	
-	@Override
-	public int getTextAreaLeft() {
-		return getLeft() + 4;
-	}
+	// @Override
+	// public int getTextAreaLeft() {
+	// 	return getLeft() + 4;
+	// }
 	
-	@Override
-	public int getTextAreaTop() {
-		return getTop() + 11;
-	}
+	// @Override
+	// public int getTextAreaTop() {
+	// 	return getTop() + 11;
+	// }
 	
-	@Override
-	public int getTextAreaWidth() {
+	// @Override
+	// public Promise getTextAreaSize() {
+  //   TextElementFormatUtil formatter = getTextFormatter();
+  //   if (formatter != null) {
+  //     return formatter.getTextSize();
+  //   }
+
+  //   int width = getWidth() - 5;
+  //   int height = getHeight() - 13;
+  //   return Promise.resolve(ElementSize.create(width, height));
+	// }
+
+  @Override
+  public Promise getTextSize() {
     TextElementFormatUtil formatter = getTextFormatter();
     if (formatter != null) {
-      return (int) formatter.getTextWidth();
+      return formatter.getTextSize();
     }
 
-    return getWidth() - 5;
-	}
+    return Promise.resolve(ElementSize.create(0, 0));
+  }
 	
-	@Override
-	public int getTextAreaHeight() {
-		return getHeight() - 13;
-	}
+	// @Override
+	// public int getTextAreaHeight() {
+	// 	return getHeight() - 13;
+	// }
 	
 	@Override
 	public String getTextAreaAlign() {
@@ -2045,10 +2059,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
 
-	@Override
-	public int getMeasurementAreaWidth() {
-		return getTextAreaWidth();
-	}
+	// @Override
+	// public Promise getMeasurementAreaSize() {
+	// 	return getTextAreaSize();
+	// }
 
   protected void toggleConnectionHelpers() {
     if (connectionHelpers != null) {

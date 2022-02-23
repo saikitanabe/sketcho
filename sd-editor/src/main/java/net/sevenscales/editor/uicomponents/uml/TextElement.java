@@ -22,6 +22,7 @@ import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.SupportsRectangleShape;
+import net.sevenscales.editor.gfx.domain.Promise;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil.AbstractHasTextElement;
@@ -48,6 +49,11 @@ public class TextElement extends AbstractDiagramItem implements
 			Color backgroundColor, Color borderColor, Color textColor, String text, boolean editable, IDiagramItemRO item) {
 		super(editable, surface, backgroundColor, borderColor, textColor, item);
 		this.shape = newShape;
+
+    if (getDiagramItem().getType() == null) {
+      // could be childtext, so don't overwrite
+      getDiagramItem().setType(ElementType.TEXT_ITEM.getValue());
+    }
 
 		group = IShapeFactory.Util.factory(editable).createGroup(
 				surface.getElementLayer());
@@ -231,7 +237,10 @@ public class TextElement extends AbstractDiagramItem implements
 //	}
 
 	public boolean resize(Point diff) {
-		return resize(getRelativeLeft(), getRelativeTop(), getWidth() + diff.x, getHeight()	+ diff.y);
+    int width = getWidth() + diff.x;
+    int height = getHeight()	+ diff.y;
+    textUtil.setShapeSize(width, height);
+		return resize(getRelativeLeft(), getRelativeTop(), width, height);
 	}
 
 	protected boolean resize(int left, int top, int width, int height) {
@@ -255,8 +264,8 @@ public class TextElement extends AbstractDiagramItem implements
 		return textUtil.getText();
 	}
 
-	public double getTextWidth() {
-		return textUtil.getTextWidth();
+	public Promise getTextSize() {
+		return textUtil.getTextSize();
 	}
 
 	@Override
@@ -418,10 +427,10 @@ public class TextElement extends AbstractDiagramItem implements
 		return textUtil;
 	}
 
-	@Override
-	public int getTextAreaTop() {
-		return getTop() + 5;
-	}
+	// @Override
+	// public int getTextAreaTop() {
+	// 	return getTop() + 5;
+	// }
 
 	@Override
 	public boolean supportsOnlyTextareaDynamicHeight() {

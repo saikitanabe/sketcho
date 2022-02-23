@@ -14,9 +14,12 @@ import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.diagram.shape.ChildTextShape;
 import net.sevenscales.editor.gfx.domain.Color;
+import net.sevenscales.editor.gfx.domain.ElementSize;
 import net.sevenscales.editor.gfx.domain.IChildElement;
 import net.sevenscales.editor.gfx.domain.IParentElement;
 import net.sevenscales.editor.gfx.domain.PointDouble;
+import net.sevenscales.editor.gfx.domain.Promise;
+import net.sevenscales.editor.gfx.domain.ElementSize;
 import net.sevenscales.editor.gfx.domain.SegmentPoint;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
@@ -216,10 +219,15 @@ public class ChildTextElement extends TextElement implements IChildElement {
 	  	fixedPointIndex = parent.findClosestSegmentPointIndex(getLeft(), getTop());
 	  	if (fixedPointIndex != null && fixedPointIndex.inSegmentIndex == 1 &&
 	  			!ShapeProperty.isNoTextAutoAlign(getDiagramItem().getShapeProperties())) {
-				PointDouble anchorPoint = parent.getPoint(fixedPointIndex);
-				double left = anchorPoint.x - getTextWidth() / 2.0;
-				fixedLeft = left - anchorPoint.x;
-				setPosition(left, getTop());
+				final PointDouble anchorPoint = parent.getPoint(fixedPointIndex);
+
+        getTextSize().then(new Promise.FunctionParam<ElementSize>() {
+          public void accept(ElementSize size) {
+            double left = anchorPoint.x - size.getWidth() / 2.0;
+            fixedLeft = left - anchorPoint.x;
+            setPosition(left, getTop());
+          }
+        });
 	  	}
 		}
 	}
@@ -326,25 +334,25 @@ public class ChildTextElement extends TextElement implements IChildElement {
     return false; 
   }	
 
-	@Override
-	public int getTextAreaLeft() {
-		return getLeft();
-	}
+	// @Override
+	// public int getTextAreaLeft() {
+	// 	return getLeft();
+	// }
 	
-	@Override
-	public int getTextAreaTop() {
-		return getTop();
-	}
+	// @Override
+	// public int getTextAreaTop() {
+	// 	return getTop();
+	// }
 	
-	@Override
-	public int getTextAreaWidth() {
-		return getWidth() + 40;
-	}
+	// @Override
+	// public int getTextAreaWidth() {
+	// 	return getWidth() + 40;
+	// }
 	
-	@Override
-	public int getTextAreaHeight() {
-		return getHeight();
-	}
+	// @Override
+	// public int getTextAreaHeight() {
+	// 	return getHeight();
+	// }
 
   @Override
   public int supportedMenuItems() {

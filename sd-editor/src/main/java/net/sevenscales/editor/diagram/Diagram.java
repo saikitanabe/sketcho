@@ -15,9 +15,11 @@ import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
+import net.sevenscales.editor.gfx.domain.Promise;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.gfx.domain.Point;
+// import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -259,10 +261,11 @@ public interface Diagram extends SourcesMouseDiagramEvents {
 	void hideText();
 	void showText();
 	String getTextAreaBackgroundColor();
-	int getTextAreaLeft();
-	int getTextAreaTop();
-	int getTextAreaWidth();
-	int getTextAreaHeight();
+	// int getTextAreaLeft();
+	// int getTextAreaTop();
+	// Promise getTextAreaSize();
+	Promise getTextSize();
+	// int getTextAreaHeight();
 	String getTextAreaAlign();
 	boolean supportsOnlyTextareaDynamicHeight();
 	Color getBorderColor();
@@ -275,7 +278,7 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   boolean supportsModifyToCenter();
 	int supportedMenuItems();
   boolean supportsMenu(ContextMenuItem menuItem);
-	int getMeasurementAreaWidth();
+	// Promise getMeasurementAreaSize();
 	String getCustomData();
 	void parseCustomData(String customData);
 	AnchorElement anchorWith(Anchor anchor, int x, int y);

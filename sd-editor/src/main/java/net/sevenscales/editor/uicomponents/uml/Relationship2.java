@@ -52,6 +52,8 @@ import net.sevenscales.editor.gfx.domain.IShape;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.PointDouble;
+import net.sevenscales.editor.gfx.domain.Promise;
+import net.sevenscales.editor.gfx.domain.ElementSize;
 import net.sevenscales.editor.gfx.domain.SegmentPoint;
 import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.AnchorUtils;
@@ -2387,48 +2389,50 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
     return result - top;
   }
   
-	@Override
-	public int getTextAreaLeft() {
-		// switch (currentTextEditLocation) {
-		// case START:
-		// 	return relationshipText.getStartElement().getX() - getTextAreaWidth() / 2;
-		// case END:
-		// 	return relationshipText.getEndElement().getX() - getTextAreaWidth() / 2;
-		// case MIDDLE:
-		// 	return relationshipText.getLabelElement().getX();
-		// }
-		return 0;
-	}
+	// @Override
+	// public int getTextAreaLeft() {
+	// 	// switch (currentTextEditLocation) {
+	// 	// case START:
+	// 	// 	return relationshipText.getStartElement().getX() - getTextAreaWidth() / 2;
+	// 	// case END:
+	// 	// 	return relationshipText.getEndElement().getX() - getTextAreaWidth() / 2;
+	// 	// case MIDDLE:
+	// 	// 	return relationshipText.getLabelElement().getX();
+	// 	// }
+	// 	return 0;
+	// }
 	
-	@Override
-	public int getTextAreaTop() {
-		// switch (currentTextEditLocation) {
-		// case START:
-		// 	return relationshipText.getStartElement().getY() - TextElementFormatUtil.ROW_HEIGHT + 5;
-		// case END:
-		// 	return relationshipText.getEndElement().getY() - TextElementFormatUtil.ROW_HEIGHT + 5;
-		// case MIDDLE:
-		// 	return relationshipText.getLabelElement().getY() - TextElementFormatUtil.ROW_HEIGHT + 5;
-		// }
-		return 0;
-	}
+	// @Override
+	// public int getTextAreaTop() {
+	// 	// switch (currentTextEditLocation) {
+	// 	// case START:
+	// 	// 	return relationshipText.getStartElement().getY() - TextElementFormatUtil.ROW_HEIGHT + 5;
+	// 	// case END:
+	// 	// 	return relationshipText.getEndElement().getY() - TextElementFormatUtil.ROW_HEIGHT + 5;
+	// 	// case MIDDLE:
+	// 	// 	return relationshipText.getLabelElement().getY() - TextElementFormatUtil.ROW_HEIGHT + 5;
+	// 	// }
+	// 	return 0;
+	// }
 	
-	@Override
-	public int getTextAreaWidth() {
-		String[] lines = text.split("\\n");
-		int widest = 0;
-		for (String line : lines) {
-			if (line.length() > widest) {
-				widest = line.length();
-			}
-		}
-		return widest * 5 + 30; // some magic char length + some margin
-	}
+	// @Override
+	// public Promise getTextAreaSize() {
+	// 	String[] lines = text.split("\\n");
+	// 	int widest = 0;
+	// 	for (String line : lines) {
+	// 		if (line.length() > widest) {
+	// 			widest = line.length();
+	// 		}
+	// 	}
+	// 	int width = widest * 5 + 30; // some magic char length + some margin
+
+  //   return Promise.resolve(ElementSize.create(width, TextElementFormatUtil.ROW_HEIGHT));
+	// }
 	
-	@Override
-	public int getTextAreaHeight() {
-		return TextElementFormatUtil.ROW_HEIGHT;
-	}
+	// @Override
+	// public int getTextAreaHeight() {
+	// 	return TextElementFormatUtil.ROW_HEIGHT;
+	// }
   
 	public String getTextAreaBackgroundColor() {
 		return "transparent"; // other wise looks little bit funny with rect background

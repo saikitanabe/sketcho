@@ -573,20 +573,20 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
   	return true;
   }
   
-  @Override
-  public int getTextAreaWidth() {
-  	return getWidth() - 21;
-  }
+  // @Override
+  // public int getTextAreaWidth() {
+  // 	return getWidth() - 21;
+  // }
   
-  @Override
-	public int getMeasurementAreaWidth() {
-  	return getWidth() - textUtil.getMargin() - 3;
-	}
+  // @Override
+	// public int getMeasurementAreaWidth() {
+  // 	return getWidth() - textUtil.getMargin() - 3;
+	// }
   
-	@Override
-	public int getTextAreaLeft() {
-		return getLeft() + 7;
-	}
+	// @Override
+	// public int getTextAreaLeft() {
+	// 	return getLeft() + 7;
+	// }
 
 	public void createComment(String text) {
 		Theme.ElementColorScheme commentColor = Theme.getCommentColorScheme();
@@ -751,10 +751,10 @@ public class CommentThreadElement extends AbstractDiagramItem implements Support
   	}
   }
 
-	@Override
-	public int getTextAreaTop() {
-		return getTop();
-	}
+	// @Override
+	// public int getTextAreaTop() {
+	// 	return getTop();
+	// }
 
 	public void setIncrementHeight(int value) {
 		setShape(getRelativeLeft(), getRelativeTop(), getWidth(), getHeight() + value);
