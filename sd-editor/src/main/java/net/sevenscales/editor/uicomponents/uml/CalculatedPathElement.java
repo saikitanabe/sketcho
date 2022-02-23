@@ -155,6 +155,8 @@ public abstract class CalculatedPathElement extends AbstractDiagramItem implemen
     subgroup.setTransform(left, top);
     textGroup.setTransform(left, top);
 
+    textUtil.setShapeSize(width, height);
+
     if (legacy) {
       textUtil.setTextShape();
     }

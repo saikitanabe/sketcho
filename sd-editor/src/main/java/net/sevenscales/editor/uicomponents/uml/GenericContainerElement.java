@@ -90,8 +90,8 @@ public class GenericContainerElement extends AbstractDiagramItem implements Supp
     theshape = Shapes.get(getDiagramItem().getType(), Tools.isSketchMode());
     theshape.fetch(this);
 
-    setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
     textUtil = new TextElementFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
+    setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);
     hasTextElement.setY(0);
     setText(text);
     
@@ -232,6 +232,10 @@ public class GenericContainerElement extends AbstractDiagramItem implements Supp
       // subgroup.setScale(factorX, factorY);
       subgroup.setTransform(left, top);
       textGroup.setTransform(left, top);
+
+      if (textUtil != null) {
+        textUtil.setShapeSize(width, height);
+      }
 
       // if (UiUtils.isIE()) {
       //   // no need to use, which doesn't work svg => pdf, scale down stroke width
