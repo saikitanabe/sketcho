@@ -3,6 +3,8 @@ package net.sevenscales.editor.api.dojo;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayString;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
@@ -88,6 +90,7 @@ import net.sevenscales.editor.gfx.domain.ISurface;
 import net.sevenscales.editor.gfx.domain.JsSvg;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.OrgEvent;
+import net.sevenscales.editor.gfx.domain.Promise;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 
@@ -366,7 +369,7 @@ class SurfaceHandler extends SimplePanel implements
     add(diagrams, ownerComponent, duplicate);
   }
   
-  public void add(List<Diagram> toAddDiagrams, boolean ownerComponent, boolean duplicate) {
+  public void add(final List<Diagram> toAddDiagrams, boolean ownerComponent, final boolean duplicate) {
     if (ownerComponent) {
       // add logically only owner components
       // rest of added items are part of owner components (composite).
@@ -383,14 +386,41 @@ class SurfaceHandler extends SimplePanel implements
       diagram.accept(this);
     }
     
-    if (editorContext.isTrue(EditorProperty.ON_CHANGE_ENABLED)) {
-      editorContext.getEventBus().fireEvent(new DiagramElementAddedEvent(toAddDiagrams, duplicate));
-
-      JsArrayString ids = BoardDocumentHelpers.getDiagramClientIds(toAddDiagrams);
-      if (ids.length() > 0) {
-        notifyShapesAdded(BoardDocumentHelpers.getDiagramClientIds(toAddDiagrams));
-      }
+    // ST 23.02.2022: defer sending for added diagrams to have a correct size for elements
+    // This is due to asynchronous size because of React foreign object that is
+    // rendered asynchronosely. Proper implementation is to run getTextSize
+    // for each diagram and send only after all Promises have returned.
+    Promise[] promises = new Promise[toAddDiagrams.size()];
+    int index = 0;
+    for (Diagram diagram : toAddDiagrams) {
+      promises[index++] = diagram.getTextSize();
     }
+
+    Promise.all(promises).then(p -> {
+      if (editorContext.isTrue(EditorProperty.ON_CHANGE_ENABLED)) {
+        editorContext.getEventBus().fireEvent(new DiagramElementAddedEvent(toAddDiagrams, duplicate));
+  
+        JsArrayString ids = BoardDocumentHelpers.getDiagramClientIds(toAddDiagrams);
+        if (ids.length() > 0) {
+          notifyShapesAdded(BoardDocumentHelpers.getDiagramClientIds(toAddDiagrams));
+        }
+      }
+    });
+
+    // this works as well, but above should be more safe...
+    // Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+    //   @Override
+    //   public void execute() {
+    //     if (editorContext.isTrue(EditorProperty.ON_CHANGE_ENABLED)) {
+    //       editorContext.getEventBus().fireEvent(new DiagramElementAddedEvent(toAddDiagrams, duplicate));
+    
+    //       JsArrayString ids = BoardDocumentHelpers.getDiagramClientIds(toAddDiagrams);
+    //       if (ids.length() > 0) {
+    //         notifyShapesAdded(BoardDocumentHelpers.getDiagramClientIds(toAddDiagrams));
+    //       }
+    //     }
+    //   }
+    // });
   }
 
   private native void notifyShapesAdded(JsArrayString clientIds)/*-{
