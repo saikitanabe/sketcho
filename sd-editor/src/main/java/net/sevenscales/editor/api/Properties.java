@@ -959,7 +959,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
   }
 
 	private int getTextAreaLeft(int width) {
-  	if (ShapeProperty.isTextPositionBottom(selectedDiagram.getDiagramItem().getShapeProperties())) {
+  	if (ShapeProperty.isTextPositionBottom(selectedDiagram.getDiagramItem().getShapeProperties()) ||
+        ShapeProperty.isTextPositionTop(selectedDiagram.getDiagramItem().getShapeProperties())
+    ) {
     	return (int) (selectedDiagram.getLeft() + selectedDiagram.getWidth() / 2 - width / 2);
     } else if (ElementType.CHILD_TEXT.getValue().equals(selectedDiagram.getDiagramItem().getType()))  {
       return selectedDiagram.getLeft();
