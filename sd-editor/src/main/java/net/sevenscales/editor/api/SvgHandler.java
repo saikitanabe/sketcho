@@ -1,5 +1,8 @@
 package net.sevenscales.editor.api;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.json.client.JSONObject;
@@ -12,8 +15,10 @@ import net.sevenscales.editor.api.impl.UnAttachedSurface;
 import net.sevenscales.editor.api.BoardDimensions;
 import net.sevenscales.editor.content.UiModelContentHandler;
 import net.sevenscales.editor.diagram.utils.UiUtils;
+import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.gfx.domain.ILoadObserver;
 import net.sevenscales.editor.gfx.domain.JsSvg;
+import net.sevenscales.editor.gfx.domain.Promise;
 import net.sevenscales.editor.gfx.svg.converter.SvgConverter;
 import net.sevenscales.editor.gfx.svg.converter.SvgData;
 import net.sevenscales.editor.uicomponents.uml.ShapeCache;
@@ -91,17 +96,29 @@ public class SvgHandler {
 				// ST 20.11.2017: END Legacy SVG custom conversion
 			} else {
 
-				// ST 12.11.2017: NEW DOM based svg extraction
-				SvgData data = new SvgData();
-				JsSvg jsSvg = surface.getSvg();
-				if (jsSvg != null) {
-					// jsSvg could be null, e.g. now on normal SurfaceHandler
-					data.svg = jsSvg.getSvg();
-          surface.setSize(jsSvg.getWidth(), jsSvg.getHeight());
-					this.svg = data.svg;
-				}
-				nativeReady(handler, jsSvg);
-				// ST 12.11.2017: END NEW DOM based svg extraction
+        // Wait that all shapes are sized correctely
+        // especially when text is separately rotated. Rotation
+        // is not visible due to async.
+        List<Diagram> diagrams = surface.getDiagrams();
+        Promise[] promises = new Promise[diagrams.size()];
+        int index = 0;
+        for (Diagram diagram : diagrams) {
+          promises[index++] = diagram.getTextSize();
+        }
+    
+        Promise.all(promises).then(p -> {
+          // ST 12.11.2017: NEW DOM based svg extraction
+          SvgData data = new SvgData();
+          JsSvg jsSvg = surface.getSvg();
+          if (jsSvg != null) {
+            // jsSvg could be null, e.g. now on normal SurfaceHandler
+            data.svg = jsSvg.getSvg();
+            surface.setSize(jsSvg.getWidth(), jsSvg.getHeight());
+            this.svg = data.svg;
+          }
+          nativeReady(handler, jsSvg);
+          // ST 12.11.2017: END NEW DOM based svg extraction
+        });
 			}
 
 			Tools.setExportMode(false);
