@@ -51,6 +51,8 @@ import net.sevenscales.editor.gfx.domain.IRectangle;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
 import net.sevenscales.editor.gfx.domain.IText;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
+import net.sevenscales.editor.gfx.domain.Promise;
+import net.sevenscales.editor.gfx.domain.ElementSize;
 import net.sevenscales.editor.utils.DiagramItemConfiguration;
 
 
