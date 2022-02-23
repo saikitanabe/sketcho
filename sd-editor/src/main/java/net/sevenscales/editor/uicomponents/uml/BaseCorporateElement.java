@@ -27,7 +27,7 @@ import net.sevenscales.editor.uicomponents.TextElementFormatUtil.HasTextElement;
 import net.sevenscales.editor.uicomponents.helpers.ResizeHelpers;
 
 
-class BaseCorporateElement extends AbstractDiagramItem implements SupportsRectangleShape {
+abstract class BaseCorporateElement extends AbstractDiagramItem implements SupportsRectangleShape {
 
   protected HasRectShape shape;
   protected IRectangle boundary;
@@ -55,6 +55,8 @@ class BaseCorporateElement extends AbstractDiagramItem implements SupportsRectan
     IDiagramItemRO item
   ) {
     super(editable, surface, backgroundColor, borderColor, textColor, item);
+
+    getDiagramItem().setType(getElementType());
 
     this.shape = newShape;
 
@@ -86,6 +88,8 @@ class BaseCorporateElement extends AbstractDiagramItem implements SupportsRectan
 
     setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height);    
   }
+
+  protected abstract String getElementType();
 
   private HasTextElement hasTextElement = new AbstractHasTextElement(this) {
     public int getWidth() {

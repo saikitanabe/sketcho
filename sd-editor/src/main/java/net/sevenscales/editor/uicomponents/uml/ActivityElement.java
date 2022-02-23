@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramType;
@@ -53,6 +54,11 @@ public class ActivityElement extends BaseCorporateElement {
 		
     super.constructorDone();
 	}
+
+  @Override
+  protected String getElementType() {
+    return ElementType.ACTIVITY.getValue();
+  }
 
   @Override
 	protected void setDimensions(int left, int top, int width, int height) {
