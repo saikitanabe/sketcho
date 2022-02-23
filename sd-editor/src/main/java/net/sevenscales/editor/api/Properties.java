@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Set;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.constants.Constants;
+import net.sevenscales.domain.ShapeProperty;
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
@@ -59,6 +61,9 @@ import net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers;
 import net.sevenscales.editor.gfx.domain.ElementColor;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.Point;
+import net.sevenscales.editor.gfx.domain.Promise;
+import net.sevenscales.editor.gfx.domain.ElementSize;
+import net.sevenscales.editor.gfx.domain.ElementRect;
 import net.sevenscales.editor.uicomponents.uml.CommentThreadElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
@@ -717,20 +722,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 														 // at least this is very precise way and perhaps easy to understand...
 		
 		setTextAreaText(text);
-		_setTextAreaSize(diagram);
-
-		codeMirror.cursorEnd();
-		codeMirror.setMarkdownMode(selectedDiagram.isMarkdownEditor());
-
-//		setFocus(true);
-
-		this.editorCommon.fireEditorOpen();
-		popup.selectAll(justCreated);
-		popup.show();
-		popup.getElement().getStyle().setPosition(com.google.gwt.dom.client.Style.Position.FIXED);
-
-		// show element context menu always when showing editor
-		surface.getEditorContext().getEventBus().fireEvent(new SelectionMouseUpEvent(diagram));
+		_setTextAreaSize(diagram, justCreated);
 	}
 
 	private void setTextAreaText(String text) {
@@ -741,22 +733,27 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		codeMirror.setText(text);
 	}
 
-	private void setMeasurementPanelText(String text) {
+	private void setMeasurementPanelText(final String text) {
 		if (selectedDiagram == null) {
 			return;
 		}
 
-		MeasurementPanel.setPlainTextAsHtml(text, selectedDiagram.getMeasurementAreaWidth());
-    MeasurementPanel.setPosition(selectedDiagram.getLeft() + selectedDiagram.getWidth() + 20, selectedDiagram.getTop());
-    // MeasurementPanel.setZoom(surface.getScaleFactor());
-
-		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-			@Override
-			public void execute() {
-        int height = (int) (MeasurementPanel.getOffsetHeight() * surface.getScaleFactor());
-				codeMirror.setHeight(height);
-			}
-		});
+    selectedDiagram.getTextSize().then(new Promise.FunctionParam<ElementSize>() {
+      public void accept(ElementSize size) {
+        MeasurementPanel.setPlainTextAsHtml(text, (int) size.getWidth());
+        MeasurementPanel.setPosition(selectedDiagram.getLeft() + selectedDiagram.getWidth() + 20, selectedDiagram.getTop());
+        // MeasurementPanel.setZoom(surface.getScaleFactor());
+    
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+          @Override
+          public void execute() {
+            int height = (int) (MeasurementPanel.getOffsetHeight() * surface.getScaleFactor());
+            codeMirror.setHeight(height);
+          }
+        });
+            
+      }
+    });
 	}
 
 	private void setTextAreaHeight() {
@@ -783,129 +780,213 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		}
 	}
 
-	private void _setTextAreaSize(Diagram diagram) {
+	private void _setTextAreaSize(final Diagram diagram, final boolean justCreated) {
 		// no need to hide text any longer since markdown editor hides the text with background color.
 		// diagram.hideText();
-		
-		MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
-		int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
-    int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop();
-    
-    int posx = x;
-    int posy = y;
-    boolean showAsDialog = false;
 
-    // move popup position to a visible area
-    if (posx < Window.getScrollLeft()) {
-      // add padding
-      // posx = Window.getScrollLeft() + 60;
-      showAsDialog = true;
-    }
-    if (posy < Window.getScrollTop()) {
-      // add padding
-      // posy = Window.getScrollTop() + 60;
-      showAsDialog = true;
-    }
-
-		popup.setPopupPosition(posx, posy);
-
-		// textArea.setVisible(true);
-
-		if (diagram.supportsOnlyTextareaDynamicHeight()) {
-			if ("transparent".equals(diagram.getTextAreaBackgroundColor())) {
-				codeMirror.setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
-			} else {
-				codeMirror.setBackgroundColor(diagram.getTextAreaBackgroundColor());
-			}
-		} else {
-			codeMirror.setBackgroundColor("transparent");
-		}
-
-		if ("transparent".equals(diagram.getTextAreaBackgroundColor())) {
-			codeMirror.setColor(Theme.getCurrentColorScheme().getTextColor().toHexStringWithHash());
-		} else {
-			codeMirror.setColor("#" + diagram.getTextColor().toHexString());
-			codeMirror.setBackgroundColor(diagram.getTextAreaBackgroundColor());
-    }
-    
-		// ST 14.11.2018: Fix code mirror cursor not visible on black background
-		// set cursor color based on background, black or white
-		codeMirror.setCursorColorByBgColor(diagram.getTextAreaBackgroundColor());
-
-		double scaleFactor = surface.getScaleFactor();
-		
-		int dFontSize = diagram.getFontSize() != null ? diagram.getFontSize() : 12;
-		int fontSize = ((int) (dFontSize * scaleFactor));
-    codeMirror.setFontSize(fontSize + "px");
-    codeMirror.setLineHeight(lineHeight(fontSize) + "px");
-    
-    int editorWidth = (int) (diagram.getTextAreaWidth() * scaleFactor);
-    // if (editorWidth > Window.getClientWidth()) {
-    //   editorWidth = Window.getClientWidth();
-    // }
-    codeMirror.setWidth(editorWidth, "px");
-    
-    // codeMirror.setHeight("100vh");
-
-    Point p = ScaleHelpers.diagramPositionToScreenPoint(
-      diagram,
-      surface,
-      false
-    );
-    
-    int clientHeight = Window.getClientHeight();
-    int clientWidth = Window.getClientWidth();
-
-    // take zoom into calculation, it might not fit if board is zoomed
-    int posHeight = p.y + (int) (diagram.getHeight() * scaleFactor);
-    int posWidth = p.x + (int) (diagram.getWidth() * scaleFactor);
-
-    // restore default height
-    codeMirror.setHeight("auto");
-
-    // remove diagram dialog editor by default
-    setDialogMode(false);
-
-    if ((posWidth > clientWidth
-        || diagram.getWidth() > clientWidth
-        || posHeight > clientHeight
-        || showAsDialog) &&
-        // prevent opening modal dialog on mobile layout
-        // especially on tutorial
-        clientWidth > 400) {
-      // open editor as a modal dialog
-
-      int maxDialoagWidth = 700;
-      if (maxDialoagWidth > clientWidth) {
-        showDynamicDialog(clientWidth, clientHeight);
-      } else {
-        showFixedDialog(clientWidth, clientHeight, maxDialoagWidth);
-      }
-
-      if ("transparent".equals(codeMirror.getBackgroundColor())) {
-        // dialog editor needs to have a solid background always
-        codeMirror.setBackgroundColor(
-          Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash()
+    getTextAreaBoundingRect().then(new Promise.FunctionParam<ElementRect>() {
+      public void accept(ElementRect rect) {
+        // MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
+        MatrixPointJS point = MatrixPointJS.createUnscaledPoint(
+          (int) rect.getLeft(),
+          (int) rect.getTop(),
+          surface.getScaleFactor()
         );
+        int x = point.getX() + surface.getRootLayer().getTransformX() + surface.getAbsoluteLeft();
+        int y = point.getY() + surface.getRootLayer().getTransformY() + surface.getAbsoluteTop();
+        
+        int posx = x;
+        int posy = y;
+        boolean showAsDialog = false;
+    
+        // move popup position to a visible area
+        if (posx < Window.getScrollLeft()) {
+          // add padding
+          // posx = Window.getScrollLeft() + 60;
+          showAsDialog = true;
+        }
+        if (posy < Window.getScrollTop()) {
+          // add padding
+          // posy = Window.getScrollTop() + 60;
+          showAsDialog = true;
+        }
+    
+        popup.setPopupPosition(posx, posy);
+    
+        // textArea.setVisible(true);
+    
+        if (diagram.supportsOnlyTextareaDynamicHeight()) {
+          if ("transparent".equals(diagram.getTextAreaBackgroundColor())) {
+            codeMirror.setBackgroundColor(Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash());
+          } else {
+            codeMirror.setBackgroundColor(diagram.getTextAreaBackgroundColor());
+          }
+        } else {
+          codeMirror.setBackgroundColor("transparent");
+        }
+    
+        if ("transparent".equals(diagram.getTextAreaBackgroundColor())) {
+          codeMirror.setColor(Theme.getCurrentColorScheme().getTextColor().toHexStringWithHash());
+        } else {
+          codeMirror.setColor("#" + diagram.getTextColor().toHexString());
+          codeMirror.setBackgroundColor(diagram.getTextAreaBackgroundColor());
+        }
+        
+        // ST 14.11.2018: Fix code mirror cursor not visible on black background
+        // set cursor color based on background, black or white
+        codeMirror.setCursorColorByBgColor(diagram.getTextAreaBackgroundColor());
+    
+        double scaleFactor = surface.getScaleFactor();
+        
+        int dFontSize = diagram.getFontSize() != null ? diagram.getFontSize() : 12;
+        int fontSize = ((int) (dFontSize * scaleFactor));
+        codeMirror.setFontSize(fontSize + "px");
+        codeMirror.setLineHeight(lineHeight(fontSize) + "px");
+        
+        int editorWidth = (int) (rect.getWidth() * scaleFactor);
+        // if (editorWidth > Window.getClientWidth()) {
+        //   editorWidth = Window.getClientWidth();
+        // }
+        codeMirror.setWidth(editorWidth, "px");
+
+        // codeMirror.setHeight("100vh");
+
+        Point p = ScaleHelpers.diagramPositionToScreenPoint(
+          diagram,
+          surface,
+          false
+        );
+
+        int clientHeight = Window.getClientHeight();
+        int clientWidth = Window.getClientWidth();
+
+        // take zoom into calculation, it might not fit if board is zoomed
+        int posHeight = p.y + (int) (diagram.getHeight() * scaleFactor);
+        int posWidth = p.x + (int) (diagram.getWidth() * scaleFactor);
+
+        // restore default height
+        codeMirror.setHeight("auto");
+
+        // remove diagram dialog editor by default
+        setDialogMode(false);
+
+        if ((posWidth > clientWidth
+            || diagram.getWidth() > clientWidth
+            || posHeight > clientHeight
+            || showAsDialog) &&
+            // prevent opening modal dialog on mobile layout
+            // especially on tutorial
+            clientWidth > 400) {
+          // open editor as a modal dialog
+
+          int maxDialoagWidth = 700;
+          if (maxDialoagWidth > clientWidth) {
+            showDynamicDialog(clientWidth, clientHeight);
+          } else {
+            showFixedDialog(clientWidth, clientHeight, maxDialoagWidth);
+          }
+
+          if ("transparent".equals(codeMirror.getBackgroundColor())) {
+            // dialog editor needs to have a solid background always
+            codeMirror.setBackgroundColor(
+              Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash()
+            );
+          }
+
+          setDialogMode(true);
+        } else {
+          // use legacy editor height setup      
+          setTextAreaHeight();
+          popup.setContentWidth((int) (rect.getWidth() * scaleFactor));
+        }
+
+        if (surface.getScaleFactor() > 1) {
+          String paddingTop = ((int) (2 * surface.getScaleFactor())) + "";
+        }
+
+        if (surface.getScaleFactor() != 1.0f && !"transparent".equals(diagram.getTextAreaBackgroundColor())) {
+          codeMirror.setBackgroundColor("#" + diagram.getBackgroundColor());
+        }
+
+        codeMirror.setTextAlign(diagram.getTextAreaAlign());
+        codeMirror.cursorEnd();
+
+        codeMirror.setMarkdownMode(selectedDiagram.isMarkdownEditor());
+
+        //		setFocus(true);
+        
+        Properties.this.editorCommon.fireEditorOpen();
+        popup.selectAll(justCreated);
+        popup.show();
+        popup.getElement().getStyle().setPosition(com.google.gwt.dom.client.Style.Position.FIXED);
+    
+        // show element context menu always when showing editor
+        surface.getEditorContext().getEventBus().fireEvent(new SelectionMouseUpEvent(diagram));
       }
-
-      setDialogMode(true);
-    } else {
-      // use legacy editor height setup      
-      setTextAreaHeight();
-      popup.setContentWidth((int) (diagram.getTextAreaWidth() * scaleFactor));
-    }
-
-		if (surface.getScaleFactor() > 1) {
-			String paddingTop = ((int) (2 * surface.getScaleFactor())) + "";
-		}
-
-		codeMirror.setTextAlign(diagram.getTextAreaAlign());
-		
-		if (surface.getScaleFactor() != 1.0f && !"transparent".equals(diagram.getTextAreaBackgroundColor())) {
-			codeMirror.setBackgroundColor("#" + diagram.getBackgroundColor());
-		}
+    });
   }
+
+  /**
+   * Let's centralize text area bounding rect calculation
+   * in here and not spread around elements.
+   * @return
+   */
+  private Promise getTextAreaBoundingRect() {
+    Promise result = new Promise((resolve, reject) -> {
+      // if (ShapeProperty.isTextPositionBottom(selectedDiagram.getDiagramItem().getShapeProperties())) {
+        selectedDiagram.getTextSize().then(new Promise.FunctionParam<ElementSize>() {
+          public void accept(ElementSize size) {
+            int left = getTextAreaLeft((int) size.getWidth());
+            int top = getTextAreaTop();
+            int width = (int) size.getWidth();
+            int height = (int) size.getHeight();
+
+            if (width < 10) {
+              width = selectedDiagram.getWidth();
+            }
+            if (height < 10) {
+              height = selectedDiagram.getHeight();
+            }
+
+            ElementRect rect = ElementRect.create(left, top, width, height);
+            resolve.accept(rect);
+          }
+        });
+      // }
+		});
+
+    return result;
+  }
+
+	private int getTextAreaLeft(int width) {
+  	if (ShapeProperty.isTextPositionBottom(selectedDiagram.getDiagramItem().getShapeProperties())) {
+    	return (int) (selectedDiagram.getLeft() + selectedDiagram.getWidth() / 2 - width / 2);
+    } else if (ElementType.CHILD_TEXT.getValue().equals(selectedDiagram.getDiagramItem().getType()))  {
+      return selectedDiagram.getLeft();
+    } else {
+			return selectedDiagram.getLeft() + 4;
+  	}
+	}
+
+	private int getTextAreaTop() {
+		// cannot find enum since user custom types will not be part of enums!!
+		// if (hasTextElement.verticalAlignMiddle()) {
+		if (ShapeProperty.isTextPositionMiddle(selectedDiagram.getDiagramItem().getShapeProperties())) {
+			// ST 8.6.2018: subgroup needs to be taken into count on textarea position
+			// calculation
+      // textUtil.middleY(0) + selectedDiagram.getTransformY() + selectedDiagram.getTransformY(selectedDiagram.getSubgroup());
+			return selectedDiagram.getTop() + 23;
+		} else if (ShapeProperty.isTextPositionBottom(selectedDiagram.getDiagramItem().getShapeProperties())) {
+			return selectedDiagram.getTop() + selectedDiagram.getHeight() - 1;
+		} else if (ElementType.STORAGE.getValue().equals(selectedDiagram.getDiagramItem().getType()))  {
+      // 23 is taken from .text-fo.text-fo.horizontal.db padding-top
+      return selectedDiagram.getTop() + 23;
+		} else if (ElementType.CHILD_TEXT.getValue().equals(selectedDiagram.getDiagramItem().getType()))  {
+      return selectedDiagram.getTop();
+    } else {
+			return selectedDiagram.getTop() + 11;
+  	}
+	}  
 
   private void showDynamicDialog(
     int clientWidth,
@@ -1021,7 +1102,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	@Override
 	public void onSizeChanged(Diagram diagram, int width, int height) {
 		if (popup.isShowing() && selectedDiagram == diagram) {
-			_setTextAreaSize(diagram);
+			_setTextAreaSize(diagram, false);
 		}
 	}
 
