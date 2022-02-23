@@ -12,6 +12,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.Window;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorContext;
@@ -73,7 +74,11 @@ public class ShowHideHelpers {
 		editorContext.getEventBus().addHandler(DiagramElementAddedEvent.TYPE, new DiagramElementAddedEventHandler() {
 			@Override
 			public void onAdded(DiagramElementAddedEvent event) {
-        hide();
+        int cw = Window.getClientWidth();
+        boolean mobileLayout = cw <= 405;
+        if (!ngIsLibraryManualShowHide() || mobileLayout) {
+          hide();
+       }
 			}
 		});
 
