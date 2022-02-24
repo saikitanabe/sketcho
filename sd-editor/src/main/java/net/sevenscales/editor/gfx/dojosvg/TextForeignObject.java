@@ -96,10 +96,10 @@ class TextForeignObject extends Shape implements IText {
 	
  @Override
 	public void setAlignment(String alignment) {
-	  // setAlignment(rawNode, alignment);
+	  setAlignment(rawNode, alignment);
 	}
 	private native void setAlignment(JavaScriptObject rawNode, String alignment)/*-{
-	  rawNode.setShape( {align:alignment} );
+	  rawNode.setTextAlignment(alignment);
 	}-*/;
 	
   @Override
@@ -119,8 +119,12 @@ class TextForeignObject extends Shape implements IText {
       int blue,
       double opacity
   )/*-{
-		// var color = new $wnd.dojo.Color( {r:red,g:green,b:blue,a:opacity} );
-		// rawNode.setFill(color);
+    rawNode.setColor({
+      r: red,
+      g: green,
+      b: blue,
+      a: opacity
+    });
 	}-*/;  
 
   @Override
@@ -159,12 +163,7 @@ class TextForeignObject extends Shape implements IText {
 	
  @Override
 	public void setShape(int x, int y) {
-		// TODO if created as tspan child nodes => update x attribute to all that have x attribute!!
-		// if (justTextNoTspan(rawNode)) {
-			// setShape(rawNode, x, y);
-		// } else {
-			// updateTspanX(x);
-		// }
+    setShape(rawNode, x, y);
 	}
 	public native void setShape(JavaScriptObject rawNode, int x, int y)/*-{
 		rawNode.setShape( {x:x, y:y} );
