@@ -937,7 +937,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
         selectedDiagram.getTextSize().then(new Promise.FunctionParam<ElementSize>() {
           public void accept(ElementSize size) {
             int left = getTextAreaLeft((int) size.getWidth());
-            int top = getTextAreaTop();
+            int top = getTextAreaTop(size.getHeight());
             int width = (int) size.getWidth();
             int height = (int) size.getHeight();
 
@@ -970,14 +970,14 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
   	}
 	}
 
-	private int getTextAreaTop() {
+	private int getTextAreaTop(double height) {
 		// cannot find enum since user custom types will not be part of enums!!
 		// if (hasTextElement.verticalAlignMiddle()) {
 		if (ShapeProperty.isTextPositionMiddle(selectedDiagram.getDiagramItem().getShapeProperties())) {
 			// ST 8.6.2018: subgroup needs to be taken into count on textarea position
 			// calculation
       // textUtil.middleY(0) + selectedDiagram.getTransformY() + selectedDiagram.getTransformY(selectedDiagram.getSubgroup());
-			return selectedDiagram.getTop() + 23;
+			return (int) (selectedDiagram.getTop() + selectedDiagram.getHeight() / 2 - height / 2) + 5;
 		} else if (ShapeProperty.isTextPositionBottom(selectedDiagram.getDiagramItem().getShapeProperties())) {
 			return selectedDiagram.getTop() + selectedDiagram.getHeight() - 1;
 		} else if (ElementType.STORAGE.getValue().equals(selectedDiagram.getDiagramItem().getType()))  {
