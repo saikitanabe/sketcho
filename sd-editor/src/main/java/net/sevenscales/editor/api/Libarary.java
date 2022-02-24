@@ -586,7 +586,8 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
         double width = size.getWidth();
 
     double left = shape.getLeft() + shape.getWidth() / 2 - width / 2;
-    sectionTitle.setShape((int) left, shape.getTop() + 30);
+        sectionTitle.setShape((int) left, shape.getTop());
+        sectionTitle.setAlignment("center");
 
     // sectionTitle.setFontWeight(IText.WEIGHT_BOLD);
 
@@ -670,7 +671,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
                        "----\n" +
                        "text\n" + 
                        "----\n",
-                       new TextShape(150, SOFTWARE_SKETCHING_GROUP + 310, 100, 50).toString()));
+                       new TextShape(123, SOFTWARE_SKETCHING_GROUP + 265, 100, 50).toString()));
 
     
     // ACTIVITY DIAGRAM
@@ -749,7 +750,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     
     result.add(_create(ElementType.TEXT_ITEM.getValue(),
                "Subtopic",
-               new TextShape(30, MINDMAP_GROUP + 170, 100, 30).toString()));
+               new TextShape(10, MINDMAP_GROUP + 135, 100, 30).toString()));
 
     result.add(_create(ElementType.NOTE.getValue(),
                "*Notes!*",
