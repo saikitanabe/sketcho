@@ -138,6 +138,8 @@ class GenericHasTextElement extends AbstractHasTextElement {
   public boolean supportElementResize() {
   	if (ShapeProperty.isTextPositionBottom(parent.getDiagramItem().getShapeProperties())) {
 			return false;
+  	} else if (parent.getDiagramItem().getType().startsWith("e_container_")) {
+      return false;
   	} else if (ShapeProperty.isShapeAutoResizeDisabled(parent.getDiagramItem().getShapeProperties())) {
   		return false;
   	} else {
