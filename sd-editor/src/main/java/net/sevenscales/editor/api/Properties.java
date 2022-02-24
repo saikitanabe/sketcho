@@ -936,8 +936,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
       // if (ShapeProperty.isTextPositionBottom(selectedDiagram.getDiagramItem().getShapeProperties())) {
         selectedDiagram.getTextSize().then(new Promise.FunctionParam<ElementSize>() {
           public void accept(ElementSize size) {
-            int left = getTextAreaLeft((int) size.getWidth());
-            int top = getTextAreaTop(size.getHeight());
             int width = (int) size.getWidth();
             int height = (int) size.getHeight();
 
@@ -947,6 +945,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
             if (height < 10) {
               height = selectedDiagram.getHeight();
             }
+
+            int left = getTextAreaLeft(width);
+            int top = getTextAreaTop(height);
 
             ElementRect rect = ElementRect.create(left, top, width, height);
             resolve.accept(rect);
