@@ -352,7 +352,8 @@ public class TextElement extends AbstractDiagramItem implements
 		attachBoundary.setShape(left, top, width, height, 4);
 		subgroup.setTransform(left, top);
 		textGroup.setTransform(left, top);
-		textUtil.setTextShape();
+		// textUtil.setTextShape();
+    textUtil.setShapeSize(width, height);
     super.applyHelpersShape();
 	}
 
