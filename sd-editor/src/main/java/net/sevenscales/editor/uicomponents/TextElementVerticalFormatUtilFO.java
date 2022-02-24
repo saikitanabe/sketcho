@@ -145,7 +145,10 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
     setText(newText);
   
     // if (force || editorContext.isTrue(EditorProperty.ON_SURFACE_LOAD) || editorContext.isTrue(EditorProperty.ON_OT_OPERATION)) {
-    if (!editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) || force) {
+
+    // ST: 24.2.2022 now performance fast enough to modify size all the time
+    // when text changes.
+    // if (!editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) || force) {
   	  calculateLines2();
       if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION) && !editorContext.isTrue(EditorProperty.ON_SURFACE_LOAD) && !editorContext.isTrue(EditorProperty.ON_LIBRARY_LOAD)) {
         // during OT operation element is NOT resized and everything is 
@@ -154,7 +157,7 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
         calculateAndNotifyHeight(hasTextElement.getWidth());
       }
       cleanupAndApplyShape();
-    }
+    // }
     // }
 
 //    if ((hasTextElement.forceAutoResize()) && 
