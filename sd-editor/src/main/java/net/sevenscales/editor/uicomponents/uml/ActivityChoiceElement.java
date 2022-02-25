@@ -3,7 +3,9 @@ package net.sevenscales.editor.uicomponents.uml;
 
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
+import net.sevenscales.domain.ElementType;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.ReactAPI;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.diagram.Diagram;
@@ -35,6 +37,7 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
   // utility shape container to align text and make separators
 //  private List<IShape> innerShapes = new ArrayList<IShape>();
   private IGroup group;
+  private IGroup textGroup;
   private Integer[] fixedAnchorPoints;
   private TextElementFormatUtil textUtil;
 //	private int boundaryWidth;
@@ -51,6 +54,14 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 	public ActivityChoiceElement(ISurfaceHandler surface, ActivityChoiceShape newShape, String text, 
 			Color backgroundColor, Color borderColor, Color textColor, boolean editable, IDiagramItemRO item) {
 		super(editable, surface, backgroundColor, borderColor, textColor, item);
+
+    getDiagramItem().setType(ElementType.CHOICE.getValue());
+    getDiagramItem().setShapeProperties(
+      ReactAPI.fixShapeProperties(
+        getDiagramItem().getType(),
+        getDiagramItem().getShapeProperties()
+      )
+    );    
 		this.shape = newShape;
 		
 		group = IShapeFactory.Util.factory(editable).createGroup(surface.getElementLayer());
@@ -68,7 +79,6 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 	  path.setStrokeWidth(STROKE_WIDTH);
 	  path.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 
-    textUtil = new TextElementFormatUtil(this, hasTextElement, group, surface.getEditorContext());
     // textUtil.setMargin(50);
 
 		boundary = IShapeFactory.Util.factory(editable).createRectangle(group);
@@ -77,6 +87,10 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
 //	boundary.setFill(backgroundColor.red, backgroundColor.green, backgroundColor.blue, backgroundColor.opacity);
 		boundary.setFill(0, 0 , 0, 0); // transparent
 	  boundary.setShape(shape.rectShape.left, shape.rectShape.top, shape.rectShape.width, shape.rectShape.height, 3);
+
+    textGroup = IShapeFactory.Util.factory(editable).createGroup(group);    
+    textUtil = new TextElementFormatUtil(this, hasTextElement, textGroup, surface.getEditorContext());
+
 		
 //		resizeElement = IShapeFactory.Util.factory(editable).createRectangle(group);
 //		resizeElement.setFill(200, 200, 200, 0.4);
@@ -288,8 +302,9 @@ public class ActivityChoiceElement extends AbstractDiagramItem implements Suppor
   	path.setShape(calcShape(0, 0));
 	  path.setAttribute("stroke-linecap", "square");
 	  path.setAttribute("stroke-linejoin", "round");
-	  
-    textUtil.setTextShape();
+
+    textGroup.setTransform(left, top);
+    textUtil.setShapeSize(width, height);
     super.applyHelpersShape();
 	}
 

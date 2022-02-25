@@ -16,6 +16,7 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.LibraryShapes;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.impl.Theme;
+import net.sevenscales.editor.api.ReactAPI;
 import net.sevenscales.editor.content.ui.ContextMenuItem;
 import net.sevenscales.editor.content.ui.UMLDiagramType;
 import net.sevenscales.editor.content.utils.ContainerAttachHelpers;
@@ -73,7 +74,12 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		super(editable, surface, backgroundColor, borderColor, textColor, item);
 
 		this.shape = newShape;
-		getDiagramItem().setShapeProperties(newShape.getShapeProperties());
+		getDiagramItem().setShapeProperties(
+      ReactAPI.fixShapeProperties(
+        getDiagramItem().getType(),
+        newShape.getShapeProperties()
+      )
+    );
 
 		group = IShapeFactory.Util.factory(editable).createGroup(getLayer(surface));
     // group.setAttribute("cursor", "default");
