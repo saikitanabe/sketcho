@@ -66,6 +66,8 @@ public class ImageElement extends AbstractDiagramItem implements IGenericElement
   ) {
 		super(editable, surface, backgroundColor, borderColor, textColor, ImageElement.copyWithTextProperties(item));
 
+    getDiagramItem().setType(ElementType.IMAGE.getValue());
+
 		this.shape = newShape;
 
     fetchSignedUrlIfMissing();
@@ -308,6 +310,7 @@ public class ImageElement extends AbstractDiagramItem implements IGenericElement
 
       subgroup.setTransform(left, top);
       textGroup.setTransform(left, top);
+      textUtil.setShapeSize(width, height);
 
       background.setShape(left, top, width, height, 0);
 			super.applyHelpersShape();
