@@ -92,11 +92,14 @@ class GenericHasTextElement extends AbstractHasTextElement {
 			return parent.getHeight() - TextElementFormatUtil.ROW_HEIGHT + 8;
   	} else if (ShapeProperty.isTextResizeDimVerticalResize(parent.getDiagramItem().getShapeProperties())) {
 			// ST 20.11.2017: text moved with a subgroup transformation			
-			if (legacy) {
-				return parent.getRelativeTop() + parent.getHeight() / 2
-						- ((int) parent.getTextHeight() / 2 + TextElementVerticalFormatUtil.DEFAULT_TOP_MARGIN / 2);
-			}
-  		return parent.getHeight() / 2 - ((int) parent.getTextHeight() / 2 + TextElementVerticalFormatUtil.DEFAULT_TOP_MARGIN / 2);
+			// if (legacy) {
+			// 	return parent.getRelativeTop() + parent.getHeight() / 2
+			// 			- ((int) parent.getTextHeight() / 2 + TextElementVerticalFormatUtil.DEFAULT_TOP_MARGIN / 2);
+			// }
+  		// return parent.getHeight() / 2 - ((int) parent.getTextHeight() / 2 + TextElementVerticalFormatUtil.DEFAULT_TOP_MARGIN / 2);
+
+      // see what happens...
+      return 0;
   	} else {
 			// switch (elementType) {
 			// 	case STORAGE: {
