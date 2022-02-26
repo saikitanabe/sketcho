@@ -237,7 +237,7 @@ public class TextElementFormatUtil {
       parent.getDiagramItem().getType(),
       Tools.isSketchMode()
     );
-    textElement.initializeText(parent.getDiagramItem().getText());
+    textElement.setText(parent.getDiagramItem().getText());
     // textElement.setPosition(hasTextElement.getX(), hasTextElement.getY());
 
     // textElement.setProperties(
@@ -501,6 +501,12 @@ public class TextElementFormatUtil {
   public void reapplyText() {
     // createRows(text, true);
     resizeElement();
+    textElement.setShapeProperties(
+      parent.getDiagramItem().getShapeProperties(),
+      parent.getDiagramItem().getType(),
+      Tools.isSketchMode()
+    );
+    textElement.reapplyText();
     // setTextShape();
   }
 

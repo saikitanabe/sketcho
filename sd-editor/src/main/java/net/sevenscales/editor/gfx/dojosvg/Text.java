@@ -384,9 +384,6 @@ class Text extends Shape implements IText {
   public void setShapeSize(int widht, int height) {
   }
   @Override
-  public void initializeText(String text) {
-  }
-  @Override
   public void setHorizontal(boolean horizontal) {
   }
   @Override
@@ -404,6 +401,9 @@ class Text extends Shape implements IText {
   }
   @Override
   public void setRotate(int degrees) {
+  }
+  @Override
+  public void reapplyText() {
   }
 
 }

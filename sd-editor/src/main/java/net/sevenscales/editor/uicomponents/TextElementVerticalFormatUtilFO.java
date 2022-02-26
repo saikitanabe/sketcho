@@ -130,11 +130,11 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
     // MeasurementHelpers.setMeasurementPanelTextAndResizeDiagram(parent, getText());
   }
 
-  @Override
-  public void reapplyText() {
-    calculateLines2();
-    cleanupAndApplyShape();
-  }
+  // @Override
+  // public void reapplyText() {
+  //   calculateLines2();
+  //   cleanupAndApplyShape();
+  // }
 
   public void setText(String newText, boolean editable, boolean force) {
   	// convert json text line (\\n) breaks to line breaks

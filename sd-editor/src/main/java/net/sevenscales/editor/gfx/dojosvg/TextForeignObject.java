@@ -99,16 +99,15 @@ class TextForeignObject extends Shape implements IText {
 	  setAlignment(rawNode, alignment);
 	}
 	private native void setAlignment(JavaScriptObject rawNode, String alignment)/*-{
-	  rawNode.setTextAlignment(alignment);
+	  rawNode.setTextAlign(alignment);
 	}-*/;
 	
   @Override
   public String getAlignment() {
-    // return nativeGetAlignment(rawNode);
-    return ALIGN_LEFT;
+    return nativeGetAlignment(rawNode);
   }
   private native String nativeGetAlignment(JavaScriptObject rawNode)/*-{
-    return rawNode.getShape().align;
+    return rawNode.getTextAlign()
   }-*/;
 
   @Override
@@ -410,16 +409,6 @@ class TextForeignObject extends Shape implements IText {
     rawNode.setShapeSize(width, height);
   }-*/;
 
-  public void initializeText(String text) {
-    _initializeText(rawNode, text);
-  }
-  private native void _initializeText(
-    JavaScriptObject rawNode,
-    String text
-  )/*-{
-    rawNode.initializeText(text)
-  }-*/;
-
   public void setHorizontal(boolean horizontal) {
     _setHorizontal(rawNode, horizontal);
   }
@@ -492,6 +481,14 @@ class TextForeignObject extends Shape implements IText {
     int degrees
   )/*-{
     rawNode.setRotate(degrees);
+  }-*/;
+
+  @Override
+  public void reapplyText() {
+    _reapplyText(rawNode);
+  }
+  private native void _reapplyText(JavaScriptObject rawNode)/*-{
+    rawNode.reapplyText()
   }-*/;
 
 }

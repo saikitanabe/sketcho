@@ -37,11 +37,11 @@ public interface IText extends IShape {
   // Safari needs width and height for foreignobject
   // to show it on page
   void setShapeSize(int widht, int height);
-  void initializeText(String text);
   void setHorizontal(boolean horizontal);
   void setColor(Color color);
   void setBorderColor(Color color);
   void setShapeProperties(int properties, String parentType, boolean awesome);
   Promise getTextSize();
   void setRotate(int degrees);
+  void reapplyText();
 }
