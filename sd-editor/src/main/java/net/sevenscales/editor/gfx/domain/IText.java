@@ -41,7 +41,7 @@ public interface IText extends IShape {
   void setColor(Color color);
   void setBorderColor(Color color);
   void setShapeProperties(int properties, String parentType, boolean awesome);
-  Promise getTextSize();
+  Promise<ElementSize> getTextSize();
   void setRotate(int degrees);
   void reapplyText();
 }

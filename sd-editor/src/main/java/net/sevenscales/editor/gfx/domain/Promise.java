@@ -28,13 +28,13 @@ import jsinterop.annotations.JsPackage;
  * @author jimmyfm
  */
 @JsType(isNative = true, namespace = JsPackage.GLOBAL)
-public class Promise
+public class Promise<T>
 {
 
 	@JsFunction
-	public interface FunctionParam<E>
+	public interface FunctionParam<T>
 	{
-		void accept(final E o);
+		void accept(final T o);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class Promise
 	 * The then() method returns a Promise. It takes up to two arguments: callback functions for the success and failure
 	 * cases of the Promise. <br />
 	 * Note: If both arguments are omitted, or are provided non-functions, a new Promise is created with no additional
-	 * handlers, simply adopting the final state of the Promise that then is called on. If the first argument is omitted
+	 * handlers, simply adoptzing the final state of the Promise that then is called on. If the first argument is omitted
 	 * or provided a non-function, the new Promise that is created simply adopts the fulfillment state of the Promise
 	 * that then is called on (if it becomes fulfilled). If the second argument is omitted or provided a non-function,
 	 * the new Promise that is created simply adopts the rejection state of the Promise that then is called on (if it
@@ -77,7 +77,7 @@ public class Promise
 	 *         resolved Promise.
 	 *
 	 */
-	public native final Promise then(final FunctionParam onFulfilled);
+	public native final Promise<T> then(final FunctionParam<T> onFulfilled);
 
 	/**
 	 * The then() method returns a Promise. It takes up to two arguments: callback functions for the success and failure

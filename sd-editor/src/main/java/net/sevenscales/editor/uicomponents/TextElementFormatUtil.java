@@ -528,17 +528,21 @@ public class TextElementFormatUtil {
       // Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
 			// 	public void execute() {
 
-        textElement.getTextSize().then(new Promise.FunctionParam<ElementSize>() {
-          public void accept(ElementSize size) {
+        textElement.getTextSize().then((ElementSize size) -> {
             // double height = getMarginTop() + getTextHeight() + fontProperty.marginBottom + getMarginBottom();
             // double height = getTextHeight();
-            hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), (int) size.getWidth(), (int) size.getHeight());
-          }
+            // int width = (int) ((ElementSize)size).getWidth();
+            // int height = (int) ((ElementSize)size).getHeight();
+            int width = (int) size.getWidth();
+            int height = (int) size.getHeight();
+            hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), width, height);
         });
       //   }
 			// });
     }
   }
+
+  
 
   public void setRotate(int degrees) {
     this.degrees = degrees;
