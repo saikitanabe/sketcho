@@ -115,7 +115,11 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
       public void accept(ElementSize size) {
         double textHeight = size.getHeight();
         if (/*textHeight != prevTextHeight && */textHeight > 0) {
-          int theight = (int) (textHeight / parent.getSurfaceHandler().getScaleFactor());
+          // int theight = (int) (textHeight / parent.getSurfaceHandler().getScaleFactor());
+
+          // ST 1.3.2022: do not add scaling, text size is correct directly
+          // even when there is zoom level
+          int theight = (int) textHeight;
           // int height = ((int) theight) + DEFAULT_TOP_MARGIN + hasTextElement.getMarginTop() + hasTextElement.getMarginBottom();
           // parent.setHeight();
           hasTextElement.resizeHeight(theight);
