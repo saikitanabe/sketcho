@@ -512,6 +512,11 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 			}
 			subgroup.setTransform(left, top);
 			textGroup.setTransform(left, top);
+
+      // ST 1.3.2022: fix bug note element resets rotation after text editing
+      // editingEnd called rotate, but async getTextSize resets it
+      // due to textGroup.setTransform
+      rotate(getDiagramItem().getRotateDegrees(), false);
 	  	if (UiUtils.isIE()) {
 			  // no need to use, which doesn't work svg => pdf, scale down stroke width
 			  // vector-effect="non-scaling-stroke"
