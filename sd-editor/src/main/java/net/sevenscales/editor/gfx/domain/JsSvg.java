@@ -12,6 +12,10 @@ public class JsSvg extends JavaScriptObject {
 	public final native String getSvg()/*-{
 		return this.svg
   }-*/;
+
+	public final native String[] getStyles()/*-{
+		return this.styles
+  }-*/;
   
 	public final native int getWidth()/*-{
 		return this.width
