@@ -535,7 +535,11 @@ public class TextElementFormatUtil {
             // int height = (int) ((ElementSize)size).getHeight();
             int width = (int) size.getWidth();
             int height = (int) size.getHeight();
-            hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), width, height);
+            if (width > 5 && height > 5) {
+              // do not allow to set too small size for the element
+              // text has been completely removed
+              hasTextElement.resize(hasTextElement.getX(), hasTextElement.getY(), width, height);
+            }
         });
       //   }
 			// });
@@ -719,6 +723,7 @@ public class TextElementFormatUtil {
 
 	public void setFontSize(int fontSize) {
 		this.fontSize  = fontSize;
+    textElement.setFontSize(fontSize + "px");
     FontProperty fp = fontToRowSizeMap.get(fontSize);
     if (fp != null) {
       fontProperty = fp;
