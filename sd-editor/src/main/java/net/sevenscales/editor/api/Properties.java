@@ -557,7 +557,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 
 	private void setSelectedDiagramText(String text) {
-		logger.debug("setSelectedDiagramText {}...", text);
+		// logger.debug("setSelectedDiagramText {}...", text);
 		if (text.equals(selectedDiagram.getText())) {
 			// do not allow sending same content again
 			return;
