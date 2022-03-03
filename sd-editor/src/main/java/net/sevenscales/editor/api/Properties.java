@@ -976,7 +976,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private int getTextAreaTop(double height) {
 		// cannot find enum since user custom types will not be part of enums!!
 		// if (hasTextElement.verticalAlignMiddle()) {
-		if (ShapeProperty.isTextPositionMiddle(selectedDiagram.getDiagramItem().getShapeProperties())) {
+		if (selectedDiagram.getDiagramItem().getType().startsWith("e_container_")) {
+      return selectedDiagram.getTop() + 11;
+    } else if (ShapeProperty.isTextPositionMiddle(selectedDiagram.getDiagramItem().getShapeProperties())) {
 			// ST 8.6.2018: subgroup needs to be taken into count on textarea position
 			// calculation
       // textUtil.middleY(0) + selectedDiagram.getTransformY() + selectedDiagram.getTransformY(selectedDiagram.getSubgroup());
