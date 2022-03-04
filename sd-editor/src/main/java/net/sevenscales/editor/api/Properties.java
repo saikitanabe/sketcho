@@ -95,7 +95,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private EditorCommon editorCommon;
   private boolean modifiedAtLeastOnce;
 	private boolean dialogMode;
-	
+  private boolean makeCursorEnd;
+
 	private Buffer buffer = new Buffer();
 
 	private ShowDiagramPropertyTextEditorEventHandler showDiagramText = new ShowDiagramPropertyTextEditorEventHandler() {
@@ -722,6 +723,9 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 														 // at least this is very precise way and perhaps easy to understand...
 		
 		setTextAreaText(text);
+
+    // ST 4.3.2022: fix cursor jumps to end all the time
+    this.makeCursorEnd = true;
 		_setTextAreaSize(diagram, justCreated);
 	}
 
@@ -783,7 +787,6 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	private void _setTextAreaSize(final Diagram diagram, final boolean justCreated) {
 		// no need to hide text any longer since markdown editor hides the text with background color.
 		// diagram.hideText();
-
     getTextAreaBoundingRect().then(new Promise.FunctionParam<ElementRect>() {
       public void accept(ElementRect rect) {
         // MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
@@ -909,7 +912,12 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
         }
 
         codeMirror.setTextAlign(diagram.getTextAreaAlign());
-        codeMirror.cursorEnd();
+
+        if (makeCursorEnd) {
+          codeMirror.cursorEnd();
+          // do not move cursor to the end when size is changed
+          makeCursorEnd = false;
+        }
 
         codeMirror.setMarkdownMode(selectedDiagram.isMarkdownEditor());
 
