@@ -963,7 +963,8 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
   	if (ShapeProperty.isTextPositionBottom(selectedDiagram.getDiagramItem().getShapeProperties()) ||
         (ShapeProperty.isTextPositionTop(selectedDiagram.getDiagramItem().getShapeProperties()) &&
         ShapeProperty.isTextPositionMiddle(selectedDiagram.getDiagramItem().getShapeProperties())) ||
-        selectedDiagram.getDiagramItem().getType().startsWith("e_container_")
+        selectedDiagram.getDiagramItem().getType().startsWith("e_container_") ||
+        ElementType.VERTICAL_PARTITION.getValue().equals(selectedDiagram.getDiagramItem().getType())
     ) {
     	return (int) (selectedDiagram.getLeft() + selectedDiagram.getWidth() / 2 - width / 2);
     } else if (ElementType.CHILD_TEXT.getValue().equals(selectedDiagram.getDiagramItem().getType()))  {
