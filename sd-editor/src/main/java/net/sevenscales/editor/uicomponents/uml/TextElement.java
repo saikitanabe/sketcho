@@ -352,6 +352,11 @@ public class TextElement extends AbstractDiagramItem implements
 		attachBoundary.setShape(left, top, width, height, 4);
 		subgroup.setTransform(left, top);
 		textGroup.setTransform(left, top);
+    // ST 1.3.2022: fix bug note element resets rotation after text editing
+    // editingEnd called rotate, but async getTextSize resets it
+    // due to textGroup.setTransform
+    rotate(getDiagramItem().getRotateDegrees(), false);
+
 		// textUtil.setTextShape();
     textUtil.setShapeSize(width, height);
     super.applyHelpersShape();
@@ -472,8 +477,6 @@ public class TextElement extends AbstractDiagramItem implements
 	 		// });
 	  }
 
-    rotate(getDiagramItem().getRotateDegrees(), false);
-	  
 	  // need to call as last to make sure attached relationships use
 	  // closest path if set
   	super.editingEnded(modified);

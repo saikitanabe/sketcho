@@ -1757,7 +1757,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
     // this is not necessary if setShape applies rotate again
     // see GenericElement setShape rotating after textGroup.setTransform(left, top);
-    rotate(getDiagramItem().getRotateDegrees(), false);
+    // rotate(getDiagramItem().getRotateDegrees(), false);
   }
 
   @Override
