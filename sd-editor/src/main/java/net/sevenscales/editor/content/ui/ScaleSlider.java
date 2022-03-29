@@ -41,7 +41,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private static final double TRESHOLD = 5;
   // Windows is still slow so take every 5th step on zoom
   // to keep it smooth, Windows is fast enough with value 1,
-  private static final int wheelSteps = UiUtils.isWindows() ? 1 : 1;
+  private static final int wheelSteps = UiUtils.isWindows() ? 3 : 1;
 
 	private EditorContext editorContext;
 	private ISurfaceHandler surface;
