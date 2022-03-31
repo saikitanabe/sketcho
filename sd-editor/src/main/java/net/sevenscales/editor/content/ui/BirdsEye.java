@@ -81,7 +81,7 @@ class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
     	int val = slider.getSliderValue() + 3;
       // logger.debug("zoom ++ {}", val);
     	if (val < Constants.ZOOM_FACTORS.length) {
-    	  slider.scaleToIndex(val);
+    	  slider.scaleToIndex(val, true);
     	}
 		}
 
@@ -93,7 +93,7 @@ class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
     	int val = slider.getSliderValue() - 3;
       // logger.debug("zoom -- {}", val);
     	if (val >= 0) {
-        slider.scaleToIndex(val);
+        slider.scaleToIndex(val, true);
     	}
     }
 
@@ -102,7 +102,7 @@ class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
 				return;
 			}
 
-  	  slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX);
+  	  slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX, true);
     }
 
 		private native void subscribeMapView(BirdsEye me)/*-{
@@ -205,7 +205,7 @@ class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
 	    // coming back from birds eye view
 	    // fixes problem when in birds eye view and then starting directly
 	    // to zoom, then starts from scale(1)
-      slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX);
+      slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX, false);
 
 	    int leftmost = BoardDimensions.getLeftmost();
 	    int topmost = BoardDimensions.getTopmost();
@@ -264,7 +264,7 @@ class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
 	      surface.setTransform(0, 0);
 
 	      // 2. scale at 0,0
-	      slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX);
+	      slider.scaleToIndex(Constants.ZOOM_DEFAULT_INDEX, false);
 
 	      // 3. move mouse point to 0,0 then move half the screen size to right
 	      // 		to center the mouse point

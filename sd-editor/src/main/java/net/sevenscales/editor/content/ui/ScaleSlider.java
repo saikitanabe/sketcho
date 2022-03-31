@@ -260,7 +260,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private void updateSliderState(int index) {
 		// this is just to set slider to correct zoom value
 		fireEvent = false;
-		scaleToIndex(index);
+		scaleToIndex(index, false);
 	}
 
 	private void handlMouseWheel(int delta) {
@@ -326,7 +326,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 
 	private native void listen(ScaleSlider me)/*-{
 		$wnd.globalStreams.scaleResetStream.onValue(function() {
-			me.@net.sevenscales.editor.content.ui.ScaleSlider::scaleToIndex(I)(@net.sevenscales.domain.constants.Constants::ZOOM_DEFAULT_INDEX)
+			me.@net.sevenscales.editor.content.ui.ScaleSlider::scaleToIndex(IZ)(@net.sevenscales.domain.constants.Constants::ZOOM_DEFAULT_INDEX, false)
 		})
 
 		$wnd.globalStreams.scaleRestoreStream.onValue(function(value) {
@@ -346,13 +346,15 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 		return surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE);		
 	}
 	
-  public void scaleToIndex(int index) {
+  public void scaleToIndex(int index, boolean wheel) {
     currentIndex = index;
+    this.wheel = wheel;
     _setSliderValue(innerScaleSlider.getElement(), currentIndex);
+    this.wheel = false;
   }
 
   public void scaleToFactor(double value) {
-  	scaleToIndex(findFactorIndex(value));
+  	scaleToIndex(findFactorIndex(value), false);
   }
 
   private int findFactorIndex(double value) {
@@ -529,7 +531,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	}-*/;
 
   public void reset() {
-    scaleToIndex(Constants.ZOOM_DEFAULT_INDEX);
+    scaleToIndex(Constants.ZOOM_DEFAULT_INDEX, false);
   }
 
 }
