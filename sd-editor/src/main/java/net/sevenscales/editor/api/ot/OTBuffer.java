@@ -151,6 +151,9 @@ public class OTBuffer {
 	}
 
 	public List<CompensationModel> topModel() {
+    if (undoBuffer.isEmpty())  {
+      return null;
+    }
 		return undoBuffer.getFirst();
 	}
 
