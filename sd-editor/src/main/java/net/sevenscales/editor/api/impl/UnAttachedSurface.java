@@ -49,7 +49,7 @@ import net.sevenscales.editor.gfx.domain.JsSvg;
 import net.sevenscales.editor.gfx.domain.JsSvgContainer;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.OrgEvent;
-
+import net.sevenscales.editor.gfx.domain.Promise;
 
 public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	private static SLogger logger = SLogger.createLogger(UnAttachedSurface.class);
@@ -128,7 +128,7 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public boolean isExporting() {
 		return true;
 	}
-  public JsSvg getSvg() {
+  public Promise<JsSvg> getSvg() {
   	JsSvgContainer svg = surface.getContainer().cast();
 		return svg.getSvg();
   }

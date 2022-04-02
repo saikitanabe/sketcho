@@ -53,6 +53,8 @@ public class SvgHandler {
 			}
 		});
 
+    _init(this);
+
 		// Firefor cannot render manipulate dom if not attached
 		// chrome could do without adding to DOM
 		// surface.getElement().getStyle().setDisplay(Style.Display.NONE);
@@ -61,6 +63,18 @@ public class SvgHandler {
 		// surface.clearAndInit();
 		// }
 	}
+
+  private native void _init(SvgHandler me)/*-{
+		$wnd.gwtGetScaleFactor = function() {
+      $wnd.console.log('gwtGetScaleFactor')
+			return me.@net.sevenscales.editor.api.SvgHandler::gwtGetScaleFactor()();
+		}
+  }-*/;
+
+  private double gwtGetScaleFactor() {
+    // no zoom in/out on export
+  	return 1;
+  }  
 
 	private void handleLoaded() {
 		logger.debug("handleLoaded...");
@@ -108,15 +122,20 @@ public class SvgHandler {
     
         Promise.all(promises).then(p -> {
           // ST 12.11.2017: NEW DOM based svg extraction
-          SvgData data = new SvgData();
-          JsSvg jsSvg = surface.getSvg();
-          if (jsSvg != null) {
-            // jsSvg could be null, e.g. now on normal SurfaceHandler
-            data.svg = jsSvg.getSvg();
-            surface.setSize(jsSvg.getWidth(), jsSvg.getHeight());
-            this.svg = data.svg;
-          }
-          nativeReady(handler, jsSvg);
+          surface.getSvg().then(new Promise.FunctionParam<JsSvg>() {
+            public void accept(JsSvg jsSvg) {
+              SvgData data = new SvgData();
+              // JsSvg jsSvg = surface.getSvg();
+              if (jsSvg != null) {
+                // jsSvg could be null, e.g. now on normal SurfaceHandler
+                data.svg = jsSvg.getSvg();
+                surface.setSize(jsSvg.getWidth(), jsSvg.getHeight());
+                SvgHandler.this.svg = data.svg;
+              }
+              nativeReady(handler, jsSvg);
+            }
+          });
+
           // ST 12.11.2017: END NEW DOM based svg extraction
         });
 			}

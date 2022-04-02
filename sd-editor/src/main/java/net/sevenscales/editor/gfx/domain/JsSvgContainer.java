@@ -2,6 +2,8 @@ package net.sevenscales.editor.gfx.domain;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
+import net.sevenscales.editor.gfx.domain.Promise;
+
 
 public class JsSvgContainer extends JavaScriptObject {
 
@@ -12,7 +14,7 @@ public class JsSvgContainer extends JavaScriptObject {
 		return this.rawNode
 	}-*/;
 
-	public final native JsSvg getSvg()/*-{
+	public final native Promise<JsSvg> getSvg()/*-{
 		var svg = this.rawNode;
 
 		if (typeof $wnd.__svgNodeToString__ === 'function') {

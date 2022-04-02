@@ -90,6 +90,7 @@ import net.sevenscales.editor.gfx.domain.ISurface;
 import net.sevenscales.editor.gfx.domain.JsSvg;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.OrgEvent;
+import net.sevenscales.editor.gfx.domain.Promise;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 
@@ -589,7 +590,7 @@ class SurfaceHandler extends SimplePanel implements
     // PROD setting don't show link svg on realtime board
 		return false;
 	}
-  public JsSvg getSvg() {
+  public Promise<JsSvg> getSvg() {
     return null;
   }
   
