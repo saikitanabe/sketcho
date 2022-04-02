@@ -144,6 +144,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   private boolean forceTextRendering;
 
   private Integer rotateDegree;
+  private LinkElement linkElement;
 	
   public static final String EVENT_DOUBLE_CLICK = "ondblclick";
 
@@ -232,30 +233,48 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   protected void applyLink() {
-    if (!this.surface.isExporting()) {
-      // enabled only on export
+
+    String link = getLink();
+
+    if (link == null) {
       return;
     }
 
-    IGroup g = getSubgroup();
-    if (g == null) {
-      g = getGroup();
+    IGroup group = getSubgroup();
+    if (group == null) {
+      group = getGroup();
     }
-    if (g != null) {
-      // TODO tooltip of the link
-      String linkUrl = getLink();
-      if (linkUrl != null && !"".equals(linkUrl)) {
-        JsShape linkicon = ShapeCache.findIcon("link");
-        if (linkicon != null) {
-          SafeUri url = UriUtils.fromString(linkUrl);
-          String urlString = url.asString(); //.replaceAll("&", "&amp;");
-          // _applyLink(g.getContainer(), "#linkshape", (int)(getWidth() / 2 - linkicon.getWidth() / 2), getHeight(), urlString);
-          _applyLink(g.getContainer(), "#linkshape", (int)(getWidth() - 3), -25, urlString);
-        }
-      } else {
-        _deleteLink(g.getContainer());
-      }
+
+    if (group != null && linkElement == null) {
+      linkElement = _createLink(group.getElement());
     }
+
+    linkElement.setLink(link);
+
+    // if (!this.surface.isExporting()) {
+    //   // enabled only on export
+    //   return;
+    // }
+
+    // IGroup g = getSubgroup();
+    // if (g == null) {
+    //   g = getGroup();
+    // }
+    // if (g != null) {
+    //   // TODO tooltip of the link
+    //   String linkUrl = getLink();
+    //   if (linkUrl != null && !"".equals(linkUrl)) {
+    //     JsShape linkicon = ShapeCache.findIcon("link");
+    //     if (linkicon != null) {
+    //       SafeUri url = UriUtils.fromString(linkUrl);
+    //       String urlString = url.asString(); //.replaceAll("&", "&amp;");
+    //       // _applyLink(g.getContainer(), "#linkshape", (int)(getWidth() / 2 - linkicon.getWidth() / 2), getHeight(), urlString);
+    //       _applyLink(g.getContainer(), "#linkshape", (int)(getWidth() - 3), -25, urlString);
+    //     }
+    //   } else {
+    //     _deleteLink(g.getContainer());
+    //   }
+    // }
   }
 
   private native void _deleteLink(JavaScriptObject group)/*-{
@@ -990,6 +1009,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     applyLink();
     notifyLinkAdded(link);
   }
+
+  private native LinkElement _createLink(
+    JavaScriptObject el
+  )/*-{
+    return $wnd.createElementLink(el)
+  }-*/;
 
   private native void notifyLinkAdded(String url)/*-{
     $wnd.globalStreams.shapeLinkStream.push(url)

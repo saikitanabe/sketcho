@@ -50,6 +50,12 @@ class Surface extends Graphics implements IContainer, ISurface {
 	public JavaScriptObject getContainer() {
 		return surface;
 	}
+  public Element getElement() {
+    return _getElement(surface);
+  }
+  private native Element _getElement(JavaScriptObject surface)/*-{
+    return surface.rawNode
+  }-*/;
 
 	public void loaded() {
 		this.width = uiObject.getOffsetWidth();

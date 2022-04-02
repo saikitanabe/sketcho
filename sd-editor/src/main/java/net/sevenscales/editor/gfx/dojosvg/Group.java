@@ -6,6 +6,7 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShape;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.user.client.Element;
 
 class Group extends Graphics implements IContainer, IGroup {
 	private static final SLogger logger = SLogger.createLogger(Group.class);
@@ -29,6 +30,13 @@ class Group extends Graphics implements IContainer, IGroup {
   public JavaScriptObject getContainer() {
     return group;
   }
+
+  public Element getElement() {
+    return _getElement(group);
+  }
+  private native Element _getElement(JavaScriptObject group)/*-{
+    return group.rawNode
+  }-*/;
 
   private native JavaScriptObject nativeCreateGroup(JavaScriptObject surface)/*-{
     return surface.createGroup();
