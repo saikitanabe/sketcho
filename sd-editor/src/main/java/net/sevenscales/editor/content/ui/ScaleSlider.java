@@ -408,10 +408,10 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 		boolean exceedTreshold = Math.abs(currentDistance - distance) > TRESHOLD; 
 		if (exceedTreshold) {
 			int index = currentIndex;
-			if (distance <= currentDistance && (index -1 ) >= 0) {
-				currentIndex = index - 1;
-			} else if (distance > currentDistance && (index + 1) < Constants.ZOOM_FACTORS.length) {
-				currentIndex = index + 1;
+			if (distance <= currentDistance && (index - wheelSteps ) >= 0) {
+				currentIndex = index - wheelSteps;
+			} else if (distance > currentDistance && (index + wheelSteps) < Constants.ZOOM_FACTORS.length) {
+				currentIndex = index + wheelSteps;
 			}
 			currentDistance = distance;
 
