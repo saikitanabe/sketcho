@@ -1,5 +1,8 @@
 package net.sevenscales.editor.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.dom.client.Touch;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -18,6 +21,7 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.event.pointer.PointerEvent;
 import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
 import net.sevenscales.editor.api.event.pointer.PointerDownHandler;
 import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
@@ -27,20 +31,38 @@ import net.sevenscales.editor.api.event.pointer.PointerUpEvent;
 import net.sevenscales.editor.api.event.pointer.PointerUpHandler;
 import net.sevenscales.editor.api.impl.TouchHelpers;
 
-public class LongPressHandler implements MouseDownHandler, 
-																				 MouseMoveHandler, 
+public class LongPressHandlerV2 implements MouseDownHandler, 
+                                         MouseMoveHandler,
                                          MouseUpHandler,
                                          PointerDownHandler, 
-																				 PointerMoveHandler, 
+                                         PointerMoveHandler, 
 																				 PointerUpHandler,
 																				 TouchStartHandler,
-																				 TouchMoveHandler,
+                                         TouchMoveHandler,
 																				 TouchEndHandler,
                                          ILongPressHandler {
-	private static final SLogger logger = SLogger.createLogger(LongPressHandler.class);
+	private static final SLogger logger = SLogger.createLogger(LongPressHandlerV2.class);
 	private static final int THRESHOLD;
 	private static final int TIME_OUT = 700;
+  private List<PointerSnapShot> pointerEvents = new ArrayList<PointerSnapShot>();
 	private final LongPressTimer timer = new LongPressTimer();
+  private boolean mouseDown;
+
+  private static class PointerSnapShot {
+    int pointerId;
+    int clientX;
+    int clientY;
+
+    PointerSnapShot(
+      int pointerId,
+      int clientX,
+      int clientY
+    ) {
+      this.pointerId = pointerId;
+      this.clientX = clientX;
+      this.clientY = clientY;
+    }
+  }
 	
 	static {
 		if (TouchHelpers.isSupportsTouch()) {
@@ -80,7 +102,7 @@ public class LongPressHandler implements MouseDownHandler,
 	private int startX;
 	private int startY;
 	
-	public LongPressHandler(ISurfaceHandler surface) {
+	public LongPressHandlerV2(ISurfaceHandler surface) {
     this.surface = surface;
     
     if (PointerEventsSupport.isSupported()) {
@@ -102,106 +124,96 @@ public class LongPressHandler implements MouseDownHandler,
 	public void onMouseDown(MouseDownEvent event) {
     mouseDown(event);
   }
-  
-  private void mouseDown(MouseEvent event) {
-		if (event.getNativeEvent().getButton() == Event.BUTTON_LEFT && !surface.getEditorContext().isTrue(EditorProperty.START_SELECTION_TOOL)) {
-			startX = event.getClientX();
-			startY = event.getClientY();
-			starScheduler();
-		}
-  }
-	
-	private void starScheduler() {
-		if (!timer.isScheduled) {
-			timer.scheduleRepeating(TIME_OUT + 5);
-		} else {
-			timer.cancel();
-		}
-	}
 
-	@Override
+  @Override
 	public void onMouseMove(MouseMoveEvent event) {
-		mouseMove(event);
+		mouseMove();
   }
-  
-  private void mouseMove(MouseEvent event) {
-    cancelScheduler(event.getClientX(), event.getClientY());
-  }
-	
-	private void cancelScheduler(int x, int y) {
-		int deltaX = Math.abs(startX - x);
-		int deltaY = Math.abs(startY - y);
-
-		if (deltaX > THRESHOLD || deltaY > THRESHOLD) {
-			cancel();
-		}
-	}
-		
-	public void cancel() {
-    // Debug.log("LongPressHandler cancel");
-		if (timer.isScheduled) {
-			timer.cancel();
-		}
-		timer.isScheduled = false;
-	}
 
 	@Override
 	public void onMouseUp(MouseUpEvent event) {
     mouseUp();
   }
   
-  private void mouseUp() {
-    timer.cancel();
+  private void mouseDown(MouseEvent event) {
+		if (event.getNativeEvent().getButton() == Event.BUTTON_LEFT && !surface.getEditorContext().isTrue(EditorProperty.START_SELECTION_TOOL)) {
+			startX = event.getClientX();
+			startY = event.getClientY();
+      mouseDown = true;
+			// starScheduler();
+		}
   }
-
+	
+  private void mouseUp() {
+    mouseDown = false;
+  }
+  
 	private void fireLongPress() {
     logger.info("fireLongPress xy({}, {})...", startX, startY);
-    // Debug.log("LongPressHandler fire");
-		surface.fireLongPress(startX, startY);
-		cancel();
+    // Debug.log("LongPressHandlerV2 fire");
+    if (pointerEvents.size() == 1) {
+		  surface.fireLongPress(startX, startY);
+    }
 	}
 
 	@Override
 	public void onTouchStart(TouchStartEvent event) {
 		event.preventDefault();
 		if (event.getTouches().length() != 1) {
-			cancel();
+			// cancel();
 			return;
 		}
 		Touch touch = event.getTouches().get(0);
 		startX = touch.getClientX();
 		startY = touch.getClientY();
-		starScheduler();
-	}
+		// starScheduler();
 
-	@Override
-	public void onTouchMove(TouchMoveEvent event) {
-		Touch touch = TouchHelpers.firstTouch(event);
-		if (touch != null) {
-			cancelScheduler(touch.getClientX(), touch.getClientY());
-		} else {
-			cancel();
-		}
+    fireLongPress();
 	}
 
 	@Override
 	public void onTouchEnd(TouchEndEvent event) {
-		cancel();
+    mouseUp();
 	}
 
 	@Override
-	public void onPointerUp(PointerUpEvent event) {
-		mouseUp();
-	}
-
-	@Override
-	public void onPointerMove(PointerMoveEvent event) {
-		mouseMove(event);
+	public void onTouchMove(TouchMoveEvent event) {
+		mouseMove();
 	}
 
 	@Override
 	public void onPointerDown(PointerDownEvent event) {
+    addPointerEvent(event);    
 		mouseDown(event);
 	}
+
+	@Override
+	public void onPointerUp(PointerUpEvent event) {
+    pointerEvents.clear();
+    mouseUp();
+	}
+
+	@Override
+	public void onPointerMove(PointerMoveEvent event) {
+		mouseMove();
+	}
+
+  private void mouseMove() {
+    if (mouseDown) {
+      fireLongPress();
+    }
+  }
+
+  private void addPointerEvent(PointerEvent event) {
+    pointerEvents.add(new PointerSnapShot(
+      event.getPointerId(),
+      event.getClientX(),
+      event.getClientY()
+    ));
+  }
+
+  public void cancel() {
+    
+  }
 
 }

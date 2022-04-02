@@ -8,7 +8,10 @@ import com.google.gwt.user.client.Timer;
 
 import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.ILongPressHandler;
 import net.sevenscales.editor.api.LongPressHandler;
+import net.sevenscales.editor.api.LongPressHandlerV2;
+import net.sevenscales.editor.api.ReactAPI;
 import net.sevenscales.editor.api.event.pointer.PointerEventsSupport;
 import net.sevenscales.editor.api.event.pointer.PointerMoveEvent;
 import net.sevenscales.editor.api.event.pointer.PointerMoveHandler;
@@ -22,7 +25,7 @@ class DoubleTapHandler implements
   private boolean itsDoubleTap;
   private IDoubleTapHandler handler;
   private ISurfaceHandler surface;
-  private LongPressHandler longPressHandler;
+  private ILongPressHandler longPressHandler;
   private static final int DOUBLETAP_MILLIS = 300;
   private static final int DOUBLETAP_POSITION_MAX_DIFF = 20;
 
@@ -40,12 +43,20 @@ class DoubleTapHandler implements
     this.handler = handler;
 
     if (editable) {
-      longPressHandler = new LongPressHandler(surface);
+      longPressHandler = createLongPressHandler();
       selectionHandler.addDiagramSelectionHandler(this);
 
       initDoubleTap();
     }
 
+  }
+
+  private ILongPressHandler createLongPressHandler() {
+    if (ReactAPI.isNav2()) {
+      return new LongPressHandlerV2(surface);
+    }
+
+    return new LongPressHandler(surface);
   }
 
   boolean isDoubleTap() {

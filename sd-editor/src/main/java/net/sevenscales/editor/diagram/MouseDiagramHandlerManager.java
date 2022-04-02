@@ -10,6 +10,7 @@ import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.ReactAPI;
 import net.sevenscales.editor.api.SketchDiagramAreaHandler;
 import net.sevenscales.editor.api.Tools;
 import net.sevenscales.editor.api.event.BoardEmptyAreaClickedEvent;
@@ -38,7 +39,7 @@ public class MouseDiagramHandlerManager implements
 	private SelectionHandler selectionHandler;
 	private MouseDiagramResizeHandler resizeHandler;
   private boolean editable;
-  private BackgroundMoveHandler backgroundMoveHandler;
+  private IBackgroundMoveHandler backgroundMoveHandler;
   private MouseDiagramHandlerCollection handlers = new MouseDiagramHandlerCollection();
   private ProxyDragHandler proxyDragHandler;
 	private SketchDiagramAreaHandler sketchDiagramAreaHandler;
@@ -84,7 +85,7 @@ public class MouseDiagramHandlerManager implements
     selectionHandler = new SelectionHandler(surface, diagrams, dragHandler.getDragHandlers(), this);
     doubleTapHandler = new DoubleTapHandler(editable, surface, selectionHandler, this);
 		resizeHandler = new MouseDiagramResizeHandler(this, surface, modeManager);
-		backgroundMoveHandler = new BackgroundMoveHandler(diagrams, surface);
+		backgroundMoveHandler = createBackgroundMoveHandler(surface, diagrams);
 		lassoSelectionHandler = new LassoSelectionHandler(surface, this);
 		if (ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
 			// free hand drawing is not possible on library area
@@ -114,6 +115,17 @@ public class MouseDiagramHandlerManager implements
 			handleOnline(this);
 		}
 		// addMouseDiagramHandler(sketchDiagramAreaHandler);
+  }
+
+  private IBackgroundMoveHandler createBackgroundMoveHandler(
+    ISurfaceHandler surface,
+    List<Diagram> diagrams
+  ) {
+    if (ReactAPI.isNav2()) {
+      return new BackgroundMoveHandlerV2(diagrams, surface);
+    }
+
+    return new BackgroundMoveHandler(diagrams, surface);
   }
   
   private ShowDiagramPropertyTextEditorEventHandler showEditorHandler = 

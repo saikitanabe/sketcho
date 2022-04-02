@@ -18,6 +18,7 @@ import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.ReactAPI;
 import net.sevenscales.editor.api.event.PinchZoomEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
@@ -55,6 +56,8 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private boolean wheel;
   private boolean fireEvent = true;
   private List<PointerSnapShot> pointerEvents;
+  private int pointerX;
+  private int pointerY;
   private int middleX;
   private int middleY;
 
@@ -114,6 +117,9 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
           int x2 = pointerEvents.get(1).clientX;
           int y2 = pointerEvents.get(1).clientY;
 
+          pointerX = x1;
+          pointerY = y1;
+
           double distance = TouchHelpers.distance(
             x1,
             y1,
@@ -146,6 +152,15 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 
           updateMiddlePoint(x1, y1, x2, y2);
           pinch(distance);
+
+          if (ReactAPI.isNav2()) {
+            // iPad needs this handling to move background with two fingers
+            int deltaX = pointerX - x1;
+            int deltaY = pointerY - y1;
+            fireBackgroundMove(deltaX, deltaY);
+          }
+          pointerX = x1;
+          pointerY = y1;
         }
       }
     }, PointerMoveEvent.getType());
@@ -164,6 +179,16 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
       }
     }, PointerUpEvent.getType());
   }
+
+  private native void fireBackgroundMove(
+    int deltaX,
+    int deltaY
+  )/*-{
+    $wnd.ReactEventStream.fire("bgmove", {
+      deltaX: deltaX,
+      deltaY: deltaY,
+    })
+  }-*/;
 
   private void updateMiddlePoint(
     int x1, 
@@ -263,7 +288,12 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 		scaleToIndex(index, false);
 	}
 
-	private void handlMouseWheel(int delta) {
+	private void handlMouseWheel(int delta, boolean zoomKeyDown) {
+
+    if (ReactAPI.isNav2() && !zoomKeyDown) {
+      // zoom only if zoom key is down and using nav2
+      return;
+    }
 
 		boolean up = delta < 0;
 		boolean down = delta > 0;
@@ -306,7 +336,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
       // on MacOS
       e.preventDefault()
 
-			me.@net.sevenscales.editor.content.ui.ScaleSlider::handlMouseWheel(I)(delta)
+			me.@net.sevenscales.editor.content.ui.ScaleSlider::handlMouseWheel(IZ)(delta, (e.metaKey || e.ctrlKey))
 		}
 
 		if (el.addEventListener) {

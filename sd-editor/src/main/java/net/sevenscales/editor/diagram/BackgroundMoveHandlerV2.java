@@ -13,12 +13,13 @@ import net.sevenscales.editor.api.event.PinchZoomEvent;
 import net.sevenscales.editor.api.event.PinchZoomEventHandler;
 import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.IGraphics;
+import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.OrgEvent;
 
 
-public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMoveHandler {
-	private static SLogger logger = SLogger.createLogger(BackgroundMoveHandler.class);
+public class BackgroundMoveHandlerV2 implements MouseDiagramHandler, IBackgroundMoveHandler {
+	private static SLogger logger = SLogger.createLogger(BackgroundMoveHandlerV2.class);
 
   private List<Diagram> diagrams;
   private GridUtils gridUtils = new GridUtils();
@@ -35,20 +36,39 @@ public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMo
 	
 //	private DiagramHelpers.ComplexElementHandler complexElementHandler = new DiagramHelpers.ComplexElementHandler();
 
-  public BackgroundMoveHandler(List<Diagram> diagrams, ISurfaceHandler surface) {
+  public BackgroundMoveHandlerV2(List<Diagram> diagrams, ISurfaceHandler surface) {
     this.diagrams = diagrams;
     this.surface = surface;
     
     listenPinchZoom();
-    init(this);
+    if (!surface.isLibrary()) {
+      // do not move library background
+      init(surface.getElement(), this);
+    }
+
   }
 
-  private native void init(BackgroundMoveHandler me)/*-{
-    $wnd.globalStreams.contextMenuStream.filter(function(v) {
-      return v && v.type==='context-menu-open'
-    }).onValue(function() {
-      me.@net.sevenscales.editor.diagram.BackgroundMoveHandler::clear()()
-    })
+  private void handleBackgroundMove(
+    int deltaX,
+    int deltaY
+  ) {
+    move(deltaX, deltaY);
+  }
+
+  private native void init(
+    com.google.gwt.user.client.Element el,
+    BackgroundMoveHandlerV2 me
+  )/*-{
+
+    function handler(data) {
+      me.@net.sevenscales.editor.diagram.BackgroundMoveHandlerV2::handleBackgroundMove(II)(data.deltaX, data.deltaY)
+    }
+
+    $wnd.ReactEventStream.register(
+      "bgmove",
+      handler
+    )
+
   }-*/;
 
   private void listenPinchZoom() {
@@ -70,87 +90,38 @@ public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMo
     backgroundMoving = false;
   }
 
+  @Override
 	public boolean onMouseDown(OrgEvent event, Diagram sender, MatrixPointJS point, int keys) {
-  	if (!surface.isDragEnabled()) {
-  		return false;
-  	}
-  	
-  	if (surface.getEditorContext().isTrue(EditorProperty.START_SELECTION_TOOL)) {
-  		return false;
-  	}
-  	
-//    if (!surface.isDragEnabled()) {
-//      return;
-//    }
-    this.currentSender = sender;
-    if (backgroundMouseDown) {
-      if (!Tools.isHandTool()) {
-        // by default it is assumed to be true and changed only if sender is real diagram element
-        // and if hand tool is not enabled
-        this.backgroundMouseDown = sender != null ? false : true;
-      }
-//      System.out.println("backgroundMouseDown:" + backgroundMouseDown);
-    }
-    
-    // if shift if pressed then background moving is disabled
-    // shift is reserved for lassoing multiple elements
-    mouseDown = keys == IGraphics.SHIFT ? false : true;
-    if (mouseDown) {
-      // disable background move if slide mode
-      mouseDown = !GlobalState.isAddSlideMode();
-    }
-    if (!surface.isVerticalDrag()) {
-    	prevX = point.getScreenX();
-    }
-    prevY = point.getScreenY();
-//    System.out.println("onMouseDown: x("+x+") y("+y+") prevX("+prevX+") prevY("+prevY+")");
-    gridUtils.init(point.getScreenX(), point.getScreenY(), surface.getScaleFactor());
-    
-    prevTransformDX = surface.getRootLayer().getTransformX();
-    prevTransformDY = surface.getRootLayer().getTransformY();
-//    complexElementHandler.reset();
     return false;
   }
 
   @Override
   public void onMouseEnter(OrgEvent event, Diagram sender, MatrixPointJS point) {
-//	    mouseDown = false;
-//	    backgroundMouseDown = true;
   }
 
+  @Override
   public void onMouseLeave(Diagram sender, MatrixPointJS point) {
-  		// reset only when going outside of drawing area or elements
-//	    mouseDown = false;
-//	    backgroundMouseDown = true;
   }
 
+  @Override
   public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
-    move(point);
   }
 
-  private void move(MatrixPointJS point) {
-    if (!gridUtils.passTreshold(point)) {
-      return;
-    }
-    
-    if (backgroundMoving || backgroundMoveInitialContitionOk()) {
-      if (!backgroundMoving) {
-        startBackgroundMove();
-      }
-      backgroundMoving = true;
-      int dx = gridUtils.dx(point.getScreenX()) + prevTransformDX;
-      int dy = gridUtils.dy(point.getScreenY()) + prevTransformDY;
+  private void move(int deltaX, int deltaY) {
+    IGroup layer = surface.getRootLayer();
 
-      if (surface.isVerticalDrag()) {
-        dx = 0;
-      }
+    int dx = layer.getTransformX() - deltaX;
+    int dy = layer.getTransformY() - deltaY;
 
-      surface.setTransform(dx, dy);
-      if (cachedEditor == null) {
-        cachedEditor = getEditor();
-      }
-      moveBgImage(cachedEditor, dx, dy);
+    if (surface.isVerticalDrag()) {
+      dx = 0;
     }
+
+    surface.setTransform(dx, dy);
+    if (cachedEditor == null) {
+      cachedEditor = getEditor();
+    }
+    moveBgImage(cachedEditor, dx, dy);
   }
 
   private native JavaScriptObject getEditor()/*-{
@@ -211,31 +182,4 @@ public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMo
   public void onTouchEnd(Diagram sender, MatrixPointJS point) {
   	// TODO Auto-generated method stub
   }
-  
-//  private void moveAll(final int dx, final int dy) {
-//    // synchronous uses lot's of processing power
-//    // currently disabled
-//  	MatrixPointJS dp = MatrixPointJS.createScaledTransform(dx, dy, surface.getScaleFactor());
-//    for (Diagram d : diagrams) {
-//      d.applyTransform(dp.getDX(), dp.getDY());
-//    }
-//    
-//    // asynchronous drawing, slightly funny but works :)
-////    DeferredCommand.addCommand(new IncrementalCommand() {
-////      private int index = 0;
-//      
-////      public boolean execute() {
-////        final int size = diagrams.size();
-////        boolean result = false;
-////        // take few at a time for drawing
-////        for (int i = 0; i < 2 && index < size; ++i) {
-////          Diagram d = (Diagram) diagrams.get(index++);
-////          d.applyTransform(dx, dy);
-////          result = true;
-////        }
-////        return result;
-////      }
-////    });
-//  }
-
 }

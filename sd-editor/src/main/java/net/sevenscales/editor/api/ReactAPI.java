@@ -2,6 +2,10 @@ package net.sevenscales.editor.api;
 
 public class ReactAPI {
 
+  public static native boolean isNav2()/*-{
+    return $wnd.isNav2()
+  }-*/;
+
   /**
    * Let's have a single place where properties are fixed.
    * 
