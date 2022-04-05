@@ -64,9 +64,9 @@ public class EditorCommon {
 		});
 	}
 
-	public static void fireEditorOpen(ISurfaceHandler surface) {
+	public static void fireEditorOpen(ISurfaceHandler surface, Diagram diagram) {
 		surface.getEditorContext().set(EditorProperty.PROPERTY_EDITOR_IS_OPEN, true);
-		surface.getEditorContext().getEventBus().fireEvent(new EditDiagramPropertiesStartedEvent());
+		surface.getEditorContext().getEventBus().fireEvent(new EditDiagramPropertiesStartedEvent(diagram));
 	}
 
 	public static void fireEditorClosed(ISurfaceHandler surface) {
@@ -75,8 +75,8 @@ public class EditorCommon {
 	}
 
 
-	public void fireEditorOpen() {
-		EditorCommon.fireEditorOpen(surface);
+	public void fireEditorOpen(Diagram diagram) {
+		EditorCommon.fireEditorOpen(surface, diagram);
 	}
 
 	public void fireEditorClosed() {

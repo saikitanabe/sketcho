@@ -37,7 +37,6 @@ import net.sevenscales.editor.gfx.base.GraphicsTouchStartHandler;
 import net.sevenscales.editor.gfx.domain.ICircle;
 import net.sevenscales.editor.gfx.domain.IGroup;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
-import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
 import net.sevenscales.editor.uicomponents.AnchorUtils;
 import net.sevenscales.editor.gfx.domain.Point;
 import net.sevenscales.editor.gfx.domain.Color;
@@ -53,9 +52,12 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	private static final int RADIUS;
 	private static final int TO_CENTER = 6;
 	private static final int BOTTOM_INDEX = 3;
+
+  // private static final int FROM_EDGE = 18;
+  private static final int FROM_EDGE = 10;
 	
 	private IModeManager modeManager;
-	private AbstractDiagramItem parent;
+	private Diagram parent;
   private List<ConnectionHandle> connectionHandles = new ArrayList<ConnectionHandle>();
   private List<ConnectionHandle> extraConnectionHandles = new ArrayList<ConnectionHandle>();
   private ICircle currentMouseOverHandle;
@@ -80,6 +82,8 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 			// mouse pointer needs smaller attach area
 			RADIUS = 7;
 		}
+
+    SLogger.addFilter(ConnectionHelpers.class);
 	}
 	
 	private ConnectionHelpers(ISurfaceHandler surface, IModeManager modeManager) {
@@ -122,6 +126,11 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 			@Override
 			public void on(EditDiagramPropertiesStartedEvent event) {
 				propertyEditorShown = true;
+        logger.debug("show editor {}", propertyEditorShown);
+        
+        if (event.getDiagram() != null) {
+          show(event.getDiagram());
+        }
 			}
 		});
 		
@@ -129,6 +138,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 			@Override
 			public void on(EditDiagramPropertiesEndedEvent event) {
 				propertyEditorShown = false;
+        logger.debug("show editor {}", propertyEditorShown);
 			}
 		});
 
@@ -204,11 +214,11 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	private static IConnectionHelpers emptyConnectionHelpers = new IConnectionHelpers() {
 		private List<ConnectionHandle> empty = new ArrayList<ConnectionHandle>();
 		@Override
-		public void show(AbstractDiagramItem parent) {
+		public void show(Diagram parent) {
 		}
 		
 		@Override
-		public void toggle(AbstractDiagramItem parent) {
+		public void toggle(Diagram parent) {
 		}
 		
 		@Override
@@ -216,7 +226,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		}
 		
 		@Override
-		public boolean isShownFor(AbstractDiagramItem diagram) {
+		public boolean isShownFor(Diagram diagram) {
 			return false;
 		}
 		
@@ -226,7 +236,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		}
 		
 		@Override
-		public void hide(AbstractDiagramItem diagram) {
+		public void hide(Diagram diagram) {
 		}
 
 		@Override
@@ -243,7 +253,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		}
 
 		@Override
-		public void addExtraConnectionHandle(AbstractDiagramItem parent, int x, int y, int radius) {
+		public void addExtraConnectionHandle(Diagram parent, int x, int y, int radius) {
 		}
 
 		@Override
@@ -251,7 +261,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		}
 
     @Override
-    public AbstractDiagramItem getParent() {
+    public Diagram getParent() {
       return null;
     }
 
@@ -295,15 +305,15 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	  connectionHandles.add(createConnectionHandle());
 	}
 	
-	public void show(AbstractDiagramItem parent) {
+	public void show(Diagram parent) {
 		try {
 			show(parent, parent.getLeft(), parent.getTop(), parent.getWidth(), parent.getHeight());
 		} catch (Exception e) {
 			net.sevenscales.domain.utils.Error.reload(e);
 		}
 	}
-	private void show(AbstractDiagramItem parent, int left, int top, int width, int height) {
-		if (propertyEditorShown || resizeOn || freehandModeOn || someElementIsDragged || surface.getSelectionHandler().getOnlyOneSelected() == null) {
+	private void show(Diagram parent, int left, int top, int width, int height) {
+		if (resizeOn || freehandModeOn || someElementIsDragged || surface.getSelectionHandler().getOnlyOneSelected() == null) {
 			// do not show connection helpers if property editor is shown
 			// do not show if resize is on going
 			logger.debug("show propertyEditorShown {} resizeOn {} freehandModeOn {} someElementIsDragged {}", propertyEditorShown, resizeOn, freehandModeOn, someElementIsDragged);
@@ -337,7 +347,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		connectionHandle.connectionHandle.setVisibility(visibility);
 	}
 
-	public void hide(AbstractDiagramItem candidate) {
+	public void hide(Diagram candidate) {
 		ElementHelpers.hide(this, candidate);
 	}
 	
@@ -376,7 +386,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
     }
 	}
 
-	public void addExtraConnectionHandle(AbstractDiagramItem parent, int cx, int cy, int radius) {
+	public void addExtraConnectionHandle(Diagram parent, int cx, int cy, int radius) {
 		this.parent = parent;
 		ConnectionHandle handle = createConnectionHandle();
 		handle.visibleHandle.setShape(cx, cy, RADIUS_VISIBLE);
@@ -588,6 +598,9 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		int handleCx = left - RADIUS + TO_CENTER;
 		int hanleCy = centerY;
 
+    centerX -= FROM_EDGE;
+    handleCx -= FROM_EDGE / 2;
+
 		setHandlePosition(connectionHandle, centerX, centerY, handleCx, hanleCy, cx, cy, rotateDegrees);
 //		connectionHandle.connectionHandle.setShape(left - RADIUS - AWAY_FROM_CENTER, top + RADIUS, RADIUS* 2, height - RADIUS * 2, 0);
 	}
@@ -601,6 +614,9 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 
 		int handleCx = centerX;
 		int hanleCy = top - RADIUS + TO_CENTER;
+
+    centerY -= FROM_EDGE;
+    hanleCy -= FROM_EDGE / 2;
 
 		setHandlePosition(connectionHandle, centerX, centerY, handleCx, hanleCy, cx, cy, rotateDegrees);
 //		connectionHandle.connectionHandle.setShape(left + RADIUS, top - RADIUS - AWAY_FROM_CENTER, width - RADIUS * 2, RADIUS * 2, 0);
@@ -616,6 +632,9 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		int handleCx = left + width + RADIUS - TO_CENTER;
 		int hanleCy = cy;
 
+    centerX += FROM_EDGE;
+    handleCx += FROM_EDGE / 2;
+
 		setHandlePosition(connectionHandle, centerX, centerY, handleCx, hanleCy, cx, cy, rotateDegrees);
 //		connectionHandle.connectionHandle.setShape(left + width - RADIUS + AWAY_FROM_CENTER, top + RADIUS, RADIUS * 2, height - RADIUS * 2, 0);
 	}
@@ -629,6 +648,9 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 
 		int handleCx = cx;
 		int hanleCy = centerY + RADIUS - TO_CENTER;
+
+    centerY += FROM_EDGE;
+    hanleCy += FROM_EDGE / 2;
 
 		setHandlePosition(connectionHandle, centerX, centerY, handleCx, hanleCy, cx, cy, rotateDegrees);
 //		connectionHandle.connectionHandle.setShape(left + RADIUS, top + height - RADIUS + AWAY_FROM_CENTER, width - RADIUS * 2, RADIUS * 2, 0);
@@ -683,18 +705,18 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		return shown;
 	}
 	
-	public boolean isShownFor(AbstractDiagramItem diagram) {
+	public boolean isShownFor(Diagram diagram) {
 		if (shown && diagram.equals(parent)) {
 			return true;
 		}
 		return false;
 	}
 
-	public void toggle(AbstractDiagramItem parent) {
+	public void toggle(Diagram parent) {
 		toggle(parent, parent.getLeft(), parent.getTop(), parent.getWidth(), parent.getHeight());
 	}
 	
-	public void toggle(AbstractDiagramItem parent, int left, int top, int width, int height) {
+	public void toggle(Diagram parent, int left, int top, int width, int height) {
     if (shown) {
     	hideForce();
     } else {
@@ -747,7 +769,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	}
 
 	@Override
-	public AbstractDiagramItem getParent() {
+	public Diagram getParent() {
 		return parent;
 	}
 

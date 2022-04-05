@@ -219,7 +219,7 @@ class CommentEditor  extends Composite {
 
 	void showEditor(Diagram diagram) {
 		show(diagram, calcEditorIncrement(diagram, false));
-		editorCommon.fireEditorOpen();
+		editorCommon.fireEditorOpen(diagram);
 	}
 
 	public void editingCommentStarted() {

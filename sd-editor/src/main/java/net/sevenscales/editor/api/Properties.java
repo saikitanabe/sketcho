@@ -923,7 +923,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 
         //		setFocus(true);
         
-        Properties.this.editorCommon.fireEditorOpen();
+        Properties.this.editorCommon.fireEditorOpen(diagram);
         popup.selectAll(justCreated);
         popup.show();
         popup.getElement().getStyle().setPosition(com.google.gwt.dom.client.Style.Position.FIXED);

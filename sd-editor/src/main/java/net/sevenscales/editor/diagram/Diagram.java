@@ -19,6 +19,7 @@ import net.sevenscales.editor.gfx.domain.Promise;
 import net.sevenscales.editor.diagram.drag.Anchor;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
 import net.sevenscales.editor.gfx.domain.Point;
+import net.sevenscales.editor.gfx.base.GraphicsEvent;
 // import net.sevenscales.editor.uicomponents.TextElementFormatUtil;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -328,6 +329,15 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   boolean isResolved();
   void annotate();
   void unannotate();
+
+  void onMouseDown(GraphicsEvent event, int keys);
+  void onMouseMove(GraphicsEvent event);
+  void onMouseUp(GraphicsEvent event, int keys);
+  void onMouseLeave(GraphicsEvent event);
+  void onMouseEnter(GraphicsEvent event);
+  void onTouchStart(GraphicsEvent event);
+  void onTouchMove(GraphicsEvent event);
+  void onTouchEnd(GraphicsEvent event);
 
   // menu support
   void setDuplicateMultiplySize(int factorX, int factorY);

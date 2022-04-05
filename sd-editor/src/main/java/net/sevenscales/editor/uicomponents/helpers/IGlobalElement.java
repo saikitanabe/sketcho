@@ -1,9 +1,9 @@
 package net.sevenscales.editor.uicomponents.helpers;
 
-import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
+import net.sevenscales.editor.diagram.Diagram;
 
 public interface IGlobalElement {
-	AbstractDiagramItem getParent();
+	Diagram getParent();
 	void hideGlobalElement();
 	void release();
 }

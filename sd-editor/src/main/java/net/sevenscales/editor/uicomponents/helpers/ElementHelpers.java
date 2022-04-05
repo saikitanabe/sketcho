@@ -5,13 +5,14 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
 
+import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.domain.utils.SLogger;
-import net.sevenscales.editor.uicomponents.AbstractDiagramItem;
+
 
 public class ElementHelpers {
 	private static final SLogger logger = SLogger.createLogger(ElementHelpers.class);
 
-	public static void hide(IGlobalElement globalElement, AbstractDiagramItem candidate) {
+	public static void hide(IGlobalElement globalElement, Diagram candidate) {
 		if (globalElement.getParent() != null && globalElement.getParent().isSelected()) {
 //			logger.debug("hide selected({}), parent {} => NOT HIDING since selected...", 
 //					globalElement.getParent().isSelected(), globalElement.getParent());
