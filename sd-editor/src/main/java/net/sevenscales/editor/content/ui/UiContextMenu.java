@@ -479,6 +479,14 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			me.@net.sevenscales.editor.content.ui.UiContextMenu::cancel()();
 		})
 
+    function bgmoveHandler() {
+      me.@net.sevenscales.editor.content.ui.UiContextMenu::hide()();
+    }
+    $wnd.ReactEventStream.register(
+      "bgmove",
+      bgmoveHandler
+    )
+
   }-*/;
   
   private void onShowPropertyEditor(final int x, final int y) {
