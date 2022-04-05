@@ -1,5 +1,8 @@
 package net.sevenscales.editor.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.dom.client.Touch;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -14,6 +17,7 @@ import com.google.gwt.event.dom.client.TouchMoveEvent;
 import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 
@@ -41,6 +45,7 @@ public class LongPressHandler implements MouseDownHandler,
 	private static final int THRESHOLD;
 	private static final int TIME_OUT = 700;
 	private final LongPressTimer timer = new LongPressTimer();
+  private List<HandlerRegistration> registrations = new ArrayList<HandlerRegistration>();  
 	
 	static {
 		if (TouchHelpers.isSupportsTouch()) {
@@ -84,19 +89,26 @@ public class LongPressHandler implements MouseDownHandler,
     this.surface = surface;
     
     if (PointerEventsSupport.isSupported()) {
-      surface.addDomHandler(this, PointerDownEvent.getType());
-      surface.addDomHandler(this, PointerUpEvent.getType());
-      surface.addDomHandler(this, PointerMoveEvent.getType());
+      registrations.add(surface.addDomHandler(this, PointerDownEvent.getType()));
+      registrations.add(surface.addDomHandler(this, PointerUpEvent.getType()));
+      registrations.add(surface.addDomHandler(this, PointerMoveEvent.getType()));
     } else {
-      surface.addDomHandler(this, MouseDownEvent.getType());
-      surface.addDomHandler(this, MouseUpEvent.getType());
-      surface.addDomHandler(this, MouseMoveEvent.getType());
+      registrations.add(surface.addDomHandler(this, MouseDownEvent.getType()));
+      registrations.add(surface.addDomHandler(this, MouseUpEvent.getType()));
+      registrations.add(surface.addDomHandler(this, MouseMoveEvent.getType()));
   
-      surface.addDomHandler(this, TouchStartEvent.getType());
-      surface.addDomHandler(this, TouchMoveEvent.getType());
-      surface.addDomHandler(this, TouchEndEvent.getType());
+      registrations.add(surface.addDomHandler(this, TouchStartEvent.getType()));
+      registrations.add(surface.addDomHandler(this, TouchMoveEvent.getType()));
+      registrations.add(surface.addDomHandler(this, TouchEndEvent.getType()));
     }
 	}
+
+  @Override
+  public void unregister() {
+    for (HandlerRegistration r : registrations) {
+      r.removeHandler();
+    }
+  }
 	
 	@Override
 	public void onMouseDown(MouseDownEvent event) {

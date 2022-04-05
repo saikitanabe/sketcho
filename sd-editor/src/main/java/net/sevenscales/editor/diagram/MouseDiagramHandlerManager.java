@@ -112,7 +112,7 @@ public class MouseDiagramHandlerManager implements
     
 
 		if (!surface.isLibrary()) {
-			handleOnline(this);
+			_init(this);
 		}
 		// addMouseDiagramHandler(sketchDiagramAreaHandler);
   }
@@ -121,6 +121,11 @@ public class MouseDiagramHandlerManager implements
     ISurfaceHandler surface,
     List<Diagram> diagrams
   ) {
+
+    if (backgroundMoveHandler != null) {
+      backgroundMoveHandler.unregister();
+    }
+
     if (ReactAPI.isNav2()) {
       return new BackgroundMoveHandlerV2(diagrams, surface);
     }
@@ -139,7 +144,7 @@ public class MouseDiagramHandlerManager implements
 
   };
 
-	private native void handleOnline(MouseDiagramHandlerManager me)/*-{
+	private native void _init(MouseDiagramHandlerManager me)/*-{
 		if (typeof $wnd.globalStreams !== 'undefined') {
 			$wnd.globalStreams.webStorageSupportedStream.onValue(function(value) {
 				me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::editable(Z)(value);
@@ -157,7 +162,16 @@ public class MouseDiagramHandlerManager implements
 		$wnd.globalStreams.spaceKeyStream.onValue(function(value) {
 			me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::spaceKey()();
 		})
+
+    $wnd.globalStreams.navigationUpdatedStream.onValue(function(value) {
+      me.@net.sevenscales.editor.diagram.MouseDiagramHandlerManager::updateNavigation()();
+    })
+
 	}-*/;
+
+  private void updateNavigation() {
+    backgroundMoveHandler = createBackgroundMoveHandler(surface, surface.getDiagrams());
+  }
 
 	private void editable(boolean value) {
 		if (editable) {

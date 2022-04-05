@@ -33,6 +33,7 @@ public class BackgroundMoveHandlerV2 implements MouseDiagramHandler, IBackground
 	private int prevTransformDY;
   private boolean backgroundMoving;
   private JavaScriptObject cachedEditor;
+  private JavaScriptObject cancelStream;
 	
 //	private DiagramHelpers.ComplexElementHandler complexElementHandler = new DiagramHelpers.ComplexElementHandler();
 
@@ -43,10 +44,20 @@ public class BackgroundMoveHandlerV2 implements MouseDiagramHandler, IBackground
     listenPinchZoom();
     if (!surface.isLibrary()) {
       // do not move library background
-      init(surface.getElement(), this);
+      cancelStream = _init(surface.getElement(), this);
     }
 
   }
+
+  @Override
+  public void unregister() {
+    _unregister(cancelStream);
+  }
+  private native void _unregister(
+    JavaScriptObject cancelStream
+  )/*-{
+    cancelStream();
+  }-*/;
 
   private void handleBackgroundMove(
     int deltaX,
@@ -55,7 +66,7 @@ public class BackgroundMoveHandlerV2 implements MouseDiagramHandler, IBackground
     move(deltaX, deltaY);
   }
 
-  private native void init(
+  private native JavaScriptObject _init(
     com.google.gwt.user.client.Element el,
     BackgroundMoveHandlerV2 me
   )/*-{
@@ -64,7 +75,7 @@ public class BackgroundMoveHandlerV2 implements MouseDiagramHandler, IBackground
       me.@net.sevenscales.editor.diagram.BackgroundMoveHandlerV2::handleBackgroundMove(II)(data.deltaX, data.deltaY)
     }
 
-    $wnd.ReactEventStream.register(
+    return $wnd.ReactEventStream.register(
       "bgmove",
       handler
     )

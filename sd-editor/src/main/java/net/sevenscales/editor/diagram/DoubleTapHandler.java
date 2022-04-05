@@ -49,9 +49,25 @@ class DoubleTapHandler implements
       initDoubleTap();
     }
 
+    _init(this);
+  }
+
+  private native void _init(DoubleTapHandler me)/*-{
+    $wnd.globalStreams.navigationUpdatedStream.onValue(function(value) {
+      me.@net.sevenscales.editor.diagram.DoubleTapHandler::updateNavigation()();
+    })
+  }-*/;
+
+  private void updateNavigation() {
+    longPressHandler = createLongPressHandler();
   }
 
   private ILongPressHandler createLongPressHandler() {
+
+    if (longPressHandler != null) {
+      longPressHandler.unregister();
+    }
+
     if (ReactAPI.isNav2()) {
       return new LongPressHandlerV2(surface);
     }

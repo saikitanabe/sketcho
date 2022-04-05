@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.TouchMoveEvent;
 import com.google.gwt.event.dom.client.TouchMoveHandler;
 import com.google.gwt.event.dom.client.TouchStartEvent;
 import com.google.gwt.event.dom.client.TouchStartHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 
@@ -42,11 +43,9 @@ public class LongPressHandlerV2 implements MouseDownHandler,
 																				 TouchEndHandler,
                                          ILongPressHandler {
 	private static final SLogger logger = SLogger.createLogger(LongPressHandlerV2.class);
-	private static final int THRESHOLD;
-	private static final int TIME_OUT = 700;
   private List<PointerSnapShot> pointerEvents = new ArrayList<PointerSnapShot>();
-	private final LongPressTimer timer = new LongPressTimer();
   private boolean mouseDown;
+  private List<HandlerRegistration> registrations = new ArrayList<HandlerRegistration>();
 
   private static class PointerSnapShot {
     int pointerId;
@@ -64,40 +63,6 @@ public class LongPressHandlerV2 implements MouseDownHandler,
     }
   }
 	
-	static {
-		if (TouchHelpers.isSupportsTouch()) {
-			THRESHOLD = 20;
-		} else {
-			// mouse pointer needs smaller threshold
-			THRESHOLD = 5;
-		}
-	}
-			
-	private class LongPressTimer extends Timer {
-    private long startTime = System.currentTimeMillis();
-		private boolean isScheduled;
-
-    @Override
-    public void cancel() {
-    	isScheduled = false;
-      super.cancel();
-    }
-
-    public void scheduleRepeating(int periodMillis) {
-    	cancel();
-    	super.scheduleRepeating(periodMillis);
-    	isScheduled = true;
-    }
-    
-    @Override
-    public void run() {
-    	if (isScheduled && System.currentTimeMillis() >= (startTime + TIME_OUT)) {
-    		fireLongPress();
-    		cancel();
-    	}
-    }
-  };
-  
 	private ISurfaceHandler surface;
 	private int startX;
 	private int startY;
@@ -106,20 +71,27 @@ public class LongPressHandlerV2 implements MouseDownHandler,
     this.surface = surface;
     
     if (PointerEventsSupport.isSupported()) {
-      surface.addDomHandler(this, PointerDownEvent.getType());
-      surface.addDomHandler(this, PointerUpEvent.getType());
-      surface.addDomHandler(this, PointerMoveEvent.getType());
+      registrations.add(surface.addDomHandler(this, PointerDownEvent.getType()));
+      registrations.add(surface.addDomHandler(this, PointerUpEvent.getType()));
+      registrations.add(surface.addDomHandler(this, PointerMoveEvent.getType()));
     } else {
-      surface.addDomHandler(this, MouseDownEvent.getType());
-      surface.addDomHandler(this, MouseUpEvent.getType());
-      surface.addDomHandler(this, MouseMoveEvent.getType());
+      registrations.add(surface.addDomHandler(this, MouseDownEvent.getType()));
+      registrations.add(surface.addDomHandler(this, MouseUpEvent.getType()));
+      registrations.add(surface.addDomHandler(this, MouseMoveEvent.getType()));
   
-      surface.addDomHandler(this, TouchStartEvent.getType());
-      surface.addDomHandler(this, TouchMoveEvent.getType());
-      surface.addDomHandler(this, TouchEndEvent.getType());
+      registrations.add(surface.addDomHandler(this, TouchStartEvent.getType()));
+      registrations.add(surface.addDomHandler(this, TouchMoveEvent.getType()));
+      registrations.add(surface.addDomHandler(this, TouchEndEvent.getType()));
     }
 	}
-	
+
+  @Override
+  public void unregister() {
+    for (HandlerRegistration r : registrations) {
+      r.removeHandler();
+    }
+  }
+
 	@Override
 	public void onMouseDown(MouseDownEvent event) {
     mouseDown(event);
@@ -213,7 +185,7 @@ public class LongPressHandlerV2 implements MouseDownHandler,
   }
 
   public void cancel() {
-    
+
   }
 
 }

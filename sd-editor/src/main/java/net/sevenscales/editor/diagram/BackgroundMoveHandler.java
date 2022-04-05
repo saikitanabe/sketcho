@@ -32,6 +32,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMo
 	private int prevTransformDY;
   private boolean backgroundMoving;
   private JavaScriptObject cachedEditor;
+  private JavaScriptObject cancelStream;
 	
 //	private DiagramHelpers.ComplexElementHandler complexElementHandler = new DiagramHelpers.ComplexElementHandler();
 
@@ -40,11 +41,20 @@ public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMo
     this.surface = surface;
     
     listenPinchZoom();
-    init(this);
+    cancelStream = _init(this);
   }
 
-  private native void init(BackgroundMoveHandler me)/*-{
-    $wnd.globalStreams.contextMenuStream.filter(function(v) {
+  @Override
+  public void unregister() {
+    _unregister(cancelStream);
+  }
+
+  private native void _unregister(JavaScriptObject cancelStream)/*-{
+    cancelStream()
+  }-*/;
+
+  private native JavaScriptObject _init(BackgroundMoveHandler me)/*-{
+    return $wnd.globalStreams.contextMenuStream.filter(function(v) {
       return v && v.type==='context-menu-open'
     }).onValue(function() {
       me.@net.sevenscales.editor.diagram.BackgroundMoveHandler::clear()()

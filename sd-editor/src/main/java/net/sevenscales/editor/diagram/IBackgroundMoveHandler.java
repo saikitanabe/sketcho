@@ -12,4 +12,5 @@ public interface IBackgroundMoveHandler {
   void onMouseUp(Diagram sender, MatrixPointJS point, int keys);
   boolean backgroundMoveIsOn();
   void cancelBackgroundMove();
+  void unregister();
 }
