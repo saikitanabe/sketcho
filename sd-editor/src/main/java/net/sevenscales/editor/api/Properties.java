@@ -332,6 +332,14 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		$wnd.globalStreams.editShapeStream.onValue(function() {
 			me.@net.sevenscales.editor.api.Properties::editOneSelected()()
 		})
+
+    function bgmoveHandler() {
+      me.@net.sevenscales.editor.api.Properties::closeIfOpen()()
+    }
+    $wnd.ReactEventStream.register(
+      "bgmove",
+      bgmoveHandler
+    )    
 	}-*/;
 
 	private native void handleItemRealTimeModify(Properties me)/*-{
