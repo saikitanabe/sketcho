@@ -89,6 +89,12 @@ abstract class Graphics extends GraphicsBase {
 	native void nativeConnectOnMouseDown(JavaScriptObject object, String eventType)/*-{
 		var self = this;
 		function onMouseDown(e,a) {
+
+      if (e.button == 2) {
+        // allow right click to move background
+        return
+      }
+
 			e.preventDefault();
 			
 //		for (var k in e) {
