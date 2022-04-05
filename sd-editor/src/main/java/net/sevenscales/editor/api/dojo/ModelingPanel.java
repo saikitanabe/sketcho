@@ -288,11 +288,19 @@ class ModelingPanel extends HorizontalPanel implements IModelingPanel, IBirdsEye
 		$wnd.isEditorOpen = function() {
 			return me.@net.sevenscales.editor.api.dojo.ModelingPanel::isEditorOpen()();
 		}
+
+    $wnd.gwtGetSurfaceElement = function() {
+      return me.@net.sevenscales.editor.api.dojo.ModelingPanel::gwtGetSurfaceElement()();
+    }
 	}-*/;
 
 	private boolean isEditorOpen() {
 		return surface.getEditorContext().isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN);
 	}
+
+  private Element gwtGetSurfaceElement() {
+    return surface.getElement();
+  }
 
 	public boolean isBirdsEyeViewOn() {
 		return scaleSlider.getBirdsEyeView().isBirdsEyeViewOn();
