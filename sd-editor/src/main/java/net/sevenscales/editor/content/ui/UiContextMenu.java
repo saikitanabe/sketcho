@@ -1,5 +1,6 @@
 package net.sevenscales.editor.content.ui;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import net.sevenscales.domain.utils.SLogger;
+import net.sevenscales.editor.api.BoardDimensions;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -79,6 +81,7 @@ import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
 public class UiContextMenu extends Composite implements net.sevenscales.editor.content.ui.ColorSelections.SelectionHandler, TextSizeHandler {
 	private static final SLogger logger = SLogger.createLogger(UiContextMenu.class);
+  private static final int ABOVE_SHAPE = 20;
 
 	static {
 		SLogger.addFilter(UiContextMenu.class);
@@ -132,9 +135,11 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	private class MainContextMenuPosition implements PopupPanel.PositionCallback {
 		int left;
 		int top;
+    int width;
+    int height;
 		@Override
 		public void setPosition(int offsetWidth, int offsetHeight) {
-			fixPosition(left, top, offsetWidth, offsetHeight);
+			fixPosition(left, top, width, height, offsetWidth, offsetHeight);
 			popup.setPopupPosition(popupPosition.x, popupPosition.y);
 		}
 	}
@@ -211,21 +216,33 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					// do not show popup menu if even one of the items is comment
 					// diagram position is scaled value, so need to translate to screen pixels...
 					Diagram d = event.getLastSelected();
-					// logger.debug("Last Selected type {} x({}) y({})", d.toString(), d.getLeft(), d.getTop());
-
-					Point screenPosition = ScaleHelpers.diagramPositionToScreenPoint(d, UiContextMenu.this.surface, false);
-					screenPosition.y += adjustByDiagramType(d);
-										
-					if (UiContextMenu.this.surface.getEditorContext().isTrue(EditorProperty.CONFLUENCE_MODE)) {
-						screenPosition.y = UiContextMenu.this.surface.getAbsoluteTop() + ScaleHelpers.unscaleValue(d.getTop(), UiContextMenu.this.surface.getScaleFactor()) + adjustByDiagramType(d) + 
-								UiContextMenu.this.surface.getRootLayer().getTransformY();
-					}
-
 					boolean allMenusHidden = setMenuItemVisibility(d, selected);
 					
 					if (!allMenusHidden) {
+            ArrayList<Diagram> ds = new ArrayList<Diagram>();
+            for (Diagram diagram : selected) {
+              ds.add(diagram);
+            }
+            BoardDimensions.resolveDimensions(ds);
+
+            Point screenPosition = ScaleHelpers.coordinateToScreenPoint(
+              BoardDimensions.getLeftmost(),
+              BoardDimensions.getTopmost(),
+              UiContextMenu.this.surface
+            );
+
 						mainContextPosition.left = screenPosition.x;
 						mainContextPosition.top = screenPosition.y;
+
+            mainContextPosition.width = ScaleHelpers.unscaleValue(
+              BoardDimensions.getWidth(),
+              UiContextMenu.this.surface.getScaleFactor()
+            );
+            mainContextPosition.height = ScaleHelpers.unscaleValue(
+              BoardDimensions.getHeight(),
+              UiContextMenu.this.surface.getScaleFactor()
+            );
+
 						showContextMenu();
 						trigger("shape-context-menu-shown");
 						EffectHelpers.tooltipper();
@@ -587,30 +604,30 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		hide();
 	}
 
-	private Point fixPosition(int left, int top, int offsetWidth, int offsetHeight) {
-		popupPosition.x = left;
-    popupPosition.y = top;
+	private Point fixPosition(int left, int top, int shapeWidth, int shapeHeight, int offsetWidth, int offsetHeight) {
+
+    top -= ABOVE_SHAPE;
+
+		popupPosition.x = left - (offsetWidth - shapeWidth) / 2;
+    popupPosition.y = top - offsetHeight;
     
     // ST 26.11.2019: Prevent to show where pointer double clicked
     // and removes accidental clicks to context menu, which
     // could be delete.
-    int marginTop = 20;
+    // int marginTop = 20;
 
-		if (left <= Window.getScrollLeft()) {
+		if (popupPosition.x <= Window.getScrollLeft()) {
 			// use mouse left
-			popupPosition.x = surface.getCurrentClientX();
-			// use mouse top
-			popupPosition.y = surface.getCurrentClientY() - (offsetHeight + marginTop);
-		} else if (top <= Window.getScrollTop()) {
-			// use mouse left
-			popupPosition.x = surface.getCurrentClientX();
-			// use mouse top
-			popupPosition.y = surface.getCurrentClientY() - (offsetHeight + marginTop);
-		}
+			popupPosition.x = Window.getScrollLeft();
+		} else if ((popupPosition.x + offsetWidth) >= Window.getClientWidth()) {
+      popupPosition.x = Window.getClientWidth() - offsetWidth;
+    }
 
-		if ((popupPosition.x + offsetWidth) >= Window.getClientWidth()) {
-			popupPosition.x = Window.getClientWidth() - offsetWidth;
-		}
+    if (popupPosition.y <= Window.getScrollTop()) {
+			// use mouse top
+			popupPosition.y = top + shapeHeight + offsetHeight;
+    }
+    
 		return popupPosition;
 	}
 
@@ -729,7 +746,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 					positionEditLinkPopup(offsetWidth, offsetHeight);
 				}
 			});
-			EditorCommon.fireEditorOpen(surface);
+			EditorCommon.fireEditorOpen(surface, selected);
 		} else {
 			editLinkPopup.hide();
 		}

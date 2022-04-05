@@ -70,6 +70,19 @@ public class ScaleHelpers {
 				surface.getRootLayer().getTransformY();
 		return new Point(left, top);
 	}
+
+  public static Point coordinateToScreenPoint(
+    int x,
+    int y,
+    ISurfaceHandler surface
+  ) {
+		int left = ScaleHelpers.unscaleValue(surface.getAbsoluteLeft() + x, surface.getScaleFactor()) + 
+				surface.getRootLayer().getTransformX(); 
+		int top = ScaleHelpers.unscaleValue(surface.getAbsoluteTop() + y, surface.getScaleFactor()) + 
+				surface.getRootLayer().getTransformY();
+
+    return new Point(left, top);
+  }
 	
 	public static int scaleAndTranslateY(int scaledY, ISurfaceHandler surface) {
 		return unscaleValue(scaledY, surface.getScaleFactor()) + surface.getRootLayer().getTransformY();
