@@ -199,7 +199,7 @@ public class MouseDiagramHandlerManager implements
 
       Debug.log("MouseDiagramHandlerManager.onMouseDown...");
 
-	    if (Tools.isHandTool() || !surface.getEditorContext().isEditable()) {
+	    if (!surface.getEditorContext().isEditable()) {
 	      // if not editable, background should be still movable
 	  		backgroundMoveHandler.onMouseDown(event, sender, point, keys);
 
@@ -336,7 +336,7 @@ public class MouseDiagramHandlerManager implements
     }
 
 		try {
-	    if (Tools.isHandTool() || !surface.getEditorContext().isEditable()) {
+	    if (!surface.getEditorContext().isEditable()) {
 	  		backgroundMoveHandler.onMouseMove(event, sender, point);
 				// lassoSelectionHandler.onMouseMove(sender, point);
 	      return;
@@ -398,7 +398,7 @@ public class MouseDiagramHandlerManager implements
 			// logger.start("onMouseUp");
 			// logger.debug("onMouseUp...");
 	//		startedConnection = false;
-	    if (Tools.isHandTool() || !surface.getEditorContext().isEditable()) {
+	    if (!surface.getEditorContext().isEditable()) {
 	  		backgroundMoveHandler.onMouseUp(sender, point, keys);
 				// lassoSelectionHandler.onMouseUp(sender, point, keys);
 				// selectionHandler.onMouseUp(sender, point, keys);
@@ -588,7 +588,7 @@ public class MouseDiagramHandlerManager implements
 	 * @param y
 	 */
 	public void fireLongPress(int x, int y) {
-		if (modeManager.isConnectMode() || surface.getEditorContext().isFreehandMode() || Tools.isHandTool() || isResizing()) {
+		if (modeManager.isConnectMode() || surface.getEditorContext().isFreehandMode() || isResizing()) {
 			// do not handle long press when connection mode is on. 
 			// User is probably trying to draw connection. 
 			return;
@@ -635,8 +635,6 @@ public class MouseDiagramHandlerManager implements
 			return;
 		}
 		resizeHandler.onLongPress(x, y);
-
-		Tools.setHandTool(false);
 
 		if (!shiftKey) {
 			surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(false));		

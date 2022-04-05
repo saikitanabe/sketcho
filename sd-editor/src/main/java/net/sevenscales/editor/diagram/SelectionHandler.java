@@ -128,10 +128,6 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     $wnd.cancelStream.onValue(function(v) {
       me.@net.sevenscales.editor.diagram.SelectionHandler::onEsc()();
     })
-
-    $wnd.globalStreams.handToolStream.onValue(function() {
-      me.@net.sevenscales.editor.diagram.SelectionHandler::unselectAll()();
-    })
   }-*/;
 
   private void onEsc() {

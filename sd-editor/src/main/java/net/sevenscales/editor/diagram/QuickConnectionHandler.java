@@ -139,13 +139,6 @@ class QuickConnectionHandler implements MouseDiagramHandler {
     $wnd.cancelStream.onValue(function(v) {
       me.@net.sevenscales.editor.diagram.QuickConnectionHandler::onEsc()();
     })
-
-    $wnd.globalStreams.handToolStream.onValue(function(value) {
-    	if (value) {
-    		// cancel any pending quick connections when hand tool is activated
-	    	me.@net.sevenscales.editor.diagram.QuickConnectionHandler::onEsc()();
-    	}
-    })
   }-*/;
 
   private void onEsc() {

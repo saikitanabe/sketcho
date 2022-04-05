@@ -94,11 +94,8 @@ public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMo
 //    }
     this.currentSender = sender;
     if (backgroundMouseDown) {
-      if (!Tools.isHandTool()) {
-        // by default it is assumed to be true and changed only if sender is real diagram element
-        // and if hand tool is not enabled
-        this.backgroundMouseDown = sender != null ? false : true;
-      }
+      // by default it is assumed to be true and changed only if sender is real diagram element
+      this.backgroundMouseDown = sender != null ? false : true;
 //      System.out.println("backgroundMouseDown:" + backgroundMouseDown);
     }
     

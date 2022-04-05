@@ -27,7 +27,6 @@ public class ToolBar extends Composite {
 	}
 
 	@UiField Element map;
-	@UiField Element handtool;
 	@UiField Element freehand;
 	@UiField Element undo;
 	@UiField Element redo;
@@ -42,8 +41,6 @@ public class ToolBar extends Composite {
 		setStyleName("toolbar2");
 		freehand.setId("tip-freehand");
 		freehand.setTitle("Freehand | F");
-		handtool.setId("tip-handtool");
-		handtool.setTitle("Hand tool | H");
 		map.setId("tip-map");
 
 		surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
@@ -57,7 +54,7 @@ public class ToolBar extends Composite {
 			}
 		});
 
-    handleButtons(this, handtool, freehand, undo, redo);
+    handleButtons(this, freehand, undo, redo);
 		map.setTitle("Map View | Z");
 		handleMapView(this, map);
 
@@ -136,22 +133,7 @@ public class ToolBar extends Composite {
     }
   }
 
-	private native void handleButtons(ToolBar me, Element handtool, Element freehand, Element undo, Element redo)/*-{
-		$wnd.Hammer(handtool).on('tap', function() {
-			me.@net.sevenscales.editor.api.ToolBar::onHandTool()()
-		})
-		if (typeof $wnd.globalStreams.handToolStream !== 'undefined') {
-			$wnd.globalStreams.handToolStream.onValue(function(enabled) {
-				me.@net.sevenscales.editor.api.ToolBar::handToolChanged()()	
-			})
-			$wnd.globalStreams.freehandStream.onValue(function(on) {
-				me.@net.sevenscales.editor.api.ToolBar::freeHandStateChanged(Z)(on)	
-			})
-		}
-		if (!$wnd.isTouch()) {
-			$wnd.$(handtool).tooltip({'container':'body'})
-		}
-
+	private native void handleButtons(ToolBar me, Element freehand, Element undo, Element redo)/*-{
 		$wnd.Hammer(freehand).on('tap', function() {
 			me.@net.sevenscales.editor.api.ToolBar::onFreehand()()
 		})
@@ -219,33 +201,8 @@ public class ToolBar extends Composite {
 
 	}-*/;
 
-	private void handToolChanged() {
-		toggleButton(handtool, "hand");
-
-		if (Tools.isHandTool() && surface.getEditorContext().isFreehandMode()) {
-			// disable freehand
-			onFreehand();
-		}
-
-		if (Tools.isHandTool()) {
-			surface.getElement().addClassName("handtool-on");
-		} else {
-			surface.getElement().removeClassName("handtool-on");
-		}
-	}
-
-	private void freeHandStateChanged(boolean on) {
-		if (on && Tools.isHandTool()) {
-			// disable hand tool if starting freehand drawing
-			onHandTool();
-		}
-	}
-
 	private void onMap(boolean on) {
 		toggleButton(map, "world");
-	}
-	private void onHandTool() {
-		Tools.toggleHandTool();
 	}
 	private void onFreehand() {
 		surface.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(!surface.getEditorContext().isTrue(EditorProperty.FREEHAND_MODE)));

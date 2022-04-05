@@ -14,14 +14,6 @@
           </a>
 				</span>
 			</li>
-			<li ui:field="handtool">
-				<span class="menu-btn2-big">
-					<a class="menu-btn2">
-            <!-- <i class="menu-ico2-hand"></i> -->
-            <svg class='sprite-toolbar-icon green'><use xlink:href='#toolbar-icons--hand' /></svg>
-          </a>
-				</span>
-			</li>
 			<li ui:field="freehand" title="Draw Freehand">
 				<span class="menu-btn2-big">
 					<a class="menu-btn2">

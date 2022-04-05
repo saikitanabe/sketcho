@@ -147,9 +147,6 @@ public class ProxyDragHandler implements MouseDiagramHandler {
 	  target.getEditorContext().set(EditorProperty.ON_CHANGE_ENABLED, true);
 
     target.getEditorContext().getEventBus().fireEvent(new FreehandModeChangedEvent(false));
-
-    // hand tool is always disabled when starting to drag shapes from the library
-    Tools.setHandTool(false);
 	}
 
   @Override
