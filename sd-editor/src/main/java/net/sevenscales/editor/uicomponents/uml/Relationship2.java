@@ -2315,8 +2315,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
       BezierHelpers.Segment seg = relLine.segments.get(i);
       result = Math.min(result, (int) seg.getPoint1().getY());
       result = Math.min(result, (int) seg.getPoint2().getY());
-      result = Math.min(result, (int) seg.getControlPoint1().getY());
-      result = Math.min(result, (int) seg.getControlPoint2().getY());
+      // result = Math.min(result, (int) seg.getControlPoint1().getY());
+      // result = Math.min(result, (int) seg.getControlPoint2().getY());
     }
     return result;
   }
