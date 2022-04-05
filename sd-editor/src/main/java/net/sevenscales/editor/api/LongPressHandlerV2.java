@@ -43,9 +43,19 @@ public class LongPressHandlerV2 implements MouseDownHandler,
 																				 TouchEndHandler,
                                          ILongPressHandler {
 	private static final SLogger logger = SLogger.createLogger(LongPressHandlerV2.class);
+  private static final int THRESHOLD;
   private List<PointerSnapShot> pointerEvents = new ArrayList<PointerSnapShot>();
   private boolean mouseDown;
   private List<HandlerRegistration> registrations = new ArrayList<HandlerRegistration>();
+
+	static {
+		if (TouchHelpers.isSupportsTouch()) {
+			THRESHOLD = 20;
+		} else {
+			// mouse pointer needs smaller threshold
+			THRESHOLD = 5;
+		}
+	}
 
   private static class PointerSnapShot {
     int pointerId;
@@ -99,7 +109,7 @@ public class LongPressHandlerV2 implements MouseDownHandler,
 
   @Override
 	public void onMouseMove(MouseMoveEvent event) {
-		mouseMove();
+		mouseMove(event.getClientX(), event.getClientY());
   }
 
 	@Override
@@ -120,11 +130,16 @@ public class LongPressHandlerV2 implements MouseDownHandler,
     mouseDown = false;
   }
   
-	private void fireLongPress() {
+	private void fireLongPress(int x, int y) {
     logger.info("fireLongPress xy({}, {})...", startX, startY);
     // Debug.log("LongPressHandlerV2 fire");
     if (pointerEvents.size() == 1) {
-		  surface.fireLongPress(startX, startY);
+      int deltaX = Math.abs(startX - x);
+      int deltaY = Math.abs(startY - y);
+
+      if (deltaX > THRESHOLD || deltaY > THRESHOLD) {
+		    surface.fireLongPress(startX, startY);
+      }
     }
 	}
 
@@ -138,9 +153,10 @@ public class LongPressHandlerV2 implements MouseDownHandler,
 		Touch touch = event.getTouches().get(0);
 		startX = touch.getClientX();
 		startY = touch.getClientY();
+    mouseDown = true;
 		// starScheduler();
 
-    fireLongPress();
+    // fireLongPress();
 	}
 
 	@Override
@@ -150,7 +166,8 @@ public class LongPressHandlerV2 implements MouseDownHandler,
 
 	@Override
 	public void onTouchMove(TouchMoveEvent event) {
-		mouseMove();
+    Touch touch = event.getTouches().get(0);
+		mouseMove(touch.getClientX(), touch.getClientY());
 	}
 
 	@Override
@@ -167,12 +184,12 @@ public class LongPressHandlerV2 implements MouseDownHandler,
 
 	@Override
 	public void onPointerMove(PointerMoveEvent event) {
-		mouseMove();
+		mouseMove(event.getClientX(), event.getClientY());
 	}
 
-  private void mouseMove() {
+  private void mouseMove(int x, int y) {
     if (mouseDown) {
-      fireLongPress();
+      fireLongPress(x, y);
     }
   }
 
