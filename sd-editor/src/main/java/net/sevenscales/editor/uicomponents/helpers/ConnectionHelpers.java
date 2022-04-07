@@ -83,7 +83,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 			RADIUS = 7;
 		}
 
-    SLogger.addFilter(ConnectionHelpers.class);
+    // SLogger.addFilter(ConnectionHelpers.class);
 	}
 	
 	private ConnectionHelpers(ISurfaceHandler surface, IModeManager modeManager) {

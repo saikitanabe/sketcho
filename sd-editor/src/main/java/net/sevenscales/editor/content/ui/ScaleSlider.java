@@ -39,6 +39,10 @@ import net.sevenscales.editor.diagram.utils.UiUtils;
 public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private static SLogger logger = SLogger.createLogger(ScaleSlider.class);
 
+  static {
+    // SLogger.addFilter(ScaleSlider.class);
+  }
+
 	private static final double TRESHOLD = 5;
   // Windows is still slow so take every 5th step on zoom
   // to keep it smooth, Windows is fast enough with value 1,
@@ -112,6 +116,9 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
         addPointerEvent(event);
 
         if (pointerEvents.size() == 2) {
+          event.preventDefault();
+          event.stopPropagation();
+
           int x1 = pointerEvents.get(0).clientX;
           int y1 = pointerEvents.get(0).clientY;
           int x2 = pointerEvents.get(1).clientX;
@@ -136,6 +143,9 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
       @Override
       public void onPointerMove(PointerMoveEvent event) {
         if (pointerEvents.size() == 2) {
+          event.preventDefault();
+          event.stopPropagation();
+
           replacePointerEvent(event);
 
           int x1 = pointerEvents.get(0).clientX;
@@ -171,6 +181,9 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
         // Debug.log("pinch pointer up: ", event.getPointerId());
 
         if (pointerEvents.size() == 2) {
+          event.preventDefault();
+          event.stopPropagation();
+
           endPinch();
         }
 
@@ -288,12 +301,19 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 		scaleToIndex(index, false);
 	}
 
-	private void handlMouseWheel(int delta, boolean zoomKeyDown) {
+	private void handlMouseWheel(
+    int delta,
+    boolean zoomKeyDown,
+    boolean isTouchPad
+  ) {
 
-    if (ReactAPI.isNav2() && !zoomKeyDown) {
+    if (ReactAPI.isNav2() && !zoomKeyDown && isTouchPad) {
       // zoom only if zoom key is down and using nav2
+      // trackpad disables zoom unless zoom key is down
       return;
     }
+
+    // continue to zoom with mouse wheel
 
 		boolean up = delta < 0;
 		boolean down = delta > 0;
@@ -319,7 +339,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 
 	private native void _initMouseWheel(com.google.gwt.user.client.Element el, ScaleSlider me)/*-{
 
-		function mouseWheelHandler(e) {
+		function mouseWheelHandler(e, trackPad) {
 			// old IE support
 			var e = window.event || e;
 			var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail || -e.deltaY)))
@@ -336,13 +356,15 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
       // on MacOS
       e.preventDefault()
 
-			me.@net.sevenscales.editor.content.ui.ScaleSlider::handlMouseWheel(IZ)(delta, (e.metaKey || e.ctrlKey))
+			me.@net.sevenscales.editor.content.ui.ScaleSlider::handlMouseWheel(IZZ)(delta, (e.metaKey || e.ctrlKey), trackPad)
 		}
 
 		if (el.addEventListener) {
 			// IE9, Chrome, Safari, Opera, Firefox
 			// Standard event
-			el.addEventListener("wheel", mouseWheelHandler, false)
+			// el.addEventListener("wheel", mouseWheelHandler, false)
+
+      $wnd.addWheelListener(el, mouseWheelHandler)
 		}	else {
 			// IE 6/7/8
 			el.attachEvent("onmousewheel", mouseWheelHandler)
