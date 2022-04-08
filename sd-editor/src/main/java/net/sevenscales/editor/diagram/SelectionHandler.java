@@ -39,6 +39,10 @@ import net.sevenscales.editor.api.event.PotentialOnChangedEvent;
 import net.sevenscales.editor.api.event.SelectionEvent;
 import net.sevenscales.editor.api.event.SelectionMouseUpEvent;
 import net.sevenscales.editor.api.event.UnselectAllEvent;
+import net.sevenscales.editor.api.event.PointersDownEvent;
+import net.sevenscales.editor.api.event.PointersDownEventHandler;
+import net.sevenscales.editor.api.event.PointersUpEventHandler;
+import net.sevenscales.editor.api.event.PointersUpEvent;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
 import net.sevenscales.editor.content.ui.UIKeyHelpers;
 import net.sevenscales.editor.diagram.drag.AnchorElement;
@@ -73,6 +77,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   private boolean potentialClearSelection;
   private MouseState mouseState;
   private List<GroupSelection> groupSelections;
+  private boolean preventSelect;
 	
 	public SelectionHandler(ISurfaceHandler surface, List<Diagram> diagrams, Set<DiagramDragHandler> dragHandlers, MouseState mouseState) {
 		this.surface = surface;
@@ -109,6 +114,25 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
           if (freehandModeOn) {
             unselectAll();
           }
+        }
+      });
+
+      surface.getEditorContext().getEventBus().addHandler(PointersDownEvent.TYPE, new PointersDownEventHandler() {
+        @Override
+        public void on(PointersDownEvent event) {
+          if (event.getPointersDownCount() == 2) {
+            // on iPad it is disturbing when selecting and dragging
+            logger.debug("pointers down");
+            unselectAll();
+            preventSelect = true;
+          }
+        }
+      });
+      surface.getEditorContext().getEventBus().addHandler(PointersUpEvent.TYPE, new PointersUpEventHandler() {
+        @Override
+        public void on(PointersUpEvent event) {
+          preventSelect = false;
+          logger.debug("pointers up");
         }
       });
 
@@ -517,6 +541,12 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   }
   
   public void select(Diagram sender) {
+    logger.debug("select");
+
+    if (preventSelect) {
+      return;
+    }
+
     if (freehandModeOn) {
       // if freehand mode is on, selection is not supported!
       return;

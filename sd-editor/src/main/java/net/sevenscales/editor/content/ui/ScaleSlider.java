@@ -20,6 +20,8 @@ import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ReactAPI;
 import net.sevenscales.editor.api.event.PinchZoomEvent;
+import net.sevenscales.editor.api.event.PointersDownEvent;
+import net.sevenscales.editor.api.event.PointersUpEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
 import net.sevenscales.editor.api.event.pointer.PointerDownEvent;
@@ -123,6 +125,8 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
           event.preventDefault();
           event.stopPropagation();
 
+          surface.getEditorContext().getEventBus().fireEvent(new PointersDownEvent(2));
+
           int x1 = pointerEvents.get(0).clientX;
           int y1 = pointerEvents.get(0).clientY;
           int x2 = pointerEvents.get(1).clientX;
@@ -193,6 +197,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 
         // better to remove all to make sure that memory is not reserved
         pointerEvents.clear();
+        surface.getEditorContext().getEventBus().fireEvent(new PointersUpEvent());
       }
     }, PointerUpEvent.getType());
   }
