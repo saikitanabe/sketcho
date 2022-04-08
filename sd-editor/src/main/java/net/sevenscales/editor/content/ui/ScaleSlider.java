@@ -38,6 +38,10 @@ import net.sevenscales.editor.diagram.utils.UiUtils;
 
 public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private static SLogger logger = SLogger.createLogger(ScaleSlider.class);
+  // this allows to slow down iPad pinch speed
+  // note it is not possible to know if os is iPadOS
+  // that is why using touch detection.
+	private static final double TRESHOLD = TouchHelpers.isSupportsTouch() ? 5 : 2;
 
   static {
     // SLogger.addFilter(ScaleSlider.class);
