@@ -49,7 +49,6 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
     // SLogger.addFilter(ScaleSlider.class);
   }
 
-	private static final double TRESHOLD = 5;
   // Windows is still slow so take every 5th step on zoom
   // to keep it smooth, Windows is fast enough with value 1,
   private static final int wheelSteps = UiUtils.isWindows() ? 3 : 1;
@@ -58,6 +57,8 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private ISurfaceHandler surface;
 	private int currentIndex = Constants.ZOOM_DEFAULT_INDEX;
 	private double currentDistance;
+  private double initialDistance;
+  private boolean pinching;
 
   private SimplePanel scaleSlider;
 	private SimplePanel innerScaleSlider;
@@ -142,7 +143,9 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
             y2
           );
 
-          startPinching(distance);
+          initialDistance = distance;
+
+          // startPinching(distance);
         }
       }
     }, PointerDownEvent.getType());
@@ -254,6 +257,8 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
         }
         
         double distance = TouchHelpers.distance(event.getTouches().get(0), event.getTouches().get(1));
+
+        initialDistance = distance;
 
 				startPinching(distance);
 			}
@@ -451,9 +456,17 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	 * using the same pinch and surface jumps randomly.
 	 */
 	private void startPinching(double distance) {
-    EffectHelpers.fadeOut(innerScaleSlider.getElement());
-    currentDistance = distance;
-		firePinchStarted();
+    boolean start = TouchHelpers.isSupportsTouch() ? Math.abs(distance - initialDistance) > 25 : true;
+
+    logger.debug("TouchHelpers startPinching {} start {} mobile {}", Math.abs(distance - initialDistance), start, UiUtils.isMobile());
+
+    if (!this.pinching && start) {
+      EffectHelpers.fadeOut(innerScaleSlider.getElement());
+      currentDistance = distance;
+      firePinchStarted();
+      this.pinching = true;
+    }
+
 	}
 	
 	private void firePinchStarted() {
@@ -463,9 +476,17 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	private void endPinch() {
 		EffectHelpers.fadeIn(innerScaleSlider.getElement());
     surface.getEditorContext().getEventBus().fireEvent(new PinchZoomEvent(false));
+    pinching = false;
 	}
 	
 	private void pinch(double distance) {
+
+    startPinching(distance);
+
+    if (!pinching) {
+      return;
+    }
+
 		boolean exceedTreshold = Math.abs(currentDistance - distance) > TRESHOLD; 
 		if (exceedTreshold) {
 			int index = currentIndex;
