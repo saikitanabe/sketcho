@@ -1300,20 +1300,23 @@ class SurfaceHandler extends SimplePanel implements
   // ST 14.12.2022: now using this only to change shape-rendering to optimizespeed;
   private void debounceDisableText() {
     // ST 11.2.2022: disable svg text shapes when scaling
-    this.wrapper.addStyleName("disable-text");
+    // ST 8.4.2022: performance move lag is bigger on Windows if changing setting shape-rendering: optimizeSpeed;
+    // just before starting moving... => commenting out
 
-    if (this.timer == null) {
-      this.timer = new Timer() {
-        public void run() {
-          // enable text just after the scaling ended
-          wrapper.removeStyleName("disable-text");
-          net.sevenscales.domain.utils.Debug.log("disable-text...");
-        }
-      };
-    }
+    // this.wrapper.addStyleName("disable-text");
 
-    // cancels previous schedule automatically when next is called
-    this.timer.schedule(timeoutToEnableText);
+    // if (this.timer == null) {
+    //   this.timer = new Timer() {
+    //     public void run() {
+    //       // enable text just after the scaling ended
+    //       wrapper.removeStyleName("disable-text");
+    //       net.sevenscales.domain.utils.Debug.log("disable-text...");
+    //     }
+    //   };
+    // }
+
+    // // cancels previous schedule automatically when next is called
+    // this.timer.schedule(timeoutToEnableText);
   }
 
   // ST 11.2.2022: These are not used at the moment. This was a test
