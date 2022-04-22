@@ -124,7 +124,7 @@ public class ModelingPanelEventHandler implements
 
 	@Override
 	public void onPointerDown(PointerDownEvent event) {
-    // Debug.log("onPointerDown...");
+    // net.sevenscales.domain.utils.Debug.log("onPointerDown...");
     
     mouseDown(event);
 	}

@@ -6,7 +6,6 @@ import java.util.Set;
 
 import com.google.gwt.user.client.Timer;
 
-import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -197,7 +196,7 @@ public class MouseDiagramHandlerManager implements
         return false;
       }
 
-      Debug.log("MouseDiagramHandlerManager.onMouseDown...");
+      // Debug.log("MouseDiagramHandlerManager.onMouseDown...");
 
 	    if (!surface.getEditorContext().isEditable()) {
 	      // if not editable, background should be still movable
@@ -605,7 +604,7 @@ public class MouseDiagramHandlerManager implements
   private Timer releaseCancelMouseDown = new Timer() {
     @Override
     public void run() {
-      Debug.log("releaseCancelMouseDown...");
+      // Debug.log("releaseCancelMouseDown...");
       cancelMouseDown = false;
     }
   };
