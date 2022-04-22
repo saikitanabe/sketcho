@@ -19,6 +19,7 @@ import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.ReactAPI;
+import net.sevenscales.editor.api.SurfaceLoadedEventListener;
 import net.sevenscales.editor.api.event.PinchZoomEvent;
 import net.sevenscales.editor.api.event.PointersDownEvent;
 import net.sevenscales.editor.api.event.PointersUpEvent;
@@ -101,8 +102,17 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
     } else {
       supportTouchEvents();
     }
-		
-		_initMouseWheel(surface.getElement(), this);
+
+    // THIS doesn't work and wheel listener should be
+    // on each svg element.
+    // surface.addLoadEventListener(new SurfaceLoadedEventListener() {
+    //   @Override
+    //   public void onLoaded() {
+    //     _initMouseWheel(surface.getRootLayer().getElement(), ScaleSlider.this);
+    //   }      
+    // });
+
+    _initMouseWheel(surface.getElement(), ScaleSlider.this);
 		
 //		new ShowHideHelpers(scaleSlider, innerScaleSlider, 6000);
 		birdsEye = new BirdsEye(surface, editorContext, this);
