@@ -133,7 +133,7 @@ public class EditLinkForm extends Composite {
 			// add automatically http:// in the beginning
 			// NOTE file:// and javascript: are not safe, not adding http:// on beginning
 			// but it is not allowed to be used by safe uri
-			url = "http://" + url;
+			url = "https://" + url;
 		}
 		applyCallback.applied(url);
 		urlField.setValue("");
