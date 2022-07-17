@@ -236,7 +236,12 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
     String link = getLink();
 
-    if (link == null) {
+    if (link == null || link == "") {
+      if (linkElement != null) {
+        // case: link removed
+        linkElement.remove();
+        linkElement = null;
+      }
       return;
     }
 
