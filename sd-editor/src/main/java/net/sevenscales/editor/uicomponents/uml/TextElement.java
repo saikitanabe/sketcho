@@ -366,6 +366,17 @@ public class TextElement extends AbstractDiagramItem implements
 
 	}
 
+  @Override
+  public void setHighlight(boolean highlight) {
+  	super.setHighlight(highlight);
+  	if (highlight) {
+	  	attachBoundary.setStroke(HIGHLIGHT_COLOR);
+  	} else {
+	  	attachBoundary.setStroke(0x33, 0x33, 0x33, 0);
+  	}
+  }  
+
+  @Override
 	public void setHighlightColor(Color color) {
 		if (!color.equals(BoardOTHelpers.HIGHLIGHT_COLOR)
 				&& !color.equals(DEFAULT_SELECTION_COLOR)) {
@@ -378,12 +389,12 @@ public class TextElement extends AbstractDiagramItem implements
 
   @Override
   public void setHighlightBackgroundBorder(Color color) {
-  	// attachBoundary.setStroke(color);
+  	attachBoundary.setStroke(color);
   }
 
   @Override
   public void clearHighlightBackgroundBorder() {
-  	// attachBoundary.setStroke(0x33, 0x33, 0x33, 0);
+  	attachBoundary.setStroke(0x33, 0x33, 0x33, 0);
   }
 	
 	
@@ -455,11 +466,16 @@ public class TextElement extends AbstractDiagramItem implements
 	@Override
 	public void select() {
 		super.select();
+
+  	if (!getDiagramItem().isGroup()) {
+	  	attachBoundary.setStroke(DEFAULT_SELECTION_COLOR);
+  	}
 	}
 	
 	@Override
 	public void unselect() {
 		super.unselect();
+    attachBoundary.setStroke(0x33, 0x33, 0x33, 0);
 	}
 	
   @Override
