@@ -219,8 +219,8 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 	}
 
 	protected void constructorDone() {
-    applyLink();
     setShapeCssClass();
+    applyLink();
     // ST 21.11.2018: Fix do not override shape class
     // IGroup group = getGroup();
     // if (group != null) {
@@ -245,16 +245,17 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
       return;
     }
 
-    IGroup group = getSubgroup();
-    if (group == null) {
-      group = getGroup();
-    }
+    // IGroup group = getSubgroup();
+    // if (group == null) {
+    //   group = getGroup();
+    // }
+    IGroup group = getGroup();
 
     if (group != null && linkElement == null) {
       linkElement = _createLink(group.getElement());
     }
 
-    linkElement.setLink(link);
+    linkElement.setLink(link, getRelativeLeft(), getRelativeTop());
 
     // if (!this.surface.isExporting()) {
     //   // enabled only on export

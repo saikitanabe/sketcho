@@ -7,8 +7,15 @@ public class LinkElement extends JavaScriptObject {
   }
 
   public final native void setLink(
-    String url
+    String url,
+    int left,
+    int top
   )/*-{
-    this.setLink(url)
+    this.setLink(url, left, top)
   }-*/;
+
+  public final native void remove()/*-{
+    this.remove()
+  }-*/;
+
 }
