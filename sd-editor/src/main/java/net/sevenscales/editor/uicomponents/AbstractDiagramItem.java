@@ -234,6 +234,11 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   protected void applyLink() {
 
+    // FIX link not available on image element sometimes:
+    // make sure that shape css is set that is used to
+    // position anchor icon.
+    setShapeCssClass();    
+
     String link = getLink();
 
     if (link == null || link == "") {
