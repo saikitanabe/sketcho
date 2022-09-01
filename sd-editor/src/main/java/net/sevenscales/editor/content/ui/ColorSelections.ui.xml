@@ -99,7 +99,7 @@
                 </td>
                 <td>
 
-                  <form class='pure-form {style.custom-color-section}'>
+                  <form class='pure-form {style.custom-color-section}' onsubmit='return false'>
                     <a ui:field="customColorBtn" class="{style.customcolorbtn}"></a>
 
                     <input
@@ -116,7 +116,7 @@
                 <td ui:field="opacitySection">
                   <!-- <a ui:field="transparent" class="pure-button p-font-smaller">Transparent</a> -->
 
-                  <form class='pure-form {style.opacity-form}'>
+                  <form class='pure-form {style.opacity-form}' onsubmit='return false'>
                     <a ui:field="opacityBtn" class="pure-button p-font-smaller">Opacity:</a>
 
                     <input
