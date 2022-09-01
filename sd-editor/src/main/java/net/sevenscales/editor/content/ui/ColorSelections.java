@@ -74,7 +74,6 @@ public class ColorSelections extends Composite {
   private static final int defaultBackgroundOpacity = 85;
 
   private int opacity = defaultBackgroundOpacity;
-  private boolean customColorSet;
 
 	// private int currentRememberIndex = 0;
 	
@@ -118,10 +117,10 @@ public class ColorSelections extends Composite {
 
   private void onCustomColor(String value) {
     try {
-      this.customColorSet = true;
       Rgb rgb = Rgb.toRgba(value);
 
       if (value.length() >= 8) {
+        // update opacity based on rgb alpha that was provided in hex value
         setOpacity((int) (rgb.a * 100));
       }
 
@@ -137,10 +136,11 @@ public class ColorSelections extends Composite {
   }
 
   private void applyCustomColor() {
-    if (!customColorSet) {
-      // use default color
-      onCustomColor(defaultCustomColor);
+    String color = customColorInput.getValue();
+    if ("".equals(color)) {
+      color = defaultCustomColor;
     }
+    onCustomColor(color);
     setColor();
   }
 
