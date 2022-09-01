@@ -616,6 +616,8 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 
     top -= ABOVE_SHAPE;
 
+    // old align with shape left
+		// popupPosition.x = left;
 		popupPosition.x = left - (offsetWidth - shapeWidth) / 2;
     popupPosition.y = top - offsetHeight;
     
@@ -867,7 +869,27 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 				// selected = UiContextMenu.this.selectionHandler.getSelectedItems().toArray(selected);
 
 				int left = colorize.getAbsoluteLeft() + 0;
-				int top = colorize.getAbsoluteTop() + popup.getOffsetHeight();
+        // change position above context menu
+        // possible to see color changes
+				int top = colorize.getAbsoluteTop() - offsetHeight - 2;
+
+        if (left <= Window.getScrollLeft()) {
+          left = Window.getScrollLeft();
+        } else if ((left + offsetWidth) >= Window.getClientWidth()) {
+          left = Window.getClientWidth() - offsetWidth;
+        }
+
+        if (top <= Window.getScrollTop()) {
+          // 80 to show little bit of the shape
+          // to see color changes
+          top = colorize.getAbsoluteTop() + popup.getOffsetHeight() + 80;
+
+          // this would be center of the screen
+          // top = Window.getClientHeight() / 2 - offsetHeight / 2;
+          // left = Window.getClientWidth() / 2 - offsetWidth / 2;
+        }
+    
+
 				colorpopup.setPopupPosition(left, top);
 				colorSelections.showHeader();
 

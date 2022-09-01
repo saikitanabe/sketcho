@@ -32,6 +32,45 @@
 			margin: 0;
 			background-color: transparent;
 		}
+
+    input[type="text"].customcolor {
+      outline: none;
+      padding: 3px 4px;
+      font-size: 80%;
+      width: 80px;
+      text-align: center;
+    }
+    input[type="text"].opacity {
+      width: 30px;
+    }
+    .customcolorbtn {
+      background-color: #000000;
+      min-width: 20px;
+      min-height: 20px;
+      border: 1px solid #ccc;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .customcolorbtn:hover {
+      background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.05) 40%, rgba(0, 0, 0, 0.1));
+    }
+
+    .color-menu {
+      width: 100%;
+    }
+    .color-menu td {
+      width: 33%;
+      white-space: nowrap;
+    }
+
+    .custom-color-section {
+      display: flex;
+    }
+    .opacity-form {
+      div-align: div;
+      display: flex;
+    }
+
 	</ui:style>
 	<g:HTMLPanel styleName="color-tabs">
 		<ul ui:field="header" class="nav nav-tabs">
@@ -53,8 +92,47 @@
 					<!-- <g:TextBox ui:field="colorValue" width="211px" styleName="color-colorfield"></g:TextBox> -->
 					<!-- </g:HorizontalPanel> -->
 					<g:HTMLPanel styleName="color-default-color">
-						<a ui:field="defaultColor" class="pure-button p-font-smaller">Restore Defaults</a>
-						<a ui:field="transparent" class="pure-button p-font-smaller">Transparent</a>
+            <table class='{style.color-menu}'>
+              <tr>
+                <td>
+                  <a ui:field="defaultColor" class="pure-button p-font-smaller">Restore Defaults</a>
+                </td>
+                <td>
+
+                  <form class='pure-form {style.custom-color-section}'>
+                    <a ui:field="customColorBtn" class="{style.customcolorbtn}"></a>
+
+                    <input
+                      type="text"
+                      class="{style.customcolor}"
+                      placeholder="#000000"
+                      maxlength="9"
+                      pattern="#{0,1}[0-9A-Fa-f]{0,8}"
+                      ui:field="customColorInput"
+                    ></input>
+                  </form>
+                </td>
+
+                <td ui:field="opacitySection">
+                  <!-- <a ui:field="transparent" class="pure-button p-font-smaller">Transparent</a> -->
+
+                  <form class='pure-form {style.opacity-form}'>
+                    <a ui:field="opacityBtn" class="pure-button p-font-smaller">Opacity:</a>
+
+                    <input
+                      type="text"
+                      class="{style.customcolor} {style.opacity}"
+                      placeholder="85"
+                      maxlength="3"
+                      pattern="((100){0,1})|([0-9]{1,2})"
+                      ui:field="opacityInput"
+                    ></input>
+                  </form>
+                  
+                </td>
+
+              </tr>
+            </table>
 					</g:HTMLPanel>
 					<g:FlexTable ui:field="colortable" styleName="{style.colortable}"
 						cellPadding="0" cellSpacing="0"></g:FlexTable>
