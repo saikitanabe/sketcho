@@ -163,6 +163,11 @@ public class ColorSelections extends Composite {
   private void onOpacity(String value) {
     if (!"".equals(value)) {
       this.opacity = Integer.parseInt(value);
+
+      if (this.opacity > 100) {
+        this.opacity = 100;
+      }
+  
     } else {
       this.opacity = defaultBackgroundOpacity;
     }
@@ -241,6 +246,10 @@ public class ColorSelections extends Composite {
   }
 
   private void setOpacity(int value) {
+    if (value > 100) {
+      value = 100;
+    }
+
     this.opacity = value;
     opacityInput.setValue(this.opacity + "");
   }
