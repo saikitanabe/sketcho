@@ -13,4 +13,5 @@ public interface IBackgroundMoveHandler {
   boolean backgroundMoveIsOn();
   void cancelBackgroundMove();
   void unregister();
+  void move(int dx, int dy);
 }

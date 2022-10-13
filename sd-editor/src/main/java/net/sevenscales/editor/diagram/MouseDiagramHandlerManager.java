@@ -499,6 +499,10 @@ public class MouseDiagramHandlerManager implements
 	public SelectionHandler getSelectionHandler() {
 		return selectionHandler;
 	}
+
+  public IBackgroundMoveHandler getBackgroundMoveHandler() {
+    return backgroundMoveHandler;
+  }
 	
 //	public MouseDiagramBendHandler getBendHandler() {
 //		return bendHandler;

@@ -118,7 +118,8 @@ public class BackgroundMoveHandlerV2 implements MouseDiagramHandler, IBackground
   public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
   }
 
-  private void move(int deltaX, int deltaY) {
+  @Override
+  public void move(int deltaX, int deltaY) {
     IGroup layer = surface.getRootLayer();
 
     int dx = layer.getTransformX() - deltaX;

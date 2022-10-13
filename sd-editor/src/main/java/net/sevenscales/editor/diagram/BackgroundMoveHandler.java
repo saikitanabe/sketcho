@@ -15,6 +15,7 @@ import net.sevenscales.editor.diagram.utils.GridUtils;
 import net.sevenscales.editor.gfx.domain.IGraphics;
 import net.sevenscales.editor.gfx.domain.MatrixPointJS;
 import net.sevenscales.editor.gfx.domain.OrgEvent;
+import net.sevenscales.editor.gfx.domain.IGroup;
 
 
 public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMoveHandler {
@@ -133,6 +134,20 @@ public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMo
 
   public void onMouseMove(OrgEvent event, Diagram sender, MatrixPointJS point) {
     move(point);
+  }
+
+  @Override
+  public void move(int dx, int dy) {
+    IGroup layer = surface.getRootLayer();
+
+    dx = layer.getTransformX() - dx;
+    dy = layer.getTransformY() - dy;
+
+    surface.setTransform(dx, dy);
+    if (cachedEditor == null) {
+      cachedEditor = getEditor();
+    }
+    moveBgImage(cachedEditor, dx, dy);    
   }
 
   private void move(MatrixPointJS point) {
