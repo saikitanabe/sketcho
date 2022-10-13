@@ -6,6 +6,18 @@ public class ReactAPI {
     return $wnd.isNav2()
   }-*/;
 
+  public static native int getCanvasWidth()/*-{
+    return $wnd.getCanvasWidth()
+  }-*/;
+
+  public static native int getCanvasHeight()/*-{
+    return $wnd.getCanvasHeight()
+  }-*/;
+
+  public static native int getLeftPanelWidth()/*-{
+    return $wnd.getLeftPanelWidth()
+  }-*/;
+
   /**
    * Let's have a single place where properties are fixed.
    * 

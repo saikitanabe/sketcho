@@ -15,6 +15,7 @@ import net.sevenscales.editor.api.IBirdsEyeView;
 import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.api.event.SurfaceScaleEvent;
 import net.sevenscales.editor.api.event.SurfaceScaleEventHandler;
+import net.sevenscales.editor.api.ReactAPI;
 
 
 class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
@@ -219,8 +220,9 @@ class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
 
 	    // int clientLeftMargin = 100;
 	    // double clientWidth = Window.getClientWidth() - clientLeftMargin;
-	    double clientWidth = Window.getClientWidth() - 20;
-	    double clientHeight = Window.getClientHeight() - 100;
+	    // double clientWidth = Window.getClientWidth() - 20;
+	    double clientWidth = ReactAPI.getCanvasWidth() - 20;
+	    double clientHeight = ReactAPI.getCanvasHeight() - 100;
 
 	    double ratioW = clientWidth / width;
 	    double ratioH = clientHeight / height;
@@ -232,7 +234,8 @@ class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
 	    double boardHeightSameUnitWithClientWindow = height * ratio;
 	    // move board to left by half of its width => board center is in the middle
 	    // move board right to half of cliend window width => move whole thing towards center
-	    double moveToCenterX = (clientWidth - boardWidthSameUnitWithClientWindow) / 2;
+      // move board if left panel is active (note)
+	    double moveToCenterX = (clientWidth - boardWidthSameUnitWithClientWindow) / 2 + ReactAPI.getLeftPanelWidth();
 	    double moveToCenterY = (clientHeight - boardHeightSameUnitWithClientWindow) / 2;
 
       int x = (int)((-leftmost * ratio) + 5 * ratio + moveToCenterX);
@@ -268,10 +271,14 @@ class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
 
 	      // 3. move mouse point to 0,0 then move half the screen size to right
 	      // 		to center the mouse point
-	      double clientWidth = Window.getClientWidth();
-	      double clientHeight = Window.getClientHeight();
+	      // double clientWidth = Window.getClientWidth();
+	      // double clientHeight = Window.getClientHeight();
 
-	      int posx = (int) (-mousePosX + clientWidth / 2);
+	      double clientWidth = ReactAPI.getCanvasWidth();
+	      double clientHeight = ReactAPI.getCanvasHeight();
+
+        // move center position according to left panel (note)
+	      int posx = (int) (-mousePosX + clientWidth / 2) + ReactAPI.getLeftPanelWidth();
 	      int posy = (int) (-mousePosY + clientHeight / 2);
 	      surface.setTransform(posx, posy);
 			}
@@ -285,5 +292,5 @@ class BirdsEye implements IBirdsEyeView, SurfaceScaleEventHandler {
 			// logger.debug("followMouse...");
 			moveRegistration = Event.addNativePreviewHandler(mouseMoveHandler);
 		}
-		
+
 	}
