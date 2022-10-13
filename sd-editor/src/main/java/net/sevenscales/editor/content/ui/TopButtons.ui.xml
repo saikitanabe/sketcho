@@ -5,7 +5,7 @@
 	<ui:style>
 		
 	</ui:style>
-	<g:HTMLPanel styleName="topButtons">
+	<g:HTMLPanel styleName="topButtons" ui:field="panel">
 		<div>
 			<!-- <button ui:field="freehandOn" class="btn btn-success tooltipper" style="display: none;" title="Exit Freehand mode | Shortcut F key" data-placement="bottom">Freehand</button> -->
 			<a ui:field="colorize" title="Change freehand drawing color" class="btn-top" data-placement="bottom">

@@ -3,10 +3,12 @@ package net.sevenscales.editor.content.ui;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.HTMLPanel;
 
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.Tools;
@@ -27,6 +29,7 @@ public class TopButtons extends Composite {
 	private EditorContext editorContext;
 	
 	// @UiField ButtonElement freehandOn;
+  @UiField HTMLPanel panel;
 	@UiField Element colorize;
 	@UiField Element lineWeight;
 	// @UiField ButtonElement commentModeOn;
@@ -35,7 +38,7 @@ public class TopButtons extends Composite {
 		this.editorContext = editorContext;
 		initWidget(uiBinder.createAndBindUi(this));
 		setVisible(false);
-		
+
 		editorContext.getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
 
 			@Override
@@ -70,6 +73,7 @@ public class TopButtons extends Composite {
 
 		tapColor(colorize);
 		tapLineWeight(lineWeight);
+    init(this);
 
 		// DOM.sinkEvents((com.google.gwt.user.client.Element) commentModeOn.cast(),
 		// 		Event.ONCLICK);
@@ -86,6 +90,17 @@ public class TopButtons extends Composite {
 		// 			}
 		// 		});
 	}
+
+  private native int getLeftPosition()/*-{
+    var tf = $wnd.document.querySelector("#tip-freehand")
+    if (tf) {
+      var rect = tf.getBoundingClientRect()
+
+      return rect.left
+    }
+
+    return 0;
+  }-*/;
 
 	@Override
   protected void onAttach() {
@@ -107,6 +122,20 @@ public class TopButtons extends Composite {
 		})
 	}-*/;
 
+  private native void init(TopButtons me)/*-{
+    $wnd.globalStreams.noteSizeStrem.onValue(function(width) {
+      $wnd.setTimeout(function() {
+        // give time to render
+        me.@net.sevenscales.editor.content.ui.TopButtons::applyPosition()();
+      })
+    })
+  }-*/;
+
+  private void applyPosition() {
+    int left = getLeftPosition();
+    panel.getElement().getStyle().setLeft(left, Unit.PX);
+  }
+
 	public void setVisible(FreehandModeChangedEvent event) {
 		super.setVisible(Tools.isCommentMode());
 		// freehandOn.getStyle().setDisplay(Display.NONE);
@@ -117,6 +146,9 @@ public class TopButtons extends Composite {
 			super.setVisible(event.isEnabled());
 			// freehandOn.getStyle().setDisplay(Display.INLINE);
 			colorize.getStyle().setDisplay(Display.INLINE_BLOCK);
+
+      applyPosition();
+  
 			// String text = editorContext.<FreehandModeType>getAs(EditorProperty.FREEHAND_MODE_TYPE).toString();
 			// if (event.isModeTypeChanged()) {
 			// 	text = event.getModeType().toString();
