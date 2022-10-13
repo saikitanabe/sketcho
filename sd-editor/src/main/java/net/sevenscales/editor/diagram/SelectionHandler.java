@@ -27,6 +27,7 @@ import net.sevenscales.editor.api.BoardDimensions;
 import net.sevenscales.editor.api.EditorContext;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.ReactAPI;
 import net.sevenscales.editor.api.auth.AuthHelpers;
 import net.sevenscales.editor.api.event.BoardRemoveDiagramsEvent;
 import net.sevenscales.editor.api.event.DeleteSelectedEvent;
@@ -854,8 +855,8 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     int centerY = height / 2;
 
     // from 0,0
-    int clientWidth = com.google.gwt.user.client.Window.getClientWidth();
-    int cliehtHeight = com.google.gwt.user.client.Window.getClientHeight();
+    int clientWidth = ReactAPI.getCanvasWidth();
+    int cliehtHeight = ReactAPI.getCanvasHeight();
     int clientCenterX = clientWidth / 2;
     int clientCenterY = cliehtHeight / 2;
 
@@ -884,7 +885,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     resetScale();
     int stx = surface.getRootLayer().getTransformX();
     int sty = surface.getRootLayer().getTransformY();
-    int tx = extrax + (int) ((-left + centerDiffX) * surface.getScaleFactor());
+    int tx = extrax + (int) ((-left + centerDiffX) * surface.getScaleFactor()) + ReactAPI.getLeftPanelWidth();
     int ty = (int) ((-top + centerDiffY - 40) * surface.getScaleFactor());
 
     animate(surface.getRootLayer().getContainer(), stx, sty, tx, ty, this);
