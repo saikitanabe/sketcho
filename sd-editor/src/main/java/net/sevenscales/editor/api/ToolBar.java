@@ -120,18 +120,26 @@ public class ToolBar extends Composite {
     if (event.getTypeInt() == Event.ONKEYDOWN && !surface.getEditorContext().isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
       NativeEvent ne = event.getNativeEvent();
       if ( (ne.getCtrlKey() || ne.getMetaKey()) && !ne.getShiftKey() && ne.getKeyCode() == 'Z') {
-      	// ctrl/cmd + z
-        event.cancel();
-        // JQuery.flashStyleClass("#" + undo.getElement().getId()+ " > a", "btn-custom-active");
-        onUndo();
+        if (!_noteAppFocused()) {
+          // ctrl/cmd + z
+          event.cancel();
+          // JQuery.flashStyleClass("#" + undo.getElement().getId()+ " > a", "btn-custom-active");
+          onUndo();
+        }
       } else if ((ne.getCtrlKey() || ne.getMetaKey()) && ne.getShiftKey() && ne.getKeyCode() == 'Z') {
       	// ctrl/cmd + shift + z
-        event.cancel();
-        // JQuery.flashStyleClass("#" + redo.getElement().getId()+ " > a", "btn-custom-active");
-				onRedo();
+        if (!_noteAppFocused()) {
+          event.cancel();
+          // JQuery.flashStyleClass("#" + redo.getElement().getId()+ " > a", "btn-custom-active");
+          onRedo();
+        }
       }
     }
   }
+
+  private native boolean _noteAppFocused()/*-{
+    return $wnd.isNoteAppFocused()
+  }-*/;
 
 	private native void handleButtons(ToolBar me, Element freehand, Element undo, Element redo)/*-{
 		$wnd.Hammer(freehand).on('tap', function() {
