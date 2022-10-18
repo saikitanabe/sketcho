@@ -221,7 +221,7 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
   	if (surface.getEditorContext().isTrue(EditorProperty.START_SELECTION_TOOL)) {
   		return true;
   	}
-  	if (GlobalState.isAddSlideMode()) {
+  	if (GlobalState.isSelectionModeOn()) {
   		return true;
   	}
   	return keys == IGraphics.SHIFT ? true : false;
@@ -338,6 +338,8 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 			  // }
 			}
 		}
+
+    surface.getSelectionHandler().fireSelectionEnd();
 	}
 
 	@Override
@@ -350,7 +352,6 @@ public class LassoSelectionHandler implements MouseDiagramHandler {
 
 		if (isLassoing && !GlobalState.isAddSlideMode()) {
 			selectItems(point);
-			
 			
 			if (surface.getSelectionHandler().getLastMultimodeSelectedDiagram() != null) {
 				Set<Diagram> selected = surface.getSelectionHandler().getSelectedItems();

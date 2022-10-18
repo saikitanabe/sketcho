@@ -105,7 +105,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMo
     mouseDown = keys == IGraphics.SHIFT ? false : true;
     if (mouseDown) {
       // disable background move if slide mode
-      mouseDown = !GlobalState.isAddSlideMode();
+      mouseDown = !GlobalState.isSelectionModeOn();
     }
     if (!surface.isVerticalDrag()) {
     	prevX = point.getScreenX();

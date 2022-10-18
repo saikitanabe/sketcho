@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.gwt.core.client.JsArrayString;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -252,6 +253,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
       }
 
 			surface.getEditorContext().getEventBus().fireEvent(new SelectionMouseUpEvent(selected.toArray(diagrams), lastSelected));
+      fireSelectionEnd();
 		}
 		currentHandler = null;
 	}
@@ -715,6 +717,19 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   	diagrams.add(diagram);
     selectionHandlers.fireSelection(diagrams);
     surface.getEditorContext().getEventBus().fireEvent(new SelectionEvent());
+  }
+
+  public void fireSelectionEnd() {
+    JsArrayString items = JavaScriptObject.createArray().cast();
+
+    for (Diagram d : getSelectedItems()) {
+      if (d.getDiagramItem() != null &&
+        !"".equals(d.getDiagramItem().getClientId())) {
+          items.push(d.getDiagramItem().getClientId());
+        }
+    }
+
+    GlobalState.notifySelected(items, "select_end");
   }
   
   public Diagram getLastMultimodeSelectedDiagram() {
