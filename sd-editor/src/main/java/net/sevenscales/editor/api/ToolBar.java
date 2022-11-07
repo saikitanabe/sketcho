@@ -43,6 +43,9 @@ public class ToolBar extends Composite {
 		freehand.setTitle("Freehand | F");
 		map.setId("tip-map");
 
+    undo.setId("undo-btn");
+    redo.setId("redo-btn");
+
 		surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
 			@Override
 			public void on(FreehandModeChangedEvent event) {
