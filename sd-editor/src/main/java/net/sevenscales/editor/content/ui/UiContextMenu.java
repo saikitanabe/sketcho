@@ -112,6 +112,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 	// @UiField AnchorElement annotate;
 	// @UiField AnchorElement unannotate;
 	@UiField AnchorElement addlink;
+	@UiField AnchorElement copyShapeLink;
 	@UiField AnchorElement openlink;
 	@UiField AnchorElement textSize;
 	@UiField AnchorElement layersMenuButton;
@@ -342,6 +343,15 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 			}
 		});
 
+		new FastElementButton(copyShapeLink).addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				stopEvent(event);
+
+        copySelectedShapeLinkToClipboard();
+			}
+		});
+
 		new FastElementButton(openlink).addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -410,6 +420,10 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		tapRectifiedArrow(rectifiedArrow, this);
 		tapGroup(group, this);
   }
+
+  private native void copySelectedShapeLinkToClipboard()/*-{
+    return $wnd.copySelectedShapeLinkToClipboard();
+  }-*/;
 
   private void supportPointerEvents() {
 		surface.addDomHandler(new PointerDownHandler() {

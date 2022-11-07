@@ -73,6 +73,11 @@
 				<!-- <i class="context-icon-link2"></i> -->
         <svg class='sprite-menu-ico-tiny wht stroke'><use xlink:href='#context-menu--link' /></svg>
 			</a>
+ 			<a ui:field="copyShapeLink" title="Copy Shape Link" class="btn btn-custom btn-context-menu tooltipper"
+      data-clipboard-text="hops keikkaa">
+				<!-- <i class="context-icon-link2"></i> -->
+        <svg class='sprite-menu-ico-tiny'><use xlink:href='#icons-keep--shapelink' /></svg>
+			</a>
  			<a ui:field="openlink" title="Open/Edit Link" class="btn btn-custom btn-context-menu tooltipper">
 				<!-- <i class="context-icon-link2"></i> -->
         <svg class='sprite-menu-ico-tiny wht stroke'><use xlink:href='#context-menu--link' /></svg>
