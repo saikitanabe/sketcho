@@ -61,8 +61,8 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
   private double initialDistance;
   private boolean pinching;
 
-  // private SimplePanel scaleSlider;
-	// private SimplePanel innerScaleSlider;
+  private SimplePanel scaleSlider;
+	private SimplePanel innerScaleSlider;
 	private BirdsEye birdsEye;
 	private int deltaSum = 0;
 	private boolean wheel;
@@ -94,8 +94,8 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 		this.editorContext = surface.getEditorContext();
 		
 		// just pinch is used
-		// createVisibleSlider();
-    // innerScaleSlider.setVisible(!UiUtils.isMobile());
+		createVisibleSlider();
+    innerScaleSlider.setVisible(!UiUtils.isMobile());
     
     if (PointerEventsSupport.isSupported()) {
       supportPointerEvents();
@@ -415,7 +415,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
   }-*/;
   
   private void userMessagePropsStream(int extraHeight) {
-    // this.scaleSlider.getElement().getStyle().setTop(58 + extraHeight, Unit.PX);
+    this.scaleSlider.getElement().getStyle().setTop(58 + extraHeight, Unit.PX);
   }
 
 	private boolean freehandMode() {
@@ -425,8 +425,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
   public void scaleToIndex(int index, boolean wheel) {
     currentIndex = index;
     this.wheel = wheel;
-    // _setSliderValue(innerScaleSlider.getElement(), currentIndex);
-    scale(index);
+    _setSliderValue(innerScaleSlider.getElement(), currentIndex);
     this.wheel = false;
   }
 
@@ -447,20 +446,20 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 		return Constants.ZOOM_DEFAULT_INDEX;
   }
 
-	// private void createVisibleSlider() {
-	// 	this.scaleSlider = new SimplePanel();
-	// 	scaleSlider.setStyleName("scaleSlider");
-	// 	scaleSlider.getElement().setTitle("Zoom Out - | Zoom In +");
-  //   EffectHelpers.tooltip(scaleSlider.getElement(), "right");
+	private void createVisibleSlider() {
+		this.scaleSlider = new SimplePanel();
+		scaleSlider.setStyleName("scaleSlider");
+		scaleSlider.getElement().setTitle("Zoom Out - | Zoom In +");
+    EffectHelpers.tooltip(scaleSlider.getElement(), "right");
 
-	// 	this.innerScaleSlider = new SimplePanel();
-	// 	innerScaleSlider.getElement().setId("innerScaleSlider");
-	// 	scaleSlider.setWidget(innerScaleSlider);
+		this.innerScaleSlider = new SimplePanel();
+		innerScaleSlider.getElement().setId("innerScaleSlider");
+		scaleSlider.setWidget(innerScaleSlider);
 		
-	// 	editorContext.registerAndAddToRootPanel(scaleSlider);
-	// 	logger.debug("innerScaleSlider.getElement() {}", innerScaleSlider.getElement());
-	// 	_slideElement(innerScaleSlider.getElement(), this);
-	// }
+		editorContext.registerAndAddToRootPanel(scaleSlider);
+		logger.debug("innerScaleSlider.getElement() {}", innerScaleSlider.getElement());
+		_slideElement(innerScaleSlider.getElement(), this);
+	}
 
 	/**
 	 * Halts surface touch events, otherwise e.g. background move will continue
@@ -472,7 +471,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
     logger.debug("TouchHelpers startPinching {} start {} mobile {}", Math.abs(distance - initialDistance), start, UiUtils.isMobile());
 
     if (!this.pinching && start) {
-      // EffectHelpers.fadeOut(innerScaleSlider.getElement());
+      EffectHelpers.fadeOut(innerScaleSlider.getElement());
       currentDistance = distance;
       firePinchStarted();
       this.pinching = true;
@@ -485,7 +484,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 	}
 
 	private void endPinch() {
-		// EffectHelpers.fadeIn(innerScaleSlider.getElement());
+		EffectHelpers.fadeIn(innerScaleSlider.getElement());
     surface.getEditorContext().getEventBus().fireEvent(new PinchZoomEvent(false));
     pinching = false;
 	}
@@ -516,8 +515,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 		if (currentIndex != index && currentIndex < Constants.ZOOM_FACTORS.length && currentIndex >= 0) {
 			logger.debug("set slider to value {}...", currentIndex);
 			this.wheel = wheel;
-			// _setSliderValue(innerScaleSlider.getElement(), currentIndex);
-      scale(currentIndex);
+			_setSliderValue(innerScaleSlider.getElement(), currentIndex);
 			this.wheel = false;
 
 			// editorContext.getEventBus().fireEvent(new SurfaceScaleEvent(currentIndex, wheel));
@@ -542,79 +540,87 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 			// that use key press events, focus steals press events and should
 			// handle keydown, but e.g. +, - signs have different keycodes on 
 			// different browsers
-			// _unfocusEverything();
+			_unfocusEverything();
   	}
   	fireEvent = true;
   }
 
-  // private native void _unfocusEverything()/*-{
-	// 	if ("activeElement" in $wnd.document) {
-  //   	$wnd.document.activeElement.blur()
-  //   	$wnd.globalStreams.closeEditorStream.push()
-	// 	}
-  // }-*/;
+  private native void _unfocusEverything()/*-{
+		if ("activeElement" in $wnd.document) {
+    	$wnd.document.activeElement.blur()
+    	$wnd.globalStreams.closeEditorStream.push()
+		}
+  }-*/;
 
 	@Override
   public int getSliderValue() {
-	  // return _sliderValue(innerScaleSlider.getElement());
-    return currentIndex;
+	  return _sliderValue(innerScaleSlider.getElement());
 	}
   
-  // private native int _sliderValue(JavaScriptObject element)/*-{
-  //   var jq = null;
-  //   if (typeof $wnd.jq172 == "function") {
-  //     jq = $wnd.jq172;
-  //   } else if (typeof $wnd.jQuery == "function") {
-  //     jq = $wnd.jQuery;
-  //   }
-  // 	return jq(element).slider("value");
-  // }-*/;
+  private native int _sliderValue(JavaScriptObject element)/*-{
+    var jq = null;
+    if (typeof $wnd.jq172 == "function") {
+      jq = $wnd.jq172;
+    } else if (typeof $wnd.jQuery == "function") {
+      jq = $wnd.jQuery;
+    }
+  	return jq(element).slider("value");
+  }-*/;
   
-  // private native void _setSliderValue(JavaScriptObject element, int index)/*-{
-  //   var jq = null;
-  //   if (typeof $wnd.jq172 == "function") {
-  //     jq = $wnd.jq172;
-  //   } else if (typeof $wnd.jQuery == "function") {
-  //     jq = $wnd.jQuery;
-  //   }
+  private native void _setSliderValue(JavaScriptObject element, int index)/*-{
+    var jq = null;
+    if (typeof $wnd.jq172 == "function") {
+      jq = $wnd.jq172;
+    } else if (typeof $wnd.jQuery == "function") {
+      jq = $wnd.jQuery;
+    }
     
-	// 	jq(element).slider('value', index);
-  // }-*/;
+		jq(element).slider('value', index);
+  }-*/;
 
-  // private native void _slideElement(JavaScriptObject element, ScaleSlider me)/*-{
-  // 	var _jquery = null
-  // 	if (typeof $wnd.jq172 == "function") {
-  // 		_jquery = $wnd.jq172
+  private native void _slideElement(JavaScriptObject element, ScaleSlider me)/*-{
+  	var _jquery = null
+  	if (typeof $wnd.jq172 == "function") {
+  		_jquery = $wnd.jq172
 
-	//   	$wnd.jq172(element).slider({ 
-	//   		orientation: 'vertical', 
-	//   		max: @net.sevenscales.domain.constants.Constants::ZOOM_FACTORS.length - 1, 
-	//   		value: @net.sevenscales.domain.constants.Constants::ZOOM_DEFAULT_INDEX,
-	//   		change: function(e, ui) {
-	//   				me.@net.sevenscales.editor.content.ui.ScaleSlider::scale(I)(ui.value);
-	//         }
-	//   		});
-  // 	} else if (typeof $wnd.jQuery == "function")  {
-  // 		_jquery = $wnd.jQuery
-	//   	$wnd.jQuery(element).slider({ 
-	//   		orientation: 'vertical', 
-	//   		max: @net.sevenscales.domain.constants.Constants::ZOOM_FACTORS.length - 1, 
-	//   		value: @net.sevenscales.domain.constants.Constants::ZOOM_DEFAULT_INDEX,
-	//   		change: function(e, ui) {
-	//   				me.@net.sevenscales.editor.content.ui.ScaleSlider::scale(I)(ui.value);
-	//         }
-	//   		});
-  // 	}
+	  	$wnd.jq172(element).slider({ 
+	  		orientation: 'vertical', 
+	  		max: @net.sevenscales.domain.constants.Constants::ZOOM_FACTORS.length - 1, 
+	  		value: @net.sevenscales.domain.constants.Constants::ZOOM_DEFAULT_INDEX,
+	  		change: function(e, ui) {
+	  				me.@net.sevenscales.editor.content.ui.ScaleSlider::scale(I)(ui.value);
+	        }
+	  		});
+  	} else if (typeof $wnd.jQuery == "function")  {
+  		_jquery = $wnd.jQuery
+	  	$wnd.jQuery(element).slider({ 
+	  		orientation: 'vertical', 
+	  		max: @net.sevenscales.domain.constants.Constants::ZOOM_FACTORS.length - 1, 
+	  		value: @net.sevenscales.domain.constants.Constants::ZOOM_DEFAULT_INDEX,
+	  		change: function(e, ui) {
+	  				me.@net.sevenscales.editor.content.ui.ScaleSlider::scale(I)(ui.value);
+	        }
+	  		});
+  	}
 
-	// 	var $e = _jquery(element)
-  // 	var $a = $e.find('a')
-  // 	if ($a) {
-  // 		$e.attr('tabIndex', '-1')
-  // 		$a.attr('tabIndex', '-1')
-  // 		$a.attr('href', '')
-  // 	}
+		var $e = _jquery(element)
+  	var $a = $e.find('a')
+  	if ($a) {
+  		$e.attr('tabIndex', '-1')
+  		$a.attr('tabIndex', '-1')
+  		$a.attr('href', '')
+  	}
   	
-	// }-*/;
+  // 	if (typeof $wnd.jq172 == "function") {
+	 //  	$wnd.jq172(element).on( "slidechange", function(event, ui) {
+	 //  		me.@net.sevenscales.editor.content.ui.ScaleSlider::scale(I)
+		// 	    ($wnd.jQuery(element).slider("value"));
+		// 	});
+  // 	} else if (typeof $wnd.jQuery == "function") $wnd.jQuery(element).on( "slidechange", function(event, ui) {
+  // 		me.@net.sevenscales.editor.content.ui.ScaleSlider::scale(I)
+		//     ($wnd.jQuery(element).slider("value"));
+		// });
+	}-*/;
 
   public void reset() {
     scaleToIndex(Constants.ZOOM_DEFAULT_INDEX, false);
