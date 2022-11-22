@@ -18,6 +18,10 @@ import net.sevenscales.editor.content.ClientIdHelpers.UniqueChecker;
 public class BoardDocument implements UniqueChecker {
 	private static final SLogger logger = SLogger.createLogger(BoardDocument.class);
 
+  static {
+    SLogger.addFilter(BoardDocument.class);
+  }
+
 	private List<IDiagramItemRO> document;
 	private IDiagramItem searchHelper;
 	private String boardId;
@@ -57,7 +61,7 @@ public class BoardDocument implements UniqueChecker {
 		}
 		logger.debug("BoardDocument.apply... done");
 	}
-
+  
 	/**
 	* Possible maybe to calculate by modify operations, perhaps
 	* minus if element is removed.
@@ -79,8 +83,8 @@ public class BoardDocument implements UniqueChecker {
 		merge(operation, items, document);
 		// logger.debug("Document AFTER apply({}) DOCUMENT: {}", logicalName, document);
 	}
-	
-	public int size() {
+
+  public int size() {
 		return document.size();
 	}
 	

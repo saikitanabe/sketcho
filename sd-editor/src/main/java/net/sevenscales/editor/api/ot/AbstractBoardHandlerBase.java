@@ -65,6 +65,8 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
 	static {
 		EMPTY_LIST = new ArrayList<ApplyOperation>();
 		EMPTY_ITEM_LIST = new ArrayList<IDiagramItemRO>();
+
+    SLogger.addFilter(AbstractBoardHandlerBase.class);
 	}
 	
 	public AbstractBoardHandlerBase(String boardName, Context context, EditorContext editorContext) {
@@ -299,16 +301,28 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
 
     Promise.all(promises).then(p -> {
       List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.diagramsToItems(diagrams);
+
+      // packJson to get only modified fields of each object, client id is preserved.
+      JSONArray diff = null;
+      if (operation.equals(OTOperation.MODIFY.getValue())) {
+        diff = JSONPack.diff(operationItems, graphicalDocumentCache.getDocument());
+      }
+
+      if (diff != null && diff.size() == 0) {
+        logger.debug("modify operation no diff => don't change anything");
+        return;
+      }
+
       applyLocalSendOperation(operation, operationItems);
       if (notUndoOrRedo(operation)) {
         // undo and redo are always translated to change operation (insert, move, delete...)
         // client is responsible to do undo/redo operations, for server those are just normal
         // change operations
-        sendLocalOperation(boardName, originator, operation, operationItems);
+        sendLocalOperation(boardName, originator, operation, operationItems, diff);
       }
     });
 	}
-	protected abstract void sendLocalOperation(String name, String originator, String operation, List<? extends IDiagramItemRO> operationItems);
+	protected abstract void sendLocalOperation(String name, String originator, String operation, List<? extends IDiagramItemRO> operationItems, JSONArray diff);
 
 //	protected abstract void sendLocalOperation(String boardName, String originator, String operation, List<Diagram> diagrams);
 	

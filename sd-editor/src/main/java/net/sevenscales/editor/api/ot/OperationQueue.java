@@ -73,7 +73,7 @@ public class OperationQueue {
 		}
 		public SendOperation(OTOperation operation, JSONArray operationJson, String guid) {
 			this.operation = operation;
-			this.operationJson = operationJson;
+			this.operationJson = JSONPack.packOperation(operation, operationJson);
 			this.guid = guid;
 			// when guid is added
 			this.gtime = System.currentTimeMillis();
