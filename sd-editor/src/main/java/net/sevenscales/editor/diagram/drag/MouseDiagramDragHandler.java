@@ -586,6 +586,10 @@ public class MouseDiagramDragHandler implements MouseDiagramHandler, DragState {
 		dragHandlers.add(handler);
 	}
 
+	public void removeDragHandler(DiagramDragHandler handler) {
+		dragHandlers.remove(handler);
+	}
+
 	public Set<DiagramDragHandler> getDragHandlers() {
 		return dragHandlers;
 	}

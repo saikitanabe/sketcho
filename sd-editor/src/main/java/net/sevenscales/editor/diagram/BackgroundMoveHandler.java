@@ -21,7 +21,6 @@ import net.sevenscales.editor.gfx.domain.IGroup;
 public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMoveHandler {
 	private static SLogger logger = SLogger.createLogger(BackgroundMoveHandler.class);
 
-  private List<Diagram> diagrams;
   private GridUtils gridUtils = new GridUtils();
   private int prevX;
   private int prevY;
@@ -37,8 +36,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMo
 	
 //	private DiagramHelpers.ComplexElementHandler complexElementHandler = new DiagramHelpers.ComplexElementHandler();
 
-  public BackgroundMoveHandler(List<Diagram> diagrams, ISurfaceHandler surface) {
-    this.diagrams = diagrams;
+  public BackgroundMoveHandler(ISurfaceHandler surface) {
     this.surface = surface;
     
     listenPinchZoom();

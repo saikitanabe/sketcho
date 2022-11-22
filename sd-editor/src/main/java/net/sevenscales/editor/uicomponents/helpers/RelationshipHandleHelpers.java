@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JavaScriptObject;
+
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.utils.SLogger;
@@ -47,6 +50,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
   private List<CircleElement> bendHandles = new ArrayList<CircleElement>();
   private List<Integer> points = new ArrayList<Integer>();
   private ISurfaceHandler surface;
+  private JsArray cancels = JavaScriptObject.createArray().cast();
 
   private Relationship2 parentRelationship;
   private int debugIdIndex;
@@ -62,6 +66,12 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     }
   }
 
+  private UndoEventHandler undoHandler = new UndoEventHandler() {
+    public void on(UndoEvent event) {
+      forceHide();
+    }
+  };
+
   private RelationshipHandleHelpers(ISurfaceHandler surface, Relationship2 parentRelationship) {
     this.surface = surface;
     // set initial relationship; since parentRelationship should not be null
@@ -71,13 +81,10 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     // to follow if parent relationship is dragged => update handles position
     surface.addDragHandler(this);
 
-    surface.getEditorContext().getEventBus().addHandler(UndoEvent.TYPE, new UndoEventHandler() {
-      public void on(UndoEvent event) {
-        forceHide();
-      }
-    });
+    surface.getEditorContext().getEventBus().addHandler(UndoEvent.TYPE, undoHandler);
 
-    handleItemRealTimeModify(this);
+    // TODO handle cancels on release
+    this.cancels = handleItemRealTimeModify(this);
 
     initDefaults();
 
@@ -85,10 +92,13 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     forceHide();
   }
 
-	private native void handleItemRealTimeModify(RelationshipHandleHelpers me)/*-{
-		$wnd.globalStreams.dataItemModifyStream.onValue(function(dataItem) {
+	private native JsArray handleItemRealTimeModify(RelationshipHandleHelpers me)/*-{
+    var result = []
+		result.push($wnd.globalStreams.dataItemModifyStream.onValue(function(dataItem) {
 			me.@net.sevenscales.editor.uicomponents.helpers.RelationshipHandleHelpers::onItemRealTimeModify(Lnet/sevenscales/domain/IDiagramItemRO;)(dataItem)
-		})
+		}))
+
+    return result
 	}-*/;
 
 	private void onItemRealTimeModify(IDiagramItemRO item) {
@@ -688,7 +698,7 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
    * Removes this global handler from memory.
    */
   @Override
-  public void release() {
+  public void release(ISurfaceHandler surface) {
     for (CircleElement h : handles) {
       h.removeFromParentForce();
     }
@@ -696,10 +706,22 @@ public class RelationshipHandleHelpers implements MouseDiagramHandler, DiagramPr
     for (CircleElement b : bendHandles) {
       b.removeFromParentForce();
     }
+
+    handles.clear();
+    bendHandles.clear();
     
     parentRelationship = null;
-    instances.clear();
+    instances.remove(surface);
+
+    surface.getEditorContext().getEventBus().removeHandler(UndoEvent.TYPE, undoHandler);
+    cancelJsFunctions(this.cancels);
   }
+
+  private native void cancelJsFunctions(JsArray cancels)/*-{
+    for (var i = 0; i < cancels.length; ++i) {
+      cancels[i]();
+    }
+  }-*/;  
 
   @Override
   public void remove(CircleElement ce) {

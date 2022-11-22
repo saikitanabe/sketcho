@@ -39,6 +39,7 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   void removeFromParent();
   void removeFromParentWithoutConnections();
   boolean isRemoved();
+  void release();
   /**
   * Not deleting whole element, but part of it, so it is actually a modify.
   * E.g. relationship point deletion is relationship modify not delete actual relationship.

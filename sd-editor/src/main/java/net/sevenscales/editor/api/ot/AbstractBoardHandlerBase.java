@@ -7,6 +7,7 @@ import java.util.logging.Level;
 
 import com.google.gwt.logging.client.LogConfiguration;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.json.client.JSONArray;
 
 import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.IDiagramItemRO;
@@ -471,6 +472,7 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
     getGraphicalViewDocument().clear();
   }
 	  
+  // NOTE all global elements need to release all listeners
   public void closeGlobalElements() {
     List<IGlobalElement> globalElements = new ArrayList<IGlobalElement>();
     globalElements.add(ConnectionHelpers.getIfAny(getEditorContent().getModelingPanel().getSurface()));
@@ -487,7 +489,7 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
   private void release(List<IGlobalElement> globalElements) {
     for (IGlobalElement g : globalElements) {
       if (g != null) {
-        g.release();
+        g.release(getEditorContent().getModelingPanel().getSurface());
       }
     }
   }

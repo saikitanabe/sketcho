@@ -6,16 +6,18 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.diagram.DiagramSearch;
 import net.sevenscales.editor.uicomponents.CircleElement;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
 public class SurfaceDiagramSearch implements DiagramSearch {
-	private List<Diagram> diagrams;
+	// private List<Diagram> diagrams;
+  private ISurfaceHandler surface;
 
-	public SurfaceDiagramSearch(List<Diagram> diagrams) {
-		this.diagrams = diagrams;
+	public SurfaceDiagramSearch(ISurfaceHandler surface) {
+		this.surface = surface;
 	}
 	
 	@Override
@@ -24,7 +26,7 @@ public class SurfaceDiagramSearch implements DiagramSearch {
 			return null;
 		}
 		
-		for (Diagram d : diagrams) {
+		for (Diagram d : surface.getDiagrams()) {
 			if ( !(d instanceof CircleElement) && d.getDiagramItem() != null && clientId.equals(d.getDiagramItem().getClientId())) {
 				return d;
 			}
@@ -40,7 +42,7 @@ public class SurfaceDiagramSearch implements DiagramSearch {
 			return result;
 		}
 
-		for (Diagram d : diagrams) {
+		for (Diagram d : surface.getDiagrams()) {
 			IDiagramItem di = d.getDiagramItem();
 			if (di != null && elementType.equals(di.getType())) {
 				result.add(d);
@@ -56,7 +58,7 @@ public class SurfaceDiagramSearch implements DiagramSearch {
 			return null;
 		}
 		
-		for (Diagram d : diagrams) {
+		for (Diagram d : surface.getDiagrams()) {
 			if (d instanceof Relationship2) {
 				Relationship2 r = (Relationship2) d;
 				if (clientId.equals(r.getStartClientId())) {

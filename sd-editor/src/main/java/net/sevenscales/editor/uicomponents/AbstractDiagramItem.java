@@ -509,6 +509,16 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     surface.addKeyEventHandler(this);
   }
 
+  public void release() {
+    TextElementFormatUtil tf = getTextFormatter();
+    if (tf != null) {
+      tf.release();
+    }
+
+    // fix memory leak of a TextForeignObject
+    surface.removeKeyEventHandler(this);
+  }
+
   public void remove() {
     surface.getSelectionHandler().remove(this, true);
   }

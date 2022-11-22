@@ -65,7 +65,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   }
 	
 //	private Diagram mouseDownSender = null;
-	private List<Diagram> diagrams;
+	// private List<Diagram> diagrams;
 	private SelectionHandlerCollection selectionHandlers;
 	private ISurfaceHandler surface;
 	private Set<Diagram> tmpSelectedItems;
@@ -81,9 +81,9 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   private List<GroupSelection> groupSelections;
   private boolean preventSelect;
 	
-	public SelectionHandler(ISurfaceHandler surface, List<Diagram> diagrams, Set<DiagramDragHandler> dragHandlers, MouseState mouseState) {
+	public SelectionHandler(ISurfaceHandler surface, Set<DiagramDragHandler> dragHandlers, MouseState mouseState) {
 		this.surface = surface;
-		this.diagrams = diagrams;
+		// this.diagrams = diagrams;
 		this.dragHandlers = dragHandlers;
     this.mouseState = mouseState;
 		this.selectionHandlers = new SelectionHandlerCollection();
@@ -307,7 +307,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
       }
 
       Diagram[] items = new Diagram[]{};
-      items = diagrams.toArray(items);
+      items = surface.getDiagrams().toArray(items);
       // clear to be removed so hooks are valid in this cycle
       clearToBeRemovedCycle();
       Set<Diagram> removed = new HashSet<Diagram>();
@@ -535,7 +535,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 
   public void moveSelected(int dx, int dy) {
   	MatrixPointJS dp = MatrixPointJS.createScaledPoint(dx, dy, surface.getScaleFactor());
-    for (Diagram d : diagrams) {
+    for (Diagram d : surface.getDiagrams()) {
       if (d.isSelected()) {
         d.applyTransform(dp.getDX(), dp.getDY());
         moveDiagram(d, dx, dy);
@@ -585,8 +585,8 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   
   if (!shiftOn && !selected) {
     // remove other selected items, because shift is not pressed and current element is not selected        
-    for (int i = 0; i < diagrams.size(); ++i) {
-      Diagram d = (Diagram) diagrams.get(i);
+    for (int i = 0; i < surface.getDiagrams().size(); ++i) {
+      Diagram d = (Diagram) surface.getDiagrams().get(i);
       // if d equals to sender it has been just selected 
       // if sender differs, need to check that owner component
       // is not d
@@ -778,7 +778,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   
   public Set<Diagram> getSelectedItems() {
     tmpSelectedItems.clear();
-    for (Diagram d : diagrams) {
+    for (Diagram d : surface.getDiagrams()) {
       if (d.isSelected()) {
         tmpSelectedItems.add(d);
       }
@@ -938,7 +938,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   */
   public Diagram getOnlyOneSelected() {
     Diagram result = null;
-    for (Diagram d : diagrams) {
+    for (Diagram d : surface.getDiagrams()) {
       if (d.isSelected()) {
         if (result != null) {
           // more than one is selected
@@ -956,9 +956,9 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
     // Debug.callstack("SelectionHandler unselectAll...");
 
     logger.start("unselectAll");
-    for (int i = 0; i < diagrams.size(); ++i) {
+    for (int i = 0; i < surface.getDiagrams().size(); ++i) {
       // nobody handled, so unselect all
-      Diagram d = (Diagram) diagrams.get(i);
+      Diagram d = (Diagram) surface.getDiagrams().get(i);
       if (d.isSelected()) {
         d.unselect();
       }
@@ -1013,7 +1013,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
 
   public int size() {
     int result = 0;
-    for (Diagram d : diagrams) {
+    for (Diagram d : surface.getDiagrams()) {
       if (d.isSelected()) {
         ++result;
       }

@@ -291,6 +291,8 @@ public class UnAttachedSurface extends SimplePanel implements ISurfaceHandler {
 	public void addKeyEventHandler(KeyEventListener keyEventHandler) {
 
 	}
+  public void removeKeyEventHandler(KeyEventListener keyEventHandler) {
+  }  
 	public void makeDraggable(Diagram diagram) {
 
 	}

@@ -57,7 +57,7 @@ public class MouseDiagramHandlerManager implements
 	private DoubleTapHandler doubleTapHandler;
 	private boolean cancelMouseDown;
 
-	public MouseDiagramHandlerManager(ISurfaceHandler surface, List<Diagram> diagrams, boolean editable, 
+	public MouseDiagramHandlerManager(ISurfaceHandler surface, boolean editable, 
 	    IModeManager modeManager, IBirdsEyeView birdsEyeView) {
 		this.surface = surface;
 	  this.editable = editable;
@@ -81,10 +81,10 @@ public class MouseDiagramHandlerManager implements
 				selectionHandler.movedMaybeGroup(dx, dy);
       }
     });
-    selectionHandler = new SelectionHandler(surface, diagrams, dragHandler.getDragHandlers(), this);
+    selectionHandler = new SelectionHandler(surface, dragHandler.getDragHandlers(), this);
     doubleTapHandler = new DoubleTapHandler(editable, surface, selectionHandler, this);
 		resizeHandler = new MouseDiagramResizeHandler(this, surface, modeManager);
-		backgroundMoveHandler = createBackgroundMoveHandler(surface, diagrams);
+		backgroundMoveHandler = createBackgroundMoveHandler(surface);
 		lassoSelectionHandler = new LassoSelectionHandler(surface, this);
 		if (ISurfaceHandler.DRAWING_AREA.equals(surface.getName())) {
 			// free hand drawing is not possible on library area
@@ -117,8 +117,7 @@ public class MouseDiagramHandlerManager implements
   }
 
   private IBackgroundMoveHandler createBackgroundMoveHandler(
-    ISurfaceHandler surface,
-    List<Diagram> diagrams
+    ISurfaceHandler surface
   ) {
 
     if (backgroundMoveHandler != null) {
@@ -126,10 +125,10 @@ public class MouseDiagramHandlerManager implements
     }
 
     if (ReactAPI.isNav2()) {
-      return new BackgroundMoveHandlerV2(diagrams, surface);
+      return new BackgroundMoveHandlerV2(surface);
     }
 
-    return new BackgroundMoveHandler(diagrams, surface);
+    return new BackgroundMoveHandler(surface);
   }
   
   private ShowDiagramPropertyTextEditorEventHandler showEditorHandler = 
@@ -169,7 +168,7 @@ public class MouseDiagramHandlerManager implements
 	}-*/;
 
   private void updateNavigation() {
-    backgroundMoveHandler = createBackgroundMoveHandler(surface, surface.getDiagrams());
+    backgroundMoveHandler = createBackgroundMoveHandler(surface);
   }
 
 	private void editable(boolean value) {
@@ -486,6 +485,10 @@ public class MouseDiagramHandlerManager implements
 
 	public void addDragHandler(DiagramDragHandler handler) {
 		dragHandler.addDragHandler(handler);
+	}
+
+	public void removeDragHandler(DiagramDragHandler handler) {
+		dragHandler.removeDragHandler(handler);
 	}
 
 	public void addSelectionListener(DiagramSelectionHandler handler) {

@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JavaScriptObject;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.IDiagramItemRO;
@@ -40,8 +42,8 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 	private ILine line5;
 	private ILine line6;
 	private AbstractDiagramItem parent;
-
 	private ISurfaceHandler surface;
+  private JsArray cancels = JavaScriptObject.createArray().cast();
 	
 	private static Map<ISurfaceHandler, ResizeHelpers> instances;
 	
@@ -83,6 +85,13 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 //	private ResizeHelpers(AbstractDiagramItem parent, List<IShape> shapes, int indent) {
 //		this(parent, shapes, indent, indent);
 //	}
+
+  private UndoEventHandler undoHandler = new UndoEventHandler() {
+    public void on(UndoEvent event) {
+      hide();
+    }
+  };
+
 	private ResizeHelpers(ISurfaceHandler surface) {
 		this.surface = surface;
 		line4 = createLine(WHITE_LINE, 2);
@@ -117,11 +126,7 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 		resizeElement.addGraphicsMouseDownHandler(this);
     resizeElement.addGraphicsMouseUpHandler(this);
 
-    surface.getEditorContext().getEventBus().addHandler(UndoEvent.TYPE, new UndoEventHandler() {
-      public void on(UndoEvent event) {
-        hide();
-      }
-    });
+    surface.getEditorContext().getEventBus().addHandler(UndoEvent.TYPE, undoHandler);
 
     hide();
     
@@ -135,13 +140,18 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 //    shapes.add(line6);
     
 //    setShape(parent.getLeft(), parent.getTop(), parent.getWidth(), parent.getHeight());
-		listen(this);
+		this.cancels = listen(this);
 	}
 
-	private native void listen(ResizeHelpers me)/*-{
-		$wnd.globalStreams.dataItemDeleteStream.onValue(function(dataItem) {
+	private native JsArray listen(ResizeHelpers me)/*-{
+
+    var result = []
+
+		result.push($wnd.globalStreams.dataItemDeleteStream.onValue(function(dataItem) {
 			me.@net.sevenscales.editor.uicomponents.helpers.ResizeHelpers::onItemRealTimeDelete(Lnet/sevenscales/domain/IDiagramItemRO;)(dataItem)
-		})
+		}))
+
+    return result
 	}-*/;
 
 	private void onItemRealTimeDelete(IDiagramItemRO item) {
@@ -442,7 +452,7 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
 	}
 
   @Override
-  public void release() {
+  public void release(ISurfaceHandler surface) {
     resizeElement.remove(); 
     line1.remove();
     line2.remove();
@@ -452,16 +462,30 @@ public class ResizeHelpers implements GraphicsMouseDownHandler, GraphicsMouseUpH
     line5.remove();
     line6.remove();
     
-    resizeElement = null; 
-    line1 = null;
-    line2 = null;
-    line3 = null;
+    // do not null these, since release order matters and 
+    // some component might try to hide this release helper still
+    // having reference to is.
+    // resizeElement = null; 
+    // line1 = null;
+    // line2 = null;
+    // line3 = null;
     
-    line4 = null;
-    line5 = null;
-    line6 = null;
+    // line4 = null;
+    // line5 = null;
+    // line6 = null;
     
-    instances.clear();
+    instances.remove(surface);
+
+    this.parent = null;
+
+    surface.getEditorContext().getEventBus().removeHandler(UndoEvent.TYPE, undoHandler);
+    cancelJsFunctions(this.cancels);
   }
+
+  private native void cancelJsFunctions(JsArray cancels)/*-{
+    for (var i = 0; i < cancels.length; ++i) {
+      cancels[i]();
+    }
+  }-*/;
 
 }

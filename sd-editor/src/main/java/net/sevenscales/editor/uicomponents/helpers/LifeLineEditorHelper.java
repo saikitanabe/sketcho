@@ -62,7 +62,7 @@ public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
     public void hideGlobalElement() {
     }
     @Override
-    public void release() {
+    public void release(ISurfaceHandler surface) {
     }
   };
   
@@ -190,12 +190,11 @@ public class LifeLineEditorHelper implements ILifeLineEditor, DiagramProxy {
   }
 
   @Override
-  public void release() {
+  public void release(ISurfaceHandler surface) {
     startSelection.removeFromParent();
     startSelection = null;
     parent = null;   
-    instances.clear();
+    instances.remove(surface);
   }
-
 
 }

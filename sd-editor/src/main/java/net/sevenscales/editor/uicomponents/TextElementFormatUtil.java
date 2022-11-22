@@ -771,4 +771,8 @@ public class TextElementFormatUtil {
     textElement.setShapeSize(width, height);
   }
 
+  public void release() {
+    textElement.remove();
+  }
+
 }

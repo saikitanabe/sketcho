@@ -201,7 +201,7 @@ class SurfaceHandler extends SimplePanel implements
     // these are not needed if surface is not editable but to clarify code
     // these are allocated as well and only mouse and key events are not
     // observed
-    mouseDiagramManager = new MouseDiagramHandlerManager(this, diagrams, editable, modeManager, birdsEyeView);
+    mouseDiagramManager = new MouseDiagramHandlerManager(this, editable, modeManager, birdsEyeView);
 
     keyEventHandler = new KeyEventHandler(editable);
     
@@ -468,6 +468,7 @@ class SurfaceHandler extends SimplePanel implements
     diagrams.remove(diagram);
     mouseDiagramManager.diagramRemoved(diagram);
     IGroup group = diagram.getGroup(); 
+    diagram.release();
     if (group != null) {
       _removeShape(group.getContainer());
     } else {
@@ -707,6 +708,10 @@ class SurfaceHandler extends SimplePanel implements
   public void addKeyEventHandler(KeyEventListener keyEventHandler) {
     this.keyEventHandler.add(keyEventHandler);
   }
+
+  public void removeKeyEventHandler(KeyEventListener keyEventHandler) {
+    this.keyEventHandler.remove(keyEventHandler);
+  }
   
   public void reset() {
     for (int i = diagrams.size() - 1; i >= 0; --i) {
@@ -714,6 +719,7 @@ class SurfaceHandler extends SimplePanel implements
     }
     
     mouseDiagramManager.reset();
+    // this.diagrams = new DiagramDisplayOrderList();
     diagrams.clear();
   }
 
@@ -1544,7 +1550,7 @@ class SurfaceHandler extends SimplePanel implements
    * @return
    */
   public DiagramSearch createDiagramSearch() {
-    return new SurfaceDiagramSearch(diagrams);
+    return new SurfaceDiagramSearch(this);
   }
 
   @Override

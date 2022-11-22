@@ -34,7 +34,7 @@ public class TextElementHorizontalFormatUtil extends TextElementFormatUtil {
   public static int DEFAULT_TOP_MARGIN = 11 + 10;
 
   private double prevTextHeight = 0;
-  private IText text;
+  // private IText text;
   private String textAnchor;
 
 	public TextElementHorizontalFormatUtil(Diagram parent, HasTextElement hasTextElement, IGroup group, EditorContext editorContext) {

@@ -52,6 +52,10 @@ public class KeyEventHandler implements KeyEventListener {
     keyEventHandlers.add(keyEventHandler);
   }
 
+  public void remove(KeyEventListener keyEventHandler) {
+    keyEventHandlers.remove(keyEventHandler);
+  }
+
 //  public void onKeyDown(KeyDownEvent event) {
 //    for (KeyEventListener l : keyEventHandlers) {
 //      l.onKeyDown(event);

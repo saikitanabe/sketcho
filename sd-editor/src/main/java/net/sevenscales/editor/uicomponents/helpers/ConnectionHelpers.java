@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.JsArray;
+import com.google.gwt.core.client.JavaScriptObject;
+
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.editor.api.ISurfaceHandler;
@@ -71,6 +74,8 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 
 	private static final Color ON_COLOR = new Color(0x77, 0x77, 0x77, 1);
 	private boolean resizeOn;
+
+  private JsArray cancels = JavaScriptObject.createArray().cast();
 	
 	private static Map<ISurfaceHandler, IConnectionHelpers> instances;
 	
@@ -85,6 +90,78 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 
     // SLogger.addFilter(ConnectionHelpers.class);
 	}
+
+  private DiagramDragHandler dragHandler = new DiagramDragHandler() {
+    @Override
+    public void onDrag(Diagram sender, int dx, int dy) {
+//				if (sender != null && sender.equals(parent)) {
+//					setShape(parent.getLeft() + parent.getTransformX(), parent.getTop() + parent.getTransformY(), parent.getWidth(), parent.getHeight());
+//				}
+    }
+    
+    @Override
+    public boolean isSelected() {
+      return false;
+    }
+    
+    @Override
+    public void dragStart(Diagram sender) {
+      someElementIsDragged = true;
+      setVisibility(false);
+    }
+    
+    @Override
+    public void dragEnd(Diagram sender) {
+      someElementIsDragged = false;
+      // TODO doesn't place connection helpers always to correct place, better to hide...				
+      if (sender != null && sender.equals(parent)) {
+        setShape(parent.getLeft(), parent.getTop(), parent.getWidth(), parent.getHeight(), parent.getDiagramItem().getRotateDegrees());
+        setVisibility(true);
+      }
+    }
+  };
+
+  private EditDiagramPropertiesStartedEventHandler propsStartHandler = new EditDiagramPropertiesStartedEventHandler() {
+    @Override
+    public void on(EditDiagramPropertiesStartedEvent event) {
+      propertyEditorShown = true;
+      logger.debug("show editor {}", propertyEditorShown);
+      
+      if (event.getDiagram() != null) {
+        show(event.getDiagram());
+      }
+    }
+  };
+
+  private EditDiagramPropertiesEndedEventHandler propeEndHandler = new EditDiagramPropertiesEndedEventHandler() {
+    @Override
+    public void on(EditDiagramPropertiesEndedEvent event) {
+      propertyEditorShown = false;
+      logger.debug("show editor {}", propertyEditorShown);
+    }
+  };
+
+  private FreehandModeChangedEventHandler freehandHandler = new FreehandModeChangedEventHandler() {
+    public void on(FreehandModeChangedEvent event) {
+      freehandModeOn = event.isEnabled();
+      if (freehandModeOn) {
+        hide();
+      }
+    }
+  };
+
+  private UndoEventHandler undoHandler = new UndoEventHandler() {
+    public void on(UndoEvent event) {
+      hideForce();
+    }
+  };
+
+  private RotateEventHandler rotateHandler = new RotateEventHandler() {
+    @Override
+    public void on(RotateEvent event) {
+      hide();
+    }
+  };
 	
 	private ConnectionHelpers(ISurfaceHandler surface, IModeManager modeManager) {
 		this.surface = surface;
@@ -92,70 +169,15 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 		group = IShapeFactory.Util.factory(true).createGroup(surface.getInteractionLayer());
 		init();
 		
-		surface.getMouseDiagramManager().addDragHandler(new DiagramDragHandler() {
-			@Override
-			public void onDrag(Diagram sender, int dx, int dy) {
-//				if (sender != null && sender.equals(parent)) {
-//					setShape(parent.getLeft() + parent.getTransformX(), parent.getTop() + parent.getTransformY(), parent.getWidth(), parent.getHeight());
-//				}
-			}
-			
-			@Override
-			public boolean isSelected() {
-				return false;
-			}
-			
-			@Override
-			public void dragStart(Diagram sender) {
-				someElementIsDragged = true;
-				setVisibility(false);
-			}
-			
-			@Override
-			public void dragEnd(Diagram sender) {
-				someElementIsDragged = false;
-				// TODO doesn't place connection helpers always to correct place, better to hide...				
-				if (sender != null && sender.equals(parent)) {
-					setShape(parent.getLeft(), parent.getTop(), parent.getWidth(), parent.getHeight(), parent.getDiagramItem().getRotateDegrees());
-					setVisibility(true);
-				}
-			}
-		});
+		surface.getMouseDiagramManager().addDragHandler(dragHandler);
 		
-		surface.getEditorContext().getEventBus().addHandler(EditDiagramPropertiesStartedEvent.TYPE, new EditDiagramPropertiesStartedEventHandler() {
-			@Override
-			public void on(EditDiagramPropertiesStartedEvent event) {
-				propertyEditorShown = true;
-        logger.debug("show editor {}", propertyEditorShown);
-        
-        if (event.getDiagram() != null) {
-          show(event.getDiagram());
-        }
-			}
-		});
+		surface.getEditorContext().getEventBus().addHandler(EditDiagramPropertiesStartedEvent.TYPE, propsStartHandler);
 		
-		surface.getEditorContext().getEventBus().addHandler(EditDiagramPropertiesEndedEvent.TYPE, new EditDiagramPropertiesEndedEventHandler() {
-			@Override
-			public void on(EditDiagramPropertiesEndedEvent event) {
-				propertyEditorShown = false;
-        logger.debug("show editor {}", propertyEditorShown);
-			}
-		});
+		surface.getEditorContext().getEventBus().addHandler(EditDiagramPropertiesEndedEvent.TYPE, propeEndHandler);
 
-		surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, new FreehandModeChangedEventHandler() {
-			public void on(FreehandModeChangedEvent event) {
-				freehandModeOn = event.isEnabled();
-				if (freehandModeOn) {
-					hide();
-				}
-			}
-		});
+		surface.getEditorContext().getEventBus().addHandler(FreehandModeChangedEvent.TYPE, freehandHandler);
 
-    surface.getEditorContext().getEventBus().addHandler(UndoEvent.TYPE, new UndoEventHandler() {
-      public void on(UndoEvent event) {
-        hideForce();
-      }
-    });
+    surface.getEditorContext().getEventBus().addHandler(UndoEvent.TYPE, undoHandler);
 
 		surface.addResizeHandler(new DiagramResizeHandler() {
 			@Override
@@ -174,27 +196,26 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 			}
 		});
 
-		surface.getEditorContext().getEventBus().addHandler(RotateEvent.TYPE, new RotateEventHandler() {
-			@Override
-			public void on(RotateEvent event) {
-        hide();
-			}
-		});
+		surface.getEditorContext().getEventBus().addHandler(RotateEvent.TYPE, rotateHandler);
 
 
-		listen(this);
+		this.cancels = listen(this);
 	}
 
-	private native void listen(ConnectionHelpers me)/*-{
-		$wnd.globalStreams.dataItemDeleteStream.onValue(function(dataItem) {
+	private native JsArray listen(ConnectionHelpers me)/*-{
+    var result = []
+    
+		result.push($wnd.globalStreams.dataItemDeleteStream.onValue(function(dataItem) {
 			me.@net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers::onItemRealTimeDelete(Lnet/sevenscales/domain/IDiagramItemRO;)(dataItem)
-		})
+		}))
 
-		$wnd.globalStreams.contextMenuStream.filter(function(v) {
+		result.push($wnd.globalStreams.contextMenuStream.filter(function(v) {
 	    return v && v.type==='rotate-start'
 	  }).onValue(function(v) {
 			me.@net.sevenscales.editor.uicomponents.helpers.ConnectionHelpers::onRotate(Ljava/lang/String;)(v.value)
-		})
+		}))
+
+    return result
 	}-*/;
 
 	private void onItemRealTimeDelete(IDiagramItemRO item) {
@@ -270,7 +291,7 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
     }
 
     @Override
-    public void release() {
+    public void release(ISurfaceHandler surface) {
     }
 	};
 
@@ -779,17 +800,35 @@ public class ConnectionHelpers implements GraphicsMouseUpHandler, GraphicsMouseM
 	}
 
   @Override
-  public void release() {
+  public void release(ISurfaceHandler surface) {
   	try {
 	    removeHandles(extraConnectionHandles);
 	    removeHandles(connectionHandles);
 
 	    group.remove();
-	    group = null;
-	    instances.clear();
+
+      parent = null;
+
+      surface.getMouseDiagramManager().removeDragHandler(this.dragHandler);
+
+      surface.getEditorContext().getEventBus().removeHandler(EditDiagramPropertiesStartedEvent.TYPE, propsStartHandler);
+      surface.getEditorContext().getEventBus().removeHandler(EditDiagramPropertiesEndedEvent.TYPE, propeEndHandler);
+      surface.getEditorContext().getEventBus().removeHandler(FreehandModeChangedEvent.TYPE, freehandHandler);
+      surface.getEditorContext().getEventBus().removeHandler(UndoEvent.TYPE, undoHandler);
+      surface.getEditorContext().getEventBus().removeHandler(RotateEvent.TYPE, rotateHandler);
+      
+	    instances.remove(surface);
+      cancelJsFunctions(this.cancels);
+      // instances.clear();
   	} catch (Exception e) {
 			net.sevenscales.domain.utils.Error.reload(e);
   	}
   }
+
+  private native void cancelJsFunctions(JsArray cancels)/*-{
+    for (var i = 0; i < cancels.length; ++i) {
+      cancels[i]();
+    }
+  }-*/;  
 
 }
