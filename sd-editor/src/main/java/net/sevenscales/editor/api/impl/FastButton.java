@@ -49,7 +49,8 @@ public class FastButton extends Composite implements
     initWidget(child);
     // sinkEvents(Event.TOUCHEVENTS | Event.ONCLICK);
 
-    new Hammer2(this.getElement()).on("tap", this);
+    // FIX: click event is fired twice
+    // new Hammer2(this.getElement()).on("tap", this);
   }
 
 	@Override

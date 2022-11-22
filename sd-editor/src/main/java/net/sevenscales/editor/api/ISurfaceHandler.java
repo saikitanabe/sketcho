@@ -118,6 +118,7 @@ public interface ISurfaceHandler extends OperationTransaction, HasMouseWheelHand
 	boolean isVerticalDrag();
 	com.google.gwt.user.client.Element getElement();
 	void addKeyEventHandler(KeyEventListener keyEventHandler);
+	void removeKeyEventHandler(KeyEventListener keyEventHandler);
 	void makeDraggable(Diagram diagram);
 	void makeBendable(Diagram diagram);
 	void addResizeHandler(DiagramResizeHandler resizeHandler);
