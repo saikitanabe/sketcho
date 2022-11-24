@@ -206,8 +206,8 @@ public class ImageElement extends AbstractDiagramItem implements IGenericElement
     // need to fetch directly and not through angular, since hander
     // needs to be this instance; this certainly will not work
     // on Confluence! :)
-    if (typeof $wnd.backendProfileService !== 'undefined') {
-      $wnd.backendProfileService.getSignedUrl({boardId: $wnd.currentBoard().boardId, filename: filename}).then(function(signedUrl) {
+    if (typeof $wnd.getSignedUrl !== 'undefined') {
+      $wnd.getSignedUrl({boardId: $wnd.currentBoard().boardId, filename: filename}).then(function(signedUrl) {
         if (signedUrl) {
           me.@net.sevenscales.editor.uicomponents.uml.ImageElement::updateImageInfo(Ljava/lang/String;)(signedUrl);
         }

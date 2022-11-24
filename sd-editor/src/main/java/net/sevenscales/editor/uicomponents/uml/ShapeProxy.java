@@ -44,11 +44,12 @@ class ShapeProxy implements IShapeGroup {
       boardId = $wnd.currentBoard().boardId
     }
 
-		if (typeof $wnd.libraryService !== 'undefined') {
-			$wnd.libraryService.loadBoardShape({
+		if (typeof $wnd.loadBoardShape !== 'undefined') {
+
+			$wnd.loadBoardShape({
 				board_id: boardId,
 				element_type: elementType,
-				shape_type: shapeType
+				shape_type: shapeType,
 			}).then(function(response) {
 				if (response.ok && response.shapes.length > 0) {
 					me.@net.sevenscales.editor.uicomponents.uml.ShapeProxy::loaded(Lcom/google/gwt/core/client/JsArray;)(response.shapes)

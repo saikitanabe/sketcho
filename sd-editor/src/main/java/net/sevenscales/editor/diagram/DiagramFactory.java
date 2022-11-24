@@ -632,8 +632,8 @@ public class DiagramFactory {
 	}
 
   private native void _saveBoardShapes(DiagramFactory me, JsArrayString elementTypes, int shapeType, IBoardSaved callback)/*-{
-  	if (typeof $wnd.libraryService.saveBoardShapes != 'undefined') {
-  		$wnd.libraryService.saveBoardShapes({
+  	if (typeof $wnd.saveBoardShapes != 'undefined') {
+  		$wnd.saveBoardShapes({
   			board_id: $wnd.currentBoard().boardId,
   			element_types: elementTypes,
   			shape_type: shapeType
