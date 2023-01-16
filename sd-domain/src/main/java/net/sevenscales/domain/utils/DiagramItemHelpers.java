@@ -50,4 +50,16 @@ public class DiagramItemHelpers {
 		return shape;		
 	}
 
+  public static String formatShape(int[] shape) {
+    String result = "";
+
+    for (int s : shape) {
+      if (result.length() > 0) {
+        result += ",";
+      }
+      result += s;
+    }
+
+    return result;
+  }
 }
