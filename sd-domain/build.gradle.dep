@@ -1,0 +1,12 @@
+plugins {
+    id 'java-library' 
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation 'org.gwtproject:gwt-user:2.10.0'
+  testImplementation('junit:junit:3.8.1')
+}
