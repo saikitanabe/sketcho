@@ -6,11 +6,13 @@ import java.util.List;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
 
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.JSONBoardUserParser;
 import net.sevenscales.domain.JSONDiagramParser;
+import net.sevenscales.domain.JSONParserHelpers;
 
 public class ApplyHelpers {
 
@@ -55,6 +57,50 @@ public class ApplyHelpers {
 		return result;
 	}
 
+  // SketchBoardServer.Update
+  public static List<BoardUpdate> toUpdateOperations(String updates) {
+    List<BoardUpdate> result = new ArrayList<BoardUpdate>();
+
+    JSONValue jvalue = JSONParser.parseStrict(updates);
+    JSONArray array = jvalue.isArray();
+
+    if (array != null) {
+      for (int i = 0; i < array.size(); ++i) {
+        JSONObject update = array.get(i).isObject();
+        if (update != null) {
+          BoardUpdate bu = new BoardUpdate();
+          bu.name = JSONParserHelpers.getString(update.get("name"));
+          bu.originator = JSONParserHelpers.getString(update.get("originator"));
+          bu.siteId = JSONParserHelpers.getString(update.get("siteId"));
+          bu.version = JSONParserHelpers.getInt(update.get("version"));
+          bu.checksum = JSONParserHelpers.getString(update.get("checksum"));
+          // bu.guids = TODO
+
+          JSONArray dops = update.get("doperations").isArray();
+          if (dops != null) {
+            for (int x = 0; x < dops.size(); ++x) {
+              JSONObject dop = dops.get(x).isObject();
+              if (dop != null) {
+                JSONArray items = dop.get("items").isArray();
+                JSONString guid = dop.get("guid").isString();
+                JSONValue o = dop.get("operation");
+                if (o.isString() != null && items != null && guid != null) {
+                  OTOperation operation = OTOperation.getEnum(o.isString().stringValue());
+                  DiagramApplyOperation applyOperation = createDiagramApplyOperation(operation, items.isArray(), guid.stringValue());
+                  bu.operations.add(applyOperation);
+                }
+              }
+            }
+          }
+
+          result.add(bu);
+        }
+      }
+    }
+
+    return result;
+  }
+
 	private static void parseOperations(JSONArray operations, ApplyOperations applyOperations) {
 		for (int i = 0; i < operations.size(); ++i) {
 			JSONValue operation = operations.get(i);
@@ -80,8 +126,9 @@ public class ApplyHelpers {
 			}
 		} else {
 			JSONArray items = operationObject.get("items").isArray();
-			if (items != null) {
-				DiagramApplyOperation applyOperation = createDiagramApplyOperation(operation, items.isArray());
+			JSONString guid = operationObject.get("guid").isString();
+			if (items != null && guid != null) {
+				DiagramApplyOperation applyOperation = createDiagramApplyOperation(operation, items.isArray(), guid.stringValue());
 				applyOperations.diagramOperations.add(applyOperation);
 			}
 		}
@@ -169,15 +216,21 @@ public class ApplyHelpers {
 
 	public static class DiagramApplyOperation extends ApplyOperation {
 		private List<IDiagramItemRO> items;
+    private String guid;
 		
-		public DiagramApplyOperation(OTOperation operation, List<IDiagramItemRO> items) {
+		public DiagramApplyOperation(OTOperation operation, List<IDiagramItemRO> items, String guid) {
 			super(operation);
 			this.items = items;
+      this.guid = guid;
 		}
 				
 		public List<IDiagramItemRO> getItems() {
 			return items;
 		}
+
+    public String getGuid() {
+      return this.guid;
+    }
 	}
 
 	public static class ApplyOperations {
@@ -210,11 +263,15 @@ public class ApplyHelpers {
 		return null;
 	}
 
-	private static DiagramApplyOperation createDiagramApplyOperation(OTOperation operation, JSONArray jitems) {
+	private static DiagramApplyOperation createDiagramApplyOperation(
+    OTOperation operation,
+    JSONArray jitems,
+    String guid
+  ) {
 		List<IDiagramItemRO> items = new ArrayList<IDiagramItemRO>();
 		for (int i = 0; i < jitems.size(); ++i) {
 			if (jitems.get(i).isObject() != null) {
-				JSONDiagramParser parser = new JSONDiagramParser(jitems.get(i).isObject());
+				JSONDiagramParser parser = new JSONDiagramParser(jitems.get(i).isObject(), true);
 				if (parser.isDiagram() != null) {
 					items.add(parser.isDiagram());
 				} else if (parser.isComment() != null) {
@@ -222,7 +279,17 @@ public class ApplyHelpers {
 				}
 			}
 		}
-		return new DiagramApplyOperation(operation, items);
+		return new DiagramApplyOperation(operation, items, guid);
 	}
+
+  public static class BoardUpdate {
+    public String name;
+    public String originator;
+    public String siteId;
+    public List<DiagramApplyOperation> operations = new ArrayList<DiagramApplyOperation>();
+    public int version;
+    public String checksum;
+    // Set<String> guids = new HashSet<String>();
+  }
 
 }

@@ -203,6 +203,7 @@ public interface Diagram extends SourcesMouseDiagramEvents {
   * Copies all fields to be shown in this diagram element.
   */
 	void copyFrom(IDiagramItemRO diagramItem);
+  void merge(IDiagramItemRO item);
   /**
   * Copies all fields except position that has been set elsewhere.
   * NOTE: could modify postion in here and duplicate method could be

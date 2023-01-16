@@ -3,7 +3,7 @@ package net.sevenscales.editor.gfx.dojosvg;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import net.sevenscales.editor.content.utils.DiagramHelpers;
-import net.sevenscales.editor.uicomponents.uml.StorageElement;
+// import net.sevenscales.editor.uicomponents.uml.StorageElement;
 
 public class DiagramHelpersTest extends TestCase {
 	public void testApply() {

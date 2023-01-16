@@ -148,7 +148,8 @@ public class BoardDocument implements UniqueChecker {
 	private void modifyInOrder(IDiagramItemRO di, List<IDiagramItemRO> to) {
 		int index = BoardDocumentHelpers.binarySearch(to, di);
 		if (index >= 0) {
-			to.get(index).copyFrom(di);
+			to.get(index).merge(di);
+			// to.get(index).copyFrom(di);
 		}
 	}
 	

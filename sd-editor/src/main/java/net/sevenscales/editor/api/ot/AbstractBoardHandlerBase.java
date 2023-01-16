@@ -431,7 +431,7 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
 	protected abstract void extendApplyLocalRedo(OTOperation redoop, OTOperation redoOperation, List<IDiagramItemRO> redoJson);
 
 	protected void applyUndoOrRedoToGraphicalView(OTOperation ope, List<IDiagramItemRO> diagramItems) {
-		DiagramApplyOperation o = new DiagramApplyOperation(ope, BoardDocumentHelpers.copyDiagramItems(diagramItems));
+		DiagramApplyOperation o = new DiagramApplyOperation(ope, BoardDocumentHelpers.copyDiagramItems(diagramItems), null);
 		logger.debug("applyUndoOrRedoToGraphicalView op {}, items.length() {}", o.getOperation(), o.getItems().size());
 		List<DiagramApplyOperation> ops = new ArrayList<DiagramApplyOperation>();
 		ops.add(o);

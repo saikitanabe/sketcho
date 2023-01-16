@@ -55,5 +55,4 @@ public class ElementTypeComparator {
 		return DiagramItemIdComparator.compareClientId(di1, di2);
 	}
 
-	
 }

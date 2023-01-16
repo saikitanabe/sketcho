@@ -29,7 +29,8 @@ public class BoardDocumentTest extends TestCase {
 															 "1", 
 															 /*customData*/null,
 															 /*links*/null,
-															 /*parentId*/null));
+															 /*parentId*/null,
+                               null));
 
 		//return new BoardDocument(original1Item, "Test 1 Item Document");
 		return null;
@@ -71,7 +72,8 @@ public class BoardDocumentTest extends TestCase {
 															 TestUtils.generateId(1),
 															 /*customData*/null,
 															 /*links*/null,
-															 /*parentId*/null));
+															 /*parentId*/null,
+                               null));
 		doc.apply(OTOperation.INSERT, insert);
 		
 		assertEquals("after insert there should be 2 items", 101, doc.size());
@@ -107,7 +109,8 @@ public class BoardDocumentTest extends TestCase {
 															 TestUtils.generateId(2), 
 															 /*customData*/null,
 															 /*links*/null,
-															 /*parentId*/null));
+															 /*parentId*/null,
+                               null));
 		doc.apply(OTOperation.MODIFY, modify);
 		
 		assertEquals("wrong text", "Modify Me", doc.getDocument().get(1).getText());
@@ -131,7 +134,8 @@ public class BoardDocumentTest extends TestCase {
 															 TestUtils.generateId(2), 
 															 /*customData*/null,
 															 /*links*/null,
-															 /*parentId*/null));
+															 /*parentId*/null,
+                               null));
 		doc.apply(OTOperation.MODIFY, modify);
 		
 		assertTrue("ID is not unique", doc.isUnique(TestUtils.generateId(1)));

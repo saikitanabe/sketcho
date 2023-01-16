@@ -31,7 +31,7 @@ public class OTCompensationTransformerTest extends TestCase {
 			itemCount = itemCount == 0 ? 1 : itemCount;
 			
 			List<IDiagramItemRO> items = TestUtils.generateDiagramItems(itemCount);
-			DiagramApplyOperation ap = new DiagramApplyOperation(operations[i], items);
+			DiagramApplyOperation ap = new DiagramApplyOperation(operations[i], items, null);
 			result.add(ap);
 		}
 		
@@ -155,7 +155,7 @@ public class OTCompensationTransformerTest extends TestCase {
 		
 		// add extra apply operation manually and check that it works as planned; item is found from apply operations not from the server document
 		List<IDiagramItemRO> shouldBeFound = TestUtils.generateDiagramItems(1); // client id 0000
-		DiagramApplyOperation previousApplyOperationState = new DiagramApplyOperation(OTOperation.INSERT, shouldBeFound);
+		DiagramApplyOperation previousApplyOperationState = new DiagramApplyOperation(OTOperation.INSERT, shouldBeFound, null);
 		// add it as earlier operation => first on the list so that it is applied earlier, so it is the previous state
 		IDiagramItemRO expectedUndoState = shouldBeFound.get(0);
 		applyOperations.add(0, previousApplyOperationState);

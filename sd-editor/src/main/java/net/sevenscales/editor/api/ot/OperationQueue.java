@@ -1,9 +1,11 @@
 package net.sevenscales.editor.api.ot;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 import java.util.logging.Level;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -19,8 +21,10 @@ import com.google.gwt.user.client.Window;
 
 import net.sevenscales.domain.JSONParserHelpers;
 import net.sevenscales.domain.js.JsSendOperation;
+import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.IEditor;
+import net.sevenscales.editor.api.ot.ApplyHelpers.DiagramApplyOperation;
 import net.sevenscales.editor.content.ClientIdHelpers;
 import net.sevenscales.editor.diagram.GlobalState;
 import net.sevenscales.editor.utils.IWebStorageListener;
@@ -33,11 +37,16 @@ public class OperationQueue {
   private static long SEND_RETRY_TIMEOUT = 7000;
   
 	private LinkedList<SendOperation> queuedOperations;
+  // actually this is the update version == update.size()
+  private Set<String> updates = new HashSet<String>();
 	private Acknowledged acknowledged;
 	private IEditor editor;
   private String boardName;
   private String tabId;
 	private String checksum;
+
+  private int baseUpdateVersion;
+	private boolean nextOffline = false;
 
 	public OperationQueue(
     Acknowledged acknowledged,
@@ -246,7 +255,11 @@ public class OperationQueue {
 
 	public QueueData toJsonAndClear() {
 		JsArray<JsSendOperation> result = null;
-		boolean offline = false;
+
+    // After reload content feature introduced, offline state
+    // cannot be checked completely from queuedOperations.
+		boolean offline = this.nextOffline;
+
 		if (!queuedOperations.isEmpty()) {
 			// queuedOperations.clear();
 			result = prepareForSending();
@@ -256,6 +269,8 @@ public class OperationQueue {
 			result = prepareForSending();
 			offline = true;
 		}
+
+    this.nextOffline = false;
 
 		return new QueueData(result, offline);
 	}
@@ -267,7 +282,12 @@ public class OperationQueue {
 		for (SendOperation so : queuedOperations) {
 			if (so.getGuid() == null) {
 				// if not marked as sent
-				so.setGuid(guid);
+        if (so.operation.getValue().startsWith("user.")) {
+          so.setGuid("u_" + guid);
+        } else {
+          so.setGuid(guid);
+        }
+				
 				// tosend.add(so);
 			}
 		}
@@ -318,14 +338,22 @@ public class OperationQueue {
   }
 
 	public boolean ack(JsArrayString guids) {
-		boolean result = false;
+    // at least one non user operation
+    boolean diagramOperation = false;
+
 		List<String> matched = new ArrayList<String>();
 		for (int i = 0; i < guids.length(); ++i) {
 			String guid = guids.get(i);
 			if (!matched.contains(guid)) {
 				matched.add(guid);
 			}
+
+      if (!guid.startsWith("u_")) {
+        diagramOperation = true;
+        addUpdateVersion(guid);
+      }
 		}
+
 		// remove guided operations from the queue
     ListIterator<SendOperation> listIterator = queuedOperations.listIterator();
     while (listIterator.hasNext()) {
@@ -340,9 +368,30 @@ public class OperationQueue {
     }
 
 		storeQueue();
-		// there was originally some guids and all matched
-		return guids.length() > 0 && matched.size() == 0;
+
+    // there was originally some guids and all matched
+    boolean result = guids.length() > 0 && matched.size() == 0;
+
+    if (result && diagramOperation) {
+      // guids were removed and at least one was a diagram operation
+      // Need to notify save state that something has been
+      // successfully saved to start the save counter from
+      // the beginng.
+      notifySomeOperationsSaved();
+    }
+
+		
+		return result;
 	}
+
+  private void addUpdateVersion(String guid) {
+    updates.add(guid);
+    Debug.debugConsole("sbcomet", "new update version", this.getUpdateVersion());
+  }
+
+  private native void notifySomeOperationsSaved()/*-{
+    $wnd.ReactEventStream.fire("acksuccess");
+  }-*/;
 
 	public JsArray<JsSendOperation> getOperationsByGuids(JsArrayString guids) {
 		JsArray<JsSendOperation> result = JavaScriptObject.createArray().cast();
@@ -453,6 +502,42 @@ public class OperationQueue {
 	private String checksumName() {
 		return boardName + "-server-checksum";
 	}
+
+  public boolean isApplied(String guid) {
+    return updates.contains(guid);
+  }
+
+  public int getUpdateVersion() {
+    return this.baseUpdateVersion +  this.updates.size();
+  }
+
+  public int getBaseUpdateVersion() {
+    return this.baseUpdateVersion;
+  }
+
+  public void setBaseUpdateVersion(int updateVersion) {
+    this.baseUpdateVersion = updateVersion;
+
+    // need to handle updates from this point forward
+    this.clearUpdates();
+  }
+
+  public void clearUpdates() {
+    this.updates.clear();
+    Debug.debugConsole("sbcomet", "clear update version", this.getUpdateVersion());
+  }
+
+  public void setNextOffline(boolean nextOffline) {
+    this.nextOffline = nextOffline;
+  }
+
+  public void applied(List<DiagramApplyOperation> applied) {
+    for (DiagramApplyOperation dao : applied) {
+      if (dao.getGuid() != null) {
+        this.updates.add(dao.getGuid());
+      }
+    }
+  }
 
 	/**
 	 * Finds previous state of the item if any from the queue.

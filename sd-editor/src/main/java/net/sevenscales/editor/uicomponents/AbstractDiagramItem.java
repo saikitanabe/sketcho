@@ -1512,7 +1512,7 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
 
   @Override
   public void copyFrom(IDiagramItemRO diagramItem) {
-    IDiagramItemRO current = getDiagramItem();
+    IDiagramItem current = getDiagramItem();
 
     // sequence item has wrong format!! => convert first space to comma
     String newshape = diagramItem.getShape();
@@ -1520,10 +1520,40 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     if (newshape != null && !newshape.equals(current.getShape())) {
       shapeChanged = true;
       int [] shape = DiagramItemHelpers.parseShape(newshape);
+
+      String ns = DiagramItemHelpers.formatShape(shape);
+
+      // fix rotate moves relationships to a wrong place
+      current.setShape(ns);
       setShape(shape);
     }
 
     duplicateFrom(diagramItem, shapeChanged);
+  }
+
+  @Override
+  public void merge(IDiagramItemRO diagramItem) {
+    IDiagramItemRO current = getDiagramItem();
+    IDiagramItemRO copy = current.copy();
+    copy.merge(diagramItem);
+    copyFrom(copy);
+
+
+    // IDiagramItemRO current = getDiagramItem();
+
+    // // sequence item has wrong format!! => convert first space to comma
+    // String newshape = diagramItem.getShape();
+    // boolean shapeChanged = false;
+    // if (newshape != null && !newshape.equals(current.getShape())) {
+    //   shapeChanged = true;
+    //   int [] shape = DiagramItemHelpers.parseShape(newshape);
+    //   setShape(shape);
+    // }
+
+    // IDiagramItemRO copy = current.copy();
+    // copy.merge(diagramItem);
+
+    // duplicateFrom(copy, shapeChanged);
   }
 
   @Override

@@ -1,5 +1,6 @@
 package net.sevenscales.editor.api.ot;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 
 import net.sevenscales.domain.CommentDTO;
+import net.sevenscales.domain.DiagramItemDTO;
 import net.sevenscales.domain.DiagramItemField;
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.IDiagramItemRO;
@@ -248,7 +250,8 @@ public class BoardOTHelpers {
 			} else {
 				// insert could be reopen comment thread and element might be
 				// just hidden
-				diagram.copyFrom(diro);
+				// diagram.copyFrom(diro);
+				diagram.merge(diro);
 			}
 			if (diagram != null) {
 				applyThemeColors(diagram);
@@ -301,6 +304,8 @@ public class BoardOTHelpers {
 	private void modifyOT(String originator, List<IDiagramItemRO> items) throws MappingNotFoundException {
 		logger.debug2("modifyOT items.length() {}", items.size());
 		Set<Diagram> diagrams = new HashSet<Diagram>();
+
+    items = fillElementTypes(items);
     Collections.sort(items, new ElementTypeComparator.DiagramItemComparator());
 
     ReattachHelpers reattachHelpers = new ReattachHelpers(diagramSearch, true);
@@ -312,7 +317,8 @@ public class BoardOTHelpers {
 			if (diagram != null) {
         diro.compare(diagram.getDiagramItem(), dirtyFields);
         diagram.setForceTextRendering(true);
-        diagram.copyFrom(diro);
+        // diagram.copyFrom(diro);
+        diagram.merge(diro);
         diagram.setForceTextRendering(false);
 				reattachHelpers.processDiagram(diagram);
 				
@@ -435,5 +441,30 @@ public class BoardOTHelpers {
 		}
 		return null;
 	}
+
+  private List<IDiagramItemRO> fillElementTypes(List<IDiagramItemRO> items) {
+
+    List<IDiagramItemRO> result = new ArrayList<IDiagramItemRO>();
+
+    for (Diagram d : surface.getVisualItems()) {
+      IDiagramItemRO found = null;
+      for (IDiagramItemRO diro : items) {
+        if (d.getDiagramItem() != null && diro.getClientId().equals(d.getDiagramItem().getClientId())) {
+          found = diro;
+          break;
+        }
+      }
+
+      if (found != null) {
+        DiagramItemDTO di = new DiagramItemDTO(found);
+        di.setType(d.getDiagramItem().getType());
+
+        result.add(di);
+      }
+
+    }
+
+    return result;
+  }
 
 }
