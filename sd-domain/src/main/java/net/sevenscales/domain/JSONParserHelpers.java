@@ -28,8 +28,16 @@ public class JSONParserHelpers {
 		return value != null && value.isNumber() != null ? (long) value.isNumber().doubleValue() : 0L;
 	}
 
+	public static Long getLongOrNull(JSONValue value) {
+		return value != null && value.isNumber() != null ? (long) value.isNumber().doubleValue() : null;
+	}
+
 	public static double getDouble(JSONValue value) {
 		return value != null && value.isNumber() != null ? value.isNumber().doubleValue() : 0f;
+	}
+
+	public static Double getDoubleOrNull(JSONValue value) {
+		return value != null && value.isNumber() != null ? value.isNumber().doubleValue() : null;
 	}
 
 	public static String getString(JSONValue value) {

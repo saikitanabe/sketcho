@@ -63,7 +63,7 @@ public class JSONContentParser {
 		for (int i = 0; i < items.size(); ++i) {
 			JSONObject obj = items.get(i).isObject();
 			if (obj != null) {
-				JSONDiagramParser dp = new JSONDiagramParser(obj);
+				JSONDiagramParser dp = new JSONDiagramParser(obj, false);
 				if (dp.isItem() != null) {
 					result.add(dp.isItem());
 				}
@@ -77,7 +77,7 @@ public class JSONContentParser {
 		for (int i = 0; i < items.size(); ++i) {
 			JSONObject obj = items.get(i).isObject();
 			if (obj != null) {
-				JSONDiagramParser dp = new JSONDiagramParser(obj);
+				JSONDiagramParser dp = new JSONDiagramParser(obj, false);
 				if (dp.isItem() != null) {
 					result.add(dp.isItem());
 				}

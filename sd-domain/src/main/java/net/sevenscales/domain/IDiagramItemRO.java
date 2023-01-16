@@ -11,7 +11,7 @@ import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.api.IExtension;
 
 public interface IDiagramItemRO extends Serializable, IsSerializable {
-	long getId();
+	Long getId();
 	String getText();
 	String getType();
 	String getShape();
@@ -22,7 +22,7 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	Integer getLineWeight();
 	Integer getShapeProperties();
 	Integer getDisplayOrder();
-	int getVersion();
+	Integer getVersion();
 	String getClientId();
 	String getParentId();
 	/**
@@ -32,20 +32,21 @@ public interface IDiagramItemRO extends Serializable, IsSerializable {
 	 */
 	String getCustomData();
   Integer getRotateDegrees();
-	double getCrc32();
+	Double getCrc32();
 	String getGroup();
 	JavaScriptObject getData();
 	boolean isGroup();
 	Long getCreatedAt();
 	Long getUpdatedAt();
-	int getAnnotation();
-	int getResolved();
+	Integer getAnnotation();
+	Integer getResolved();
 	boolean isAnnotation();
 	boolean isResolved();
 	List<? extends IUrlLinkRO> getLinks();
 	String getFirstLink();
 	IDiagramItem copy();
 	void copyFrom(IDiagramItemRO item);
+  void merge(IDiagramItemRO item);
 
 	boolean isComment();
 	boolean compare(IDiagramItemRO diro, Map<String, Boolean> dirtyFields);

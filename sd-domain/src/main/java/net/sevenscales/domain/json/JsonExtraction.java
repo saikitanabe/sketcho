@@ -69,15 +69,25 @@ public class JsonExtraction {
 	public static JSONObject decompose(IDiagramItemRO item) {
     JSONObject result = new JSONObject();
     String text = item.getText();
-    result.put("text", new JSONString(text));
-    result.put("elementType", new JSONString(safeJsonString(item.getType())));
-    result.put("shape", new JSONString(safeJsonString(validateShape(item.getShape()))));
+    if (text != null) {
+      result.put("text", new JSONString(text));
+    }
+    if (item.getType() != null) {
+      result.put("elementType", new JSONString(safeJsonString(item.getType())));
+    }
+    if (item.getShape() != null) {
+      result.put("shape", new JSONString(safeJsonString(validateShape(item.getShape()))));
+    }
     if (item.getExtension() != null) {
       JSONObject ext = decomposeExtension(item);
       result.put(DiagramItemField.EXTENSION.getValue(), ext);
     }
-    result.put("backgroundColor", new JSONString(safeJsonString(item.getBackgroundColor())));
-    result.put("textColor", new JSONString(safeJsonString(item.getTextColor())));
+    if (item.getBackgroundColor() != null) {
+      result.put("backgroundColor", new JSONString(safeJsonString(item.getBackgroundColor())));
+    }
+    if (item.getTextColor() != null) {
+      result.put("textColor", new JSONString(safeJsonString(item.getTextColor())));
+    }
     if (item.getFontSize() != null) {
         result.put("fsize", new JSONNumber(item.getFontSize()));
     }
@@ -90,16 +100,26 @@ public class JsonExtraction {
       // value can be - as well to be on bottom
       result.put("dord", new JSONNumber(item.getDisplayOrder()));
     }
-    result.put("version", new JSONNumber(item.getVersion()));
-    result.put("id", new JSONNumber(item.getId()));
-    result.put("clientId", new JSONString(safeJsonString(item.getClientId())));
-    result.put("cd", new JSONString(safeJsonString(item.getCustomData())));
+    if (item.getVersion() != null) {
+      result.put("version", new JSONNumber(item.getVersion()));
+    }
+    if (item.getId() != null) {
+      result.put("id", new JSONNumber(item.getId()));
+    }
+    if (item.getClientId() != null) {
+      result.put("clientId", new JSONString(safeJsonString(item.getClientId())));
+    }
+    if (item.getCustomData() != null) {
+      result.put("cd", new JSONString(safeJsonString(item.getCustomData())));
+    }
 
     if (item.getRotateDegrees() != null) {
       result.put(DiagramItemField.ROTATE_DEGREES.getValue(), new JSONNumber(item.getRotateDegrees()));
     }
 
-    result.put("crc", new JSONNumber(item.getCrc32()));
+    if (item.getCrc32() != null) {
+      result.put("crc", new JSONNumber(item.getCrc32()));
+    }
 
     if (item.getCreatedAt() != null) {
       result.put(DiagramItemField.CREATED_AT.getValue(), new JSONNumber(item.getCreatedAt()));

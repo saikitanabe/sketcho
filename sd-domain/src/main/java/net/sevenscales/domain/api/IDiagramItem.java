@@ -20,12 +20,12 @@ public interface IDiagramItem extends IDiagramItemRO {
   void addShapeProperty(ShapeProperty shapeProperty);
   void clearShapeProperty(ShapeProperty shapeProperty);
   void setDisplayOrder(Integer displayOrder);
-	void setVersion(int version);
+	void setVersion(Integer version);
   void setClientId(String clientId);
   void setParentId(String parentClientId);
-  void setId(long id);
+  void setId(Long id);
   void setCustomData(String customData);
-  void setCrc32(double crc32);
+  void setCrc32(Double crc32);
   void setGroup(String group);
   void setData(JavaScriptObject data);
   void annotate();
