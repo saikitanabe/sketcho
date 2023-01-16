@@ -6,17 +6,21 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 import net.sevenscales.domain.api.IDiagramContent;
 import net.sevenscales.domain.api.IDiagramItem;
 import net.sevenscales.domain.api.IExtension;
+import net.sevenscales.domain.json.JsonExtraction;
 import net.sevenscales.domain.utils.DiagramItemUtils;
 
 public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializable {
 	public static final int DATA_VERSION = 4;
 	private static final long serialVersionUID = 5754682876312853660L;
-	private long id;
+	private Long id;
 	private String text;
 	private String type;
 	private String shape;
@@ -27,14 +31,14 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 	private Integer fontSize;
 	private Integer shapeProperties;
 	private Integer displayOrder;
-  private int version = DATA_VERSION;
+  private Integer version = DATA_VERSION;
 	private String clientId;
 	private String customData;
 	private Integer rotateDegrees;
-	private double crc32;
+	private Double crc32;
 	private String group;
-	private int annotation;
-	private int resolved;
+	private Integer annotation;
+	private Integer resolved;
 	private List<UrlLinkDTO> links;
 	private String parentId;
 	private JavaScriptObject data;
@@ -74,7 +78,7 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 		Integer fontSize,
 		Integer shapeProperties,
 		Integer displayOrder,
-		int version,
+		Integer version,
 		Long id,
 		String clientId,
 		String customData,
@@ -82,7 +86,29 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 		List<UrlLinkDTO> links,
 		String parentId
 	) {
-    this(text, type, shape, extension, backgroundColor, textColor, fontSize, shapeProperties, displayOrder, version, id, clientId, customData, rotateDegrees, 0, /*group*/ null, 0, 0, links, parentId, /* data */ null);
+    this(
+      text,
+      type,
+      shape,
+      extension,
+      backgroundColor,
+      textColor,
+      fontSize, 
+      shapeProperties,
+      displayOrder,
+      version,
+      id,
+      clientId,
+      customData,
+      rotateDegrees,
+      Double.valueOf(0),
+      /*group*/ null,
+      Integer.valueOf(0),
+      Integer.valueOf(0),
+      links,
+      parentId,
+      /* data */ null
+    );
   }
 
 //	public DiagramItemDTO(String text, String type, String shape, String backgroundColor, String textColor,
@@ -105,10 +131,10 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 		String clientId,
 		String customData,
 		Integer rotateDegrees,
-		double crc32,
+		Double crc32,
 		String group,
-		int annotation,
-		int resolved,
+		Integer annotation,
+		Integer resolved,
 		List<UrlLinkDTO> links,
 		String parentId,
 		JavaScriptObject data
@@ -138,18 +164,40 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 	}
 	
 	public DiagramItemDTO(String clientId) {
-		this("", "", "", /* extension */ null, "", "", null, /* shapeProperties */null, /* displayOrder */ null, 0, 0L, clientId, "", /*rotateDegrees*/  null, 0, /*group*/ null, 0, 0, null, /* parentId */ null, /* data */null);
+		this(
+      "",
+      "",
+      "",
+      /* extension */ null,
+      "",
+      "",
+      null,
+      /* shapeProperties */null,
+      /* displayOrder */ null,
+      Integer.valueOf(0),
+      Long.valueOf(0),
+      clientId,
+      "",
+      /*rotateDegrees*/  null,
+      Double.valueOf(0),
+      /*group*/ null,
+      Integer.valueOf(0),
+      Integer.valueOf(0),
+      null,
+      /* parentId */ null,
+      /* data */null
+    );
 	}
 
 	public DiagramItemDTO(IDiagramItemRO di) {
 		copyFrom(di);
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -279,11 +327,13 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 		this.displayOrder = displayOrder;
 	}
 	
-	public int getVersion() {
+  @Override
+	public Integer getVersion() {
     return version;
   }
 	
-	public void setVersion(int version) {
+  @Override
+	public void setVersion(Integer version) {
 		this.version = version;
 	}
 	
@@ -317,12 +367,12 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 	}
 
 	// @Override
-	public double getCrc32() {
+	public Double getCrc32() {
 		return crc32;
 	}
 
 	// @Override
-	public void setCrc32(double crc32) {
+	public void setCrc32(Double crc32) {
 		this.crc32 = crc32;
 	}
 
@@ -375,23 +425,23 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 	}	
 
 	// @Override
-	public int getAnnotation() {
+	public Integer getAnnotation() {
 		return annotation;
 	}
 
 	// @Override
-	public int getResolved() {
+	public Integer getResolved() {
 		return resolved;
 	}
 
 	// @Override
 	public boolean isAnnotation() {
-		return annotation == 1;
+		return annotation != null && annotation == 1;
 	}
 
 	// @Override
 	public boolean isResolved() {
-		return resolved == 1;
+		return resolved != null && resolved == 1;
 	}
 
 	// @Override
@@ -459,8 +509,26 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 	public IDiagramItem copy() {
 		return new DiagramItemDTO(this);
 	}
+
+  @Override
+  public void merge(IDiagramItemRO di) {
+
+    JSONObject from = JsonExtraction.decompose(di);
+    JSONObject to = JsonExtraction.decompose(this);
+    JavaScriptObject merged = _merge(to.getJavaScriptObject(), from.getJavaScriptObject());
+    JSONObject mvalue = new JSONObject(merged);
+    if (mvalue.isObject() != null) {
+      DiagramItemDTO md = new JSONDiagramParser(mvalue.isObject(), false).isDiagram();
+      copyFrom(md);
+    }
+
+  }
+
+  private native JavaScriptObject _merge(JavaScriptObject to, JavaScriptObject from)/*-{
+    return $wnd.mergeJson(to, from)
+  }-*/;
 	
-	// @Override
+	@Override
 	public void copyFrom(IDiagramItemRO di) {
 		DiagramItemDTO dit = (DiagramItemDTO) di;
 		id = dit.id;
