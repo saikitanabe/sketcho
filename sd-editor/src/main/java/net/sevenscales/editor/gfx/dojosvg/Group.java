@@ -69,6 +69,7 @@ class Group extends Graphics implements IContainer, IGroup {
   }
   private native void _remove(JavaScriptObject rawNode)/*-{
   	rawNode.removeShape();
+    rawNode.rawNode.remove();
   }-*/;
   
   public void applyTransform(int dx, int dy) {

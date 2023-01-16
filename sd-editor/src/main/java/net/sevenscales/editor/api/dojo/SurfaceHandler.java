@@ -721,6 +721,21 @@ class SurfaceHandler extends SimplePanel implements
     mouseDiagramManager.reset();
     // this.diagrams = new DiagramDisplayOrderList();
     diagrams.clear();
+    diagrams = new DiagramDisplayOrderList();
+
+    rootLayer0.remove();
+    slideLayer.remove();
+    containerLayer1.remove();
+    elementLayer2.remove();
+    connectionLayer3.remove();
+    interactionLayer4.remove();
+
+    rootLayer0 = IShapeFactory.Util.factory(editable).createGroup(surface);
+    slideLayer = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
+    containerLayer1 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
+    elementLayer2 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
+    connectionLayer3 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
+    interactionLayer4 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
   }
 
   public int count() {

@@ -362,7 +362,8 @@ public class MouseDiagramResizeHandler implements MouseDiagramHandler, MouseDiag
 	}
 
   public void reset() {
-    resizeHandlerCollection.clear();
+    // resizeHandlerCollection.clear();
+    resizeHandlerCollection = new ResizeHandlerCollection();
   }
 
 }
