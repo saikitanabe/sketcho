@@ -42,6 +42,13 @@ public class Debug {
       }
     }
   }
+
+  public static native void debugConsole(String name, Object... args)/*-{
+  	if (typeof $wnd.consoleDebug) {
+      $wnd.consoleDebugGwt(name, args)
+    }
+  }-*/;
+
   
   public static void log(String msg) {
     if (LogConfiguration.loggingIsEnabled(Level.FINER)) {
