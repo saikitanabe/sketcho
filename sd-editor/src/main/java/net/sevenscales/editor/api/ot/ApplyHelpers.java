@@ -86,7 +86,13 @@ public class ApplyHelpers {
                 JSONValue o = dop.get("operation");
                 if (o.isString() != null && items != null && guid != null) {
                   OTOperation operation = OTOperation.getEnum(o.isString().stringValue());
-                  DiagramApplyOperation applyOperation = createDiagramApplyOperation(operation, items.isArray(), guid.stringValue());
+                  // ST 10.2.2023: Fix tab synchronization chrash
+                  // on tab synchronization guid is null.
+                  String guidString = null;
+                  if (guid != null) {
+                    guidString = guid.stringValue();
+                  }
+                  DiagramApplyOperation applyOperation = createDiagramApplyOperation(operation, items.isArray(), guidString);
                   bu.operations.add(applyOperation);
                 }
               }
@@ -126,9 +132,23 @@ public class ApplyHelpers {
 			}
 		} else {
 			JSONArray items = operationObject.get("items").isArray();
-			JSONString guid = operationObject.get("guid").isString();
-			if (items != null && guid != null) {
-				DiagramApplyOperation applyOperation = createDiagramApplyOperation(operation, items.isArray(), guid.stringValue());
+      JSONValue guidval = operationObject.get("guid");
+
+      // ST 10.2.2023: Fix tab synchronization chrash.
+      // guidval is null when coming as storage event
+      // now storage event is similar as copy paste, but it is not sent to server
+      // just applied to graphical view.
+			String guid = null;
+      if (guidval != null) {
+        guid = guidval.isString().stringValue();
+      }
+
+			if (items != null) {
+				DiagramApplyOperation applyOperation = createDiagramApplyOperation(
+          operation,
+          items.isArray(),
+          guid
+        );
 				applyOperations.diagramOperations.add(applyOperation);
 			}
 		}
