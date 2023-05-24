@@ -282,25 +282,25 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
     // rendered asynchronosely. Proper implementation is to run getTextSize
     // for each diagram and send only after all Promises have returned.
 
-    int size = 0;
-    if (diagrams instanceof List) {
-      size = ((List)diagrams).size();
-    } else if (diagrams instanceof Set) {
-      size = ((Set) diagrams).size();
-    } else {
-      // finally calculate the size if not available
-      for (Diagram d : diagrams) {
-        ++size;
-      }
-    }
+    // int size = 0;
+    // if (diagrams instanceof List) {
+    //   size = ((List)diagrams).size();
+    // } else if (diagrams instanceof Set) {
+    //   size = ((Set) diagrams).size();
+    // } else {
+    //   // finally calculate the size if not available
+    //   for (Diagram d : diagrams) {
+    //     ++size;
+    //   }
+    // }
 
-    Promise[] promises = new Promise[size];
-    int index = 0;
-    for (Diagram diagram : diagrams) {
-      promises[index++] = diagram.getTextSize();
-    }
+    // Promise[] promises = new Promise[size];
+    // int index = 0;
+    // for (Diagram diagram : diagrams) {
+    //   promises[index++] = diagram.getTextSize();
+    // }
 
-    Promise.all(promises).then(p -> {
+    // Promise.all(promises).then(p -> {
       List<? extends IDiagramItemRO> operationItems = BoardDocumentHelpers.diagramsToItems(diagrams);
 
       // packJson to get only modified fields of each object, client id is preserved.
@@ -321,7 +321,7 @@ public abstract class AbstractBoardHandlerBase implements Acknowledged, Operatio
         // change operations
         sendLocalOperation(boardName, originator, operation, operationItems, diff);
       }
-    });
+    // });
 	}
 	protected abstract void sendLocalOperation(String name, String originator, String operation, List<? extends IDiagramItemRO> operationItems, JSONArray diff);
 

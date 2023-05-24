@@ -489,10 +489,15 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 	}
 
 	private void closeIfOpen() {
-      hide();
+    hide();
   }
   
 	private void hide() {
+
+    if (selectedDiagram != null) {
+      selectedDiagram.autoResize();
+    }
+
     // Debug.log("Properties.hide");
     // Debug.callstack("Properties.hide");
 

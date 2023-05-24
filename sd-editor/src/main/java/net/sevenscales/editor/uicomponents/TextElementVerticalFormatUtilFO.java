@@ -143,7 +143,7 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
   public void setText(String newText, boolean editable, boolean force) {
   	// convert json text line (\\n) breaks to line breaks
 //  	newText = newText.replaceAll("\\\\n", "\n");
-    newText = newText.replaceAll("\\\\r", ""); // remove \r chars and handle only \n later
+    // newText = newText.replaceAll("\\\\r\\\\n", "\n"); // remove \r chars and handle only \n later
     // boolean changed = getText() != null && getText().equals(newText) ? false : true;
     // if (changed || force) {
     setText(newText);
@@ -154,7 +154,10 @@ public class TextElementVerticalFormatUtilFO extends TextElementFormatUtil {
     // when text changes.
     // if (!editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN) || force) {
   	  calculateLines2();
-      if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION) && !editorContext.isTrue(EditorProperty.ON_SURFACE_LOAD) && !editorContext.isTrue(EditorProperty.ON_LIBRARY_LOAD)) {
+      if (!editorContext.isTrue(EditorProperty.ON_OT_OPERATION) &&
+          !editorContext.isTrue(EditorProperty.ON_SURFACE_LOAD) &&
+          !editorContext.isTrue(EditorProperty.ON_LIBRARY_LOAD) &&
+          !editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
         // during OT operation element is NOT resized and everything is 
         // copied as is, element size and text
         // though in vertical case text needs to be recalculated based on element size
