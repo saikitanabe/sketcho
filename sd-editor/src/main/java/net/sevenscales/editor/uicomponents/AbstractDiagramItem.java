@@ -822,10 +822,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   }
 
   @Override
-  public void autoResize() {
-  }
-
-  @Override
   public boolean isSketchiness() {
     return false;
   }

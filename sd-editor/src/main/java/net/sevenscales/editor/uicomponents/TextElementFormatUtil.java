@@ -367,8 +367,8 @@ public class TextElementFormatUtil {
   }
 
   private String handleLineBreaks(String newText) {
-    // newText = newText.replaceAll("\\\\n", "\n");
-    // newText = newText.replaceAll("\\\\r\\\\n", "\n");
+    newText = newText.replaceAll("\\\\n", "\n");
+    newText = newText.replaceAll("\\\\r", "");
     return newText;
   }
 

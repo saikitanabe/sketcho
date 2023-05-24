@@ -1502,8 +1502,8 @@ public class Relationship2 extends AbstractDiagramItem implements DiagramDragHan
   }
 
   public void doSetText(String text) {
-  	// text = text.replaceAll("\\\\n", "\n");
-  	// text = text.replaceAll("\\\\r\\\\n", "\n"); // windows line breaks removed
+  	text = text.replaceAll("\\\\n", "\n");
+  	text = text.replaceAll("\\\\r", ""); // windows line breaks removed
   	this.text = text;
   	
     textUtil.setText(this.text);

@@ -75,7 +75,6 @@ public interface Diagram extends SourcesMouseDiagramEvents {
    */
   public boolean isAutoResize();
   public void setAutoResize(boolean autoresize);
-  void autoResize();
 
   boolean isSketchiness();
   

@@ -423,11 +423,6 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 		super.resizeEnd();
 	}
 
-  @Override
-  public void autoResize() {
-    textUtil.resizeEnd();
-  }
-
   public Info getInfo() {
     super.fillInfo(shape);
     return this.shape;
