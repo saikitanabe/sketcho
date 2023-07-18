@@ -91,7 +91,10 @@ public class JsonExtraction {
     if (item.getFontSize() != null) {
         result.put("fsize", new JSONNumber(item.getFontSize()));
     }
-    if (item.getShapeProperties() != null && item.getShapeProperties() > 0) {
+    
+    // FIX: 18.7.2023: rectified relationship is not working because 0 
+    // removed props.
+    if (item.getShapeProperties() != null && item.getShapeProperties() >= 0) {
       // 0 is default and is omitted
       result.put("props", new JSONNumber(item.getShapeProperties()));
     }
