@@ -292,10 +292,11 @@ public class DiagramItemDTO implements IDiagramItem, Serializable, IsSerializabl
 
 	// @Override
 	public Integer getShapeProperties() {
-    if (shapeProperties == null) {
-      // getting unnecessary null pointer exceptions
-      return 0;
-    }
+    // Fix 19.7.2023 regression bug of curved arrow drawn as rectified on peer
+    // if (shapeProperties == null) {
+    //   // getting unnecessary null pointer exceptions
+    //   return 0;
+    // }
 		return shapeProperties;
 	}
 

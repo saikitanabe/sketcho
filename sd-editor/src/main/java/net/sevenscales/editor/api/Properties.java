@@ -976,9 +976,12 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
   }
 
 	private int getTextAreaLeft(int width) {
-  	if (ShapeProperty.isTextPositionBottom(selectedDiagram.getDiagramItem().getShapeProperties()) ||
-        (ShapeProperty.isTextPositionTop(selectedDiagram.getDiagramItem().getShapeProperties()) &&
-        ShapeProperty.isTextPositionMiddle(selectedDiagram.getDiagramItem().getShapeProperties())) ||
+
+    Integer props = selectedDiagram.getDiagramItem().getShapeProperties();
+
+  	if (ShapeProperty.isTextPositionBottom(props) ||
+        (ShapeProperty.isTextPositionTop(props) &&
+        ShapeProperty.isTextPositionMiddle(props)) ||
         selectedDiagram.getDiagramItem().getType().startsWith("e_container_") ||
         ElementType.VERTICAL_PARTITION.getValue().equals(selectedDiagram.getDiagramItem().getType()) ||
         ElementType.FREEHAND2.getValue().equals(selectedDiagram.getDiagramItem().getType())

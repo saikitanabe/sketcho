@@ -179,7 +179,12 @@ public class GenericContainerElement extends AbstractDiagramItem implements Supp
 	
   @Override
   public Diagram duplicate(ISurfaceHandler surface, int x, int y) {
-    GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth() * factorX, getHeight() * factorY, getDiagramItem().getShapeProperties(), shape.getSvgData());
+    Integer props = getDiagramItem().getShapeProperties();
+    if (props == null) {
+      props = 0;
+    }
+
+    GenericShape newShape = new GenericShape(getDiagramItem().getType(), x, y, getWidth() * factorX, getHeight() * factorY, props, shape.getSvgData());
     return createGenericContainerElement(surface, newShape);
   }
 

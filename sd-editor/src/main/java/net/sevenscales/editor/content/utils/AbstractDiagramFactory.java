@@ -505,7 +505,12 @@ public interface AbstractDiagramFactory {
       if (item.getExtension() != null) {
         svgdata = item.getExtension().getSvgData();
       }
-      return new GenericShape(item.getType(), s, item.getShapeProperties(), svgdata).move(moveX, moveY);
+      Integer props = item.getShapeProperties();
+      if (props == null) {
+        // keep original behaviour of getShapeProperties.
+        props = 0;
+      }
+      return new GenericShape(item.getType(), s, props, svgdata).move(moveX, moveY);
     }
 
     public Diagram parseDiagram(ISurfaceHandler surface, Info shape, boolean editable, IDiagramItemRO item, IParentElement parent) {

@@ -232,8 +232,15 @@ public class TextElementFormatUtil {
 
     textElement = IShapeFactory.Util.factory(true).createText(textGroup, false);
     textElement.setHorizontal(isHorizontal());
+
+    Integer props = parent.getDiagramItem().getShapeProperties();
+    if (props == null) {
+      // keep old behaviour of getShapeProperties
+      props = 0;
+    }
+
     textElement.setShapeProperties(
-      parent.getDiagramItem().getShapeProperties(),
+      props,
       parent.getDiagramItem().getType(),
       Tools.isSketchMode()
     );
@@ -385,8 +392,13 @@ public class TextElementFormatUtil {
     textElement.setColor(hasTextElement.getTextColor());
     textElement.setBorderColor(parent.getBorderColor());
     textElement.setFontSize(fontSize + "px");
+    Integer props = parent.getDiagramItem().getShapeProperties();
+    if (props == null) {
+      props = 0;
+    }
+
     textElement.setShapeProperties(
-      parent.getDiagramItem().getShapeProperties(),
+      props,
       parent.getDiagramItem().getType(),
       Tools.isSketchMode()
     );
@@ -501,8 +513,12 @@ public class TextElementFormatUtil {
   public void reapplyText() {
     // createRows(text, true);
     resizeElement();
+    Integer props = parent.getDiagramItem().getShapeProperties();
+    if (props == null) {
+      props = 0;
+    }
     textElement.setShapeProperties(
-      parent.getDiagramItem().getShapeProperties(),
+      props,
       parent.getDiagramItem().getType(),
       Tools.isSketchMode()
     );
@@ -763,8 +779,13 @@ public class TextElementFormatUtil {
   }
 
   public void setShapeSize(int width, int height) {
+    Integer props = parent.getDiagramItem().getShapeProperties();
+    if (props == null) {
+      props = 0;
+    }
+
     textElement.setShapeProperties(
-      parent.getDiagramItem().getShapeProperties(),
+      props,
       parent.getDiagramItem().getType(),
       Tools.isSketchMode()
     );

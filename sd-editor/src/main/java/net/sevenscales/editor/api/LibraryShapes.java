@@ -192,7 +192,11 @@ public class LibraryShapes {
 
     // update default values with dynamic properties
     Integer props = result.getShapeProperties();
-    props = props | (item.getShapeProperties() & ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue());
+    if (props == null) {
+      // keep original behaviour of getShapeProperties
+      props = 0;
+    }
+    props = props | (props & ShapeProperty.DISABLE_SHAPE_AUTO_RESIZE.getValue());
     result.setShapeProperties(props);
     return result;
   }

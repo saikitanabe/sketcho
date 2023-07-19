@@ -1640,7 +1640,17 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     // }
 
     Integer props = diagramItem.getShapeProperties();
+    if (props == null) {
+      // keep old behaviour of getShapeProperties
+      props = 0;
+    }
+
     Integer cprops = current.getShapeProperties();
+    if (cprops == null) {
+      // keep old behaviour of getShapeProperties
+      cprops = 0;
+    }
+
     if (cprops == null && props != null || cprops != null && !cprops.equals(props)) {
       setShapeProperties(props);
     }
