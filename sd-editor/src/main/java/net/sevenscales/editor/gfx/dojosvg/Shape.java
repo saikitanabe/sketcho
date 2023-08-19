@@ -17,10 +17,13 @@ abstract class Shape extends Graphics implements IShape {
 	private int svgdy;
 	private boolean themeSupported = true;
 	private boolean fillAsBorderColor = false;
-	private boolean fillAsBorderColorDark = false;
+  // 0 disables border color ligth/dark and any positive integer is
+  // how much border color is lightened/darkened
+  private int fillAsBorderColorLight = 0;
+	private int fillAsBorderColorDark = 0;
 	private boolean fillAsShapeBackgroundColor = false;
 	private boolean fillAsBoardBackgroundColor = false;
-	private boolean fillAsBackgroundColorLight = false;
+	private int fillAsBackgroundColorLight = 0;
 	private boolean fillAsBackgroundColorDark = false;
 	
 	final public void setStroke(Color color) {
@@ -541,19 +544,27 @@ abstract class Shape extends Graphics implements IShape {
   	return fillAsBoardBackgroundColor;
   }
 
-	public void setFillAsBorderColorDark(boolean value) {
+	public void setFillAsBorderColorLight(int value) {
+		this.fillAsBorderColorLight = value;
+	}
+
+  public int getFillAsBorderColorLight() {
+  	return fillAsBorderColorLight;
+  }
+
+	public void setFillAsBorderColorDark(int value) {
 		this.fillAsBorderColorDark = value;
 	}
 
-  public boolean isFillAsBorderColorDark() {
+  public int getFillAsBorderColorDark() {
   	return fillAsBorderColorDark;
   }
 
-	public void setFillAsBackgroundColorLight(boolean value) {
+	public void setFillAsBackgroundColorLight(int value) {
 		this.fillAsBackgroundColorLight = value;
 	}
 
-  public boolean isFillAsBackgroundColorLight() {
+  public int getFillAsBackgroundColorLight() {
   	return fillAsBackgroundColorLight;
 	}
 

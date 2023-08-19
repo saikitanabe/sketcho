@@ -50,8 +50,8 @@ public class Color {
 		return copyRgbColor(rgb);
 	}
 
-	public Color toLighter() {
-		JsArrayInteger rgb = tsRgbToLighter(red, green, blue, 20);
+	public Color toLighter(int lighter) {
+		JsArrayInteger rgb = tsRgbToLighter(red, green, blue, lighter);
 		return copyRgbColor(rgb);
 	}
 
@@ -64,8 +64,8 @@ public class Color {
 		return result;
 	}
 
-	public Color toDarker() {
-		JsArrayInteger rgb = tsRgbToDarker(red, green, blue);
+	public Color toDarker(int darker) {
+		JsArrayInteger rgb = tsRgbToDarker(red, green, blue, darker);
 
 		Color result = create();
 		result.red = rgb.get(0);
@@ -78,8 +78,8 @@ public class Color {
 	private native JsArrayInteger tsRgbToLighter(int red, int green, int blue, int lighter)/*-{
 		return $wnd.tsRgbToLighter(red, green, blue, lighter);
 	}-*/;
-	private native JsArrayInteger tsRgbToDarker(int red, int green, int blue)/*-{
-		return $wnd.tsRgbToDarker(red, green, blue);
+	private native JsArrayInteger tsRgbToDarker(int red, int green, int blue, int darker)/*-{
+		return $wnd.tsRgbToDarker(red, green, blue, darker);
 	}-*/;
 	
 	public void copy(Color color) {

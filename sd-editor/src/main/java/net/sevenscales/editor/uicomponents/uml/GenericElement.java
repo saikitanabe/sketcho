@@ -629,8 +629,10 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
 				path.path.setFill(color);
 			} else if (path.path.isFillAsBoardBackgroundColor()) {
   			path.path.setFill(Theme.getCurrentThemeName().getBoardBackgroundColor());
-  		} else if (path.path.isFillAsBorderColorDark()) {
-  			path.path.setFill(color.toDarker());
+  		} else if (path.path.getFillAsBorderColorLight() > 0) {
+  			path.path.setFill(color.toLighter(path.path.getFillAsBorderColorLight()));
+  		} else if (path.path.getFillAsBorderColorDark() > 0) {
+  			path.path.setFill(color.toDarker(path.path.getFillAsBorderColorDark()));
   		}
   	}
 		// background.setStroke(color);

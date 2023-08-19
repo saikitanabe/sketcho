@@ -76,11 +76,14 @@ public interface IShape extends IGraphics {
   void setFillAsBoardBackgroundColor(boolean value);
   boolean isFillAsBoardBackgroundColor();
   
-  void setFillAsBorderColorDark(boolean value);
-  boolean isFillAsBorderColorDark();
+  void setFillAsBorderColorLight(int value);
+  int getFillAsBorderColorLight();
 
-  void setFillAsBackgroundColorLight(boolean value);
-  boolean isFillAsBackgroundColorLight();
+  void setFillAsBorderColorDark(int value);
+  int getFillAsBorderColorDark();
+
+  void setFillAsBackgroundColorLight(int value);
+  int getFillAsBackgroundColorLight();
   
   void setFillAsBackgroundColorDark(boolean value);
   boolean isFillAsBackgroundColorDark();

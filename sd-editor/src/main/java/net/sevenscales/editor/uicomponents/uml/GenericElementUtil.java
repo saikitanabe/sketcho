@@ -2,6 +2,9 @@ package net.sevenscales.editor.uicomponents.uml;
 
 import java.util.List;
 
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
+
 import net.sevenscales.editor.gfx.domain.IPath;
 import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.IShape;
@@ -17,11 +20,22 @@ class GenericElementUtil {
 
   private static final String BOUNDARY_COLOR          = "#aaaaaa";
   private static final String FILL_BORDER_COLOR       = "fill:bordercolor;";
-  private static final String FILL_BORDER_COLOR_DARK  = "fill:bordercolor-dark;";
+  private static final String FILL_BORDER_COLOR_LIGHT  = "fill:bordercolor-light";
+  private static final String FILL_BORDER_COLOR_DARK  = "fill:bordercolor-dark";
   private static final String FILL_SHAPE_BG_COLOR     = "fill:shape-bgcolor;";
   private static final String FILL_BG_COLOR           = "fill:bgcolor;";
-  private static final String FILL_BG_COLOR_LIGHT     = "fill:bgcolor-light;";
+  private static final String FILL_BG_COLOR_LIGHT     = "fill:bgcolor-light";
   private static final String FILL_BG_COLOR_DARK      = "fill:bgcolor-dark;";
+
+  private static final String COLOR_ARG_PATTERN = ":?(\\d+)?;";
+  private static final String darkColorPattern = FILL_BORDER_COLOR_DARK + COLOR_ARG_PATTERN;
+  private static final RegExp darkColorRegExp = RegExp.compile(darkColorPattern);
+
+  private static final String lightColorPattern = FILL_BORDER_COLOR_LIGHT + COLOR_ARG_PATTERN;
+  private static final RegExp lightColorRegExp = RegExp.compile(lightColorPattern);
+
+  private static final String bgLightColorPattern = FILL_BG_COLOR_LIGHT + COLOR_ARG_PATTERN;
+  private static final RegExp bgLightColorRegExp = RegExp.compile(bgLightColorPattern);
 
   static class ElementData {
     List<PathWrapper> paths;
@@ -141,17 +155,48 @@ class GenericElementUtil {
     } else if (style.contains(FILL_BG_COLOR)) {
       path.setFillAsBoardBackgroundColor(true);
       style = style.replace(FILL_BG_COLOR, "");
+    } else if (style.contains(FILL_BORDER_COLOR_LIGHT)) {
+      int defaultLegacyValue = 20;
+      int value = getColorArg(style, lightColorRegExp, defaultLegacyValue);
+      path.setFillAsBorderColorLight(value);
+      style = style.replaceAll(lightColorPattern, "");
     } else if (style.contains(FILL_BORDER_COLOR_DARK)) {
-      path.setFillAsBorderColorDark(true);
-      style = style.replace(FILL_BORDER_COLOR_DARK, "");
+      // Example style and regex
+      // stroke:#111;fill:bordercolor-dark:8;opacity:8
+      // fill:bordercolor-dark:?(\S*);
+
+      int defaultLegacyValue = 10;
+      int darker = getColorArg(style, darkColorRegExp, defaultLegacyValue);
+      path.setFillAsBorderColorDark(darker);
+      style = style.replaceAll(darkColorPattern, "");
     } else if (style.contains(FILL_BG_COLOR_LIGHT)) {
-      path.setFillAsBackgroundColorLight(true);
-      style = style.replace(FILL_BG_COLOR_LIGHT, "");
+      int defaultLegacyValue = 20;
+      int value = getColorArg(style, bgLightColorRegExp, defaultLegacyValue);
+      path.setFillAsBackgroundColorLight(value);
+      style = style.replaceAll(bgLightColorPattern, "");
     } else if (style.contains(FILL_BG_COLOR_DARK)) {
       path.setFillAsBackgroundColorDark(true);
       style = style.replace(FILL_BG_COLOR_DARK, "");
     }
     return style;
+  }
+
+  static int getColorArg(String style, RegExp regexp, int defaultValue) {
+    try {
+      MatchResult m = regexp.exec(style);
+
+      if (m != null && m.getGroupCount() == 2) {
+        // can have one argument how much border color is darkened/lightened
+        String value = m.getGroup(1);
+        // it will be null if no arg, and throws exception
+        return Integer.valueOf(value);
+      }
+  
+    } catch (Exception e) {
+      // ignore and return default value in the end
+    }
+
+    return defaultValue;
   }
 
   static void setBackgroundColor(
@@ -175,12 +220,13 @@ class GenericElementUtil {
 
       }
 
-      if (path.path.isFillAsBackgroundColorLight()) {
+      if (path.path.getFillAsBackgroundColorLight() > 0) {
         Color color = element.backgroundColor;
-        path.path.setFill(color.toLighter());
+        path.path.setFill(color.toLighter(path.path.getFillAsBackgroundColorLight()));
       } else if (path.path.isFillAsBackgroundColorDark()) {
         Color color = element.backgroundColor;
-        path.path.setFill(color.toDarker());
+        int darker = 10;
+        path.path.setFill(color.toDarker(darker));
       } else if (path.path.isFillAsShapeBackgroundColor()) {
         path.path.setFill(clr.red, clr.green, clr.blue, clr.opacity);
       }
