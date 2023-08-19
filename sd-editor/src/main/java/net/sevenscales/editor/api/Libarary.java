@@ -248,6 +248,7 @@ public class Libarary extends SimplePanel implements SurfaceLoadedEventListener,
     ngHideLibrary("extra");
     ngHideLibrary("aws");
     ngHideLibrary("electronic");
+    ngHideLibrary("gcp");
 
     // string switch not supported
     // switch (libraryName) {
