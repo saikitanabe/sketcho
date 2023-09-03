@@ -917,6 +917,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
       translateX: [stx, tx],
       translateY: [sty, ty],
       easing: 'easeOutQuad',
+      duration: 500,
       begin: function() {
       },
       complete: function() {
