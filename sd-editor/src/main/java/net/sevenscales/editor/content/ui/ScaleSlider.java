@@ -438,7 +438,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 		int i = 0;
 
 		for (double f : Constants.ZOOM_FACTORS) {
-			if (f == value) {
+			if (f >= value) {
 				return i;
 			}
 			++i;
