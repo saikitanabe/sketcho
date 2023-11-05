@@ -163,7 +163,7 @@ public class SelectionHandler implements MouseDiagramHandler, KeyEventListener {
   private void handleBackspaceDelete(NativePreviewEvent event) {
     NativeEvent ne = event.getNativeEvent();
     if (event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.noMetaKeys(ne) && !surface.getEditorContext().isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
-      if (ne.getKeyCode() == KeyCodes.KEY_BACKSPACE && UIKeyHelpers.allMenusAreClosed() && confluenceCheck()) {
+      if (ne.getKeyCode() == KeyCodes.KEY_BACKSPACE && !UIKeyHelpers.isInputFocus() && confluenceCheck()) {
         event.getNativeEvent().preventDefault();
         removeSelected();
       }

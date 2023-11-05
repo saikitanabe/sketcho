@@ -35,11 +35,11 @@ public class Clipboard {
 	private void copyOrPaste(NativePreviewEvent event) {
     NativeEvent ne = event.getNativeEvent();
     if (event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.cntrlOrCmdKey(ne) && !editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
-      if (ne.getKeyCode() == 'C' && UIKeyHelpers.allMenusAreClosed()) {
+      if (ne.getKeyCode() == 'C' && !UIKeyHelpers.isInputFocus()) {
 	      logger.debug("copy...");
 	      _copy();
 	      preventDefault(event);
-	    } else if (ne.getKeyCode() == 'V' && UIKeyHelpers.allMenusAreClosed()) {
+	    } else if (ne.getKeyCode() == 'V' && !UIKeyHelpers.isInputFocus()) {
 	      logger.debug("paste...");
 	      _paste();
 	      preventDefault(event);

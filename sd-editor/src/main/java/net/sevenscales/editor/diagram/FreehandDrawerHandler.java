@@ -94,14 +94,14 @@ public class FreehandDrawerHandler implements
       public void onPreviewNativeEvent(NativePreviewEvent event) {
         NativeEvent ne = event.getNativeEvent();
         if (!freehandKeyDown && event.getTypeInt() == Event.ONKEYDOWN && UIKeyHelpers.noMetaKeys(ne) && UIKeyHelpers.isEditorClosed(FreehandDrawerHandler.this.surface.getEditorContext())) {
-          if (ne.getKeyCode() == 'F' && UIKeyHelpers.allMenusAreClosed()) {
+          if (ne.getKeyCode() == 'F' && !UIKeyHelpers.isInputFocus()) {
             freehandKeyDown = true;
             fireToggleFreehandMode();
           }
         }
 
         if (freehandKeyDown && event.getTypeInt() == Event.ONKEYUP && UIKeyHelpers.isEditorClosed(FreehandDrawerHandler.this.surface.getEditorContext())) {
-          if (ne.getKeyCode() == 'F' && UIKeyHelpers.allMenusAreClosed()) {
+          if (ne.getKeyCode() == 'F' && !UIKeyHelpers.isInputFocus()) {
             freehandKeyDown = false;
           }
         }

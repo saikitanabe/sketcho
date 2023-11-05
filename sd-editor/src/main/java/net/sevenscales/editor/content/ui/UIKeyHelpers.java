@@ -16,6 +16,10 @@ public class UIKeyHelpers {
 	  if (typeof menuOpenFunc == "function") return !menuOpenFunc();
 	  return true; 
 	}-*/; 
+
+  public static native boolean isInputFocus()/*-{
+    return typeof $wnd.isInputFocus === 'function' && $wnd.isInputFocus()
+  }-*/;
 	
 	public static boolean noMetaKeys(NativeEvent ne) {
 	  return !ne.getCtrlKey() && !ne.getMetaKey() && !ne.getShiftKey();

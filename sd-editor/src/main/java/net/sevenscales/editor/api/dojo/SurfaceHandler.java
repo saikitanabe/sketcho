@@ -144,8 +144,6 @@ class SurfaceHandler extends SimplePanel implements
   private Integer height;
   private int currentClientX;
   private int currentClientY;
-  private int currentClientMouseMoveX;
-  private int currentClientMouseMoveY;
   private boolean proxyDragAdd;
   private String svgClassName;
   
@@ -213,36 +211,6 @@ class SurfaceHandler extends SimplePanel implements
 
 //      addStyleName("diagram-panel");
     }
-
-    Event.addNativePreviewHandler(new NativePreviewHandler() {
-      @Override
-      public void onPreviewNativeEvent(NativePreviewEvent event) {
-        NativeEvent ne = event.getNativeEvent();
-        switch (event.getTypeInt()) {
-          case Event.ONMOUSEMOVE: {
-            // store mouse move position separately,
-            // not to break any currentclientx and y position logic
-            currentClientMouseMoveX = ne.getClientX();
-            currentClientMouseMoveY = ne.getClientY();
-            break;
-          }
-          // NOTE: retrieved from global sketchboard-current-pointer.ts
-          // case Event.ONMOUSEDOWN:
-          // case Event.ONMOUSEUP: {
-          //   // store mouse up event location before it happens
-          //   // on surface, then possible to pass this location
-          //   // together with OTs.
-          //   // mouse up location through surface is the location of mouse down
-          //   // at least when dragging an element, most probably element prevents
-          //   // getting mouse up location
-          //   currentClientX = ne.getClientX();
-          //   currentClientY = ne.getClientY();
-          //   break;
-          // }
-        }
-      }
-    });
-
     
     // FocusPanel support (key events handled through browser)
 //    getElement().setTabIndex(0);
@@ -451,11 +419,11 @@ class SurfaceHandler extends SimplePanel implements
   }-*/;
 
   public int getCurrentClientMouseMoveX() {
-    return currentClientMouseMoveX;
+    return nativeCurrentPointerDownX();
   }
 
   public int getCurrentClientMouseMoveY() {
-    return currentClientMouseMoveY;
+    return nativeCurrentPointerDownY();
   }
   
   public void removeAll() {
@@ -1234,7 +1202,7 @@ class SurfaceHandler extends SimplePanel implements
 
     if (wheel) {
       // wheel zoom zooms to mouse point
-      scaleAtPoint(value, currentClientMouseMoveX, currentClientMouseMoveY);
+      scaleAtPoint(value, nativeCurrentPointerDownX(), nativeCurrentPointerDownY());
     } else if (middleX != 0 || middleY != 0) {
       // wheel zoom zooms to mouse point
       scaleAtPoint(value, middleX, middleY);

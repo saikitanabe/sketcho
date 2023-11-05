@@ -407,7 +407,7 @@ public class UiContextMenu extends Composite implements net.sevenscales.editor.c
 		    if (event.getTypeInt() == Event.ONKEYDOWN && 
 		    		!UiContextMenu.this.editorContext.isTrue(EditorProperty.PROPERTY_EDITOR_IS_OPEN)) {
 		      NativeEvent ne = event.getNativeEvent();
-		      if (ne.getKeyCode() == KeyCodes.KEY_DELETE && UIKeyHelpers.allMenusAreClosed()) {
+		      if (ne.getKeyCode() == KeyCodes.KEY_DELETE && !UIKeyHelpers.isInputFocus()) {
 						UiContextMenu.this.selectionHandler.removeSelected();
 		      }
 		    }
