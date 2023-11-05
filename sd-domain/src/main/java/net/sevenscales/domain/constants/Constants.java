@@ -134,7 +134,7 @@ public class Constants {
 			++i;
 		}
 
-    Debug.log("ZOOM_FACTORS", ZOOM_FACTORS, "ZOOM_DEFAULT_INDEX", ZOOM_DEFAULT_INDEX);
+    // Debug.log("ZOOM_FACTORS", ZOOM_FACTORS, "ZOOM_DEFAULT_INDEX", ZOOM_DEFAULT_INDEX);
 	}
 
 }
