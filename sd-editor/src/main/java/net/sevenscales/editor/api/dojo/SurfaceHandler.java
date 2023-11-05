@@ -138,6 +138,7 @@ class SurfaceHandler extends SimplePanel implements
   private IGroup containerLayer1;
   private IGroup slideLayer;
   private IGroup rootLayer0;
+  private IGroup patternLayer;
 
   private Integer width;
   private Integer height;
@@ -724,6 +725,7 @@ class SurfaceHandler extends SimplePanel implements
     diagrams = new DiagramDisplayOrderList();
 
     rootLayer0.remove();
+    patternLayer.remove();
     slideLayer.remove();
     containerLayer1.remove();
     elementLayer2.remove();
@@ -731,12 +733,18 @@ class SurfaceHandler extends SimplePanel implements
     interactionLayer4.remove();
 
     rootLayer0 = IShapeFactory.Util.factory(editable).createGroup(surface);
+    patternLayer = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
+    __addPattern__(patternLayer.getElement());
     slideLayer = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
     containerLayer1 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
     elementLayer2 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
     connectionLayer3 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
     interactionLayer4 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
   }
+
+  private native void __addPattern__(JavaScriptObject group)/*-{
+    $wnd.__addPattern__(group)
+  }-*/;
 
   public int count() {
     return count(surface.getContainer());
@@ -846,6 +854,8 @@ class SurfaceHandler extends SimplePanel implements
     logger.debug("loaded {}...", name);
     // layers in order
     rootLayer0 = IShapeFactory.Util.factory(editable).createGroup(surface);
+    // add pattern layer that can be managed by react createRoot
+    patternLayer = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
     slideLayer = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
     containerLayer1 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
     elementLayer2 = IShapeFactory.Util.factory(editable).createGroup(rootLayer0);
@@ -1248,7 +1258,10 @@ class SurfaceHandler extends SimplePanel implements
 
     }
 
-    scaleBackground(value);
+    // ST 4.11.2023: not needed any longer after added
+    // svg background grid.
+
+    // scaleBackground(value);
     this.scaleFactor = value;
 
     if (!isLibrary()) {
