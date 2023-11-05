@@ -119,6 +119,7 @@ public class BackgroundMoveHandlerV2 implements MouseDiagramHandler, IBackground
   @Override
   public void move(int deltaX, int deltaY) {
     IGroup layer = surface.getRootLayer();
+    layer.setAttribute("class", "");
 
     int dx = layer.getTransformX() - deltaX;
     int dy = layer.getTransformY() - deltaY;

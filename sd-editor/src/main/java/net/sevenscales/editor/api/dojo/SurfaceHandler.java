@@ -1229,6 +1229,9 @@ class SurfaceHandler extends SimplePanel implements
   
   @Override
   public void scale(double value, boolean wheel, int middleX, int middleY) {
+    // style class to allow using css transformations during zoom
+    rootLayer0.setAttribute("class", "rootlayer");
+
     if (wheel) {
       // wheel zoom zooms to mouse point
       scaleAtPoint(value, currentClientMouseMoveX, currentClientMouseMoveY);
