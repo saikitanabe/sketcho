@@ -117,7 +117,8 @@ public class JSONDiagramParser {
 	}
 
 	public IDiagramItemRO isItem() {
-		if (diagramItem != null) {
+		if (diagramItem != null && diagramItem.getType() != null && diagramItem.getType().length() > 0) {
+      // fix bug where there are ghost items that doesn't have type
 			return diagramItem;
 		} else if (comment != null) {
 			return comment;
