@@ -21,7 +21,6 @@ public class Constants {
 	public static final int ELLIPSE_RECT_SHAPE_VERSION = 7;
 
 	public static int ZOOM_DEFAULT_INDEX;
-  private static double zoomSmallest = 0.1;
   // private static double zoomStep = 0.0225;
 
   public static final double[] ZOOM_FACTORS;
@@ -104,20 +103,23 @@ public class Constants {
 
 	static {
     java.util.List<Double> values = new java.util.ArrayList<Double>();
+    double zoomMin = 0.1;
+    double zoomMax = 3.6;
     
-    for (double value = zoomSmallest; value <= 3.6;) {
+    for (double value = zoomMin; value <= zoomMax;) {
       // ZOOM_FACTORS[i] = value;
       values.add(value);
 
       if (value <= 0.26) {
         value += 0.005;
       } else if (value <= 1) {
-        value += 0.03;
+        value += 0.01;
       } else if (value <= 2) {
-        value += 0.04;
+        value += 0.02;
       } else {
-        value += 0.05;
+        value += 0.03;
       }
+      // value += 0.01;
     }
 
     ZOOM_FACTORS = new double[values.size()];
