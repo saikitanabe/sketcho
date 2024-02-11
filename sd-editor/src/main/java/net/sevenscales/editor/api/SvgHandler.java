@@ -66,7 +66,7 @@ public class SvgHandler {
 
   private native void _init(SvgHandler me)/*-{
 		$wnd.gwtGetScaleFactor = function() {
-      $wnd.console.log('gwtGetScaleFactor')
+      // $wnd.console.log('gwtGetScaleFactor')
 			return me.@net.sevenscales.editor.api.SvgHandler::gwtGetScaleFactor()();
 		}
   }-*/;
