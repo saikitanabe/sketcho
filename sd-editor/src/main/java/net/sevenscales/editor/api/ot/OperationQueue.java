@@ -47,6 +47,7 @@ public class OperationQueue {
 
   private int baseUpdateVersion;
 	private boolean nextOffline = false;
+  private boolean transaction = false;
 
 	public OperationQueue(
     Acknowledged acknowledged,
@@ -60,6 +61,18 @@ public class OperationQueue {
     this.tabId = tabId;
 		queuedOperations = new LinkedList<SendOperation>();
 	}
+
+  public void beginTransaction() {
+    transaction = true;
+  }
+
+  public void commitTransaction() {
+    transaction = false;
+  }
+
+  public boolean isTransaction() {
+    return transaction;
+  }
 	
 	public interface Acknowledged {
 		boolean acknowledgedFromServerOrShouldRetry();

@@ -22,16 +22,7 @@ public class SurfaceDiagramSearch implements DiagramSearch {
 	
 	@Override
 	public Diagram findByClientId(String clientId) {
-		if (clientId == null || "".equals(clientId)) {
-			return null;
-		}
-		
-		for (Diagram d : surface.getDiagrams()) {
-			if ( !(d instanceof CircleElement) && d.getDiagramItem() != null && clientId.equals(d.getDiagramItem().getClientId())) {
-				return d;
-			}
-		}
-		return null;
+    return DiagramSearchImpl.findByClientId(clientId, surface.getDiagrams());
 	}
 
 	@Override

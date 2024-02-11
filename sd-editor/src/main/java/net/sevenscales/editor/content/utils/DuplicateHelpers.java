@@ -6,13 +6,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collections;
+import java.util.Collection;
+import java.util.Comparator;
 
 import net.sevenscales.domain.ElementType;
 import net.sevenscales.domain.IDiagramItemRO;
 import net.sevenscales.domain.api.IDiagramItem;
+import net.sevenscales.domain.utils.Debug;
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.EditorProperty;
 import net.sevenscales.editor.api.ISurfaceHandler;
+import net.sevenscales.editor.api.impl.DiagramSearchImpl;
 import net.sevenscales.editor.api.impl.Theme;
 import net.sevenscales.editor.api.ot.BoardDocument;
 import net.sevenscales.editor.api.ot.BoardDocumentHelpers;
@@ -25,7 +30,8 @@ import net.sevenscales.editor.diagram.shape.Info;
 import net.sevenscales.editor.diagram.utils.CommentFactory;
 import net.sevenscales.editor.diagram.utils.ReattachHelpers;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
-
+import net.sevenscales.editor.diagram.drag.AnchorElement;
+import net.sevenscales.editor.diagram.drag.Anchor;
 
 public class DuplicateHelpers {
 	private static final SLogger logger = SLogger.createLogger(DuplicateHelpers.class);
@@ -68,6 +74,7 @@ public class DuplicateHelpers {
 			// Apply theme colors
 			BoardColorHelper.applyThemeToDiagram(copied, Theme.getColorScheme(Theme.ThemeName.PAPER), Theme.getCurrentColorScheme());
 		}
+
 	}
 	
 	public void duplicate(BoardDocument boardDocument) {
@@ -91,7 +98,7 @@ public class DuplicateHelpers {
 			for (IDiagramItemRO diro : items) {
 				copies.add(diro.copy());
 			}
-			paste(left + 20, top + 35, copies, boardDocument, true, true);
+			paste(left + 20, top + 35, copies, boardDocument, true, true, false);
 		} else if (toduplicate.size() == 1) {
 			// special one item duplicate, e.g. sequence or horizontal bar
 			Diagram duplicated = toduplicate.get(0).duplicate();
@@ -99,13 +106,21 @@ public class DuplicateHelpers {
 		}
 	}
 
-	private void addItemsToTheBoard(State state, boolean asSelected) {
+	private void addItemsToTheBoard(
+    State state,
+    boolean asSelected,
+    boolean autoResizeAndAlign
+  ) {
 		// check if something was really duplicated; item might not support duplication like comment element.
 		if (state.newItems.size() > 0) {
 			// replace old connections with new client ids
 			replaceOldConnections(state.relationships, state.clientIdMapping);
 
-			state.reattachHelpers.reattachRelationshipsAndDraw();
+      if (autoResizeAndAlign) {
+        state.reattachHelpers.reattachRelationshipsAndDrawClosestPath();
+      } else {
+        state.reattachHelpers.reattachRelationshipsAndDraw();
+      }
 
 			if (asSelected) {
 				surface.addAsSelected(state.newItems, true, true);
@@ -115,9 +130,30 @@ public class DuplicateHelpers {
 		}
 	}
 
-	public Map<String, String> paste(int x, int y, List<? extends IDiagramItemRO> items, BoardDocument boardDocument, boolean editable, boolean asSelected) {
-		// TODO check if editable, should be checked already before copy!!
-		// TODO what do to with comments!! is it allowed to copy those!!!???
+  private native void beginOperationQueueTransaction()/*-{
+    $wnd.beginOperationQueueTransaction()
+  }-*/;
+
+  private native void commitOperationQueueTransaction()/*-{
+    $wnd.commitOperationQueueTransaction()
+  }-*/;
+
+	public Map<String, String> paste(
+    int x,
+    int y,
+    List<? extends IDiagramItemRO> items,
+    BoardDocument boardDocument,
+    boolean editable,
+    boolean asSelected,
+    boolean autoResizeAndAlign
+  ) {
+    // TODO check if editable, should be checked already before copy!!
+    // TODO what do to with comments!! is it allowed to copy those!!!???
+
+    // start operation queue transaction
+    // align makes insert and move
+    // and we want those to goes in a single send.
+    beginOperationQueueTransaction();
 
 		Map<String, String> result = null;
 
@@ -127,12 +163,102 @@ public class DuplicateHelpers {
 
 			State state = copyAndMapClientIds(x, y, items, boardDocument);
 
-			addItemsToTheBoard(state, asSelected);
+      if (autoResizeAndAlign) {
+        // align shapes before reattaching relationships
+        // so those utilize updated positions
+        align(state);
+        // state.reprocess();
+      }
+
+			addItemsToTheBoard(state, asSelected, autoResizeAndAlign);
 			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
 
 			result = state.clientIdMapping;
 		}
+
+    com.google.gwt.core.client.Scheduler.get().scheduleDeferred(new com.google.gwt.core.client.Scheduler.ScheduledCommand() {
+      public void execute() {
+        // allow to send what ever has been done in here
+        commitOperationQueueTransaction();
+      }
+    });
+
 		return result;
+	}
+
+  private void align(State state) {
+    for (Diagram d : state.newItems) {
+      d.resizeEnd();
+    }
+
+    com.google.gwt.core.client.Scheduler.get().scheduleDeferred(new com.google.gwt.core.client.Scheduler.ScheduledCommand() {
+      // need to do as scheduled, since otherwise elements are not resized
+      public void execute() {
+        surface.getSelectionHandler().unselectAll();
+        sort(state.newItems);
+      }
+    });
+  }
+
+  private void sort(List<Diagram> shapes) {
+    Collections.sort(shapes, Comparator.comparing((Diagram s) -> s.getTop()).thenComparing(s -> s.getLeft()));
+
+    for (int i = 1; i < shapes.size(); i++) {
+      Diagram prev = shapes.get(i - 1);
+      Diagram curr = shapes.get(i);
+
+      if (curr instanceof Relationship2) {
+        continue;
+      }
+
+      if (curr.getTop() < prev.getTop() + prev.getHeight() && curr.getLeft() < prev.getLeft() + prev.getWidth()) {
+        // Shapes overlap, adjust the position of the current shape
+        int dy = prev.getTop() + prev.getHeight() - curr.getTop() + 50;
+        curr.setTransform(0, dy);
+      }
+    }
+
+    for (Diagram d : shapes) {
+      if (d instanceof Relationship2) {
+        Anchor anchor = ((Relationship2)d).getStartAnchor();
+        if (anchor != null) {
+          Diagram ad = anchor.getDiagram();
+          ad.anchorWith(anchor, ad.getCenterX(), ad.getCenterY());
+        }
+        Anchor anchor2 = ((Relationship2)d).getEndAnchor();
+        if (anchor2 != null) {
+          Diagram ad = anchor2.getDiagram();
+          ad.anchorWith(anchor2, ad.getCenterX(), ad.getCenterY());
+        }
+      }
+    }
+
+    for (Diagram d : shapes) {
+      if (!(d instanceof Relationship2)) {
+        moveAnchors(d.getAnchors(), 0, 0, 0);
+      }
+    }
+
+    ReattachHelpers reattachHelpers = new ReattachHelpers();
+
+    for (Diagram d : shapes) {
+      reattachHelpers.processDiagram(d);
+    }
+
+    reattachHelpers.reattachRelationships(false, true, true);
+
+    surface.getEditorContext().getEventBus().fireEvent(new net.sevenscales.editor.api.event.PotentialOnChangedEvent(shapes));
+    // net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers.fireDiagramsChangedEvenet(
+    //   new java.util.HashSet(shapes),
+    //   surface,
+    //   net.sevenscales.editor.api.ActionType.DRAGGING
+    // );
+  }
+
+  private void moveAnchors(Collection<AnchorElement> anchors, int dx, int dy, int sequence) {
+		for (AnchorElement ae : anchors) {
+			ae.dispatch(dx, dy, sequence);
+		}
 	}
 
 	private State copyAndMapClientIds(int x, int y, List<? extends IDiagramItemRO> items, BoardDocument boardDocument) {
