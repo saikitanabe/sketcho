@@ -203,18 +203,26 @@ public class DuplicateHelpers {
   private void sort(List<Diagram> shapes) {
     Collections.sort(shapes, Comparator.comparing((Diagram s) -> s.getTop()).thenComparing(s -> s.getLeft()));
 
-    for (int i = 1; i < shapes.size(); i++) {
-      Diagram prev = shapes.get(i - 1);
-      Diagram curr = shapes.get(i);
+    int xGap = 100;
+    int yGap = 100;
 
-      if (curr instanceof Relationship2) {
+    for (int i = 1; i < shapes.size(); i++) {
+      Diagram prevShape = shapes.get(i - 1);
+      Diagram currShape = shapes.get(i);
+
+      if (currShape instanceof Relationship2) {
         continue;
       }
 
-      if (curr.getTop() < prev.getTop() + prev.getHeight() && curr.getLeft() < prev.getLeft() + prev.getWidth()) {
+      if (currShape.getTop() < prevShape.getTop() + prevShape.getHeight() && currShape.getLeft() < prevShape.getLeft() + prevShape.getWidth()) {
         // Shapes overlap, adjust the position of the current shape
-        int dy = prev.getTop() + prev.getHeight() - curr.getTop() + 50;
-        curr.setTransform(0, dy);
+        int dy = prevShape.getTop() + prevShape.getHeight() + yGap - currShape.getTop();
+        int dx = xGap; // Introduce a horizontal gap
+
+        currShape.setTransform(dx, dy);
+      } else {
+        int dy = yGap; // Introduce a vertical gap
+        currShape.setTransform(0, dy);
       }
     }
 
