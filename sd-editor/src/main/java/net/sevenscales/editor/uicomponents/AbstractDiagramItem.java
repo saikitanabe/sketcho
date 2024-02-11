@@ -1743,7 +1743,6 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
     }
 
     applyLink();
-
 	}
 
   protected abstract void doSetShape(int[] shape);
