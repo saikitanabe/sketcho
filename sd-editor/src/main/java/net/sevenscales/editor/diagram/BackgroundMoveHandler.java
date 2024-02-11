@@ -145,7 +145,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMo
     if (cachedEditor == null) {
       cachedEditor = getEditor();
     }
-    moveBgImage(cachedEditor, dx, dy);    
+    // moveBgImage(cachedEditor, dx, dy);    
   }
 
   private void move(MatrixPointJS point) {
@@ -169,7 +169,7 @@ public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMo
       if (cachedEditor == null) {
         cachedEditor = getEditor();
       }
-      moveBgImage(cachedEditor, dx, dy);
+      // moveBgImage(cachedEditor, dx, dy);
     }
   }
 
@@ -177,10 +177,10 @@ public class BackgroundMoveHandler implements MouseDiagramHandler, IBackgroundMo
     return $wnd.$('#sketchboard-editor')
   }-*/;
 
-  private native void moveBgImage(JavaScriptObject editor, int dx, int dy)/*-{
-    var pos = dx + "px " + dy + "px"
-    editor.css("background-position", pos)
-  }-*/;
+  // private native void moveBgImage(JavaScriptObject editor, int dx, int dy)/*-{
+  //   var pos = dx + "px " + dy + "px"
+  //   editor.css("background-position", pos)
+  // }-*/;
 
   private void startBackgroundMove() {
     surface.getEditorContext().getEventBus().fireEvent(new BackgroundMoveStartedEvent());
