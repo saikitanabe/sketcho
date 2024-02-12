@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.Collections;
 import java.util.Collection;
 import java.util.Comparator;
@@ -153,35 +155,40 @@ public class DuplicateHelpers {
     // start operation queue transaction
     // align makes insert and move
     // and we want those to goes in a single send.
-    beginOperationQueueTransaction();
+    Map<String, String> result = null;
 
-		Map<String, String> result = null;
+    try {
+      beginOperationQueueTransaction();
 
-		if (editable) {
-			logger.debug("paste... {}", items);
-			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
+      if (editable) {
+        logger.debug("paste... {}", items);
+        surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, true);
 
-			State state = copyAndMapClientIds(x, y, items, boardDocument);
+        State state = copyAndMapClientIds(x, y, items, boardDocument);
 
-      if (autoResizeAndAlign) {
-        // align shapes before reattaching relationships
-        // so those utilize updated positions
-        align(state);
-        // state.reprocess();
+        if (autoResizeAndAlign) {
+          // align shapes before reattaching relationships
+          // so those utilize updated positions
+          align(state);
+          // state.reprocess();
+        }
+
+        addItemsToTheBoard(state, asSelected, autoResizeAndAlign);
+        surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
+
+        result = state.clientIdMapping;
       }
 
-			addItemsToTheBoard(state, asSelected, autoResizeAndAlign);
-			surface.getEditorContext().set(EditorProperty.ON_SURFACE_LOAD, false);
-
-			result = state.clientIdMapping;
-		}
-
-    com.google.gwt.core.client.Scheduler.get().scheduleDeferred(new com.google.gwt.core.client.Scheduler.ScheduledCommand() {
-      public void execute() {
-        // allow to send what ever has been done in here
-        commitOperationQueueTransaction();
-      }
-    });
+      com.google.gwt.core.client.Scheduler.get()
+          .scheduleDeferred(new com.google.gwt.core.client.Scheduler.ScheduledCommand() {
+            public void execute() {
+              // allow to send what ever has been done in here
+              commitOperationQueueTransaction();
+            }
+          });
+    } catch (Exception e) {
+      commitOperationQueueTransaction();
+    }
 
 		return result;
 	}
@@ -195,26 +202,51 @@ public class DuplicateHelpers {
       // need to do as scheduled, since otherwise elements are not resized
       public void execute() {
         surface.getSelectionHandler().unselectAll();
-        sort(state.newItems);
+        sort(state);
       }
     });
   }
 
-  private void sort(List<Diagram> shapes) {
-    Collections.sort(shapes, Comparator.comparing((Diagram s) -> s.getTop()).thenComparing(s -> s.getLeft()));
+  private static boolean isConnected(
+    Diagram shape1,
+    Diagram shape2,
+    Set<Relationship2> relationship2s
+  ) {
+    // Check if there is a connection between the shapes
+    // For simplicity, assuming connections are bidirectional
+    String cid1 = shape1.getDiagramItem().getClientId();
+    String cid2 = shape2.getDiagramItem().getClientId();
 
+    for (Relationship2 r : relationship2s) {
+      if ((r.getStartClientId().equals(cid1) || r.getEndClientId().equals(cid1)) &&
+          (r.getStartClientId().equals(cid2) || r.getEndClientId().equals(cid2))) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private void centerAlignGroup(List<Diagram> group, int currentY) {
     int xGap = 100;
     int yGap = 100;
 
-    for (int i = 1; i < shapes.size(); i++) {
-      Diagram prevShape = shapes.get(i - 1);
-      Diagram currShape = shapes.get(i);
+    if (group.size() == 1) {
+      // if there is only one shape, then need to set currentY
+      Diagram currShape = group.get(0);
+      currShape.setTransform(0, currentY);      
+    }
 
-      if (currShape instanceof Relationship2) {
-        continue;
+    for (int i = 1; i < group.size(); i++) {
+      Diagram prevShape = group.get(i - 1);
+      Diagram currShape = group.get(i);
+
+      if (i == 1) {
+        prevShape.setTransform(0, currentY);
       }
 
-      if (currShape.getTop() < prevShape.getTop() + prevShape.getHeight() && currShape.getLeft() < prevShape.getLeft() + prevShape.getWidth()) {
+      if (currShape.getTop() < prevShape.getTop() + prevShape.getHeight()
+          && currShape.getLeft() < prevShape.getLeft() + prevShape.getWidth()) {
         // Shapes overlap, adjust the position of the current shape
         int dy = prevShape.getTop() + prevShape.getHeight() + yGap - currShape.getTop();
         int dx = xGap; // Introduce a horizontal gap
@@ -225,8 +257,47 @@ public class DuplicateHelpers {
         currShape.setTransform(0, dy);
       }
     }
+  }
 
-    for (Diagram d : shapes) {
+  private void sort(State state) {
+    List<Diagram> shapes = state.newItems.stream()
+      .filter(i -> !(i instanceof Relationship2))
+      .collect(Collectors.toList());
+    List<List<Diagram>> connectedGroups = new ArrayList<>();
+
+    // if no connections to or from a shape, it will be alone in the group.
+    // Build connected groups
+    for (Diagram shape : shapes) {
+      boolean isConnected = false;
+
+      for (List<Diagram> group : connectedGroups) {
+        for (Diagram groupShape : group) {
+          if (isConnected(shape, groupShape, state.relationships)) {
+            group.add(shape);
+            isConnected = true;
+            break;
+          }
+        }
+      }
+
+      if (!isConnected) {
+        List<Diagram> newGroup = new ArrayList<>();
+        newGroup.add(shape);
+        connectedGroups.add(newGroup);
+      }
+    }
+
+    // Sort and center align each connected group
+    int yGapBetweenGroups = 200;
+    int currentY = 0;
+
+    for (List<Diagram> group : connectedGroups) {
+      Collections.sort(group, Comparator.comparing(Diagram::getTop).thenComparing(Diagram::getLeft));
+      centerAlignGroup(group, currentY);
+      currentY += group.stream().mapToInt(Diagram::getHeight).max().orElse(0) + yGapBetweenGroups;
+    }
+
+    for (Diagram d : state.relationships) {
       if (d instanceof Relationship2) {
         Anchor anchor = ((Relationship2)d).getStartAnchor();
         if (anchor != null) {
@@ -249,13 +320,13 @@ public class DuplicateHelpers {
 
     ReattachHelpers reattachHelpers = new ReattachHelpers();
 
-    for (Diagram d : shapes) {
+    for (Diagram d : state.newItems) {
       reattachHelpers.processDiagram(d);
     }
 
     reattachHelpers.reattachRelationships(false, true, true);
 
-    surface.getEditorContext().getEventBus().fireEvent(new net.sevenscales.editor.api.event.PotentialOnChangedEvent(shapes));
+    surface.getEditorContext().getEventBus().fireEvent(new net.sevenscales.editor.api.event.PotentialOnChangedEvent(state.newItems));
     // net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers.fireDiagramsChangedEvenet(
     //   new java.util.HashSet(shapes),
     //   surface,
