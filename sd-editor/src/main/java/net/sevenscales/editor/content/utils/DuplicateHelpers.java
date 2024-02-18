@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.Collections;
 import java.util.Collection;
@@ -37,6 +36,7 @@ import net.sevenscales.editor.diagram.drag.Anchor;
 
 public class DuplicateHelpers {
 	private static final SLogger logger = SLogger.createLogger(DuplicateHelpers.class);
+  private static final int MIN_DISTANCE = 100;
 
 	private ISurfaceHandler surface;
 	private SelectionHandler selectionHandler;
@@ -207,93 +207,22 @@ public class DuplicateHelpers {
     });
   }
 
-  private static boolean isConnected(
-    Diagram shape1,
-    Diagram shape2,
-    Set<Relationship2> relationship2s
-  ) {
-    // Check if there is a connection between the shapes
-    // For simplicity, assuming connections are bidirectional
-    String cid1 = shape1.getDiagramItem().getClientId();
-    String cid2 = shape2.getDiagramItem().getClientId();
-
-    for (Relationship2 r : relationship2s) {
-      if ((r.getStartClientId().equals(cid1) || r.getEndClientId().equals(cid1)) &&
-          (r.getStartClientId().equals(cid2) || r.getEndClientId().equals(cid2))) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  private void centerAlignGroup(List<Diagram> group, int currentY) {
-    int xGap = 100;
-    int yGap = 100;
-
-    if (group.size() == 1) {
-      // if there is only one shape, then need to set currentY
-      Diagram currShape = group.get(0);
-      currShape.setTransform(0, currentY);      
-    }
-
-    for (int i = 1; i < group.size(); i++) {
-      Diagram prevShape = group.get(i - 1);
-      Diagram currShape = group.get(i);
-
-      if (i == 1) {
-        prevShape.setTransform(0, currentY);
-      }
-
-      if (currShape.getTop() < prevShape.getTop() + prevShape.getHeight()
-          && currShape.getLeft() < prevShape.getLeft() + prevShape.getWidth()) {
-        // Shapes overlap, adjust the position of the current shape
-        int dy = prevShape.getTop() + prevShape.getHeight() + yGap - currShape.getTop();
-        int dx = xGap; // Introduce a horizontal gap
-
-        currShape.setTransform(dx, dy);
-      } else {
-        int dy = yGap; // Introduce a vertical gap
-        currShape.setTransform(0, dy);
-      }
-    }
-  }
-
   private void sort(State state) {
-    List<Diagram> shapes = state.newItems.stream()
+    Set<Diagram> shapes = state.newItems.stream()
       .filter(i -> !(i instanceof Relationship2))
-      .collect(Collectors.toList());
-    List<List<Diagram>> connectedGroups = new ArrayList<>();
+      .collect(Collectors.toSet());
 
-    // if no connections to or from a shape, it will be alone in the group.
-    // Build connected groups
-    for (Diagram shape : shapes) {
-      boolean isConnected = false;
-
-      for (List<Diagram> group : connectedGroups) {
-        for (Diagram groupShape : group) {
-          if (isConnected(shape, groupShape, state.relationships)) {
-            group.add(shape);
-            isConnected = true;
-            break;
-          }
-        }
-      }
-
-      if (!isConnected) {
-        List<Diagram> newGroup = new ArrayList<>();
-        newGroup.add(shape);
-        connectedGroups.add(newGroup);
-      }
-    }
+    DiagramGrouper dg = new DiagramGrouper(shapes, state.relationships);
+    List<Set<Diagram>> connectedGroups = dg.groupDiagrams();
 
     // Sort and center align each connected group
-    int yGapBetweenGroups = 200;
+    int yGapBetweenGroups = 600;
     int currentY = 0;
 
-    for (List<Diagram> group : connectedGroups) {
-      Collections.sort(group, Comparator.comparing(Diagram::getTop).thenComparing(Diagram::getLeft));
-      centerAlignGroup(group, currentY);
+    for (Set<Diagram> group : connectedGroups) {
+      LayoutAlgorithm la = new LayoutAlgorithm(group, state.relationships, currentY, surface);
+      la.layout();
+
       currentY += group.stream().mapToInt(Diagram::getHeight).max().orElse(0) + yGapBetweenGroups;
     }
 
@@ -327,11 +256,6 @@ public class DuplicateHelpers {
     reattachHelpers.reattachRelationships(false, true, true);
 
     surface.getEditorContext().getEventBus().fireEvent(new net.sevenscales.editor.api.event.PotentialOnChangedEvent(state.newItems));
-    // net.sevenscales.editor.diagram.utils.MouseDiagramEventHelpers.fireDiagramsChangedEvenet(
-    //   new java.util.HashSet(shapes),
-    //   surface,
-    //   net.sevenscales.editor.api.ActionType.DRAGGING
-    // );
   }
 
   private void moveAnchors(Collection<AnchorElement> anchors, int dx, int dy, int sequence) {

@@ -139,6 +139,8 @@ public interface Diagram extends SourcesMouseDiagramEvents {
    * @return
    */
   public IDiagramItem getDiagramItem();
+  public String getClientId();
+  // public String getId();
 //  void copyAppliedDiagramItem(IDiagramItemRO apply);
 //  IDiagramItem getAppliedDiagramItem();
   

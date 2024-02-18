@@ -1024,6 +1024,10 @@ public abstract class AbstractDiagramItem implements Diagram, DiagramProxy,
   public IDiagramItem getDiagramItem() {
     return this.data;
   }
+
+  public String getClientId() {
+    return this.data.getClientId();
+  }
     
   public void setLink(String link) {
     data.setLink(link);
