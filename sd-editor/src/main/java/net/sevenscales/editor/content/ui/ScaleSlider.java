@@ -52,7 +52,7 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
 
   // Windows is still slow so take every 5th step on zoom
   // to keep it smooth, Windows is fast enough with value 1,
-  private static final int wheelSteps = UiUtils.isWindows() ? 3 : 1;
+  private static final int wheelSteps = 3; // UiUtils.isWindows() ? 3 : 1;
 
 	private EditorContext editorContext;
 	private ISurfaceHandler surface;
@@ -379,6 +379,8 @@ public class ScaleSlider implements IScaleSlider, SurfaceScaleEventHandler {
       // ST 27.11.2019: Prevent surface element area two finger browser zoom
       // on MacOS
       e.preventDefault()
+
+      $wnd.console.log('wheel', e.metaKey || e.ctrlKey, trackPad)
 
 			me.@net.sevenscales.editor.content.ui.ScaleSlider::handlMouseWheel(IZZ)(delta, (e.metaKey || e.ctrlKey), trackPad)
 		}
