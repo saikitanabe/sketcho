@@ -12,7 +12,7 @@ import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 
 class DiagramLayout {
-  public static void alignDiagrams(List<Diagram> diagrams, int minDistance, Set<Relationship2> relationships) {
+  public static void alignDiagrams(Set<Diagram> diagrams, int minDistance, Set<Relationship2> relationships) {
     // Step 1: Identify Clusters
     List<Set<Diagram>> clusters = identifyClusters(diagrams, relationships);
 
@@ -35,7 +35,7 @@ class DiagramLayout {
     layoutClustersRelative(clusterBounds, minDistance);
   }
 
-  private static List<Set<Diagram>> identifyClusters(List<Diagram> diagrams, Set<Relationship2> relationships) {
+  private static List<Set<Diagram>> identifyClusters(Set<Diagram> diagrams, Set<Relationship2> relationships) {
     List<Set<Diagram>> clusters = new ArrayList<>();
     Set<Diagram> visited = new HashSet<>();
 
@@ -55,7 +55,7 @@ class DiagramLayout {
       Set<Diagram> cluster,
       Set<Relationship2> relationships,
       Set<Diagram> visited,
-      List<Diagram> diagrams) {
+      Set<Diagram> diagrams) {
     visited.add(diagram);
     cluster.add(diagram);
     for (Relationship2 relationship : relationships) {
@@ -122,7 +122,7 @@ class DiagramLayout {
     }
   }
 
-  private static Diagram findDiagramById(List<Diagram> diagrams, String id) {
+  private static Diagram findDiagramById(Set<Diagram> diagrams, String id) {
     return diagrams.stream().filter(d -> d.getDiagramItem().getClientId().equals(id)).findFirst().orElse(null);
   }
 

@@ -13,11 +13,12 @@ import net.sevenscales.editor.api.ISurfaceHandler;
 import net.sevenscales.editor.diagram.Diagram;
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
 import net.sevenscales.editor.gfx.domain.IShapeFactory;
+import net.sevenscales.editor.gfx.domain.Color;
 import net.sevenscales.editor.gfx.domain.ICircle;
 import net.sevenscales.editor.gfx.domain.IGroup;
 
 public class LayoutAlgorithm {
-  private final Set<Diagram> diagrams;
+  private final DiagramGrouper.Cluster cluster;
   private final Set<Relationship2> relationships;
   private int currentY;
 
@@ -26,12 +27,12 @@ public class LayoutAlgorithm {
   // <<<<< DEBUG layout algorithm placement
 
   public LayoutAlgorithm(
-    Set<Diagram> diagrams,
+    DiagramGrouper.Cluster cluster,
     Set<Relationship2> relationships,
     int currentY,
     ISurfaceHandler surface
   ) {
-    this.diagrams = diagrams;
+    this.cluster = cluster;
     this.relationships = relationships;
     this.currentY = currentY;
 
@@ -45,26 +46,31 @@ public class LayoutAlgorithm {
 
   public void layout() {
     // Find the center shape
-    Diagram center = findCenterDiagram();
-    if (center == null)
-      return;
+    // Diagram center = findCenterDiagram();
+    // if (center == null)
+    //   return;
 
-    center.setTransform(0, this.currentY);
+    if (!this.cluster.center.placed) {
+      this.cluster.center.item.setTransform(0, this.currentY);
+      this.cluster.center.placed = true;
+    }
+
+    this.cluster.center.item.setBackgroundColor(new Color(0, 191, 255, 1));
 
     // Calculate the initial radius
-    int radius = calculateInitialRadius(center);
+    int radius = calculateInitialRadius(this.cluster.center.item);
 
     // Place surrounding shapes
-    placeSurroundingShapes(center, radius);
+    placeSurroundingShapes(radius);
 
     // Adjust positions to be more centered
     adjustPositions();
   }
 
-  private Diagram findCenterDiagram() {
-    // Find the diagram with the most connections
-    return diagrams.stream().max(Comparator.comparingInt(d -> countConnections(d.getClientId()))).orElse(null);
-  }
+  // private Diagram findCenterDiagram() {
+  //   // Find the diagram with the most connections
+  //   return diagrams.stream().max(Comparator.comparingInt(d -> countConnections(d.getClientId()))).orElse(null);
+  // }
 
   private int countConnections(String id) {
     // Count the number of relationships where this diagram is involved
@@ -74,27 +80,26 @@ public class LayoutAlgorithm {
 
   private int calculateInitialRadius(Diagram center) {
     // Calculate the initial radius based on the size of the center diagram
-    return Math.max(center.getWidth(), center.getHeight()) / 2 + 50; // 50 is an arbitrary padding
+    return Math.max(center.getWidth(), center.getHeight()) / 2 + 500; // 500 is an arbitrary padding
   }
 
-  private void placeSurroundingShapes(Diagram center, int initialRadius) {
+  private void placeSurroundingShapes(int initialRadius) {
     // Define the maximum radius to prevent shapes from being placed too far
-    final int maxRadius = initialRadius + 2500; // Example value, adjust as needed
-    double angleIncrement = 2 * Math.PI / (diagrams.size() - 1);
+    final int maxRadius = initialRadius + 0; // Example value, adjust as needed
+    double angleIncrement = 2 * Math.PI / (this.cluster.members.size());
     double currentAngle = 0.0;
     int radius = initialRadius;
 
-    for (Diagram diagram : diagrams) {
-      if (diagram.equals(center))
-        continue;
+    for (DiagramGrouper.Node node : this.cluster.members) {
+      // if (diagram.equals(center))
+      //   continue;
 
-      boolean placed = false;
       int dx = 0;
       int dy = 0;
 
-      while (!placed) {
-        int newLeft = (center.getLeft() + center.getWidth() / 2) + (int) (radius * Math.cos(currentAngle));
-        int newTop = (center.getTop() + center.getHeight() / 2) + (int) (radius * Math.sin(currentAngle));
+      while (!node.placed) {
+        int newLeft = (this.cluster.center.item.getLeft() + this.cluster.center.item.getWidth() / 2) + (int) (radius * Math.cos(currentAngle));
+        int newTop = (this.cluster.center.item.getTop() + this.cluster.center.item.getHeight() / 2) + (int) (radius * Math.sin(currentAngle));
 
         // >>>>> DEBUG layout algorithm placement
         // tempCircle.setShape(newLeft, newTop, 10);
@@ -104,13 +109,14 @@ public class LayoutAlgorithm {
 
         // dx += newLeft - diagram.getLeft() - diagram.getWidth() / 2;
         // dy += newTop - diagram.getTop() - diagram.getHeight() / 2;
-        dx += newLeft - diagram.getLeft();
-        dy += newTop - diagram.getTop();
+        dx += newLeft - node.item.getLeft();
+        dy += newTop - node.item.getTop();
 
-        diagram.setTransform(dx, dy);
+        node.item.setTransform(dx, dy);
 
-        if (!checkOverlap(diagram)) {
-          placed = true;
+        if (!checkOverlap(node.item)) {
+          node.placed = true;
+          currentAngle += angleIncrement;
         } else {
           // Try adjusting the angle more finely before increasing the radius
           // currentAngle += angleIncrement / 4;
@@ -129,56 +135,56 @@ public class LayoutAlgorithm {
   }
 
   private boolean checkOverlap(Diagram diagram) {
-    for (Diagram other : diagrams) {
-      if (other != diagram) {
-        if (diagram.getLeft() < other.getLeft() + other.getWidth() &&
-            diagram.getLeft() + diagram.getWidth() > other.getLeft() &&
-            diagram.getTop() < other.getTop() + other.getHeight() &&
-            diagram.getTop() + diagram.getHeight() > other.getTop()) {
-          return true; // Overlap detected
-        }
-      }
-    }
+    // for (DiagramGrouper.Node other : this.cluster.members) {
+    //   if (other.item != diagram) {
+    //     if (diagram.getLeft() < other.item.getLeft() + other.item.getWidth() &&
+    //         diagram.getLeft() + diagram.getWidth() > other.item.getLeft() &&
+    //         diagram.getTop() < other.item.getTop() + other.item.getHeight() &&
+    //         diagram.getTop() + diagram.getHeight() > other.item.getTop()) {
+    //       return true; // Overlap detected
+    //     }
+    //   }
+    // }
     return false; // No overlap detected
   }
 
   private void adjustPositions() {
-    Diagram center = findCenterDiagram();
-    if (center == null) return;
+    // Diagram center = findCenterDiagram();
+    // if (center == null) return;
   
-    int centerX = center.getLeft() + center.getWidth() / 2;
-    int centerY = center.getTop() + center.getHeight() / 2;
+    // int centerX = this.cluster.center.item.getLeft() + this.cluster.center.item.getWidth() / 2;
+    // int centerY = this.cluster.center.item.getTop() + this.cluster.center.item.getHeight() / 2;
   
-    for (Diagram diagram : diagrams) {
-      if (diagram.equals(center)) continue; // Skip the center diagram
+    // for (DiagramGrouper.Node node : this.cluster.members) {
+    //   if (node.item.equals(center)) continue; // Skip the center diagram
   
-      int diagramCenterX = diagram.getLeft() + diagram.getWidth() / 2;
-      int diagramCenterY = diagram.getTop() + diagram.getHeight() / 2;
+    //   int diagramCenterX = node.item.getLeft() + node.item.getWidth() / 2;
+    //   int diagramCenterY = node.item.getTop() + node.item.getHeight() / 2;
   
-      // Calculate the differences
-      int diffx = diagramCenterX - centerX;
-      int diffy = diagramCenterY - centerY;
+    //   // Calculate the differences
+    //   int diffx = diagramCenterX - centerX;
+    //   int diffy = diagramCenterY - centerY;
   
-      // Check for other diagrams that are center-aligned along the intended axis and on the same side
-      boolean hasAlignedDiagramOnSameSide = diagrams.stream()
-                                           .filter(d -> !d.equals(diagram) && !d.equals(center))
-                                           .anyMatch(d -> {
-                                             int otherCenterX = d.getLeft() + d.getWidth() / 2;
-                                             int otherCenterY = d.getTop() + d.getHeight() / 2;
-                                             boolean isSameVerticalSide = (otherCenterY > centerY) == (diagramCenterY > centerY);
-                                             boolean isSameHorizontalSide = (otherCenterX > centerX) == (diagramCenterX > centerX);
-                                             return (Math.abs(diffx) < Math.abs(diffy)) ? (otherCenterX == centerX && isSameHorizontalSide) : (otherCenterY == centerY && isSameVerticalSide);
-                                           });
+    //   // Check for other diagrams that are center-aligned along the intended axis and on the same side
+    //   boolean hasAlignedDiagramOnSameSide = diagrams.stream()
+    //                                        .filter(d -> !d.equals(diagram) && !d.equals(center))
+    //                                        .anyMatch(d -> {
+    //                                          int otherCenterX = d.getLeft() + d.getWidth() / 2;
+    //                                          int otherCenterY = d.getTop() + d.getHeight() / 2;
+    //                                          boolean isSameVerticalSide = (otherCenterY > centerY) == (diagramCenterY > centerY);
+    //                                          boolean isSameHorizontalSide = (otherCenterX > centerX) == (diagramCenterX > centerX);
+    //                                          return (Math.abs(diffx) < Math.abs(diffy)) ? (otherCenterX == centerX && isSameHorizontalSide) : (otherCenterY == centerY && isSameVerticalSide);
+    //                                        });
   
-      if (!hasAlignedDiagramOnSameSide) {
-        // Adjust based on the smaller absolute difference and absence of overlap
-        if (Math.abs(diffx) < Math.abs(diffy) && !checkOverlapAfterAdjustment(diagram, -diffx, 0)) {
-          diagram.setTransform(diagram.getTransformX() - diffx, diagram.getTransformY());
-        } else if (!checkOverlapAfterAdjustment(diagram, 0, -diffy)) {
-          diagram.setTransform(diagram.getTransformX(), diagram.getTransformY() - diffy);
-        }
-      }
-    }
+    //   if (!hasAlignedDiagramOnSameSide) {
+    //     // Adjust based on the smaller absolute difference and absence of overlap
+    //     if (Math.abs(diffx) < Math.abs(diffy) && !checkOverlapAfterAdjustment(diagram, -diffx, 0)) {
+    //       diagram.setTransform(diagram.getTransformX() - diffx, diagram.getTransformY());
+    //     } else if (!checkOverlapAfterAdjustment(diagram, 0, -diffy)) {
+    //       diagram.setTransform(diagram.getTransformX(), diagram.getTransformY() - diffy);
+    //     }
+    //   }
+    // }
   }
   
   private boolean checkOverlapAfterAdjustment(Diagram diagram, int dx, int dy) {

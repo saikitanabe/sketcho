@@ -3,7 +3,10 @@ package net.sevenscales.editor.content.utils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import net.sevenscales.editor.uicomponents.uml.Relationship2;
@@ -13,7 +16,6 @@ import net.sevenscales.editor.diagram.Diagram;
 public class DiagramGrouper {
 
   private Set<Diagram> visited = new HashSet<>();
-  private List<Set<Diagram>> connectedGroups = new ArrayList<>();
   private Set<Relationship2> relationships;
   private Set<Diagram> shapes;
 
@@ -22,14 +24,81 @@ public class DiagramGrouper {
     this.relationships = relationships;
   }
 
-  public List<Set<Diagram>> groupDiagrams() {
+  static class Node {
+    Diagram item;
+    boolean placed;
+    Set<String> connections = new HashSet<>();
+
+    Node(Diagram item) {
+      this.item = item;
+    }
+  }
+
+  static class Cluster {
+    Node center;
+    Set<Node> members;
+
+    Cluster(Node center, Set<Node> members) {
+      this.center = center;
+      this.members = members;
+    }
+
+    void print() {
+      String result = this.members.stream()
+      .map(m -> m.item.getClientId())
+      .collect(Collectors.joining(", "));
+      Debug.log("cluster: " + this.center.item.getClientId() + ": " + result);
+    }
+  }
+
+  public List<Cluster> groupDiagrams() {
+
+    Map<String, Node> itemMap = new HashMap<>();
+
     for (Diagram shape : shapes) {
-      if (!visited.contains(shape)) {
-        Set<Diagram> newGroup = new HashSet<>();
-        dfs(shape, newGroup);
-        connectedGroups.add(newGroup);
+      itemMap.put(shape.getClientId(), new Node(shape));
+    }
+
+    for (Diagram shape : shapes) {
+      Set<Diagram> connectedShapes = getConnectedShapes(shape);
+      for (Diagram cs : connectedShapes) {
+        Node n1 = itemMap.get(shape.getClientId());
+        Node n2 = itemMap.get(cs.getClientId());
+        if (n1 != null && n2 != null) {
+          n1.connections.add(cs.getClientId());
+          n2.connections.add(shape.getClientId());
+        }
       }
     }
+
+    List<Cluster> clusters = new ArrayList<>();
+
+    for (Map.Entry<String, Node> entry : itemMap.entrySet()) {
+      String id = entry.getKey();
+      Node node = entry.getValue();
+      if (node.connections.size() > 1) {
+        Set<Node> clusterMembers = new HashSet<>();
+        // Set<Diagram> newGroup = new HashSet<>();
+        for (String connId : node.connections) {
+          Node member = itemMap.get(connId);
+          if (member != null) {
+            clusterMembers.add(member);
+            // newGroup.add(member.item);
+          }
+        }
+        clusters.add(new Cluster(node, clusterMembers));
+        // newGroup.add(node.item);
+        // connectedGroups.add(newGroup);
+      }
+    }
+
+    // for (Diagram shape : shapes) {
+    //   if (!visited.contains(shape)) {
+    //     Set<Diagram> newGroup = new HashSet<>();
+    //     dfs(shape, newGroup);
+    //     connectedGroups.add(newGroup);
+    //   }
+    // }
 
     // int i = 1;
     // for (Set<Diagram> group : connectedGroups) {
@@ -41,7 +110,11 @@ public class DiagramGrouper {
     //   ++i;
     // }
 
-    return connectedGroups;
+    for (Cluster cluster : clusters) {
+      cluster.print();
+    }
+
+    return clusters;
   }
 
   private void dfs(Diagram shape, Set<Diagram> group) {

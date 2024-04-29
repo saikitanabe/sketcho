@@ -213,17 +213,20 @@ public class DuplicateHelpers {
       .collect(Collectors.toSet());
 
     DiagramGrouper dg = new DiagramGrouper(shapes, state.relationships);
-    List<Set<Diagram>> connectedGroups = dg.groupDiagrams();
+    List<DiagramGrouper.Cluster> clusters = dg.groupDiagrams();
 
     // Sort and center align each connected group
-    int yGapBetweenGroups = 600;
+    int yGapBetweenGroups = 100;
     int currentY = 0;
 
-    for (Set<Diagram> group : connectedGroups) {
+    for (DiagramGrouper.Cluster group : clusters) {
       LayoutAlgorithm la = new LayoutAlgorithm(group, state.relationships, currentY, surface);
       la.layout();
+      // DiagramLayout.alignDiagrams(shapes, 50, state.relationships);
 
-      currentY += group.stream().mapToInt(Diagram::getHeight).max().orElse(0) + yGapBetweenGroups;
+      currentY += group.members.stream()
+        .mapToInt(node -> node.item.getHeight())
+        .max().orElse(0) + yGapBetweenGroups;
     }
 
     for (Diagram d : state.relationships) {
