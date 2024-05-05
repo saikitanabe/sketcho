@@ -24,46 +24,19 @@ public class DiagramGrouper {
     this.relationships = relationships;
   }
 
-  static class Node {
-    Diagram item;
-    boolean placed;
-    Set<String> connections = new HashSet<>();
-
-    Node(Diagram item) {
-      this.item = item;
-    }
-  }
-
-  static class Cluster {
-    Node center;
-    Set<Node> members;
-
-    Cluster(Node center, Set<Node> members) {
-      this.center = center;
-      this.members = members;
-    }
-
-    void print() {
-      String result = this.members.stream()
-      .map(m -> m.item.getClientId())
-      .collect(Collectors.joining(", "));
-      Debug.log("cluster: " + this.center.item.getClientId() + ": " + result);
-    }
-  }
-
   public List<Cluster> groupDiagrams() {
 
-    Map<String, Node> itemMap = new HashMap<>();
+    Map<String, Cluster.Node> itemMap = new HashMap<>();
 
     for (Diagram shape : shapes) {
-      itemMap.put(shape.getClientId(), new Node(shape));
+      itemMap.put(shape.getClientId(), new Cluster.Node(shape));
     }
 
     for (Diagram shape : shapes) {
       Set<Diagram> connectedShapes = getConnectedShapes(shape);
       for (Diagram cs : connectedShapes) {
-        Node n1 = itemMap.get(shape.getClientId());
-        Node n2 = itemMap.get(cs.getClientId());
+        Cluster.Node n1 = itemMap.get(shape.getClientId());
+        Cluster.Node n2 = itemMap.get(cs.getClientId());
         if (n1 != null && n2 != null) {
           n1.connections.add(cs.getClientId());
           n2.connections.add(shape.getClientId());
@@ -73,14 +46,14 @@ public class DiagramGrouper {
 
     List<Cluster> clusters = new ArrayList<>();
 
-    for (Map.Entry<String, Node> entry : itemMap.entrySet()) {
+    for (Map.Entry<String, Cluster.Node> entry : itemMap.entrySet()) {
       String id = entry.getKey();
-      Node node = entry.getValue();
+      Cluster.Node node = entry.getValue();
       if (node.connections.size() > 1) {
-        Set<Node> clusterMembers = new HashSet<>();
+        Set<Cluster.Node> clusterMembers = new HashSet<>();
         // Set<Diagram> newGroup = new HashSet<>();
         for (String connId : node.connections) {
-          Node member = itemMap.get(connId);
+          Cluster.Node member = itemMap.get(connId);
           if (member != null) {
             clusterMembers.add(member);
             // newGroup.add(member.item);

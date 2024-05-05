@@ -18,7 +18,7 @@ import net.sevenscales.editor.gfx.domain.ICircle;
 import net.sevenscales.editor.gfx.domain.IGroup;
 
 public class LayoutAlgorithm {
-  private final DiagramGrouper.Cluster cluster;
+  private final Cluster cluster;
   private final Set<Relationship2> relationships;
   private int currentY;
 
@@ -27,7 +27,7 @@ public class LayoutAlgorithm {
   // <<<<< DEBUG layout algorithm placement
 
   public LayoutAlgorithm(
-    DiagramGrouper.Cluster cluster,
+    Cluster cluster,
     Set<Relationship2> relationships,
     int currentY,
     ISurfaceHandler surface
@@ -90,7 +90,7 @@ public class LayoutAlgorithm {
     double currentAngle = 0.0;
     int radius = initialRadius;
 
-    for (DiagramGrouper.Node node : this.cluster.members) {
+    for (Cluster.Node node : this.cluster.members) {
       // if (diagram.equals(center))
       //   continue;
 
