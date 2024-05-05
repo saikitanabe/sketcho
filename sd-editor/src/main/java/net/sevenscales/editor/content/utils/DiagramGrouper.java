@@ -49,7 +49,7 @@ public class DiagramGrouper {
     for (Map.Entry<String, Cluster.Node> entry : itemMap.entrySet()) {
       String id = entry.getKey();
       Cluster.Node node = entry.getValue();
-      if (node.connections.size() > 1) {
+      if (node.connections.size() > 0) {
         Set<Cluster.Node> clusterMembers = new HashSet<>();
         // Set<Diagram> newGroup = new HashSet<>();
         for (String connId : node.connections) {
