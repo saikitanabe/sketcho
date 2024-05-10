@@ -55,7 +55,7 @@ public class LayoutAlgorithm {
       this.cluster.center.placed = true;
     }
 
-    this.cluster.center.item.setBackgroundColor(new Color(0, 191, 255, 1));
+    // this.cluster.center.item.setBackgroundColor(new Color(0, 191, 255, 1));
 
     // Calculate the initial radius
     int radius = calculateInitialRadius(this.cluster.center.item);
