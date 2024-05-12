@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONBoolean;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.IBirdsEyeView;
@@ -296,6 +298,7 @@ public class MouseDiagramHandlerManager implements
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 11");
 
 			surfaceClickHandler.onMouseDown(event, sender, point, keys);
+      Doc.fireGlobalEvent("mousedown");
   	} catch (Exception e) {
   		net.sevenscales.domain.utils.Error.reload(e);
   	}
@@ -439,12 +442,19 @@ public class MouseDiagramHandlerManager implements
 
 	//		bendHandler.onMouseUp(sender, x, y, keys);
 			backgroundMoveHandler.onMouseUp(sender, point, keys);
+      boolean wasIsLassoing = lassoSelectionHandler.isLassoing();
 			lassoSelectionHandler.onMouseUp(sender, point, keys);
 			surfaceClickHandler.onMouseUp(sender, point, keys);
 			quickConnectionHandler.onMouseUp(sender, point, keys);
 			net.sevenscales.editor.uicomponents.AnchorUtils.hide();
 			// logger.debugTime();
 	    currentMouseHandler = null;
+
+      JSONObject data = new JSONObject();
+      data.put("wasLassoing", JSONBoolean.getInstance(wasIsLassoing));
+      data.put("selected", JSONBoolean.getInstance(selectionHandler.getSelectedItems().size() > 0));
+
+      Doc.fireGlobalEventWithData("mouseup", data);
 		} catch (Exception e) {
 			net.sevenscales.domain.utils.Error.reload(e);
 		}
@@ -663,6 +673,8 @@ public class MouseDiagramHandlerManager implements
 				surface.getEditorContext().getEventBus().fireEvent(new BoardEmptyAreaClickedEvent(x, y));
 			}
 		}
+
+    Doc.fireGlobalEvent("doubletap");
 	}
 
 	private void spaceKey() {
