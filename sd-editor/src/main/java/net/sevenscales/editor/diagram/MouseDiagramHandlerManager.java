@@ -7,6 +7,7 @@ import java.util.Set;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONBoolean;
+import com.google.gwt.json.client.JSONNumber;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.IBirdsEyeView;
@@ -298,7 +299,12 @@ public class MouseDiagramHandlerManager implements
 	    // logger.start("MouseDiagramHandlerManager.onMouseDown 11");
 
 			surfaceClickHandler.onMouseDown(event, sender, point, keys);
-      Doc.fireGlobalEvent("mousedown");
+
+      JSONObject data = new JSONObject();
+      data.put("x", new JSONNumber(point.getScreenX()));
+      data.put("y", new JSONNumber(point.getScreenY()));
+
+      Doc.fireGlobalEventWithData("mousedown", data);
   	} catch (Exception e) {
   		net.sevenscales.domain.utils.Error.reload(e);
   	}
