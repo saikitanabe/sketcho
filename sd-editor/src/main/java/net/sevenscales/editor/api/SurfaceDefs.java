@@ -6,7 +6,18 @@ import com.google.gwt.core.client.JsArray;
 import net.sevenscales.domain.js.JsShape;
 
 public class SurfaceDefs {
-	public static native void addToDefs(JavaScriptObject surface, JsArray<JsShape> icons)/*-{
+	public static void addToDefs(JavaScriptObject surface, JsArray<JsShape> icons) {
+    doAddToDefs(surface, icons);
+    __addGradientsToDefs__();
+  }
+
+  private static native void __addGradientsToDefs__()/*-{
+    if (typeof $wnd.__addGradientsToDefs__ === 'function') {
+      $wnd.__addGradientsToDefs__();
+    }
+  }-*/;
+
+	private static native void doAddToDefs(JavaScriptObject surface, JsArray<JsShape> icons)/*-{
 		function _createElementNS(ns, nodeType){
 			// summary:
 			//		Internal helper to deal with creating elements that
