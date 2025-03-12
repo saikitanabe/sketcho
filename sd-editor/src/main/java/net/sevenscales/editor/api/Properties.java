@@ -11,6 +11,7 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.dom.client.Style.Unit;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -575,7 +576,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     // set diagram text synchronously, because editor might be closed
     // before buffer is saved and would show a wrong state for a while
     // if set only when buffer is sent
-    selectedDiagram.setText(codeMirror.getText(), textEditX, textEditY);
+    selectedDiagram.setText(text, textEditX, textEditY);
 
     modifiedAtLeastOnce = true;
     sendBuffer();
@@ -854,11 +855,11 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
         codeMirror.setFontSize(fontSize + "px");
         codeMirror.setLineHeight(lineHeight(fontSize) + "px");
         
-        int editorWidth = (int) (rect.getWidth() * scaleFactor);
+        // int editorWidth = (int) (rect.getWidth() / scaleFactor);
         // if (editorWidth > Window.getClientWidth()) {
         //   editorWidth = Window.getClientWidth();
         // }
-        codeMirror.setWidth(editorWidth, "px");
+        // codeMirror.setWidth(editorWidth, "px");
 
         // codeMirror.setHeight("100vh");
 
@@ -882,7 +883,7 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
         setDialogMode(false);
 
         if ((posWidth > clientWidth
-            || diagram.getWidth() > clientWidth
+            // || rect.getWidth() > clientWidth
             || posHeight > clientHeight
             || showAsDialog) &&
             // prevent opening modal dialog on mobile layout
@@ -891,11 +892,12 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
           // open editor as a modal dialog
 
           int maxDialoagWidth = 700;
-          if (maxDialoagWidth > clientWidth) {
-            showDynamicDialog(clientWidth, clientHeight);
-          } else {
-            showFixedDialog(clientWidth, clientHeight, maxDialoagWidth);
-          }
+          // if (maxDialoagWidth > clientWidth) {
+          //   showDynamicDialog(clientWidth, clientHeight);
+          // } else {
+            // ST 10.3.2025: for now show only fixed dialog
+            showFixedDialog(clientWidth, clientHeight, (int) rect.getWidth(), maxDialoagWidth);
+          // }
 
           if ("transparent".equals(codeMirror.getBackgroundColor())) {
             // dialog editor needs to have a solid background always
@@ -908,7 +910,12 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
         } else {
           // use legacy editor height setup      
           setTextAreaHeight();
-          popup.setContentWidth((int) (rect.getWidth() * scaleFactor));
+          popup.getElement().getStyle().setWidth(rect.getWidth(), Unit.PX);
+
+          // let text editor to grow almost up to the bottom of the screen
+          int margin = (int) (50 * surface.getScaleFactor());
+          int height = clientHeight - p.y - margin;
+          codeMirror.setHeight((int)(height / surface.getScaleFactor()));
         }
 
         if (surface.getScaleFactor() > 1) {
@@ -934,6 +941,12 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
         Properties.this.editorCommon.fireEditorOpen(diagram);
         popup.selectAll(justCreated);
         popup.show();
+        popup.setScaling(surface.getScaleFactor());
+
+        // If board has been just scaled and nothing is changed, and opening the same 
+        // shape in different zoom levels, react will not redraw
+        // component since no props are changed. This forces to redraw always when opened.
+        codeMirror.refresh();
         popup.getElement().getStyle().setPosition(com.google.gwt.dom.client.Style.Position.FIXED);
     
         // show element context menu always when showing editor
@@ -1026,9 +1039,11 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
     int popupMarginRigth = 60;
     int diagramDialogPadding = 22;
 
-    codeMirror.setHeight(clientHeight - diagramDialogPadding - 40 - popupLeft * 2);
-    codeMirror.setWidth(clientWidth - diagramDialogPadding - popupMarginRigth * 2, "px");
-    popup.setContentWidth(clientWidth - popupMarginRigth * 2);
+    // codeMirror.setHeight(clientHeight - diagramDialogPadding - 40 - popupLeft * 2);
+    // codeMirror.setWidth(clientWidth - diagramDialogPadding - popupMarginRigth * 2, "px");
+    // popup.setContentWidth(clientWidth - popupMarginRigth * 2);
+
+    popup.getElement().getStyle().setWidth(clientWidth, Unit.PX);
 
     popup.setPopupPosition(popupLeft, popupTop);
     
@@ -1038,19 +1053,31 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
   private void showFixedDialog(
     int clientWidth,
     int clientHeight,
+    int width,
     int maxDialoagWidth
   ) {
-    int popupLeft = clientWidth / 2 - maxDialoagWidth / 2;
     int popupTop = 80;
-    int diagramDialogPadding = 30;
-  
-    // codeMirror.setHeight(clientHeight - diagramDialogPadding - 20 - popupLeft * 2);
-    int bottomMargin = 200;
-    codeMirror.setHeight(clientHeight - bottomMargin);
-    // codeMirror.setWidth(clientWidth - diagramDialogPadding - popupMarginRigth * 2);
-    codeMirror.setWidth(maxDialoagWidth - diagramDialogPadding, "px");
-    // popup.setContentWidth(clientWidth - popupMarginRigth * 2);
-    popup.setContentWidth(maxDialoagWidth);
+    int diagramDialogPadding = 100;
+
+    int w = clientWidth - 2 * diagramDialogPadding;
+    if (w > maxDialoagWidth) {
+      w = maxDialoagWidth;
+    }
+
+    int wmiddle = w / 2;
+
+    int popupLeft = clientWidth / 2 - wmiddle;
+    if (popupLeft < diagramDialogPadding) {
+      popupLeft = diagramDialogPadding;
+    }
+    
+    popup.getElement().getStyle().setProperty("maxWidth", (int) (w / surface.getScaleFactor()), Unit.PX);
+    popup.getElement().getStyle().setWidth(w, Unit.PX);
+
+    // let text editor to grow almost up to the bottom of the screen
+    int margin = (int) (30 * surface.getScaleFactor());
+    int height = clientHeight - popupTop - margin;
+    codeMirror.setHeight((int)(height / surface.getScaleFactor()));
   
     popup.setPopupPosition(popupLeft, popupTop);
     firePropertyEditorOpenPosition(popupLeft, popupTop);

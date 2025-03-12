@@ -1,7 +1,7 @@
 package net.sevenscales.editor.api.texteditor;
 
 import com.google.gwt.user.client.ui.Composite;
-
+import com.google.gwt.user.client.ui.Widget;
 import net.sevenscales.editor.diagram.utils.UiUtils;
 
 public interface ITextEditor {
@@ -15,12 +15,13 @@ public interface ITextEditor {
 			if (UiUtils.isMobile()) {
 				return new TextEditor(changeListener);
 			}
-			return new CodeMirror(changeListener);
+			// return new CodeMirror(changeListener);
+      return new CodeMirror6(changeListener);
 		}
 	}
 
+	Widget getUi();
 	void setMarkdownMode(boolean markdownMode);
-	Composite getUi();
 	void setFocus();
 	void selectAll();
 	void cursorEnd();
@@ -38,5 +39,6 @@ public interface ITextEditor {
 	void setWidth(int width, String unit);
 	void setHeight(int height);
 	void setHeight(String height);
+  void refresh();
 	boolean isCodeMirror();
 }

@@ -4,6 +4,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.i18n.client.NumberFormat;
 
 import net.sevenscales.domain.utils.SLogger;
 import net.sevenscales.editor.api.texteditor.ITextEditor;
@@ -65,6 +66,18 @@ public class CustomPopupCodeMirror extends PopupPanel {
 	public void selectAll(boolean selectAll) {
 		this.selectAll = selectAll;
 	}
+
+  void setScaling(double scaleFactor) {
+    getElement().getStyle().setProperty("transformOrigin", "0 0");
+    NumberFormat fmt = NumberFormat.getDecimalFormat();
+    String formatted = fmt.format(scaleFactor);
+    getElement().
+      getStyle().
+      setProperty(
+        "transform",
+        "scale(" + formatted + ")"
+      );
+  }
 
 	void setContentWidth(int width) {
 		setContentWidth(width + "px", getElement());

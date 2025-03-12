@@ -168,6 +168,10 @@ class TextEditor extends Composite implements ITextEditor {
 		textArea.getElement().getStyle().setProperty("height", height);
 	}
 
+  @Override
+  public void refresh() {
+  }
+
 	@Override
 	public boolean isCodeMirror() {
 		return false;

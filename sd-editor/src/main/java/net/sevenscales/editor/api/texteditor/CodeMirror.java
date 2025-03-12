@@ -220,6 +220,11 @@ class CodeMirror extends Composite implements ITextEditor {
   private native void setHeight(JavaScriptObject cm, String height)/*-{
     $wnd.$(cm.getTextArea().parentNode).find(".CodeMirror").css("height", height)
   }-*/;
+
+  @Override
+  public void refresh() {
+  }
+
 	@Override
 	public boolean isCodeMirror() {
 		return true;
