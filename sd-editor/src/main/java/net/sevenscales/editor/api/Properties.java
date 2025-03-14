@@ -946,7 +946,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
         // If board has been just scaled and nothing is changed, and opening the same 
         // shape in different zoom levels, react will not redraw
         // component since no props are changed. This forces to redraw always when opened.
-        codeMirror.refresh();
+
+        // After all do not call this, or horizontal component text editor gets recreated all the time.
+        // codeMirror.refresh();
+
         popup.getElement().getStyle().setPosition(com.google.gwt.dom.client.Style.Position.FIXED);
     
         // show element context menu always when showing editor
