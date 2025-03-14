@@ -45,8 +45,12 @@ public class CodeMirror6 extends Widget implements ITextEditor {
   }-*/;
 
 	public void selectAll() {
-
+    _selectAll(codeMirror);
   }
+	private native void _selectAll(JavaScriptObject codeMirror)/*-{
+    codeMirror.selectAll()
+  }-*/;
+
 	public void cursorEnd() {
 
   }
