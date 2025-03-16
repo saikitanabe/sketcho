@@ -100,10 +100,13 @@ public class CodeMirror6 extends Widget implements ITextEditor {
 
   }
 	public void setTextAlign(String textAlign) {
-
+    _setTextAlign(codeMirror, textAlign);
   }
-	public void setWidth(int width, String unit) {
+  private native void _setTextAlign(JavaScriptObject codeMirror, String textAlign)/*-{
+    codeMirror.setTextAlign(textAlign)
+  }-*/;
 
+	public void setWidth(int width, String unit) {
   }
 	public void setHeight(int height) {
     _setHeight(codeMirror, height);
