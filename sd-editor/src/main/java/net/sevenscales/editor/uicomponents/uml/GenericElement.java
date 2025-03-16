@@ -822,7 +822,9 @@ public class GenericElement extends AbstractDiagramItem implements IGenericEleme
   public void select() {
   	super.select();
   	if (!getDiagramItem().isGroup()) {
-	  	background.setStroke(DEFAULT_SELECTION_COLOR);
+      // ST 14.3.2025 do not set background rect border color on select
+      // it becomes confusing with codemirror 6 dashed border
+	  	// background.setStroke(DEFAULT_SELECTION_COLOR);
   	}
   }
 
