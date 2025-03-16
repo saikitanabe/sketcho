@@ -910,7 +910,12 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
         } else {
           // use legacy editor height setup      
           setTextAreaHeight();
-          popup.getElement().getStyle().setWidth(rect.getWidth(), Unit.PX);
+          if (ElementType.CHILD_TEXT.getValue().equals(selectedDiagram.getDiagramItem().getType())) {
+            // child text width grows horizontally
+            popup.getElement().getStyle().setProperty("width", "auto");
+          } else {
+            popup.getElement().getStyle().setWidth(rect.getWidth(), Unit.PX);
+          }
 
           // let text editor to grow almost up to the bottom of the screen
           int margin = (int) (50 * surface.getScaleFactor());
