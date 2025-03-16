@@ -798,6 +798,19 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
 		// diagram.hideText();
     getTextAreaBoundingRect().then(new Promise.FunctionParam<ElementRect>() {
       public void accept(ElementRect rect) {
+
+        if (popup.isShowing()) {
+          // this would be a way to prevent normal class like shapes to grow only width
+          // and not to reinitialize whole editor again, which would cause jumping in the worst case
+          if (!ShapeProperty.isShapeAutoResizeDisabled(selectedDiagram.getDiagramItem().getShapeProperties())) {
+            popup.getElement().getStyle().setWidth(rect.getWidth(), Unit.PX);
+          }
+
+          // do not continue if already initialized
+          return;
+        }
+    
+
         // MatrixPointJS point = MatrixPointJS.createUnscaledPoint(diagram.getTextAreaLeft(), diagram.getTextAreaTop(), surface.getScaleFactor());
         MatrixPointJS point = MatrixPointJS.createUnscaledPoint(
           (int) rect.getLeft(),
