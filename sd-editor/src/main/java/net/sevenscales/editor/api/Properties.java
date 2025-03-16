@@ -899,12 +899,10 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
             showFixedDialog(clientWidth, clientHeight, (int) rect.getWidth(), maxDialoagWidth);
           // }
 
-          if ("transparent".equals(codeMirror.getBackgroundColor())) {
-            // dialog editor needs to have a solid background always
-            codeMirror.setBackgroundColor(
-              Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash()
-            );
-          }
+          // dialog editor needs to have a solid background always
+          codeMirror.setBackgroundColor(
+            Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash()
+          );
 
           setDialogMode(true);
         } else {
@@ -927,8 +925,14 @@ public class Properties extends SimplePanel implements DiagramSelectionHandler, 
           String paddingTop = ((int) (2 * surface.getScaleFactor())) + "";
         }
 
-        if (surface.getScaleFactor() != 1.0f && !"transparent".equals(diagram.getTextAreaBackgroundColor())) {
-          codeMirror.setBackgroundColor("#" + diagram.getBackgroundColor());
+        if ("transparent".equals(diagram.getTextAreaBackgroundColor())) {
+          // ST 16.3.2025: if shape provides transparent backtground, set theme board background
+          codeMirror.setBackgroundColor(
+            Theme.getCurrentThemeName().getBoardBackgroundColor().toHexStringWithHash()
+          );
+        } else {
+          // ST 16.3.2025: otherwise use provided text area background color.
+          codeMirror.setBackgroundColor(diagram.getTextAreaBackgroundColor());
         }
 
         codeMirror.setTextAlign(diagram.getTextAreaAlign());
