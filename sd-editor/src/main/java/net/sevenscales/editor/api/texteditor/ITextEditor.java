@@ -12,10 +12,6 @@ public interface ITextEditor {
 
 	static class Factory {
 		public static ITextEditor createEditor(TextChanged changeListener) {
-			if (UiUtils.isMobile()) {
-				return new TextEditor(changeListener);
-			}
-			// return new CodeMirror(changeListener);
       return new CodeMirror6(changeListener);
 		}
 	}
