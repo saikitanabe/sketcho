@@ -35,8 +35,12 @@ public class CodeMirror6 extends Widget implements ITextEditor {
   }
 
   public void setMarkdownMode(boolean markdownMode) {
-
+    _setMarkdownMode(codeMirror, markdownMode);
   }
+  private native void _setMarkdownMode(JavaScriptObject codeMirror, boolean markdownMode)/*-{
+    codeMirror.setMarkdownMode(markdownMode)
+  }-*/;
+
 	public void setFocus() {
     _setFocus(codeMirror);
   }
