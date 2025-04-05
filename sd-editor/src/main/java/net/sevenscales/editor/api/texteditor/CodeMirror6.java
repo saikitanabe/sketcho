@@ -98,8 +98,12 @@ public class CodeMirror6 extends Widget implements ITextEditor {
 
   }
 	public void setFontSize(String fontSize) {
-
+    _setFontSize(this.codeMirror, fontSize);
   }
+  private native void _setFontSize(JavaScriptObject codeMirror, String fontSize)/*-{
+    codeMirror.setFontSize(fontSize)
+  }-*/;
+
 	public void setLineHeight(String lineHeight) {
 
   }
